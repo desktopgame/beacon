@@ -110,9 +110,9 @@ bool IsImplementAbstractClassValidClass(class_* cls, Method** out) {
 	for(int i=0; i<csuper->method_list->Length; i++) {
 		Method* me = AtVector(csuper->method_list, i);
 		#if defined(DEBUG)
-		const char* mename = Ref2Str(me->namev);
+		const char* mename = Ref2Str(me->Name);
 		#endif
-		if(!IsAbstractModifier(me->modifier)) { continue; }
+		if(!IsAbstractModifier(me->Modifier)) { continue; }
 		Vector* methods = FindTreeMethodClass(cls, me);
 		if(methods->Length == 0 || methods_is_all_abstract(methods)) {
 		   (*out) = me;
@@ -139,14 +139,14 @@ bool IsMethodParameterValidClass(class_* cls, Method** out_method, StringView* o
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<cls->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(cls->method_list, i);
-		if(IsOverwrappedParameterName(m->parameters, out_name)) {
+		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<cls->smethod_list->Length; i++) {
 		Method* m = (Method*)AtVector(cls->smethod_list, i);
-		if(IsOverwrappedParameterName(m->parameters, out_name)) {
+		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -173,14 +173,14 @@ bool IsMethodTypeParameterValidClass(class_* self, Method** out_method, StringVi
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
-		if(IsOverwrappedTypeParameterName(m->type_parameters, out_name)) {
+		if(IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<self->smethod_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->smethod_list, i);
-		if(IsOverwrappedTypeParameterName(m->type_parameters, out_name)) {
+		if(IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -228,9 +228,9 @@ static bool methods_is_all_abstract(Vector* v) {
 	for(int i=0; i<v->Length; i++) {
 		Method* e = AtVector(v, i);
 		#if defined(DEBUG)
-		const char* tyname = Ref2Str(GetTypeName(e->parent));
+		const char* tyname = Ref2Str(GetTypeName(e->Parent));
 		#endif
-		if(!IsAbstractModifier(e->modifier)) {
+		if(!IsAbstractModifier(e->Modifier)) {
 			return false;
 		}
 	}

@@ -233,7 +233,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
 		Method* m = method_new(ilfunc->Name);
-		DupTypeParameterList(ilfunc->TypeParameters, m->type_parameters);
+		DupTypeParameterList(ilfunc->TypeParameters, m->TypeParameters);
 		script_method* sm = NewScriptMethod();
 		Enviroment* env = NewEnviroment();
 		//CallContextの設定
@@ -244,18 +244,18 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 		namespace_* loc = GetNamespaceCContext(cctx);
 		env->ContextRef = self;
 		sm->env = env;
-		m->access = ACCESS_PRIVATE_T;
-		m->u.script_method = sm;
-		m->parent = worldT;
+		m->Access = ACCESS_PRIVATE_T;
+		m->Kind.Script = sm;
+		m->Parent = worldT;
 		//戻り値を指定
-		m->return_gtype = ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
+		m->ReturnGType = ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
 	//	PrintGenericType(m->return_gtype);
 	//	Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->Parameters->Length; j++) {
 			il_parameter* ilparam = AtVector(ilfunc->Parameters, j);
 			Parameter* param = NewParameter(ilparam->namev);
-			PushVector(m->parameters, param);
+			PushVector(m->Parameters, param);
 			param->GType = ResolveImportManager(loc, ilparam->fqcn, cctx);
 			EntrySymbolTable(
 				env->Symboles,
@@ -277,7 +277,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
 		Method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
-		script_method* sm = m->u.script_method;
+		script_method* sm = m->Kind.Script;
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->Scope = GetLangNamespace();
 		cctx->Ty = worldT;

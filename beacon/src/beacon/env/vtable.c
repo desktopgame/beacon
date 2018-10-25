@@ -18,18 +18,18 @@ void CopyVTable(vtable * src, vtable * dst) {
 }
 
 void AddVTable(vtable * self, Method * m) {
-	if (IsStaticModifier(m->modifier)) {
+	if (IsStaticModifier(m->Modifier)) {
 		return;
 	}
 	PushVector(self->elements, m);
 }
 
 void ReplaceVTable(vtable * self, Method * m, CallContext* cctx) {
-	if (IsStaticModifier(m->modifier)) {
+	if (IsStaticModifier(m->Modifier)) {
 		return;
 	}
 	#if defined(DEBUG)
-	const char* methodname = Ref2Str(m->namev);
+	const char* methodname = Ref2Str(m->Name);
 	#endif
 	for (int i = 0; i < self->elements->Length; i++) {
 		Method* e = (Method*)AtVector(self->elements, i);

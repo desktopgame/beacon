@@ -6,7 +6,7 @@
 bool IsMethodParameterValidInterface(interface_* inter, Method** out_method, StringView* out_name) {
 	for(int i=0; i<inter->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(inter->method_list, i);
-		if(IsOverwrappedParameterName(m->parameters, out_name)) {
+		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -21,7 +21,7 @@ bool IsTypeParameterValidInterface(interface_* inter, StringView* out_name) {
 bool IsMethodTypeParameterValidInterface(interface_* inter, Method** out_method, StringView* out_name) {
 	for(int i=0; i<inter->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(inter->method_list, i);
-		if(IsOverwrappedParameterName(m->type_parameters, out_name)) {
+		if(IsOverwrappedParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}

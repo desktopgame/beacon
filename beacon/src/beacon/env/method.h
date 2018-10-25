@@ -28,30 +28,30 @@ typedef enum MethodType {
  * メソッドを表す構造体.
  */
 typedef struct Method {
-	StringView namev;
-	MethodType type;
+	StringView Name;
+	MethodType Type;
 	//struct class_* decleared_type;
-	struct type* parent;
-	struct generic_type* return_gtype;
-	Vector* parameters;
-	Vector* type_parameters;
-	AccessLevel access;
-	ModifierType modifier;
+	struct type* Parent;
+	struct generic_type* ReturnGType;
+	Vector* Parameters;
+	Vector* TypeParameters;
+	AccessLevel Access;
+	ModifierType Modifier;
 	union {
-		script_method* script_method;
-		native_method* native_method;
-	} u;
+		script_method* Script;
+		native_method* Native;
+	} Kind;
 } Method;
 
 /**
  * メソッドを作成します.
- * @param namev
+ * @param name
  * @param filename
  * @param lineno
  * @return
  */
-Method* MallocMethod(StringView namev, const char* filename, int lineno);
-#define method_new(namev) (MallocMethod(namev, __FILE__, __LINE__))
+Method* MallocMethod(StringView name, const char* filename, int lineno);
+#define method_new(name) (MallocMethod(name, __FILE__, __LINE__))
 
 /**
  * メソッドを実行します.

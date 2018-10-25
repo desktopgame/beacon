@@ -113,7 +113,7 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, CallCon
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		#if defined(DEBUG)
-		const char* methodname = Ref2Str(mt->namev);
+		const char* methodname = Ref2Str(mt->Name);
 		#endif
 		int index = GetGenericIndexForMethod(mt, fqcn->namev);
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;

@@ -509,12 +509,12 @@ Vector* FindTreeMethodClass(class_* self, Method* m) {
 }
 
 bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
-	assert(!IsStaticModifier(m->modifier));
+	assert(!IsStaticModifier(m->Modifier));
 	(*outM) = NULL;
 	bool ret = false;
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->Scope = m->parent->location;
-	cctx->Ty = m->parent;
+	cctx->Scope = m->Parent->location;
+	cctx->Ty = m->Parent;
 	for(int i=0; i<method_list->Length; i++) {
 		Method* mE = AtVector(method_list, i);
 		if(IsOverridedMethod(m, mE, cctx)) {

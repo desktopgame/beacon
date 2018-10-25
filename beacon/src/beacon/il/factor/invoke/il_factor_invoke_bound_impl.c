@@ -202,13 +202,13 @@ static void GenerateILInvokeBound_method(il_factor_invoke_bound* self, Enviromen
 			return;
 		}
 	}
-	if(IsStaticModifier(self->u.m->modifier)) {
+	if(IsStaticModifier(self->u.m->Modifier)) {
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->parent->absolute_index);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->Parent->absolute_index);
 		AddOpcodeBuf(env->Bytecode,(VectorItem) self->index);
 	} else {
 		AddOpcodeBuf(env->Bytecode,(VectorItem) OP_THIS);
-		if(self->u.m->access == ACCESS_PRIVATE_T) {
+		if(self->u.m->Access == ACCESS_PRIVATE_T) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESPECIAL);
 			AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 		} else {
@@ -256,7 +256,7 @@ static void GenerateILInvokeBound_subscript(il_factor_invoke_bound* self, Enviro
 static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound* self, CallContext* cctx) {
 	assert(self->tag != BOUND_INVOKE_UNDEFINED_T);
 	return ApplyGenericType(self->tag == BOUND_INVOKE_METHOD_T ?
-			self->u.m->return_gtype :
+			self->u.m->ReturnGType :
 			self->u.subscript.opov->return_gtype, cctx);
 }
 

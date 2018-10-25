@@ -167,7 +167,7 @@ void AddPropertyClass(class_* self, property* p) {
 
 void AddMethodClass(class_ * self, Method * m) {
 	assert(m != NULL);
-	if (IsStaticModifier(m->modifier)) {
+	if (IsStaticModifier(m->Modifier)) {
 		PushVector(self->smethod_list, m);
 	} else {
 		PushVector(self->method_list, m);
@@ -373,7 +373,7 @@ void LinkAllClass(class_ * self) {
 	}
 	for (int i = 0; i < self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
-		m->parent = self->parent;
+		m->Parent = self->parent;
 	}
 	for (int i = 0; i < self->constructor_list->Length; i++) {
 		constructor* ctor = (constructor*)AtVector(self->constructor_list, i);
@@ -415,8 +415,8 @@ void DeleteClass(class_ * self) {
 static void CreateVTableClass_top(class_* self) {
 	for (int i = 0; i < self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
-		if(m->access != ACCESS_PRIVATE_T &&
-		   !IsStaticModifier(m->modifier)) {
+		if(m->Access != ACCESS_PRIVATE_T &&
+		   !IsStaticModifier(m->Modifier)) {
 			AddVTable(self->vt, m);
 		}
 	}
@@ -433,8 +433,8 @@ static void CreateVTableClass_override(class_* self) {
 	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
-		if(m->access != ACCESS_PRIVATE_T &&
-		   !IsStaticModifier(m->modifier)) {
+		if(m->Access != ACCESS_PRIVATE_T &&
+		   !IsStaticModifier(m->Modifier)) {
 			ReplaceVTable(self->vt, m, cctx);
 		}
 	}
@@ -464,8 +464,8 @@ static void CreateVTableClass_interface(class_* self) {
 			if(!self->is_abstract && classVTM == NULL) {
 				PushVector(self->vt_vec, newVT);
 				ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
-					Ref2Str(GetTypeName(interVTM->parent)),
-					Ref2Str(interVTM->namev)
+					Ref2Str(GetTypeName(interVTM->Parent)),
+					Ref2Str(interVTM->Name)
 				);
 				DeleteVector(tbl, VectorDeleterOfNull);
 				return;

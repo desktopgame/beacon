@@ -57,7 +57,7 @@ int GetLengthBCArray(object* arr) {
 }
 //private
 static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	type* tp = parent->parent;
+	type* tp = parent->Parent;
 	//Array#lengthを取り出す
 	int temp = 0;
 	field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);

@@ -267,33 +267,33 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	Vector* ilparams = ilmethod->Parameters;
 	//実行時のメソッド情報を作成する
 	Method* method = method_new(ilmethod->Name);
-	Vector* parameter_list = method->parameters;
-	method->type = IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
-	method->access = ilmethod->Access;
-	method->modifier = ilmethod->Modifier;
-	DupTypeParameterList(ilmethod->TypeParameters, method->type_parameters);
+	Vector* parameter_list = method->Parameters;
+	method->Type = IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
+	method->Access = ilmethod->Access;
+	method->Modifier = ilmethod->Modifier;
+	DupTypeParameterList(ilmethod->TypeParameters, method->TypeParameters);
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	cctx->Kind.Method = method;
 	//インターフェースなら空
 	if (tp->tag == TYPE_INTERFACE_T ||
-	   IsAbstractModifier(method->modifier)) {
-		method->type = METHOD_TYPE_ABSTRACT_T;
-		method->u.script_method = NULL;
+	   IsAbstractModifier(method->Modifier)) {
+		method->Type = METHOD_TYPE_ABSTRACT_T;
+		method->Kind.Script = NULL;
 	} else {
-		if(IsNativeModifier(method->modifier)) {
-			method->u.native_method = NewNativeMethod();
+		if(IsNativeModifier(method->Modifier)) {
+			method->Kind.Native = NewNativeMethod();
 		} else {
-			method->u.script_method = NewScriptMethod();
+			method->Kind.Script = NewScriptMethod();
 		}
 	}
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
-	if(IsAbstractModifier(method->modifier) &&
+	if(IsAbstractModifier(method->Modifier) &&
 	  (tp->tag == TYPE_CLASS_T &&
 	  !TYPE2CLASS(tp)->is_abstract)) {
-		ThrowBCError(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->namev));
+		ThrowBCError(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->Name));
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
@@ -302,9 +302,9 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	//ネイティブメソッドでも抽象メソッドでもない
 	if(tp->tag == TYPE_CLASS_T &&
 	   ilmethod->IsNoStmt &&
-		(!IsAbstractModifier(method->modifier) && !IsNativeModifier(method->modifier))
+		(!IsAbstractModifier(method->Modifier) && !IsNativeModifier(method->Modifier))
 	) {
-		ThrowBCError(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
+		ThrowBCError(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->Name));
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
@@ -312,48 +312,48 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
 	if(tp->tag == TYPE_CLASS_T &&
 	   !ilmethod->IsNoStmt &&
-		(IsAbstractModifier(method->modifier) || IsNativeModifier(method->modifier))
+		(IsAbstractModifier(method->Modifier) || IsNativeModifier(method->Modifier))
 	) {
-		ThrowBCError(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->namev));
+		ThrowBCError(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->Name));
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
 	//メソッドの修飾子が static override
-	if(IsStaticModifier(method->modifier) &&
-	   IsOverrideModifier(method->modifier)) {
+	if(IsStaticModifier(method->Modifier) &&
+	   IsOverrideModifier(method->Modifier)) {
 		ThrowBCError(BCERROR_STATIC_OVERRIDE_METHOD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(method->namev)
+			Ref2Str(method->Name)
 		);
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
 	//.. abstract override
-	if(IsAbstractModifier(method->modifier) &&
-	   IsOverrideModifier(method->modifier)) {
+	if(IsAbstractModifier(method->Modifier) &&
+	   IsOverrideModifier(method->Modifier)) {
 		ThrowBCError(BCERROR_ABSTRACT_OVERRIDE_METHOD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(method->namev)
+			Ref2Str(method->Name)
 		);
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
 	//.. abstract static
-	if(IsAbstractModifier(method->modifier) &&
-	   IsStaticModifier(method->modifier)) {
+	if(IsAbstractModifier(method->Modifier) &&
+	   IsStaticModifier(method->Modifier)) {
 		ThrowBCError(BCERROR_ABSTRACT_STATIC_METHOD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(method->namev)
+			Ref2Str(method->Name)
 		);
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
 	}
-	method->parent = tp;
-	method->return_gtype = ResolveImportManager(scope, ilmethod->ReturnGCache, cctx);
+	method->Parent = tp;
+	method->ReturnGType = ResolveImportManager(scope, ilmethod->ReturnGCache, cctx);
 	//ILパラメータを実行時パラメータへ変換
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
@@ -363,7 +363,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 		Parameter* param = NewParameter(ilp->namev);
 		PushVector(parameter_list, param);
 	}
-	CLBC_parameter_list(self, scope, ilmethod->Parameters, method->parameters, cctx);
+	CLBC_parameter_list(self, scope, ilmethod->Parameters, method->Parameters, cctx);
 	AddMethodType(tp, method);
 	DeleteCallContext(cctx);
 	return true;
@@ -374,8 +374,8 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	Method* me = mt;
 	ILMethod* ilmethod = ilmt;
 	//ネイティブメソッドならオペコードは不要
-	if (me->type == METHOD_TYPE_NATIVE_T ||
-		me->type == METHOD_TYPE_ABSTRACT_T) {
+	if (me->Type == METHOD_TYPE_NATIVE_T ||
+		me->Type == METHOD_TYPE_ABSTRACT_T) {
 		return true;
 	}
 	//オペコードを作成
@@ -402,7 +402,7 @@ bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, ty
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
-	if (!IsStaticModifier(me->modifier)) {
+	if (!IsStaticModifier(me->Modifier)) {
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 	}
@@ -627,7 +627,7 @@ bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilp
 			AddOpcodeBuf(env->Bytecode, OP_LOAD);
 			AddOpcodeBuf(env->Bytecode, i + 1);
 		}
-		mt->u.script_method->env = env;
+		mt->Kind.Script->env = env;
 		AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
 		AddOpcodeBuf(env->Bytecode, iterT->absolute_index);
 		AddOpcodeBuf(env->Bytecode, 0);
@@ -636,7 +636,7 @@ bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilp
 	}
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilstmts, env, cctx, range);
-	mt->u.script_method->env = env;
+	mt->Kind.Script->env = env;
 	return true;
 }
 

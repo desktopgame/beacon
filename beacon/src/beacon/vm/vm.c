@@ -870,7 +870,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Method* m = GetSMethodClass(cls->u.class_, methodIndex);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(GetTypeName(cls));
-				const char* mname = Ref2Str(m->namev);
+				const char* mname = Ref2Str(m->Name);
 				#endif
 				ExecuteMethod(m, self, env);
 				break;

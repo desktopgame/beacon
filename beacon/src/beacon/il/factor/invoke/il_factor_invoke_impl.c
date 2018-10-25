@@ -203,7 +203,7 @@ static void il_factor_invoke_args_delete(VectorItem item) {
 
 static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
-	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->return_gtype : self->u.opov->return_gtype;
+	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->ReturnGType : self->u.opov->return_gtype;
 }
 
 static void GenerateILInvoke_method(il_factor_invoke* self, Enviroment* env, CallContext* cctx) {
@@ -222,13 +222,13 @@ static void GenerateILInvoke_method(il_factor_invoke* self, Enviroment* env, Cal
 		GenerateILFactor(e->Factor, env, cctx);
 	}
 	GenerateILFactor(self->receiver, env, cctx);
-	if(self->u.m->parent->tag == TYPE_INTERFACE_T) {
+	if(self->u.m->Parent->tag == TYPE_INTERFACE_T) {
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKEINTERFACE);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->parent->absolute_index);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->Parent->absolute_index);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 	} else {
-		assert(!IsStaticModifier(self->u.m->modifier));
-		if(self->u.m->access == ACCESS_PRIVATE_T) {
+		assert(!IsStaticModifier(self->u.m->Modifier));
+		if(self->u.m->Access == ACCESS_PRIVATE_T) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESPECIAL);
 			AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 		} else {

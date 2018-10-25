@@ -121,11 +121,11 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	//privateなメンバーは定義できない
 	for(int i=0; i<tp->u.interface_->method_list->Length; i++) {
 		Method* e = AtVector(tp->u.interface_->method_list, i);
-		if(e->access == ACCESS_PRIVATE_T) {
+		if(e->Access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
 				Ref2Str(GetTypeName(tp)),
-				Ref2Str(e->namev)
+				Ref2Str(e->Name)
 			);
 		}
 	}
@@ -267,7 +267,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	Method* outiMethod = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
 	  !IsImplementInterfaceMethodValidClass(TYPE2CLASS(tp), &outiMethod)) {
-		ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiMethod->namev));
+		ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiMethod->Name));
 		return;
 	}
 	//実装されていないプロパティを確認する
@@ -281,7 +281,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	Method* outaMethod = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
 	   !IsImplementAbstractClassValidClass(TYPE2CLASS(tp), &outaMethod)) {
-		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outaMethod->namev));
+		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outaMethod->Name));
 		return;
 	   }
 	//重複するプロパティを確認する
@@ -308,7 +308,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	if(!IsMethodParameterValidClass(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(out_overwrap_m->namev),
+			Ref2Str(out_overwrap_m->Name),
 			Ref2Str(out_overwrap_mname)
 		);
 		return;
@@ -339,7 +339,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 	if(!IsMethodTypeParameterValidClass(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(out_overwrap_tpm->namev),
+			Ref2Str(out_overwrap_tpm->Name),
 			Ref2Str(out_overwrap_tpmname)
 		);
 		return;
@@ -370,7 +370,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	if(!IsMethodParameterValidInterface(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(out_overwrap_m->namev),
+			Ref2Str(out_overwrap_m->Name),
 			Ref2Str(out_overwrap_name)
 		);
 	}
@@ -388,7 +388,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 	if(!IsMethodTypeParameterValidInterface(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(out_overwrap_tpm->namev),
+			Ref2Str(out_overwrap_tpm->Name),
 			Ref2Str(out_overwrap_tpmname)
 		);
 	}

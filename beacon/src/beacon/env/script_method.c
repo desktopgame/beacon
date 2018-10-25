@@ -19,14 +19,14 @@ script_method * NewScriptMethod() {
 
 void ExecuteScriptMethod(script_method * self, Method* parent, Frame* fr, Enviroment* env) {
 #if defined(DEBUG)
-	const char* name = Ref2Str(parent->namev);
+	const char* name = Ref2Str(parent->Name);
 #endif
 	Frame* sub = SubFrame(fr);
 	CallFrame* cfr = NULL;
-	sub->Receiver = parent->parent;
+	sub->Receiver = parent->Parent;
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
-	if (!IsStaticModifier(parent->modifier)) {
+	if (!IsStaticModifier(parent->Modifier)) {
 		object* receiver_obj = PopVector(fr->ValueStack);
 		PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
@@ -38,13 +38,13 @@ void ExecuteScriptMethod(script_method * self, Method* parent, Frame* fr, Enviro
 		cfr->Kind.StaticInvoke.Args = aArgs;
 		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
-	for (int i = 0; i < parent->parameters->Length; i++) {
+	for (int i = 0; i < parent->Parameters->Length; i++) {
 		object* arg = CopyObject(PopVector(fr->ValueStack));
 		PushVector(sub->ValueStack, arg);
-		AssignVector(aArgs, (parent->parameters->Length - i), arg);
+		AssignVector(aArgs, (parent->Parameters->Length - i), arg);
 	}
 	//メソッドに渡された型引数を引き継ぐ
-	int typeparams = parent->type_parameters->Length;
+	int typeparams = parent->TypeParameters->Length;
 	for(int i=0; i<typeparams; i++) {
 		VectorItem e = PopVector(fr->TypeArgs);
 		AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
@@ -53,7 +53,7 @@ void ExecuteScriptMethod(script_method * self, Method* parent, Frame* fr, Enviro
 	ExecuteVM(sub, self->env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
-	if(parent->return_gtype != TYPE_VOID->generic_self &&
+	if(parent->ReturnGType != TYPE_VOID->generic_self &&
 	   sub->ValueStack->Length > 0) {
 		object* o = (object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, NON_NULL(o));

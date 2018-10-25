@@ -139,8 +139,8 @@ Method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView n
 			continue;
 		}
 		//名前か引数の個数が違うので無視
-		if (m->namev != namev ||
-			m->parameters->Length != ilargs->Length
+		if (m->Name != namev ||
+			m->Parameters->Length != ilargs->Length
 			) {
 			continue;
 		}
@@ -150,7 +150,7 @@ Method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView n
 			(*outIndex) = i;
 			return m;
 		}
-		int score = MetaILCalcScore(m->parameters, ilargs, env, cctx);
+		int score = MetaILCalcScore(m->Parameters, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -173,8 +173,8 @@ Method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView na
 		VectorItem ve = AtVector(method_vec, i);
 		Method* m = (Method*)ve;
 		//名前か引数の個数が違うので無視
-		if (m->namev != namev ||
-			m->parameters->Length != gargs->Length
+		if (m->Name != namev ||
+			m->Parameters->Length != gargs->Length
 			) {
 			continue;
 		}
@@ -184,7 +184,7 @@ Method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView na
 			(*outIndex) = i;
 			return m;
 		}
-		int score = MetaGCalcScore(m->parameters, gargs);
+		int score = MetaGCalcScore(m->Parameters, gargs);
 		if(score == -1) {
 			continue;
 		}
@@ -292,14 +292,14 @@ bool IsMetaMethodAccessValid(Method* m, CallContext* cctx) {
 	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
-		m->access == ACCESS_PRIVATE_T &&
-		TYPE2CLASS(m->parent) != context) {
+		m->Access == ACCESS_PRIVATE_T &&
+		TYPE2CLASS(m->Parent) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
-		m->access == ACCESS_PROTECTED_T &&
-		DistanceClass(TYPE2CLASS(m->parent), context) < 0) {
+		m->Access == ACCESS_PROTECTED_T &&
+		DistanceClass(TYPE2CLASS(m->Parent), context) < 0) {
 		return false;
 	}
 	return true;

@@ -137,7 +137,7 @@ void PrintGenericType(generic_type * self) {
 			printf("(%s)", Ref2Str(GetTypeName(self->u.type_)));
 		//copy[0]
 		} else if(self->tag == GENERIC_TYPE_TAG_METHOD_T) {
-			printf("(%s)", Ref2Str(self->u.method_->namev));
+			printf("(%s)", Ref2Str(self->u.method_->Name));
 		}
 		printf("[%d]", self->virtual_type_index);
 	//Intなど

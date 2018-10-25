@@ -23,10 +23,10 @@ static void check_method_return(il_stmt_return_empty self, Enviroment * env, Cal
 	}
 	Method* m = GetMethodCContext(cctx);
 	//戻り値が Void ではないのに値を返さない
-	if(m->return_gtype->core_type != TYPE_VOID) {
+	if(m->ReturnGType->core_type != TYPE_VOID) {
 		ThrowBCError(BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T,
-			Ref2Str(GetTypeName(m->parent)),
-			Ref2Str(m->namev)
+			Ref2Str(GetTypeName(m->Parent)),
+			Ref2Str(m->Name)
 		);
 		return;
 	}

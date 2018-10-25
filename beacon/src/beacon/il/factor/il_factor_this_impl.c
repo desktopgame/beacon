@@ -42,10 +42,10 @@ static void check_context(il_factor_this * self, Enviroment * env, CallContext* 
 		return;
 	}
 	Method* met = GetMethodCContext(cctx);
-	if(IsStaticModifier(met->modifier)) {
+	if(IsStaticModifier(met->Modifier)) {
 		ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-			Ref2Str(GetTypeName(met->parent)),
-			Ref2Str(met->namev)
+			Ref2Str(GetTypeName(met->Parent)),
+			Ref2Str(met->Name)
 		);
 	}
 }
