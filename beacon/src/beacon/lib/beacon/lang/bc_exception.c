@@ -10,7 +10,7 @@
 #include <string.h>
 #include <assert.h>
 //proto
-static void bc_exception_nativeInit(method* parent, Frame* fr, Enviroment* env);
+static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCException() {
 	namespace_* lang = GetLangNamespace();
@@ -25,7 +25,7 @@ type* GetBCExceptionType() {
 	return FindTypeFromNamespace(lang, InternString("Exception"));
 }
 //private
-static void bc_exception_nativeInit(method* parent, Frame* fr, Enviroment* env) {
+static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	namespace_* lang = GetLangNamespace();
 	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
 	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));

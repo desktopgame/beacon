@@ -73,7 +73,7 @@ generic_type* ResolveImportManager(namespace_* scope, generic_cache* fqcn, CallC
 	}
 	generic_type* parameterized = generic_NewType(NULL);
 	//T, Eなど
-	method* mt = GetMethodCContext(cctx);
+	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->fqcn->namev);
@@ -110,7 +110,7 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, CallCon
 	//V = class_tag 1
 	generic_type* parameterized = generic_NewType(NULL);
 	//まずはメソッドの型変数を調べる
-	method* mt = GetMethodCContext(cctx);
+	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
 		#if defined(DEBUG)
 		const char* methodname = Ref2Str(mt->namev);

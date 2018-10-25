@@ -857,7 +857,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				method* m = GetImplMethodClass(o->gtype->core_type->u.class_, tp, methodIndex);
+				Method* m = GetImplMethodClass(o->gtype->core_type->u.class_, tp, methodIndex);
 				CallContext* cctx = GetSGThreadCContext();
 				ExecuteMethod(m, self, env);
 				break;
@@ -867,7 +867,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClassIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int methodIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				type* cls = (type*)AtVector(ctx->type_vec, absClassIndex);
-				method* m = GetSMethodClass(cls->u.class_, methodIndex);
+				Method* m = GetSMethodClass(cls->u.class_, methodIndex);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(GetTypeName(cls));
 				const char* mname = Ref2Str(m->namev);
@@ -882,7 +882,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				method* m = GetMethodClass(o, index);
+				Method* m = GetMethodClass(o, index);
 				ExecuteMethod(m, self, env);
 				break;
 			}
@@ -899,7 +899,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(self->Receiver != NULL) {
 					cl = TYPE2CLASS(self->Receiver);
 				}
-				method* m = (method*)AtVector(cl->method_list, index);
+				Method* m = (Method*)AtVector(cl->method_list, index);
 				ExecuteMethod(m, self, env);
 				break;
 			}

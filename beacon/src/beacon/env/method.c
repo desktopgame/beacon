@@ -28,14 +28,14 @@
 static void method_DeleteParameter(VectorItem item);
 static void method_DeleteTypeParameter(VectorItem item);
 static void method_count(il_stmt* s, int* yeild_ret, int* ret);
-static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len);
-static method* create_has_next(method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
-static method* create_next(method* self, type* ty,class_loader* cll, generic_type* a, Vector* stmt_list, int* out_op_len);
-static Vector* method_vm_args(method* self, Frame* fr, Frame* a);
-static Vector* method_vm_typeargs(method* self, Frame* fr, Frame* a);
+static constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len);
+static Method* create_has_next(Method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
+static Method* create_next(Method* self, type* ty,class_loader* cll, generic_type* a, Vector* stmt_list, int* out_op_len);
+static Vector* method_vm_args(Method* self, Frame* fr, Frame* a);
+static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a);
 
-method* MallocMethod(StringView namev, const char* filename, int lineno) {
-	method* ret = (method*)mem_malloc(sizeof(method), filename, lineno);
+Method* MallocMethod(StringView namev, const char* filename, int lineno) {
+	Method* ret = (Method*)mem_malloc(sizeof(Method), filename, lineno);
 	ret->namev = namev;
 	ret->parameters = MallocVector(filename, lineno);
 	ret->type = METHOD_TYPE_SCRIPT_T;
@@ -47,7 +47,7 @@ method* MallocMethod(StringView namev, const char* filename, int lineno) {
 	return ret;
 }
 
-void ExecuteMethod(method* self, Frame* fr, Enviroment* env) {
+void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 	#if defined(DEBUG)
 	const char* namestr = Ref2Str(self->namev);
 	if(self->namev == InternString("writeLine")) {
@@ -88,7 +88,7 @@ void ExecuteMethod(method* self, Frame* fr, Enviroment* env) {
 	}
 }
 
-bool IsOverridedMethod(method* superM, method* subM, CallContext* cctx) {
+bool IsOverridedMethod(Method* superM, Method* subM, CallContext* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->namev != subM->namev ||
 		superM->parameters->Length != subM->parameters->Length) {
@@ -126,7 +126,7 @@ bool IsOverridedMethod(method* superM, method* subM, CallContext* cctx) {
 	return ret != -1;
 }
 
-int GetGenericIndexForMethod(method * self, StringView namev) {
+int GetGenericIndexForMethod(Method * self, StringView namev) {
 	int ret = -1;
 	for (int i = 0; i < self->type_parameters->Length; i++) {
 		TypeParameter* e = (TypeParameter*)AtVector(self->type_parameters, i);
@@ -138,7 +138,7 @@ int GetGenericIndexForMethod(method * self, StringView namev) {
 	return ret;
 }
 
-void DeleteMethod(method * self) {
+void DeleteMethod(Method * self) {
 	DeleteVector(self->type_parameters, method_DeleteTypeParameter);
 	DeleteVector(self->parameters, method_DeleteParameter);
 	if (self->type == METHOD_TYPE_SCRIPT_T) {
@@ -149,7 +149,7 @@ void DeleteMethod(method * self) {
 	MEM_FREE(self);
 }
 
-StringView MangleMethod(method* self) {
+StringView MangleMethod(Method* self) {
 	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(self->namev));
 	//引数が一つもないので終了
@@ -188,7 +188,7 @@ StringView MangleMethod(method* self) {
 	return sv;
 }
 
-StringView GetMethodUniqueName(method* self) {
+StringView GetMethodUniqueName(Method* self) {
 	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(GetTypeFullName(self->parent)));
 	AppendsBuffer(ret, Ref2Str(MangleMethod(self)));
@@ -198,12 +198,12 @@ StringView GetMethodUniqueName(method* self) {
 	return sv;
 }
 
-bool IsCoroutineMethod(method* self) {
+bool IsCoroutineMethod(Method* self) {
 	type* iteratorT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	return (iteratorT && self->return_gtype->core_type == iteratorT);
 }
 
-bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
+bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error) {
 	(*error) = false;
 	if(self->type != METHOD_TYPE_SCRIPT_T || !IsCoroutineMethod(self)) {
 		return false;
@@ -226,7 +226,7 @@ bool IsYieldMethod(method* self, Vector* stmt_list, bool* error) {
 	return yield_ret > 0 ? true : false;
 }
 
-type* CreateIteratorTypeFromMethod(method* self,  class_loader* cll, Vector* stmt_list) {
+type* CreateIteratorTypeFromMethod(Method* self,  class_loader* cll, Vector* stmt_list) {
 	CallContext* lCctx = NewCallContext(CALL_CTOR_T);
 	CallFrame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->Kind.Resolve.GType = self->return_gtype;
@@ -332,7 +332,7 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 	}
 }
 
-static constructor* create_delegate_ctor(method* self, type* ty, class_loader* cll,int op_len) {
+static constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
 	constructor* iterCons = NewConstructor();
 	Enviroment* envIterCons = NewEnviroment();
@@ -373,8 +373,8 @@ static constructor* create_delegate_ctor(method* self, type* ty, class_loader* c
 	return iterCons;
 }
 
-static method* create_has_next(method* self, type* ty, class_loader* cll, Vector* stmt_list, int* out_op_len) {
-	method* mt = method_new(InternString("moveNext"));
+static Method* create_has_next(Method* self, type* ty, class_loader* cll, Vector* stmt_list, int* out_op_len) {
+	Method* mt = method_new(InternString("moveNext"));
 	mt->return_gtype = GENERIC_BOOL;
 	mt->modifier = MODIFIER_NONE_T;
 	mt->access = ACCESS_PUBLIC_T;
@@ -424,8 +424,8 @@ static method* create_has_next(method* self, type* ty, class_loader* cll, Vector
 	return mt;
 }
 
-static method* create_next(method* self, type* ty, class_loader* cll,generic_type* a, Vector* stmt_list, int* out_op_len) {
-	method* mt = method_new(InternString("current"));
+static Method* create_next(Method* self, type* ty, class_loader* cll,generic_type* a, Vector* stmt_list, int* out_op_len) {
+	Method* mt = method_new(InternString("current"));
 	mt->return_gtype = a;
 	mt->modifier = MODIFIER_NONE_T;
 	mt->access = ACCESS_PUBLIC_T;
@@ -455,7 +455,7 @@ static method* create_next(method* self, type* ty, class_loader* cll,generic_typ
 	return mt;
 }
 
-static Vector* method_vm_args(method* self, Frame* fr, Frame* a) {
+static Vector* method_vm_args(Method* self, Frame* fr, Frame* a) {
 	Vector* args = NewVector();
 	//引数を引き継ぐ
 	int len = self->parameters->Length;
@@ -468,7 +468,7 @@ static Vector* method_vm_args(method* self, Frame* fr, Frame* a) {
 	return args;
 }
 
-static Vector* method_vm_typeargs(method* self, Frame* fr, Frame* a) {
+static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a) {
 	//メソッドに渡された型引数を引き継ぐ
 	Vector* typeargs = NewVector();
 	int typeparams = self->type_parameters->Length;

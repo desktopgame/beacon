@@ -54,7 +54,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct Frame*
  * @param outIndex
  * @return
  */
-method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
+Method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -64,7 +64,7 @@ method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, 
  * @param outIndex
  * @return
  */
-method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex);
+Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex);
 
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
@@ -77,7 +77,7 @@ method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, in
  * @param outIndex
  * @return
  */
-method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
+Method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -87,7 +87,7 @@ method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, Strin
  * @param outIndex
  * @return
  */
-method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
+Method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -150,7 +150,7 @@ operator_overload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector
  * @param cctx
  * @return
  */
-bool IsMetaMethodAccessValid(struct method* m, CallContext* cctx);
+bool IsMetaMethodAccessValid(struct Method* m, CallContext* cctx);
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
  * @param m

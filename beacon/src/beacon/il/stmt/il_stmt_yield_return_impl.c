@@ -41,7 +41,7 @@ static void check_IsYieldMethod_return(il_stmt_yield_return * self, Enviroment *
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
-	method* m = GetMethodCContext(cctx);
+	Method* m = GetMethodCContext(cctx);
 	generic_type* arg = AtVector(m->return_gtype->type_args_list, 0);
 	//戻り値の型に互換性がない
 	if(DistanceGenericType(arg, EvalILFactor(self->fact, env, cctx), cctx) < 0) {

@@ -293,14 +293,14 @@ constructor * ILFindEmptyConstructorClass(class_ * self, Enviroment * env, CallC
 
 
 
-method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
 	#endif
 	//assert(self->vt->elements->Length > 0);
-	method* ret = NULL;
+	Method* ret = NULL;
 	if((ret = MetaScopedILFindMethod(self, self->vt->elements, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
@@ -316,11 +316,11 @@ method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, Envir
 	return NULL;
 }
 
-method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
+Method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	//assert(self->vt->elements->Length > 0);
-	method* ret = NULL;
+	Method* ret = NULL;
 	if((ret = MetaScopedGFindMethod(self, self->vt->elements, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
@@ -336,38 +336,38 @@ method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* out
 	return NULL;
 }
 
-method* GFindEqMethodClass(class_* self, int* outIndex) {
+Method* GFindEqMethodClass(class_* self, int* outIndex) {
 	Vector* gargs = NewVector();
 	PushVector(gargs, TYPE_OBJECT->generic_self);
-	method* ret = GFindMethodClass(self, InternString("equals"), gargs, outIndex);
+	Method* ret = GFindMethodClass(self, InternString("equals"), gargs, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-method * ILFindSMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method * ILFindSMethodClass(class_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(namev);
 	#endif
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;
-	method* ret = MetaILFindMethod(self->smethod_list, namev, args, env, cctx, &temp);
+	Method* ret = MetaILFindMethod(self->smethod_list, namev, args, env, cctx, &temp);
 //	temp += (CountAllSMethodClass(self) - self->smethod_list->Length);
 	(*outIndex) = temp;
 	return ret;
 }
 
-method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
+Method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;
-	method* ret = MetaGFindMethod(self->smethod_list, namev, gargs, &temp);
+	Method* ret = MetaGFindMethod(self->smethod_list, namev, gargs, &temp);
 //	temp += (CountAllSMethodClass(self) - self->smethod_list->Length);
 	(*outIndex) = temp;
 	return ret;
 }
 
-method * GetMethodClass(object * o, int index) {
+Method * GetMethodClass(object * o, int index) {
 	assert(index >= 0);
 	#if defined(DEBUG)
 	const char* name = GetObjectName(o);
@@ -376,10 +376,10 @@ method * GetMethodClass(object * o, int index) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
 	vtable* vx = (o->vptr);
-	return (method*)AtVector(vx->elements, index);
+	return (Method*)AtVector(vx->elements, index);
 }
 
-method * GetSMethodClass(class_* self, int index) {
+Method * GetSMethodClass(class_* self, int index) {
 	assert(index >= 0);
 	/*
 	//class_* self = o->classz;
@@ -393,7 +393,7 @@ method * GetSMethodClass(class_* self, int index) {
 	return AtVector(self->smethod_list, index);
 }
 
-method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
+Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
 	#endif
@@ -485,7 +485,7 @@ operator_overload* GetOperatorOverloadClass(class_* self, int index) {
 	return AtVector(self->ovt->vec, index);
 }
 
-Vector* FindTreeMethodClass(class_* self, method* m) {
+Vector* FindTreeMethodClass(class_* self, Method* m) {
 	assert(self != NULL);
 	assert(m != NULL);
 	class_* ptr = self;
@@ -494,7 +494,7 @@ Vector* FindTreeMethodClass(class_* self, method* m) {
 	const char* ptrname = Ref2Str(ptr->namev);
 	#endif
 	do {
-		method* tmp = NULL;
+		Method* tmp = NULL;
 		if(IsContainsMethod(ptr->method_list, m, &tmp)) {
 			PushVector(ret, tmp);
 		}
@@ -508,7 +508,7 @@ Vector* FindTreeMethodClass(class_* self, method* m) {
 	return ret;
 }
 
-bool IsContainsMethod(Vector* method_list, method* m, method** outM) {
+bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
 	assert(!IsStaticModifier(m->modifier));
 	(*outM) = NULL;
 	bool ret = false;
@@ -516,7 +516,7 @@ bool IsContainsMethod(Vector* method_list, method* m, method** outM) {
 	cctx->Scope = m->parent->location;
 	cctx->Ty = m->parent;
 	for(int i=0; i<method_list->Length; i++) {
-		method* mE = AtVector(method_list, i);
+		Method* mE = AtVector(method_list, i);
 		if(IsOverridedMethod(m, mE, cctx)) {
 			(*outM) = mE;
 			ret = true;

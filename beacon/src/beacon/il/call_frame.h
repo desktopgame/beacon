@@ -2,7 +2,7 @@
 #define BEACON_IL_CALL_FRAME_H
 #include "../util/vector.h"
 
-struct method;
+struct Method;
 struct constructor;
 struct operator_overload;
 struct generic_type;

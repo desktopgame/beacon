@@ -8,7 +8,7 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 #include "interface_validate.h"
-struct method;
+struct Method;
 struct property;
 struct Enviroment;
 struct generic_type;
@@ -46,7 +46,7 @@ interface_* NewInterface(StringView namev);
  * @param self
  * @param m
  */
-void AddMethodInterface(interface_* self, struct method* m);
+void AddMethodInterface(interface_* self, struct Method* m);
 
 /**
  * プロパティを追加します.
@@ -65,7 +65,7 @@ void AddPropertyInterface(interface_* self, struct property* p);
  * @param outIndex
  * @return
  */
-struct method* ILFindMethodInterface(interface_* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
+struct Method* ILFindMethodInterface(interface_* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -75,7 +75,7 @@ struct method* ILFindMethodInterface(interface_* self, StringView namev, Vector 
  * @param outIndex
  * @return
  */
-struct method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex);
+struct Method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
@@ -130,7 +130,7 @@ bool IsFunctionalInterface(interface_* self);
  * @param self
  * @return
  */
-struct method* GetFunctionInterface(interface_* self);
+struct Method* GetFunctionInterface(interface_* self);
 
 /**
  * このインターフェイスを除く継承された全てのインターフェイスを返します.

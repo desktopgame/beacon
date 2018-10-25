@@ -7,7 +7,7 @@
 struct Enviroment;
 struct generic_type;
 struct operator_overload;
-struct method;
+struct Method;
 //binded? bound?
 
 typedef enum bound_invoke {
@@ -21,7 +21,7 @@ typedef struct il_factor_invoke_bound {
 	Vector* type_args;
 	Vector* args;
 	union {
-		struct method* m;
+		struct Method* m;
 		subscript_descriptor subscript;
 	} u;
 	int index;

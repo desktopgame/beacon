@@ -17,14 +17,14 @@ void CopyVTable(vtable * src, vtable * dst) {
 	}
 }
 
-void AddVTable(vtable * self, method * m) {
+void AddVTable(vtable * self, Method * m) {
 	if (IsStaticModifier(m->modifier)) {
 		return;
 	}
 	PushVector(self->elements, m);
 }
 
-void ReplaceVTable(vtable * self, method * m, CallContext* cctx) {
+void ReplaceVTable(vtable * self, Method * m, CallContext* cctx) {
 	if (IsStaticModifier(m->modifier)) {
 		return;
 	}
@@ -32,7 +32,7 @@ void ReplaceVTable(vtable * self, method * m, CallContext* cctx) {
 	const char* methodname = Ref2Str(m->namev);
 	#endif
 	for (int i = 0; i < self->elements->Length; i++) {
-		method* e = (method*)AtVector(self->elements, i);
+		Method* e = (Method*)AtVector(self->elements, i);
 		//if (IsOverridedMethod(m, e, cctx)) {
 		if (IsOverridedMethod(e, m, cctx)) {
 			AssignVector(self->elements, i, m);

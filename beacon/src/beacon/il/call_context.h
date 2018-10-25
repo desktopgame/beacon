@@ -6,7 +6,7 @@
 struct namespace_;
 struct type;
 struct class_;
-struct method;
+struct Method;
 struct constructor;
 struct operator_overload;
 struct generic_type;
@@ -34,7 +34,7 @@ typedef struct CallContext {
 	struct namespace_* Scope;
 	struct type* Ty;
 	union {
-		struct method* Method;
+		struct Method* Method;
 		struct constructor* Ctor;
 		struct operator_overload* OpOv;
 	} Kind;
@@ -52,7 +52,7 @@ void PopCallContext(CallContext* self);
 
 struct namespace_* GetNamespaceCContext(CallContext* self);
 
-struct method* GetMethodCContext(CallContext* self);
+struct Method* GetMethodCContext(CallContext* self);
 
 struct type* GetTypeCContext(CallContext* self);
 

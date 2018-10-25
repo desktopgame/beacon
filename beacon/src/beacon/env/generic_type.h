@@ -10,7 +10,7 @@
 #define TYPE2GENERIC(type) (type->generic_self)
 
 struct type;
-struct method;
+struct Method;
 struct Enviroment;
 struct virtual_type;
 struct Frame;
@@ -36,7 +36,7 @@ typedef struct generic_type {
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
 		struct type* type_;
-		struct method* method_;
+		struct Method* method_;
 	} u;
 	//もしこの型が List<T> の Tを表すなら、
 	//外側のクラスの何番目の型変数かを格納する。

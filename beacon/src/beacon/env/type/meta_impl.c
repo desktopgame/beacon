@@ -118,23 +118,23 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	return score;
 }
 
-method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
 	return MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
+Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
 	return MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
-	method* ret = NULL;
+	Method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
-		method* m = (method*)ve;
+		Method* m = (Method*)ve;
 		if(!IsMetaMethodAccessValid(m, cctx)) {
 			continue;
 		}
@@ -163,15 +163,15 @@ method* MetaScopedILFindMethod(class_* context, Vector* method_vec, StringView n
 	return ret;
 }
 
-method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
+Method* MetaScopedGFindMethod(class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
-	method* ret = NULL;
+	Method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
-		method* m = (method*)ve;
+		Method* m = (Method*)ve;
 		//名前か引数の個数が違うので無視
 		if (m->namev != namev ||
 			m->parameters->Length != gargs->Length
@@ -288,7 +288,7 @@ operator_overload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector
 	return ret;
 }
 
-bool IsMetaMethodAccessValid(method* m, CallContext* cctx) {
+bool IsMetaMethodAccessValid(Method* m, CallContext* cctx) {
 	class_* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&

@@ -266,7 +266,7 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilmethod->Parameters;
 	//実行時のメソッド情報を作成する
-	method* method = method_new(ilmethod->Name);
+	Method* method = method_new(ilmethod->Name);
 	Vector* parameter_list = method->parameters;
 	method->type = IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
 	method->access = ilmethod->Access;
@@ -369,9 +369,9 @@ bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* i
 	return true;
 }
 
-bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, method* mt) {
+bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, Method* mt) {
 	//	VectorItem e = AtVector(sgmethods, i);
-	method* me = mt;
+	Method* me = mt;
 	ILMethod* ilmethod = ilmt;
 	//ネイティブメソッドならオペコードは不要
 	if (me->type == METHOD_TYPE_NATIVE_T ||
@@ -610,7 +610,7 @@ void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp,
 	}
 }
 
-bool CLBC_corutine(class_loader* self, method* mt, Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range) {
+bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range) {
 	//戻り値が iterator なら、
 	//コルーチンとして使えるようにする
 	bool yield_err = false;

@@ -27,7 +27,7 @@ typedef enum MethodType {
 /**
  * メソッドを表す構造体.
  */
-typedef struct method {
+typedef struct Method {
 	StringView namev;
 	MethodType type;
 	//struct class_* decleared_type;
@@ -41,7 +41,7 @@ typedef struct method {
 		script_method* script_method;
 		native_method* native_method;
 	} u;
-} method;
+} Method;
 
 /**
  * メソッドを作成します.
@@ -50,7 +50,7 @@ typedef struct method {
  * @param lineno
  * @return
  */
-method* MallocMethod(StringView namev, const char* filename, int lineno);
+Method* MallocMethod(StringView namev, const char* filename, int lineno);
 #define method_new(namev) (MallocMethod(namev, __FILE__, __LINE__))
 
 /**
@@ -59,7 +59,7 @@ method* MallocMethod(StringView namev, const char* filename, int lineno);
  * @param frame
  * @param env
  */
-void ExecuteMethod(method* self, struct Frame* fr, Enviroment* env);
+void ExecuteMethod(Method* self, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドa とb が完全に等価である場合に true を返します.
@@ -70,41 +70,41 @@ void ExecuteMethod(method* self, struct Frame* fr, Enviroment* env);
  * @param cctx
  * @return
  */
-bool IsOverridedMethod(method* superM, method* subM, struct CallContext* cctx);
+bool IsOverridedMethod(Method* superM, Method* subM, struct CallContext* cctx);
 
 /**
  * @param self
  * @param name
  * @return
  */
-int GetGenericIndexForMethod(method* self, StringView namev);
+int GetGenericIndexForMethod(Method* self, StringView namev);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void DeleteMethod(method* self);
+void DeleteMethod(Method* self);
 
 /**
  * このメソッドのマングル表現を返します.
  * @param self
  * @return
  */
-StringView MangleMethod(method* self);
+StringView MangleMethod(Method* self);
 
 /**
  * 型の完全名とマングル表現を連結して返します.
  * @param self
  * @return
  */
-StringView GetMethodUniqueName(method* self);
+StringView GetMethodUniqueName(Method* self);
 
 /**
  * メソッドがコルーチンとして機能できるなら true.
  * @param self
  * @return
  */
-bool IsCoroutineMethod(method* self);
+bool IsCoroutineMethod(Method* self);
 
 /**
  * メソッドがイールドパターンで実装されているなら true.
@@ -112,7 +112,7 @@ bool IsCoroutineMethod(method* self);
  * @param error
  * @return
  */
-bool IsYieldMethod(method* self, Vector* stmt_list, bool* error);
+bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error);
 
 /**
  * このメソッドのためのユニークなイテレータ型を作成します.
@@ -122,6 +122,6 @@ bool IsYieldMethod(method* self, Vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct type* CreateIteratorTypeFromMethod(method* self, struct class_loader* cll, Vector* stmt_list);
+struct type* CreateIteratorTypeFromMethod(Method* self, struct class_loader* cll, Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H

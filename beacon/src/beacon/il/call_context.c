@@ -45,7 +45,7 @@ namespace_* GetNamespaceCContext(CallContext* self) {
 	return GetLangNamespace();
 }
 
-method* GetMethodCContext(CallContext* self) {
+Method* GetMethodCContext(CallContext* self) {
 	if(self->Tag != CALL_METHOD_T) {
 		return NULL;
 	}

@@ -232,7 +232,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		method* m = method_new(ilfunc->Name);
+		Method* m = method_new(ilfunc->Name);
 		DupTypeParameterList(ilfunc->TypeParameters, m->type_parameters);
 		script_method* sm = NewScriptMethod();
 		Enviroment* env = NewEnviroment();
@@ -276,7 +276,7 @@ static void LoadClassLoader_toplevel_function(class_loader* self) {
 	//実装のロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
+		Method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
 		script_method* sm = m->u.script_method;
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->Scope = GetLangNamespace();

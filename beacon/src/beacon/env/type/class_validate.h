@@ -3,7 +3,7 @@
 #include "../../util/string_pool.h"
 #include <stdbool.h>
 struct class_;
-struct method;
+struct Method;
 struct property;
 struct field;
 struct constructor;
@@ -14,7 +14,7 @@ struct constructor;
  * @param out
  * @return
  */
-bool IsImplementInterfaceMethodValidClass(struct class_* cls, struct method** out);
+bool IsImplementInterfaceMethodValidClass(struct class_* cls, struct Method** out);
 /**
  * クラスが全てのプロパティを正しく実装しているなら true.
  * インターフェイスを一つも持っていないなら 常にtrue です。
@@ -31,7 +31,7 @@ bool IsImplementInterfacePropertyValidClass(struct class_* cls, struct property*
  * @param out
  * @return
  */
-bool IsImplementAbstractClassValidClass(struct class_* cls, struct method** out);
+bool IsImplementAbstractClassValidClass(struct class_* cls, struct Method** out);
 
 /**
  * クラスのフィールド名のうち重複するものがないなら true.
@@ -57,7 +57,7 @@ bool IsValidPropertyClass(struct class_* self, struct property** out);
  * @param out_name
  * @return
  */
-bool IsMethodParameterValidClass(struct class_* cls, struct method** out_method, StringView* out_name);
+bool IsMethodParameterValidClass(struct class_* cls, struct Method** out_method, StringView* out_name);
 
 /**
  * 全てのコンストラクタを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -83,5 +83,5 @@ bool IsTypeParameterValidClass(struct class_* self, StringView* out_name);
  * @param out_name
  * @return
  */
-bool IsMethodTypeParameterValidClass(struct class_* self, struct method** out_method, StringView* out_name);
+bool IsMethodTypeParameterValidClass(struct class_* self, struct Method** out_method, StringView* out_name);
 #endif

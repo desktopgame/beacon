@@ -41,7 +41,7 @@ void CLBC_properties_decl(class_loader* self, il_type* iltype, type* tp, Vector*
 void CLBC_properties_impl(class_loader* self, il_type* iltype, type* tp, Vector* ilprops, Vector* sgprops, namespace_* scope);
 
 bool CLBC_method_decl(class_loader* self, il_type* iltype, type* tp, ILMethod* ilmt, namespace_* scope);
-bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, method* mt);
+bool CLBC_method_impl(class_loader* self, namespace_* scope, il_type* iltype, type* tp, ILMethod* ilmt, Method* mt);
 
 /**
  * メソッド宣言を読み込んでクラスに追加します.
@@ -74,7 +74,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, namespace_* scope);
 
-bool CLBC_corutine(class_loader* self, method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range);
+bool CLBC_corutine(class_loader* self, Method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, namespace_* range);
 
 void CLBC_body(class_loader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, namespace_* range);
 #endif

@@ -6,7 +6,7 @@
 struct Enviroment;
 struct generic_type;
 struct operator_overload;
-struct method;
+struct Method;
 
 typedef enum instance_invoke {
 	INSTANCE_INVOKE_METHOD_T,
@@ -21,7 +21,7 @@ typedef struct il_factor_invoke {
 	StringView namev;
 	int index;
 	union {
-		struct method* m;
+		struct Method* m;
 		struct operator_overload* opov;
 	} u;
 	struct generic_type* resolved;

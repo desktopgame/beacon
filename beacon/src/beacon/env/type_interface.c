@@ -74,7 +74,7 @@ void AddPropertyType(type* self, property* p) {
 	}
 }
 
-void AddMethodType(type* self, method * m) {
+void AddMethodType(type* self, Method * m) {
 	if (self->tag == TYPE_CLASS_T) {
 		AddMethodClass(self->u.class_, m);
 	} else if (self->tag == TYPE_INTERFACE_T) {
@@ -82,7 +82,7 @@ void AddMethodType(type* self, method * m) {
 	}
 }
 
-method * ILFindMethodType(type * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method * ILFindMethodType(type * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == TYPE_CLASS_T) {
 		return ILFindMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
@@ -92,7 +92,7 @@ method * ILFindMethodType(type * self, StringView namev, Vector * args, Envirome
 	return NULL;
 }
 
-method* ILFindSMethodType(type* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+Method* ILFindSMethodType(type* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == TYPE_CLASS_T);
 	return ILFindSMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 }

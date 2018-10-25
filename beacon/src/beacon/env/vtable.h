@@ -2,7 +2,7 @@
 #ifndef BEACON_ENV_VTABLE_H
 #define BEACON_ENV_VTABLE_H
 #include "../util/vector.h"
-struct method;
+struct Method;
 struct CallContext;
 /**
  * メソッドの一覧をフラットに格納する配列です.
@@ -35,7 +35,7 @@ void CopyVTable(vtable* src, vtable* dst);
  * @param self
  * @param m
  */
-void AddVTable(vtable* self, struct method* m);
+void AddVTable(vtable* self, struct Method* m);
 
 /**
  * メソッド一覧に m を追加します.
@@ -45,7 +45,7 @@ void AddVTable(vtable* self, struct method* m);
  * @param m
  * @param cctx
  */
-void ReplaceVTable(vtable* self, struct method* m, struct CallContext* cctx);
+void ReplaceVTable(vtable* self, struct Method* m, struct CallContext* cctx);
 
 /**
  * vtableを開放します.

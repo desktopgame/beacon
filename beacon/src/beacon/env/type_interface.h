@@ -21,7 +21,7 @@ struct namespace_;
 struct class_;
 struct interface_;
 struct field;
-struct method;
+struct Method;
 struct property;
 struct Enviroment;
 struct vtable;
@@ -113,7 +113,7 @@ void AddPropertyType(type* self, struct property* p);
  * @param self
  * @param m
  */
-void AddMethodType(type* self, struct method* m);
+void AddMethodType(type* self, struct Method* m);
 
 /**
  * この型からメソッドを検索します.
@@ -125,7 +125,7 @@ void AddMethodType(type* self, struct method* m);
  * @param outIndex
  * @return
  */
-struct method* ILFindMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct Method* ILFindMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -137,7 +137,7 @@ struct method* ILFindMethodType(type* self, StringView namev, Vector* args, stru
  * @param outIndex
  * @return
  */
-struct method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct Method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

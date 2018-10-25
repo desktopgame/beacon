@@ -8,10 +8,10 @@
 #include <assert.h>
 
 //proto
-static void bc_array_nativeInit(method* parent, Frame* fr, Enviroment* env);
-static void bc_array_nativeSet(method* parent, Frame* fr, Enviroment* env);
-static void bc_array_nativeGet(method* parent, Frame* fr, Enviroment* env);
-static void bc_array_nativeCopy(method* parent, Frame* fr, Enviroment* env);
+static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env);
+static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env);
+static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env);
+static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCArray() {
 	namespace_* lang = GetLangNamespace();
@@ -56,7 +56,7 @@ int GetLengthBCArray(object* arr) {
 	return arr->native_slot_vec->Length;
 }
 //private
-static void bc_array_nativeInit(method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	type* tp = parent->parent;
 	//Array#lengthを取り出す
 	int temp = 0;
@@ -76,7 +76,7 @@ static void bc_array_nativeInit(method* parent, Frame* fr, Enviroment* env) {
 	}
 }
 
-static void bc_array_nativeSet(method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env) {
 	object* self = AtVector(fr->VariableTable, 0);
 	object* idx = AtVector(fr->VariableTable, 1);
 	object* val = AtVector(fr->VariableTable, 2);
@@ -84,7 +84,7 @@ static void bc_array_nativeSet(method* parent, Frame* fr, Enviroment* env) {
 	AssignVector(self->native_slot_vec, idx->u.int_, val);
 }
 
-static void bc_array_nativeGet(method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	object* self = AtVector(fr->VariableTable, 0);
 	object* idx = AtVector(fr->VariableTable, 1);
 //	object* a = AtVector(vm->VariableTable, 2);
@@ -94,7 +94,7 @@ static void bc_array_nativeGet(method* parent, Frame* fr, Enviroment* env) {
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_array_nativeCopy(method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env) {
 	object* src = AtVector(fr->VariableTable, 1);
 	object* srcOffset = AtVector(fr->VariableTable, 2);
 	object* dst = AtVector(fr->VariableTable, 3);

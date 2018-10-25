@@ -15,7 +15,7 @@ native_method * NewNativeMethod() {
 	return ret;
 }
 
-void ExecuteNativeMethod(native_method * self, method * parent, Frame* fr, Enviroment* env) {
+void ExecuteNativeMethod(native_method * self, Method * parent, Frame* fr, Enviroment* env) {
 	if (self->ref == NULL) {
 		class_* declared = parent->parent->u.class_;
 		self->ref = GetNumericMapValue(declared->native_method_ref_nmap, parent->namev);

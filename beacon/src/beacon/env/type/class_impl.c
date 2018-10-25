@@ -40,7 +40,7 @@ static void class_DeleteField(VectorItem item);
 static void class_DeleteMethod(VectorItem item);
 static void class_ctor_delete(VectorItem item);
 static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
-static method* class_find_impl_method(class_* self, method* virtualMethod);
+static Method* class_find_impl_method(class_* self, Method* virtualMethod);
 static void class_vtable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
 static void class_generic_type_list_delete(VectorItem item);
@@ -165,7 +165,7 @@ void AddPropertyClass(class_* self, property* p) {
 	}
 }
 
-void AddMethodClass(class_ * self, method * m) {
+void AddMethodClass(class_ * self, Method * m) {
 	assert(m != NULL);
 	if (IsStaticModifier(m->modifier)) {
 		PushVector(self->smethod_list, m);
@@ -372,7 +372,7 @@ void LinkAllClass(class_ * self) {
 		f->parent = self->parent;
 	}
 	for (int i = 0; i < self->method_list->Length; i++) {
-		method* m = (method*)AtVector(self->method_list, i);
+		Method* m = (Method*)AtVector(self->method_list, i);
 		m->parent = self->parent;
 	}
 	for (int i = 0; i < self->constructor_list->Length; i++) {
@@ -414,7 +414,7 @@ void DeleteClass(class_ * self) {
 //private
 static void CreateVTableClass_top(class_* self) {
 	for (int i = 0; i < self->method_list->Length; i++) {
-		method* m = (method*)AtVector(self->method_list, i);
+		Method* m = (Method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
 			AddVTable(self->vt, m);
@@ -432,7 +432,7 @@ static void CreateVTableClass_override(class_* self) {
 	CreateVTableClass(self->super_class->core_type->u.class_);
 	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->Length; i++) {
-		method* m = (method*)AtVector(self->method_list, i);
+		Method* m = (Method*)AtVector(self->method_list, i);
 		if(m->access != ACCESS_PRIVATE_T &&
 		   !IsStaticModifier(m->modifier)) {
 			ReplaceVTable(self->vt, m, cctx);
@@ -459,8 +459,8 @@ static void CreateVTableClass_interface(class_* self) {
 		for (int j = 0; j < interVT->elements->Length; j++) {
 			//実装クラスの中の、
 			//シグネチャが同じメソッドをテーブルへ。
-			method* interVTM = AtVector(interVT->elements, j);
-			method* classVTM = class_find_impl_method(self, interVTM);
+			Method* interVTM = AtVector(interVT->elements, j);
+			Method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->is_abstract && classVTM == NULL) {
 				PushVector(self->vt_vec, newVT);
 				ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
@@ -494,7 +494,7 @@ static void class_DeleteField(VectorItem item) {
 }
 
 static void class_DeleteMethod(VectorItem item) {
-	method* e = (method*)item;
+	Method* e = (Method*)item;
 	DeleteMethod(e);
 }
 
@@ -508,14 +508,14 @@ static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) 
 	DeleteNativeMethodRef(e);
 }
 
-static method* class_find_impl_method(class_* self, method* virtualMethod) {
+static Method* class_find_impl_method(class_* self, Method* virtualMethod) {
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->parent->location;
 	cctx->Ty = self->parent;
-	method* ret = NULL;
+	Method* ret = NULL;
 	vtable* clVT = self->vt;
 	for (int i = 0; i < clVT->elements->Length; i++) {
-		method* clM = AtVector(clVT->elements, i);
+		Method* clM = AtVector(clVT->elements, i);
 		if (IsOverridedMethod(virtualMethod, clM, cctx)) {
 			ret = clM;
 			break;

@@ -2,8 +2,8 @@
 #include "../../bc_library_impl.h"
 
 //proto
-static void bc_char_nativeInit(method* parent, Frame* fr, Enviroment* env);
-static void bc_char_nativeToInt(method* parent, Frame* fr, Enviroment* env);
+static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env);
+static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCChar() {
 	namespace_* lang = GetLangNamespace();
@@ -20,7 +20,7 @@ type* GetBCCharType() {
 }
 
 //private
-static void bc_char_nativeInit(method* parent, Frame* fr, Enviroment* env) {
+static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	object* self = AtVector(fr->VariableTable, 0);
 	object* ch = AtVector(fr->VariableTable, 1);
 
@@ -28,7 +28,7 @@ static void bc_char_nativeInit(method* parent, Frame* fr, Enviroment* env) {
 	self->tag = OBJECT_CHAR_T;
 }
 
-static void bc_char_nativeToInt(method* parent, Frame* fr, Enviroment* env) {
+static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env) {
 	object* self = AtVector(fr->VariableTable, 0);
 	PushVector(fr->ValueStack, GetIntObject((int)self->u.char_));
 }

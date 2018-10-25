@@ -221,7 +221,7 @@ struct constructor* ILFindEmptyConstructorClass(class_* self, Enviroment* env, C
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* ILFindMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct Method* ILFindMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -231,7 +231,7 @@ struct method* ILFindMethodClass(class_* self, StringView namev, Vector* args, E
  * @param outIndex
  * @return
  */
-struct method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex);
+struct Method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * equalsメソッドを検索します.
@@ -239,7 +239,7 @@ struct method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, i
  * @param outIndex
  * @return
  */
-struct method* GFindEqMethodClass(class_* self, int* outIndex);
+struct Method* GFindEqMethodClass(class_* self, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -251,7 +251,7 @@ struct method* GFindEqMethodClass(class_* self, int* outIndex);
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct method* ILFindSMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct Method* ILFindSMethodClass(class_* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -261,7 +261,7 @@ struct method* ILFindSMethodClass(class_* self, StringView namev, Vector* args, 
  * @param outIndex
  * @return
  */
-struct method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex);
+struct Method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.
@@ -271,7 +271,7 @@ struct method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, 
  * @param index
  * @return
  */
-struct method* GetMethodClass(struct object* o, int index);
+struct Method* GetMethodClass(struct object* o, int index);
 
 /**
  * 指定位置のメソッドを返します.
@@ -281,7 +281,7 @@ struct method* GetMethodClass(struct object* o, int index);
  * @param index
  * @return
  */
-struct method* GetSMethodClass(class_* self, int index);
+struct Method* GetSMethodClass(class_* self, int index);
 
 /**
  * selfから、 interTypeの仮想関数テーブルの interIndex番目に属するメソッド
@@ -291,7 +291,7 @@ struct method* GetSMethodClass(class_* self, int index);
  * @param interIndex
  * @return
  */
-struct method* GetImplMethodClass(class_* self, type* interType, int interMIndex);
+struct Method* GetImplMethodClass(class_* self, type* interType, int interMIndex);
 
 
 
@@ -325,7 +325,7 @@ struct operator_overload* GetOperatorOverloadClass(class_* self, int index);
  * @param outM
  * @return
  */
-Vector* FindTreeMethodClass(class_* self, method* m);
+Vector* FindTreeMethodClass(class_* self, Method* m);
 
 /**
  * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
@@ -333,7 +333,7 @@ Vector* FindTreeMethodClass(class_* self, method* m);
  * @param method_list
  * @param m
  */
-bool IsContainsMethod(Vector* method_list, method* m, method** outM);
+bool IsContainsMethod(Vector* method_list, Method* m, Method** outM);
 
 /**
  * 実装された全てのジェネリックインターフェイスを返します.

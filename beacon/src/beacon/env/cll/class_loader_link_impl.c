@@ -120,7 +120,7 @@ static void CLBC_interface_decl(class_loader * self, il_type * iltype, type * tp
 	CLBC_properties_decl(self, iltype, tp, iltype->u.interface_->prop_list, scope);
 	//privateなメンバーは定義できない
 	for(int i=0; i<tp->u.interface_->method_list->Length; i++) {
-		method* e = AtVector(tp->u.interface_->method_list, i);
+		Method* e = AtVector(tp->u.interface_->method_list, i);
 		if(e->access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
@@ -264,7 +264,7 @@ static void CLBC_excec_enum_impl(class_loader* self) {
 
 static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//実装されていないインターフェイスを確認する
-	method* outiMethod = NULL;
+	Method* outiMethod = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
 	  !IsImplementInterfaceMethodValidClass(TYPE2CLASS(tp), &outiMethod)) {
 		ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T, Ref2Str(tp->u.class_->namev), Ref2Str(outiMethod->namev));
@@ -278,7 +278,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
-	method* outaMethod = NULL;
+	Method* outaMethod = NULL;
 	if(tp->tag == TYPE_CLASS_T &&
 	   !IsImplementAbstractClassValidClass(TYPE2CLASS(tp), &outaMethod)) {
 		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->u.class_->namev), Ref2Str(outaMethod->namev));
@@ -303,7 +303,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 		return;
 	}
 	//メソッドの重複するパラメータ名を検出する
-	method* out_overwrap_m = NULL;
+	Method* out_overwrap_m = NULL;
 	StringView out_overwrap_mname;
 	if(!IsMethodParameterValidClass(tp->u.class_, &out_overwrap_m, &out_overwrap_mname)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
@@ -334,7 +334,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 		return;
 	}
 	//メソッドの重複する型パラメータ名を検出する
-	method* out_overwrap_tpm = NULL;
+	Method* out_overwrap_tpm = NULL;
 	StringView out_overwrap_tpmname;
 	if(!IsMethodTypeParameterValidClass(tp->u.class_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
@@ -365,7 +365,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, n
 
 static void CLBC_check_interface(class_loader * self, il_type * iltype, type * tp, namespace_ * scope) {
 	//重複するパラメータ名を検出する
-	method* out_overwrap_m = NULL;
+	Method* out_overwrap_m = NULL;
 	StringView out_overwrap_name;
 	if(!IsMethodParameterValidInterface(tp->u.interface_, &out_overwrap_m, &out_overwrap_name)) {
 		ThrowBCError(BCERROR_OVERWRAP_PARAMETER_NAME_T,
@@ -383,7 +383,7 @@ static void CLBC_check_interface(class_loader * self, il_type * iltype, type * t
 		);
 	}
 	//メソッドの重複する型パラメータ名を検出する
-	method* out_overwrap_tpm = NULL;
+	Method* out_overwrap_tpm = NULL;
 	StringView out_overwrap_tpmname;
 	if(!IsMethodTypeParameterValidInterface(tp->u.interface_, &out_overwrap_tpm, &out_overwrap_tpmname)) {
 		ThrowBCError(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,

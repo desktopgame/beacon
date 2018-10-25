@@ -3,7 +3,7 @@
 #define BEACON_ENV_NATIVE_METHOD_H
 struct native_method_ref;
 struct Enviroment;
-struct method;
+struct Method;
 struct Frame;
 /**
  * Cで実装されたメソッド.
@@ -24,7 +24,7 @@ native_method* NewNativeMethod();
  * @param fr
  * @param env
  */
-void ExecuteNativeMethod(native_method* self, struct method* parent, struct Frame* fr, struct Enviroment* env);
+void ExecuteNativeMethod(native_method* self, struct Method* parent, struct Frame* fr, struct Enviroment* env);
 
 /**
  * ネイティブメソッドを開放します.

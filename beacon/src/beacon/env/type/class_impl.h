@@ -23,7 +23,7 @@ struct object;
 struct field;
 struct property;
 struct property_body;
-struct method;
+struct Method;
 struct constructor;
 struct generic_type;
 struct operator_overload;
@@ -128,7 +128,7 @@ void AddPropertyClass(class_* self, struct property* p);
  * @param self
  * @param m
  */
-void AddMethodClass(class_* self, struct method* m);
+void AddMethodClass(class_* self, struct Method* m);
 
 /**
  * このクラスにコンストラクタを追加します.

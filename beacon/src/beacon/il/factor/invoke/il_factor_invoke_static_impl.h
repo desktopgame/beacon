@@ -5,14 +5,14 @@
 #include "../../../util/string_pool.h"
 struct Enviroment;
 struct generic_type;
-struct method;
+struct Method;
 
 typedef struct il_factor_invoke_static {
 	StringView namev;
 	fqcn_cache* fqcn;
 	Vector* args;
 	Vector* type_args;
-	struct method* m;
+	struct Method* m;
 	int index;
 	struct generic_type* resolved;
 } il_factor_invoke_static;

@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 #include "../vm/enviroment.h"
 struct Frame;
-struct method;
+struct Method;
 struct Enviroment;
 
 /**
@@ -28,7 +28,7 @@ script_method* NewScriptMethod();
  * @param fr
  * @param env
  */
-void ExecuteScriptMethod(script_method* self, struct method* parent, struct Frame* fr, Enviroment* env);
+void ExecuteScriptMethod(script_method* self, struct Method* parent, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドを開放します.

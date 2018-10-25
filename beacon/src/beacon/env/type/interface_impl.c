@@ -39,7 +39,7 @@ interface_ * NewInterface(StringView namev) {
 	return ret;
 }
 
-void AddMethodInterface(interface_ * self, method * m) {
+void AddMethodInterface(interface_ * self, Method * m) {
 	PushVector(self->method_list, m);
 }
 
@@ -47,11 +47,11 @@ void AddPropertyInterface(interface_* self, property* p) {
 	PushVector(self->prop_list, p);
 }
 
-method * ILFindMethodInterface(interface_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method * ILFindMethodInterface(interface_ * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	return MetaILFindMethod(self->method_list, namev, args, env,cctx, outIndex);
 }
 
-method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex) {
+Method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex) {
 	return MetaGFindMethod(self->method_list, namev, gargs, outIndex);
 }
 
@@ -131,9 +131,9 @@ bool IsFunctionalInterface(interface_* self) {
 	return GetFunctionInterface(self) != NULL;
 }
 
-method* GetFunctionInterface(interface_* self) {
+Method* GetFunctionInterface(interface_* self) {
 	Vector* v = FlattenMethodInterface(self);
-	method* ret = NULL;
+	Method* ret = NULL;
 	if(v->Length == 1) {
 		ret = AtVector(v, 0);
 	}
@@ -173,7 +173,7 @@ Vector* GetGenericInterfaceTreeInterfaceImpl(interface_* self) {
 	return ret;
 }
 static void DeleteInterface_method(VectorItem item) {
-	method* e = (method*)item;
+	Method* e = (Method*)item;
 	DeleteMethod(e);
 }
 
@@ -194,7 +194,7 @@ static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth
 	#endif
 	assert(depth < 42);
 	for(int i=0; i<self->method_list->Length; i++) {
-		method* m = AtVector(self->method_list, i);
+		Method* m = AtVector(self->method_list, i);
 		PushVector(dest, m);
 	}
 	for(int i=0; i<self->impl_list->Length; i++) {
