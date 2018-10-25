@@ -18,24 +18,24 @@
 //proto
 static void DeleteImportManager_import_info(VectorItem item);
 
-import_manager * NewImportManager() {
-	import_manager* ret = (import_manager*)MEM_MALLOC(sizeof(import_manager));
-	ret->info_vec = NewVector();
+ImportManager * NewImportManager() {
+	ImportManager* ret = (ImportManager*)MEM_MALLOC(sizeof(ImportManager));
+	ret->Items = NewVector();
 	return ret;
 }
 
-ImportInfo* ImportImportManager(import_manager * self, class_loader * target) {
+ImportInfo* ImportImportManager(ImportManager * self, class_loader * target) {
 	ImportInfo* info = NewImportInfo();
 	info->Context = target;
-	PushVector(self->info_vec, info);
+	PushVector(self->Items, info);
 	return info;
 }
 
-bool IsLoadedImportManager(import_manager * self, int index) {
-	if (index >= self->info_vec->Length) {
+bool IsLoadedImportManager(ImportManager * self, int index) {
+	if (index >= self->Items->Length) {
 		return false;
 	}
-	ImportInfo* info = (ImportInfo*)AtVector(self->info_vec, index);
+	ImportInfo* info = (ImportInfo*)AtVector(self->Items, index);
 	return info->IsConsume;
 }
 
@@ -135,8 +135,8 @@ generic_type* ResolvefImportManager(namespace_* scope, fqcn_cache* fqcn, CallCon
 	return parameterized;
 }
 
-void DeleteImportManager(import_manager * self) {
-	DeleteVector(self->info_vec, DeleteImportManager_import_info);
+void DeleteImportManager(ImportManager * self) {
+	DeleteVector(self->Items, DeleteImportManager_import_info);
 	MEM_FREE(self);
 }
 //private

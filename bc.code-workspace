@@ -129,7 +129,8 @@
 			"opcode.h": "c",
 			"tree_map.h": "c",
 			"type_parameter.h": "c",
-			"il_constructor_chain.h": "c"
+			"il_constructor_chain.h": "c",
+			"getopt.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

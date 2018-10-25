@@ -62,7 +62,7 @@ class_loader* NewClassLoader(const char* filename, ContentType type) {
 	ret->parent = NULL;
 	ret->type = type;
 	ret->link = LINK_NONE_T;
-	ret->import_manager = NewImportManager();
+	ret->ImportManager = NewImportManager();
 	ret->env = NewEnviroment();
 	ret->level = 0;
 	ret->type_cache_vec = NewVector();
@@ -112,7 +112,7 @@ void DeleteClassLoader(class_loader * self) {
 	DeleteAST(self->source_code);
 	DeleteILToplevel(self->il_code);
 	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
-	DeleteImportManager(self->import_manager);
+	DeleteImportManager(self->ImportManager);
 	DeleteEnviroment(self->env);
 	MEM_FREE(self->filename);
 	MEM_FREE(self);
@@ -142,9 +142,9 @@ static void LinkClassLoader_recursive(class_loader* self, LinkType type) {
 		return;
 	}
 	self->link = type;
-	import_manager* importMgr = self->import_manager;
-	for (int i = 0; i < importMgr->info_vec->Length; i++) {
-		ImportInfo* info = (ImportInfo*)AtVector(importMgr->info_vec, i);
+	ImportManager* importMgr = self->ImportManager;
+	for (int i = 0; i < importMgr->Items->Length; i++) {
+		ImportInfo* info = (ImportInfo*)AtVector(importMgr->Items, i);
 		if (info->IsConsume) {
 			continue;
 		}

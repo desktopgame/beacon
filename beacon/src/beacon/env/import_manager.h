@@ -15,15 +15,15 @@ struct CallContext;
 /**
  * あるファイルが参照しているファイルの一覧を管理します.
  */
-typedef struct import_manager {
-	Vector* info_vec;
-} import_manager;
+typedef struct ImportManager {
+	Vector* Items;
+} ImportManager;
 
 /**
  * インポートマネージャを作成します.
  * @return
  */
-import_manager* NewImportManager();
+ImportManager* NewImportManager();
 
 /**
  * 指定のクラスローダをインポートの一覧に含めます.
@@ -31,7 +31,7 @@ import_manager* NewImportManager();
  * @param target
  * @return
  */
-struct ImportInfo* ImportImportManager(import_manager* self, struct class_loader* target);
+struct ImportInfo* ImportImportManager(ImportManager* self, struct class_loader* target);
 
 /**
  * 既に読み込まれたなら true.
@@ -39,7 +39,7 @@ struct ImportInfo* ImportImportManager(import_manager* self, struct class_loader
  * @param index
  * @return
  */
-bool IsLoadedImportManager(import_manager* self, int index);
+bool IsLoadedImportManager(ImportManager* self, int index);
 
 /**
  * 指定の名前から型を解決します.
@@ -65,5 +65,5 @@ struct generic_type* ResolvefImportManager(struct namespace_* scope, struct fqcn
  * インポートマネージャを開放します.
  * @param self
  */
-void DeleteImportManager(import_manager* self);
+void DeleteImportManager(ImportManager* self);
 #endif // !SIGNAL_ENV_IMPORT_MANAGER_H

@@ -20,7 +20,7 @@ typedef struct class_loader {
 	il_top_level* il_code;
 
 	struct Enviroment* env;
-	import_manager* import_manager;
+	ImportManager* ImportManager;
 	ContentType type;
 	LinkType link;
 	Vector* type_cache_vec;
