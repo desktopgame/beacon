@@ -11,13 +11,13 @@
 #include "object.h"
 #include "generic_type.h"
 
-script_method * NewScriptMethod() {
-	script_method* ret = (script_method*)MEM_MALLOC(sizeof(script_method));
+ScriptMethod * NewScriptMethod() {
+	ScriptMethod* ret = (ScriptMethod*)MEM_MALLOC(sizeof(ScriptMethod));
 	ret->env = NULL;
 	return ret;
 }
 
-void ExecuteScriptMethod(script_method * self, Method* parent, Frame* fr, Enviroment* env) {
+void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Enviroment* env) {
 #if defined(DEBUG)
 	const char* name = Ref2Str(parent->Name);
 #endif
@@ -64,7 +64,7 @@ void ExecuteScriptMethod(script_method * self, Method* parent, Frame* fr, Enviro
 	DeleteFrame(sub);
 }
 
-void DeleteScriptMethod(script_method * self) {
+void DeleteScriptMethod(ScriptMethod * self) {
 	DeleteEnviroment(self->env);
 	MEM_FREE(self);
 }

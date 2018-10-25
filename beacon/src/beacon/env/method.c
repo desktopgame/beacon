@@ -379,7 +379,7 @@ static Method* create_has_next(Method* self, type* ty, class_loader* cll, Vector
 	mt->Modifier = MODIFIER_NONE_T;
 	mt->Access = ACCESS_PUBLIC_T;
 	mt->Type = METHOD_TYPE_SCRIPT_T;
-	script_method* smt = NewScriptMethod();
+	ScriptMethod* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = self->Parent->location;
@@ -430,7 +430,7 @@ static Method* create_next(Method* self, type* ty, class_loader* cll,generic_typ
 	mt->Modifier = MODIFIER_NONE_T;
 	mt->Access = ACCESS_PUBLIC_T;
 	mt->Type = METHOD_TYPE_SCRIPT_T;
-	script_method* smt = NewScriptMethod();
+	ScriptMethod* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = self->Parent->location;

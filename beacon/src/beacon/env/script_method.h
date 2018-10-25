@@ -10,16 +10,16 @@ struct Enviroment;
 /**
  * スクリプトで実装されたメソッド.
  */
-typedef struct script_method {
+typedef struct ScriptMethod {
 //	Vector* source;
 	Enviroment* env;
-} script_method;
+} ScriptMethod;
 
 /**
  * スクリプトで実装されたメソッドを作成します.
  * @return
  */
-script_method* NewScriptMethod();
+ScriptMethod* NewScriptMethod();
 
 /**
  * メソッドを実行します.
@@ -28,11 +28,11 @@ script_method* NewScriptMethod();
  * @param fr
  * @param env
  */
-void ExecuteScriptMethod(script_method* self, struct Method* parent, struct Frame* fr, Enviroment* env);
+void ExecuteScriptMethod(ScriptMethod* self, struct Method* parent, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void DeleteScriptMethod(script_method* self);
+void DeleteScriptMethod(ScriptMethod* self);
 #endif // !SIGNAL_ENV_SCRIPT_METHOD_H

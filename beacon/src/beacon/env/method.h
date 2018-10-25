@@ -38,7 +38,7 @@ typedef struct Method {
 	AccessLevel Access;
 	ModifierType Modifier;
 	union {
-		script_method* Script;
+		ScriptMethod* Script;
 		NativeMethod* Native;
 	} Kind;
 } Method;
