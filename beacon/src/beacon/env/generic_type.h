@@ -19,13 +19,13 @@ struct CallContext;
  * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
  */
-typedef enum generic_type_tag {
+typedef enum GenericTypeTag {
 	GENERIC_TYPE_TAG_NONE_T,
 	//クラスの型変数
 	GENERIC_TYPE_TAG_CLASS_T,
 	//メソッドの型変数
 	GENERIC_TYPE_TAG_METHOD_T,
-} generic_type_tag;
+} GenericTypeTag;
 
 /**
  * 型変数つきの型宣言.
@@ -41,7 +41,7 @@ typedef struct generic_type {
 	//もしこの型が List<T> の Tを表すなら、
 	//外側のクラスの何番目の型変数かを格納する。
 	int virtual_type_index;
-	generic_type_tag tag;
+	GenericTypeTag tag;
 	bool mark;
 	bool is_ctor;
 } generic_type;
