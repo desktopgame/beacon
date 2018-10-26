@@ -6,13 +6,13 @@ struct OperatorOverload;
 /**
  * オペレータの仮想関数テーブル.
  */
-typedef struct operator_vt {
+typedef struct OperatorVT {
 	Vector* vec;
-} operator_vt;
+} OperatorVT;
 
-operator_vt* NewOperatorVt();
+OperatorVT* NewOperatorVt();
 
-void ReplaceOperatorVt(operator_vt* self, struct OperatorOverload* opov);
+void ReplaceOperatorVt(OperatorVT* self, struct OperatorOverload* opov);
 
-void DeleteOperatorVt(operator_vt* self);
+void DeleteOperatorVt(OperatorVT* self);
 #endif

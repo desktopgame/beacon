@@ -54,7 +54,7 @@ typedef struct class_ {
 	Vector* vt_vec;
 	//Vector* static_fieldval_vec;
 	VTable* vt;
-	operator_vt* ovt;
+	OperatorVT* ovt;
 	bool is_abstract;
 } class_;
 #include "class_find.h"
