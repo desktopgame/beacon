@@ -155,7 +155,7 @@ static void il_factor_invoke_check(il_factor_invoke * self, Enviroment * env, Ca
 		return;
 	}
 	ResolveILTypeArgument(self->type_args, cctx);
-	type* ctype = gtype->core_type;
+	type* ctype = gtype->CoreType;
 	#if defined(DEBUG)
 	const char* cname = Ref2Str(GetTypeName(ctype));
 	#endif

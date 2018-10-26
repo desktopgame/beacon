@@ -231,7 +231,7 @@ void PaintAllObject(Object* self, ObjectPaint paint) {
 	}
 	//配列型ならスロットも全てマーク
 	type* arrayType = GetBCArrayType();
-	if (self->GType->core_type == arrayType) {
+	if (self->GType->CoreType == arrayType) {
 		for (int i = 0; i < self->NativeSlotVec->Length; i++) {
 			Object* e = (Object*)AtVector(self->NativeSlotVec, i);
 			PaintAllObject(e, paint);
@@ -296,7 +296,7 @@ void DestroyObject(Object* self) {
 	if (self == NULL) {
 		return;
 	}
-	type* tp = self->GType->core_type;
+	type* tp = self->GType->CoreType;
 	assert(self->Paint == PAINT_ONEXIT_T);
 	if (self->Tag == OBJECT_REF_T ||
 	   self->Tag == OBJECT_STRING_T ||
@@ -362,13 +362,13 @@ Object* LongToObject(long l) {
 
 Object* GetDefaultObject(GenericType* gt) {
 	Object* a = GetNullObject();
-	if (gt->core_type == TYPE_INT) {
+	if (gt->CoreType == TYPE_INT) {
 		a = GetIntObject(0);
-	} else if (gt->core_type == TYPE_DOUBLE) {
+	} else if (gt->CoreType == TYPE_DOUBLE) {
 		a = Object_double_new(0.0);
-	} else if (gt->core_type == TYPE_BOOL) {
+	} else if (gt->CoreType == TYPE_BOOL) {
 		a = GetBoolObject(false);
-	} else if (gt->core_type == TYPE_CHAR) {
+	} else if (gt->CoreType == TYPE_CHAR) {
 		a = Object_char_new('\0');
 	}
 	return a;
@@ -376,8 +376,8 @@ Object* GetDefaultObject(GenericType* gt) {
 
 const char* GetObjectName(Object* self) {
 	const char* name = "NULL";
-	if(self->GType != NULL && self->GType->core_type != NULL) {
-		name = Ref2Str(GetTypeFullName(self->GType->core_type));
+	if(self->GType != NULL && self->GType->CoreType != NULL) {
+		name = Ref2Str(GetTypeFullName(self->GType->CoreType));
 	}
 	return name;
 }

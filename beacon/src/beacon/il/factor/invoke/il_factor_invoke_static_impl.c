@@ -93,7 +93,7 @@ static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env,
 	}
 	GenericType* rgtp = self->m->ReturnGType;
 	GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->virtual_type_index);
-	self->resolved = generic_NewType(instanced_type->core_type);
+	self->resolved = generic_NewType(instanced_type->CoreType);
 	self->resolved->tag = GENERIC_TYPE_TAG_METHOD_T;
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
 }

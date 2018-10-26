@@ -32,8 +32,8 @@ void GenerateILVariableInit(il_stmt_variable_init * self, Enviroment * env, Call
 	//voidは代入できない
 	assert(gb != NULL);
 	BC_ERROR();
-	if((ga->core_type != NULL && ga->core_type == TYPE_VOID) ||
-	   (gb->core_type != NULL && gb->core_type == TYPE_VOID)) {
+	if((ga->CoreType != NULL && ga->CoreType == TYPE_VOID) ||
+	   (gb->CoreType != NULL && gb->CoreType == TYPE_VOID)) {
 		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}

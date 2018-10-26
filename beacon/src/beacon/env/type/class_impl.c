@@ -81,7 +81,7 @@ class_ * NewClass(StringView namev) {
 }
 
 class_* NewClassProxy(GenericType* gt, StringView namev) {
-	assert(gt->core_type->tag == TYPE_INTERFACE_T);
+	assert(gt->CoreType->tag == TYPE_INTERFACE_T);
 	class_* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
 	PushVector(ret->impl_list, gt);
@@ -202,7 +202,7 @@ int DistanceClass(class_ * super, class_ * sub) {
 			depth = -1;
 			break;
 		}
-		pointee = super_gtype->core_type->u.class_;
+		pointee = super_gtype->CoreType->u.class_;
 		depth++;
 		if (pointee == NULL) {
 			depth = -1;
@@ -269,7 +269,7 @@ int CountAllFieldClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->core_type->u.class_;
+		pt = pt->super_class->CoreType->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -282,7 +282,7 @@ int CountAllSFieldClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->core_type->u.class_;
+		pt = pt->super_class->CoreType->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -295,7 +295,7 @@ int CountAllPropertyClass(class_* self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->core_type->u.class_;
+		pt = pt->super_class->CoreType->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -308,7 +308,7 @@ int CountAllSPropertyClass(class_* self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->core_type->u.class_;
+		pt = pt->super_class->CoreType->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -321,7 +321,7 @@ int CountAllMethodClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->core_type->u.class_;
+		pt = pt->super_class->CoreType->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -334,7 +334,7 @@ int CountAllSMethodClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->core_type->u.class_;
+		pt = pt->super_class->CoreType->u.class_;
 	} while (pt != NULL);
 	return sum;
 }
@@ -383,7 +383,7 @@ void LinkAllClass(class_ * self) {
 
 void UnlinkClass(class_ * self) {
 	if (self->super_class != NULL) {
-		self->super_class->core_type->u.class_->ref_count--;
+		self->super_class->CoreType->u.class_->ref_count--;
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_DeleteType(self->super_class);
@@ -428,9 +428,9 @@ static void CreateVTableClass_override(class_* self) {
 	#endif
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->parent->location;
-	cctx->Ty = self->super_class->core_type;
-	CreateVTableClass(self->super_class->core_type->u.class_);
-	CopyVTable(self->super_class->core_type->u.class_->vt, self->vt);
+	cctx->Ty = self->super_class->CoreType;
+	CreateVTableClass(self->super_class->CoreType->u.class_);
+	CopyVTable(self->super_class->CoreType->u.class_->vt, self->vt);
 	for (int i = 0; i < self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
 		if(m->Access != ACCESS_PRIVATE_T &&

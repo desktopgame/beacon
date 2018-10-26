@@ -42,17 +42,17 @@ void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	self->gtype = ResolveImportManager(GetNamespaceCContext(cctx), self->fqcn, cctx);
 	GenericType* a = EvalILFactor(self->fact, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
-	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == TYPE_INTERFACE_T) {
+	if(self->gtype->CoreType != NULL && GENERIC2TYPE(self->gtype)->tag == TYPE_INTERFACE_T) {
 		self->mode = CAST_UP_T;
 		return;
 	}
 	//キャスト先がインターフェイスなら常にアップキャスト
-	if(a->core_type != NULL && GENERIC2TYPE(a)->tag == TYPE_INTERFACE_T) {
+	if(a->CoreType != NULL && GENERIC2TYPE(a)->tag == TYPE_INTERFACE_T) {
 		self->mode = CAST_DOWN_T;
 		return;
 	}
 	//キャスト先がオブジェクトなら常にアップキャスト
-	if(self->gtype->core_type != NULL && self->gtype->core_type == TYPE_OBJECT) {
+	if(self->gtype->CoreType != NULL && self->gtype->CoreType == TYPE_OBJECT) {
 		self->mode = CAST_UP_T;
 		return;
 	}
@@ -67,8 +67,8 @@ void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	//それ以外
 	} else {
 		ThrowBCError(BCERROR_CAST_NOT_COMPATIBLE_T,
-			Ref2Str(GetTypeName(a->core_type)),
-			Ref2Str(GetTypeName(self->gtype->core_type))
+			Ref2Str(GetTypeName(a->CoreType)),
+			Ref2Str(GetTypeName(self->gtype->CoreType))
 		);
 	}
 }

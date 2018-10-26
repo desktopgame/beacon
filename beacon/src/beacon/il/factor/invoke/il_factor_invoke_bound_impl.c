@@ -94,7 +94,7 @@ static void resolve_non_default(il_factor_invoke_bound * self, Enviroment * env,
 	} else if(rgtp->tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
 		GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->virtual_type_index);
-		self->resolved = generic_NewType(instanced_type->core_type);
+		self->resolved = generic_NewType(instanced_type->CoreType);
 		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
 }

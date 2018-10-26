@@ -102,7 +102,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env
 		return il_factor_member_op_check_static(self, env, cctx, gtype, swap);
 	}
 	//レシーバのインスタンスフィールドを検索
-	type* ctype = gtype->core_type;
+	type* ctype = gtype->CoreType;
 	assert(ctype->tag == TYPE_CLASS_T);
 	int temp = -1;
 	self->f = FindTreeFieldClass(TYPE2CLASS(ctype), self->namev, &temp);
@@ -133,7 +133,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, Envirome
 	receiver_type = ref;
 	//Name.call
 	//の call をフィールドとして解決する
-	type* ccT = receiver_type->core_type;
+	type* ccT = receiver_type->CoreType;
 	assert(ccT->tag == TYPE_CLASS_T);
 	int temp = -1;
 	self->f = FindTreeSFieldClass(TYPE2CLASS(ccT), self->namev, &temp);
@@ -148,7 +148,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 	#if defined(DEBUG)
 	const char* name = Ref2Str(self->namev);
 	#endif
-	type* ctype = receiver_type->core_type;
+	type* ctype = receiver_type->CoreType;
 	Property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
 	il_factor_Property* factp = il_factor_Property_new();
 	factp->fact = self->fact;
@@ -174,7 +174,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 
 static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
 	int temp = -1;
-	type* ctype = receiver_type->core_type;
+	type* ctype = receiver_type->CoreType;
 	Property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
 	il_factor_Property* factp = il_factor_Property_new();
 	factp->fact = self->fact;

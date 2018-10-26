@@ -163,7 +163,7 @@ StringView MangleMethod(Method* self) {
 		Parameter* e = (Parameter*)AtVector(self->Parameters, i);
 		GenericType* gt = e->GType;
 		AppendBuffer(ret, '_');
-		if(gt->core_type == NULL) {
+		if(gt->CoreType == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
 			//何番目の型変数であるかを入れる
 			if(gt->tag == GENERIC_TYPE_TAG_CLASS_T) {
@@ -179,7 +179,7 @@ StringView MangleMethod(Method* self) {
 			sprintf(buff, "%d", gt->virtual_type_index);
 			AppendsBuffer(ret, buff);
 		} else {
-			AppendsBuffer(ret, Ref2Str(GetTypeFullName(gt->core_type)));
+			AppendsBuffer(ret, Ref2Str(GetTypeFullName(gt->CoreType)));
 		}
 	}
 	char* raw = ReleaseBuffer(ret);
@@ -200,7 +200,7 @@ StringView GetMethodUniqueName(Method* self) {
 
 bool IsCoroutineMethod(Method* self) {
 	type* iteratorT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
-	return (iteratorT && self->ReturnGType->core_type == iteratorT);
+	return (iteratorT && self->ReturnGType->CoreType == iteratorT);
 }
 
 bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error) {

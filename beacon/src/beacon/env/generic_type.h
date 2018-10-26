@@ -31,7 +31,7 @@ typedef enum GenericTypeTag {
  * 型変数つきの型宣言.
  */
 typedef struct GenericType {
-	struct type* core_type;
+	struct type* CoreType;
 	Vector* type_args_list;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
@@ -46,7 +46,7 @@ typedef struct GenericType {
 	bool is_ctor;
 } GenericType;
 
-//#define GenericType_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+//#define GenericType_validate(self) assert((self)->CoreType != NULL || self->virtual_type_index != -1)
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -56,12 +56,12 @@ typedef struct GenericType {
 #define generic_NewType(ctype) (MallocGenericType(ctype, __FILE__, __LINE__))
 
 /**
- * core_typeがNULL以外なら generic_selfを参照し、
+ * CoreTypeがNULL以外なら generic_selfを参照し、
  * NULLなら新規作成します。
- * @param core_type
+ * @param CoreType
  * @return
  */
-GenericType* RefGenericType(struct type* core_type);
+GenericType* RefGenericType(struct type* CoreType);
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -69,7 +69,7 @@ GenericType* RefGenericType(struct type* core_type);
  * @param ctype
  * @return
  */
-GenericType* MallocGenericType(struct type* core_type, const char* filename, int lineno);
+GenericType* MallocGenericType(struct type* CoreType, const char* filename, int lineno);
 
 /**
  * ジェネリックタイプを複製します.

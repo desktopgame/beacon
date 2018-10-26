@@ -28,21 +28,21 @@ static void generic_DeleteTypercr_self(VectorItem item);
 static void GenericType_recursive_mark(GenericType* a);
 static GenericType* GenericType_get(GenericType* a);
 /*
-GenericType * generic_NewType(type * core_type) {
+GenericType * generic_NewType(type * CoreType) {
 
 }
 */
 
-GenericType* RefGenericType(type* core_type) {
-	if(core_type == NULL) {
-		return generic_NewType(core_type);
+GenericType* RefGenericType(type* CoreType) {
+	if(CoreType == NULL) {
+		return generic_NewType(CoreType);
 	}
-	return core_type->generic_self;
+	return CoreType->generic_self;
 }
 
-GenericType* MallocGenericType(struct type* core_type, const char* filename, int lineno) {
+GenericType* MallocGenericType(struct type* CoreType, const char* filename, int lineno) {
 	GenericType* ret = (GenericType*)mem_malloc(sizeof(GenericType), filename, lineno);
-	ret->core_type = core_type;
+	ret->CoreType = CoreType;
 	ret->type_args_list = NewVector();
 	ret->virtual_type_index = -1;
 	ret->tag = GENERIC_TYPE_TAG_NONE_T;
@@ -54,7 +54,7 @@ GenericType* MallocGenericType(struct type* core_type, const char* filename, int
 }
 
 GenericType* CloneGenericType(GenericType* self) {
-	GenericType* a = generic_NewType(self->core_type);
+	GenericType* a = generic_NewType(self->CoreType);
 	for(int i=0; i<self->type_args_list->Length; i++) {
 		GenericType* e = AtVector(self->type_args_list, i);
 		AddArgsGenericType(a, CloneGenericType(e));
@@ -98,8 +98,8 @@ void LostownershipGenericType(GenericType* a) {
 	if(a == NULL) {
 		return;
 	}
-	assert(a->core_type != NULL);
-	assert(a->core_type->generic_self == a);
+	assert(a->CoreType != NULL);
+	assert(a->CoreType->generic_self == a);
 	generic_DeleteTypercr_self(a);
 }
 
@@ -142,7 +142,7 @@ void PrintGenericType(GenericType * self) {
 		printf("[%d]", self->virtual_type_index);
 	//Intなど
 	} else {
-		printf("%s", Ref2Str(GetTypeName(self->core_type)));
+		printf("%s", Ref2Str(GetTypeName(self->CoreType)));
 	}
 	if(self->is_ctor) {
 		printf("!!");
@@ -165,7 +165,7 @@ void PrintGenericType(GenericType * self) {
 void GenerateGenericType(GenericType* self, Enviroment* env) {
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ENTER);
 	AddOpcodeBuf(env->Bytecode, self->type_args_list->Length);
-	if(self->core_type == NULL) {
+	if(self->CoreType == NULL) {
 		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
 			AddOpcodeBuf(env->Bytecode, OP_GENERIC_INSTANCE_TYPE);
 			AddOpcodeBuf(env->Bytecode, self->virtual_type_index);
@@ -176,7 +176,7 @@ void GenerateGenericType(GenericType* self, Enviroment* env) {
 		}
 	} else {
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_UNIQUE_TYPE);
-		AddOpcodeBuf(env->Bytecode, self->core_type->absolute_index);
+		AddOpcodeBuf(env->Bytecode, self->CoreType->absolute_index);
 	}
 	for(int i=0; i<self->type_args_list->Length; i++) {
 		GenericType* e = (GenericType*)AtVector(self->type_args_list, i);
@@ -195,7 +195,7 @@ GenericType* RApplyGenericType(GenericType* self, CallContext* cctx, Frame* fr) 
 }
 
 struct type* GenericTypeToType(GenericType* self) {
-	return self->core_type;
+	return self->CoreType;
 }
 
 //private
@@ -215,7 +215,7 @@ static GenericType* ApplyGenericTypeImpl(GenericType* self, CallContext* cctx, F
 			ret = CloneGenericType(GenericType_typeargs_at(cctx, fr, self->virtual_type_index));
 		}
 	} else {
-		ret = generic_NewType(self->core_type);
+		ret = generic_NewType(self->CoreType);
 		ret->tag = self->tag;
 		ret->virtual_type_index = self->virtual_type_index;
 	}
@@ -231,9 +231,9 @@ static int DistanceGenericTypeImpl(GenericType* self, GenericType* other, Frame*
 		return DistanceGenericType_nogeneric(self, other, fr, cctx);
 	}
 	//要求されている型は T
-	if(self->core_type == NULL) {
+	if(self->CoreType == NULL) {
 		//提供されているのは T
-		if(other->core_type == NULL) {
+		if(other->CoreType == NULL) {
 			return 0;
 		//提供されているのは具体的な型
 		} else {
@@ -241,11 +241,11 @@ static int DistanceGenericTypeImpl(GenericType* self, GenericType* other, Frame*
 			return 0;
 		}
 	//提供している型は T
-	} else if(other->core_type == NULL) {
+	} else if(other->CoreType == NULL) {
 		//要求されているのは具体的な型
-		if(self->core_type != NULL) {
+		if(self->CoreType != NULL) {
 			//Object型にのみ変換可能
-			if(self->core_type == TYPE_OBJECT) {
+			if(self->CoreType == TYPE_OBJECT) {
 				return 0;
 			}
 			//T が 具体的な型の要件を満たしているか？
@@ -261,25 +261,25 @@ static int DistanceGenericTypeImpl(GenericType* self, GenericType* other, Frame*
 }
 
 static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
-	assert(self->core_type != NULL);
-	assert(other->core_type != NULL);
-	int dist = DistanceType(self->core_type, other->core_type);
-	assert(self->core_type != NULL);
-	assert(other->core_type != NULL);
+	assert(self->CoreType != NULL);
+	assert(other->CoreType != NULL);
+	int dist = DistanceType(self->CoreType, other->CoreType);
+	assert(self->CoreType != NULL);
+	assert(other->CoreType != NULL);
 	#if defined(DEBUG)
-	const char* sname = Ref2Str(GetTypeName(self->core_type));
-	const char* oname = Ref2Str(GetTypeName(other->core_type));
+	const char* sname = Ref2Str(GetTypeName(self->CoreType));
+	const char* oname = Ref2Str(GetTypeName(other->CoreType));
 	#endif
 	//List : Dict みたいな型ならもうこの時点で次へ
 	if(dist == -1) {
 		return dist;
 	}
-	if(other->core_type == TYPE_NULL) {
+	if(other->CoreType == TYPE_NULL) {
 		return 1;
 	}
-	if (self->core_type->tag == TYPE_CLASS_T) {
+	if (self->CoreType->tag == TYPE_CLASS_T) {
 		return DistanceGenericType_class(dist, self, other, fr, cctx);
-	} else if (self->core_type->tag == TYPE_INTERFACE_T) {
+	} else if (self->CoreType->tag == TYPE_INTERFACE_T) {
 		return DistanceGenericType_interface(dist, self, other, fr, cctx);
 	}
 	return dist;
@@ -287,12 +287,12 @@ static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, 
 
 static int DistanceGenericType_class(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	//otherからselfまで辿る
-	class_* baseline = self->core_type->u.class_;
-	class_* ptr = other->core_type->u.class_;
+	class_* baseline = self->CoreType->u.class_;
+	class_* ptr = other->CoreType->u.class_;
 	GenericType* target = other;
 	while (baseline != ptr) {
 		target = ptr->super_class;
-		ptr = ptr->super_class->core_type->u.class_;
+		ptr = ptr->super_class->CoreType->u.class_;
 	}
 	assert(target != NULL);
 	assert(self->type_args_list->Length == target->type_args_list->Length);
@@ -309,7 +309,7 @@ static int DistanceGenericType_class(int dist, GenericType* self, GenericType* o
 }
 
 static int DistanceGenericType_interface(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
-	if (other->core_type->tag == TYPE_CLASS_T) {
+	if (other->CoreType->tag == TYPE_CLASS_T) {
 		//クラスからインターフェイスを探す
 		GenericType* impl_baseline = NULL;
 		GenericType* impl = FindInterfaceTypeClass(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
@@ -328,7 +328,7 @@ static int DistanceGenericType_interface(int dist, GenericType* self, GenericTyp
 		}
 		DeleteVector(gargs, VectorDeleterOfNull);
 		return dist;
-	} else if (other->core_type->tag == TYPE_INTERFACE_T) {
+	} else if (other->CoreType->tag == TYPE_INTERFACE_T) {
 		GenericType* impl = FindInterfaceInterface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
 		if (impl == NULL) {
 			impl = other;
@@ -351,11 +351,11 @@ static int DistanceGenericType_interface(int dist, GenericType* self, GenericTyp
 }
 
 static Vector* ApplyGenericType_by_hierarchy(GenericType* impl_baseline, GenericType* impl) {
-	assert(impl_baseline->core_type != NULL);
+	assert(impl_baseline->CoreType != NULL);
 	Vector* gargs = NewVector();
 	for (int i = 0; i < impl->type_args_list->Length; i++) {
 		GenericType* e = AtVector(impl->type_args_list, i);
-		if (e->core_type == NULL) {
+		if (e->CoreType == NULL) {
 			e = AtVector(impl_baseline->type_args_list, e->virtual_type_index);
 		}
 		PushVector(gargs, e);

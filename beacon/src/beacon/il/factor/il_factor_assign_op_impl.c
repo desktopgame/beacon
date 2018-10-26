@@ -41,8 +41,8 @@ void LoadILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cct
 	//voidは代入できない
 	GenericType* gret = EvalILFactor(self->right, env, cctx);
 	BC_ERROR();
-	if(gret->core_type != NULL &&
-	   gret->core_type == TYPE_VOID) {
+	if(gret->CoreType != NULL &&
+	   gret->CoreType == TYPE_VOID) {
 		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
@@ -122,7 +122,7 @@ static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, CallC
 
 static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	GenericType* gt = EvalILFactor(receiver, env, cctx);
-	class_* cls = TYPE2CLASS(gt->core_type);
+	class_* cls = TYPE2CLASS(gt->CoreType);
 	int temp = -1;
 	Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
@@ -269,7 +269,7 @@ static bool can_assign_to_field(Field* f, il_factor_assign_op* self, Enviroment*
 
 static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	GenericType* gt = EvalILFactor(receiver, env, cctx);
-	class_* cls = TYPE2CLASS(gt->core_type);
+	class_* cls = TYPE2CLASS(gt->CoreType);
 	int temp = -1;
 	Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);

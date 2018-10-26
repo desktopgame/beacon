@@ -713,7 +713,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, IL
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->core_type->u.class_, env, cctx, &emptyTemp);
+	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->CoreType->u.class_, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
@@ -734,7 +734,7 @@ static void CLBC_chain_auto(class_loader * self, il_type * iltype, type * tp, IL
 	ilcons->Chain = ch_empty;
 	//親クラスへ連鎖
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->super_class->core_type->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->super_class->CoreType->absolute_index);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
@@ -759,9 +759,9 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, I
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->absolute_index));
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
-		chainTarget = ILFindConstructorClass(classz->super_class->core_type->u.class_, chain->Arguments, env, cctx, &temp);
+		chainTarget = ILFindConstructorClass(classz->super_class->CoreType->u.class_, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
-		AddOpcodeBuf(env->Bytecode, classz->super_class->core_type->absolute_index);
+		AddOpcodeBuf(env->Bytecode, classz->super_class->CoreType->absolute_index);
 	}
 	if(chainTarget == NULL) {
 		ThrowBCError(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,
@@ -814,7 +814,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	//== などの比較演算子の戻り値が bool ではない
-	if(IsCompareOperator(opov->Type) && opov->ReturnGType->core_type != TYPE_BOOL) {
+	if(IsCompareOperator(opov->Type) && opov->ReturnGType->CoreType != TYPE_BOOL) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_BOOL_COMPARE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
 			OperatorToString(opov->Type)
@@ -822,7 +822,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 		return true;
 	}
 	//! の戻り値が bool ではない
-	if(opov->Type == OPERATOR_NOT_T && opov->ReturnGType->core_type != TYPE_BOOL) {
+	if(opov->Type == OPERATOR_NOT_T && opov->ReturnGType->CoreType != TYPE_BOOL) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_BOOL_NOT_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
 			OperatorToString(opov->Type)
@@ -831,7 +831,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 	}
 	//- の戻り値がクラスと異なる
 	//(IntならInt, Vector2ならVector2)
-	if(opov->Type == OPERATOR_NEGATIVE_T && opov->ReturnGType->core_type != opov->Parent) {
+	if(opov->Type == OPERATOR_NEGATIVE_T && opov->ReturnGType->CoreType != opov->Parent) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
 			OperatorToString(opov->Type)

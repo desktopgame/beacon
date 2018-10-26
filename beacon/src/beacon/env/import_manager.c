@@ -40,25 +40,25 @@ bool IsLoadedImportManager(ImportManager * self, int index) {
 }
 
 GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallContext* cctx) {
-	type* core_type = GetTypeFQCN(fqcn->FQCN, scope);
+	type* CoreType = GetTypeFQCN(fqcn->FQCN, scope);
 	#if defined(DEBUG)
-	const char* ctname = Ref2Str(GetTypeName(core_type));
+	const char* ctname = Ref2Str(GetTypeName(CoreType));
 	const char* it = Ref2Str(fqcn->FQCN->Name);
 	if(fqcn->FQCN->Name == InternString("Token")) {
 		int a = 0;
 	}
 	#endif
 	//Int, Double
-	if(core_type != NULL && fqcn->TypeArgs->Length == 0) {
-		assert(core_type->generic_self != NULL);
-		return core_type->generic_self;
+	if(CoreType != NULL && fqcn->TypeArgs->Length == 0) {
+		assert(CoreType->generic_self != NULL);
+		return CoreType->generic_self;
 	}
 	//Array[T], Dictionary[K, V]
-	if(core_type != NULL && fqcn->TypeArgs->Length > 0) {
+	if(CoreType != NULL && fqcn->TypeArgs->Length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
-		GenericType* normalGType = generic_NewType(core_type);
-		assert(core_type->tag != TYPE_ENUM_T);
+		GenericType* normalGType = generic_NewType(CoreType);
+		assert(CoreType->tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->TypeArgs->Length; i++) {
 			GenericCache* e = (GenericCache*)AtVector(fqcn->TypeArgs, i);
 			GenericType* child = ResolveImportManager(scope, e, cctx);
@@ -66,7 +66,7 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 		}
 		return normalGType;
 	}
-	assert(core_type == NULL);
+	assert(CoreType == NULL);
 	assert(fqcn->FQCN->Scope->Length == 0);
 	if(fqcn->TypeArgs->Length > 0) {
 		return NULL;
@@ -94,11 +94,11 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 }
 
 GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContext* cctx) {
-	type* core_type = GetTypeFQCN(fqcn, scope);
+	type* CoreType = GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass
-	if(core_type != NULL) {
-		return core_type->generic_self;
+	if(CoreType != NULL) {
+		return CoreType->generic_self;
 	}
 	//Foo::UndefinedClassName
 	if(fqcn->Scope->Length > 0) {

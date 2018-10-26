@@ -36,8 +36,8 @@ void LoadILVariableDecl(il_stmt_variable_decl * self, Enviroment* env, CallConte
 		ResolveImportManager(NULL, self->fqcn, cctx),
 		self->namev
 	);
-	if(e->GType->core_type != NULL &&
-	   e->GType->core_type == TYPE_VOID) {
+	if(e->GType->CoreType != NULL &&
+	   e->GType->CoreType == TYPE_VOID) {
 		   ThrowBCError(BCERROR_VOID_DECL_T);
 	}
 }

@@ -38,7 +38,7 @@ Field* FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 		if(supergtype == NULL) {
 			break;
 		}
-		pointee = supergtype->core_type->u.class_;
+		pointee = supergtype->CoreType->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -66,7 +66,7 @@ Field* FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
 		if(pointee->super_class == NULL) {
 			break;
 		}
-		pointee = pointee->super_class->core_type->u.class_;
+		pointee = pointee->super_class->CoreType->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -78,7 +78,7 @@ Field* GetFieldClass(class_ * self, int index) {
 		index < all) {
 		return AtVector(self->field_list, self->field_list->Length - (all - index));
 	}
-	return GetFieldClass(self->super_class->core_type->u.class_, index);
+	return GetFieldClass(self->super_class->CoreType->u.class_, index);
 }
 
 Field* GetSFieldClass(class_ * self, int index) {
@@ -88,7 +88,7 @@ Field* GetSFieldClass(class_ * self, int index) {
 		index < all) {
 		return AtVector(self->sfield_list, self->sfield_list->Length - (all - index));
 	}
-	return GetSFieldClass(self->super_class->core_type->u.class_, index);
+	return GetSFieldClass(self->super_class->CoreType->u.class_, index);
 }
 
 bool IsContainsFieldClass(class_* self, Field* f) {
@@ -118,7 +118,7 @@ bool IsAccessibleFieldClass(class_* self, Field* f) {
 		if(c->super_class == NULL) {
 			break;
 		}
-		ty = c->super_class->core_type;
+		ty = c->super_class->CoreType;
 	}
 	return false;
 }
@@ -152,7 +152,7 @@ bool IsAccessiblePropertyClass(class_* self, Property* p) {
 		if(c->super_class == NULL) {
 			break;
 		}
-		ty = c->super_class->core_type;
+		ty = c->super_class->CoreType;
 	}
 	return false;
 }
@@ -176,7 +176,7 @@ bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 		if(c->super_class == NULL) {
 			break;
 		}
-		ty = c->super_class->core_type;
+		ty = c->super_class->CoreType;
 	}
 	return false;
 }
@@ -199,7 +199,7 @@ Property* GetPropertyClass(class_* self, int index) {
 		index < all) {
 		return AtVector(self->prop_list, self->prop_list->Length - (all - index));
 	}
-	return GetPropertyClass(self->super_class->core_type->u.class_, index);
+	return GetPropertyClass(self->super_class->CoreType->u.class_, index);
 }
 
 Property* GetSPropertyClass(class_* self, int index) {
@@ -209,7 +209,7 @@ Property* GetSPropertyClass(class_* self, int index) {
 		index < all) {
 		return AtVector(self->sprop_list, self->sprop_list->Length - (all - index));
 	}
-	return GetPropertyClass(self->super_class->core_type->u.class_, index);
+	return GetPropertyClass(self->super_class->CoreType->u.class_, index);
 }
 
 Property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
@@ -236,7 +236,7 @@ Property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 		if(supergtype == NULL) {
 			break;
 		}
-		pointee = supergtype->core_type->u.class_;
+		pointee = supergtype->CoreType->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -265,7 +265,7 @@ Property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) 
 		if(supergtype == NULL) {
 			break;
 		}
-		pointee = supergtype->core_type->u.class_;
+		pointee = supergtype->CoreType->u.class_;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -388,7 +388,7 @@ Method * GetSMethodClass(class_* self, int index) {
 		index < all) {
 		return AtVector(self->smethod_list, self->smethod_list->Length - (all - index));
 	}
-	return GetSMethodClass(self->super_class->core_type->u.class_, index);
+	return GetSMethodClass(self->super_class->CoreType->u.class_, index);
 	//*/
 	return AtVector(self->smethod_list, index);
 }
@@ -404,7 +404,7 @@ Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 	int declIndex = -1;
 	for (int i = 0; i < tbl->Length; i++) {
 		GenericType* e = AtVector(tbl, i);
-		interface_* inter = e->core_type->u.interface_;
+		interface_* inter = e->CoreType->u.interface_;
 		if (inter == interType->u.interface_) {
 			declIndex = i;
 			break;
@@ -500,7 +500,7 @@ Vector* FindTreeMethodClass(class_* self, Method* m) {
 		}
 		//親クラスへ
 		if(ptr->super_class != NULL) {
-			ptr = ptr->super_class->core_type->u.class_;
+			ptr = ptr->super_class->CoreType->u.class_;
 		} else {
 			ptr = NULL;
 		}
@@ -592,7 +592,7 @@ GenericType* FindInterfaceTypeClass(class_* self, type* tinter, GenericType** ou
 		Vector* gimpl_list = ptr->impl_list;
 		for (int i = 0; i < gimpl_list->Length; i++) {
 			GenericType* gimpl = AtVector(gimpl_list, i);
-			if (gimpl->core_type == tinter) {
+			if (gimpl->CoreType == tinter) {
 				found = true;
 				ret = gimpl;
 				break;

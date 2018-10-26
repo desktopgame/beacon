@@ -114,13 +114,13 @@ void DeleteInterface(interface_ * self) {
 }
 
 GenericType* IsContainsTypeInterface(GenericType* source, interface_* find) {
-	interface_* self = source->core_type->u.interface_;
+	interface_* self = source->CoreType->u.interface_;
 	if(self == find) {
 		return source;
 	}
 	for(int i=0; i<self->impl_list->Length; i++) {
 		GenericType* gE = AtVector(self->impl_list, i);
-		if(gE->core_type->u.interface_ == find) {
+		if(gE->CoreType->u.interface_ == find) {
 			return gE;
 		}
 	}
@@ -153,7 +153,7 @@ GenericType* FindInterfaceInterface(interface_* self, type* tinter) {
 	}
 	for (int i = 0; i < self->impl_list->Length; i++) {
 		GenericType* e = AtVector(self->impl_list, i);
-		if (e->core_type == tinter) {
+		if (e->CoreType == tinter) {
 			return e;
 		}
 	}
@@ -199,7 +199,7 @@ static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth
 	}
 	for(int i=0; i<self->impl_list->Length; i++) {
 		GenericType* e = AtVector(self->impl_list, i);
-		interface_* inter = TYPE2INTERFACE(e->core_type);
+		interface_* inter = TYPE2INTERFACE(e->CoreType);
 		FlattenMethodInterfaceImpl(inter, dest, depth + 1);
 	}
 }

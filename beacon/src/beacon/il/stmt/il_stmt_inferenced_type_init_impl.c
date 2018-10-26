@@ -33,8 +33,8 @@ void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * 
 	GenericType* gtp = EvalILFactor(self->fact, env, cctx);
 	BC_ERROR();
 	//voidは代入できない
-	if(gtp->core_type != NULL &&
-	   gtp->core_type == TYPE_VOID) {
+	if(gtp->CoreType != NULL &&
+	   gtp->CoreType == TYPE_VOID) {
 		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
 		return;
 	}

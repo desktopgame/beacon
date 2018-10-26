@@ -805,7 +805,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* o = PopVector(self->ValueStack);
 				GenericType* a = PopVector(self->TypeArgs);
 				a = ApplyGenericType(a, GetSGThreadCContext());
-				if(a->core_type->tag == TYPE_INTERFACE_T) {
+				if(a->CoreType->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
@@ -831,10 +831,10 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* o = PopVector(self->ValueStack);
 				GenericType* a = PopVector(self->TypeArgs);
 				a = ApplyGenericType(a, GetSGThreadCContext());
-				assert(a->core_type != NULL);
-				if(a->core_type->tag == TYPE_CLASS_T) {
+				assert(a->CoreType != NULL);
+				if(a->CoreType->tag == TYPE_CLASS_T) {
 					PushVector(self->ValueStack, o);
-				} else if(a->core_type->tag == TYPE_INTERFACE_T) {
+				} else if(a->CoreType->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
@@ -857,7 +857,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				Method* m = GetImplMethodClass(o->GType->core_type->u.class_, tp, methodIndex);
+				Method* m = GetImplMethodClass(o->GType->CoreType->u.class_, tp, methodIndex);
 				CallContext* cctx = GetSGThreadCContext();
 				ExecuteMethod(m, self, env);
 				break;
@@ -895,7 +895,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				class_* cl = TYPE2CLASS(o->GType->core_type);
+				class_* cl = TYPE2CLASS(o->GType->CoreType);
 				if(self->Receiver != NULL) {
 					cl = TYPE2CLASS(self->Receiver);
 				}
@@ -907,7 +907,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int index = (int)GetEnviromentSourceAt(env, ++IDX);
 				Object* o = (Object*)TopVector(self->ValueStack);
-				class_* cl = TYPE2CLASS(o->GType->core_type);
+				class_* cl = TYPE2CLASS(o->GType->CoreType);
 				#if defined(DEBUG)
 				char* clname = Ref2Str(cl->namev);
 				#endif

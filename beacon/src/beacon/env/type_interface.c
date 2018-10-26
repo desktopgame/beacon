@@ -121,7 +121,7 @@ int DistanceType(type * super, type * sub) {
 		Vector* gimpl_list = GetGenericInterfaceListClass(TYPE2CLASS(sub));
 		for (int i = 0; i < gimpl_list->Length; i++) {
 			GenericType* e = (GenericType*)AtVector(gimpl_list, i);
-			if (e->core_type == super) {
+			if (e->CoreType == super) {
 				found = true;
 				break;
 			}
@@ -178,18 +178,18 @@ GenericType * FindImplementType(type * self, type * a) {
 			if (a->tag == TYPE_INTERFACE_T) {
 				for (int i = 0; i < ptr->impl_list->Length; i++) {
 					GenericType* inter = (GenericType*)AtVector(ptr->impl_list, i);
-					if (inter->core_type == a) {
+					if (inter->CoreType == a) {
 						return inter;
 					}
 				}
 			}
-			ptr = ptr->super_class->core_type->u.class_;
+			ptr = ptr->super_class->CoreType->u.class_;
 		}
 	} else if (self->tag == TYPE_INTERFACE_T) {
 		interface_* inter = self->u.interface_;
 		for (int i = 0; i < inter->impl_list->Length; i++) {
 			GenericType* e = (GenericType*)AtVector(inter->impl_list, i);
-			if (e->core_type == a) {
+			if (e->CoreType == a) {
 				return e;
 			}
 		}
@@ -257,7 +257,7 @@ GenericType* BaselineType(type* abstract, type* concrete) {
 	do {
 		class_* cls = TYPE2CLASS(ptr);
 		if(cls->super_class != NULL &&
-		   cls->super_class->core_type == abstract) {
+		   cls->super_class->CoreType == abstract) {
 			return cls->super_class;
 		}
 		if(abstract->tag == TYPE_INTERFACE_T) {
@@ -273,7 +273,7 @@ GenericType* BaselineType(type* abstract, type* concrete) {
 		if(cls->super_class == NULL) {
 			ptr = NULL;
 		} else {
-			ptr = cls->super_class->core_type;
+			ptr = cls->super_class->CoreType;
 		}
 	} while(ptr != NULL);
 	return NULL;

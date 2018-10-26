@@ -34,7 +34,7 @@ void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
 		if(e->GType == NULL) {
 	//		Namespace* scope = cc_namespace(
 			e->GType = ResolveImportManager(cctx->Scope, e->GCache, cctx);
-			//assert(e->gtype->core_type != NULL || e->gtype->virtual_type_index != -1);
+			//assert(e->gtype->CoreType != NULL || e->gtype->virtual_type_index != -1);
 		}
 	}
 }

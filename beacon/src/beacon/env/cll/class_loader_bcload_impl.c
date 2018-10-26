@@ -339,9 +339,9 @@ static void CLBC_register_class(class_loader* self, Namespace* parent, il_type* 
 		if (i == 0) {
 			GenericType* gtp = ResolveImportManager(parent, e, cctx);
 			assert(gtp != NULL);
-			if (gtp->core_type->tag == TYPE_CLASS_T) {
+			if (gtp->CoreType->tag == TYPE_CLASS_T) {
 				cls->super_class = gtp;
-			} else if (gtp->core_type->tag == TYPE_INTERFACE_T) {
+			} else if (gtp->CoreType->tag == TYPE_INTERFACE_T) {
 				PushVector(cls->impl_list, gtp);
 			} else assert(false);
 		//二つ目以降はインターフェースのみ
