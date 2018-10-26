@@ -17,7 +17,7 @@
 #define LONG2OBJ(a) (LongToObject(a))
 
 struct generic_type;
-struct vtable;
+struct VTable;
 /** 
  * オブジェクトの着色状態.
  * インクリメンタルGCのためのフラグです。
@@ -55,7 +55,7 @@ typedef enum object_tag {
  */
 typedef struct object {
 	struct generic_type* gtype;
-	struct vtable* vptr;
+	struct VTable* vptr;
 	object_paint paint;
 	object_tag tag;
 	Vector* native_slot_vec;

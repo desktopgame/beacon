@@ -9,24 +9,24 @@ struct CallContext;
  * 同じシグネチャのメソッドが複数現れる場合には、
  * 親クラスで現れた時点の添え字をサブクラスの実装で上書きします。
  */
-typedef struct vtable {
+typedef struct VTable {
 	//恐らくアップキャストのときに必要
-	struct vtable* parent;
+	struct VTable* parent;
 	Vector* elements;
-} vtable;
+} VTable;
 
 /**
- * vtableを作成します.
+ * VTableを作成します.
  * @return
  */
-vtable* NewVTable();
+VTable* NewVTable();
 
 /**
  * src の中身を dst へ複製します.
  * @param src
  * @param dst
  */
-void CopyVTable(vtable* src, vtable* dst);
+void CopyVTable(VTable* src, VTable* dst);
 
 /**
  * メソッド一覧に m を追加します.
@@ -35,7 +35,7 @@ void CopyVTable(vtable* src, vtable* dst);
  * @param self
  * @param m
  */
-void AddVTable(vtable* self, struct Method* m);
+void AddVTable(VTable* self, struct Method* m);
 
 /**
  * メソッド一覧に m を追加します.
@@ -45,11 +45,11 @@ void AddVTable(vtable* self, struct Method* m);
  * @param m
  * @param cctx
  */
-void ReplaceVTable(vtable* self, struct Method* m, struct CallContext* cctx);
+void ReplaceVTable(VTable* self, struct Method* m, struct CallContext* cctx);
 
 /**
- * vtableを開放します.
+ * VTableを開放します.
  * @param self
  */
-void DeleteVTable(vtable* self);
+void DeleteVTable(VTable* self);
 #endif // !SIGNAL_ENV_VTABLE_H

@@ -97,7 +97,7 @@ Method* ILFindSMethodType(type* self, StringView namev, Vector* args, Enviroment
 	return ILFindSMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 }
 
-vtable * GetVTableType(type * self) {
+VTable * GetVTableType(type * self) {
 	if (self->tag == TYPE_CLASS_T) {
 		CreateVTableClass(self->u.class_);
 		return self->u.class_->vt;

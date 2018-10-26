@@ -24,7 +24,7 @@ struct Field;
 struct Method;
 struct Property;
 struct Enviroment;
-struct vtable;
+struct VTable;
 struct generic_type;
 
 typedef enum type_state {
@@ -144,7 +144,7 @@ struct Method* ILFindSMethodType(type* self, StringView namev, Vector* args, str
  * @param self
  * @return
  */
-struct vtable* GetVTableType(type* self);
+struct VTable* GetVTableType(type* self);
 
 /**
  * 型の距離を返します.

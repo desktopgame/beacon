@@ -375,7 +375,7 @@ Method * GetMethodClass(object * o, int index) {
 	if(o->tag == OBJECT_NULL_T) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
-	vtable* vx = (o->vptr);
+	VTable* vx = (o->vptr);
 	return (Method*)AtVector(vx->elements, index);
 }
 
@@ -413,7 +413,7 @@ Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 	//仮想関数テーブルの一覧から引く
 	assert(declIndex != -1);
 	DeleteVector(tbl, VectorDeleterOfNull);
-	vtable* vtAt = AtVector(self->vt_vec, declIndex);
+	VTable* vtAt = AtVector(self->vt_vec, declIndex);
 	return AtVector(vtAt->elements, interMIndex);
 }
 

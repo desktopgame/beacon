@@ -23,7 +23,7 @@ typedef struct interface_ {
 	Vector* prop_list;
 	Vector* method_list;
 	Namespace* location;
-	vtable* vt;
+	VTable* vt;
 	Vector* GetParameterListType;
 } interface_;
 
@@ -93,7 +93,7 @@ Vector* FlattenMethodInterfaceList(Vector* inter_list);
 Vector* FlattenMethodInterface(interface_* self);
 
 /**
- * メソッドの一覧から vtable を作成します.
+ * メソッドの一覧から VTable を作成します.
  * @param self
  */
 void CreateVTableInterface(interface_* self);

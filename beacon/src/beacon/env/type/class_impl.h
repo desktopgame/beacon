@@ -53,7 +53,7 @@ typedef struct class_ {
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
 	Vector* vt_vec;
 	//Vector* static_fieldval_vec;
-	vtable* vt;
+	VTable* vt;
 	operator_vt* ovt;
 	bool is_abstract;
 } class_;
@@ -164,7 +164,7 @@ void DefineNativeMethodByRefClass(class_* self, StringView namev, NativeImpl imp
 int DistanceClass(class_* super, class_* sub);
 
 /**
- * このクラスの vtable を、現在のメソッド一覧に基づいて作成します.
+ * このクラスの VTable を、現在のメソッド一覧に基づいて作成します.
  * このメソッドが呼び出されるまでメンバの vt は NULL です。
  * また、この関数は全てのメソッドが登録されてから呼び出してさい。
  * @param self

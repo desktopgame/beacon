@@ -41,7 +41,7 @@ static void class_DeleteMethod(VectorItem item);
 static void class_ctor_delete(VectorItem item);
 static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
 static Method* class_find_impl_method(class_* self, Method* virtualMethod);
-static void class_vtable_vec_delete(VectorItem item);
+static void class_VTable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
 static void class_generic_type_list_delete(VectorItem item);
 static void DeleteClass_operator_overload(VectorItem item);
@@ -399,7 +399,7 @@ void UnlinkClass(class_ * self) {
 	DeleteVector(self->sprop_list, DeleteClass_Property);
 	DeleteVTable(self->vt);
 	DeleteOperatorVt(self->ovt);
-	DeleteVector(self->vt_vec, class_vtable_vec_delete);
+	DeleteVector(self->vt_vec, class_VTable_vec_delete);
 }
 
 void DeleteClass(class_ * self) {
@@ -451,8 +451,8 @@ static void CreateVTableClass_interface(class_* self) {
 	for (int i = 0; i < tbl->Length; i++) {
 		//generic_type* gtp = (generic_type*)AtVector(tbl, i);
 		interface_* inter = (interface_*)AtVector(tbl, i);
-		vtable* interVT = inter->vt;
-		vtable* newVT = NewVTable();
+		VTable* interVT = inter->vt;
+		VTable* newVT = NewVTable();
 		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧
 		//これはスーパーインターフェースも含む。
@@ -513,7 +513,7 @@ static Method* class_find_impl_method(class_* self, Method* virtualMethod) {
 	cctx->Scope = self->parent->location;
 	cctx->Ty = self->parent;
 	Method* ret = NULL;
-	vtable* clVT = self->vt;
+	VTable* clVT = self->vt;
 	for (int i = 0; i < clVT->elements->Length; i++) {
 		Method* clM = AtVector(clVT->elements, i);
 		if (IsOverridedMethod(virtualMethod, clM, cctx)) {
@@ -525,8 +525,8 @@ static Method* class_find_impl_method(class_* self, Method* virtualMethod) {
 	return ret;
 }
 
-static void class_vtable_vec_delete(VectorItem item) {
-	vtable* e = (vtable*)item;
+static void class_VTable_vec_delete(VectorItem item) {
+	VTable* e = (VTable*)item;
 	DeleteVTable(e);
 }
 

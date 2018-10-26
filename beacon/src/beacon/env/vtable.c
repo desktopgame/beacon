@@ -4,27 +4,27 @@
 #include <assert.h>
 #include "../il/call_context.h"
 
-vtable * NewVTable() {
-	vtable* ret = (vtable*)MEM_MALLOC(sizeof(vtable));
+VTable * NewVTable() {
+	VTable* ret = (VTable*)MEM_MALLOC(sizeof(VTable));
 	ret->elements = NewVector();
 	ret->parent = NULL;
 	return ret;
 }
 
-void CopyVTable(vtable * src, vtable * dst) {
+void CopyVTable(VTable * src, VTable * dst) {
 	for (int i = 0; i < src->elements->Length; i++) {
 		PushVector(dst->elements, AtVector(src->elements, i));
 	}
 }
 
-void AddVTable(vtable * self, Method * m) {
+void AddVTable(VTable * self, Method * m) {
 	if (IsStaticModifier(m->Modifier)) {
 		return;
 	}
 	PushVector(self->elements, m);
 }
 
-void ReplaceVTable(vtable * self, Method * m, CallContext* cctx) {
+void ReplaceVTable(VTable * self, Method * m, CallContext* cctx) {
 	if (IsStaticModifier(m->Modifier)) {
 		return;
 	}
@@ -42,7 +42,7 @@ void ReplaceVTable(vtable * self, Method * m, CallContext* cctx) {
 	PushVector(self->elements, m);
 }
 
-void DeleteVTable(vtable * self) {
+void DeleteVTable(VTable * self) {
 	if (self == NULL) {
 		return;
 	}
