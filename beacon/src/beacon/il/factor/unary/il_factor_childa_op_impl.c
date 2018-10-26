@@ -33,7 +33,7 @@ generic_type* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, CallC
 		//演算子オーバーロードもない
 		assert(self->operator_index != -1);
 		OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gtype)), self->operator_index);
-		return ApplyILUnaryOp(self->parent, operator_ov->return_gtype, env, cctx);
+		return ApplyILUnaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 	}
 }
 

@@ -268,14 +268,14 @@ OperatorOverload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector*
 	for(int i=0; i<opov_vec->Length; i++) {
 		OperatorOverload* opov = AtVector(opov_vec, i);
 		//オペレータの種類が違うので無視
-		if(opov->type != type) {
+		if(opov->Type != type) {
 			continue;
 		}
 		//引数の数が違うので無視
-		if(opov->parameter_list->Length != gargs->Length) {
+		if(opov->Parameters->Length != gargs->Length) {
 			continue;
 		}
-		int score = MetaGCalcScore(opov->parameter_list, gargs);
+		int score = MetaGCalcScore(opov->Parameters, gargs);
 		if(min == -1) {
 			continue;
 		}

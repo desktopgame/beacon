@@ -528,22 +528,22 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, Namespace* scope) {
 	//演算子オーバーロード一覧から取り出す
 	OperatorOverload* opov = NewOperatorOverload(ilopov->Type);
-	opov->access = ilopov->Access;
+	opov->Access = ilopov->Access;
 	//CallContextの設定
 	CallContext* cctx = NewCallContext(CALL_OPOV_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	cctx->Kind.OpOv = opov;
 	//戻り値読み込み
-	opov->parent = tp;
-	opov->return_gtype = ResolveImportManager(scope, ilopov->ReturnGCache, cctx);
+	opov->Parent = tp;
+	opov->ReturnGType = ResolveImportManager(scope, ilopov->ReturnGCache, cctx);
 	//パラメータ読み込み
 	for(int j=0; j<ilopov->Parameters->Length; j++) {
 		ILParameter* ilparam = AtVector(ilopov->Parameters, j);
 		Parameter* param = NewParameter(ilparam->Name);
-		PushVector(opov->parameter_list, param);
+		PushVector(opov->Parameters, param);
 	}
-	CLBC_parameter_list(self, scope, ilopov->Parameters, opov->parameter_list, cctx);
+	CLBC_parameter_list(self, scope, ilopov->Parameters, opov->Parameters, cctx);
 	PushVector(tp->u.class_->operator_overload_list, opov);
 	//オペレータオーバロードの妥当性をテストする
 	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
@@ -584,7 +584,7 @@ bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, 
 	CLBC_body(self, ilopov->Statements, env, cctx, scope);
 	DeleteCallContext(cctx);
 	//ccpop_method();
-	opov->env = env;
+	opov->Env = env;
 	return true;
 }
 
@@ -780,61 +780,61 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, I
 
 static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, OperatorOverload* opov) {
 	//アクセスレベルを確認する
-	if(opov->access != ACCESS_PUBLIC_T) {
+	if(opov->Access != ACCESS_PUBLIC_T) {
 		ThrowBCError(BCERROR_PRIVATE_OPERATOR_T, GetTypeName(tp));
 		return true;
 	}
 	//二項演算子であるなら引数は1
-	if(Is2ArgOperator(opov->type) && opov->parameter_list->Length != 1) {
-		ThrowBCError(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), OperatorToString(opov->type));
+	if(Is2ArgOperator(opov->Type) && opov->Parameters->Length != 1) {
+		ThrowBCError(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), OperatorToString(opov->Type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
-	if(Is1ArgOperator(opov->type) && opov->parameter_list->Length != 0) {
+	if(Is1ArgOperator(opov->Type) && opov->Parameters->Length != 0) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT1_UOPERATOR_T,
 			GetTypeName(tp),
-			OperatorToString(opov->type)
+			OperatorToString(opov->Type)
 		);
 		return true;
 	}
 	//配列参照演算子であるあんら引数は1
-	if(opov->type == OPERATOR_SUB_SCRIPT_GET_T && opov->parameter_list->Length != 1) {
+	if(opov->Type == OPERATOR_SUB_SCRIPT_GET_T && opov->Parameters->Length != 1) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT1_SUBSCRIPT_GET_OP_T,
 			GetTypeName(tp),
-			OperatorToString(opov->type)
+			OperatorToString(opov->Type)
 		);
 		return true;
 	}
 	//配列書き込み演算子であるあんら引数は2
-	if(opov->type == OPERATOR_SUB_SCRIPT_SET_T && opov->parameter_list->Length != 2) {
+	if(opov->Type == OPERATOR_SUB_SCRIPT_SET_T && opov->Parameters->Length != 2) {
 		ThrowBCError(BCERROR_ARG_COUNT_NOT2_SUBSCRIPT_SET_OP_T,
 			GetTypeName(tp),
-			OperatorToString(opov->type)
+			OperatorToString(opov->Type)
 		);
 		return true;
 	}
 	//== などの比較演算子の戻り値が bool ではない
-	if(IsCompareOperator(opov->type) && opov->return_gtype->core_type != TYPE_BOOL) {
+	if(IsCompareOperator(opov->Type) && opov->ReturnGType->core_type != TYPE_BOOL) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_BOOL_COMPARE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			OperatorToString(opov->type)
+			OperatorToString(opov->Type)
 		);
 		return true;
 	}
 	//! の戻り値が bool ではない
-	if(opov->type == OPERATOR_NOT_T && opov->return_gtype->core_type != TYPE_BOOL) {
+	if(opov->Type == OPERATOR_NOT_T && opov->ReturnGType->core_type != TYPE_BOOL) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_BOOL_NOT_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			OperatorToString(opov->type)
+			OperatorToString(opov->Type)
 		);
 		return true;
 	}
 	//- の戻り値がクラスと異なる
 	//(IntならInt, Vector2ならVector2)
-	if(opov->type == OPERATOR_NEGATIVE_T && opov->return_gtype->core_type != opov->parent) {
+	if(opov->Type == OPERATOR_NEGATIVE_T && opov->ReturnGType->core_type != opov->Parent) {
 		ThrowBCError(BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			OperatorToString(opov->type)
+			OperatorToString(opov->Type)
 		);
 		return true;
 	}

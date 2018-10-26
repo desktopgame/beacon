@@ -36,7 +36,7 @@ generic_type* EvalILExcorOp(il_factor_excor_op * self, Enviroment* env, CallCont
 		return NULL;
 	}
 	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-	return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
+	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 }
 
 void GenerateILExcorOp(il_factor_excor_op* self, Enviroment* env, CallContext* cctx) {

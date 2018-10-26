@@ -17,11 +17,11 @@ static void DeleteOperatorOverload_param(VectorItem item);
 
 OperatorOverload* NewOperatorOverload(OperatorType type) {
 	OperatorOverload* ret = (OperatorOverload*)MEM_MALLOC(sizeof(OperatorOverload));
-	ret->parent = NULL;
-	ret->parameter_list = NewVector();
-	ret->type = type;
-	ret->env = NULL;
-	ret->return_gtype = NULL;
+	ret->Parent = NULL;
+	ret->Parameters = NewVector();
+	ret->Type = type;
+	ret->Env = NULL;
+	ret->ReturnGType = NULL;
 	return ret;
 }
 
@@ -29,13 +29,13 @@ void ExecuteOperatorOverload(OperatorOverload* self, Frame* fr, Enviroment* env)
 	Frame* sub = SubFrame(fr);
 	sub->Receiver = fr->Receiver;
 	PushVector(sub->ValueStack, PopVector(fr->ValueStack));
-	for (int i = 0; i < self->parameter_list->Length; i++) {
+	for (int i = 0; i < self->Parameters->Length; i++) {
 		PushVector(sub->ValueStack, CopyObject(PopVector(fr->ValueStack)));
 	}
-	ExecuteVM(sub, self->env);
+	ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
-	if(self->return_gtype != TYPE_VOID->generic_self &&
+	if(self->ReturnGType != TYPE_VOID->generic_self &&
 	   sub->ValueStack->Length > 0) {
 		object* o = (object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, o);
@@ -44,8 +44,8 @@ void ExecuteOperatorOverload(OperatorOverload* self, Frame* fr, Enviroment* env)
 }
 
 void DeleteOperatorOverload(OperatorOverload* self) {
-	DeleteEnviroment(self->env);
-	DeleteVector(self->parameter_list, DeleteOperatorOverload_param);
+	DeleteEnviroment(self->Env);
+	DeleteVector(self->Parameters, DeleteOperatorOverload_param);
 	MEM_FREE(self);
 }
 //private

@@ -11,12 +11,12 @@ struct Frame;
  * 演算子オーバーロードを表す構造体.
  */
 typedef struct OperatorOverload {
-	struct type* parent;
-	struct generic_type* return_gtype;
-	OperatorType type;
-	Vector* parameter_list;
-	struct Enviroment* env;
-	AccessLevel access;
+	struct type* Parent;
+	struct generic_type* ReturnGType;
+	OperatorType Type;
+	Vector* Parameters;
+	struct Enviroment* Env;
+	AccessLevel Access;
 } OperatorOverload;
 
 /**

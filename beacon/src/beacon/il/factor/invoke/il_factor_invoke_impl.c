@@ -97,7 +97,7 @@ OperatorOverload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Envi
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
-	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -203,7 +203,7 @@ static void il_factor_invoke_args_delete(VectorItem item) {
 
 static generic_type* il_factor_invoke_return_gtype(il_factor_invoke* self) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
-	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->ReturnGType : self->u.opov->return_gtype;
+	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->ReturnGType : self->u.opov->ReturnGType;
 }
 
 static void GenerateILInvoke_method(il_factor_invoke* self, Enviroment* env, CallContext* cctx) {

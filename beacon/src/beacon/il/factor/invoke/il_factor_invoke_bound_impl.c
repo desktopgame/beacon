@@ -69,7 +69,7 @@ OperatorOverload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* 
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
-	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.subscript.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.subscript.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -257,7 +257,7 @@ static generic_type* il_factor_invoke_bound_return_gtype(il_factor_invoke_bound*
 	assert(self->tag != BOUND_INVOKE_UNDEFINED_T);
 	return ApplyGenericType(self->tag == BOUND_INVOKE_METHOD_T ?
 			self->u.m->ReturnGType :
-			self->u.subscript.opov->return_gtype, cctx);
+			self->u.subscript.opov->ReturnGType, cctx);
 }
 
 static generic_type* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx) {

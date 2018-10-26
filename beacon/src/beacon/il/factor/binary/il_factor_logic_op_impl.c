@@ -37,7 +37,7 @@ generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, CallConte
 			return NULL;
 		}
 		OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-		return ApplyILBinaryOp(self->parent, operator_ov->return_gtype, env, cctx);
+		return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 	}
 }
 

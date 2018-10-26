@@ -43,7 +43,7 @@ void LoadILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cc
 }
 
 generic_type* EvalILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cctx) {
-	return ApplyGenericType(self->opov->return_gtype, cctx);
+	return ApplyGenericType(self->opov->ReturnGType, cctx);
 }
 
 char* ILSubscriptToString(il_factor_subscript* self, Enviroment* env) {

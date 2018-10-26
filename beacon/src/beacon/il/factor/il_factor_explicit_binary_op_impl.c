@@ -40,7 +40,7 @@ void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env,
 generic_type* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, Enviroment* env, CallContext* cctx) {
 	generic_type* gt = EvalILFactor(self->receiver, env, cctx);
 	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gt)), self->index);
-	return operator_ov->return_gtype;
+	return operator_ov->ReturnGType;
 }
 
 void DeleteILExplicitBinaryOp(il_factor_explicit_binary_op* self) {

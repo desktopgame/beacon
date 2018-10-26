@@ -14,15 +14,15 @@ operator_vt* NewOperatorVt() {
 void ReplaceOperatorVt(operator_vt* self, OperatorOverload* opov) {
 	for(int i=0; i<self->vec->Length; i++) {
 		OperatorOverload* e = AtVector(self->vec, i);
-		if(e->type != opov->type) {
+		if(e->Type != opov->Type) {
 			continue;
 		}
-		if(Is1ArgOperator(e->type)) {
+		if(Is1ArgOperator(e->Type)) {
 			AssignVector(self->vec, i, opov);
 			return;
-		} else if(Is2ArgOperator(e->type)) {
-			Parameter* param_a = AtVector(e->parameter_list, 0);
-			Parameter* param_b = AtVector(opov->parameter_list, 0);
+		} else if(Is2ArgOperator(e->Type)) {
+			Parameter* param_a = AtVector(e->Parameters, 0);
+			Parameter* param_b = AtVector(opov->Parameters, 0);
 			if(DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {
 				AssignVector(self->vec, i, opov);
 				return;

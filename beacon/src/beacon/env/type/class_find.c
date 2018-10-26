@@ -426,13 +426,13 @@ OperatorOverload* GFindOperatorOverloadClass(class_* self, OperatorType type, Ve
 	CreateOperatorVTClass(self);
 	for(int i=0; i<self->ovt->vec->Length; i++) {
 		OperatorOverload* operator_ov = AtVector(self->ovt->vec, i);
-		if(operator_ov->type != type) {
+		if(operator_ov->Type != type) {
 			continue;
 		}
 		bool nomatch = false;
 		int score = 1024;
 		int sum = 0;
-		Vector* params = operator_ov->parameter_list;
+		Vector* params = operator_ov->Parameters;
 		for(int j=0; j<params->Length; j++) {
 			Parameter* param = AtVector(params, j);
 			generic_type* arg = AtVector(args, j);
