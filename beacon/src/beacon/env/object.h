@@ -37,7 +37,7 @@ typedef enum ObjectPaint {
 /**
  * オブジェクトの種類を表す列挙.
  */
-typedef enum object_tag {
+typedef enum ObjectTag {
 	OBJECT_INT_T,
 	OBJECT_LONG_T, //bc_timeでだけ使ってる
 	OBJECT_DOUBLE_T,
@@ -47,7 +47,7 @@ typedef enum object_tag {
 	OBJECT_REF_T,
 	OBJECT_ARRAY_T,
 	OBJECT_NULL_T,
-} object_tag;
+} ObjectTag;
 
 /**
  * ヒープに関連付けされるオブジェクト.
@@ -57,7 +57,7 @@ typedef struct object {
 	struct generic_type* gtype;
 	struct VTable* vptr;
 	ObjectPaint paint;
-	object_tag tag;
+	ObjectTag tag;
 	Vector* native_slot_vec;
 	bool is_coroutine;
 	bool is_clone;

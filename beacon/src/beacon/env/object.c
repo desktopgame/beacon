@@ -15,11 +15,11 @@
 #include "../vm/yield_context.h"
 
 //proto
-static object* object_mallocImpl(object_tag type, const char* filename, int lineno);
+static object* object_mallocImpl(ObjectTag type, const char* filename, int lineno);
 static void DeleteObject_self(VectorItem item);
 static void object_mark_coroutine(object* self);
 #define object_malloc(type) (object_mallocImpl(type, __FILE__, __LINE__))
-//static object* object_malloc(object_tag type);
+//static object* object_malloc(ObjectTag type);
 //static object* gObjectTrue = NULL;
 //static object* gObjectFalse = NULL;
 //static object* gObjectNull = NULL;
@@ -383,7 +383,7 @@ const char* GetObjectName(object* self) {
 }
 
 //private
-static object* object_mallocImpl(object_tag type, const char* filename, int lineno) {
+static object* object_mallocImpl(ObjectTag type, const char* filename, int lineno) {
 	object* ret = (object*)mem_malloc(sizeof(object), filename, lineno);
 	ret->is_coroutine = false;
 	ret->gtype = NULL;
