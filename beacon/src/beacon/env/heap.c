@@ -9,7 +9,7 @@
 #include "../vm/vm.h"
 
 //proto
-static void DeleteHeap_object(VectorItem item);
+static void DeleteHeap_Object(VectorItem item);
 static void gc_clear(Heap* self);
 static void gc_mark(Heap* self);
 static void gc_sweep(Heap* self);
@@ -30,7 +30,7 @@ Heap * GetHeap() {
 	return ctx->Heap;
 }
 
-void AddHeap(Heap * self, object * obj) {
+void AddHeap(Heap * self, Object * obj) {
 	if(self == NULL) {
 		obj->paint = PAINT_ONEXIT_T;
 		return;
@@ -51,7 +51,7 @@ void CollectHeap(Heap * self) {
 	gc_sweep(self);
 }
 
-void IgnoreHeap(Heap* self, object* o) {
+void IgnoreHeap(Heap* self, Object* o) {
 	int i = FindVector(self->Objects, o);
 	if(i >= 0) {
 		RemoveVector(self->Objects, i);
@@ -59,14 +59,14 @@ void IgnoreHeap(Heap* self, object* o) {
 }
 
 void DeleteHeap(Heap * self) {
-	DeleteVector(self->Objects,DeleteHeap_object);
+	DeleteVector(self->Objects,DeleteHeap_Object);
 	MEM_FREE(self);
 }
 
 void DumpHeap(Heap* self) {
 	printf("heap dump:\n");
 	for(int i=0; i<self->Objects->Length; i++) {
-		object* a = AtVector(self->Objects, i);
+		Object* a = AtVector(self->Objects, i);
 		printf("    ");
 		PrintGenericType(a->gtype);
 		printf("\n");
@@ -74,14 +74,14 @@ void DumpHeap(Heap* self) {
 }
 
 //private
-static void DeleteHeap_object(VectorItem item) {
-	object* e = (object*)item;
+static void DeleteHeap_Object(VectorItem item) {
+	Object* e = (Object*)item;
 	DeleteObject(e);
 }
 
 static void gc_clear(Heap* self) {
 	for (int i = 0; i < self->Objects->Length; i++) {
-		object* e = (object*)AtVector(self->Objects, i);
+		Object* e = (Object*)AtVector(self->Objects, i);
 		if (e->paint == PAINT_MARKED_T) {
 			e->paint = PAINT_UNMARKED_T;
 		}
@@ -107,7 +107,7 @@ static void gc_sweep(Heap* self) {
 	Vector* recycle = NewVector();
 	Vector* garabage = NewVector();
 	for (int i = 0; i < self->Objects->Length; i++) {
-		object* e = (object*)AtVector(self->Objects, i);
+		Object* e = (Object*)AtVector(self->Objects, i);
 		if (e->paint == PAINT_UNMARKED_T) {
 			PushVector(garabage, e);
 			sweep++;
@@ -121,6 +121,6 @@ static void gc_sweep(Heap* self) {
 }
 
 static void gc_delete(VectorItem item) {
-	object* e = (object*)item;
+	Object* e = (Object*)item;
 	DeleteObject(e);
 }

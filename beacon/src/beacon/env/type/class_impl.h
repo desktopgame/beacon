@@ -19,7 +19,7 @@
 #include <stdarg.h>
 //struct field_list;
 //struct method_list;
-struct object;
+struct Object;
 struct Field;
 struct Property;
 struct PropertyBody;
@@ -99,7 +99,7 @@ type* NewPreloadClass(StringView namev);
  * @param o
  * @param fr
  */
-void AllocFieldsClass(class_* self, struct object* o, Frame* fr);
+void AllocFieldsClass(class_* self, struct Object* o, Frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
@@ -107,7 +107,7 @@ void AllocFieldsClass(class_* self, struct object* o, Frame* fr);
  * @param self
  * @param o
  */
-void FreeClassFields(class_* self, struct object* o);
+void FreeClassFields(class_* self, struct Object* o);
 
 /**
  * このクラスにフィールドを追加します.
@@ -226,7 +226,7 @@ int CountAllSMethodClass(class_* self);
  * @param type_args
  * @return
  */
-struct object* NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args);
+struct Object* NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

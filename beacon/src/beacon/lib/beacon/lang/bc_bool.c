@@ -19,15 +19,15 @@ type* GetBCBoolType() {
 }
 //private
 static void bc_bool_nativeBitOr(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
-	object* a = AtVector(fr->VariableTable, 1);
-	object* ret = GetBoolObject(self->u.bool_ | a->u.bool_);
+	Object* self = AtVector(fr->VariableTable, 0);
+	Object* a = AtVector(fr->VariableTable, 1);
+	Object* ret = GetBoolObject(self->u.bool_ | a->u.bool_);
 	PushVector(fr->ValueStack, ret);
 }
 
 static void bc_bool_nativeBitAnd(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
-	object* a = AtVector(fr->VariableTable, 1);
-	object* ret = GetBoolObject(self->u.bool_ & a->u.bool_);
+	Object* self = AtVector(fr->VariableTable, 0);
+	Object* a = AtVector(fr->VariableTable, 1);
+	Object* ret = GetBoolObject(self->u.bool_ & a->u.bool_);
 	PushVector(fr->ValueStack, ret);
 }

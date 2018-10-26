@@ -3,7 +3,7 @@
 #define BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 struct Frame;
 struct type;
-struct object;
+struct Object;
 struct generic_type;
 
 /**
@@ -24,7 +24,7 @@ struct type* GetBCArrayType();
  * @param fr
  * @return
  */
-struct object* NewBCArray(struct generic_type* gtype, int length, struct Frame* fr);
+struct Object* NewBCArray(struct generic_type* gtype, int length, struct Frame* fr);
 
 /**
  * @param arr
@@ -32,18 +32,18 @@ struct object* NewBCArray(struct generic_type* gtype, int length, struct Frame* 
  * @param o
  * @return
  */
-void SetBCArray(struct object* arr, int index, struct object* o);
+void SetBCArray(struct Object* arr, int index, struct Object* o);
 
 /**
  * @param arr
  * @param index
  * @return
  */
-struct object* GetBCArray(struct object* arr, int index);
+struct Object* GetBCArray(struct Object* arr, int index);
 
 /**
  * @param arr
  * @return
  */
-int GetLengthBCArray(struct object* arr);
+int GetLengthBCArray(struct Object* arr);
 #endif // !SIGNAL_LIB_SIGNAL_LANG_SG_ARRAY_H

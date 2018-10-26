@@ -29,7 +29,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 	Namespace* lang = GetLangNamespace();
 	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
 	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
-	object* self= (object*)AtVector(fr->VariableTable, 0);
+	Object* self= (Object*)AtVector(fr->VariableTable, 0);
 	//FXIME:???
 	Heap* h = GetHeap();
 	h->CollectBlocking++;
@@ -53,9 +53,9 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		Vector* args = NewVector();
-		PushVector(args, object_string_new(temp->ContextRef->ContextRef->filename));
-		PushVector(args, object_int_new(lineno));
-		object* trace = NewInstanceClass(
+		PushVector(args, Object_string_new(temp->ContextRef->ContextRef->filename));
+		PushVector(args, Object_int_new(lineno));
+		Object* trace = NewInstanceClass(
 			stackTraceElementClass,
 			//ilctx,
 			fr,
@@ -72,7 +72,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		}
 	} while (temp != NULL);
 	//配列へ
-	object* arr = NewBCArray(stackTraceElementClass->parent->generic_self, stackTraceElementVec->Length, fr);
+	Object* arr = NewBCArray(stackTraceElementClass->parent->generic_self, stackTraceElementVec->Length, fr);
 	for (int i = 0; i < stackTraceElementVec->Length; i++) {
 		SetBCArray(arr, i, AtVector(stackTraceElementVec, i));
 	}

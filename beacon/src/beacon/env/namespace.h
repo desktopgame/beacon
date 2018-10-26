@@ -137,7 +137,7 @@ Namespace* GetUnsafeNamespace();
 Namespace* GetPlaceholderNamespace();
 
 /**
- * 現在のスクリプトコンテキストで object タイプを返します.
+ * 現在のスクリプトコンテキストで Object タイプを返します.
  * @return
  */
 struct type* GetObjectTypeNamespace();

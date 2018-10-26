@@ -7,7 +7,7 @@
 //#include "virtual_type.h"
 struct type;
 struct generic_type;
-struct object;
+struct Object;
 struct Enviroment;
 struct il_factor;
 /**
@@ -17,7 +17,7 @@ typedef struct Field {
 	StringView namev;
 	struct type* parent;
 	struct generic_type* gtype;
-	struct object* static_value;
+	struct Object* static_value;
 	AccessLevel access;
 	ModifierType modifier;
 	struct il_factor* initial_value;

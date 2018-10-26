@@ -21,14 +21,14 @@ type* GetBCCharType() {
 
 //private
 static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
-	object* ch = AtVector(fr->VariableTable, 1);
+	Object* self = AtVector(fr->VariableTable, 0);
+	Object* ch = AtVector(fr->VariableTable, 1);
 
 	self->u.char_ = ch->u.char_;
 	self->tag = OBJECT_CHAR_T;
 }
 
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
+	Object* self = AtVector(fr->VariableTable, 0);
 	PushVector(fr->ValueStack, GetIntObject((int)self->u.char_));
 }

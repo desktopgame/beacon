@@ -21,13 +21,13 @@ Constructor * NewConstructor() {
 	return ret;
 }
 
-object * NewInstanceConstructor(Constructor * self, Vector * args, Frame* parent) {
+Object * NewInstanceConstructor(Constructor * self, Vector * args, Frame* parent) {
 	Frame* sub = SubFrame(parent);
 	for (int i = 0; i < args->Length; i++) {
 		PushVector(sub->ValueStack, AtVector(args, i));
 	}
 	ExecuteVM(sub, self->Env);
-	object* ret = PopVector(sub->ValueStack);
+	Object* ret = PopVector(sub->ValueStack);
 	DeleteFrame(sub);
 	return ret;
 }

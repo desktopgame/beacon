@@ -98,7 +98,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	for (int i = 0; i < params->Length; i++) {
 		VectorItem varg = AtVector(args, i);
 		VectorItem vparam = AtVector(params, i);
-		object* arg = (object*)varg;
+		Object* arg = (Object*)varg;
 		Parameter* param = (Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;

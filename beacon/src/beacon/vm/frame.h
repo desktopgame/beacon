@@ -3,7 +3,7 @@
 #include "../util/stack.h"
 #include "../util/vector.h"
 #include "enviroment.h"
-struct object;
+struct Object;
 struct type;
 /**
  * 実行時の情報を格納する構造体.
@@ -42,10 +42,10 @@ typedef struct Frame {
 	struct Frame* Parent;
 
 	//最後にスローされた例外です.
-	struct object* Exception;
+	struct Object* Exception;
 
 	//コルーチンの実装クラスオブジェクトです.
-	struct object* Coroutine;
+	struct Object* Coroutine;
 
 	//メソッドを実行中のレシーバ型
 	struct type* Receiver;

@@ -7,7 +7,7 @@
 struct generic_type;
 struct type;
 struct Field;
-struct object;
+struct Object;
 
 typedef struct Property {
 	ModifierType Modifier;

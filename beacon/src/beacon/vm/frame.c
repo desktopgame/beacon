@@ -89,11 +89,11 @@ static void frame_markRecursive(Frame* self) {
 		frame_markRecursive(e);
 	}
 	for (int i = 0; i < self->ValueStack->Length; i++) {
-		object* e = (object*)AtVector(self->ValueStack, i);
+		Object* e = (Object*)AtVector(self->ValueStack, i);
 		MarkAllObject(e);
 	}
 	for (int i = 0; i < self->VariableTable->Length; i++) {
-		object* e = (object*)AtVector(self->VariableTable, i);
+		Object* e = (Object*)AtVector(self->VariableTable, i);
 		MarkAllObject(e);
 	}
 	//deferのために一時的に保存された領域
@@ -110,7 +110,7 @@ static void frame_mark_defer(Frame* self) {
 		DeferContext* defctx = AtVector(self->DeferList, i);
 		Vector* bind = defctx->VariableTable;
 		for(int j=0; j<bind->Length; j++) {
-			object* e = AtVector(bind, j);
+			Object* e = AtVector(bind, j);
 			MarkAllObject(e);
 		}
 	}

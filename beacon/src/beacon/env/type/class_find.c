@@ -367,7 +367,7 @@ Method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, int* ou
 	return ret;
 }
 
-Method * GetMethodClass(object * o, int index) {
+Method * GetMethodClass(Object * o, int index) {
 	assert(index >= 0);
 	#if defined(DEBUG)
 	const char* name = GetObjectName(o);

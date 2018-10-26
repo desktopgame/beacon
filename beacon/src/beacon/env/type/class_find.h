@@ -183,7 +183,7 @@ struct Property* FindTreeSPropertyClass(class_* self, StringView namev, int* out
 /**
  * もっとも一致するコンストラクタを返します.
  * @param self
- * @param args<object*> 呼び出し側で開放してください.
+ * @param args<Object*> 呼び出し側で開放してください.
  * @param typeargs
  * @param outIndex
  * @return 無ければ空
@@ -271,7 +271,7 @@ struct Method* GFindSMethodClass(class_* self, StringView namev, Vector* gargs, 
  * @param index
  * @return
  */
-struct Method* GetMethodClass(struct object* o, int index);
+struct Method* GetMethodClass(struct Object* o, int index);
 
 /**
  * 指定位置のメソッドを返します.

@@ -29,7 +29,7 @@ type* GetBCConsoleType() {
 
 //private
 static void bc_console_writeLine(Method* parent, Frame* fr, Enviroment* env) {
-	object* o = AtVector(fr->VariableTable, 1);
+	Object* o = AtVector(fr->VariableTable, 1);
 	if (o->tag == OBJECT_INT_T) {
 		printf("%d\n", o->u.int_);
 	} else if(o->tag == OBJECT_DOUBLE_T) {
@@ -49,7 +49,7 @@ static void bc_console_writeLine(Method* parent, Frame* fr, Enviroment* env) {
 }
 
 static void bc_console_write(Method* parent, Frame* fr, Enviroment* env) {
-	object* o = AtVector(fr->VariableTable, 1);
+	Object* o = AtVector(fr->VariableTable, 1);
 	if (o->tag == OBJECT_INT_T) {
 		printf("%d", o->u.int_);
 	}  else if (o->tag == OBJECT_DOUBLE_T) {
@@ -70,12 +70,12 @@ static void bc_console_write(Method* parent, Frame* fr, Enviroment* env) {
 
 static void bc_console_read(Method* parent, Frame* fr, Enviroment* env) {
 	char c = getchar();
-	object* o = object_char_new(c);
+	Object* o = Object_char_new(c);
 	PushVector(fr->ValueStack, o);
 }
 
 static void bc_console_readLine(Method* parent, Frame* fr, Enviroment* env) {
 	char* s = ReadLine();
-	object* o = object_string_new(s);
+	Object* o = Object_string_new(s);
 	PushVector(fr->ValueStack, o);
 }

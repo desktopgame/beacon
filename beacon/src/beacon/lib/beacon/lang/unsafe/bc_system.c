@@ -31,7 +31,7 @@ type* GetBCSystemType() {
 
 //private
 static void bc_system_nativeExit(Method* parent, Frame* fr, Enviroment* env) {
-	object* returnCodeObj = AtVector(fr->VariableTable, 1);
+	Object* returnCodeObj = AtVector(fr->VariableTable, 1);
 	int returnCode = OBJ2INT(returnCodeObj);
 	exit(returnCode);
 }
@@ -41,7 +41,7 @@ static void bc_system_nativeAbort(Method* parent, Frame* fr, Enviroment* env) {
 }
 
 static void bc_system_nativeExec(Method* parent, Frame* fr, Enviroment* env) {
-	object* cmd = AtVector(fr->VariableTable, 1);
+	Object* cmd = AtVector(fr->VariableTable, 1);
 	const char* str = GetRawBCString(cmd)->Text;
 	int ret = system(str);
 	PushVector(fr->ValueStack, GetIntObject(ret));

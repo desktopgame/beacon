@@ -2,7 +2,7 @@
 #define BEACON_LIB_BEACON_LANG_BC_FILE_H
 struct Frame;
 struct type;
-struct object;
+struct Object;
 struct generic_type;
 
 struct type;

@@ -10,16 +10,16 @@
 #endif
 
 //proto
-static void bc_object_nativeToString(Method* parent, Frame* fr, Enviroment* env);
-static void bc_object_nativeReferenceEquals(Method* parent, Frame* fr, Enviroment* env);
+static void bc_Object_nativeToString(Method* parent, Frame* fr, Enviroment* env);
+static void bc_Object_nativeReferenceEquals(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCObject() {
 	Namespace* lang = GetLangNamespace();
-	type* objectType = NewPreloadClass(InternString("Object"));
-	class_* objectClass = TYPE2CLASS(objectType);
-	AddTypeNamespace(lang, objectType);
-	DefineNativeMethodClass(objectClass, "nativeToString", bc_object_nativeToString);
-	DefineNativeMethodClass(objectClass, "nativeReferenceEquals", bc_object_nativeReferenceEquals);
+	type* ObjectType = NewPreloadClass(InternString("Object"));
+	class_* ObjectClass = TYPE2CLASS(ObjectType);
+	AddTypeNamespace(lang, ObjectType);
+	DefineNativeMethodClass(ObjectClass, "nativeToString", bc_Object_nativeToString);
+	DefineNativeMethodClass(ObjectClass, "nativeReferenceEquals", bc_Object_nativeReferenceEquals);
 }
 
 type* GetBCObjectType() {
@@ -28,8 +28,8 @@ type* GetBCObjectType() {
 }
 
 //private
-static void bc_object_nativeToString(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = (object*)AtVector(fr->VariableTable, 0);
+static void bc_Object_nativeToString(Method* parent, Frame* fr, Enviroment* env) {
+	Object* self = (Object*)AtVector(fr->VariableTable, 0);
 	Buffer* sb = NewBuffer();
 	//参照型
 	if (self->tag == OBJECT_REF_T) {
@@ -54,13 +54,13 @@ static void bc_object_nativeToString(Method* parent, Frame* fr, Enviroment* env)
 #undef BUFF_LEN
 	}
 	char* str = ReleaseBuffer(sb);
-	object* ret = object_string_new(str);
+	Object* ret = Object_string_new(str);
 	PushVector(fr->ValueStack, ret);
 	MEM_FREE(str);
 }
 
-static void bc_object_nativeReferenceEquals(Method* parent, Frame* fr, Enviroment* env) {
-	object* a = (object*)AtVector(fr->VariableTable, 1);
-	object* b = (object*)AtVector(fr->VariableTable, 2);
+static void bc_Object_nativeReferenceEquals(Method* parent, Frame* fr, Enviroment* env) {
+	Object* a = (Object*)AtVector(fr->VariableTable, 1);
+	Object* b = (Object*)AtVector(fr->VariableTable, 2);
 	PushVector(fr->ValueStack, GetBoolObject(a == b));
 }

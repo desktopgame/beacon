@@ -6,7 +6,7 @@
 struct type;
 struct class_;
 struct Enviroment;
-struct object;
+struct Object;
 struct Frame;
 /**
  * コンストラクタを表す構造体.
@@ -31,7 +31,7 @@ Constructor* NewConstructor();
  * @param parent
  * @return
  */
-struct object* NewInstanceConstructor(Constructor* self, Vector* args, struct Frame* parent);
+struct Object* NewInstanceConstructor(Constructor* self, Vector* args, struct Frame* parent);
 
 /**
  * コンストラクタを開放します.

@@ -298,7 +298,7 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_NEW_OBJECT:
 		{
-			fprintf(fp,"new object");
+			fprintf(fp,"new Object");
 			break;
 		}
 		case OP_ALLOC_FIELD:

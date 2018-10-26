@@ -37,7 +37,7 @@ void ExecuteOperatorOverload(OperatorOverload* self, Frame* fr, Enviroment* env)
 	//例外によって終了した場合には戻り値がない
 	if(self->ReturnGType != TYPE_VOID->generic_self &&
 	   sub->ValueStack->Length > 0) {
-		object* o = (object*)PopVector(sub->ValueStack);
+		Object* o = (Object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, o);
 	}
 	DeleteFrame(sub);

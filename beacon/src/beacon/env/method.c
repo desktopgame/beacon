@@ -63,7 +63,7 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 		Vector* aTArgs = NULL;
 		//レシーバも
 		if(!IsStaticModifier(self->Modifier)) {
-			object* receiver_obj = PopVector(fr->ValueStack);
+			Object* receiver_obj = PopVector(fr->ValueStack);
 			AssignVector(a->VariableTable, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
@@ -459,7 +459,7 @@ static Vector* method_vm_args(Method* self, Frame* fr, Frame* a) {
 	//引数を引き継ぐ
 	int len = self->Parameters->Length;
 	for(int i=0; i<len; i++) {
-		object* ARG = PopVector(fr->ValueStack);
+		Object* ARG = PopVector(fr->ValueStack);
 		assert(ARG != NULL);
 		AssignVector(a->VariableTable, (len - i), ARG);
 		AssignVector(args, (len - i), ARG->gtype);

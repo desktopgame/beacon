@@ -199,7 +199,7 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 
 
 		case BCERROR_THROWN_NOT_EXCEPTION_TYPE_T:
-			fmt = "must be thrown object type compatible to `exception`: %s";
+			fmt = "must be thrown Object type compatible to `exception`: %s";
 			break;
 
 

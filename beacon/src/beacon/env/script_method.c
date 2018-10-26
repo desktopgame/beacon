@@ -27,7 +27,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
 	if (!IsStaticModifier(parent->Modifier)) {
-		object* receiver_obj = PopVector(fr->ValueStack);
+		Object* receiver_obj = PopVector(fr->ValueStack);
 		PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
@@ -39,7 +39,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
 	for (int i = 0; i < parent->Parameters->Length; i++) {
-		object* arg = CopyObject(PopVector(fr->ValueStack));
+		Object* arg = CopyObject(PopVector(fr->ValueStack));
 		PushVector(sub->ValueStack, arg);
 		AssignVector(aArgs, (parent->Parameters->Length - i), arg);
 	}
@@ -55,7 +55,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	//例外によって終了した場合には戻り値がない
 	if(parent->ReturnGType != TYPE_VOID->generic_self &&
 	   sub->ValueStack->Length > 0) {
-		object* o = (object*)PopVector(sub->ValueStack);
+		Object* o = (Object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, NON_NULL(o));
 	}
 	DeleteVector(aArgs, VectorDeleterOfNull);

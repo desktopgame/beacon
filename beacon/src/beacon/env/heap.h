@@ -39,7 +39,7 @@ Heap* GetHeap();
  * @param self
  * @param obj
  */
-void AddHeap(Heap* self, object* obj);
+void AddHeap(Heap* self, Object* obj);
 
 /**
  * GCを実行します.
@@ -52,7 +52,7 @@ void CollectHeap(Heap* self);
  * @param self
  * @param o
  */
-void IgnoreHeap(Heap* self, object* o);
+void IgnoreHeap(Heap* self, Object* o);
 
 /**
  * ヒープを開放します.

@@ -124,17 +124,17 @@ void ClearScriptContext(ScriptContext* self) {
 	EachStaticScriptContext(self, ClearScriptContextImpl);
 }
 
-object* IInternScriptContext(ScriptContext* self, int i) {
+Object* IInternScriptContext(ScriptContext* self, int i) {
 	Heap* he = self->Heap;
 	NumericMap* cell = GetNumericMapCell(self->IntegerCacheMap, i);
 	he->AcceptBlocking++;
 	if(cell == NULL) {
-		object* obj = object_int_new(i);
+		Object* obj = Object_int_new(i);
 		obj->paint = PAINT_ONEXIT_T;
 		cell = PutNumericMap(self->IntegerCacheMap, i, obj);
 	}
 	he->AcceptBlocking--;
-	return (object*)cell->Item;
+	return (Object*)cell->Item;
 }
 
 void CacheScriptContext() {
@@ -150,13 +150,13 @@ void CacheScriptContext() {
 	   }
 	//正の数のキャッシュ
 	for(int i=0; i<100; i++) {
-		object* a = object_int_new(i);
+		Object* a = Object_int_new(i);
 		PushVector(self->PositiveIntegerCacheList, a);
 		a->paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
-		object* a = object_int_new(-i);
+		Object* a = Object_int_new(-i);
 		PushVector(self->NegativeIntegerCacheList, a);
 		a->paint = PAINT_ONEXIT_T;
 	}
@@ -248,9 +248,9 @@ static void ClearScriptContextImpl(Field* item) {
 }
 
 static void CacheScriptContext_delete(VectorItem item) {
-	DestroyObject((object*)item);
+	DestroyObject((Object*)item);
 }
 
 static void ScriptContext_mcache_delete(NumericMapKey key, NumericMapItem item) {
-	DestroyObject((object*)item);
+	DestroyObject((Object*)item);
 }

@@ -103,12 +103,12 @@ type* NewPreloadClass(StringView namev) {
 	return tp;
 }
 
-void AllocFieldsClass(class_ * self, object * o, Frame* fr) {
+void AllocFieldsClass(class_ * self, Object * o, Frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
 	Heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->Length; i++) {
 		Field* f = (Field*)AtVector(self->field_list, i);
-		object* a = GetDefaultObject(f->gtype);
+		Object* a = GetDefaultObject(f->gtype);
 		//静的フィールドは別の場所に確保
 		if (IsStaticModifier(f->modifier)) {
 			continue;
@@ -130,7 +130,7 @@ void AllocFieldsClass(class_ * self, object * o, Frame* fr) {
 	}
 }
 
-void FreeClassFields(class_ * self, object * o) {
+void FreeClassFields(class_ * self, Object * o) {
 }
 
 void AddFieldClass(class_ * self, Field* f) {
@@ -339,7 +339,7 @@ int CountAllSMethodClass(class_ * self) {
 	return sum;
 }
 
-object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args) {
+Object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	Constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
@@ -349,7 +349,7 @@ object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_ar
 	Heap* h = GetHeap();
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {
-			object* o = AtVector(args, i);
+			Object* o = AtVector(args, i);
 			PushVector(sub->ValueStack, o);
 		}
 	}
@@ -359,7 +359,7 @@ object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_ar
 		}
 	}
 	ExecuteVM(sub, ctor->Env);
-	object* inst = PopVector(sub->ValueStack);
+	Object* inst = PopVector(sub->ValueStack);
 	h->CollectBlocking++;
 	DeleteFrame(sub);
 	h->CollectBlocking--;

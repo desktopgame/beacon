@@ -35,7 +35,7 @@ int MetaGCalcScore(Vector* params, Vector* gargs);
 
 /**
  * 仮引数と実引数のマッチ率を返します.
- * こちらは object* を 使用します。
+ * こちらは Object* を 使用します。
  * @param params
  * @param args
  * @param typeargs

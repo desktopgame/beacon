@@ -2433,7 +2433,7 @@ static void yyensure_buffer_stack (void)
  * @param base the character buffer
  * @param size the size in bytes of the character buffer
  * 
- * @return the newly allocated buffer state object. 
+ * @return the newly allocated buffer state Object. 
  */
 YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
 {
@@ -2468,7 +2468,7 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
  * scan from a @e copy of @a str.
  * @param yystr a NUL-terminated string to scan
  * 
- * @return the newly allocated buffer state object.
+ * @return the newly allocated buffer state Object.
  * @note If you want to scan bytes that may contain NUL values, then use
  *       yy_scan_bytes() instead.
  */
@@ -2483,7 +2483,7 @@ YY_BUFFER_STATE yy_scan_string (yyconst char * yystr )
  * @param bytes the byte buffer to scan
  * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
- * @return the newly allocated buffer state object.
+ * @return the newly allocated buffer state Object.
  */
 YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
 {

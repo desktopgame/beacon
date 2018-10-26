@@ -18,7 +18,7 @@ static void bc_file_nativeGetStdIn(Method* parent, Frame* fr, Enviroment* env);
 static void bc_file_nativeGetStdOut(Method* parent, Frame* fr, Enviroment* env);
 static void bc_file_nativeGetStdErr(Method* parent, Frame* fr, Enviroment* env);
 static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env);
-static object* file_new(FILE* fp, bool std);
+static Object* file_new(FILE* fp, bool std);
 
 void InitBCFile() {
 	Namespace* unsafe = GetUnsafeNamespace();
@@ -41,8 +41,8 @@ type* GetBCFileType() {
 }
 //private
 static void bc_file_nativeOpen(Method* parent, Frame* fr, Enviroment* env) {
-	object* fileObj = AtVector(fr->VariableTable, 1);
-	object* modeObj = AtVector(fr->VariableTable, 2);
+	Object* fileObj = AtVector(fr->VariableTable, 1);
+	Object* modeObj = AtVector(fr->VariableTable, 2);
 	Buffer* fileStr = GetRawBCString(fileObj);
 	Buffer* modeStr = GetRawBCString(modeObj);
 	//Printfln("%s : %s", fileStr->text, modeStr->text);
@@ -53,57 +53,57 @@ static void bc_file_nativeOpen(Method* parent, Frame* fr, Enviroment* env) {
 		PushVector(fr->ValueStack, GetNullObject());
 		return;
 	}
-	object* file = file_new(fp, false);
+	Object* file = file_new(fp, false);
 	PushVector(fr->ValueStack, file);
 }
 
 static void bc_file_nativePut(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
-	object* ch = AtVector(fr->VariableTable, 1);
+	Object* self = AtVector(fr->VariableTable, 0);
+	Object* ch = AtVector(fr->VariableTable, 1);
 	FILE* fp = AtVector(self->native_slot_vec, 0);
 	assert(fp != NULL);
 	fputc(ch->u.char_, fp);
 }
 
 static void bc_file_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
+	Object* self = AtVector(fr->VariableTable, 0);
 	FILE* fp = AtVector(self->native_slot_vec, 0);
 	assert(fp != NULL);
 	char ret = fgetc(fp);
-	PushVector(fr->ValueStack, object_char_new(ret));
+	PushVector(fr->ValueStack, Object_char_new(ret));
 }
 
 static void bc_file_nativeAvailable(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
+	Object* self = AtVector(fr->VariableTable, 0);
 	FILE* fp = AtVector(self->native_slot_vec, 0);
 	assert(fp != NULL);
 	PushVector(fr->ValueStack, GetBoolObject(!feof(fp)));
 }
 
 static void bc_file_nativeGetStdIn(Method* parent, Frame* fr, Enviroment* env) {
-	object* file = file_new(stdin, true);
+	Object* file = file_new(stdin, true);
 	PushVector(fr->ValueStack, file);
 }
 
 static void bc_file_nativeGetStdOut(Method* parent, Frame* fr, Enviroment* env) {
-	object* file = file_new(stdout, true);
+	Object* file = file_new(stdout, true);
 	PushVector(fr->ValueStack, file);
 }
 
 static void bc_file_nativeGetStdErr(Method* parent, Frame* fr, Enviroment* env) {
-	object* file = file_new(stderr, true);
+	Object* file = file_new(stderr, true);
 	PushVector(fr->ValueStack, file);
 }
 
 static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env) {
-	object* self = AtVector(fr->VariableTable, 0);
+	Object* self = AtVector(fr->VariableTable, 0);
 	FILE* fp = AtVector(self->native_slot_vec, 0);
 	assert(fp != NULL);
 	fclose(fp);
 }
 
-static object* file_new(FILE* fp, bool std) {
-	object* file = object_ref_new();
+static Object* file_new(FILE* fp, bool std) {
+	Object* file = Object_ref_new();
 	assert(file->paint != PAINT_ONEXIT_T);
 	type* fileType = GetBCFileType();
 	file->gtype = fileType->generic_self;

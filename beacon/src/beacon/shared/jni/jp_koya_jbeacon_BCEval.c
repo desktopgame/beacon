@@ -24,7 +24,7 @@ static Frame* bc_eval_allocate(class_loader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a);
 static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, class_loader* cll, Frame* fr);
-static void printClassInfo(JNIEnv* env, jobject object);
+static void printClassInfo(JNIEnv* env, jobject Object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
 static jchar jobject2jchar(JNIEnv* env, jobject obj);
 static jboolean jobject2jboolean(JNIEnv* env, jobject obj);
@@ -193,7 +193,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	NumericMapItem val = nmap->Item;
 	const char* name = Ref2Str(key);
 	SymbolEntry* se = (SymbolEntry*)val;
-	object* bcobj = AtVector(fr->VariableTable, se->Index);
+	Object* bcobj = AtVector(fr->VariableTable, se->Index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
@@ -201,13 +201,13 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 		return;
 	}
 	//jp.koya.jbeacon.BCObjectを検索する
-	jclass bcobject_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCObject");
-	if(bcobject_cls == NULL) {
+	jclass bcObject_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCObject");
+	if(bcObject_cls == NULL) {
 		(*env)->FatalError(env, "not found class: jp/koya/jbeacon/BCObjec");
 		return;
 	}
-	jmethodID bcobject_ctor_id = (*env)->GetMethodID(env, bcobject_cls, "<init>", "()V");
-	if(bcobject_ctor_id == NULL) {
+	jmethodID bcObject_ctor_id = (*env)->GetMethodID(env, bcObject_cls, "<init>", "()V");
+	if(bcObject_ctor_id == NULL) {
 		(*env)->FatalError(env, "not found method: <init>");
 		return;
 	}
@@ -262,7 +262,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		jobject other = (*env)->NewObject(env, bcobject_cls, bcobject_ctor_id);
+		jobject other = (*env)->NewObject(env, bcObject_cls, bcObject_ctor_id);
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, other);
 	}
 	//次の要素へ
@@ -299,20 +299,20 @@ static void printClassInfo(JNIEnv* env, jobject obj) {
 	if (cls == NULL) {
 		printf("cls obj is null");
 	}
-	// First get the class object
+	// First get the class Object
 	jmethodID mid = (*env)->GetMethodID(env, cls, "getClass", "()Ljava/lang/Class;");
 	jobject clsObj = (*env)->CallObjectMethod(env, obj, mid);
 
-	// Now get the class object's class descriptor
+	// Now get the class Object's class descriptor
 	cls = (*env)->GetObjectClass(env, clsObj);
 
-	// Find the getName() method on the class object
+	// Find the getName() method on the class Object
 	mid = (*env)->GetMethodID(env, cls, "getName", "()Ljava/lang/String;");
 
-	// Call the getName() to get a jstring object back
+	// Call the getName() to get a jstring Object back
 	jstring strObj = (jstring)(*env)->CallObjectMethod(env, clsObj, mid);
 
-	// Now get the c string from the java jstring object
+	// Now get the c string from the java jstring Object
 	const char* str = (*env)->GetStringUTFChars(env, strObj, NULL);
 
 	// Print the class name

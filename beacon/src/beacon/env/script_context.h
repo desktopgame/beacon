@@ -7,7 +7,7 @@
 #include "../util/vector.h"
 #include "../util/numeric_map.h"
 struct Heap;
-struct object;
+struct Object;
 struct class_loader;
 struct Field;
 
@@ -37,9 +37,9 @@ typedef struct ScriptContext {
 	bool IsPrintError;
 	bool IsAbortOnError;
 	struct Heap* Heap;
-	struct object* True;
-	struct object* False;
-	struct object* Null;
+	struct Object* True;
+	struct Object* False;
+	struct Object* Null;
 } ScriptContext;
 
 /**
@@ -96,7 +96,7 @@ void ClearScriptContext(ScriptContext* self);
  * @param i
  * @return
  */
-struct object* IInternScriptContext(ScriptContext* self, int i);
+struct Object* IInternScriptContext(ScriptContext* self, int i);
 
 /**
  * 現在のコンテキストでリテラルをキャッシュします.
