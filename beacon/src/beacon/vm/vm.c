@@ -912,7 +912,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				char* clname = Ref2Str(cl->namev);
 				#endif
 				CreateOperatorVTClass(cl);
-				OperatorOverload* operator_ov = (OperatorOverload*)AtVector(cl->ovt->vec, index);
+				OperatorOverload* operator_ov = (OperatorOverload*)AtVector(cl->ovt->Operators, index);
 				ExecuteOperatorOverload(operator_ov, self, env);
 				break;
 			}

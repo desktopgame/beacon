@@ -424,8 +424,8 @@ OperatorOverload* GFindOperatorOverloadClass(class_* self, OperatorType type, Ve
 	(*outIndex) = -1;
 	OperatorOverload* ret = NULL;
 	CreateOperatorVTClass(self);
-	for(int i=0; i<self->ovt->vec->Length; i++) {
-		OperatorOverload* operator_ov = AtVector(self->ovt->vec, i);
+	for(int i=0; i<self->ovt->Operators->Length; i++) {
+		OperatorOverload* operator_ov = AtVector(self->ovt->Operators, i);
 		if(operator_ov->Type != type) {
 			continue;
 		}
@@ -482,7 +482,7 @@ OperatorOverload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, 
 }
 
 OperatorOverload* GetOperatorOverloadClass(class_* self, int index) {
-	return AtVector(self->ovt->vec, index);
+	return AtVector(self->ovt->Operators, index);
 }
 
 Vector* FindTreeMethodClass(class_* self, Method* m) {

@@ -7,37 +7,37 @@
 
 OperatorVT* NewOperatorVt() {
 	OperatorVT* ret = (OperatorVT*)MEM_MALLOC(sizeof(OperatorVT));
-	ret->vec = NewVector();
+	ret->Operators = NewVector();
 	return ret;
 }
 
 void ReplaceOperatorVt(OperatorVT* self, OperatorOverload* opov) {
-	for(int i=0; i<self->vec->Length; i++) {
-		OperatorOverload* e = AtVector(self->vec, i);
+	for(int i=0; i<self->Operators->Length; i++) {
+		OperatorOverload* e = AtVector(self->Operators, i);
 		if(e->Type != opov->Type) {
 			continue;
 		}
 		if(Is1ArgOperator(e->Type)) {
-			AssignVector(self->vec, i, opov);
+			AssignVector(self->Operators, i, opov);
 			return;
 		} else if(Is2ArgOperator(e->Type)) {
 			Parameter* param_a = AtVector(e->Parameters, 0);
 			Parameter* param_b = AtVector(opov->Parameters, 0);
 			if(DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {
-				AssignVector(self->vec, i, opov);
+				AssignVector(self->Operators, i, opov);
 				return;
 			}
 		} else {
 			assert(false);
 		}
 	}
-	PushVector(self->vec, opov);
+	PushVector(self->Operators, opov);
 }
 
 void DeleteOperatorVt(OperatorVT* self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->vec, VectorDeleterOfNull);
+	DeleteVector(self->Operators, VectorDeleterOfNull);
 	MEM_FREE(self);
 }

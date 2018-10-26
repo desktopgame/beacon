@@ -7,7 +7,7 @@ struct OperatorOverload;
  * オペレータの仮想関数テーブル.
  */
 typedef struct OperatorVT {
-	Vector* vec;
+	Vector* Operators;
 } OperatorVT;
 
 OperatorVT* NewOperatorVt();

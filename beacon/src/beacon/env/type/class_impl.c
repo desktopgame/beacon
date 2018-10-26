@@ -246,13 +246,13 @@ void CreateOperatorVTClass(class_* self) {
 	if(self->super_class == NULL) {
 		for(int i=0; i<self->operator_overload_list->Length; i++) {
 			OperatorOverload* opov = AtVector(self->operator_overload_list, i);
-			PushVector(self->ovt->vec, opov);
+			PushVector(self->ovt->Operators, opov);
 		}
 	} else {
 		OperatorVT* super_vt = TYPE2CLASS(GENERIC2TYPE(self->super_class))->ovt;
-		for(int i=0; i<super_vt->vec->Length; i++) {
-			OperatorOverload* opov = AtVector(super_vt->vec, i);
-			PushVector(self->ovt->vec, opov);
+		for(int i=0; i<super_vt->Operators->Length; i++) {
+			OperatorOverload* opov = AtVector(super_vt->Operators, i);
+			PushVector(self->ovt->Operators, opov);
 		}
 		for(int i=0; i<self->operator_overload_list->Length; i++) {
 			OperatorOverload* opov = AtVector(self->operator_overload_list, i);
