@@ -13,7 +13,7 @@
 #include <string.h>
 
 //proto
-static bool eval_top_from_cll(class_loader* cll, AST* aOpt);
+static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt);
 
 
 bool EvalAST(const char* filename) {
@@ -45,7 +45,7 @@ bool EvalIL(const char* filename) {
 	abort();
 	return false;
 	/*
-	class_loader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	ClassLoader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
@@ -58,7 +58,7 @@ bool EvalIL(const char* filename) {
 }
 
 bool EvalOp(const char* filename) {
-	class_loader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	ClassLoader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
@@ -69,7 +69,7 @@ bool EvalOp(const char* filename) {
 }
 
 bool EvalFile(const char * filename) {
-	class_loader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	ClassLoader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	return eval_top_from_cll(cll, NULL);
 }
 
@@ -80,14 +80,14 @@ bool EvalString(const char* source) {
 		DestroyParser(p);
 		return false;
 	}
-	class_loader* cll = NewClassLoader("", CONTENT_ENTRY_POINT_T);
+	ClassLoader* cll = NewClassLoader("", CONTENT_ENTRY_POINT_T);
 	AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	return eval_top_from_cll(cll, a);
 }
 
 //private
-static bool eval_top_from_cll(class_loader* cll, AST* aOpt) {
+static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if(aOpt == NULL) {
 		LoadClassLoader(cll);

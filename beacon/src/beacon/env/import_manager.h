@@ -8,7 +8,7 @@ struct GenericCache;
 struct GenericType;
 struct FQCNCache;
 struct Namespace;
-struct class_loader;
+struct ClassLoader;
 struct ImportInfo;
 struct CallContext;
 
@@ -31,7 +31,7 @@ ImportManager* NewImportManager();
  * @param target
  * @return
  */
-struct ImportInfo* ImportImportManager(ImportManager* self, struct class_loader* target);
+struct ImportInfo* ImportImportManager(ImportManager* self, struct ClassLoader* target);
 
 /**
  * 既に読み込まれたなら true.

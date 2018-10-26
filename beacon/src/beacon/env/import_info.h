@@ -2,10 +2,10 @@
 #ifndef BEACON_ENV_IMPORT_INFO_H
 #define BEACON_ENV_IMPORT_INFO_H
 #include <stdbool.h>
-struct class_loader;
+struct ClassLoader;
 
 typedef struct ImportInfo {
-	struct class_loader* Context;
+	struct ClassLoader* Context;
 	bool IsConsume;
 } ImportInfo;
 

@@ -12,15 +12,15 @@
 #include <assert.h>
 
 //proto
-static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i);
+static void CLBC_import_internal(ClassLoader* self, Vector* ilimports, int i);
 
 
-static void CLBC_new_load_internal(class_loader * self, char * full_path);
+static void CLBC_new_load_internal(ClassLoader * self, char * full_path);
 
-static void CLBC_import_already(class_loader* self, class_loader* cll);
-//static class_loader* CLBC_import_new(class_loader* self, char* fullPath);
+static void CLBC_import_already(ClassLoader* self, ClassLoader* cll);
+//static ClassLoader* CLBC_import_new(ClassLoader* self, char* fullPath);
 
-void CLBC_import(class_loader* self, Vector* ilimports) {
+void CLBC_import(ClassLoader* self, Vector* ilimports) {
 	CL_ERROR(self);
 	for (int i = self->ImportManager->Items->Length; i < ilimports->Length; i++) {
 		CLBC_import_internal(self, ilimports, i);
@@ -39,7 +39,7 @@ void CLBC_import(class_loader* self, Vector* ilimports) {
 	}
 }
 
-void CLBC_new_load(class_loader * self, char * fullPath) {
+void CLBC_new_load(ClassLoader * self, char * fullPath) {
 	CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	ctx->Heap->AcceptBlocking++;
@@ -47,10 +47,10 @@ void CLBC_new_load(class_loader * self, char * fullPath) {
 	ctx->Heap->AcceptBlocking--;
 }
 
-class_loader* CLBC_import_new(class_loader* self, char* full_path) {
+ClassLoader* CLBC_import_new(ClassLoader* self, char* full_path) {
 	CL_ERROR_RET(self, self);
 	ScriptContext* ctx = GetCurrentScriptContext();
-	class_loader* cll = NewClassLoader(full_path, CONTENT_LIB_T);
+	ClassLoader* cll = NewClassLoader(full_path, CONTENT_LIB_T);
 	cll->parent = self;
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
@@ -59,7 +59,7 @@ class_loader* CLBC_import_new(class_loader* self, char* full_path) {
 }
 
 //private
-static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i) {
+static void CLBC_import_internal(ClassLoader* self, Vector* ilimports, int i) {
 	CL_ERROR(self);
 	if (i >= ilimports->Length ||
 	    IsLoadedImportManager(self->ImportManager, i)) {
@@ -74,12 +74,12 @@ static void CLBC_import_internal(class_loader* self, Vector* ilimports, int i) {
 	MEM_FREE(fullPath);
 }
 
-static void CLBC_new_load_internal(class_loader * self, char * full_path) {
+static void CLBC_new_load_internal(ClassLoader * self, char * full_path) {
 	CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
-	class_loader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
+	ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
 	if (cll != NULL) {
 		CLBC_import_already(self, cll);
 		return;
@@ -98,7 +98,7 @@ static void CLBC_new_load_internal(class_loader * self, char * full_path) {
 	LoadClassLoader(cll);
 }
 
-static void CLBC_import_already(class_loader* self, class_loader* cll) {
+static void CLBC_import_already(ClassLoader* self, ClassLoader* cll) {
 	CL_ERROR(self);
 	//self -> cll への参照を与える
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);

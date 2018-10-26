@@ -24,7 +24,7 @@ ImportManager * NewImportManager() {
 	return ret;
 }
 
-ImportInfo* ImportImportManager(ImportManager * self, class_loader * target) {
+ImportInfo* ImportImportManager(ImportManager * self, ClassLoader * target) {
 	ImportInfo* info = NewImportInfo();
 	info->Context = target;
 	PushVector(self->Items, info);

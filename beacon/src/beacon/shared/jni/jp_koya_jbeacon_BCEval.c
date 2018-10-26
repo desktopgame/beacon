@@ -20,10 +20,10 @@
 #include "../../error.h"
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
-static Frame* bc_eval_allocate(class_loader* cll);
+static Frame* bc_eval_allocate(ClassLoader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a);
 static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target);
-static void bc_eval_release(JNIEnv* env, class_loader* cll, Frame* fr);
+static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr);
 static void printClassInfo(JNIEnv* env, jobject Object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
 static jchar jobject2jchar(JNIEnv* env, jobject obj);
@@ -61,7 +61,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		DeleteAST(a);
 		return NULL;
 	}
-	class_loader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	ClassLoader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	LoadPassASTClassLoader(cll, a);
 	if(GetLastBCError()) {
 		DeleteClassLoader(cll);
@@ -93,7 +93,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	return symbol_table_obj;
 }
 
-static Frame* bc_eval_allocate(class_loader* cll) {
+static Frame* bc_eval_allocate(ClassLoader* cll) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	Frame* fr = NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
@@ -274,7 +274,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	}
 }
 
-static void bc_eval_release(JNIEnv* env, class_loader* cll, Frame* fr) {
+static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr) {
 	if(GetLastBCError()) {
 		Buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");

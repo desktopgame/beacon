@@ -5,7 +5,7 @@
 struct AST;
 struct FQCNCache;
 struct GenericCache;
-struct class_loader;
+struct ClassLoader;
 
 void CLILFQCNCache(struct AST* afqcn, struct FQCNCache* fqcn);
 
@@ -17,14 +17,14 @@ void CLILGenericCache(struct AST* afqcn, struct GenericCache* dest);
  * @param dst
  * @param typename_list
  */
-void CLILTypenameList(struct class_loader* self, Vector* dst, struct AST* atypename_list);
+void CLILTypenameList(struct ClassLoader* self, Vector* dst, struct AST* atypename_list);
 
 
-void CLILTypeParameter(struct class_loader* self, struct AST* asource, Vector* dest);
+void CLILTypeParameter(struct ClassLoader* self, struct AST* asource, Vector* dest);
 
-void CLILTypeArgument(struct class_loader* self, struct AST* atype_args, Vector* dest);
+void CLILTypeArgument(struct ClassLoader* self, struct AST* atype_args, Vector* dest);
 
-void CLILParameterList(struct class_loader* self, Vector* list, struct AST* asource);
+void CLILParameterList(struct ClassLoader* self, Vector* list, struct AST* asource);
 
-void CLILArgumentList(struct class_loader* self, Vector* list, struct AST* asource);
+void CLILArgumentList(struct ClassLoader* self, Vector* list, struct AST* asource);
 #endif

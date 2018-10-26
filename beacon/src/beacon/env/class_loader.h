@@ -15,7 +15,7 @@ struct parser;
 /**
  * クラスローダーを表す構造体です.
  */
-typedef struct class_loader {
+typedef struct ClassLoader {
 	AST* source_code;
 	ILToplevel* il_code;
 
@@ -25,11 +25,11 @@ typedef struct class_loader {
 	LinkType link;
 	Vector* type_cache_vec;
 
-	struct class_loader* parent;
+	struct ClassLoader* parent;
 	int level;
 	char* filename;
 //	bool error;
-} class_loader;
+} ClassLoader;
 
 /**
  * 引数のクラスローダの error が true なら return します.
@@ -51,14 +51,14 @@ typedef struct class_loader {
  * @param type
  * @return
  */
-class_loader* NewClassLoader(const char* filename, ContentType type);
+ClassLoader* NewClassLoader(const char* filename, ContentType type);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、
  * 型の解決などその他必要な情報をまとめあげます。
  * @param self
  */
-void LoadClassLoader(class_loader* self);
+void LoadClassLoader(ClassLoader* self);
 
 /**
  * ASTの解析をスキップして代わりに引数のASTを解析します.
@@ -67,7 +67,7 @@ void LoadClassLoader(class_loader* self);
  * @param self
  * @param a
  */
-void LoadPassASTClassLoader(class_loader* self, AST* a);
+void LoadPassASTClassLoader(ClassLoader* self, AST* a);
 
 /**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
@@ -75,13 +75,13 @@ void LoadPassASTClassLoader(class_loader* self, AST* a);
  * @param self
  * @param relativePath
  */
-void SpecialLoadClassLoader(class_loader* self, char* relativePath);
+void SpecialLoadClassLoader(ClassLoader* self, char* relativePath);
 
 /**
  * このクラスローダーを開放します.
  * @param self
  */
-void DeleteClassLoader(class_loader* self);
+void DeleteClassLoader(ClassLoader* self);
 
 //void class_link_print(class_link link);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H

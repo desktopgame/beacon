@@ -229,7 +229,7 @@ static void ScriptContext_free(ScriptContext* self) {
 }
 
 static void ScriptContext_DeleteClassLoader(const char* name, TreeItem item) {
-	class_loader* e = (class_loader*)item;
+	ClassLoader* e = (ClassLoader*)item;
 	DeleteClassLoader(e);
 }
 

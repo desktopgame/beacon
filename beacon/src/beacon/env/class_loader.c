@@ -46,17 +46,17 @@
 #include "heap.h"
 
 //proto
-static void LoadClassLoader_impl(class_loader* self);
-static void LinkClassLoader_recursive(class_loader* self, LinkType type);
+static void Loadclass_loader_impl(ClassLoader* self);
+static void Linkclass_loader_recursive(ClassLoader* self, LinkType type);
 static void class_loader_cache_delete(VectorItem item);
-static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loader* cll, char* full_path);
-static void LoadClassLoader_toplevel(class_loader* self);
-static void LoadClassLoader_linkall(class_loader* self);
-static void LoadClassLoader_toplevel_function(class_loader* self);
+static ClassLoader* Loadclass_loader_specialImpl(ClassLoader* self, ClassLoader* cll, char* full_path);
+static void Loadclass_loader_toplevel(ClassLoader* self);
+static void Loadclass_loader_linkall(ClassLoader* self);
+static void Loadclass_loader_toplevel_function(ClassLoader* self);
 static bool check_parser_error(Parser* p);
 
-class_loader* NewClassLoader(const char* filename, ContentType type) {
-	class_loader* ret = (class_loader*)MEM_MALLOC(sizeof(class_loader));
+ClassLoader* NewClassLoader(const char* filename, ContentType type) {
+	ClassLoader* ret = (ClassLoader*)MEM_MALLOC(sizeof(ClassLoader));
 	ret->source_code = NULL;
 	ret->il_code = NULL;
 	ret->parent = NULL;
@@ -71,7 +71,7 @@ class_loader* NewClassLoader(const char* filename, ContentType type) {
 	return ret;
 }
 
-void LoadClassLoader(class_loader * self) {
+void LoadClassLoader(ClassLoader * self) {
 	//ASTを読み込む
 	Parser* p = ParseFile(self->filename);
 	//解析に失敗した場合
@@ -83,29 +83,29 @@ void LoadClassLoader(class_loader * self) {
 	LoadPassASTClassLoader(self, a);
 }
 
-void LoadPassASTClassLoader(class_loader* self, AST* a) {
+void LoadPassASTClassLoader(ClassLoader* self, AST* a) {
 	ClearBCError();
 	Heap* hee = GetHeap();
 	hee->AcceptBlocking++;
 	self->source_code = a;
-	LoadClassLoader_impl(self);
+	Loadclass_loader_impl(self);
 	hee->AcceptBlocking--;
 }
 
-void SpecialLoadClassLoader(class_loader* self, char* relativePath) {
+void SpecialLoadClassLoader(ClassLoader* self, char* relativePath) {
 	char* fullP = ResolveScriptPath(relativePath);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	Heap* he = GetHeap();
-	class_loader* cll = GetTreeMapValue(ctx->ClassLoaderMap, fullP);
+	ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, fullP);
 	he->AcceptBlocking++;
 	if(cll == NULL) {
-		cll = LoadClassLoader_specialImpl(self, cll, fullP);
+		cll = Loadclass_loader_specialImpl(self, cll, fullP);
 	}
 	he->AcceptBlocking--;
 	MEM_FREE(fullP);
 }
 
-void DeleteClassLoader(class_loader * self) {
+void DeleteClassLoader(ClassLoader * self) {
 	if(self == NULL) {
 		return;
 	}
@@ -120,7 +120,7 @@ void DeleteClassLoader(class_loader * self) {
 
 
 //private
-static void LoadClassLoader_impl(class_loader* self) {
+static void Loadclass_loader_impl(ClassLoader* self) {
 	assert(self != NULL);
 	//AST -> IL へ
 	ILLoadClassLoader(self, self->source_code);
@@ -129,12 +129,12 @@ static void LoadClassLoader_impl(class_loader* self) {
 	BCLoadClassLoader(self);
 	if (GetLastBCError()) { return; }
 	//他のクラスローダーとリンク
-	LoadClassLoader_linkall(self);
-	LoadClassLoader_toplevel_function(self);
-	LoadClassLoader_toplevel(self);
+	Loadclass_loader_linkall(self);
+	Loadclass_loader_toplevel_function(self);
+	Loadclass_loader_toplevel(self);
 }
 
-static void LinkClassLoader_recursive(class_loader* self, LinkType type) {
+static void Linkclass_loader_recursive(ClassLoader* self, LinkType type) {
 	if (self->link == type) {
 		return;
 	}
@@ -148,7 +148,7 @@ static void LinkClassLoader_recursive(class_loader* self, LinkType type) {
 		if (info->IsConsume) {
 			continue;
 		}
-		LinkClassLoader_recursive(info->Context, type);
+		Linkclass_loader_recursive(info->Context, type);
 	}
 	LinkClassLoader(self, type);
 }
@@ -158,7 +158,7 @@ static void class_loader_cache_delete(VectorItem item) {
 	DeleteTypeCache(e);
 }
 
-static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loader* cll, char* full_path) {
+static ClassLoader* Loadclass_loader_specialImpl(ClassLoader* self, ClassLoader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
 	Parser* p = ParseFile(full_path);
@@ -178,15 +178,15 @@ static class_loader* LoadClassLoader_specialImpl(class_loader* self, class_loade
 	return cll;
 }
 
-static void LoadClassLoader_linkall(class_loader* self) {
+static void Loadclass_loader_linkall(ClassLoader* self) {
 	if(self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
-	LinkClassLoader_recursive(self, LINK_DECL_T);
-	LinkClassLoader_recursive(self, LINK_IMPL_T);
+	Linkclass_loader_recursive(self, LINK_DECL_T);
+	Linkclass_loader_recursive(self, LINK_IMPL_T);
 }
 
-static void LoadClassLoader_toplevel(class_loader* self) {
+static void Loadclass_loader_toplevel(ClassLoader* self) {
 	//トップレベルのステートメントを読み込む
 	if(self->type != CONTENT_ENTRY_POINT_T) {
 		return;
@@ -217,7 +217,7 @@ static void LoadClassLoader_toplevel(class_loader* self) {
 	CacheScriptContext();
 }
 
-static void LoadClassLoader_toplevel_function(class_loader* self) {
+static void Loadclass_loader_toplevel_function(ClassLoader* self) {
 	if(self->level != 0 || self->type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}

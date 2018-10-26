@@ -13,7 +13,7 @@ struct interface_;
 struct Frame;
 struct Enviroment;
 struct CallContext;
-struct class_loader;
+struct ClassLoader;
 
 /**
  * メソッドの種類を表す列挙.
@@ -122,6 +122,6 @@ bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct type* CreateIteratorTypeFromMethod(Method* self, struct class_loader* cll, Vector* stmt_list);
+struct type* CreateIteratorTypeFromMethod(Method* self, struct ClassLoader* cll, Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H
