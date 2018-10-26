@@ -17,7 +17,7 @@ void GenerateILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->filename);
+	SetBCErrorFile(env->ContextRef->FileName);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILSTMT_IF_T:
@@ -84,7 +84,7 @@ void LoadILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->filename);
+	SetBCErrorFile(env->ContextRef->FileName);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILSTMT_IF_T:

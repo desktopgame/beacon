@@ -16,18 +16,18 @@ struct parser;
  * クラスローダーを表す構造体です.
  */
 typedef struct ClassLoader {
-	AST* source_code;
-	ILToplevel* il_code;
+	AST* SourceCode;
+	ILToplevel* ILCode;
 
-	struct Enviroment* env;
+	struct Enviroment* Env;
 	ImportManager* ImportManager;
-	ContentType type;
-	LinkType link;
-	Vector* type_cache_vec;
+	ContentType Type;
+	LinkType Link;
+	Vector* TypeCaches;
 
-	struct ClassLoader* parent;
-	int level;
-	char* filename;
+	struct ClassLoader* Parent;
+	int Level;
+	char* FileName;
 //	bool error;
 } ClassLoader;
 

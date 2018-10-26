@@ -49,7 +49,7 @@ bool EvalIL(const char* filename) {
 	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
-		ILToplevel* il = cl->il_code;
+		ILToplevel* il = cl->ILCode;
 		ILToplevel_dump(il, 0);
 	}
 	DeleteClassLoader(cl);
@@ -62,7 +62,7 @@ bool EvalOp(const char* filename) {
 	LoadClassLoader(cl);
 
 	if(!GetLastBCError()) {
-		DumpEnviromentOp(cl->env, 0);
+		DumpEnviromentOp(cl->Env, 0);
 	}
 	DeleteClassLoader(cl);
 	return true;
@@ -104,7 +104,7 @@ static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt) {
 	Printfln("start");
 #endif
 	if(!GetLastBCError()) {
-		ExecuteVM(fr, cll->env);
+		ExecuteVM(fr, cll->Env);
 	}
 	if(fr->IsTerminate) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");

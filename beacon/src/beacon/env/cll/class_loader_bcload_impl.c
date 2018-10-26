@@ -98,23 +98,23 @@ static void CLBC_register_interface(ClassLoader* self, Namespace* parent, il_typ
 void BCLoadClassLoader(ClassLoader* self) {
 	CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
-	ILToplevel* iltop = self->il_code;
-	CLBC_import(self, self->il_code->ImportList);
+	ILToplevel* iltop = self->ILCode;
+	CLBC_import(self, self->ILCode->ImportList);
 	CLBC_Namespacetree(self);
 }
 
 void SpecialBCLoadClassLoader(ClassLoader* self) {
 	CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
-	ILToplevel* iltop = self->il_code;
-//	CLBC_import(self, self->il_code->import_list);
+	ILToplevel* iltop = self->ILCode;
+//	CLBC_import(self, self->ILCode->import_list);
 	CLBC_Namespacetree(self);
 }
 
 //private
 static void CLBC_Namespacetree(ClassLoader* self) {
 	CL_ERROR(self);
-	CLBC_Namespacelist(self, self->il_code->NamespaceList, NULL);
+	CLBC_Namespacelist(self, self->ILCode->NamespaceList, NULL);
 }
 
 static void CLBC_Namespacelist(ClassLoader* self, Vector* ilNamespacelist, Namespace* parent) {
@@ -189,7 +189,7 @@ static void CLBC_enum(ClassLoader * self, il_type * iltype, Namespace * parent) 
 		parent,
 		CACHEKIND_ENUM_DECL_T
 	);
-	PushVector(self->type_cache_vec, tc);
+	PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
 	type_cache* mtc = InitTypeCache(
 		NewTypeCache(),
@@ -199,7 +199,7 @@ static void CLBC_enum(ClassLoader * self, il_type * iltype, Namespace * parent) 
 		parent,
 		CACHEKIND_ENUM_IMPL_T
 	);
-	PushVector(self->type_cache_vec, mtc);
+	PushVector(self->TypeCaches, mtc);
 	tp->state = tp->state | TYPE_REGISTER;
 }
 
@@ -227,7 +227,7 @@ static void CLBC_class(ClassLoader* self, il_type* iltype, Namespace* parent) {
 		parent,
 		CACHEKIND_CLASS_DECL_T
 	);
-	PushVector(self->type_cache_vec, tc);
+	PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
 	type_cache* mtc = InitTypeCache(
 		NewTypeCache(),
@@ -237,7 +237,7 @@ static void CLBC_class(ClassLoader* self, il_type* iltype, Namespace* parent) {
 		parent,
 		CACHEKIND_CLASS_IMPL_T
 	);
-	PushVector(self->type_cache_vec, mtc);
+	PushVector(self->TypeCaches, mtc);
 	tp->state = tp->state | TYPE_REGISTER;
 }
 
@@ -261,7 +261,7 @@ static void CLBC_interface(ClassLoader * self, il_type * iltype, Namespace * par
 		parent,
 		CACHEKIND_INTERFACE_DECL_T
 	);
-	PushVector(self->type_cache_vec, tc);
+	PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
 	type_cache* mtc = InitTypeCache(
 		NewTypeCache(),
@@ -271,7 +271,7 @@ static void CLBC_interface(ClassLoader * self, il_type * iltype, Namespace * par
 		parent,
 		CACHEKIND_INTERFACE_IMPL_T
 	);
-	PushVector(self->type_cache_vec, mtc);
+	PushVector(self->TypeCaches, mtc);
 	tp->state = tp->state | TYPE_REGISTER;
 }
 

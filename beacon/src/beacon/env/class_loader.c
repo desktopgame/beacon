@@ -57,23 +57,23 @@ static bool check_parser_error(Parser* p);
 
 ClassLoader* NewClassLoader(const char* filename, ContentType type) {
 	ClassLoader* ret = (ClassLoader*)MEM_MALLOC(sizeof(ClassLoader));
-	ret->source_code = NULL;
-	ret->il_code = NULL;
-	ret->parent = NULL;
-	ret->type = type;
-	ret->link = LINK_NONE_T;
+	ret->SourceCode = NULL;
+	ret->ILCode = NULL;
+	ret->Parent = NULL;
+	ret->Type = type;
+	ret->Link = LINK_NONE_T;
 	ret->ImportManager = NewImportManager();
-	ret->env = NewEnviroment();
-	ret->level = 0;
-	ret->type_cache_vec = NewVector();
-	ret->filename = Strdup(filename);
-	ret->env->ContextRef = ret;
+	ret->Env = NewEnviroment();
+	ret->Level = 0;
+	ret->TypeCaches = NewVector();
+	ret->FileName = Strdup(filename);
+	ret->Env->ContextRef = ret;
 	return ret;
 }
 
 void LoadClassLoader(ClassLoader * self) {
 	//ASTを読み込む
-	Parser* p = ParseFile(self->filename);
+	Parser* p = ParseFile(self->FileName);
 	//解析に失敗した場合
 	if (check_parser_error(p)) {
 		return;
@@ -87,7 +87,7 @@ void LoadPassASTClassLoader(ClassLoader* self, AST* a) {
 	ClearBCError();
 	Heap* hee = GetHeap();
 	hee->AcceptBlocking++;
-	self->source_code = a;
+	self->SourceCode = a;
 	Loadclass_loader_impl(self);
 	hee->AcceptBlocking--;
 }
@@ -109,12 +109,12 @@ void DeleteClassLoader(ClassLoader * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteAST(self->source_code);
-	DeleteILToplevel(self->il_code);
-	DeleteVector(self->type_cache_vec, class_loader_cache_delete);
+	DeleteAST(self->SourceCode);
+	DeleteILToplevel(self->ILCode);
+	DeleteVector(self->TypeCaches, class_loader_cache_delete);
 	DeleteImportManager(self->ImportManager);
-	DeleteEnviroment(self->env);
-	MEM_FREE(self->filename);
+	DeleteEnviroment(self->Env);
+	MEM_FREE(self->FileName);
 	MEM_FREE(self);
 }
 
@@ -123,7 +123,7 @@ void DeleteClassLoader(ClassLoader * self) {
 static void Loadclass_loader_impl(ClassLoader* self) {
 	assert(self != NULL);
 	//AST -> IL へ
-	ILLoadClassLoader(self, self->source_code);
+	ILLoadClassLoader(self, self->SourceCode);
 	if (GetLastBCError()) { return; }
 	//IL -> SG へ
 	BCLoadClassLoader(self);
@@ -135,13 +135,13 @@ static void Loadclass_loader_impl(ClassLoader* self) {
 }
 
 static void Linkclass_loader_recursive(ClassLoader* self, LinkType type) {
-	if (self->link == type) {
+	if (self->Link == type) {
 		return;
 	}
 	if(GetLastBCError()) {
 		return;
 	}
-	self->link = type;
+	self->Link = type;
 	ImportManager* importMgr = self->ImportManager;
 	for (int i = 0; i < importMgr->Items->Length; i++) {
 		ImportInfo* info = (ImportInfo*)AtVector(importMgr->Items, i);
@@ -166,20 +166,20 @@ static ClassLoader* Loadclass_loader_specialImpl(ClassLoader* self, ClassLoader*
 		return cll;
 	}
 	//ASTをclassloaderへ
-	cll->source_code = ReleaseParserAST(p);
+	cll->SourceCode = ReleaseParserAST(p);
 	DestroyParser(p);
 	//AST -> IL へ
-	ILLoadClassLoader(cll, cll->source_code);
+	ILLoadClassLoader(cll, cll->SourceCode);
 	if (GetLastBCError()) { return cll; }
 	//IL -> SG へ
 	SpecialBCLoadClassLoader(cll);
 	if (GetLastBCError()) { return cll; }
-	assert(cll->type == CONTENT_LIB_T);
+	assert(cll->Type == CONTENT_LIB_T);
 	return cll;
 }
 
 static void Loadclass_loader_linkall(ClassLoader* self) {
-	if(self->type != CONTENT_ENTRY_POINT_T) {
+	if(self->Type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
 	Linkclass_loader_recursive(self, LINK_DECL_T);
@@ -188,7 +188,7 @@ static void Loadclass_loader_linkall(ClassLoader* self) {
 
 static void Loadclass_loader_toplevel(ClassLoader* self) {
 	//トップレベルのステートメントを読み込む
-	if(self->type != CONTENT_ENTRY_POINT_T) {
+	if(self->Type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
 	//var $world = new beacon::lang::World();
@@ -203,25 +203,25 @@ static void Loadclass_loader_toplevel(ClassLoader* self) {
 	//worldをselfにする
 	CallContext* cctx = NewCallContext(CALL_TOP_T);
 	cctx->Ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
-	LoadILStmt(body, self->env, cctx);
-	GenerateILStmt(body, self->env, cctx);
+	LoadILStmt(body, self->Env, cctx);
+	GenerateILStmt(body, self->Env, cctx);
 	//$worldをthisにする
-	AddOpcodeBuf(self->env->Bytecode, OP_LOAD);
-	AddOpcodeBuf(self->env->Bytecode, 1);
-	AddOpcodeBuf(self->env->Bytecode, OP_STORE);
-	AddOpcodeBuf(self->env->Bytecode, 0);
+	AddOpcodeBuf(self->Env->Bytecode, OP_LOAD);
+	AddOpcodeBuf(self->Env->Bytecode, 1);
+	AddOpcodeBuf(self->Env->Bytecode, OP_STORE);
+	AddOpcodeBuf(self->Env->Bytecode, 0);
 	//以下読み込み
-	CLBC_body(self, self->il_code->StatementList, self->env, cctx, NULL);
+	CLBC_body(self, self->ILCode->StatementList, self->Env, cctx, NULL);
 	DeleteILStmt(body);
 	DeleteCallContext(cctx);
 	CacheScriptContext();
 }
 
 static void Loadclass_loader_toplevel_function(ClassLoader* self) {
-	if(self->level != 0 || self->type != CONTENT_ENTRY_POINT_T) {
+	if(self->Level != 0 || self->Type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
-	Vector* funcs = self->il_code->FunctionList;
+	Vector* funcs = self->ILCode->FunctionList;
 	type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;

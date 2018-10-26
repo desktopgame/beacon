@@ -51,7 +51,7 @@ ClassLoader* CLBC_import_new(ClassLoader* self, char* full_path) {
 	CL_ERROR_RET(self, self);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	ClassLoader* cll = NewClassLoader(full_path, CONTENT_LIB_T);
-	cll->parent = self;
+	cll->Parent = self;
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
 	PutTreeMap(ctx->ClassLoaderMap, full_path, cll);
@@ -89,7 +89,7 @@ static void CLBC_new_load_internal(ClassLoader * self, char * full_path) {
 	}
 	//そのローダーが破損しているなら
 	if (GetLastBCError()) {
-		ThrowBCError(BCERROR_CHAIN_T, cll->filename);
+		ThrowBCError(BCERROR_CHAIN_T, cll->FileName);
 	}
 	//パースをキャンセル
 	if (GetLastBCError()) {
@@ -103,11 +103,11 @@ static void CLBC_import_already(ClassLoader* self, ClassLoader* cll) {
 	//self -> cll への参照を与える
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
-	assert(cll->source_code != NULL);
-	assert(cll->il_code != NULL);
+	assert(cll->SourceCode != NULL);
+	assert(cll->ILCode != NULL);
 	//そのローダーが破損しているなら
 	if (GetLastBCError()) {
-		ThrowBCError(BCERROR_CHAIN_T, cll->filename);
+		ThrowBCError(BCERROR_CHAIN_T, cll->FileName);
 		return;
 	}
 }

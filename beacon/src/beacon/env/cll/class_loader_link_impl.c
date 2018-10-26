@@ -34,7 +34,7 @@ static void CLBC_check_interface(ClassLoader * self, il_type * iltype, type * tp
 
 void LinkClassLoader(ClassLoader* self, LinkType type) {
 	CL_ERROR(self);
-	SetBCErrorFile(self->filename);
+	SetBCErrorFile(self->FileName);
 	if(type == LINK_DECL_T) {
 		CLBC_excec_class_decl(self);
 		CL_ERROR(self);
@@ -182,8 +182,8 @@ static void CLBC_enum_impl(ClassLoader * self, il_type * iltype, type * tp, Name
 static void CLBC_excec_class_decl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
+	for (int i = 0; i < self->TypeCaches->Length; i++) {
+		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_CLASS_DECL_T || e->consume) {
 			continue;
 		}
@@ -195,8 +195,8 @@ static void CLBC_excec_class_decl(ClassLoader* self) {
 
 static void CLBC_excec_class_impl(ClassLoader* self) {
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
+	for (int i = 0; i < self->TypeCaches->Length; i++) {
+		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_CLASS_IMPL_T || e->consume) {
 			continue;
 		}
@@ -209,8 +209,8 @@ static void CLBC_excec_class_impl(ClassLoader* self) {
 static void CLBC_excec_interface_decl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
+	for (int i = 0; i < self->TypeCaches->Length; i++) {
+		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_INTERFACE_DECL_T || e->consume) {
 			continue;
 		}
@@ -223,8 +223,8 @@ static void CLBC_excec_interface_decl(ClassLoader* self) {
 static void CLBC_excec_interface_impl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
+	for (int i = 0; i < self->TypeCaches->Length; i++) {
+		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_INTERFACE_IMPL_T || e->consume) {
 			continue;
 		}
@@ -237,8 +237,8 @@ static void CLBC_excec_interface_impl(ClassLoader* self) {
 static void CLBC_excec_enum_decl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
+	for (int i = 0; i < self->TypeCaches->Length; i++) {
+		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_ENUM_DECL_T || e->consume) {
 			continue;
 		}
@@ -251,8 +251,8 @@ static void CLBC_excec_enum_decl(ClassLoader* self) {
 static void CLBC_excec_enum_impl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
-	for (int i = 0; i < self->type_cache_vec->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->type_cache_vec, i);
+	for (int i = 0; i < self->TypeCaches->Length; i++) {
+		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_ENUM_IMPL_T || e->consume) {
 			continue;
 		}

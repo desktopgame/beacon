@@ -21,7 +21,7 @@ void GenerateILFactor(il_factor * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->filename);
+	SetBCErrorFile(env->ContextRef->FileName);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
@@ -98,7 +98,7 @@ void LoadILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->filename);
+	SetBCErrorFile(env->ContextRef->FileName);
 	SetBCErrorLine(self->lineno);
 	switch (self->type) {
 		case ILFACTOR_INT_T:
@@ -173,7 +173,7 @@ GenericType* EvalILFactor(il_factor * self, Enviroment * env, CallContext* cctx)
 	if(GetLastBCError()) {
 		return NULL;
 	}
-	SetBCErrorFile(env->ContextRef->filename);
+	SetBCErrorFile(env->ContextRef->FileName);
 	SetBCErrorLine(self->lineno);
 	GenericType* ret = NULL;
 	switch (self->type) {

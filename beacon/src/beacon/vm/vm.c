@@ -1253,7 +1253,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	Buffer* cstr = AtVector(msg->NativeSlotVec, 0);
 
 	char block[256] = {0};
-	sprintf(block, "file: %s <%d>", env->ContextRef->filename, line);
+	sprintf(block, "file: %s <%d>", env->ContextRef->FileName, line);
 	AppendsBuffer(sbuf, block);
 	AppendBuffer(sbuf, '\n');
 	AppendsBuffer(sbuf, cstr->Text);

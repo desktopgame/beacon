@@ -85,8 +85,8 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	jobject symbol_table_obj = (*env)->NewObject(env, symbol_table_cls, symbol_table_ctor_id);
 	//スクリプトを実行
 	Frame* fr =  bc_eval_allocate(cll);
-	bc_write_symbol(env, cll->env->Symboles->VariableMap->Left, fr, symbol_table_obj);
-	bc_write_symbol(env, cll->env->Symboles->VariableMap->Right, fr, symbol_table_obj);
+	bc_write_symbol(env, cll->Env->Symboles->VariableMap->Left, fr, symbol_table_obj);
+	bc_write_symbol(env, cll->Env->Symboles->VariableMap->Right, fr, symbol_table_obj);
 	bc_eval_release(env, cll, fr);
 	//https://stackoverflow.com/questions/23085044/jni-system-out-and-printf-behaviour
 	fflush(stdout);
@@ -100,7 +100,7 @@ static Frame* bc_eval_allocate(ClassLoader* cll) {
 	Heap* he = GetHeap();
 	he->AcceptBlocking = 0;
 	if(!GetLastBCError()) {
-		ExecuteVM(fr, cll->env);
+		ExecuteVM(fr, cll->Env);
 	}
 	if(fr->IsTerminate) {
 		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");

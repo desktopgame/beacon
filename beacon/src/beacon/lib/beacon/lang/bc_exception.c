@@ -45,7 +45,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		//assert(lineno != -1);
 		//直前の表示と同じ
 		if(lfilename != NULL &&
-		   !strcmp(temp->ContextRef->ContextRef->filename, lfilename) &&
+		   !strcmp(temp->ContextRef->ContextRef->FileName, lfilename) &&
 		   llineno == lineno) {
 			temp = temp->Parent;
 			continue;
@@ -53,7 +53,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		Vector* args = NewVector();
-		PushVector(args, Object_string_new(temp->ContextRef->ContextRef->filename));
+		PushVector(args, Object_string_new(temp->ContextRef->ContextRef->FileName));
 		PushVector(args, Object_int_new(lineno));
 		Object* trace = NewInstanceClass(
 			stackTraceElementClass,
@@ -67,7 +67,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		temp = temp->Parent;
 		//今回の表示情報を記録
 		if(temp != NULL) {
-			lfilename = temp->ContextRef->ContextRef->filename;
+			lfilename = temp->ContextRef->ContextRef->FileName;
 			llineno = lineno;
 		}
 	} while (temp != NULL);

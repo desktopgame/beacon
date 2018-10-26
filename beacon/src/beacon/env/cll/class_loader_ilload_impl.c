@@ -107,19 +107,19 @@ static void class_loader_ilload_identifier_list(ClassLoader* self, Vector* list,
 //static il_stmt* class_loader_ilload_bodyImpl(ClassLoader* self, AST* source);
 
 void ILLoadClassLoader(ClassLoader* self, AST* source_code) {
-	assert(self->il_code == NULL);
-	self->il_code = NewILToplevel();
+	assert(self->ILCode == NULL);
+	self->ILCode = NewILToplevel();
 	for (int i = 0; i < source_code->Children->Length; i++) {
-		AST* child = AtAST(self->source_code, i);
+		AST* child = AtAST(self->SourceCode, i);
 		//import a
 		if (child->Tag == AST_IMPORT_DECL_T || child->Tag == AST_IMPORT_DECL_LIST_T) {
 			class_loader_ilload_import_list(self, child);
 		//namespace Foo { ... }
 		} else if (child->Tag == AST_NAMESPACE_DECL_T) {
-			class_loader_ilload_namespace(self, self->il_code->NamespaceList, child);
+			class_loader_ilload_namespace(self, self->ILCode->NamespaceList, child);
 		//print();
 		} else if (IsStmtAST(child)) {
-			CLILBody(self, self->il_code->StatementList, child);
+			CLILBody(self, self->ILCode->StatementList, child);
 		//def f() { ... }
 		} else if(child->Tag == AST_FUNCTION_DECL_T) {
 			class_loader_ilload_function(self, child);
@@ -143,7 +143,7 @@ static void class_loader_ilload_function(ClassLoader * self, AST* asource) {
 	CLILParameterList(self, ilfunc->Parameters, aparam_list);
 	CLILBody(self, ilfunc->Statements, afunc_body);
 	CLILGenericCache(aret_name, ilfunc->ReturnGCache);
-	PushVector(self->il_code->FunctionList, ilfunc);
+	PushVector(self->ILCode->FunctionList, ilfunc);
 }
 
 static void class_loader_ilload_import_list(ClassLoader* self, AST* asource) {
@@ -161,7 +161,7 @@ static void class_loader_ilload_import(ClassLoader* self, AST* aimport_decl) {
 	assert(aimport_decl->Tag == AST_IMPORT_DECL_T);
 	AST* apath = FirstAST(aimport_decl);
 	ILImport* ret = NewILImport(apath->Attr.StringVValue);
-	PushVector(self->il_code->ImportList, ret);
+	PushVector(self->ILCode->ImportList, ret);
 }
 
 static void class_loader_ilload_namespace(ClassLoader* self, Vector* parent, AST* aNamespacedecl) {
