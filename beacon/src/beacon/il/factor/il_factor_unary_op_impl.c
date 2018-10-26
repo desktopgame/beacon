@@ -138,7 +138,7 @@ int GetIndexILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* cc
 int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env, CallContext* cctx) {
 	Vector* args = NewVector();
 	GenericType* gtype = EvalILFactor(receiver, env, cctx);
-	if(gtype->virtual_type_index != -1) {
+	if(gtype->VirtualTypeIndex != -1) {
 		assert(false);
 	}
 	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));

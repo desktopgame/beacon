@@ -87,15 +87,15 @@ static void resolve_non_default(il_factor_invoke_bound * self, Enviroment * env,
 	}
 	type* tp = NULL;
 	GenericType* rgtp  = il_factor_invoke_bound_return_gtype(self, cctx);
-	if(rgtp->tag == GENERIC_TYPE_TAG_CLASS_T) {
+	if(rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		self->resolved = generic_NewType(NULL);
-		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
-		self->resolved->virtual_type_index = rgtp->virtual_type_index;
-	} else if(rgtp->tag == GENERIC_TYPE_TAG_METHOD_T) {
+		self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
+		self->resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
+	} else if(rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
-		GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->virtual_type_index);
+		GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->VirtualTypeIndex);
 		self->resolved = generic_NewType(instanced_type->CoreType);
-		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
+		self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
 }
 
@@ -279,7 +279,7 @@ static GenericType* EvalILInvokeBoundImpl(il_factor_invoke_bound * self, Envirom
 		cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
 	}
 
-	if(il_factor_invoke_bound_return_gtype(self, cctx)->tag != GENERIC_TYPE_TAG_NONE_T) {
+	if(il_factor_invoke_bound_return_gtype(self, cctx)->Tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		assert(self->resolved != NULL);
 		PopCallContext(cctx);

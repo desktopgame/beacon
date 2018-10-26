@@ -66,7 +66,7 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* lengthObj = AtVector(self->u.field_vec, temp);
 	assert(lengthObj != NULL);
-	GenericType* targ = AtVector(self->GType->type_args_list, 0);
+	GenericType* targ = AtVector(self->GType->TypeArgs, 0);
 	//配列の長さだけ確保
 	int len = lengthObj->u.int_;
 	assert(len >= 0);

@@ -680,7 +680,7 @@ static void CLBC_parameter_list(class_loader* self, Namespace* scope, Vector* pa
 static void CLBC_parameter_list_ctor(Vector* param_list) {
 	for(int i=0; i<param_list->Length; i++) {
 		Parameter* param = AtVector(param_list, i);
-		param->GType->is_ctor = true;
+		param->GType->IsCtor = true;
 	}
 }
 

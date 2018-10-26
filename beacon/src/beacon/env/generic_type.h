@@ -32,7 +32,7 @@ typedef enum GenericTypeTag {
  */
 typedef struct GenericType {
 	struct type* CoreType;
-	Vector* type_args_list;
+	Vector* TypeArgs;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
 		struct type* type_;
@@ -40,13 +40,13 @@ typedef struct GenericType {
 	} u;
 	//もしこの型が List<T> の Tを表すなら、
 	//外側のクラスの何番目の型変数かを格納する。
-	int virtual_type_index;
-	GenericTypeTag tag;
-	bool mark;
-	bool is_ctor;
+	int VirtualTypeIndex;
+	GenericTypeTag Tag;
+	bool IsMark;
+	bool IsCtor;
 } GenericType;
 
-//#define GenericType_validate(self) assert((self)->CoreType != NULL || self->virtual_type_index != -1)
+//#define GenericType_validate(self) assert((self)->CoreType != NULL || self->VirtualTypeIndex != -1)
 
 /**
  * 新しい型変数つきの型宣言を作成します.

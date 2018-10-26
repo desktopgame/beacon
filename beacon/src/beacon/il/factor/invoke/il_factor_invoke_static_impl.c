@@ -57,7 +57,7 @@ GenericType* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment* env,
 		return NULL;
 	}
 	GenericType* rgtp = self->m->ReturnGType;
-	if(rgtp->tag != GENERIC_TYPE_TAG_NONE_T) {
+	if(rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		return self->resolved;
 	} else {
@@ -92,10 +92,10 @@ static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env,
 		return;
 	}
 	GenericType* rgtp = self->m->ReturnGType;
-	GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->virtual_type_index);
+	GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->VirtualTypeIndex);
 	self->resolved = generic_NewType(instanced_type->CoreType);
-	self->resolved->tag = GENERIC_TYPE_TAG_METHOD_T;
-	self->resolved->virtual_type_index = rgtp->virtual_type_index;
+	self->resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
+	self->resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
 
 static void resolve_default(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {

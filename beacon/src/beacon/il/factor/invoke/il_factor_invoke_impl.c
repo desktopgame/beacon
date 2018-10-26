@@ -61,7 +61,7 @@ GenericType* EvalILInvoke(il_factor_invoke * self, Enviroment* env, CallContext*
 	GenericType* rgtp = il_factor_invoke_return_gtype(self);
 	GenericType* ret = NULL;
 	//型変数をそのまま返す場合
-	if(rgtp->tag != GENERIC_TYPE_TAG_NONE_T) {
+	if(rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		ret = self->resolved;
 	//型変数ではない型を返す
@@ -108,17 +108,17 @@ static void resolve_non_default(il_factor_invoke * self, Enviroment* env, CallCo
 	}
 	GenericType* receivergType = EvalILFactor(self->receiver, env, cctx);
 	GenericType* rgtp = il_factor_invoke_return_gtype(self);
-	if(rgtp->tag == GENERIC_TYPE_TAG_CLASS_T) {
+	if(rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
-		GenericType* instanced_type = (GenericType*)AtVector(receivergType->type_args_list, rgtp->virtual_type_index);
+		GenericType* instanced_type = (GenericType*)AtVector(receivergType->TypeArgs, rgtp->VirtualTypeIndex);
 		self->resolved = CloneGenericType(instanced_type);
-		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
-	} else if(rgtp->tag == GENERIC_TYPE_TAG_METHOD_T) {
+		self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
+	} else if(rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
-		GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->virtual_type_index);
+		GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->VirtualTypeIndex);
 		self->resolved = CloneGenericType(instanced_type);
-		self->resolved->tag = GENERIC_TYPE_TAG_CLASS_T;
+		self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
 }
 

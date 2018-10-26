@@ -211,7 +211,7 @@ int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, OperatorType otype,
 	GenericType* lgtype = EvalILFactor(receiver, env, cctx);
 	GenericType* rgtype = EvalILFactor(arg, env, cctx);
 	
-	if(lgtype->virtual_type_index != -1) {
+	if(lgtype->VirtualTypeIndex != -1) {
 		assert(false);
 	}
 	//PushVector(args, lgtype);

@@ -74,20 +74,20 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 	GenericType* parameterized = generic_NewType(NULL);
 	//T, Eなど
 	Method* mt = GetMethodCContext(cctx);
-	if(parameterized->virtual_type_index == -1 && mt != NULL) {
-		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
-		parameterized->virtual_type_index = GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
+	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
+		parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
+		parameterized->VirtualTypeIndex = GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
 		parameterized->u.method_ = mt;
 	}
 	type* ty = GetTypeCContext(cctx);
-	if(parameterized->virtual_type_index == -1 &&  ty != NULL) {
-		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
-		parameterized->virtual_type_index = GetGenericIndexType(ty, fqcn->FQCN->Name);
+	if(parameterized->VirtualTypeIndex == -1 &&  ty != NULL) {
+		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
+		parameterized->VirtualTypeIndex = GetGenericIndexType(ty, fqcn->FQCN->Name);
 		parameterized->u.type_ = ty;
 	}
 	//現在の名前空間でクラス名を解決できなかったし、
 	//現在のコンテキストで型変数として解決することもできなかった
-	if(parameterized->virtual_type_index == -1) {
+	if(parameterized->VirtualTypeIndex == -1) {
 		return NULL;
 	}
 	return parameterized;
@@ -111,27 +111,27 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 	GenericType* parameterized = generic_NewType(NULL);
 	//まずはメソッドの型変数を調べる
 	Method* mt = GetMethodCContext(cctx);
-	if(parameterized->virtual_type_index == -1 && mt != NULL) {
+	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
 		#if defined(DEBUG)
 		const char* methodname = Ref2Str(mt->Name);
 		#endif
 		int index = GetGenericIndexForMethod(mt, fqcn->Name);
-		parameterized->tag = GENERIC_TYPE_TAG_METHOD_T;
-		parameterized->virtual_type_index = index;
+		parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
+		parameterized->VirtualTypeIndex = index;
 		parameterized->u.method_ = mt;
 	}
 	//次にクラスの型変数を調べる
 	type* ty = GetTypeCContext(cctx);
-	if(parameterized->virtual_type_index == -1 && ty != NULL) {
+	if(parameterized->VirtualTypeIndex == -1 && ty != NULL) {
 		#if defined(DEBUG)
 		const char* typename_ = Ref2Str(GetTypeName(ty));
 		#endif
 		int index = GetGenericIndexType(ty, fqcn->Name);
-		parameterized->tag = GENERIC_TYPE_TAG_CLASS_T;
-		parameterized->virtual_type_index = index;
+		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
+		parameterized->VirtualTypeIndex = index;
 		parameterized->u.type_ = ty;
 	}
-	assert(parameterized->virtual_type_index != -1);
+	assert(parameterized->VirtualTypeIndex != -1);
 	return parameterized;
 }
 

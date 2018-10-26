@@ -166,9 +166,9 @@ StringView MangleMethod(Method* self) {
 		if(gt->CoreType == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
 			//何番目の型変数であるかを入れる
-			if(gt->tag == GENERIC_TYPE_TAG_CLASS_T) {
+			if(gt->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 				AppendBuffer(ret, 'c');
-			} else if(gt->tag == GENERIC_TYPE_TAG_METHOD_T) {
+			} else if(gt->Tag == GENERIC_TYPE_TAG_METHOD_T) {
 				AppendBuffer(ret, 'm');
 			} else {
 				assert(false);
@@ -176,7 +176,7 @@ StringView MangleMethod(Method* self) {
 			//数値 -> 文字
 			char buff[256];
 			memset(buff, '\0', 256);
-			sprintf(buff, "%d", gt->virtual_type_index);
+			sprintf(buff, "%d", gt->VirtualTypeIndex);
 			AppendsBuffer(ret, buff);
 		} else {
 			AppendsBuffer(ret, Ref2Str(GetTypeFullName(gt->CoreType)));
@@ -241,7 +241,7 @@ type* CreateIteratorTypeFromMethod(Method* self,  class_loader* cll, Vector* stm
 	//イテレータのコンストラクタ追加
 	int op_len = 0;
 	AddMethodClass(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
-	AddMethodClass(iterImplC, create_next(self, iterImplT, cll, AtVector(self->ReturnGType->type_args_list, 0), stmt_list, &op_len));
+	AddMethodClass(iterImplC, create_next(self, iterImplT, cll, AtVector(self->ReturnGType->TypeArgs, 0), stmt_list, &op_len));
 	AddConstructorClass(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
 	PopCallContext(lCctx);
 	DeleteCallContext(lCctx);

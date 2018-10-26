@@ -170,16 +170,16 @@ static void LoadILVariableLocal_Property(il_factor_variable_local * self, Enviro
 static void set_gtype(il_factor_variable_local * self, GenericType* gt) {
 	//GenericType* gt = f->gtype;
 	//virtual_type vt = f->vtype;
-	if(gt->tag == GENERIC_TYPE_TAG_NONE_T) {
+	if(gt->Tag == GENERIC_TYPE_TAG_NONE_T) {
 		self->gt = gt;
-	} else if(gt->tag == GENERIC_TYPE_TAG_CLASS_T) {
+	} else if(gt->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		self->gt = generic_NewType(NULL);
-		self->gt->tag = GENERIC_TYPE_TAG_CLASS_T;
-		self->gt->virtual_type_index = gt->virtual_type_index;
-	} else if(gt->tag == GENERIC_TYPE_TAG_METHOD_T) {
+		self->gt->Tag = GENERIC_TYPE_TAG_CLASS_T;
+		self->gt->VirtualTypeIndex = gt->VirtualTypeIndex;
+	} else if(gt->Tag == GENERIC_TYPE_TAG_METHOD_T) {
 		self->gt = generic_NewType(NULL);
-		self->gt->tag = GENERIC_TYPE_TAG_METHOD_T;
-		self->gt->virtual_type_index = gt->virtual_type_index;
+		self->gt->Tag = GENERIC_TYPE_TAG_METHOD_T;
+		self->gt->VirtualTypeIndex = gt->VirtualTypeIndex;
 	}
 }
 //private

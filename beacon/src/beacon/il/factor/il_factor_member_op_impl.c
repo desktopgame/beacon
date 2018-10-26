@@ -63,12 +63,12 @@ GenericType* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallCont
 	}
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
-	if(self->f->gtype->tag == GENERIC_TYPE_TAG_NONE_T) {
+	if(self->f->gtype->Tag == GENERIC_TYPE_TAG_NONE_T) {
 		GenericType* a = self->f->gtype;
 		return a;
 	}
 	GenericType* a = EvalILFactor(self->fact, env, cctx);
-	return AtVector(a->type_args_list, self->f->gtype->virtual_type_index);
+	return AtVector(a->TypeArgs, self->f->gtype->VirtualTypeIndex);
 }
 
 char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env) {

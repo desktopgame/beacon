@@ -1074,7 +1074,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 							a = generic_NewType((type*)AtVector(ctx->TypeList, arg));
 						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							Object* receiver = (Object*)AtVector(self->VariableTable, 0);
-							a = (GenericType*)AtVector(receiver->GType->type_args_list, arg);
+							a = (GenericType*)AtVector(receiver->GType->TypeArgs, arg);
 						} else if(code == OP_GENERIC_STATIC_TYPE) {
 							a = (GenericType*)AtVector(self->TypeArgs, arg);
 						}

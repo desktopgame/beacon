@@ -28,8 +28,8 @@ GenericType* InitGenericSelf(type* self, int counts) {
 		self->generic_self = generic_NewType(self);
 		for (int i = 0; i < counts; i++) {
 			GenericType* arg = generic_NewType(NULL);
-			arg->tag = GENERIC_TYPE_TAG_CLASS_T;
-			arg->virtual_type_index = i;
+			arg->Tag = GENERIC_TYPE_TAG_CLASS_T;
+			arg->VirtualTypeIndex = i;
 			arg->u.type_ = self;
 			AddArgsGenericType(self->generic_self, arg);
 		}
