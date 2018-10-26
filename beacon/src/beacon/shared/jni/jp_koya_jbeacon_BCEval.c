@@ -213,7 +213,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	}
 	//beaconのオブジェクトをjavaのオブジェクトへ
 	jstring keyj= (*env)->NewStringUTF(env, name);
-	if(GENERIC2TYPE(bcobj->gtype) == TYPE_INT) {
+	if(GENERIC2TYPE(bcobj->GType) == TYPE_INT) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putInteger", "(Ljava/lang/String;I)V");
 		if(symbol_table_put_id == NULL) {
@@ -221,7 +221,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			return;
 		}
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jint)OBJ2INT(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_DOUBLE) {
+	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_DOUBLE) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putDouble", "(Ljava/lang/String;D)V");
 		if(symbol_table_put_id == NULL) {
@@ -229,7 +229,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			return;
 		}
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)OBJ2DOUBLE(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_CHAR) {
+	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_CHAR) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putCharacter", "(Ljava/lang/String;C)V");
 		if(symbol_table_put_id == NULL) {
@@ -237,7 +237,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			return;
 		}
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jchar)OBJ2CHAR(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_BOOL) {
+	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_BOOL) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putBoolean", "(Ljava/lang/String;Z)V");
 		if(symbol_table_put_id == NULL) {
@@ -245,7 +245,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			return;
 		}
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jboolean)OBJ2BOOL(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->gtype) == TYPE_STRING) {
+	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_STRING) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putString", "(Ljava/lang/String;Ljava/lang/String;)V");
 		if(symbol_table_put_id == NULL) {

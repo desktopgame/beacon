@@ -30,40 +30,40 @@ type* GetBCConsoleType() {
 //private
 static void bc_console_writeLine(Method* parent, Frame* fr, Enviroment* env) {
 	Object* o = AtVector(fr->VariableTable, 1);
-	if (o->tag == OBJECT_INT_T) {
+	if (o->Tag == OBJECT_INT_T) {
 		printf("%d\n", o->u.int_);
-	} else if(o->tag == OBJECT_DOUBLE_T) {
+	} else if(o->Tag == OBJECT_DOUBLE_T) {
 		printf("%f\n", o->u.double_);
-	} else if (o->tag == OBJECT_STRING_T) {
+	} else if (o->Tag == OBJECT_STRING_T) {
 		printf("%s\n", GetRawBCString(o)->Text);
-	} else if (o->tag == OBJECT_REF_T) {
-		PrintGenericType(o->gtype);
+	} else if (o->Tag == OBJECT_REF_T) {
+		PrintGenericType(o->GType);
 		printf("\n");
-	} else if (o->tag == OBJECT_CHAR_T) {
+	} else if (o->Tag == OBJECT_CHAR_T) {
 		printf("%c\n", o->u.char_);
-	} else if (o->tag == OBJECT_BOOL_T) {
+	} else if (o->Tag == OBJECT_BOOL_T) {
 		printf("%s\n", o->u.bool_ ? "true" : "false");
-	} else if(o->tag == OBJECT_NULL_T) {
+	} else if(o->Tag == OBJECT_NULL_T) {
 		printf("null\n");
 	}
 }
 
 static void bc_console_write(Method* parent, Frame* fr, Enviroment* env) {
 	Object* o = AtVector(fr->VariableTable, 1);
-	if (o->tag == OBJECT_INT_T) {
+	if (o->Tag == OBJECT_INT_T) {
 		printf("%d", o->u.int_);
-	}  else if (o->tag == OBJECT_DOUBLE_T) {
+	}  else if (o->Tag == OBJECT_DOUBLE_T) {
 		printf("%f", o->u.double_);
-	} else if (o->tag == OBJECT_STRING_T) {
+	} else if (o->Tag == OBJECT_STRING_T) {
 		printf("%s", GetRawBCString(o)->Text);
-	} else if (o->tag == OBJECT_REF_T) {
-		PrintGenericType(o->gtype);
+	} else if (o->Tag == OBJECT_REF_T) {
+		PrintGenericType(o->GType);
 		//printf("\n");
-	} else if (o->tag == OBJECT_CHAR_T) {
+	} else if (o->Tag == OBJECT_CHAR_T) {
 		printf("%c", o->u.char_);
-	} else if (o->tag == OBJECT_BOOL_T) {
+	} else if (o->Tag == OBJECT_BOOL_T) {
 		printf("%s", o->u.bool_ ? "true" : "false");
-	} else if(o->tag == OBJECT_NULL_T) {
+	} else if(o->Tag == OBJECT_NULL_T) {
 		printf("null");
 	}
 }

@@ -103,7 +103,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		//generic_type* argType = EvalILFactor(arg->factor, env, ilctx);
-		generic_type* argType = arg->gtype;
+		generic_type* argType = arg->GType;
 		if (argType->core_type != TYPE_NULL) {
 			generic_type* a = RApplyGenericType(param->GType, NULL,fr);
 			dist = RDistanceGenericType(a, argType, fr);

@@ -32,11 +32,11 @@ Heap * GetHeap() {
 
 void AddHeap(Heap * self, Object * obj) {
 	if(self == NULL) {
-		obj->paint = PAINT_ONEXIT_T;
+		obj->Paint = PAINT_ONEXIT_T;
 		return;
 	}
 	if (self->AcceptBlocking > 0) {
-		obj->paint = PAINT_ONEXIT_T;
+		obj->Paint = PAINT_ONEXIT_T;
 		return;
 	}
 	PushVector(self->Objects, obj);
@@ -68,7 +68,7 @@ void DumpHeap(Heap* self) {
 	for(int i=0; i<self->Objects->Length; i++) {
 		Object* a = AtVector(self->Objects, i);
 		printf("    ");
-		PrintGenericType(a->gtype);
+		PrintGenericType(a->GType);
 		printf("\n");
 	}
 }
@@ -82,8 +82,8 @@ static void DeleteHeap_Object(VectorItem item) {
 static void gc_clear(Heap* self) {
 	for (int i = 0; i < self->Objects->Length; i++) {
 		Object* e = (Object*)AtVector(self->Objects, i);
-		if (e->paint == PAINT_MARKED_T) {
-			e->paint = PAINT_UNMARKED_T;
+		if (e->Paint == PAINT_MARKED_T) {
+			e->Paint = PAINT_UNMARKED_T;
 		}
 	}
 }
@@ -97,9 +97,9 @@ static void gc_mark(Heap* self) {
 	MarkAllFrame(top);
 
 	//true/false/nullは常にマーク
-	GetTrueObject()->paint = PAINT_MARKED_T;
-	GetFalseObject()->paint = PAINT_MARKED_T;
-	GetNullObject()->paint = PAINT_MARKED_T;
+	GetTrueObject()->Paint = PAINT_MARKED_T;
+	GetFalseObject()->Paint = PAINT_MARKED_T;
+	GetNullObject()->Paint = PAINT_MARKED_T;
 }
 
 static void gc_sweep(Heap* self) {
@@ -108,7 +108,7 @@ static void gc_sweep(Heap* self) {
 	Vector* garabage = NewVector();
 	for (int i = 0; i < self->Objects->Length; i++) {
 		Object* e = (Object*)AtVector(self->Objects, i);
-		if (e->paint == PAINT_UNMARKED_T) {
+		if (e->Paint == PAINT_UNMARKED_T) {
 			PushVector(garabage, e);
 			sweep++;
 		} else {

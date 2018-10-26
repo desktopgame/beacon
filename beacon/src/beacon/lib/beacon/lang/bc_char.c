@@ -25,7 +25,7 @@ static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* ch = AtVector(fr->VariableTable, 1);
 
 	self->u.char_ = ch->u.char_;
-	self->tag = OBJECT_CHAR_T;
+	self->Tag = OBJECT_CHAR_T;
 }
 
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env) {

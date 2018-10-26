@@ -14,8 +14,8 @@ void InitBCString() {
 }
 
 Buffer * GetRawBCString(Object* self) {
-	VectorItem e = AtVector(self->native_slot_vec, 0);
-	assert(self->tag == OBJECT_STRING_T);
+	VectorItem e = AtVector(self->NativeSlotVec, 0);
+	assert(self->Tag == OBJECT_STRING_T);
 	return (Buffer*)e;
 }
 
@@ -40,11 +40,11 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* charArr = AtVector(self->u.field_vec, temp);
 	//これを char* へ変換
 	Buffer* sb = NewBuffer();
-	for (int i = 0; i < charArr->native_slot_vec->Length; i++) {
-		Object* e = (Object*)AtVector(charArr->native_slot_vec, i);
-		assert(e->tag == OBJECT_CHAR_T);
+	for (int i = 0; i < charArr->NativeSlotVec->Length; i++) {
+		Object* e = (Object*)AtVector(charArr->NativeSlotVec, i);
+		assert(e->Tag == OBJECT_CHAR_T);
 		AppendBuffer(sb, e->u.char_);
 	}
-	AssignVector(self->native_slot_vec, 0, sb);
-	self->tag = OBJECT_STRING_T;
+	AssignVector(self->NativeSlotVec, 0, sb);
+	self->Tag = OBJECT_STRING_T;
 }

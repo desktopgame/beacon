@@ -372,10 +372,10 @@ Method * GetMethodClass(Object * o, int index) {
 	#if defined(DEBUG)
 	const char* name = GetObjectName(o);
 	#endif
-	if(o->tag == OBJECT_NULL_T) {
-		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
+	if(o->Tag == OBJECT_NULL_T) {
+		o->VPtr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
-	VTable* vx = (o->vptr);
+	VTable* vx = (o->VPtr);
 	return (Method*)AtVector(vx->Elements, index);
 }
 

@@ -124,7 +124,7 @@ void CatchVM(Frame* self) {
 	}
 	self->IsValidate = false;
 	if(self->Exception != NULL) {
-		self->Exception->paint = PAINT_UNMARKED_T;
+		self->Exception->Paint = PAINT_UNMARKED_T;
 		self->Exception = NULL;
 	}
 }
@@ -499,9 +499,9 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* v = (Object*)PopVector(self->ValueStack);
 				//PrintGenericType(gtype);
 				//Printfln("");
-				//PrintGenericType(v->gtype);
+				//PrintGenericType(v->GType);
 				//Printfln("");
-				int dist = DistanceGenericType(gtype, v->gtype, GetSGThreadCContext());
+				int dist = DistanceGenericType(gtype, v->GType, GetSGThreadCContext());
 				Object* b = GetBoolObject(dist >= 0);
 				PushVector(self->ValueStack, b);
 				break;
@@ -521,7 +521,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//トップレベルまで到達するとこの処理によって生成が行われます。
 				//FIXME:???
 				Object* o = Object_ref_new();
-				assert(o->paint != PAINT_ONEXIT_T);
+				assert(o->Paint != PAINT_ONEXIT_T);
 				PushVector(self->ValueStack, NON_NULL(o));
 				//これを this とする
 				AssignVector(self->VariableTable, 0, o);
@@ -535,21 +535,21 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* obj = (Object*)TopVector(self->ValueStack);
 				//仮想関数テーブル更新
 				CreateVTableClass(cls);
-				obj->gtype = RefGenericType(cls->parent);
-				obj->vptr = cls->vt;
+				obj->GType = RefGenericType(cls->parent);
+				obj->VPtr = cls->vt;
 				//ジェネリック型を実体化
 				if(cls->GetParameterListType->Length == 0) {
-					obj->gtype = tp->generic_self;
+					obj->GType = tp->generic_self;
 				} else {
 					generic_type* g = generic_NewType(tp);
 					for(int i=0; i<cls->GetParameterListType->Length; i++) {
 						AddArgsGenericType(g, (generic_type*)AtVector(self->TypeArgs, i));
 					}
-					obj->gtype = g;
+					obj->GType = g;
 				}
 				//フィールドの割り当て
 				AllocFieldsClass(cls, obj, self);
-				assert(obj->gtype != NULL);
+				assert(obj->GType != NULL);
 				break;
 			}
 			case OP_NEW_INSTANCE:
@@ -575,7 +575,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					VectorItem e = PopVector(self->ValueStack);
 					Object* o = (Object*)e;
 					PushVector(sub->ValueStack, NON_NULL(e));
-					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->gtype);
+					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->GType);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
 				int typeparams = cls->GetParameterListType->Length;
@@ -619,7 +619,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				for (int i = 0; i < ctor->Parameters->Length; i++) {
 					Object* o = (Object*)PopVector(self->ValueStack);
 					PushVector(sub->ValueStack, NON_NULL(o));
-					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->gtype);
+					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->GType);
 				}
 				for(int i=0; i<self->TypeArgs->Length; i++) {
 					PushVector(cfr->Kind.StaticInvoke.TypeArgs, self->TypeArgs);
@@ -650,8 +650,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				Object* a = AtVector(self->VariableTable, 0);
 				Object* super = CloneObject(a);
-				super->gtype = TYPE2CLASS(GENERIC2TYPE(a->gtype))->super_class;
-				super->vptr = TYPE2CLASS(GENERIC2TYPE(TYPE2CLASS(GENERIC2TYPE(a->gtype))->super_class))->vt;
+				super->GType = TYPE2CLASS(GENERIC2TYPE(a->GType))->super_class;
+				super->VPtr = TYPE2CLASS(GENERIC2TYPE(TYPE2CLASS(GENERIC2TYPE(a->GType))->super_class))->vt;
 				PushVector(self->ValueStack, super);
 				break;
 			}
@@ -663,7 +663,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, assignTarget)) {
 					break;
 				}
-				assert(assignTarget->tag == OBJECT_REF_T);
+				assert(assignTarget->Tag == OBJECT_REF_T);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				AssignVector(assignTarget->u.field_vec, fieldIndex, assignValue);
 				break;
@@ -675,7 +675,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, sourceObject)) {
 					break;
 				}
-				//assert(sourceObject->tag == OBJECT_REF_T);
+				//assert(sourceObject->Tag == OBJECT_REF_T);
 				//int absClsIndex = (int)GetEnviromentSourceAt(env, ++i);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Object* val = (Object*)AtVector(sourceObject->u.field_vec, fieldIndex);
@@ -711,9 +711,9 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, assignTarget)) {
 					break;
 				}
-				assert(assignTarget->tag == OBJECT_REF_T);
+				assert(assignTarget->Tag == OBJECT_REF_T);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->gtype)), propIndex);
+				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->GType)), propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = pro->Parent;
@@ -730,7 +730,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					break;
 				}
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(sourceObject->gtype)), propIndex);
+				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(sourceObject->GType)), propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
 				sub->Receiver = pro->Parent;
@@ -807,7 +807,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				a = ApplyGenericType(a, GetSGThreadCContext());
 				if(a->core_type->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
-					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
+					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
 					DeleteVector(inter_list, VectorDeleterOfNull);
 					if(iter == -1) {
@@ -817,11 +817,11 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					}
 					break;
 				}
-				if(DistanceGenericType(o->gtype, a, GetSGThreadCContext()) < 0) {
+				if(DistanceGenericType(o->GType, a, GetSGThreadCContext()) < 0) {
 					PushVector(self->ValueStack, GetNullObject());
 				} else {
 					//o = CloneObject(o);
-					//o->gtype = a;
+					//o->GType = a;
 					PushVector(self->ValueStack, o);
 				}
 				break;
@@ -836,7 +836,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					PushVector(self->ValueStack, o);
 				} else if(a->core_type->tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
-					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->gtype)));
+					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
 					DeleteVector(inter_list, VectorDeleterOfNull);
 					if(iter == -1) {
@@ -857,7 +857,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				Method* m = GetImplMethodClass(o->gtype->core_type->u.class_, tp, methodIndex);
+				Method* m = GetImplMethodClass(o->GType->core_type->u.class_, tp, methodIndex);
 				CallContext* cctx = GetSGThreadCContext();
 				ExecuteMethod(m, self, env);
 				break;
@@ -895,7 +895,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				class_* cl = TYPE2CLASS(o->gtype->core_type);
+				class_* cl = TYPE2CLASS(o->GType->core_type);
 				if(self->Receiver != NULL) {
 					cl = TYPE2CLASS(self->Receiver);
 				}
@@ -907,7 +907,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int index = (int)GetEnviromentSourceAt(env, ++IDX);
 				Object* o = (Object*)TopVector(self->ValueStack);
-				class_* cl = TYPE2CLASS(o->gtype->core_type);
+				class_* cl = TYPE2CLASS(o->GType->core_type);
 				#if defined(DEBUG)
 				char* clname = Ref2Str(cl->namev);
 				#endif
@@ -919,8 +919,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			case OP_CORO_INIT:
 			{
 				Object* o = (Object*)AtVector(self->VariableTable, 0);
-				if(o->native_slot_vec == NULL) {
-					o->native_slot_vec = NewVector();
+				if(o->NativeSlotVec == NULL) {
+					o->NativeSlotVec = NewVector();
 				}
 				int param_len = (int)GetEnviromentSourceAt(env, ++IDX);
 				int op_len = (int)GetEnviromentSourceAt(env, ++IDX);
@@ -941,16 +941,16 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				}
 				//暗黙的に生成されるイテレータ実装クラスのコンストラクタは、
 				//必ず最後に iterate() を定義したクラスのオブジェクトを受け取る。
-				PushVector(o->native_slot_vec, yctx);
-				o->is_coroutine = true;
+				PushVector(o->NativeSlotVec, yctx);
+				o->IsCoroutine = true;
 				break;
 			}
 			case OP_CORO_NEXT:
 			{
 				Object* o = self->Coroutine;
 				Object* ret = (Object*)PopVector(self->ValueStack);
-				assert(o->is_coroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
+				assert(o->IsCoroutine);
+				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
 				//この実行コードが
 				//前回からの再開によって開始した場合、それを元に戻す
 				if(yctx->VariableTable != NULL) {
@@ -975,8 +975,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			case OP_CORO_EXIT:
 			{
 				Object* o = self->Coroutine;
-				assert(o->is_coroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
+				assert(o->IsCoroutine);
+				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
 				IDX = source_len;
 				yctx->YieldOffset = source_len;
 				if(yctx->VariableTable != NULL) {
@@ -989,8 +989,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			case OP_CORO_RESUME:
 			{
 				Object* o = self->Coroutine;
-				assert(o->is_coroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
+				assert(o->IsCoroutine);
+				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
 				//前回の位置が記録されているのでそこから
 				if(yctx->YieldOffset != 0) {
 					IDX = yctx->YieldOffset - 1;
@@ -1004,8 +1004,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			case OP_CORO_CURRENT:
 			{
 				Object* o = self->Coroutine;
-				assert(o->is_coroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->native_slot_vec, 0);
+				assert(o->IsCoroutine);
+				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
 				PushVector(self->ValueStack, yctx->Stock);
 				break;
 			}
@@ -1013,8 +1013,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				assert(self->Coroutine == NULL);
 				Object* o = (Object*)AtVector(self->VariableTable, 0);
-				assert(o->is_coroutine);
-				YieldContext* yctx = AtVector(o->native_slot_vec, 0);
+				assert(o->IsCoroutine);
+				YieldContext* yctx = AtVector(o->NativeSlotVec, 0);
 				if(yctx->IsCached) {
 					self->Coroutine = o;
 					break;
@@ -1074,7 +1074,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 							a = generic_NewType((type*)AtVector(ctx->TypeList, arg));
 						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							Object* receiver = (Object*)AtVector(self->VariableTable, 0);
-							a = (generic_type*)AtVector(receiver->gtype->type_args_list, arg);
+							a = (generic_type*)AtVector(receiver->GType->type_args_list, arg);
 						} else if(code == OP_GENERIC_STATIC_TYPE) {
 							a = (generic_type*)AtVector(self->TypeArgs, arg);
 						}
@@ -1170,67 +1170,67 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 
 static int stack_topi(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_INT_T);
+	assert(ret->Tag == OBJECT_INT_T);
 	return ret->u.int_;
 }
 
 static double stack_topd(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_DOUBLE_T);
+	assert(ret->Tag == OBJECT_DOUBLE_T);
 	return ret->u.double_;
 }
 
 static char stack_topc(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_CHAR_T);
+	assert(ret->Tag == OBJECT_CHAR_T);
 	return ret->u.char_;
 }
 
 static char* stack_tops(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_STRING_T);
+	assert(ret->Tag == OBJECT_STRING_T);
 	return GetRawBCString(ret)->Text;
 }
 
 static bool stack_topb(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_BOOL_T);
+	assert(ret->Tag == OBJECT_BOOL_T);
 	return ret->u.bool_;
 }
 
 
 static int stack_popi(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_INT_T);
+	assert(ret->Tag == OBJECT_INT_T);
 	return ret->u.int_;
 }
 
 static double stack_popd(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_DOUBLE_T);
+	assert(ret->Tag == OBJECT_DOUBLE_T);
 	return ret->u.double_;
 }
 
 static char stack_popc(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_CHAR_T);
+	assert(ret->Tag == OBJECT_CHAR_T);
 	return ret->u.char_;
 }
 
 static char* stack_pops(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_STRING_T);
+	assert(ret->Tag == OBJECT_STRING_T);
 	return GetRawBCString(ret)->Text;
 }
 
 static bool stack_popb(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->tag == OBJECT_BOOL_T);
+	assert(ret->Tag == OBJECT_BOOL_T);
 	return ret->u.bool_;
 }
 
 static bool throw_npe(Frame* self, Object* o) {
-	if(o->tag == OBJECT_NULL_T) {
+	if(o->Tag == OBJECT_NULL_T) {
 		NativeThrowVM(self, NewSimplefException(self, "NullPointerException"));
 		return true;
 	}
@@ -1250,7 +1250,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	FindFieldClass(exceptionT->u.class_, InternString("message"), &temp);
 	Object* ex = self->Exception;
 	Object* msg = AtVector(ex->u.field_vec, temp);
-	Buffer* cstr = AtVector(msg->native_slot_vec, 0);
+	Buffer* cstr = AtVector(msg->NativeSlotVec, 0);
 
 	char block[256] = {0};
 	sprintf(block, "file: %s <%d>", env->ContextRef->filename, line);

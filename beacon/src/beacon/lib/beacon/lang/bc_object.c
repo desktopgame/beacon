@@ -32,21 +32,21 @@ static void bc_Object_nativeToString(Method* parent, Frame* fr, Enviroment* env)
 	Object* self = (Object*)AtVector(fr->VariableTable, 0);
 	Buffer* sb = NewBuffer();
 	//参照型
-	if (self->tag == OBJECT_REF_T) {
+	if (self->Tag == OBJECT_REF_T) {
 		//char* name = GetTypeName(self->type);
 		AppendBuffer(sb, '[');
 		AppendsBuffer(sb, "Ref");
 		AppendBuffer(sb, ']');
 		ShrinkBuffer(sb);
 	//真偽型
-	} else if (self->tag == OBJECT_BOOL_T) {
+	} else if (self->Tag == OBJECT_BOOL_T) {
 		if (self == GetTrueObject()) {
 			AppendsBuffer(sb, "true");
 		} else if (self == GetFalseObject()) {
 			AppendsBuffer(sb, "false");
 		}
 	//整数型
-	} else if (self->tag == OBJECT_INT_T) {
+	} else if (self->Tag == OBJECT_INT_T) {
 #define BUFF_LEN 256
 		char buff[256];
 		int res = sprintf(buff, "%d", self->u.int_);

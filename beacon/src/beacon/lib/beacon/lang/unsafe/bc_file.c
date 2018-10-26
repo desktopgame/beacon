@@ -60,14 +60,14 @@ static void bc_file_nativeOpen(Method* parent, Frame* fr, Enviroment* env) {
 static void bc_file_nativePut(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* ch = AtVector(fr->VariableTable, 1);
-	FILE* fp = AtVector(self->native_slot_vec, 0);
+	FILE* fp = AtVector(self->NativeSlotVec, 0);
 	assert(fp != NULL);
 	fputc(ch->u.char_, fp);
 }
 
 static void bc_file_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
-	FILE* fp = AtVector(self->native_slot_vec, 0);
+	FILE* fp = AtVector(self->NativeSlotVec, 0);
 	assert(fp != NULL);
 	char ret = fgetc(fp);
 	PushVector(fr->ValueStack, Object_char_new(ret));
@@ -75,7 +75,7 @@ static void bc_file_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 
 static void bc_file_nativeAvailable(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
-	FILE* fp = AtVector(self->native_slot_vec, 0);
+	FILE* fp = AtVector(self->NativeSlotVec, 0);
 	assert(fp != NULL);
 	PushVector(fr->ValueStack, GetBoolObject(!feof(fp)));
 }
@@ -97,17 +97,17 @@ static void bc_file_nativeGetStdErr(Method* parent, Frame* fr, Enviroment* env) 
 
 static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
-	FILE* fp = AtVector(self->native_slot_vec, 0);
+	FILE* fp = AtVector(self->NativeSlotVec, 0);
 	assert(fp != NULL);
 	fclose(fp);
 }
 
 static Object* file_new(FILE* fp, bool std) {
 	Object* file = Object_ref_new();
-	assert(file->paint != PAINT_ONEXIT_T);
+	assert(file->Paint != PAINT_ONEXIT_T);
 	type* fileType = GetBCFileType();
-	file->gtype = fileType->generic_self;
-	file->vptr = TYPE2CLASS(fileType)->vt;
-	AssignVector(file->native_slot_vec, 0, fp);
+	file->GType = fileType->generic_self;
+	file->VPtr = TYPE2CLASS(fileType)->vt;
+	AssignVector(file->NativeSlotVec, 0, fp);
 	return file;
 }

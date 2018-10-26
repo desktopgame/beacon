@@ -130,7 +130,7 @@ Object* IInternScriptContext(ScriptContext* self, int i) {
 	he->AcceptBlocking++;
 	if(cell == NULL) {
 		Object* obj = Object_int_new(i);
-		obj->paint = PAINT_ONEXIT_T;
+		obj->Paint = PAINT_ONEXIT_T;
 		cell = PutNumericMap(self->IntegerCacheMap, i, obj);
 	}
 	he->AcceptBlocking--;
@@ -152,13 +152,13 @@ void CacheScriptContext() {
 	for(int i=0; i<100; i++) {
 		Object* a = Object_int_new(i);
 		PushVector(self->PositiveIntegerCacheList, a);
-		a->paint = PAINT_ONEXIT_T;
+		a->Paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
 		Object* a = Object_int_new(-i);
 		PushVector(self->NegativeIntegerCacheList, a);
-		a->paint = PAINT_ONEXIT_T;
+		a->Paint = PAINT_ONEXIT_T;
 	}
 	if(h != NULL) h->AcceptBlocking--;
 }
@@ -201,7 +201,7 @@ static void ScriptContext_free(ScriptContext* self) {
 	DeleteClassLoader(self->BootstrapClassLoader);
 	if(self->Null != NULL) {
 		IgnoreHeap(self->Heap, self->Null);
-		self->Null->paint = PAINT_ONEXIT_T;
+		self->Null->Paint = PAINT_ONEXIT_T;
 		DestroyObject(self->Null);
 	}
 	DeleteHeap(self->Heap);

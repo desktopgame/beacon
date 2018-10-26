@@ -30,7 +30,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 		Object* receiver_obj = PopVector(fr->ValueStack);
 		PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
-		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
+		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
 		cfr->Kind.InstanceInvoke.Args = aArgs;
 		cfr->Kind.InstanceInvoke.TypeArgs = aTArgs;
 	} else {

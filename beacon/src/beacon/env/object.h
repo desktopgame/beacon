@@ -54,13 +54,13 @@ typedef enum ObjectTag {
  * signal で使用される全てのデータはこれ。
  */
 typedef struct Object {
-	struct generic_type* gtype;
-	struct VTable* vptr;
-	ObjectPaint paint;
-	ObjectTag tag;
-	Vector* native_slot_vec;
-	bool is_coroutine;
-	bool is_clone;
+	struct generic_type* GType;
+	struct VTable* VPtr;
+	ObjectPaint Paint;
+	ObjectTag Tag;
+	Vector* NativeSlotVec;
+	bool IsCoroutine;
+	bool IsClone;
 	union {
 		int int_;
 		double double_;

@@ -54,7 +54,7 @@ static void bc_int_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* i = AtVector(fr->VariableTable, 1);
 
 	self->u.int_ = i->u.int_;
-	self->tag = OBJECT_INT_T;
+	self->Tag = OBJECT_INT_T;
 }
 
 static void bc_int_nativeEquals(Method* parent, Frame* fr, Enviroment* env) {

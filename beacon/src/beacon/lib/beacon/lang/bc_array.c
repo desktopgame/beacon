@@ -44,16 +44,16 @@ Object * NewBCArray(struct generic_type* gtype, int length, Frame* fr) {
 }
 
 void SetBCArray(Object * arr, int index, Object * o) {
-	AssignVector(arr->native_slot_vec, index, o);
+	AssignVector(arr->NativeSlotVec, index, o);
 }
 
 Object * GetBCArray(Object * arr, int index) {
-	return (Object*)AtVector(arr->native_slot_vec, index);
+	return (Object*)AtVector(arr->NativeSlotVec, index);
 }
 
 int GetLengthBCArray(Object* arr) {
 	//assert(arr->tag == OBJECT_ARRAY_T);
-	return arr->native_slot_vec->Length;
+	return arr->NativeSlotVec->Length;
 }
 //private
 static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
@@ -66,13 +66,13 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* lengthObj = AtVector(self->u.field_vec, temp);
 	assert(lengthObj != NULL);
-	generic_type* targ = AtVector(self->gtype->type_args_list, 0);
+	generic_type* targ = AtVector(self->GType->type_args_list, 0);
 	//配列の長さだけ確保
 	int len = lengthObj->u.int_;
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
 		Object* oe = GetDefaultObject(targ);
-		PushVector(self->native_slot_vec, oe);
+		PushVector(self->NativeSlotVec, oe);
 	}
 }
 
@@ -80,16 +80,16 @@ static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* idx = AtVector(fr->VariableTable, 1);
 	Object* val = AtVector(fr->VariableTable, 2);
-	assert(idx->tag == OBJECT_INT_T);
-	AssignVector(self->native_slot_vec, idx->u.int_, val);
+	assert(idx->Tag == OBJECT_INT_T);
+	AssignVector(self->NativeSlotVec, idx->u.int_, val);
 }
 
 static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* idx = AtVector(fr->VariableTable, 1);
 //	Object* a = AtVector(vm->VariableTable, 2);
-	assert(idx->tag == OBJECT_INT_T);
-	Object* ret = (Object*)AtVector(self->native_slot_vec, idx->u.int_);
+	assert(idx->Tag == OBJECT_INT_T);
+	Object* ret = (Object*)AtVector(self->NativeSlotVec, idx->u.int_);
 	//Printfln("array get %d", idx->u.int_);
 	PushVector(fr->ValueStack, ret);
 }
@@ -100,8 +100,8 @@ static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env) {
 	Object* dst = AtVector(fr->VariableTable, 3);
 	Object* dstOffset = AtVector(fr->VariableTable, 4);
 	Object* length = AtVector(fr->VariableTable, 5);
-	int srcLen = src->native_slot_vec->Length;
-	int dstLen = dst->native_slot_vec->Length;
+	int srcLen = src->NativeSlotVec->Length;
+	int dstLen = dst->NativeSlotVec->Length;
 	int cpyLen = length->u.int_;
 	//添え字がマイナス
 	if (srcOffset->u.int_ < 0 ||
@@ -119,7 +119,7 @@ static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env) {
 			 i < (srcOffset->u.int_ + length->u.int_);
 			 i++) {
 		int a = (i - srcOffset->u.int_) + dstOffset->u.int_;
-		VectorItem e = AtVector(src->native_slot_vec, i);
-		AssignVector(dst->native_slot_vec, a, e);
+		VectorItem e = AtVector(src->NativeSlotVec, i);
+		AssignVector(dst->NativeSlotVec, a, e);
 	}
 }

@@ -118,25 +118,25 @@ Object* GetEnviromentConstantAt(Enviroment * self, int index) {
 
 Object* GetEnviromentCIntAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->tag == OBJECT_INT_T);
+	assert(e->Tag == OBJECT_INT_T);
 	return e;
 }
 
 Object* GetEnviromentCDoubleAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->tag == OBJECT_DOUBLE_T);
+	assert(e->Tag == OBJECT_DOUBLE_T);
 	return e;
 }
 
 Object* GetEnviromentCCharAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->tag == OBJECT_CHAR_T);
+	assert(e->Tag == OBJECT_CHAR_T);
 	return e;
 }
 
 Object* GetEnviromentCStringAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->tag == OBJECT_STRING_T);
+	assert(e->Tag == OBJECT_STRING_T);
 	return e;
 }
 
@@ -163,7 +163,7 @@ static void Enviroment_DeleteLineRange(VectorItem item) {
 
 static void Enviroment_add_constant(Enviroment* self, Object* o) {
 	PushVector(self->ConstantPool, o);
-	assert(o->paint == PAINT_ONEXIT_T);
+	assert(o->Paint == PAINT_ONEXIT_T);
 }
 
 static void Enviroment_DeleteObject_self(VectorItem item) {

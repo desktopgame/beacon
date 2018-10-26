@@ -66,7 +66,7 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 			Object* receiver_obj = PopVector(fr->ValueStack);
 			AssignVector(a->VariableTable, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
-			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->gtype;
+			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
 			aArgs = cfr->Kind.InstanceInvoke.Args = method_vm_args(self, fr, a);
 			aTArgs = cfr->Kind.InstanceInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		} else {
@@ -462,7 +462,7 @@ static Vector* method_vm_args(Method* self, Frame* fr, Frame* a) {
 		Object* ARG = PopVector(fr->ValueStack);
 		assert(ARG != NULL);
 		AssignVector(a->VariableTable, (len - i), ARG);
-		AssignVector(args, (len - i), ARG->gtype);
+		AssignVector(args, (len - i), ARG->GType);
 	}
 	return args;
 }

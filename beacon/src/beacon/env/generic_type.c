@@ -382,8 +382,8 @@ static generic_type* generic_type_receiver_at(CallContext* cctx, Frame* fr, int 
 		return instanced;
 	} else {
 		Object* a = AtVector(fr->VariableTable, 0);
-		printf("receiver at: "); PrintGenericType(a->gtype); Println();
-		return AtVector(a->gtype->type_args_list, index);
+		printf("receiver at: "); PrintGenericType(a->GType); Println();
+		return AtVector(a->GType->type_args_list, index);
 	}
 	return NULL;
 }
