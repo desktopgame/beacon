@@ -5,7 +5,7 @@
 struct class_;
 struct Method;
 struct Property;
-struct field;
+struct Field;
 struct Constructor;
 /**
  * クラスが全てのメソッドを正しく実装しているなら true.
@@ -40,7 +40,7 @@ bool IsImplementAbstractClassValidClass(struct class_* cls, struct Method** out)
  * @param out
  * @return
  */
-bool IsValidFieldClass(struct class_* cls, struct field** out);
+bool IsValidFieldClass(struct class_* cls, struct Field** out);
 
 /**
  * クラスのプロパティ名のうち重複するものがないなら true.

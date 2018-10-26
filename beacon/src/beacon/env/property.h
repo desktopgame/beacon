@@ -6,14 +6,14 @@
 #include "property_body.h"
 struct generic_type;
 struct type;
-struct field;
+struct Field;
 struct object;
 
 typedef struct Property {
 	ModifierType Modifier;
 	StringView Name;
 	struct type* Parent;
-	struct field* SourceRef;
+	struct Field* SourceRef;
 	struct generic_type* GType;
 	AccessLevel Access;
 	PropertyBody* Set;

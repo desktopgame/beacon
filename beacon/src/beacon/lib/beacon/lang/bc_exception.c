@@ -78,7 +78,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;
-	field* stackTraceF = FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
+	Field* stackTraceF = FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
 	AssignVector(self->u.field_vec, tempi, arr);
 	DeleteVector(stackTraceElementVec, VectorDeleterOfNull);
 	h->CollectBlocking--;

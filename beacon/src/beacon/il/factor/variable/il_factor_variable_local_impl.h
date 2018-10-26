@@ -6,7 +6,7 @@
 struct SymbolEntry;
 struct Enviroment;
 struct generic_type;
-struct field;
+struct Field;
 struct Property;
 
 typedef enum variable_local_type {
@@ -17,7 +17,7 @@ typedef enum variable_local_type {
 } variable_local_type;
 
 typedef struct field_with_index {
-	struct field* fi;
+	struct Field* fi;
 	int index;
 } field_with_index;
 

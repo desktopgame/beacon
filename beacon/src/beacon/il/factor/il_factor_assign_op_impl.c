@@ -18,7 +18,7 @@ static void assign_by_call(il_factor_assign_op* self, Enviroment* env, CallConte
 static void assign_by_invoke(il_factor_invoke* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx);
 static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, Enviroment* env, CallContext* cctx);
 static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx);
-static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+static bool can_assign_to_field(Field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 static void generate_assign_to_variable(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 static void generate_assign_to_variable_local(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 
@@ -91,7 +91,7 @@ static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, CallC
 	if(ilvar->type == ILVARIABLE_TYPE_STATIC_T) {
 		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->u.static_->fqcn));
 		int temp = -1;
-		field* sf = FindSFieldClass(cls, ilmem->namev, &temp);
+		Field* sf = FindSFieldClass(cls, ilmem->namev, &temp);
 		assert(temp != -1);
 		GenerateILFactor(self->right, env, cctx);
 		GeneratePutField(env->Bytecode, sf, temp);
@@ -124,7 +124,7 @@ static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_f
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	field* f = FindTreeFieldClass(cls, namev, &temp);
+	Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	GenerateILFactor(receiver, env, cctx);
 	GenerateILFactor(source, env, cctx);
@@ -253,7 +253,7 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 	AddOpcodeBuf(env->Bytecode, temp);
 }
 
-static bool can_assign_to_field(field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
+static bool can_assign_to_field(Field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	generic_type* gt = EvalILFactor(self->right, env, cctx);
 	int dist = DistanceGenericType(f->gtype, gt, cctx);
 	if(dist >= 0) {
@@ -271,7 +271,7 @@ static void check_final(il_factor* receiver, il_factor* source, StringView namev
 	generic_type* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
-	field* f = FindTreeFieldClass(cls, namev, &temp);
+	Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->Tag != CALL_CTOR_T) {
@@ -326,7 +326,7 @@ static void generate_assign_to_variable_local(il_factor_assign_op* self, Envirom
 	//src のような名前がフィールドを示す場合
 	} else if(illoc->type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
+		Field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
 		if(temp == -1) {
 			f = FindTreeSFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
 		}

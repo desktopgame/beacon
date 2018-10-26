@@ -61,7 +61,7 @@ StringView GetTypeFullName(type* self) {
 	);
 }
 
-void AddFieldType(type* self, field * f) {
+void AddFieldType(type* self, Field* f) {
 	assert(self->tag == TYPE_CLASS_T);
 	AddFieldClass(self->u.class_, f);
 }

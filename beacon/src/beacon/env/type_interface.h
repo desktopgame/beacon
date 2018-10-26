@@ -20,7 +20,7 @@ typedef enum type_tag {
 struct Namespace;
 struct class_;
 struct interface_;
-struct field;
+struct Field;
 struct Method;
 struct Property;
 struct Enviroment;
@@ -99,7 +99,7 @@ StringView GetTypeFullName(type* self);
  * @param self
  * @param f
  */
-void AddFieldType(type* self, struct field* f);
+void AddFieldType(type* self, struct Field* f);
 
 /**
  * この型にプロパティを追加します.

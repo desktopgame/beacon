@@ -11,7 +11,7 @@
 
 //struct opcode_buf;
 struct generic_type;
-struct field;
+struct Field;
 
 /**
  * 変数の種類を判別する列挙.

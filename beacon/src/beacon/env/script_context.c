@@ -20,7 +20,7 @@ static void ScriptContext_DeleteClassLoader(const char* name, TreeItem item);
 
 static void ScriptContext_UnlinkNamespace(NumericMapKey key, NumericMapItem item);
 static void ScriptContext_DeleteNamespace(NumericMapKey key, NumericMapItem item);
-static void ClearScriptContextImpl(field* item);
+static void ClearScriptContextImpl(Field* item);
 static void CacheScriptContext_delete(VectorItem item);
 static void ScriptContext_mcache_delete(NumericMapKey key, NumericMapItem item);
 
@@ -112,7 +112,7 @@ void EachStaticScriptContext(ScriptContext* self, static_each act) {
 		}
 		class_* cls = e->u.class_;
 		for (int j = 0; j < cls->sfield_list->Length; j++) {
-			field* f = (field*)AtVector(cls->sfield_list, j);
+			Field* f = (Field*)AtVector(cls->sfield_list, j);
 			if(IsStaticModifier(f->modifier)) {
 				act(f);
 			}
@@ -243,7 +243,7 @@ static void ScriptContext_DeleteNamespace(NumericMapKey key, NumericMapItem item
 	DeleteNamespace(e);
 }
 
-static void ClearScriptContextImpl(field* item) {
+static void ClearScriptContextImpl(Field* item) {
 	item->static_value = GetNullObject();
 }
 

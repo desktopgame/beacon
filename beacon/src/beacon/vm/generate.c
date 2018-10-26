@@ -3,7 +3,7 @@
 #include "../env/type_interface.h"
 #include "../env/TYPE_IMPL.h"
 
-void GenerateGetField(OpcodeBuf* buf, field* fi, int index) {
+void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
 	if(IsStaticModifier(fi->modifier)) {
 		AddOpcodeBuf(buf, OP_GET_STATIC);
 		AddOpcodeBuf(buf, fi->parent->absolute_index);
@@ -29,7 +29,7 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 	}
 }
 
-void GeneratePutField(OpcodeBuf* buf, field* fi, int index) {
+void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
 	if(IsStaticModifier(fi->modifier)) {
 		AddOpcodeBuf(buf, OP_PUT_STATIC);
 		AddOpcodeBuf(buf, fi->parent->absolute_index);

@@ -8,7 +8,7 @@
 
 //proto
 static void remove_from_parent(Frame* self);
-static void frame_markStatic(field* item);
+static void frame_markStatic(Field* item);
 static void frame_markRecursive(Frame* self);
 static void frame_mark_defer(Frame* self);
 static void DeleteFrame_defctx(VectorItem e);
@@ -74,7 +74,7 @@ static void remove_from_parent(Frame* self) {
 	}
 }
 
-static void frame_markStatic(field* item) {
+static void frame_markStatic(Field* item) {
 	//フィールドがintなどならここでマークしない
 	//静的定数フィールドに初期値が割り当てられていない場合
 	if(item->static_value != NULL &&

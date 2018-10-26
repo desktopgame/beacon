@@ -43,7 +43,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, Ca
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_LOAD);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.entry_->Index);
 	} else if(self->type == VARIABLE_LOCAL_FIELD_T) {
-		field* f = self->u.f_with_i.fi;
+		Field* f = self->u.f_with_i.fi;
 		if(!IsStaticModifier(f->modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
@@ -118,7 +118,7 @@ static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviromen
 #else
 	field_with_index fwi = {};
 #endif
-	field* f = FindTreeFieldClass(TYPE2CLASS(tp), self->namev, &temp);
+	Field* f = FindTreeFieldClass(TYPE2CLASS(tp), self->namev, &temp);
 	fwi.fi = f;
 	fwi.index = temp;
 	self->type = VARIABLE_LOCAL_FIELD_T;

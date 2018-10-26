@@ -10,7 +10,7 @@
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindFieldClass(class_* self, StringView namev, int* outIndex);
+struct Field* FindFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つフィールドを返します.
@@ -20,7 +20,7 @@ struct field* FindFieldClass(class_* self, StringView namev, int* outIndex);
  * @param outIndex
  * @return
  */
-struct field* FindTreeFieldClass(class_* self, StringView namev, int* outIndex);
+struct Field* FindTreeFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -29,7 +29,7 @@ struct field* FindTreeFieldClass(class_* self, StringView namev, int* outIndex);
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindSFieldClass(class_* self, StringView namev, int* outIndex);
+struct Field* FindSFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -39,7 +39,7 @@ struct field* FindSFieldClass(class_* self, StringView namev, int* outIndex);
  * @param outIndex
  * @return 無ければ NULL
  */
-struct field* FindTreeSFieldClass(class_* self, StringView namev, int* outIndex);
+struct Field* FindTreeSFieldClass(class_* self, StringView namev, int* outIndex);
 
 /**
  * 指定位置のフィールドを返します.
@@ -49,7 +49,7 @@ struct field* FindTreeSFieldClass(class_* self, StringView namev, int* outIndex)
  * @param index
  * @return
  */
-struct field* GetFieldClass(class_* self, int index);
+struct Field* GetFieldClass(class_* self, int index);
 
 /**
  * 指定位置の静的フィールドを返します.
@@ -59,7 +59,7 @@ struct field* GetFieldClass(class_* self, int index);
  * @param index
  * @return
  */
-struct field* GetSFieldClass(class_* self, int index);
+struct Field* GetSFieldClass(class_* self, int index);
 
 /**
  * クラスに指定のフィールドが含まれるなら true.
@@ -67,7 +67,7 @@ struct field* GetSFieldClass(class_* self, int index);
  * @param f
  * @return
  */
-bool IsContainsFieldClass(class_* self, struct field* f);
+bool IsContainsFieldClass(class_* self, struct Field* f);
 
 /**
  * クラスに指定の静的フィールドが含まれるなら true.
@@ -75,7 +75,7 @@ bool IsContainsFieldClass(class_* self, struct field* f);
  * @param f
  * @return
  */
-bool IsContainsSFieldClass(class_* self, struct field* f);
+bool IsContainsSFieldClass(class_* self, struct Field* f);
 
 /**
  * 指定のクラスからフィールドにアクセスできるなら true.
@@ -83,7 +83,7 @@ bool IsContainsSFieldClass(class_* self, struct field* f);
  * @param f
  * @return
  */
-bool IsAccessibleFieldClass(class_* self, struct field* f);
+bool IsAccessibleFieldClass(class_* self, struct Field* f);
 
 
 

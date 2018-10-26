@@ -9,13 +9,13 @@
 struct Heap;
 struct object;
 struct class_loader;
-struct field;
+struct Field;
 
 /**
  * 静的フィールドを訪問するための関数ポインタ.
  * @param item
  */
-typedef void(*static_each)(struct field* item);
+typedef void(*static_each)(struct Field* item);
 
 /**
  * beacon言語のあらゆるオブジェクトのトップレベル.

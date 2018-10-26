@@ -60,7 +60,7 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	type* tp = parent->Parent;
 	//Array#lengthを取り出す
 	int temp = 0;
-	field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);
+	Field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	object* self = AtVector(fr->VariableTable, 0);

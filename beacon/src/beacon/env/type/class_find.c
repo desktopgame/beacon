@@ -11,14 +11,14 @@
 #include "../../il/il_factor_impl.h"
 #include "../../util/vector.h"
 
-static bool IsContainsFieldClassImpl(Vector* fields, field* f);
+static bool IsContainsFieldClassImpl(Vector* fields, Field* f);
 static bool IsContainsPropertyClassImpl(Vector* props, Property* p);
 
-field * FindFieldClass(class_* self, StringView namev, int* outIndex) {
+Field* FindFieldClass(class_* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->field_list->Length; i++) {
 		VectorItem e = AtVector(self->field_list, i);
-		field* f = (field*)e;
+		Field* f = (Field*)e;
 		if (namev == f->namev) {
 			(*outIndex) = (CountAllFieldClass(self) - self->field_list->Length) + i;
 			return f;
@@ -27,10 +27,10 @@ field * FindFieldClass(class_* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-field * FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
+Field* FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 	class_* pointee = self;
 	do {
-		field* f = FindFieldClass(pointee, namev, outIndex);
+		Field* f = FindFieldClass(pointee, namev, outIndex);
 		if (f != NULL) {
 			return f;
 		}
@@ -43,11 +43,11 @@ field * FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-field * FindSFieldClass(class_ * self, StringView namev, int * outIndex) {
+Field* FindSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->sfield_list->Length; i++) {
 		VectorItem e = AtVector(self->sfield_list, i);
-		field* f = (field*)e;
+		Field* f = (Field*)e;
 		if (namev == f->namev) {
 			(*outIndex) = (CountAllSFieldClass(self) - self->sfield_list->Length) + i;
 			return f;
@@ -56,10 +56,10 @@ field * FindSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-field * FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
+Field* FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	class_* pointee = self;
 	do {
-		field* f = FindSFieldClass(pointee, namev, outIndex);
+		Field* f = FindSFieldClass(pointee, namev, outIndex);
 		if (f != NULL) {
 			return f;
 		}
@@ -71,7 +71,7 @@ field * FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-field * GetFieldClass(class_ * self, int index) {
+Field* GetFieldClass(class_ * self, int index) {
 	assert(index >= 0);
 	int all = CountAllFieldClass(self);
 	if (index >= (all - self->field_list->Length) &&
@@ -81,7 +81,7 @@ field * GetFieldClass(class_ * self, int index) {
 	return GetFieldClass(self->super_class->core_type->u.class_, index);
 }
 
-field * GetSFieldClass(class_ * self, int index) {
+Field* GetSFieldClass(class_ * self, int index) {
 	assert(index >= 0);
 	int all = CountAllSFieldClass(self);
 	if (index >= (all - self->sfield_list->Length) &&
@@ -91,15 +91,15 @@ field * GetSFieldClass(class_ * self, int index) {
 	return GetSFieldClass(self->super_class->core_type->u.class_, index);
 }
 
-bool IsContainsFieldClass(class_* self, field* f) {
+bool IsContainsFieldClass(class_* self, Field* f) {
 	return IsContainsFieldClassImpl(self->field_list, f);
 }
 
-bool IsContainsSFieldClass(class_* self, field* f) {
+bool IsContainsSFieldClass(class_* self, Field* f) {
 	return IsContainsFieldClassImpl(self->sfield_list, f);
 }
 
-bool IsAccessibleFieldClass(class_* self, field* f) {
+bool IsAccessibleFieldClass(class_* self, Field* f) {
 	assert(f != NULL);
 	if(f->access == ACCESS_PUBLIC_T) {
 		return true;
@@ -610,9 +610,9 @@ generic_type* FindInterfaceTypeClass(class_* self, type* tinter, generic_type** 
 }
 
 //private
-static bool IsContainsFieldClassImpl(Vector* fields, field* f) {
+static bool IsContainsFieldClassImpl(Vector* fields, Field* f) {
 	for(int i=0; i<fields->Length; i++) {
-		field* e = (field*)AtVector(fields, i);
+		Field* e = (Field*)AtVector(fields, i);
 		if(e == f) {
 			return true;
 		}

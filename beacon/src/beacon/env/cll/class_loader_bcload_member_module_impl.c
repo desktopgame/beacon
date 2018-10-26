@@ -43,7 +43,7 @@ static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, typ
 //
 //
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, Namespace* scope, CallContext* cctx) {
-	field* fi = NewField(ilfi->Name);
+	Field* fi = NewField(ilfi->Name);
 	fi->access = ilfi->Access;
 	fi->modifier = ilfi->Modifier;
 	fi->parent = tp;
@@ -90,7 +90,7 @@ bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilf
 	return true;
 }
 
-bool CLBC_field_impl(class_loader* self, type* tp, field* fi, Namespace* scope, CallContext* cctx) {
+bool CLBC_field_impl(class_loader* self, type* tp, Field* fi, Namespace* scope, CallContext* cctx) {
 	fi->static_value = GetDefaultObject(fi->gtype);
 	if(fi->initial_value == NULL) {
 		return true;

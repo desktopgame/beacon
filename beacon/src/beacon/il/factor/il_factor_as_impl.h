@@ -23,7 +23,7 @@ typedef struct il_factor_as {
 
 struct Enviroment;
 struct type;
-struct field;
+struct Field;
 
 il_factor* WrapILAs(il_factor_as* self);
 

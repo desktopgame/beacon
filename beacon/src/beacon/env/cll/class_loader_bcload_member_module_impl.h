@@ -17,7 +17,7 @@
 #include "../../env/property.h"
 
 bool CLBC_field_decl(class_loader* self, il_type* iltype, type* tp, ILField* ilfi, Namespace* scope, CallContext* cctx);
-bool CLBC_field_impl(class_loader* self, type* tp, field* fi, Namespace* scope, CallContext* cctx);
+bool CLBC_field_impl(class_loader* self, type* tp, Field* fi, Namespace* scope, CallContext* cctx);
 /**
  * フィールド宣言を読み込んでクラスに追加します.
  * @param self

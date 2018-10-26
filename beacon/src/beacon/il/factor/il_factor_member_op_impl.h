@@ -7,7 +7,7 @@
 #include "../il_factor_interface.h"
 
 struct Enviroment;
-struct field;
+struct Field;
 
 /**
  * メンバアクセスを表す要素.
@@ -18,7 +18,7 @@ typedef struct il_factor_member_op {
 	StringView namev;
 	Vector* type_args;
 	int index;
-	struct field* f;
+	struct Field* f;
 } il_factor_member_op;
 
 il_factor* WrapILMemberOp(il_factor_member_op* self);

@@ -145,7 +145,7 @@ static void il_factor_invoke_bound_check(il_factor_invoke_bound * self, Envirome
 		self->u.subscript.index = local->Index;
 	}
 	//フィールドとして解決する
-	field* fi = FindFieldClass(GetClassCContext(cctx), self->namev, &temp);
+	Field* fi = FindFieldClass(GetClassCContext(cctx), self->namev, &temp);
 	if(receiver_gtype == NULL && fi != NULL) {
 		receiver_gtype = fi->gtype;
 		self->u.subscript.tag = SUBSCRIPT_FIELD_T;

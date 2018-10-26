@@ -20,7 +20,7 @@
 //struct field_list;
 //struct method_list;
 struct object;
-struct field;
+struct Field;
 struct Property;
 struct PropertyBody;
 struct Method;
@@ -114,7 +114,7 @@ void FreeClassFields(class_* self, struct object* o);
  * @param self
  * @param f
  */
-void AddFieldClass(class_* self, struct field* f);
+void AddFieldClass(class_* self, struct Field* f);
 
 /**
  * このクラスにプロパティを追加します.

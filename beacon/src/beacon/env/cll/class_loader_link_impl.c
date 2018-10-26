@@ -159,7 +159,7 @@ static void CLBC_enum_decl(class_loader * self, il_type * iltype, type * tp, Nam
 		return;
 	}
 	//重複するフィールドを確認する
-	field* outField = NULL;
+	Field* outField = NULL;
 	if((tp->tag == TYPE_ENUM_T ||
 	   tp->tag == TYPE_CLASS_T) &&
 	   !IsValidFieldClass(tp->u.class_, &outField)) {
@@ -173,7 +173,7 @@ static void CLBC_enum_impl(class_loader * self, il_type * iltype, type * tp, Nam
 		return;
 	}
 	for(int i=0; i<tp->u.class_->sfield_list->Length; i++) {
-		field* f = AtVector(tp->u.class_->sfield_list, i);
+		Field* f = AtVector(tp->u.class_->sfield_list, i);
 		f->static_value = GetIntObject(i);
 	}
 	tp->state = tp->state | TYPE_IMPL;
@@ -294,7 +294,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, N
 		return;
 	}
 	//重複するフィールドを確認する
-	field* outField = NULL;
+	Field* outField = NULL;
 	if(!IsValidFieldClass(tp->u.class_, &outField)) {
 		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T,
 			Ref2Str(tp->u.class_->namev),
@@ -348,7 +348,7 @@ static void CLBC_check_class(class_loader * self, il_type * iltype, type * tp, N
 	//これはコンストラクタが生成されてからでないといけない
 	class_* cls = TYPE2CLASS(tp);
 	for(int i=0; i<cls->field_list->Length; i++) {
-		field* fi = AtVector(cls->field_list, i);
+		Field* fi = AtVector(cls->field_list, i);
 		//インスタンス定数が
 		//フィールドでもコンストラクタでも初期化されない
 		if(!IsStaticModifier(fi->modifier) &&

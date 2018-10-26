@@ -7,7 +7,7 @@
 #include "../type_parameter.h"
 #include "../field.h"
 #include "class_impl.h"
-static bool IsValidFieldClassImpl(Vector* field_vec, field** out);
+static bool IsValidFieldClassImpl(Vector* field_vec, Field** out);
 static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out);
 static bool methods_is_all_abstract(Vector* v);
 
@@ -125,7 +125,7 @@ bool IsImplementAbstractClassValidClass(class_* cls, Method** out) {
 	return ret;
 }
 
-bool IsValidFieldClass(class_* cls, field** out) {
+bool IsValidFieldClass(class_* cls, Field** out) {
 	return IsValidFieldClassImpl(cls->field_list, out) &&
 		   IsValidFieldClassImpl(cls->sfield_list, out);
 }
@@ -188,13 +188,13 @@ bool IsMethodTypeParameterValidClass(class_* self, Method** out_method, StringVi
 	return true;
 }
 //private
-static bool IsValidFieldClassImpl(Vector* field_vec, field** out) {
+static bool IsValidFieldClassImpl(Vector* field_vec, Field** out) {
 	(*out) = NULL;
 	bool ret = true;
 	for(int i=0; i<field_vec->Length; i++) {
-		field* f = (field*)AtVector(field_vec, i);
+		Field* f = (Field*)AtVector(field_vec, i);
 		for(int j=0; j<field_vec->Length; j++) {
-			field* fE = (field*)AtVector(field_vec, j);
+			Field* fE = (Field*)AtVector(field_vec, j);
 			if(f == fE) { continue; }
 			if(f->namev == fE->namev) {
 				ret = false;

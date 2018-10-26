@@ -46,7 +46,7 @@ static char stack_popc(Frame* self);
 static char* stack_pops(Frame* self);
 static bool stack_popb(Frame* self);
 static void remove_from_parent(Frame* self);
-static void frame_markStatic(field* item);
+static void frame_markStatic(Field* item);
 static void vm_delete_defctx(VectorItem e);
 static bool throw_npe(Frame* self, object* o);
 static char* create_error_message(Frame* self, Enviroment* env, int pc);
@@ -689,7 +689,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
-				field* f = GetSFieldClass(cls, fieldIndex);
+				Field* f = GetSFieldClass(cls, fieldIndex);
 				object* sv = (object*)PopVector(self->ValueStack);
 				f->static_value = sv;
 				break;
@@ -700,7 +700,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				type* cls = (type*)AtVector(ctx->TypeList, absClsIndex);
-				field* f = GetSFieldClass(cls->u.class_, fieldIndex);
+				Field* f = GetSFieldClass(cls->u.class_, fieldIndex);
 				PushVector(self->ValueStack, NON_NULL(f->static_value));
 				break;
 			}

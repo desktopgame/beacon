@@ -107,7 +107,7 @@ void AllocFieldsClass(class_ * self, object * o, Frame* fr) {
 	assert(o->tag == OBJECT_REF_T);
 	Heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->Length; i++) {
-		field* f = (field*)AtVector(self->field_list, i);
+		Field* f = (Field*)AtVector(self->field_list, i);
 		object* a = GetDefaultObject(f->gtype);
 		//静的フィールドは別の場所に確保
 		if (IsStaticModifier(f->modifier)) {
@@ -133,7 +133,7 @@ void AllocFieldsClass(class_ * self, object * o, Frame* fr) {
 void FreeClassFields(class_ * self, object * o) {
 }
 
-void AddFieldClass(class_ * self, field * f) {
+void AddFieldClass(class_ * self, Field* f) {
 	assert(f != NULL);
 	if (IsStaticModifier(f->modifier)) {
 		PushVector(self->sfield_list, f);
@@ -154,7 +154,7 @@ void AddPropertyClass(class_* self, Property* p) {
 	const char* name = Ref2Str(p->Name);
 	#endif
 	if(p->IsShort) {
-		field* f = NewField(ConcatIntern("$propery.", p->Name));
+		Field* f = NewField(ConcatIntern("$propery.", p->Name));
 		f->access = ACCESS_PRIVATE_T;
 		f->gtype = p->GType;
 		f->modifier = p->Modifier;
@@ -368,7 +368,7 @@ object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_ar
 
 void LinkAllClass(class_ * self) {
 	for (int i = 0; i < self->field_list->Length; i++) {
-		field* f = (field*)AtVector(self->field_list, i);
+		Field* f = (Field*)AtVector(self->field_list, i);
 		f->parent = self->parent;
 	}
 	for (int i = 0; i < self->method_list->Length; i++) {
@@ -489,7 +489,7 @@ static void class_impl_delete(VectorItem item) {
 }
 
 static void class_DeleteField(VectorItem item) {
-	field* e = (field*)item;
+	Field* e = (Field*)item;
 	DeleteField(e);
 }
 

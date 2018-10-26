@@ -13,7 +13,7 @@ struct il_factor;
 /**
  * フィールドを表す構造体.
  */
-typedef struct field {
+typedef struct Field {
 	StringView namev;
 	struct type* parent;
 	struct generic_type* gtype;
@@ -23,18 +23,18 @@ typedef struct field {
 	struct il_factor* initial_value;
 	struct Enviroment* initial_value_env;
 	bool not_initialized_at_ctor;
-} field;
+} Field;
 
 /**
  * 新しいフィールドを作成します.
  * @param namev
  * @return
  */
-field* NewField(StringView namev);
+Field* NewField(StringView namev);
 
 /**
  * フィールドを開放します.
  * @param self
  */
-void DeleteField(field* self);
+void DeleteField(Field* self);
 #endif // !SIGNAL_ENV_FIELD_H
