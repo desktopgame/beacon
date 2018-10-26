@@ -22,7 +22,7 @@ struct VTable;
  * オブジェクトの着色状態.
  * インクリメンタルGCのためのフラグです。
  */
-typedef enum object_paint {
+typedef enum ObjectPaint {
 	PAINT_UNMARKED_T,
 	PAINT_MARKED_T,
 	//コンテキストが終了するまで
@@ -32,7 +32,7 @@ typedef enum object_paint {
 //	paint_white,
 //	paint_black,
 //	paint_gray
-} object_paint ;
+} ObjectPaint ;
 
 /**
  * オブジェクトの種類を表す列挙.
@@ -56,7 +56,7 @@ typedef enum object_tag {
 typedef struct object {
 	struct generic_type* gtype;
 	struct VTable* vptr;
-	object_paint paint;
+	ObjectPaint paint;
 	object_tag tag;
 	Vector* native_slot_vec;
 	bool is_coroutine;
@@ -190,7 +190,7 @@ object* CloneObject(object* self);
  * @param self
  * @param paint
  */
-void PaintAllObject(object* self, object_paint paint);
+void PaintAllObject(object* self, ObjectPaint paint);
 
 /**
  * このオブジェクトと

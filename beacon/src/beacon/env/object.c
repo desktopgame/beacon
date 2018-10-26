@@ -208,7 +208,7 @@ object* CloneObject(object* self) {
 	return ret;
 }
 
-void PaintAllObject(object* self, object_paint paint) {
+void PaintAllObject(object* self, ObjectPaint paint) {
 	//field#static_valueは
 	//実際に修飾子が static でないときは NULL
 	if (self == NULL) {
