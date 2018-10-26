@@ -1,7 +1,7 @@
 #ifndef BEACON_IL_FACTOR_INVOKE_SUBSCRIPT_DESCRIPTOR_H
 #define BEACON_IL_FACTOR_INVOKE_SUBSCRIPT_DESCRIPTOR_H
 
-struct operator_overload;
+struct OperatorOverload;
 struct SymbolEntry;
 struct Field;
 struct Property;
@@ -15,7 +15,7 @@ typedef enum subscript_tag {
 
 typedef struct subscript_descriptor {
 	subscript_tag tag;
-	struct operator_overload* opov;
+	struct OperatorOverload* opov;
 	int index;
 	union {
 		struct SymbolEntry* local;

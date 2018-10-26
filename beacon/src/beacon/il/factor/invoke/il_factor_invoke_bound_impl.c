@@ -64,12 +64,12 @@ void DeleteILInvokeBound(il_factor_invoke_bound* self) {
 	MEM_FREE(self);
 }
 
-operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
+OperatorOverload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == BOUND_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
-	operator_overload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.subscript.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.subscript.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }

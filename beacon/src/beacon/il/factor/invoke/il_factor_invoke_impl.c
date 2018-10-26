@@ -92,12 +92,12 @@ void DeleteILInvoke(il_factor_invoke* self) {
 	MEM_FREE(self);
 }
 
-operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
+OperatorOverload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
-	operator_overload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->u.opov->parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }

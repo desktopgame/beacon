@@ -44,7 +44,7 @@ static Method* class_find_impl_method(class_* self, Method* virtualMethod);
 static void class_VTable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
 static void class_generic_type_list_delete(VectorItem item);
-static void DeleteClass_operator_overload(VectorItem item);
+static void DeleteClass_OperatorOverload(VectorItem item);
 static void DeleteClass_Property(VectorItem item);
 
 type * WrapClass(class_ * self) {
@@ -245,17 +245,17 @@ void CreateOperatorVTClass(class_* self) {
 	self->ovt = NewOperatorVt();
 	if(self->super_class == NULL) {
 		for(int i=0; i<self->operator_overload_list->Length; i++) {
-			operator_overload* opov = AtVector(self->operator_overload_list, i);
+			OperatorOverload* opov = AtVector(self->operator_overload_list, i);
 			PushVector(self->ovt->vec, opov);
 		}
 	} else {
 		operator_vt* super_vt = TYPE2CLASS(GENERIC2TYPE(self->super_class))->ovt;
 		for(int i=0; i<super_vt->vec->Length; i++) {
-			operator_overload* opov = AtVector(super_vt->vec, i);
+			OperatorOverload* opov = AtVector(super_vt->vec, i);
 			PushVector(self->ovt->vec, opov);
 		}
 		for(int i=0; i<self->operator_overload_list->Length; i++) {
-			operator_overload* opov = AtVector(self->operator_overload_list, i);
+			OperatorOverload* opov = AtVector(self->operator_overload_list, i);
 			ReplaceOperatorVt(self->ovt, opov);
 		}
 	}
@@ -394,7 +394,7 @@ void UnlinkClass(class_ * self) {
 	DeleteVector(self->method_list, class_DeleteMethod);
 	DeleteVector(self->smethod_list, class_DeleteMethod);
 	DeleteVector(self->constructor_list, class_ctor_delete);
-	DeleteVector(self->operator_overload_list, DeleteClass_operator_overload);
+	DeleteVector(self->operator_overload_list, DeleteClass_OperatorOverload);
 	DeleteVector(self->prop_list, DeleteClass_Property);
 	DeleteVector(self->sprop_list, DeleteClass_Property);
 	DeleteVTable(self->vt);
@@ -540,8 +540,8 @@ static void class_generic_type_list_delete(VectorItem item) {
 //	generic_DeleteType(e);
 }
 
-static void DeleteClass_operator_overload(VectorItem item) {
-	operator_overload* e = (operator_overload*)item;
+static void DeleteClass_OperatorOverload(VectorItem item) {
+	OperatorOverload* e = (OperatorOverload*)item;
 	DeleteOperatorOverload(e);
 }
 

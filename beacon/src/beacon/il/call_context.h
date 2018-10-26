@@ -8,7 +8,7 @@ struct type;
 struct class_;
 struct Method;
 struct Constructor;
-struct operator_overload;
+struct OperatorOverload;
 struct generic_type;
 struct FQCNCache;
 
@@ -36,7 +36,7 @@ typedef struct CallContext {
 	union {
 		struct Method* Method;
 		struct Constructor* Ctor;
-		struct operator_overload* OpOv;
+		struct OperatorOverload* OpOv;
 	} Kind;
 } CallContext;
 

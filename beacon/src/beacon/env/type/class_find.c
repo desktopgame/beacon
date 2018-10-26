@@ -420,12 +420,12 @@ Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 
 
 
-operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+OperatorOverload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	(*outIndex) = -1;
-	operator_overload* ret = NULL;
+	OperatorOverload* ret = NULL;
 	CreateOperatorVTClass(self);
 	for(int i=0; i<self->ovt->vec->Length; i++) {
-		operator_overload* operator_ov = AtVector(self->ovt->vec, i);
+		OperatorOverload* operator_ov = AtVector(self->ovt->vec, i);
 		if(operator_ov->type != type) {
 			continue;
 		}
@@ -455,19 +455,19 @@ operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, V
 	return ret;
 }
 
-operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+OperatorOverload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		il_factor* ilfact = (il_factor*)AtVector(args,i);
 		generic_type* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
-	operator_overload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
+	OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+OperatorOverload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);
@@ -476,12 +476,12 @@ operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type,
 		generic_type* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
-	operator_overload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
+	OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-operator_overload* GetOperatorOverloadClass(class_* self, int index) {
+OperatorOverload* GetOperatorOverloadClass(class_* self, int index) {
 	return AtVector(self->ovt->vec, index);
 }
 

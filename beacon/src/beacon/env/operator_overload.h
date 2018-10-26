@@ -10,21 +10,21 @@ struct Frame;
 /**
  * 演算子オーバーロードを表す構造体.
  */
-typedef struct operator_overload {
+typedef struct OperatorOverload {
 	struct type* parent;
 	struct generic_type* return_gtype;
 	OperatorType type;
 	Vector* parameter_list;
 	struct Enviroment* env;
 	AccessLevel access;
-} operator_overload;
+} OperatorOverload;
 
 /**
  * 新しい演算子オーバーロードを生成します.
  * @param type
  * @return
  */
-operator_overload* NewOperatorOverload(OperatorType type);
+OperatorOverload* NewOperatorOverload(OperatorType type);
 
 /**
  * 演算子オーバーロードを実行します.
@@ -32,11 +32,11 @@ operator_overload* NewOperatorOverload(OperatorType type);
  * @param fr
  * @param env
  */
-void ExecuteOperatorOverload(operator_overload* self, struct Frame* fr, struct Enviroment* env);
+void ExecuteOperatorOverload(OperatorOverload* self, struct Frame* fr, struct Enviroment* env);
 
 /**
  * 演算子オーバーロードを解放します.
  * @param self
  */
-void DeleteOperatorOverload(operator_overload* self);
+void DeleteOperatorOverload(OperatorOverload* self);
 #endif

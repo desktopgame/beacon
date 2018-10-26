@@ -4,7 +4,7 @@
 
 struct Method;
 struct Constructor;
-struct operator_overload;
+struct OperatorOverload;
 struct generic_type;
 
 typedef enum CallFrameTag {

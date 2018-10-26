@@ -26,7 +26,7 @@ struct PropertyBody;
 struct Method;
 struct Constructor;
 struct generic_type;
-struct operator_overload;
+struct OperatorOverload;
 /**
  * クラスを表す構造体です.
  */

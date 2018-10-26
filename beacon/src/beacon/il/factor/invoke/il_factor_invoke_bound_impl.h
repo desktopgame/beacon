@@ -6,7 +6,7 @@
 
 struct Enviroment;
 struct generic_type;
-struct operator_overload;
+struct OperatorOverload;
 struct Method;
 //binded? bound?
 
@@ -41,5 +41,5 @@ char* ILInvokeBoundToString(il_factor_invoke_bound* self, Enviroment* env);
 
 void DeleteILInvokeBound(il_factor_invoke_bound* self);
 
-struct operator_overload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

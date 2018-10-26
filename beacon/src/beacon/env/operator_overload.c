@@ -15,8 +15,8 @@
 
 static void DeleteOperatorOverload_param(VectorItem item);
 
-operator_overload* NewOperatorOverload(OperatorType type) {
-	operator_overload* ret = (operator_overload*)MEM_MALLOC(sizeof(operator_overload));
+OperatorOverload* NewOperatorOverload(OperatorType type) {
+	OperatorOverload* ret = (OperatorOverload*)MEM_MALLOC(sizeof(OperatorOverload));
 	ret->parent = NULL;
 	ret->parameter_list = NewVector();
 	ret->type = type;
@@ -25,7 +25,7 @@ operator_overload* NewOperatorOverload(OperatorType type) {
 	return ret;
 }
 
-void ExecuteOperatorOverload(operator_overload* self, Frame* fr, Enviroment* env) {
+void ExecuteOperatorOverload(OperatorOverload* self, Frame* fr, Enviroment* env) {
 	Frame* sub = SubFrame(fr);
 	sub->Receiver = fr->Receiver;
 	PushVector(sub->ValueStack, PopVector(fr->ValueStack));
@@ -43,7 +43,7 @@ void ExecuteOperatorOverload(operator_overload* self, Frame* fr, Enviroment* env
 	DeleteFrame(sub);
 }
 
-void DeleteOperatorOverload(operator_overload* self) {
+void DeleteOperatorOverload(OperatorOverload* self) {
 	DeleteEnviroment(self->env);
 	DeleteVector(self->parameter_list, DeleteOperatorOverload_param);
 	MEM_FREE(self);

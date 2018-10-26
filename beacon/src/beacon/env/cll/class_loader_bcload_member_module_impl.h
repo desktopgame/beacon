@@ -69,7 +69,7 @@ void CLBC_ctors_decl(class_loader* self, il_type* iltype, type* tp, Namespace* s
 void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp);
 
 bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, Namespace* scope);
-bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, operator_overload* opov, Namespace* scope);
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, OperatorOverload* opov, Namespace* scope);
 
 void CLBC_operator_overloads_decl(class_loader* self, il_type* iltype, type* tp, Namespace* scope);
 void CLBC_operator_overloads_impl(class_loader* self, il_type* iltype, type* tp, Namespace* scope);

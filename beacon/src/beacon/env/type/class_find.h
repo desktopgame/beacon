@@ -305,18 +305,18 @@ struct Method* GetImplMethodClass(class_* self, type* interType, int interMIndex
  * @param outIndex
  * @return
  */
-struct operator_overload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* GFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct operator_overload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct operator_overload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * @param self
  * @param index
  * @return
  */
-struct operator_overload* GetOperatorOverloadClass(class_* self, int index);
+struct OperatorOverload* GetOperatorOverloadClass(class_* self, int index);
 
 /**
  * 指定のクラスから Object クラスまで階層で m と互換性のあるメソッドを検索して返します.

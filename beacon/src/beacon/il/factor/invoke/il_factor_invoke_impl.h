@@ -5,7 +5,7 @@
 #include "subscript_descriptor.h"
 struct Enviroment;
 struct generic_type;
-struct operator_overload;
+struct OperatorOverload;
 struct Method;
 
 typedef enum instance_invoke {
@@ -22,7 +22,7 @@ typedef struct il_factor_invoke {
 	int index;
 	union {
 		struct Method* m;
-		struct operator_overload* opov;
+		struct OperatorOverload* opov;
 	} u;
 	struct generic_type* resolved;
 	instance_invoke tag;
@@ -40,5 +40,5 @@ char* ILInvokeToString(il_factor_invoke* self, Enviroment* env);
 
 void DeleteILInvoke(il_factor_invoke* self);
 
-struct operator_overload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* FindSetILInvoke(il_factor_invoke* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

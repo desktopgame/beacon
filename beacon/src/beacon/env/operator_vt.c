@@ -11,9 +11,9 @@ operator_vt* NewOperatorVt() {
 	return ret;
 }
 
-void ReplaceOperatorVt(operator_vt* self, operator_overload* opov) {
+void ReplaceOperatorVt(operator_vt* self, OperatorOverload* opov) {
 	for(int i=0; i<self->vec->Length; i++) {
-		operator_overload* e = AtVector(self->vec, i);
+		OperatorOverload* e = AtVector(self->vec, i);
 		if(e->type != opov->type) {
 			continue;
 		}

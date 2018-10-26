@@ -261,12 +261,12 @@ Constructor* MetaScopedRFindConstructor(class_* context, Vector* ctor_vec, Vecto
 	return ret;
 }
 
-operator_overload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector* gargs, int* outIndex) {
+OperatorOverload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
-	operator_overload* ret = NULL;
+	OperatorOverload* ret = NULL;
 	for(int i=0; i<opov_vec->Length; i++) {
-		operator_overload* opov = AtVector(opov_vec, i);
+		OperatorOverload* opov = AtVector(opov_vec, i);
 		//オペレータの種類が違うので無視
 		if(opov->type != type) {
 			continue;

@@ -36,7 +36,7 @@ static void CLBC_chain(class_loader* self, il_type* iltype, type* tp, ILConstruc
 static void CLBC_chain_root(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
 static void CLBC_chain_auto(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
 static void CLBC_chain_super(class_loader* self, il_type* iltype, type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov);
+static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, OperatorOverload* opov);
 
 //
 //field
@@ -527,7 +527,7 @@ void CLBC_ctors_impl(class_loader* self, il_type* iltype, type* tp) {
 //
 bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, Namespace* scope) {
 	//演算子オーバーロード一覧から取り出す
-	operator_overload* opov = NewOperatorOverload(ilopov->Type);
+	OperatorOverload* opov = NewOperatorOverload(ilopov->Type);
 	opov->access = ilopov->Access;
 	//CallContextの設定
 	CallContext* cctx = NewCallContext(CALL_OPOV_T);
@@ -554,7 +554,7 @@ bool CLBC_operator_overload_decl(class_loader* self, il_type* iltype, type* tp, 
 	return true;
 }
 
-bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, operator_overload* opov, Namespace* scope) {
+bool CLBC_operator_overload_impl(class_loader* self, il_type* iltype, type* tp, ILOperatorOverload* ilopov, OperatorOverload* opov, Namespace* scope) {
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
@@ -778,7 +778,7 @@ static void CLBC_chain_super(class_loader * self, il_type * iltype, type * tp, I
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
 }
 
-static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, operator_overload* opov) {
+static bool CLBC_test_operator_overlaod(class_loader* self, il_type* iltype, type* tp, OperatorOverload* opov) {
 	//アクセスレベルを確認する
 	if(opov->access != ACCESS_PUBLIC_T) {
 		ThrowBCError(BCERROR_PRIVATE_OPERATOR_T, GetTypeName(tp));
