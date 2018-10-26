@@ -301,7 +301,7 @@ Method * ILFindMethodClass(class_ * self, StringView namev, Vector * args, Envir
 	#endif
 	//assert(self->vt->elements->Length > 0);
 	Method* ret = NULL;
-	if((ret = MetaScopedILFindMethod(self, self->vt->elements, namev, args, env, cctx, outIndex))
+	if((ret = MetaScopedILFindMethod(self, self->vt->Elements, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -321,7 +321,7 @@ Method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* out
 	CreateVTableClass(self);
 	//assert(self->vt->elements->Length > 0);
 	Method* ret = NULL;
-	if((ret = MetaScopedGFindMethod(self, self->vt->elements, namev, gargs, outIndex))
+	if((ret = MetaScopedGFindMethod(self, self->vt->Elements, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
 	}
@@ -376,7 +376,7 @@ Method * GetMethodClass(object * o, int index) {
 		o->vptr = TYPE2CLASS(TYPE_OBJECT)->vt;
 	}
 	VTable* vx = (o->vptr);
-	return (Method*)AtVector(vx->elements, index);
+	return (Method*)AtVector(vx->Elements, index);
 }
 
 Method * GetSMethodClass(class_* self, int index) {
@@ -414,7 +414,7 @@ Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 	assert(declIndex != -1);
 	DeleteVector(tbl, VectorDeleterOfNull);
 	VTable* vtAt = AtVector(self->vt_vec, declIndex);
-	return AtVector(vtAt->elements, interMIndex);
+	return AtVector(vtAt->Elements, interMIndex);
 }
 
 

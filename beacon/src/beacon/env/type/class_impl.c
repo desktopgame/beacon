@@ -232,7 +232,7 @@ void CreateVTableClass(class_ * self) {
 		CreateVTableClass_override(self);
 	}
 	CreateVTableClass_interface(self);
-	assert(self->vt->elements->Length != 0);
+	assert(self->vt->Elements->Length != 0);
 }
 
 void CreateOperatorVTClass(class_* self) {
@@ -456,10 +456,10 @@ static void CreateVTableClass_interface(class_* self) {
 		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧
 		//これはスーパーインターフェースも含む。
-		for (int j = 0; j < interVT->elements->Length; j++) {
+		for (int j = 0; j < interVT->Elements->Length; j++) {
 			//実装クラスの中の、
 			//シグネチャが同じメソッドをテーブルへ。
-			Method* interVTM = AtVector(interVT->elements, j);
+			Method* interVTM = AtVector(interVT->Elements, j);
 			Method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->is_abstract && classVTM == NULL) {
 				PushVector(self->vt_vec, newVT);
@@ -514,8 +514,8 @@ static Method* class_find_impl_method(class_* self, Method* virtualMethod) {
 	cctx->Ty = self->parent;
 	Method* ret = NULL;
 	VTable* clVT = self->vt;
-	for (int i = 0; i < clVT->elements->Length; i++) {
-		Method* clM = AtVector(clVT->elements, i);
+	for (int i = 0; i < clVT->Elements->Length; i++) {
+		Method* clM = AtVector(clVT->Elements, i);
 		if (IsOverridedMethod(virtualMethod, clM, cctx)) {
 			ret = clM;
 			break;
