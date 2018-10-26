@@ -77,13 +77,13 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
 		parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->VirtualTypeIndex = GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
-		parameterized->u.method_ = mt;
+		parameterized->Kind.Method = mt;
 	}
 	type* ty = GetTypeCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 &&  ty != NULL) {
 		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->VirtualTypeIndex = GetGenericIndexType(ty, fqcn->FQCN->Name);
-		parameterized->u.type_ = ty;
+		parameterized->Kind.Type = ty;
 	}
 	//現在の名前空間でクラス名を解決できなかったし、
 	//現在のコンテキストで型変数として解決することもできなかった
@@ -118,7 +118,7 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 		int index = GetGenericIndexForMethod(mt, fqcn->Name);
 		parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->VirtualTypeIndex = index;
-		parameterized->u.method_ = mt;
+		parameterized->Kind.Method = mt;
 	}
 	//次にクラスの型変数を調べる
 	type* ty = GetTypeCContext(cctx);
@@ -129,7 +129,7 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 		int index = GetGenericIndexType(ty, fqcn->Name);
 		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->VirtualTypeIndex = index;
-		parameterized->u.type_ = ty;
+		parameterized->Kind.Type = ty;
 	}
 	assert(parameterized->VirtualTypeIndex != -1);
 	return parameterized;

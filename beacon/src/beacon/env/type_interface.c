@@ -30,7 +30,7 @@ GenericType* InitGenericSelf(type* self, int counts) {
 			GenericType* arg = generic_NewType(NULL);
 			arg->Tag = GENERIC_TYPE_TAG_CLASS_T;
 			arg->VirtualTypeIndex = i;
-			arg->u.type_ = self;
+			arg->Kind.Type = self;
 			AddArgsGenericType(self->generic_self, arg);
 		}
 	}

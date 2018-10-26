@@ -62,9 +62,9 @@ GenericType* CloneGenericType(GenericType* self) {
 	a->Tag = self->Tag;
 	a->VirtualTypeIndex = self->VirtualTypeIndex;
 	if(a->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-		a->u.type_ = self->u.type_;
+		a->Kind.Type = self->Kind.Type;
 	} else if(a->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-		a->u.method_ = self->u.method_;
+		a->Kind.Method = self->Kind.Method;
 	}
 	return a;
 }
@@ -134,10 +134,10 @@ void PrintGenericType(GenericType * self) {
 	if (self->VirtualTypeIndex != -1) {
 		//(Array)[0]
 		if(self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-			printf("(%s)", Ref2Str(GetTypeName(self->u.type_)));
+			printf("(%s)", Ref2Str(GetTypeName(self->Kind.Type)));
 		//copy[0]
 		} else if(self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-			printf("(%s)", Ref2Str(self->u.method_->Name));
+			printf("(%s)", Ref2Str(self->Kind.Method->Name));
 		}
 		printf("[%d]", self->VirtualTypeIndex);
 	//Intなど

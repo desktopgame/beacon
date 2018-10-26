@@ -35,9 +35,9 @@ typedef struct GenericType {
 	Vector* TypeArgs;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
-		struct type* type_;
-		struct Method* method_;
-	} u;
+		struct type* Type;
+		struct Method* Method;
+	} Kind;
 	//もしこの型が List<T> の Tを表すなら、
 	//外側のクラスの何番目の型変数かを格納する。
 	int VirtualTypeIndex;
