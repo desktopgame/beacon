@@ -22,7 +22,7 @@ void GenerateILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
 
 void LoadILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
 
 char* ILIntToString(il_factor_int* self, Enviroment* env);
 

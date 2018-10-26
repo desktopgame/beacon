@@ -3,7 +3,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct il_factor_binary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 
 typedef struct il_factor_excor_op {
@@ -14,7 +14,7 @@ typedef struct il_factor_excor_op {
 
 il_factor_excor_op* NewILExcorOp(OperatorType type);
 
-struct generic_type* EvalILExcorOp(il_factor_excor_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILExcorOp(il_factor_excor_op * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILExcorOp(il_factor_excor_op* self, struct Enviroment* env, CallContext* cctx);
 

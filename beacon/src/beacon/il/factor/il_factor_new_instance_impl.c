@@ -69,23 +69,23 @@ void LoadILNewInstance(il_factor_new_instance * self, Enviroment * env, CallCont
 	}
 }
 
-generic_type* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
 	il_factor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return NULL;
 	}
 	//型引数がないのでそのまま
 	if (self->type_args->Length == 0) {
-		generic_type* ret = RefGenericType(self->c->Parent);
+		GenericType* ret = RefGenericType(self->c->Parent);
 		return ret;
 	}
 	//FQCNCache typename_group
 	if (self->instance_type == NULL) {
 		Namespace* scope = NULL;
-		generic_type* a = generic_NewType(self->c->Parent);
+		GenericType* a = generic_NewType(self->c->Parent);
 		for (int i = 0; i < self->type_args->Length; i++) {
 			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
-			generic_type* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
+			GenericType* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
 			AddArgsGenericType(a, arg);
 		}
 		self->instance_type = a;

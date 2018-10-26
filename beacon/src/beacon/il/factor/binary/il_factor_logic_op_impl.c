@@ -20,13 +20,13 @@ il_factor_logic_op* NewILLogicOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILLogicOp(il_factor_logic_op* self, Enviroment* env, CallContext* cctx) {
 	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_INT);
 	} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_BOOL);
 	} else {
-		generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
+		GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
 		//プリミティブ型同士でないのに
 		//演算子オーバーロードもない
 		if(self->operator_index == -1) {

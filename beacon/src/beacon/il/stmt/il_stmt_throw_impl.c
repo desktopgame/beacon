@@ -25,7 +25,7 @@ void GenerateILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
 
 void LoadILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
-	generic_type* tgt = EvalILFactor(self->fact, env, cctx);
+	GenericType* tgt = EvalILFactor(self->fact, env, cctx);
 	if(DistanceGenericType(GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->core_type != NULL) {
 			ThrowBCError(

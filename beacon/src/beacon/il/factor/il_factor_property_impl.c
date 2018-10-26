@@ -23,7 +23,7 @@ void GenerateILPropertyAccess(il_factor_Property* self, Enviroment* env, CallCon
 }
 
 void LoadILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
-	generic_type* receiver = EvalILFactor(self->fact, env, cctx);
+	GenericType* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
 	FindTreePropertyClass(TYPE2CLASS(receiverT), self->p->Name, &temp);
@@ -37,7 +37,7 @@ void LoadILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx
 	}
 }
 
-generic_type* EvalILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx) {
 	return self->p->GType;
 }
 

@@ -32,7 +32,7 @@ typedef struct Method {
 	MethodType Type;
 	//struct class_* decleared_type;
 	struct type* Parent;
-	struct generic_type* ReturnGType;
+	struct GenericType* ReturnGType;
 	Vector* Parameters;
 	Vector* TypeParameters;
 	AccessLevel Access;

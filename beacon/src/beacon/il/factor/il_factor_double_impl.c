@@ -31,7 +31,7 @@ void GenerateILDouble(il_factor_double * self, Enviroment* env, CallContext* cct
 void LoadILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
 }
 
-generic_type* EvalILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_DOUBLE;
 }
 

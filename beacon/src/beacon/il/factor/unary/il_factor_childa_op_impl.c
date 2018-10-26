@@ -17,8 +17,8 @@ il_factor_childa_op* NewILChildaOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, CallContext* cctx) {
-	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
+GenericType* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, CallContext* cctx) {
+	GenericType* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		//GenerateILFactor(self->parent->a, env);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
@@ -40,7 +40,7 @@ generic_type* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, CallC
 void GenerateILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
-		generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
+		GenericType* gtype = EvalILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gtype) == TYPE_INT) {
 			AddOpcodeBuf(env->Bytecode, OP_IFLIP);
 		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
@@ -56,7 +56,7 @@ void GenerateILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext*
 }
 
 void LoadILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext* cctx) {
-	generic_type* gtype = EvalILFactor(self->parent->a, env, cctx);
+	GenericType* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gtype) != TYPE_INT &&
 	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
 		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);

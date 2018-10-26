@@ -29,7 +29,7 @@ void LoadILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cct
 
 void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx);
 
 char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env);
 

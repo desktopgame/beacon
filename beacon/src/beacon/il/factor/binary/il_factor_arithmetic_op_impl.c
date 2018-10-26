@@ -21,9 +21,9 @@ il_factor_arithmetic_op* NewILArithmeticOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, Enviroment* env, CallContext* cctx) {
-	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
-	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
+GenericType* EvalILArithmeticOp(il_factor_arithmetic_op * self, Enviroment* env, CallContext* cctx) {
+	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;

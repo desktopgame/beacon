@@ -20,7 +20,7 @@ void GenerateILSubscript(il_factor_subscript* self, Enviroment* env, CallContext
 
 void LoadILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cctx);
 
 char* ILSubscriptToString(il_factor_subscript* self, Enviroment* env);
 

@@ -11,7 +11,7 @@
 struct Method;
 struct Property;
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 struct type;
 /**
  * インターフェースを表す構造体.
@@ -116,7 +116,7 @@ void DeleteInterface(interface_* self);
  * @param find
  * @return
  */
-struct generic_type* IsContainsTypeInterface(struct generic_type* source, interface_* find);
+struct GenericType* IsContainsTypeInterface(struct GenericType* source, interface_* find);
 
 /**
  * 関数型インターフェイスであるならtrue.
@@ -145,5 +145,5 @@ Vector* GetGenericInterfaceTreeInterface(interface_* self);
  * @param out_baseline
  * @return
  */
-struct generic_type* FindInterfaceInterface(interface_* self, type* tinter);
+struct GenericType* FindInterfaceInterface(interface_* self, type* tinter);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

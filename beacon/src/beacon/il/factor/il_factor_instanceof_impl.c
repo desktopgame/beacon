@@ -26,7 +26,7 @@ void LoadILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* 
 }
 
 void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx) {
-	generic_type* gtype = ResolveImportManager(NULL, self->gcache, cctx);
+	GenericType* gtype = ResolveImportManager(NULL, self->gcache, cctx);
 	type* type = gtype->core_type;
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
@@ -34,7 +34,7 @@ void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallConte
 	AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 }
 
-generic_type* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx) {
 	return TYPE_BOOL->generic_self;
 }
 

@@ -17,7 +17,7 @@ typedef struct il_factor_new_instance {
 	FQCNCache* fqcnc;
 	Vector* type_args;
 //	GenericCache* fqcn;
-	generic_type* instance_type;
+	GenericType* instance_type;
 	struct Constructor* c;
 	int constructor_index;
 } il_factor_new_instance;
@@ -30,7 +30,7 @@ void GenerateILNewInstance(il_factor_new_instance* self, Enviroment* env, CallCo
 
 void LoadILNewInstance(il_factor_new_instance* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILNewInstance(il_factor_new_instance* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILNewInstance(il_factor_new_instance* self, Enviroment* env, CallContext* cctx);
 
 char* ILNewInstanceToString(il_factor_new_instance* self, Enviroment* env);
 

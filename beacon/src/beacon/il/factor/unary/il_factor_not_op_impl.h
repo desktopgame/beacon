@@ -3,7 +3,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../../il/call_context.h"
 struct il_factor_unary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 
 typedef struct il_factor_not_op {
@@ -14,7 +14,7 @@ typedef struct il_factor_not_op {
 
 il_factor_not_op* NewILNotOp(OperatorType type);
 
-struct generic_type* EvalILNotOp(il_factor_not_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILNotOp(il_factor_not_op * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILNotOp(il_factor_not_op* self, struct Enviroment* env, CallContext* cctx);
 

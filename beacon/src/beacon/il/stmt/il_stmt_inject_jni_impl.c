@@ -31,7 +31,7 @@ void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, CallContext* cc
 	}
 	self->fact->lineno = 0;
 	LoadILFactor(self->fact, env, cctx);
-	generic_type* gtype = EvalILFactor(self->fact, env, cctx);
+	GenericType* gtype = EvalILFactor(self->fact, env, cctx);
 	self->se = EntrySymbolTable(env->Symboles, gtype, self->namev);
 }
 

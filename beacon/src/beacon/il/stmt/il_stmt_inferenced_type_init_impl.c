@@ -30,7 +30,7 @@ void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviromen
 void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
 	//代入するオブジェクトを計算
 	LoadILFactor(self->fact, env, cctx);
-	generic_type* gtp = EvalILFactor(self->fact, env, cctx);
+	GenericType* gtp = EvalILFactor(self->fact, env, cctx);
 	BC_ERROR();
 	//voidは代入できない
 	if(gtp->core_type != NULL &&

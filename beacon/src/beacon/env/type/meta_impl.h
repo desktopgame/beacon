@@ -26,7 +26,7 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext
 
 /**
  * 仮引数と実引数のマッチ率を返します.
- * こちらは generic_type* を 使用します。
+ * こちらは GenericType* を 使用します。
  * @param params
  * @param gargs
  * @return

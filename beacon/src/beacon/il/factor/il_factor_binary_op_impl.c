@@ -100,9 +100,9 @@ void LoadILBinaryOp(il_factor_binary_op * self, Enviroment * env, CallContext* c
 	}
 }
 
-generic_type* EvalILBinaryOp(il_factor_binary_op * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILBinaryOp(il_factor_binary_op * self, Enviroment * env, CallContext* cctx) {
 	LoadILBinaryOp(self, env, cctx);
-	generic_type* ret = NULL;
+	GenericType* ret = NULL;
 	switch(self->category) {
 		case OPERATOR_CARITHMERIC_T:
 			ret = EvalILArithmeticOp(self->u.arithmetic_op, env, cctx);
@@ -208,8 +208,8 @@ int GetIndexILBinaryOp(il_factor_binary_op* self, Enviroment* env, CallContext* 
 
 int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, OperatorType otype, Enviroment* env, CallContext* cctx) {
 	Vector* args = NewVector();
-	generic_type* lgtype = EvalILFactor(receiver, env, cctx);
-	generic_type* rgtype = EvalILFactor(arg, env, cctx);
+	GenericType* lgtype = EvalILFactor(receiver, env, cctx);
+	GenericType* rgtype = EvalILFactor(arg, env, cctx);
 	
 	if(lgtype->virtual_type_index != -1) {
 		assert(false);
@@ -225,19 +225,19 @@ int GetIndexILBinaryOp2(il_factor* receiver, il_factor* arg, OperatorType otype,
 	return temp;
 }
 
-generic_type* ApplyILBinaryOp(il_factor_binary_op* self, generic_type* gtype, Enviroment* env, CallContext* cctx) {
-	generic_type* lgtype = EvalILFactor(self->left, env, cctx);
+GenericType* ApplyILBinaryOp(il_factor_binary_op* self, GenericType* gtype, Enviroment* env, CallContext* cctx) {
+	GenericType* lgtype = EvalILFactor(self->left, env, cctx);
 	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;
-	generic_type* ret = ApplyGenericType(gtype,cctx);
+	GenericType* ret = ApplyGenericType(gtype,cctx);
 	PopCallContext(cctx);
 	return ret;
 }
 
 //private
 static bool type_test(il_factor_binary_op* self, Enviroment* env, CallContext* cctx, type* t) {
-	generic_type* lgtype = EvalILFactor(self->left, env, cctx);
-	generic_type* rgtype = EvalILFactor(self->right, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->right, env, cctx);
 	return GENERIC2TYPE(lgtype) == t &&
 	       GENERIC2TYPE(rgtype) == t;
 }

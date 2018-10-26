@@ -63,7 +63,7 @@ class_* GetClassCContext(CallContext* self) {
 	return TYPE2CLASS(GetTypeCContext(self));
 }
 
-generic_type* GetReceiverCContext(CallContext* self) {
+GenericType* GetReceiverCContext(CallContext* self) {
 	CallFrame* cfr = TopVector(self->CallStack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.Receiver;

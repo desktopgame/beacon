@@ -2,7 +2,7 @@
 #define BEACON_IL_IL_FACTOR_INSTANCEOF_IMPL_H
 #include "../il_factor_interface.h"
 struct GenericCache;
-struct generic_type;
+struct GenericType;
 struct FQCNCache;
 
 typedef struct il_factor_instanceof {
@@ -18,7 +18,7 @@ void LoadILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* 
 
 void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
 
 char* ILInstanceOfToString(il_factor_instanceof* self, Enviroment* env);
 

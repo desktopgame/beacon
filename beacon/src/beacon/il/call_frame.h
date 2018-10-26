@@ -5,7 +5,7 @@
 struct Method;
 struct Constructor;
 struct OperatorOverload;
-struct generic_type;
+struct GenericType;
 
 typedef enum CallFrameTag {
 	FRAME_RESOLVE_T,
@@ -15,7 +15,7 @@ typedef enum CallFrameTag {
 } CallFrameTag;
 
 typedef struct CallResolve {
-	struct generic_type* GType;
+	struct GenericType* GType;
 	Vector* TypeArgs;
 } CallResolve;
 
@@ -30,7 +30,7 @@ typedef struct CallStaticInvoke {
 } CallStaticInvoke;
 
 typedef struct CallInstanceInvoke {
-	struct generic_type* Receiver;
+	struct GenericType* Receiver;
 	Vector* Args;
 	Vector* TypeArgs;
 } CallInstanceInvoke;

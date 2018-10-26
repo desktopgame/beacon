@@ -21,7 +21,7 @@ void LoadILVariableStatic(il_factor_variable_static * self, Enviroment * env, Ca
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-generic_type* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx) {
 	return NULL;
 }
 

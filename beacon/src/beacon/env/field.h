@@ -6,7 +6,7 @@
 #include "../util/string_pool.h"
 //#include "virtual_type.h"
 struct type;
-struct generic_type;
+struct GenericType;
 struct Object;
 struct Enviroment;
 struct il_factor;
@@ -16,7 +16,7 @@ struct il_factor;
 typedef struct Field {
 	StringView namev;
 	struct type* parent;
-	struct generic_type* gtype;
+	struct GenericType* gtype;
 	struct Object* static_value;
 	AccessLevel access;
 	ModifierType modifier;

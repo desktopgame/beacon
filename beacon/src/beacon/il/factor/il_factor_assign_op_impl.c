@@ -39,7 +39,7 @@ void LoadILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cct
 	LoadILFactor(self->left, env, cctx);
 	LoadILFactor(self->right, env, cctx);
 	//voidは代入できない
-	generic_type* gret = EvalILFactor(self->right, env, cctx);
+	GenericType* gret = EvalILFactor(self->right, env, cctx);
 	BC_ERROR();
 	if(gret->core_type != NULL &&
 	   gret->core_type == TYPE_VOID) {
@@ -73,7 +73,7 @@ void GenerateILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext*
 	}
 }
 
-generic_type* EvalILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
 	return EvalILFactor(self->right, env, cctx);
 }
 
@@ -121,7 +121,7 @@ static void assign_by_namebase(il_factor_assign_op* self, Enviroment* env, CallC
 }
 
 static void assign_to_field(il_factor_assign_op* self, il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx) {
-	generic_type* gt = EvalILFactor(receiver, env, cctx);
+	GenericType* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
 	Field* f = FindTreeFieldClass(cls, namev, &temp);
@@ -254,7 +254,7 @@ static void assign_by_invoke_bound(il_factor_invoke_bound* lhs, il_factor* rhs, 
 }
 
 static bool can_assign_to_field(Field* f, il_factor_assign_op* self, Enviroment* env, CallContext* cctx) {
-	generic_type* gt = EvalILFactor(self->right, env, cctx);
+	GenericType* gt = EvalILFactor(self->right, env, cctx);
 	int dist = DistanceGenericType(f->gtype, gt, cctx);
 	if(dist >= 0) {
 		return true;
@@ -268,7 +268,7 @@ static bool can_assign_to_field(Field* f, il_factor_assign_op* self, Enviroment*
 }
 
 static void check_final(il_factor* receiver, il_factor* source, StringView namev, Enviroment* env, CallContext* cctx) {
-	generic_type* gt = EvalILFactor(receiver, env, cctx);
+	GenericType* gt = EvalILFactor(receiver, env, cctx);
 	class_* cls = TYPE2CLASS(gt->core_type);
 	int temp = -1;
 	Field* f = FindTreeFieldClass(cls, namev, &temp);

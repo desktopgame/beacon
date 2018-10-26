@@ -4,7 +4,7 @@
 #include "../../../env/fqcn_cache.h"
 #include "../../../util/string_pool.h"
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 struct Method;
 
 typedef struct il_factor_invoke_static {
@@ -14,7 +14,7 @@ typedef struct il_factor_invoke_static {
 	Vector* type_args;
 	struct Method* m;
 	int index;
-	struct generic_type* resolved;
+	struct GenericType* resolved;
 } il_factor_invoke_static;
 
 il_factor_invoke_static* NewILInvokeStatic(StringView namev);
@@ -23,7 +23,7 @@ void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, Call
 
 void LoadILInvokeStatic(il_factor_invoke_static * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeStaticToString(il_factor_invoke_static* self, Enviroment* env);
 

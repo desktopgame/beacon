@@ -25,7 +25,7 @@ struct Property;
 struct PropertyBody;
 struct Method;
 struct Constructor;
-struct generic_type;
+struct GenericType;
 struct OperatorOverload;
 /**
  * クラスを表す構造体です.
@@ -34,7 +34,7 @@ typedef struct class_ {
 	type* parent;
 	StringView namev;
 	Namespace* location;
-	struct generic_type* super_class;
+	struct GenericType* super_class;
 	Vector* impl_list;
 	Vector* field_list;
 	Vector* sfield_list;
@@ -80,7 +80,7 @@ class_* NewClass(StringView namev);
  * @param namev
  * @return
  */
-class_* NewClassProxy(struct generic_type* gt, StringView namev);
+class_* NewClassProxy(struct GenericType* gt, StringView namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.

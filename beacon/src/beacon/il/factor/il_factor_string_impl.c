@@ -29,7 +29,7 @@ void GenerateILString(il_factor_string * self, Enviroment* env, CallContext* cct
 void LoadILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
 }
 
-generic_type* EvalILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
 //	assert(TYPE_STRING->generic_self->core_type != NULL);
 	return GENERIC_STRING;
 }

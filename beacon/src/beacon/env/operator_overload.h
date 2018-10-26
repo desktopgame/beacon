@@ -5,14 +5,14 @@
 #include "../ast/access_level.h"
 struct type;
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 struct Frame;
 /**
  * 演算子オーバーロードを表す構造体.
  */
 typedef struct OperatorOverload {
 	struct type* Parent;
-	struct generic_type* ReturnGType;
+	struct GenericType* ReturnGType;
 	OperatorType Type;
 	Vector* Parameters;
 	struct Enviroment* Env;

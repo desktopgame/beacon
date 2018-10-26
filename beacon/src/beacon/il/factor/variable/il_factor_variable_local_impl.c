@@ -17,7 +17,7 @@ static void DeleteILVariableLocal_typeargs(VectorItem item);
 static void LoadILVariableLocalImpl(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_field(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_Property(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
-static void set_gtype(il_factor_variable_local * self, generic_type* gt);
+static void set_gtype(il_factor_variable_local * self, GenericType* gt);
 
 il_factor_variable_local* NewILVariableLocal(StringView namev) {
 	il_factor_variable_local* ret = (il_factor_variable_local*)MEM_MALLOC(sizeof(il_factor_variable_local));
@@ -64,7 +64,7 @@ void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, Call
 	LoadILVariableLocalImpl(self, env, cctx);
 }
 
-generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	return self->gt;
@@ -167,8 +167,8 @@ static void LoadILVariableLocal_Property(il_factor_variable_local * self, Enviro
 	set_gtype(self, p->GType);
 }
 
-static void set_gtype(il_factor_variable_local * self, generic_type* gt) {
-	//generic_type* gt = f->gtype;
+static void set_gtype(il_factor_variable_local * self, GenericType* gt) {
+	//GenericType* gt = f->gtype;
 	//virtual_type vt = f->vtype;
 	if(gt->tag == GENERIC_TYPE_TAG_NONE_T) {
 		self->gt = gt;

@@ -3,7 +3,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct il_factor_binary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 typedef struct il_factor_compare_op {
 	struct il_factor_binary_op* parent;
@@ -13,7 +13,7 @@ typedef struct il_factor_compare_op {
 
 il_factor_compare_op* NewILCompareOp(OperatorType type);
 
-struct generic_type* EvalILCompareOp(il_factor_compare_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILCompareOp(il_factor_compare_op * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILCompareOp(il_factor_compare_op* self, struct Enviroment* env, CallContext* cctx);
 

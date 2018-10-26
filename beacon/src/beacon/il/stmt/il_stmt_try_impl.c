@@ -61,7 +61,7 @@ void GenerateILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx) {
 	for (int i = 0; i < self->catch_list->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		il_stmt_catch* ilcatch = (il_stmt_catch*)AtVector(self->catch_list, i);
-		generic_type* exgType = ResolveImportManager(NULL, ilcatch->fqcn, cctx);
+		GenericType* exgType = ResolveImportManager(NULL, ilcatch->fqcn, cctx);
 		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->namev)->Index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
@@ -117,7 +117,7 @@ void LoadILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx) {
 }
 
 void LoadILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx) {
-	generic_type* exgType = ResolveImportManager(NULL, self->fqcn, cctx);
+	GenericType* exgType = ResolveImportManager(NULL, self->fqcn, cctx);
 	EntrySymbolTable(env->Symboles, exgType, self->namev);
 	for(int i=0; i<self->statement_list->Length; i++) {
 		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);

@@ -4,7 +4,7 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 #include "property_body.h"
-struct generic_type;
+struct GenericType;
 struct type;
 struct Field;
 struct Object;
@@ -14,7 +14,7 @@ typedef struct Property {
 	StringView Name;
 	struct type* Parent;
 	struct Field* SourceRef;
-	struct generic_type* GType;
+	struct GenericType* GType;
 	AccessLevel Access;
 	PropertyBody* Set;
 	PropertyBody* Get;

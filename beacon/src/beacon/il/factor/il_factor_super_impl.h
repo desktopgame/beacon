@@ -11,7 +11,7 @@ struct type;
  */
 
 typedef struct il_factor_super {
-	generic_type* resolved;
+	GenericType* resolved;
 } il_factor_super;
 
 il_factor_super* NewILSuper();
@@ -20,7 +20,7 @@ void GenerateILSuper(il_factor_super* self, struct Enviroment* env, CallContext*
 
 void LoadILSuper(il_factor_super* self, struct Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILSuper(il_factor_super* self, struct Enviroment* env, CallContext* cctx);
+GenericType* EvalILSuper(il_factor_super* self, struct Enviroment* env, CallContext* cctx);
 
 char* ILSuperToString(il_factor_super* self, struct Enviroment* env);
 

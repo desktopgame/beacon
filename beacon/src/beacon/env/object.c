@@ -360,7 +360,7 @@ Object* LongToObject(long l) {
 	return Object_long_new(l);
 }
 
-Object* GetDefaultObject(generic_type* gt) {
+Object* GetDefaultObject(GenericType* gt) {
 	Object* a = GetNullObject();
 	if (gt->core_type == TYPE_INT) {
 		a = GetIntObject(0);

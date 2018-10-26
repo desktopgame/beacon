@@ -9,7 +9,7 @@
  */
 typedef struct Parameter {
 	StringView Name;
-	struct generic_type* GType;
+	struct GenericType* GType;
 } Parameter;
 
 /**

@@ -8,7 +8,7 @@
 
 
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 /**
  * 関数呼び出し演算子の種類を表す列挙型.
  */
@@ -41,7 +41,7 @@ il_factor_call_op* NewILCallOp();
 
 void LoadCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx);
 
 char* ILCallOpToString(il_factor_call_op* self, Enviroment* env);
 

@@ -3,7 +3,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct il_factor_binary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 typedef struct il_factor_arithmetic_op {
 	struct il_factor_binary_op* parent;
@@ -14,7 +14,7 @@ typedef struct il_factor_arithmetic_op {
 il_factor_arithmetic_op* NewILArithmeticOp(OperatorType type);
 
 
-struct generic_type* EvalILArithmeticOp(il_factor_arithmetic_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILArithmeticOp(il_factor_arithmetic_op * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILArithmeticOp(il_factor_arithmetic_op* self, struct Enviroment* env, CallContext* cctx);
 

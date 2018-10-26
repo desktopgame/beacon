@@ -34,7 +34,7 @@ Field* FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 		if (f != NULL) {
 			return f;
 		}
-		generic_type* supergtype = pointee->super_class;
+		GenericType* supergtype = pointee->super_class;
 		if(supergtype == NULL) {
 			break;
 		}
@@ -232,7 +232,7 @@ Property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 		if (p != NULL) {
 			return p;
 		}
-		generic_type* supergtype = pointee->super_class;
+		GenericType* supergtype = pointee->super_class;
 		if(supergtype == NULL) {
 			break;
 		}
@@ -261,7 +261,7 @@ Property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) 
 		if (p != NULL) {
 			return p;
 		}
-		generic_type* supergtype = pointee->super_class;
+		GenericType* supergtype = pointee->super_class;
 		if(supergtype == NULL) {
 			break;
 		}
@@ -403,7 +403,7 @@ Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
 	for (int i = 0; i < tbl->Length; i++) {
-		generic_type* e = AtVector(tbl, i);
+		GenericType* e = AtVector(tbl, i);
 		interface_* inter = e->core_type->u.interface_;
 		if (inter == interType->u.interface_) {
 			declIndex = i;
@@ -435,7 +435,7 @@ OperatorOverload* GFindOperatorOverloadClass(class_* self, OperatorType type, Ve
 		Vector* params = operator_ov->Parameters;
 		for(int j=0; j<params->Length; j++) {
 			Parameter* param = AtVector(params, j);
-			generic_type* arg = AtVector(args, j);
+			GenericType* arg = AtVector(args, j);
 			int dist = DistanceGenericType(param->GType, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
@@ -459,7 +459,7 @@ OperatorOverload* ILFindOperatorOverloadClass(class_* self, OperatorType type, V
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		il_factor* ilfact = (il_factor*)AtVector(args,i);
-		generic_type* g = EvalILFactor(ilfact, env, cctx);
+		GenericType* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
 	OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
@@ -473,7 +473,7 @@ OperatorOverload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, 
 		//il_factor* ilfact = (il_factor*)AtVector(args,i);
 		ILArgument* ilarg = (ILArgument*)AtVector(args, i);
 		il_factor* ilfact = ilarg->Factor;
-		generic_type* g = EvalILFactor(ilfact, env, cctx);
+		GenericType* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
 	OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
@@ -530,7 +530,7 @@ bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
 Vector* GetGenericInterfaceListClass(class_* self) {
 	Vector* ret = NewVector();
 	for(int i=0; i<self->impl_list->Length; i++) {
-		generic_type* ginter = AtVector(self->impl_list, i);
+		GenericType* ginter = AtVector(self->impl_list, i);
 		Vector* inner = GetGenericInterfaceTreeInterface(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
 		MergeVector(ret, inner);
 		PushVector(ret, ginter);
@@ -558,7 +558,7 @@ Vector* GetInterfaceListClass(class_* self) {
 	Vector* ret = NewVector();
 	Vector* c = GetGenericInterfaceListClass(self);
 	for(int i=0; i<c->Length; i++) {
-		generic_type* gt = AtVector(c, i);
+		GenericType* gt = AtVector(c, i);
 		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
 	}
 	DeleteVector(c, VectorDeleterOfNull);
@@ -569,19 +569,19 @@ Vector* GetInterfaceTreeClass(class_* self) {
 	Vector* ret = NewVector();
 	Vector* c = GetGenericInterfaceTreeClass(self);
 	for(int i=0; i<c->Length; i++) {
-		generic_type* gt = AtVector(c, i);
+		GenericType* gt = AtVector(c, i);
 		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
 	}
 	DeleteVector(c, VectorDeleterOfNull);
 	return ret;
 }
 
-generic_type* FindInterfaceTypeClass(class_* self, type* tinter, generic_type** out_baseline) {
+GenericType* FindInterfaceTypeClass(class_* self, type* tinter, GenericType** out_baseline) {
 	assert(tinter->tag == TYPE_INTERFACE_T);
 	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す
-	generic_type* ret = NULL;
-	generic_type* out = NULL;
+	GenericType* ret = NULL;
+	GenericType* out = NULL;
 	class_* ptr = self;
 	do {
 		if (ptr->super_class == NULL) {
@@ -591,7 +591,7 @@ generic_type* FindInterfaceTypeClass(class_* self, type* tinter, generic_type** 
 		//Vector* gimpl_list = GetGenericInterfaceListClass(ptr);
 		Vector* gimpl_list = ptr->impl_list;
 		for (int i = 0; i < gimpl_list->Length; i++) {
-			generic_type* gimpl = AtVector(gimpl_list, i);
+			GenericType* gimpl = AtVector(gimpl_list, i);
 			if (gimpl->core_type == tinter) {
 				found = true;
 				ret = gimpl;

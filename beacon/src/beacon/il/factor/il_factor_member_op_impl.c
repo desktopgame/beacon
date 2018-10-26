@@ -15,9 +15,9 @@
 
 //proto
 static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env, CallContext* cctx, bool* swap);
-static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type, bool* swap);
-static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type,bool* swap);
-static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type,bool* swap);
+static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap);
+static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap);
+static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap);
 static void il_factor_member_op_typearg_delete(VectorItem item);
 
 il_factor* WrapILMemberOp(il_factor_member_op* self) {
@@ -50,7 +50,7 @@ void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext*
 	GenerateGetField(env->Bytecode, self->f, self->index);
 }
 
-generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx) {
 	//il_factor_member_op_checkは、
 	//フィールドアクセスとプロパティアクセスを区別して、
 	//プロパティなら木構造を入れ替える
@@ -64,10 +64,10 @@ generic_type* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallCon
 //	XSTREQ(self->name, "charArray");
 	assert(self->fact != NULL);
 	if(self->f->gtype->tag == GENERIC_TYPE_TAG_NONE_T) {
-		generic_type* a = self->f->gtype;
+		GenericType* a = self->f->gtype;
 		return a;
 	}
-	generic_type* a = EvalILFactor(self->fact, env, cctx);
+	GenericType* a = EvalILFactor(self->fact, env, cctx);
 	return AtVector(a->type_args_list, self->f->gtype->virtual_type_index);
 }
 
@@ -94,7 +94,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env
 	}
 	//レシーバの型を取得
 	il_factor* fact = self->fact;
-	generic_type* gtype = EvalILFactor(fact, env, cctx);
+	GenericType* gtype = EvalILFactor(fact, env, cctx);
 	BC_ERROR();
 	//レシーバの型が特定できない場合は
 	//変数名を型として静的フィールドで解決する
@@ -121,7 +121,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env
 	}
 }
 
-static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type, bool* swap) {
+static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap) {
 	il_factor* fact = self->fact;
 	il_factor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
@@ -129,7 +129,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, Envirome
 	#endif
 	//Name.call
 	//の Name を型名として解決する
-	generic_type* ref = ResolvefImportManager(cctx->Scope, ilvar->u.static_->fqcn, cctx);
+	GenericType* ref = ResolvefImportManager(cctx->Scope, ilvar->u.static_->fqcn, cctx);
 	receiver_type = ref;
 	//Name.call
 	//の call をフィールドとして解決する
@@ -143,7 +143,7 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, Envirome
 	}
 }
 
-static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type,bool* swap) {
+static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
 	const char* name = Ref2Str(self->namev);
@@ -172,7 +172,7 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 	(*swap) = true;
 }
 
-static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, generic_type* receiver_type,bool* swap) {
+static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	type* ctype = receiver_type->core_type;
 	Property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);

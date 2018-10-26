@@ -50,13 +50,13 @@ void LoadILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, CallCon
 	il_factor_invoke_static_check(self, env, cctx);
 }
 
-generic_type* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
 	il_factor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(GetLastBCError()) {
 		return NULL;
 	}
-	generic_type* rgtp = self->m->ReturnGType;
+	GenericType* rgtp = self->m->ReturnGType;
 	if(rgtp->tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		return self->resolved;
@@ -91,8 +91,8 @@ static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env,
 	if(self->resolved != NULL) {
 		return;
 	}
-	generic_type* rgtp = self->m->ReturnGType;
-	generic_type* instanced_type = (generic_type*)AtVector(self->type_args, rgtp->virtual_type_index);
+	GenericType* rgtp = self->m->ReturnGType;
+	GenericType* instanced_type = (GenericType*)AtVector(self->type_args, rgtp->virtual_type_index);
 	self->resolved = generic_NewType(instanced_type->core_type);
 	self->resolved->tag = GENERIC_TYPE_TAG_METHOD_T;
 	self->resolved->virtual_type_index = rgtp->virtual_type_index;
@@ -105,7 +105,7 @@ static void resolve_default(il_factor_invoke_static * self, Enviroment* env, Cal
 	CallFrame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->Kind.StaticInvoke.Args = self->args;
 	cfr->Kind.StaticInvoke.TypeArgs = self->type_args;
-	generic_type* rgtp = self->m->ReturnGType;
+	GenericType* rgtp = self->m->ReturnGType;
 	self->resolved = ApplyGenericType(rgtp, cctx);
 	PopCallContext(cctx);
 }

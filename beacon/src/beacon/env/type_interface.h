@@ -25,7 +25,7 @@ struct Method;
 struct Property;
 struct Enviroment;
 struct VTable;
-struct generic_type;
+struct GenericType;
 
 typedef enum type_state {
 	/**
@@ -57,7 +57,7 @@ typedef enum type_state {
 typedef struct type {
 	type_tag tag;
 	struct Namespace* location;
-	struct generic_type* generic_self;
+	struct GenericType* generic_self;
 	int absolute_index;
 	type_state state;
 	union {
@@ -78,7 +78,7 @@ type* NewType();
  * @param count 型変数の個数
  * @return
  */
-struct generic_type* InitGenericSelf(type* self, int counts);
+struct GenericType* InitGenericSelf(type* self, int counts);
 
 /**
  * この型の名前を返します.
@@ -178,7 +178,7 @@ int GetGenericIndexType(type* self, StringView namev);
  * @param a
  * @return
  */
-struct generic_type* FindImplementType(type* self, type* a);
+struct GenericType* FindImplementType(type* self, type* a);
 
 /**
  * この型の型引数の一覧を返します.
@@ -201,7 +201,7 @@ Vector* GetImplementList(type* self);
  * @param index
  * @return
  */
-struct generic_type* TypeParameterAtType(type* self, int index);
+struct GenericType* TypeParameterAtType(type* self, int index);
 
 /**
  * 型を開放します.
@@ -224,12 +224,12 @@ struct interface_* CastInterfaceType(type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.
- * concreteの親クラス/実装インターフェイス一覧から abstract を検索し、 generic_type で返します。
+ * concreteの親クラス/実装インターフェイス一覧から abstract を検索し、 GenericType で返します。
  * @param abstract
  * @param concrete
  * @return
  */
-struct generic_type* BaselineType(type* abstract, type* concrete);
+struct GenericType* BaselineType(type* abstract, type* concrete);
 
 /**
  * 同じインターフェイスが二回現れるなら NULL 以外.

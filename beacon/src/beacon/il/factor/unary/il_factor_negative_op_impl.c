@@ -17,12 +17,12 @@ il_factor_negative_op* MallocILNegativeOp(OperatorType type, const char* filenam
 	return ret;
 }
 
-generic_type* EvalILNegativeOp(il_factor_negative_op * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILNegativeOp(il_factor_negative_op * self, Enviroment * env, CallContext* cctx) {
 	return EvalILFactor(self->parent->a, env, cctx);
 }
 
 void GenerateILNegativeOp(il_factor_negative_op* self, Enviroment* env, CallContext* cctx) {
-	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
+	GenericType* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_INT) {
@@ -40,7 +40,7 @@ void GenerateILNegativeOp(il_factor_negative_op* self, Enviroment* env, CallCont
 }
 
 void LoadILNegativeOp(il_factor_negative_op* self, Enviroment* env, CallContext* cctx) {
-	generic_type* gt = EvalILFactor(self->parent->a, env, cctx);
+	GenericType* gt = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_INT &&
 	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {
 		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);

@@ -14,7 +14,7 @@
 Vector* GetGenericInterfaceTreeInterfaceImpl(interface_* self);
 static void DeleteInterface_method(VectorItem item);
 static void interface_DeleteTypeParameter(VectorItem item);
-static void interface_generic_type_list_delete(VectorItem item);
+static void interface_GenericType_list_delete(VectorItem item);
 static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth);
 static void DeleteInterface_Property(VectorItem item);
 
@@ -88,7 +88,7 @@ void CreateVTableInterface(interface_ * self) {
 		}
 	} else {
 		for (int i = 0; i < self->impl_list->Length; i++) {
-			generic_type* ginter = (generic_type*)AtVector(self->impl_list, i);
+			GenericType* ginter = (GenericType*)AtVector(self->impl_list, i);
 			type* cinter = GENERIC2TYPE(ginter);
 			interface_* inter = TYPE2INTERFACE(cinter);
 //			interface_* inter = (interface_*)AtVector(self->impl_list, i);
@@ -113,13 +113,13 @@ void DeleteInterface(interface_ * self) {
 	MEM_FREE(self);
 }
 
-generic_type* IsContainsTypeInterface(generic_type* source, interface_* find) {
+GenericType* IsContainsTypeInterface(GenericType* source, interface_* find) {
 	interface_* self = source->core_type->u.interface_;
 	if(self == find) {
 		return source;
 	}
 	for(int i=0; i<self->impl_list->Length; i++) {
-		generic_type* gE = AtVector(self->impl_list, i);
+		GenericType* gE = AtVector(self->impl_list, i);
 		if(gE->core_type->u.interface_ == find) {
 			return gE;
 		}
@@ -146,13 +146,13 @@ Vector* GetGenericInterfaceTreeInterface(interface_* self) {
 	return GetGenericInterfaceTreeInterfaceImpl(self);
 }
 
-generic_type* FindInterfaceInterface(interface_* self, type* tinter) {
+GenericType* FindInterfaceInterface(interface_* self, type* tinter) {
 	assert(tinter->tag == TYPE_INTERFACE_T);
 	if (self == TYPE2INTERFACE(tinter)) {
 		return NULL;
 	}
 	for (int i = 0; i < self->impl_list->Length; i++) {
-		generic_type* e = AtVector(self->impl_list, i);
+		GenericType* e = AtVector(self->impl_list, i);
 		if (e->core_type == tinter) {
 			return e;
 		}
@@ -164,7 +164,7 @@ generic_type* FindInterfaceInterface(interface_* self, type* tinter) {
 Vector* GetGenericInterfaceTreeInterfaceImpl(interface_* self) {
 	Vector* ret = NewVector();
 	for(int i=0; i<self->impl_list->Length; i++) {
-		generic_type* ginter = AtVector(self->impl_list, i);
+		GenericType* ginter = AtVector(self->impl_list, i);
 		PushVector(ret, ginter);
 		Vector* inner = GetGenericInterfaceTreeInterfaceImpl(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
 		MergeVector(ret, inner);
@@ -182,8 +182,8 @@ static void interface_DeleteTypeParameter(VectorItem item) {
 	DeleteTypeParameter(e);
 }
 
-static void interface_generic_type_list_delete(VectorItem item) {
-	//generic_type* e = (generic_type*)item;
+static void interface_GenericType_list_delete(VectorItem item) {
+	//GenericType* e = (GenericType*)item;
 	//generic_DeleteType(e);
 }
 
@@ -198,7 +198,7 @@ static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth
 		PushVector(dest, m);
 	}
 	for(int i=0; i<self->impl_list->Length; i++) {
-		generic_type* e = AtVector(self->impl_list, i);
+		GenericType* e = AtVector(self->impl_list, i);
 		interface_* inter = TYPE2INTERFACE(e->core_type);
 		FlattenMethodInterfaceImpl(inter, dest, depth + 1);
 	}

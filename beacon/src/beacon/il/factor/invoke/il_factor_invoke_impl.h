@@ -4,7 +4,7 @@
 #include "../../../util/string_pool.h"
 #include "subscript_descriptor.h"
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 struct OperatorOverload;
 struct Method;
 
@@ -24,7 +24,7 @@ typedef struct il_factor_invoke {
 		struct Method* m;
 		struct OperatorOverload* opov;
 	} u;
-	struct generic_type* resolved;
+	struct GenericType* resolved;
 	instance_invoke tag;
 } il_factor_invoke;
 
@@ -34,7 +34,7 @@ void GenerateILInvoke(il_factor_invoke* self, Enviroment* env, CallContext* cctx
 
 void LoadILInvoke(il_factor_invoke * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILInvoke(il_factor_invoke * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvoke(il_factor_invoke * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeToString(il_factor_invoke* self, Enviroment* env);
 

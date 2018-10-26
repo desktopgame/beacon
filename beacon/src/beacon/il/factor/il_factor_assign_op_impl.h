@@ -1,7 +1,7 @@
 #ifndef BEACON_IL_IL_FACTOR_ASSIGN_OP_IMPL_H
 #define BEACON_IL_IL_FACTOR_ASSIGN_OP_IMPL_H
 #include "../il_factor_interface.h"
-struct generic_type;
+struct GenericType;
 typedef struct il_factor_assign_op {
 	il_factor* left;
 	il_factor* right;
@@ -15,7 +15,7 @@ void LoadILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cct
 
 void GenerateILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILAssignOp(il_factor_assign_op* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILAssignOp(il_factor_assign_op* self);
 #endif

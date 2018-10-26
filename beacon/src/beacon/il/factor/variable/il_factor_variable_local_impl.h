@@ -5,7 +5,7 @@
 #include "../../il_factor_interface.h"
 struct SymbolEntry;
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 struct Field;
 struct Property;
 
@@ -32,7 +32,7 @@ typedef struct Property_with_index {
 typedef struct il_factor_variable_local {
 	StringView namev;
 	variable_local_type type;
-	struct generic_type* gt;
+	struct GenericType* gt;
 	union {
 		struct SymbolEntry* entry_;
 		field_with_index f_with_i;
@@ -47,7 +47,7 @@ void GenerateILVariableLocal(il_factor_variable_local* self, Enviroment* env, Ca
 
 void LoadILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILVariableLocal(il_factor_variable_local * self, Enviroment * env, CallContext* cctx);
 
 char* ILVariableLocalToString(il_factor_variable_local * self, Enviroment * env);
 

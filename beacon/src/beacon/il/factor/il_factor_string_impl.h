@@ -20,7 +20,7 @@ void GenerateILString(il_factor_string* self, Enviroment* env, CallContext* cctx
 
 void LoadILString(il_factor_string* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILString(il_factor_string* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILString(il_factor_string* self, Enviroment* env, CallContext* cctx);
 
 char* ILStringToString(il_factor_string* self, Enviroment* env);
 

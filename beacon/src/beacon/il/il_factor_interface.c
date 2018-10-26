@@ -169,13 +169,13 @@ void LoadILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-generic_type* EvalILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
 	SetBCErrorFile(env->ContextRef->filename);
 	SetBCErrorLine(self->lineno);
-	generic_type* ret = NULL;
+	GenericType* ret = NULL;
 	switch (self->type) {
 		case ILFACTOR_INT_T:
 			ret = EvalILInt(self->u.int_, env, cctx);

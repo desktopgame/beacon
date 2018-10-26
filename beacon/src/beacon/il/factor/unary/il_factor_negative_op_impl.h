@@ -3,7 +3,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct il_factor_unary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 
 typedef struct il_factor_negative_op {
@@ -15,7 +15,7 @@ typedef struct il_factor_negative_op {
 #define il_factor_negative_op_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
 il_factor_negative_op* MallocILNegativeOp(OperatorType type, const char* filename, int lineno);
 
-struct generic_type* EvalILNegativeOp(il_factor_negative_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILNegativeOp(il_factor_negative_op * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILNegativeOp(il_factor_negative_op* self, struct Enviroment* env, CallContext* cctx);
 

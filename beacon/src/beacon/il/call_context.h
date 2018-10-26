@@ -9,7 +9,7 @@ struct class_;
 struct Method;
 struct Constructor;
 struct OperatorOverload;
-struct generic_type;
+struct GenericType;
 struct FQCNCache;
 
 typedef enum CallContextTag {
@@ -58,7 +58,7 @@ struct type* GetTypeCContext(CallContext* self);
 
 struct class_* GetClassCContext(CallContext* self);
 
-struct generic_type* GetReceiverCContext(CallContext* self);
+struct GenericType* GetReceiverCContext(CallContext* self);
 
 struct type* GetEvalTypeCContext(CallContext* self, struct FQCNCache* fqcn);
 

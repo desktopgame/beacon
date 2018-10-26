@@ -16,7 +16,7 @@
 #define CHAR2OBJ(a) (CharToObject(a))
 #define LONG2OBJ(a) (LongToObject(a))
 
-struct generic_type;
+struct GenericType;
 struct VTable;
 /** 
  * オブジェクトの着色状態.
@@ -54,7 +54,7 @@ typedef enum ObjectTag {
  * signal で使用される全てのデータはこれ。
  */
 typedef struct Object {
-	struct generic_type* GType;
+	struct GenericType* GType;
 	struct VTable* VPtr;
 	ObjectPaint Paint;
 	ObjectTag Tag;
@@ -298,7 +298,7 @@ Object* LongToObject(long l);
  * @param gt
  * @return
  */
-Object* GetDefaultObject(struct generic_type* gt);
+Object* GetDefaultObject(struct GenericType* gt);
 
 /**
  * このオブジェクトのデバッグ表現を返します.

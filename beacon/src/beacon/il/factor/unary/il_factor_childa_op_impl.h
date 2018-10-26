@@ -3,7 +3,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct il_factor_unary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 
 typedef struct il_factor_childa_op {
@@ -14,7 +14,7 @@ typedef struct il_factor_childa_op {
 
 il_factor_childa_op* NewILChildaOp(OperatorType type);
 
-struct generic_type* EvalILChildaOp(il_factor_childa_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILChildaOp(il_factor_childa_op * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILChildaOp(il_factor_childa_op* self, struct Enviroment* env, CallContext* cctx);
 

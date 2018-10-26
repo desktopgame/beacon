@@ -4,7 +4,7 @@
 #include "../call_context.h"
 struct il_factor;
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 
 typedef struct il_factor_explicit_binary_op {
 	struct il_factor* receiver;
@@ -21,7 +21,7 @@ void GenerateILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct Envir
 
 void LoadILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILExplicitBinaryOp(il_factor_explicit_binary_op* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILExplicitBinaryOp(il_factor_explicit_binary_op* self);
 #endif

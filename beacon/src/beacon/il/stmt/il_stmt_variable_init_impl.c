@@ -27,8 +27,8 @@ il_stmt_variable_init * NewILVariableInit(StringView namev) {
 void GenerateILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	//宣言型と代入型が異なる場合
-	generic_type* ga = EvalILFactor(self->fact, env, cctx);
-	generic_type* gb = ResolveImportManager(NULL, self->fqcn, cctx);
+	GenericType* ga = EvalILFactor(self->fact, env, cctx);
+	GenericType* gb = ResolveImportManager(NULL, self->fqcn, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
 	BC_ERROR();
@@ -54,7 +54,7 @@ void LoadILVariableInit(il_stmt_variable_init * self, Enviroment * env, CallCont
 			Ref2Str(self->namev)
 		);
 	}
-	generic_type* gt = ResolveImportManager(NULL, self->fqcn, cctx);
+	GenericType* gt = ResolveImportManager(NULL, self->fqcn, cctx);
 	if(gt == NULL) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_TYPE_DECL_T,

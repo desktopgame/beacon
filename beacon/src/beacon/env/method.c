@@ -30,7 +30,7 @@ static void method_DeleteTypeParameter(VectorItem item);
 static void method_count(il_stmt* s, int* yeild_ret, int* ret);
 static Constructor* create_delegate_ctor(Method* self, type* ty, class_loader* cll,int op_len);
 static Method* create_has_next(Method* self, type* ty,class_loader* cll, Vector* stmt_list, int* out_op_len);
-static Method* create_next(Method* self, type* ty,class_loader* cll, generic_type* a, Vector* stmt_list, int* out_op_len);
+static Method* create_next(Method* self, type* ty,class_loader* cll, GenericType* a, Vector* stmt_list, int* out_op_len);
 static Vector* method_vm_args(Method* self, Frame* fr, Frame* a);
 static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a);
 
@@ -94,33 +94,33 @@ bool IsOverridedMethod(Method* superM, Method* subM, CallContext* cctx) {
 		superM->Parameters->Length != subM->Parameters->Length) {
 		return false;
 	}
-	generic_type* bl = BaselineType(superM->Parent, subM->Parent);
+	GenericType* bl = BaselineType(superM->Parent, subM->Parent);
 	assert(bl != NULL);
 	//全ての引数を比較
 	for (int i = 0; i < superM->Parameters->Length; i++) {
 		Parameter* superP = ((Parameter*)AtVector(superM->Parameters, i));
 		Parameter* subP = ((Parameter*)AtVector(subM->Parameters, i));
-		generic_type* superGT = superP->GType;
-		generic_type* subGT = subP->GType;
+		GenericType* superGT = superP->GType;
+		GenericType* subGT = subP->GType;
 
 		CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 		cfr->Kind.Resolve.GType = bl;
-		generic_type* superGT2 = ApplyGenericType(superGT, cctx);
+		GenericType* superGT2 = ApplyGenericType(superGT, cctx);
 		PopCallContext(cctx);
-//		assert(!generic_type_equals(superGT, superGT2));
+//		assert(!GenericType_equals(superGT, superGT2));
 
-//		generic_type_diff(superGT, superGT2);
+//		GenericType_diff(superGT, superGT2);
 		if(DistanceGenericType(superGT2, subGT, cctx) != 0) {
 			return false;
 		}
 	}
-	generic_type* superRet = superM->ReturnGType;
-	generic_type* subRet = subM->ReturnGType;
+	GenericType* superRet = superM->ReturnGType;
+	GenericType* subRet = subM->ReturnGType;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = bl;
-	generic_type* superRet2 = ApplyGenericType(superRet, cctx);
-//	generic_type_diff(superRet, superRet2);
-//	assert(!generic_type_equals(superRet, superRet2));
+	GenericType* superRet2 = ApplyGenericType(superRet, cctx);
+//	GenericType_diff(superRet, superRet2);
+//	assert(!GenericType_equals(superRet, superRet2));
 	int ret =DistanceGenericType(superRet2, subRet, cctx);
 	PopCallContext(cctx);
 	return ret != -1;
@@ -161,7 +161,7 @@ StringView MangleMethod(Method* self) {
 	}
 	for(int i=0; i<self->Parameters->Length; i++) {
 		Parameter* e = (Parameter*)AtVector(self->Parameters, i);
-		generic_type* gt = e->GType;
+		GenericType* gt = e->GType;
 		AppendBuffer(ret, '_');
 		if(gt->core_type == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
@@ -233,7 +233,7 @@ type* CreateIteratorTypeFromMethod(Method* self,  class_loader* cll, Vector* stm
 	StringView iterName = GetMethodUniqueName(self);
 	type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
-	generic_type* iterImplGT = ApplyGenericType(self->ReturnGType, lCctx);
+	GenericType* iterImplGT = ApplyGenericType(self->ReturnGType, lCctx);
 	class_* iterImplC = NewClassProxy(iterImplGT, iterName);
 	type* iterImplT = WrapClass(iterImplC);
 	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);
@@ -424,7 +424,7 @@ static Method* create_has_next(Method* self, type* ty, class_loader* cll, Vector
 	return mt;
 }
 
-static Method* create_next(Method* self, type* ty, class_loader* cll,generic_type* a, Vector* stmt_list, int* out_op_len) {
+static Method* create_next(Method* self, type* ty, class_loader* cll,GenericType* a, Vector* stmt_list, int* out_op_len) {
 	Method* mt = method_new(InternString("current"));
 	mt->ReturnGType = a;
 	mt->Modifier = MODIFIER_NONE_T;

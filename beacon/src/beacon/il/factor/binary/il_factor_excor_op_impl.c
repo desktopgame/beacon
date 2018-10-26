@@ -16,9 +16,9 @@ il_factor_excor_op* NewILExcorOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILExcorOp(il_factor_excor_op * self, Enviroment* env, CallContext* cctx) {
-	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
-	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
+GenericType* EvalILExcorOp(il_factor_excor_op * self, Enviroment* env, CallContext* cctx) {
+	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	if(IsIntIntBinaryOp(self->parent, env, cctx)) {

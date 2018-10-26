@@ -20,9 +20,9 @@ il_factor_shift_op* NewILShiftOp(OperatorType type) {
 	return ret;
 }
 
-generic_type* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, CallContext* cctx) {
-	generic_type* lgtype = EvalILFactor(self->parent->left, env, cctx);
-	generic_type* rgtype = EvalILFactor(self->parent->right, env, cctx);
+GenericType* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, CallContext* cctx) {
+	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;

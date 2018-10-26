@@ -40,7 +40,7 @@ void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	}
 	LoadILFactor(self->fact, env, cctx);
 	self->gtype = ResolveImportManager(GetNamespaceCContext(cctx), self->fqcn, cctx);
-	generic_type* a = EvalILFactor(self->fact, env, cctx);
+	GenericType* a = EvalILFactor(self->fact, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
 	if(self->gtype->core_type != NULL && GENERIC2TYPE(self->gtype)->tag == TYPE_INTERFACE_T) {
 		self->mode = CAST_UP_T;
@@ -73,7 +73,7 @@ void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-generic_type* EvalILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	LoadILAs(self, env, cctx);
 	return self->gtype;
 }

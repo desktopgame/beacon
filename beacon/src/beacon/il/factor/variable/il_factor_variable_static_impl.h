@@ -3,7 +3,7 @@
 #include "../../../env/fqcn_cache.h"
 #include "../../il_factor_interface.h"
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 
 typedef struct il_factor_variable_static {
 	FQCNCache* fqcn;
@@ -16,7 +16,7 @@ void GenerateILVariableStatic(il_factor_variable_static* self, Enviroment* env, 
 
 void LoadILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx);
 
 char* ILVariableStaticToString(il_factor_variable_static * self, Enviroment * env);
 

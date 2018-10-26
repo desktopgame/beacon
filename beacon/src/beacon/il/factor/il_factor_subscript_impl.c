@@ -32,8 +32,8 @@ void LoadILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cc
 	}
 	LoadILFactor(self->receiver, env, cctx);
 	LoadILFactor(self->pos, env, cctx);
-	generic_type* receiver_gtype = EvalILFactor(self->receiver, env, cctx);
-	generic_type* arg_gtype = EvalILFactor(self->pos, env, cctx);
+	GenericType* receiver_gtype = EvalILFactor(self->receiver, env, cctx);
+	GenericType* arg_gtype = EvalILFactor(self->pos, env, cctx);
 	Vector* args = NewVector();
 	PushVector(args, arg_gtype);
 	int temp = -1;
@@ -42,7 +42,7 @@ void LoadILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cc
 	DeleteVector(args, VectorDeleterOfNull);
 }
 
-generic_type* EvalILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILSubscript(il_factor_subscript* self, Enviroment* env, CallContext* cctx) {
 	return ApplyGenericType(self->opov->ReturnGType, cctx);
 }
 

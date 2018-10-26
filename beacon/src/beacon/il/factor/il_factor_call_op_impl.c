@@ -50,9 +50,9 @@ void LoadCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-generic_type* EvalILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILCallOp(il_factor_call_op* self, Enviroment* env, CallContext* cctx) {
 	il_factor_call_op_check(self, env, cctx);
-	generic_type* ret = NULL;
+	GenericType* ret = NULL;
 	if(self->type == ILCALL_TYPE_INVOKE_T) {
 		ret = EvalILInvoke(self->u.invoke_, env, cctx);
 	} else if(self->type == ILCALL_TYPE_INVOKE_STATIC_T) {
@@ -199,7 +199,7 @@ static void il_factor_subscript_check(il_factor_call_op* self, Enviroment* env, 
 	il_factor* receiver = self->receiver;
 	il_factor_call_op* call_left = receiver->u.call_;
 	il_factor_invoke* iv = NewILInvoke(ZERO_VIEW);
-	generic_type* receiver_gtype = EvalILFactor(receiver, env, cctx);
+	GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
 	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
 	int temp;
 	iv->u.opov = ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->argument_list, env, cctx, &temp);

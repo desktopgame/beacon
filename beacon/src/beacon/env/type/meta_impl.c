@@ -27,12 +27,12 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext
 		Parameter* param = (Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		generic_type* argType = EvalILFactor(arg->Factor, env, cctx);
+		GenericType* argType = EvalILFactor(arg->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = ApplyGenericType(param->GType, cctx);
+			GenericType* a = ApplyGenericType(param->GType, cctx);
 			//PrintGenericType2(param->gtype, a);
 			dist = DistanceGenericType(
 				a,
@@ -66,12 +66,12 @@ int MetaGCalcScore(Vector* params, Vector* gargs) {
 		Parameter* param = (Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		generic_type* argType = (generic_type*)varg;
+		GenericType* argType = (GenericType*)varg;
 		if(GetLastBCError()) {
 			return -1;
 		}
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = ApplyGenericType(param->GType, NULL);
+			GenericType* a = ApplyGenericType(param->GType, NULL);
 			dist = DistanceGenericType(
 				a,
 			//	ApplyGenericType(argType, ilctx),
@@ -102,10 +102,10 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 		Parameter* param = (Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		//generic_type* argType = EvalILFactor(arg->factor, env, ilctx);
-		generic_type* argType = arg->GType;
+		//GenericType* argType = EvalILFactor(arg->factor, env, ilctx);
+		GenericType* argType = arg->GType;
 		if (argType->core_type != TYPE_NULL) {
-			generic_type* a = RApplyGenericType(param->GType, NULL,fr);
+			GenericType* a = RApplyGenericType(param->GType, NULL,fr);
 			dist = RDistanceGenericType(a, argType, fr);
 		}
 		score += dist;

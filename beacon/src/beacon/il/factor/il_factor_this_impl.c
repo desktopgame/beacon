@@ -25,7 +25,7 @@ void LoadILThis(il_factor_this * self, Enviroment * env, CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-generic_type* EvalILThis(il_factor_this * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILThis(il_factor_this * self, Enviroment * env, CallContext* cctx) {
 	return GetTypeCContext(cctx)->generic_self;
 }
 

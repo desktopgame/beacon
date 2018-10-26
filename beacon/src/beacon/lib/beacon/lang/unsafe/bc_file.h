@@ -3,7 +3,7 @@
 struct Frame;
 struct type;
 struct Object;
-struct generic_type;
+struct GenericType;
 
 struct type;
 /**

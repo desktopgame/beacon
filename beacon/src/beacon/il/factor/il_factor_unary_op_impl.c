@@ -70,9 +70,9 @@ void LoadILUnaryOp(il_factor_unary_op * self, Enviroment * env, CallContext* cct
 	}
 }
 
-generic_type* EvalILUnaryOp(il_factor_unary_op * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILUnaryOp(il_factor_unary_op * self, Enviroment * env, CallContext* cctx) {
 	LoadILUnaryOp(self, env, cctx);
-	generic_type* ret = NULL;
+	GenericType* ret = NULL;
 	switch(self->type) {
 		case OPERATOR_NOT_T:
 			ret = EvalILNotOp(self->u.not_op, env, cctx);
@@ -137,7 +137,7 @@ int GetIndexILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* cc
 
 int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env, CallContext* cctx) {
 	Vector* args = NewVector();
-	generic_type* gtype = EvalILFactor(receiver, env, cctx);
+	GenericType* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->virtual_type_index != -1) {
 		assert(false);
 	}
@@ -148,11 +148,11 @@ int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env,
 	return temp;
 }
 
-generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, Enviroment* env, CallContext* cctx) {
-	generic_type* lgtype = EvalILFactor(self->a, env, cctx);
+GenericType* ApplyILUnaryOp(il_factor_unary_op* self, GenericType* gtype, Enviroment* env, CallContext* cctx) {
+	GenericType* lgtype = EvalILFactor(self->a, env, cctx);
 	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;
-	generic_type* ret = ApplyGenericType(gtype,cctx);
+	GenericType* ret = ApplyGenericType(gtype,cctx);
 	PopCallContext(cctx);
 	return ret;
 }

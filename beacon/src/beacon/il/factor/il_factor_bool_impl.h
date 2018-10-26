@@ -19,7 +19,7 @@ il_factor_bool* NewILBool(bool b);
 
 void GenerateILBool(il_factor_bool* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILBool(il_factor_bool* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILBool(il_factor_bool* self, Enviroment* env, CallContext* cctx);
 
 char* ILBoolToString(il_factor_bool* self, Enviroment* env);
 

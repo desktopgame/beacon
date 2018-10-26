@@ -4,7 +4,7 @@
 #include "fqcn_cache.h"
 #include "../util/vector.h"
 
-struct generic_type;
+struct GenericType;
 struct type;
 struct class_;
 struct interface_;

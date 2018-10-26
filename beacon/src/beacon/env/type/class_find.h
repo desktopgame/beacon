@@ -368,5 +368,5 @@ Vector* GetInterfaceTreeClass(class_* self);
  * @parma tinter
  * @return
  */
-struct generic_type* FindInterfaceTypeClass(class_* self, type* tinter, struct generic_type** out_baseline);
+struct GenericType* FindInterfaceTypeClass(class_* self, type* tinter, struct GenericType** out_baseline);
 #endif

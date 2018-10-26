@@ -4,7 +4,7 @@
 #include "../../call_context.h"
 
 struct il_factor_binary_op;
-struct generic_type;
+struct GenericType;
 struct Enviroment;
 typedef struct il_factor_logic_op {
 	struct il_factor_binary_op* parent;
@@ -14,7 +14,7 @@ typedef struct il_factor_logic_op {
 
 il_factor_logic_op* NewILLogicOp(OperatorType type);
 
-struct generic_type* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
 void GenerateILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 

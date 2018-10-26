@@ -4,7 +4,7 @@
 #include "../../env/property.h"
 
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 
 typedef struct il_factor_Property {
 	il_factor* fact;
@@ -20,7 +20,7 @@ void GenerateILPropertyAccess(il_factor_Property* self, Enviroment* env, CallCon
 
 void LoadILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx);
 
-struct generic_type* EvalILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILProperty(il_factor_Property* self, Enviroment* env, CallContext* cctx);
 
 char* ILPropertyToString(il_factor_Property* self, Enviroment* env);
 

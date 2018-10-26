@@ -50,9 +50,9 @@ void LoadILVariable(il_factor_variable * self, Enviroment * env, CallContext* cc
 	}
 }
 
-generic_type* EvalILVariable(il_factor_variable * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILVariable(il_factor_variable * self, Enviroment * env, CallContext* cctx) {
 	il_factor_variable_check(self, env, cctx);
-	generic_type* ret = NULL;
+	GenericType* ret = NULL;
 	if(self->type == ILVARIABLE_TYPE_LOCAL_T) {
 		ret = EvalILVariableLocal(self->u.local_, env, cctx);
 	} else if(self->type == ILVARIABLE_TYPE_STATIC_T) {

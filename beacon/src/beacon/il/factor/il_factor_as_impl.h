@@ -17,7 +17,7 @@ typedef enum cast_mode {
 typedef struct il_factor_as {
 	il_factor* fact;
 	GenericCache* fqcn;
-	generic_type* gtype;
+	GenericType* gtype;
 	cast_mode mode;
 } il_factor_as;
 
@@ -33,7 +33,7 @@ void GenerateILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
 
 void LoadILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILAs(il_factor_as* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILAs(il_factor_as* self);
 

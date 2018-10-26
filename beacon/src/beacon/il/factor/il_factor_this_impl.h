@@ -9,7 +9,7 @@ struct type;
  * thisを表す要素.
  */
 typedef struct il_factor_this {
-	generic_type* resolved;
+	GenericType* resolved;
 } il_factor_this;
 
 il_factor_this* NewILThis();
@@ -18,7 +18,7 @@ void GenerateILThis(il_factor_this* self, struct Enviroment* env, CallContext* c
 
 void LoadILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
+GenericType* EvalILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
 
 char* ILThisToString(il_factor_this* self, struct Enviroment* env);
 

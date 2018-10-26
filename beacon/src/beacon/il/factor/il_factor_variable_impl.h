@@ -10,7 +10,7 @@
 #include <stdbool.h>
 
 //struct opcode_buf;
-struct generic_type;
+struct GenericType;
 struct Field;
 
 /**
@@ -49,7 +49,7 @@ void GenerateILVariable(il_factor_variable* self, Enviroment* env, CallContext* 
 
 void LoadILVariable(il_factor_variable* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILVariable(il_factor_variable* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILVariable(il_factor_variable* self, Enviroment* env, CallContext* cctx);
 
 char* ILVariableToString(il_factor_variable* self, Enviroment* env);
 

@@ -39,7 +39,7 @@ bool IsLoadedImportManager(ImportManager * self, int index) {
 	return info->IsConsume;
 }
 
-generic_type* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallContext* cctx) {
+GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallContext* cctx) {
 	type* core_type = GetTypeFQCN(fqcn->FQCN, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(GetTypeName(core_type));
@@ -57,11 +57,11 @@ generic_type* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCon
 	if(core_type != NULL && fqcn->TypeArgs->Length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
-		generic_type* normalGType = generic_NewType(core_type);
+		GenericType* normalGType = generic_NewType(core_type);
 		assert(core_type->tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->TypeArgs->Length; i++) {
 			GenericCache* e = (GenericCache*)AtVector(fqcn->TypeArgs, i);
-			generic_type* child = ResolveImportManager(scope, e, cctx);
+			GenericType* child = ResolveImportManager(scope, e, cctx);
 			AddArgsGenericType(normalGType, child);
 		}
 		return normalGType;
@@ -71,7 +71,7 @@ generic_type* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCon
 	if(fqcn->TypeArgs->Length > 0) {
 		return NULL;
 	}
-	generic_type* parameterized = generic_NewType(NULL);
+	GenericType* parameterized = generic_NewType(NULL);
 	//T, Eなど
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {
@@ -93,7 +93,7 @@ generic_type* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCon
 	return parameterized;
 }
 
-generic_type* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContext* cctx) {
+GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContext* cctx) {
 	type* core_type = GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass
@@ -108,7 +108,7 @@ generic_type* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallConte
 	//例えば Dictionary[K, V] なら
 	//K = class_tag 0
 	//V = class_tag 1
-	generic_type* parameterized = generic_NewType(NULL);
+	GenericType* parameterized = generic_NewType(NULL);
 	//まずはメソッドの型変数を調べる
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->virtual_type_index == -1 && mt != NULL) {

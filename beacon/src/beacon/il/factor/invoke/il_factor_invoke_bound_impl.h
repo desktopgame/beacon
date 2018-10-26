@@ -5,7 +5,7 @@
 #include "subscript_descriptor.h"
 
 struct Enviroment;
-struct generic_type;
+struct GenericType;
 struct OperatorOverload;
 struct Method;
 //binded? bound?
@@ -25,7 +25,7 @@ typedef struct il_factor_invoke_bound {
 		subscript_descriptor subscript;
 	} u;
 	int index;
-	struct generic_type* resolved;
+	struct GenericType* resolved;
 	bound_invoke tag;
 } il_factor_invoke_bound;
 
@@ -35,7 +35,7 @@ void GenerateILInvokeBound(il_factor_invoke_bound* self, Enviroment* env, CallCo
 
 void LoadILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
 
-struct generic_type* EvalILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeBoundToString(il_factor_invoke_bound* self, Enviroment* env);
 

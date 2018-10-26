@@ -337,7 +337,7 @@ static void CLBC_register_class(class_loader* self, Namespace* parent, il_type* 
 		GenericCache* e = (GenericCache*)AtVector(iltype->u.class_->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
-			generic_type* gtp = ResolveImportManager(parent, e, cctx);
+			GenericType* gtp = ResolveImportManager(parent, e, cctx);
 			assert(gtp != NULL);
 			if (gtp->core_type->tag == TYPE_CLASS_T) {
 				cls->super_class = gtp;
@@ -346,7 +346,7 @@ static void CLBC_register_class(class_loader* self, Namespace* parent, il_type* 
 			} else assert(false);
 		//二つ目以降はインターフェースのみ
 		} else {
-			generic_type* gtp = ResolveImportManager(parent, e, cctx);
+			GenericType* gtp = ResolveImportManager(parent, e, cctx);
 			type* E = GENERIC2TYPE(gtp);
 			#if defined(DEBUG)
 			const char* Estr = Ref2Str(GetTypeName(E));
@@ -398,7 +398,7 @@ static void CLBC_register_interface(class_loader* self, Namespace* parent, il_ty
 	for (int i = 0; i < iltype->u.interface_->extends_list->Length; i++) {
 		GenericCache* e = (GenericCache*)AtVector(iltype->u.interface_->extends_list, i);
 		//インターフェースはインターフェースのみ継承
-		generic_type* gtp = ResolveImportManager(parent, e, cctx);
+		GenericType* gtp = ResolveImportManager(parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
 		if(E->tag != TYPE_INTERFACE_T) {
 			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(GetTypeName(tp)));

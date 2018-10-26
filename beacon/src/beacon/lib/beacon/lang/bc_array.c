@@ -29,7 +29,7 @@ type * GetBCArrayType() {
 	return FindTypeFromNamespace(lang, InternString("Array"));
 }
 
-Object * NewBCArray(struct generic_type* gtype, int length, Frame* fr) {
+Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
 	type* arrayType = GetBCArrayType();
 
 	Vector* args = NewVector();
@@ -66,7 +66,7 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* lengthObj = AtVector(self->u.field_vec, temp);
 	assert(lengthObj != NULL);
-	generic_type* targ = AtVector(self->GType->type_args_list, 0);
+	GenericType* targ = AtVector(self->GType->type_args_list, 0);
 	//配列の長さだけ確保
 	int len = lengthObj->u.int_;
 	assert(len >= 0);

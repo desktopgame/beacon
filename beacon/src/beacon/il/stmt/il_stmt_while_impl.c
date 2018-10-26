@@ -73,7 +73,7 @@ static void il_stmt_while_stmt_delete(VectorItem item) {
 }
 
 static void check_condition_type(il_factor* fact, Enviroment* env, CallContext* cctx) {
-	generic_type* cond_T = EvalILFactor(fact, env, cctx);
+	GenericType* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->core_type != TYPE_BOOL) {
 		char* condstr = ILFactorToString(fact, env);
 		ThrowBCError(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,

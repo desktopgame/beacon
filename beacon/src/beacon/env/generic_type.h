@@ -16,7 +16,7 @@ struct virtual_type;
 struct Frame;
 struct CallContext;
 /**
- * 型変数つきの型宣言の型引数では generic_type 自身が使われますが、
+ * 型変数つきの型宣言の型引数では GenericType 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
  */
 typedef enum GenericTypeTag {
@@ -30,7 +30,7 @@ typedef enum GenericTypeTag {
 /**
  * 型変数つきの型宣言.
  */
-typedef struct generic_type {
+typedef struct GenericType {
 	struct type* core_type;
 	Vector* type_args_list;
 	//このジェネリックタイプの紐づけたられたコンテナ
@@ -44,9 +44,9 @@ typedef struct generic_type {
 	GenericTypeTag tag;
 	bool mark;
 	bool is_ctor;
-} generic_type;
+} GenericType;
 
-//#define generic_type_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
+//#define GenericType_validate(self) assert((self)->core_type != NULL || self->virtual_type_index != -1)
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -61,7 +61,7 @@ typedef struct generic_type {
  * @param core_type
  * @return
  */
-generic_type* RefGenericType(struct type* core_type);
+GenericType* RefGenericType(struct type* core_type);
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -69,18 +69,18 @@ generic_type* RefGenericType(struct type* core_type);
  * @param ctype
  * @return
  */
-generic_type* MallocGenericType(struct type* core_type, const char* filename, int lineno);
+GenericType* MallocGenericType(struct type* core_type, const char* filename, int lineno);
 
 /**
  * ジェネリックタイプを複製します.
  * @param self
  * @return
  */
-generic_type* CloneGenericType(generic_type* self);
+GenericType* CloneGenericType(GenericType* self);
 
 /**
  * 現在のスクリプトコンテキストでどこからも参照されていない
- * generic_type の一覧を解放します。
+ * GenericType の一覧を解放します。
  */
 void CollectGenericType();
 
@@ -89,14 +89,14 @@ void CollectGenericType();
  * CollectGenericType より後に呼び出してください。
  * @param a
  */
-void LostownershipGenericType(generic_type* a);
+void LostownershipGenericType(GenericType* a);
 
 /**
  * self の子要素として a を追加します.
  * @param self
  * @param a
  */
-void AddArgsGenericType(generic_type* self, generic_type* a);
+void AddArgsGenericType(GenericType* self, GenericType* a);
 
 /**
  * a と b の距離を返します.
@@ -108,7 +108,7 @@ void AddArgsGenericType(generic_type* self, generic_type* a);
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int DistanceGenericType(generic_type* self, generic_type* other, struct CallContext* cctx);
+int DistanceGenericType(GenericType* self, GenericType* other, struct CallContext* cctx);
 /**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
@@ -119,13 +119,13 @@ int DistanceGenericType(generic_type* self, generic_type* other, struct CallCont
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int RDistanceGenericType(generic_type* self, generic_type* other, struct Frame* fr);
+int RDistanceGenericType(GenericType* self, GenericType* other, struct Frame* fr);
 
 /**
  * 型変数と型を出力します.
  * @param self
  */
-void PrintGenericType(generic_type* self);
+void PrintGenericType(GenericType* self);
 
 /**
  * ジェネリックタイプをオペコードとして出力します.
@@ -133,7 +133,7 @@ void PrintGenericType(generic_type* self);
  * @param env
  * @param ilctx
  */
-void GenerateGenericType(generic_type* self, struct Enviroment* env);
+void GenerateGenericType(GenericType* self, struct Enviroment* env);
 
 /**
  * 現在のコンテキストで self の型変数を解決します.
@@ -142,7 +142,7 @@ void GenerateGenericType(generic_type* self, struct Enviroment* env);
  * @param cctx
  * @return
  */
-generic_type* ApplyGenericType(generic_type* self, struct CallContext* cctx);
+GenericType* ApplyGenericType(GenericType* self, struct CallContext* cctx);
 /**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
@@ -150,12 +150,12 @@ generic_type* ApplyGenericType(generic_type* self, struct CallContext* cctx);
  * @param fr
  * @return
  */
-generic_type* RApplyGenericType(generic_type* self, struct CallContext* cctx, struct Frame* fr);
+GenericType* RApplyGenericType(GenericType* self, struct CallContext* cctx, struct Frame* fr);
 
 /**
- * generic_type を type へ変換します.
+ * GenericType を type へ変換します.
  * @param self
  * @return
  */
-struct type* GenericTypeToType(generic_type* self);
+struct type* GenericTypeToType(GenericType* self);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

@@ -15,33 +15,33 @@
 #include <stdio.h>
 
 //proto
-static generic_type* ApplyGenericTypeImpl(generic_type* self, CallContext* cctx, Frame* fr);
-static int DistanceGenericTypeImpl(generic_type* self, generic_type* other, Frame* fr, CallContext* cctx);
-static int DistanceGenericType_nogeneric(generic_type* self, generic_type* other, Frame* fr, CallContext* cctx);
-static int DistanceGenericType_class(int dist, generic_type* self, generic_type* other, Frame* fr, CallContext* cctx);
-static int DistanceGenericType_interface(int dist, generic_type* self, generic_type* other, Frame* fr, CallContext* cctx);
-static Vector* ApplyGenericType_by_hierarchy(generic_type* impl_baseline, generic_type* impl);
-static generic_type* generic_type_typeargs_at(CallContext* cctx, Frame* fr, int index);
-static generic_type* generic_type_receiver_at(CallContext* cctx, Frame* fr, int index);
+static GenericType* ApplyGenericTypeImpl(GenericType* self, CallContext* cctx, Frame* fr);
+static int DistanceGenericTypeImpl(GenericType* self, GenericType* other, Frame* fr, CallContext* cctx);
+static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, Frame* fr, CallContext* cctx);
+static int DistanceGenericType_class(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx);
+static int DistanceGenericType_interface(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx);
+static Vector* ApplyGenericType_by_hierarchy(GenericType* impl_baseline, GenericType* impl);
+static GenericType* GenericType_typeargs_at(CallContext* cctx, Frame* fr, int index);
+static GenericType* GenericType_receiver_at(CallContext* cctx, Frame* fr, int index);
 static void generic_DeleteType_self(VectorItem item);
 static void generic_DeleteTypercr_self(VectorItem item);
-static void generic_type_recursive_mark(generic_type* a);
-static generic_type* generic_type_get(generic_type* a);
+static void GenericType_recursive_mark(GenericType* a);
+static GenericType* GenericType_get(GenericType* a);
 /*
-generic_type * generic_NewType(type * core_type) {
+GenericType * generic_NewType(type * core_type) {
 
 }
 */
 
-generic_type* RefGenericType(type* core_type) {
+GenericType* RefGenericType(type* core_type) {
 	if(core_type == NULL) {
 		return generic_NewType(core_type);
 	}
 	return core_type->generic_self;
 }
 
-generic_type* MallocGenericType(struct type* core_type, const char* filename, int lineno) {
-	generic_type* ret = (generic_type*)mem_malloc(sizeof(generic_type), filename, lineno);
+GenericType* MallocGenericType(struct type* core_type, const char* filename, int lineno) {
+	GenericType* ret = (GenericType*)mem_malloc(sizeof(GenericType), filename, lineno);
 	ret->core_type = core_type;
 	ret->type_args_list = NewVector();
 	ret->virtual_type_index = -1;
@@ -53,10 +53,10 @@ generic_type* MallocGenericType(struct type* core_type, const char* filename, in
 	return ret;
 }
 
-generic_type* CloneGenericType(generic_type* self) {
-	generic_type* a = generic_NewType(self->core_type);
+GenericType* CloneGenericType(GenericType* self) {
+	GenericType* a = generic_NewType(self->core_type);
 	for(int i=0; i<self->type_args_list->Length; i++) {
-		generic_type* e = AtVector(self->type_args_list, i);
+		GenericType* e = AtVector(self->type_args_list, i);
 		AddArgsGenericType(a, CloneGenericType(e));
 	}
 	a->tag = self->tag;
@@ -73,18 +73,18 @@ void CollectGenericType() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	//マークを外す
 	for(int i=0; i<ctx->AllGenericList->Length; i++) {
-		generic_type* e= (generic_type*)AtVector(ctx->AllGenericList, i);
+		GenericType* e= (GenericType*)AtVector(ctx->AllGenericList, i);
 		e->mark = false;
 	}
 	//全ての型に定義された自身を参照するための generic をマーク
 	for(int i=0; i<ctx->TypeList->Length; i++) {
 		type* e= (type*)AtVector(ctx->TypeList, i);
-		generic_type_recursive_mark(e->generic_self);
+		GenericType_recursive_mark(e->generic_self);
 	}
 	Vector* alive = NewVector();
 	Vector* dead = NewVector();
 	for(int i=0; i<ctx->AllGenericList->Length; i++) {
-		generic_type* e= (generic_type*)AtVector(ctx->AllGenericList, i);
+		GenericType* e= (GenericType*)AtVector(ctx->AllGenericList, i);
 		PushVector((!e->mark ? dead : alive), e);
 	}
 	DeleteVector(ctx->AllGenericList, VectorDeleterOfNull);
@@ -92,7 +92,7 @@ void CollectGenericType() {
 	ctx->AllGenericList = alive;
 }
 
-void LostownershipGenericType(generic_type* a) {
+void LostownershipGenericType(GenericType* a) {
 	//enumはクラスの一種だが、
 	//generic_Selfを持たない
 	if(a == NULL) {
@@ -103,20 +103,20 @@ void LostownershipGenericType(generic_type* a) {
 	generic_DeleteTypercr_self(a);
 }
 
-void AddArgsGenericType(generic_type* self, generic_type* a) {
+void AddArgsGenericType(GenericType* self, GenericType* a) {
 	assert(a != NULL);
 	PushVector(self->type_args_list, a);
 }
 
-int DistanceGenericType(generic_type * self, generic_type * other, CallContext* cctx) {
+int DistanceGenericType(GenericType * self, GenericType * other, CallContext* cctx) {
 	return DistanceGenericTypeImpl(self, other, NULL, cctx);
 }
 
-int RDistanceGenericType(generic_type* self, generic_type* other, Frame* fr) {
+int RDistanceGenericType(GenericType* self, GenericType* other, Frame* fr) {
 	return DistanceGenericTypeImpl(self, other, fr, NULL);
 }
 
-void PrintGenericType(generic_type * self) {
+void PrintGenericType(GenericType * self) {
 	assert(self != NULL);
 	//タグを出力
 	switch(self->tag) {
@@ -153,7 +153,7 @@ void PrintGenericType(generic_type * self) {
 	//[...]
 	printf("[");
 	for (int i = 0; i < self->type_args_list->Length; i++) {
-		generic_type* e = (generic_type*)AtVector(self->type_args_list, i);
+		GenericType* e = (GenericType*)AtVector(self->type_args_list, i);
 		PrintGenericType(e);
 		if (i != self->type_args_list->Length - 1) {
 			printf(",");
@@ -162,7 +162,7 @@ void PrintGenericType(generic_type * self) {
 	printf("]");
 }
 
-void GenerateGenericType(generic_type* self, Enviroment* env) {
+void GenerateGenericType(GenericType* self, Enviroment* env) {
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ENTER);
 	AddOpcodeBuf(env->Bytecode, self->type_args_list->Length);
 	if(self->core_type == NULL) {
@@ -179,40 +179,40 @@ void GenerateGenericType(generic_type* self, Enviroment* env) {
 		AddOpcodeBuf(env->Bytecode, self->core_type->absolute_index);
 	}
 	for(int i=0; i<self->type_args_list->Length; i++) {
-		generic_type* e = (generic_type*)AtVector(self->type_args_list, i);
+		GenericType* e = (GenericType*)AtVector(self->type_args_list, i);
 		GenerateGenericType(e, env);
 	}
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_EXIT);
 }
 
 //Hash<String,List<Int>>
-generic_type* ApplyGenericType(generic_type* self, CallContext* cctx) {
+GenericType* ApplyGenericType(GenericType* self, CallContext* cctx) {
 	return ApplyGenericTypeImpl(self, cctx, NULL);
 }
 
-generic_type* RApplyGenericType(generic_type* self, CallContext* cctx, Frame* fr) {
+GenericType* RApplyGenericType(GenericType* self, CallContext* cctx, Frame* fr) {
 	return ApplyGenericTypeImpl(self, cctx, fr);
 }
 
-struct type* GenericTypeToType(generic_type* self) {
+struct type* GenericTypeToType(GenericType* self) {
 	return self->core_type;
 }
 
 //private
-static generic_type* ApplyGenericTypeImpl(generic_type* self, CallContext* cctx, Frame* fr) {
+static GenericType* ApplyGenericTypeImpl(GenericType* self, CallContext* cctx, Frame* fr) {
 	int count = 0;
 	//型変数なら変換
-	generic_type* ret = NULL;
+	GenericType* ret = NULL;
 	if(self->virtual_type_index != -1) {
 		count++;
 		if(self->tag == GENERIC_TYPE_TAG_CLASS_T) {
 			if(self->is_ctor) {
-				ret = CloneGenericType(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
+				ret = CloneGenericType(GenericType_typeargs_at(cctx, fr, self->virtual_type_index));
 			} else {
-				ret = CloneGenericType(generic_type_receiver_at(cctx, fr, self->virtual_type_index));
+				ret = CloneGenericType(GenericType_receiver_at(cctx, fr, self->virtual_type_index));
 			}
 		} else if(self->tag == GENERIC_TYPE_TAG_METHOD_T) {
-			ret = CloneGenericType(generic_type_typeargs_at(cctx, fr, self->virtual_type_index));
+			ret = CloneGenericType(GenericType_typeargs_at(cctx, fr, self->virtual_type_index));
 		}
 	} else {
 		ret = generic_NewType(self->core_type);
@@ -226,7 +226,7 @@ static generic_type* ApplyGenericTypeImpl(generic_type* self, CallContext* cctx,
 	return ret;
 }
 
-static int DistanceGenericTypeImpl(generic_type* self, generic_type* other, Frame* fr, CallContext* cctx) {
+static int DistanceGenericTypeImpl(GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	if(fr != NULL) {
 		return DistanceGenericType_nogeneric(self, other, fr, cctx);
 	}
@@ -260,7 +260,7 @@ static int DistanceGenericTypeImpl(generic_type* self, generic_type* other, Fram
 	}
 }
 
-static int DistanceGenericType_nogeneric(generic_type* self, generic_type* other, Frame* fr, CallContext* cctx) {
+static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	assert(self->core_type != NULL);
 	assert(other->core_type != NULL);
 	int dist = DistanceType(self->core_type, other->core_type);
@@ -285,11 +285,11 @@ static int DistanceGenericType_nogeneric(generic_type* self, generic_type* other
 	return dist;
 }
 
-static int DistanceGenericType_class(int dist, generic_type* self, generic_type* other, Frame* fr, CallContext* cctx) {
+static int DistanceGenericType_class(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	//otherからselfまで辿る
 	class_* baseline = self->core_type->u.class_;
 	class_* ptr = other->core_type->u.class_;
-	generic_type* target = other;
+	GenericType* target = other;
 	while (baseline != ptr) {
 		target = ptr->super_class;
 		ptr = ptr->super_class->core_type->u.class_;
@@ -297,8 +297,8 @@ static int DistanceGenericType_class(int dist, generic_type* self, generic_type*
 	assert(target != NULL);
 	assert(self->type_args_list->Length == target->type_args_list->Length);
 	for (int i = 0; i<self->type_args_list->Length; i++) {
-		generic_type* a = AtVector(self->type_args_list, i);
-		generic_type* b = AtVector(target->type_args_list, i);
+		GenericType* a = AtVector(self->type_args_list, i);
+		GenericType* b = AtVector(target->type_args_list, i);
 		int calc = DistanceGenericTypeImpl(a, b, fr, cctx);
 		if (calc == -1 || calc > 0) {
 			dist = -1;
@@ -308,18 +308,18 @@ static int DistanceGenericType_class(int dist, generic_type* self, generic_type*
 	return dist;
 }
 
-static int DistanceGenericType_interface(int dist, generic_type* self, generic_type* other, Frame* fr, CallContext* cctx) {
+static int DistanceGenericType_interface(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	if (other->core_type->tag == TYPE_CLASS_T) {
 		//クラスからインターフェイスを探す
-		generic_type* impl_baseline = NULL;
-		generic_type* impl = FindInterfaceTypeClass(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
+		GenericType* impl_baseline = NULL;
+		GenericType* impl = FindInterfaceTypeClass(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
 		if (impl_baseline == NULL) {
 			impl_baseline = other;
 		}
 		Vector* gargs = ApplyGenericType_by_hierarchy(impl_baseline, impl);
 		for (int i = 0; i<self->type_args_list->Length; i++) {
-			generic_type* a = AtVector(self->type_args_list, i);
-			generic_type* b = AtVector(gargs, i);
+			GenericType* a = AtVector(self->type_args_list, i);
+			GenericType* b = AtVector(gargs, i);
 			int calc = DistanceGenericTypeImpl(a, b, fr, cctx);
 			if (calc == -1 || calc > 0) {
 				dist = -1;
@@ -329,13 +329,13 @@ static int DistanceGenericType_interface(int dist, generic_type* self, generic_t
 		DeleteVector(gargs, VectorDeleterOfNull);
 		return dist;
 	} else if (other->core_type->tag == TYPE_INTERFACE_T) {
-		generic_type* impl = FindInterfaceInterface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
+		GenericType* impl = FindInterfaceInterface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
 		if (impl == NULL) {
 			impl = other;
 		}
 		for (int i = 0; i<self->type_args_list->Length; i++) {
-			generic_type* a = AtVector(self->type_args_list, i);
-			generic_type* b = AtVector(impl->type_args_list, i);
+			GenericType* a = AtVector(self->type_args_list, i);
+			GenericType* b = AtVector(impl->type_args_list, i);
 			int calc = DistanceGenericTypeImpl(a, b, fr, cctx);
 			if (calc == -1 || calc > 0) {
 				dist = -1;
@@ -350,11 +350,11 @@ static int DistanceGenericType_interface(int dist, generic_type* self, generic_t
 	return dist;
 }
 
-static Vector* ApplyGenericType_by_hierarchy(generic_type* impl_baseline, generic_type* impl) {
+static Vector* ApplyGenericType_by_hierarchy(GenericType* impl_baseline, GenericType* impl) {
 	assert(impl_baseline->core_type != NULL);
 	Vector* gargs = NewVector();
 	for (int i = 0; i < impl->type_args_list->Length; i++) {
-		generic_type* e = AtVector(impl->type_args_list, i);
+		GenericType* e = AtVector(impl->type_args_list, i);
 		if (e->core_type == NULL) {
 			e = AtVector(impl_baseline->type_args_list, e->virtual_type_index);
 		}
@@ -363,22 +363,22 @@ static Vector* ApplyGenericType_by_hierarchy(generic_type* impl_baseline, generi
 	return gargs;
 }
 
-static generic_type* generic_type_typeargs_at(CallContext* cctx, Frame* fr, int index) {
+static GenericType* GenericType_typeargs_at(CallContext* cctx, Frame* fr, int index) {
 	if(fr == NULL) {
 		Vector* type_args = GetTypeArgsCContext(cctx);
 		ILTypeArgument* a = AtVector(type_args, index);
 		return a->GType;
 	} else {
-		generic_type* a = AtVector(fr->TypeArgs, index);
+		GenericType* a = AtVector(fr->TypeArgs, index);
 		return a;
 	}
 	return NULL;
 }
 
-static generic_type* generic_type_receiver_at(CallContext* cctx, Frame* fr, int index) {
+static GenericType* GenericType_receiver_at(CallContext* cctx, Frame* fr, int index) {
 	if(fr == NULL) {
-		generic_type* tp = GetReceiverCContext(cctx);
-		generic_type* instanced = AtVector(tp->type_args_list, index);
+		GenericType* tp = GetReceiverCContext(cctx);
+		GenericType* instanced = AtVector(tp->type_args_list, index);
 		return instanced;
 	} else {
 		Object* a = AtVector(fr->VariableTable, 0);
@@ -388,16 +388,16 @@ static generic_type* generic_type_receiver_at(CallContext* cctx, Frame* fr, int 
 	return NULL;
 }
 
-static generic_type* generic_type_get(generic_type* a) {
+static GenericType* GenericType_get(GenericType* a) {
 	/*
 	if(a->virtual_type_index == -1) {
 		return a;
 	}
 	if(a->tag == GENERIC_TYPE_TAG_CLASS_T) {
-		generic_type* receiver = ccat_receiver(a->virtual_type_index);
+		GenericType* receiver = ccat_receiver(a->virtual_type_index);
 		a = receiver;
 	} else if(a->tag == GENERIC_TYPE_TAG_METHOD_T) {
-		generic_type* at = AtVector(cctop_type_args(), a->virtual_type_index);
+		GenericType* at = AtVector(cctop_type_args(), a->virtual_type_index);
 		a = at;
 	}
 	return a;
@@ -406,23 +406,23 @@ static generic_type* generic_type_get(generic_type* a) {
 }
 
 static void generic_DeleteType_self(VectorItem item) {
-	generic_type* e = (generic_type*)item;
+	GenericType* e = (GenericType*)item;
 	DeleteVector(e->type_args_list, VectorDeleterOfNull);
 	MEM_FREE(e);
 }
 
 static void generic_DeleteTypercr_self(VectorItem item) {
-	generic_type* e = (generic_type*)item;
+	GenericType* e = (GenericType*)item;
 	DeleteVector(e->type_args_list, generic_DeleteTypercr_self);
 	MEM_FREE(e);
 }
 
-static void generic_type_recursive_mark(generic_type* a) {
+static void GenericType_recursive_mark(GenericType* a) {
 	if(a == NULL || a->mark) {
 		return;
 	}
 	a->mark = true;
 	for(int i=0; i<a->type_args_list->Length; i++) {
-		generic_type_recursive_mark((generic_type*)AtVector(a->type_args_list, i));
+		GenericType_recursive_mark((GenericType*)AtVector(a->type_args_list, i));
 	}
 }

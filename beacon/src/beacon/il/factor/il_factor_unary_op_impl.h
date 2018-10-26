@@ -32,7 +32,7 @@ void GenerateILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* c
 
 void LoadILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* cctx);
 
-generic_type* EvalILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* cctx);
 
 char* ILUnaryOpToString(il_factor_unary_op* self, Enviroment* env);
 
@@ -44,5 +44,5 @@ int GetIndexILUnaryOp(il_factor_unary_op* self, Enviroment* env, CallContext* cc
 
 int GetIndexILUnaryOp2(il_factor* receiver, OperatorType otype, Enviroment* env, CallContext* cctx);
 
-generic_type* ApplyILUnaryOp(il_factor_unary_op* self, generic_type* gtype, Enviroment* env, CallContext* cctx);
+GenericType* ApplyILUnaryOp(il_factor_unary_op* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

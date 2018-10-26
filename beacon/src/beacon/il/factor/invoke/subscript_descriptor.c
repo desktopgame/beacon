@@ -4,7 +4,7 @@
 #include "../../../env/property.h"
 #include "../../../vm/symbol_entry.h"
 
-generic_type* subscript_descriptor_receiver(const subscript_descriptor* desc) {
+GenericType* subscript_descriptor_receiver(const subscript_descriptor* desc) {
 	if(desc->tag == SUBSCRIPT_LOCAL_T) {
 		return desc->u.local->GType;
 	} else if(desc->tag == SUBSCRIPT_FIELD_T) {

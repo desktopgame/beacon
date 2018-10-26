@@ -102,7 +102,7 @@ bool CLBC_field_impl(class_loader* self, type* tp, Field* fi, Namespace* scope, 
 	LoadILFactor(fi->initial_value, env, cctx);
 	GenerateILFactor(fi->initial_value, env, cctx);
 	//フィールドの型と互換性がない
-	generic_type* gf = EvalILFactor(fi->initial_value, env, cctx);
+	GenericType* gf = EvalILFactor(fi->initial_value, env, cctx);
 	if(DistanceGenericType(fi->gtype, gf, cctx) < 0) {
 		PrintGenericType(fi->gtype); Println();
 		PrintGenericType(gf); Println();

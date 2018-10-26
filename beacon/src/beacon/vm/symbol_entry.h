@@ -3,14 +3,14 @@
 #define BEACON_VM_SYMBOL_ENTRY_H
 //#include "../env/class.h"
 #include "../util/string_pool.h"
-struct generic_type;
+struct GenericType;
 /**
  * シンボルを表す構造体.
  */
 typedef struct SymbolEntry {
 	int Index;
 	int ScopeDepth;
-	struct generic_type* GType;
+	struct GenericType* GType;
 } SymbolEntry;
 
 /**

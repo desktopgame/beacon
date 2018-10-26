@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 //#include "../env/class.h"
-struct generic_type;
+struct GenericType;
 struct SymbolEntry;
 /**
  * 変数名とインデックスの変換テーブルです.
@@ -33,7 +33,7 @@ SymbolTable* NewSymbolTable();
  * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct SymbolEntry* EntrySymbolTable(SymbolTable* self, struct generic_type* gtp, StringView namev);
+struct SymbolEntry* EntrySymbolTable(SymbolTable* self, struct GenericType* gtp, StringView namev);
 
 /**
  * 既に指定の名前が含まれるなら true.

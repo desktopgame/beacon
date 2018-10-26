@@ -43,7 +43,7 @@ static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
 static Method* class_find_impl_method(class_* self, Method* virtualMethod);
 static void class_VTable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
-static void class_generic_type_list_delete(VectorItem item);
+static void class_GenericType_list_delete(VectorItem item);
 static void DeleteClass_OperatorOverload(VectorItem item);
 static void DeleteClass_Property(VectorItem item);
 
@@ -80,7 +80,7 @@ class_ * NewClass(StringView namev) {
 	return ret;
 }
 
-class_* NewClassProxy(generic_type* gt, StringView namev) {
+class_* NewClassProxy(GenericType* gt, StringView namev) {
 	assert(gt->core_type->tag == TYPE_INTERFACE_T);
 	class_* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
@@ -197,7 +197,7 @@ int DistanceClass(class_ * super, class_ * sub) {
 		if (pointee == super) {
 			return depth;
 		}
-		generic_type* super_gtype = pointee->super_class;
+		GenericType* super_gtype = pointee->super_class;
 		if(super_gtype == NULL) {
 			depth = -1;
 			break;
@@ -449,7 +449,7 @@ static void CreateVTableClass_interface(class_* self) {
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < tbl->Length; i++) {
-		//generic_type* gtp = (generic_type*)AtVector(tbl, i);
+		//GenericType* gtp = (GenericType*)AtVector(tbl, i);
 		interface_* inter = (interface_*)AtVector(tbl, i);
 		VTable* interVT = inter->vt;
 		VTable* newVT = NewVTable();
@@ -484,7 +484,7 @@ static void CreateVTableClass_interface(class_* self) {
 }
 
 static void class_impl_delete(VectorItem item) {
-	generic_type* e = (generic_type*)item;
+	GenericType* e = (GenericType*)item;
 	//generic_DeleteType(e);
 }
 
@@ -535,8 +535,8 @@ static void class_DeleteTypeParameter(VectorItem item) {
 	DeleteTypeParameter(e);
 }
 
-static void class_generic_type_list_delete(VectorItem item) {
-	generic_type* e = (generic_type*)item;
+static void class_GenericType_list_delete(VectorItem item) {
+	GenericType* e = (GenericType*)item;
 //	generic_DeleteType(e);
 }
 

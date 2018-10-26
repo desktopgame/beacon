@@ -10,7 +10,7 @@ struct CallContext;
  */
 typedef struct ILTypeArgument {
 	GenericCache* GCache;
-	generic_type* GType;
+	GenericType* GType;
 } ILTypeArgument;
 
 /**

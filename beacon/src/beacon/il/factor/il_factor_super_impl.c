@@ -25,7 +25,7 @@ void LoadILSuper(il_factor_super * self, Enviroment * env, CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-generic_type* EvalILSuper(il_factor_super * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILSuper(il_factor_super * self, Enviroment * env, CallContext* cctx) {
 	type* t = GetTypeCContext(cctx);
 	return t->u.class_->super_class;
 }
