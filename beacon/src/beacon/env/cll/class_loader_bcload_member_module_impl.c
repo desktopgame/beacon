@@ -509,7 +509,7 @@ void CLBC_ctors_impl(ClassLoader* self, ILType* iltype, type* tp) {
 	class_* classz = tp->u.class_;
 	Namespace* scope = classz->location;
 	Vector* constructors = classz->constructor_list;
-	if (iltype->Tag != ilTYPE_CLASS_T) {
+	if (iltype->Tag != ILTYPE_CLASS_T) {
 		return;
 	}
 	//既に登録されたが、

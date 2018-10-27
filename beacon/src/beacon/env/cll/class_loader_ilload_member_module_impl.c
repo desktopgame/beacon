@@ -49,13 +49,13 @@ void CLILMemberList(ClassLoader* self, ILType* current, AST* amember, AccessLeve
 }
 
 void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel level) {
-	//assert(current->Tag == ilTYPE_CLASS_T);
+	//assert(current->Tag == ILTYPE_CLASS_T);
 	AST* amodifier = FirstAST(afield);
 	AST* aGetTypeName = SecondAST(afield);
 	AST* aaccess_name = AtAST(afield, 2);
 	AST* afact = AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
-	if(current->Tag == ilTYPE_INTERFACE_T) {
+	if(current->Tag == ILTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_FIELD_T,
 			Ref2Str(current->Kind.Interface->namev),
@@ -106,7 +106,7 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel le
 }
 
 void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, AccessLevel level) {
-	assert(current->Tag == ilTYPE_CLASS_T || current->Tag == ilTYPE_INTERFACE_T);
+	assert(current->Tag == ILTYPE_CLASS_T || current->Tag == ILTYPE_INTERFACE_T);
 	AST* amodifier = AtAST(amethod, 0);
 	AST* afunc_name = AtAST(amethod, 1);
 	AST* ageneric = AtAST(amethod, 2);
@@ -134,13 +134,13 @@ void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, AccessLevel le
 }
 
 void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, AccessLevel level) {
-	//assert(current->Tag == ilTYPE_CLASS_T);
+	//assert(current->Tag == ILTYPE_CLASS_T);
 	AST* aparams = AtAST(aconstructor, 0);
 	AST* achain = AtAST(aconstructor, 1);
 	AST* abody = AtAST(aconstructor, 2);
 	ILConstructorChain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
-	if(current->Tag == ilTYPE_INTERFACE_T) {
+	if(current->Tag == ILTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_CTOR_T,
 			Ref2Str(current->Kind.Interface->namev)
@@ -169,7 +169,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 	AST* abody = AtAST(aopov, 1);
 	AST* areturn = AtAST(aopov, 2);
 	//インターフェイスはコンストラクタを持てない
-	if(current->Tag == ilTYPE_INTERFACE_T) {
+	if(current->Tag == ILTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_OPOV_T,
 			Ref2Str(current->Kind.Interface->namev),

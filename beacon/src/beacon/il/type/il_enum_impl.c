@@ -8,7 +8,7 @@ static void il_enum_name_delete(il_enum* self);
 
 ILType * WrapILEnum(il_enum * self) {
 	ILType* ret = NewILType();
-	ret->Tag = ilTYPE_ENUM_T;
+	ret->Tag = ILTYPE_ENUM_T;
 	ret->Kind.Enum = self;
 	return ret;
 }

@@ -145,11 +145,11 @@ static void CLBC_type_list(ClassLoader* self, Vector* iltype_list, Namespace* pa
 	for (int i = 0; i < iltype_list->Length; i++) {
 		VectorItem e = AtVector(iltype_list, i);
 		ILType* ilt = (ILType*)e;
-		if (ilt->Tag == ilTYPE_CLASS_T) {
+		if (ilt->Tag == ILTYPE_CLASS_T) {
 			CLBC_class(self, ilt, parent);
-		} else if (ilt->Tag == ilTYPE_INTERFACE_T) {
+		} else if (ilt->Tag == ILTYPE_INTERFACE_T) {
 			CLBC_interface(self, ilt, parent);
-		} else if (ilt->Tag == ilTYPE_ENUM_T) {
+		} else if (ilt->Tag == ILTYPE_ENUM_T) {
 			CLBC_enum(self, ilt, parent);
 		}
 		CL_ERROR(self);
@@ -158,7 +158,7 @@ static void CLBC_type_list(ClassLoader* self, Vector* iltype_list, Namespace* pa
 
 static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	CL_ERROR(self);
-	assert(iltype->Tag == ilTYPE_ENUM_T);
+	assert(iltype->Tag == ILTYPE_ENUM_T);
 	il_enum* ilenum = iltype->Kind.Enum;
 	type* tp = CLBC_get_or_load_enum(parent, iltype);
 	CL_ERROR(self);
@@ -207,7 +207,7 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 	CL_ERROR(self);
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
-	assert(iltype->Tag == ilTYPE_CLASS_T);
+	assert(iltype->Tag == ILTYPE_CLASS_T);
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
@@ -243,7 +243,7 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 
 static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	CL_ERROR(self);
-	assert(iltype->Tag == ilTYPE_INTERFACE_T);
+	assert(iltype->Tag == ILTYPE_INTERFACE_T);
 	//NOTE:後で親関数から渡すようにする
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	CL_ERROR(self);
