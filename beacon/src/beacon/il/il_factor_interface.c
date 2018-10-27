@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-il_factor* MallocILFactor(il_factor_type type, const char* filename, int lineno) {
+il_factor* MallocILFactor(ILFactorType type, const char* filename, int lineno) {
 	il_factor* ret = mem_malloc(sizeof(il_factor), filename, lineno);
 	ret->type = type;
 	ret->lineno = -1;

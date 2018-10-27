@@ -15,7 +15,7 @@
 /**
  * 計算可能な要素の種類.
  */
-typedef enum il_factor_type {
+typedef enum ILFactorType {
 	ILFACTOR_INT_T,
 	ILFACTOR_DOUBLE_T,
 	ILFACTOR_CHAR_T,
@@ -37,7 +37,7 @@ typedef enum il_factor_type {
 	ILFACTOR_EXPLICIT_UNARY_OP_T,
 	ILFACTOR_PROPERTY_T,
 	ILFACTOR_SUBSCRIPT_T
-} il_factor_type;
+} ILFactorType;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
 //ために、スーパーセットの定義ではサブセットを前方宣言します。
@@ -76,7 +76,7 @@ struct il_factor_subscript;
  * 計算可能な要素.
  */
 typedef struct il_factor {
-	il_factor_type type;
+	ILFactorType type;
 	int lineno;
 	union {
 		struct il_factor_int* int_;
@@ -107,7 +107,7 @@ typedef struct il_factor {
 } il_factor;
 
 #define il_factor_new(type) (MallocILFactor(type, __FILE__, __LINE__))
-il_factor* MallocILFactor(il_factor_type type, const char* filename, int lineno);
+il_factor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
 
 /**
  * オペコードを生成します.
