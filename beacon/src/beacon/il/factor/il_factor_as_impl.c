@@ -8,14 +8,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-il_factor * WrapILAs(il_factor_as * self) {
-	il_factor* ret = il_factor_new(ILFACTOR_AS_T);
+ILFactor * WrapILAs(ILFactor_as * self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_AS_T);
 	ret->u.as_ = self;
 	return ret;
 }
 
-il_factor_as * NewILAs() {
-	il_factor_as* ret = (il_factor_as*)MEM_MALLOC(sizeof(il_factor_as));
+ILFactor_as * NewILAs() {
+	ILFactor_as* ret = (ILFactor_as*)MEM_MALLOC(sizeof(ILFactor_as));
 	ret->fact = NULL;
 	ret->fqcn = NewGenericCache();
 	ret->gtype = NULL;
@@ -23,7 +23,7 @@ il_factor_as * NewILAs() {
 	return ret;
 }
 
-void GenerateILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
+void GenerateILAs(ILFactor_as * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	GenerateGenericType(self->gtype, env);
@@ -34,7 +34,7 @@ void GenerateILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
+void LoadILAs(ILFactor_as * self, Enviroment * env, CallContext* cctx) {
 	if(self->gtype != NULL) {
 		return;
 	}
@@ -73,18 +73,18 @@ void LoadILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILAs(il_factor_as * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILAs(ILFactor_as * self, Enviroment * env, CallContext* cctx) {
 	LoadILAs(self, env, cctx);
 	return self->gtype;
 }
 
-void DeleteILAs(il_factor_as * self) {
+void DeleteILAs(ILFactor_as * self) {
 	DeleteGenericCache(self->fqcn);
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }
 
-char* ILAsToString(il_factor_as* self, Enviroment* env) {
+char* ILAsToString(ILFactor_as* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* factstr = ILFactorToString(self->fact, env);
 	char* to = GenericCacheToString(self->fqcn);

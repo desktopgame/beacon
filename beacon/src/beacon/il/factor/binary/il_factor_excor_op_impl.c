@@ -8,15 +8,15 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-il_factor_excor_op* NewILExcorOp(OperatorType type) {
-	il_factor_excor_op* ret = (il_factor_excor_op*)MEM_MALLOC(sizeof(il_factor_excor_op));
+ILFactor_excor_op* NewILExcorOp(OperatorType type) {
+	ILFactor_excor_op* ret = (ILFactor_excor_op*)MEM_MALLOC(sizeof(ILFactor_excor_op));
 	ret->type = type;
 	ret->parent = NULL;
 	ret->operator_index = -1;
 	return ret;
 }
 
-GenericType* EvalILExcorOp(il_factor_excor_op * self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILExcorOp(ILFactor_excor_op * self, Enviroment* env, CallContext* cctx) {
 	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
 	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
@@ -39,7 +39,7 @@ GenericType* EvalILExcorOp(il_factor_excor_op * self, Enviroment* env, CallConte
 	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILExcorOp(il_factor_excor_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
@@ -59,17 +59,17 @@ void GenerateILExcorOp(il_factor_excor_op* self, Enviroment* env, CallContext* c
 	}
 }
 
-void LoadILExcorOp(il_factor_excor_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsBoolBoolBinaryOp(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 
-void DeleteILExcorOp(il_factor_excor_op* self) {
+void DeleteILExcorOp(ILFactor_excor_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILExcorOpToString(il_factor_excor_op* self, Enviroment* env) {
+char* ILExcorOpToString(ILFactor_excor_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }

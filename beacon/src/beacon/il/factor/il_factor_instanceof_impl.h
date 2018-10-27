@@ -5,22 +5,22 @@ struct GenericCache;
 struct GenericType;
 struct FQCNCache;
 
-typedef struct il_factor_instanceof {
-	il_factor* fact;
+typedef struct ILFactor_instanceof {
+	ILFactor* fact;
 	struct GenericCache* gcache;
-} il_factor_instanceof;
+} ILFactor_instanceof;
 
-il_factor* WrapILInstanceOf(il_factor_instanceof* self);
+ILFactor* WrapILInstanceOf(ILFactor_instanceof* self);
 
-il_factor_instanceof* NewILInstanceOf();
+ILFactor_instanceof* NewILInstanceOf();
 
-void LoadILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
+void LoadILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
+void GenerateILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx);
 
-char* ILInstanceOfToString(il_factor_instanceof* self, Enviroment* env);
+char* ILInstanceOfToString(ILFactor_instanceof* self, Enviroment* env);
 
-void DeleteILInstanceOf(il_factor_instanceof* self);
+void DeleteILInstanceOf(ILFactor_instanceof* self);
 #endif

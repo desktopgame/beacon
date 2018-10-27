@@ -10,19 +10,19 @@ struct type;
  * superを表す要素.
  */
 
-typedef struct il_factor_super {
+typedef struct ILFactor_super {
 	GenericType* resolved;
-} il_factor_super;
+} ILFactor_super;
 
-il_factor_super* NewILSuper();
+ILFactor_super* NewILSuper();
 
-void GenerateILSuper(il_factor_super* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILSuper(ILFactor_super* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILSuper(il_factor_super* self, struct Enviroment* env, CallContext* cctx);
+void LoadILSuper(ILFactor_super* self, struct Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILSuper(il_factor_super* self, struct Enviroment* env, CallContext* cctx);
+GenericType* EvalILSuper(ILFactor_super* self, struct Enviroment* env, CallContext* cctx);
 
-char* ILSuperToString(il_factor_super* self, struct Enviroment* env);
+char* ILSuperToString(ILFactor_super* self, struct Enviroment* env);
 
-void DeleteILSuper(il_factor_super* self);
+void DeleteILSuper(ILFactor_super* self);
 #endif // !SIGNAL_IL_IL_FACTOR_SUPER_H

@@ -458,7 +458,7 @@ OperatorOverload* GFindOperatorOverloadClass(class_* self, OperatorType type, Ve
 OperatorOverload* ILFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
-		il_factor* ilfact = (il_factor*)AtVector(args,i);
+		ILFactor* ilfact = (ILFactor*)AtVector(args,i);
 		GenericType* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
@@ -470,9 +470,9 @@ OperatorOverload* ILFindOperatorOverloadClass(class_* self, OperatorType type, V
 OperatorOverload* ArgFindOperatorOverloadClass(class_* self, OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
-		//il_factor* ilfact = (il_factor*)AtVector(args,i);
+		//ILFactor* ilfact = (ILFactor*)AtVector(args,i);
 		ILArgument* ilarg = (ILArgument*)AtVector(args, i);
-		il_factor* ilfact = ilarg->Factor;
+		ILFactor* ilfact = ilarg->Factor;
 		GenericType* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}

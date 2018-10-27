@@ -7,22 +7,22 @@
 /**
  * 文字を表す要素.
  */
-typedef struct il_factor_char {
+typedef struct ILFactor_char {
 	char value;
-} il_factor_char;
+} ILFactor_char;
 
-il_factor* WrapILChar(il_factor_char* self);
+ILFactor* WrapILChar(ILFactor_char* self);
 
-il_factor_char* NewILChar(char c);
+ILFactor_char* NewILChar(char c);
 
-void GenerateILChar(il_factor_char* self, Enviroment* env, CallContext* cctx);
+void GenerateILChar(ILFactor_char* self, Enviroment* env, CallContext* cctx);
 
-void LoadILChar(il_factor_char* self, Enviroment* env, CallContext* cctx);
+void LoadILChar(ILFactor_char* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILChar(il_factor_char* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILChar(ILFactor_char* self, Enviroment* env, CallContext* cctx);
 
-char* ILCharToString(il_factor_char* self, Enviroment* env);
+char* ILCharToString(ILFactor_char* self, Enviroment* env);
 
-void DeleteILChar(il_factor_char* self);
+void DeleteILChar(ILFactor_char* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_CHAR_H

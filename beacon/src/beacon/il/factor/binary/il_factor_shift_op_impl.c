@@ -12,15 +12,15 @@
 static Opcode operator_to_iopcode(OperatorType type);
 static Opcode operator_to_dopcode(OperatorType type);
 
-il_factor_shift_op* NewILShiftOp(OperatorType type) {
-	il_factor_shift_op* ret = (il_factor_shift_op*)MEM_MALLOC(sizeof(il_factor_shift_op));
+ILFactor_shift_op* NewILShiftOp(OperatorType type) {
+	ILFactor_shift_op* ret = (ILFactor_shift_op*)MEM_MALLOC(sizeof(ILFactor_shift_op));
 	ret->parent = NULL;
 	ret->type = type;
 	ret->operator_index = -1;
 	return ret;
 }
 
-GenericType* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILShiftOp(ILFactor_shift_op * self, Enviroment* env, CallContext* cctx) {
 	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
 	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,7 +46,7 @@ GenericType* EvalILShiftOp(il_factor_shift_op * self, Enviroment* env, CallConte
 	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILShiftOp(il_factor_shift_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILShiftOp(ILFactor_shift_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->right, env, cctx);
 		GenerateILFactor(self->parent->left, env, cctx);
@@ -66,17 +66,17 @@ void GenerateILShiftOp(il_factor_shift_op* self, Enviroment* env, CallContext* c
 	}
 }
 
-void LoadILShiftOp(il_factor_shift_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILShiftOp(ILFactor_shift_op* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx)) {
 		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 
-void DeleteILShiftOp(il_factor_shift_op* self) {
+void DeleteILShiftOp(ILFactor_shift_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILShiftOpToString(il_factor_shift_op* self, Enviroment* env) {
+char* ILShiftOpToString(ILFactor_shift_op* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static

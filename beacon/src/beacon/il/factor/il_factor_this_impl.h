@@ -8,19 +8,19 @@ struct type;
 /**
  * thisを表す要素.
  */
-typedef struct il_factor_this {
+typedef struct ILFactor_this {
 	GenericType* resolved;
-} il_factor_this;
+} ILFactor_this;
 
-il_factor_this* NewILThis();
+ILFactor_this* NewILThis();
 
-void GenerateILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILThis(ILFactor_this* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
+void LoadILThis(ILFactor_this* self, struct Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILThis(il_factor_this* self, struct Enviroment* env, CallContext* cctx);
+GenericType* EvalILThis(ILFactor_this* self, struct Enviroment* env, CallContext* cctx);
 
-char* ILThisToString(il_factor_this* self, struct Enviroment* env);
+char* ILThisToString(ILFactor_this* self, struct Enviroment* env);
 
-void DeleteILThis(il_factor_this* self);
+void DeleteILThis(ILFactor_this* self);
 #endif // !SIGNAL_IL_IL_FACTOR_THIS_H

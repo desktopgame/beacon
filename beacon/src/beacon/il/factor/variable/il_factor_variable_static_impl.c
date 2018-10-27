@@ -4,38 +4,38 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_type_argument.h"
 
-static void il_factor_static_delete_typeargs(VectorItem item);
+static void ILFactor_static_delete_typeargs(VectorItem item);
 
-il_factor_variable_static* NewILVariableStatic() {
-	il_factor_variable_static* ret = (il_factor_variable_static*)MEM_MALLOC(sizeof(il_factor_variable_static));
+ILFactor_variable_static* NewILVariableStatic() {
+	ILFactor_variable_static* ret = (ILFactor_variable_static*)MEM_MALLOC(sizeof(ILFactor_variable_static));
 	ret->fqcn = NULL;
 	ret->type_args = NULL;
 	return ret;
 }
 
-void GenerateILVariableStatic(il_factor_variable_static* self, Enviroment* env, CallContext* cctx) {
+void GenerateILVariableStatic(ILFactor_variable_static* self, Enviroment* env, CallContext* cctx) {
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
-void LoadILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx) {
+void LoadILVariableStatic(ILFactor_variable_static * self, Enviroment * env, CallContext* cctx) {
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-GenericType* EvalILVariableStatic(il_factor_variable_static * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILVariableStatic(ILFactor_variable_static * self, Enviroment * env, CallContext* cctx) {
 	return NULL;
 }
 
-char* ILVariableStaticToString(il_factor_variable_static * self, Enviroment * env) {
+char* ILVariableStaticToString(ILFactor_variable_static * self, Enviroment * env) {
 	return NULL;
 }
 
-void DeleteILVariableStatic(il_factor_variable_static* self) {
+void DeleteILVariableStatic(ILFactor_variable_static* self) {
 	DeleteFQCNCache(self->fqcn);
-	DeleteVector(self->type_args, il_factor_static_delete_typeargs);
+	DeleteVector(self->type_args, ILFactor_static_delete_typeargs);
 	MEM_FREE(self);
 }
 //private
-static void il_factor_static_delete_typeargs(VectorItem item) {
+static void ILFactor_static_delete_typeargs(VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

@@ -9,15 +9,15 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-il_factor_childa_op* NewILChildaOp(OperatorType type) {
-	il_factor_childa_op* ret = (il_factor_childa_op*)MEM_MALLOC(sizeof(il_factor_childa_op));
+ILFactor_childa_op* NewILChildaOp(OperatorType type) {
+	ILFactor_childa_op* ret = (ILFactor_childa_op*)MEM_MALLOC(sizeof(ILFactor_childa_op));
 	ret->type = type;
 	ret->parent = NULL;
 	ret->operator_index = -1;
 	return ret;
 }
 
-GenericType* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILChildaOp(ILFactor_childa_op * self, Enviroment * env, CallContext* cctx) {
 	GenericType* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(self->operator_index == -1) {
 		//GenerateILFactor(self->parent->a, env);
@@ -37,7 +37,7 @@ GenericType* EvalILChildaOp(il_factor_childa_op * self, Enviroment * env, CallCo
 	}
 }
 
-void GenerateILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILChildaOp(ILFactor_childa_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->a, env, cctx);
 		GenericType* gtype = EvalILFactor(self->parent->a, env, cctx);
@@ -55,7 +55,7 @@ void GenerateILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext*
 	}
 }
 
-void LoadILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILChildaOp(ILFactor_childa_op* self, Enviroment* env, CallContext* cctx) {
 	GenericType* gtype = EvalILFactor(self->parent->a, env, cctx);
 	if(GENERIC2TYPE(gtype) != TYPE_INT &&
 	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
@@ -63,10 +63,10 @@ void LoadILChildaOp(il_factor_childa_op* self, Enviroment* env, CallContext* cct
 	}
 }
 
-void DeleteILChildaOp(il_factor_childa_op* self) {
+void DeleteILChildaOp(ILFactor_childa_op* self) {
 	MEM_FREE(self);
 }
 
-char* ILChildaOpToString(il_factor_childa_op* self, Enviroment* env) {
+char* ILChildaOpToString(ILFactor_childa_op* self, Enviroment* env) {
 	return ILUnaryOpToString_simple(self->parent, env);
 }

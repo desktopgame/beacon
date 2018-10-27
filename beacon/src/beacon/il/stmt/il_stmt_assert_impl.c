@@ -40,7 +40,7 @@ void LoadILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = ILFactorToString(self->condition, env);
-		il_factor_string* ilstr = NewILString(InternString(str));
+		ILFactor_string* ilstr = NewILString(InternString(str));
 		self->message = WrapILString(ilstr);
 		assert(ilstr->valuev != 0);
 		MEM_FREE(str);

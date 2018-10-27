@@ -60,7 +60,7 @@ static il_stmt* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		case AST_PROC_T:
 		{
 			AST* afact = FirstAST(asource);
-			il_factor* ilfact = CLILFactor(self, afact);
+			ILFactor* ilfact = CLILFactor(self, afact);
 			il_stmt_proc* ilproc = NewILProc();
 				ilproc->factor = ilfact;
 			assert(ilfact != NULL);
@@ -201,7 +201,7 @@ static il_stmt_if* CLIL_if(ClassLoader* self, AST* asource) {
 	il_stmt_if* ret = NewILIf();
 	AST* acond = FirstAST(asource);
 	AST* abody = SecondAST(asource);
-	il_factor* ilcond = CLILFactor(self, acond);
+	ILFactor* ilcond = CLILFactor(self, acond);
 	CLILBody(self, ret->body, abody);
 	ret->condition = ilcond;
 	return ret;
@@ -259,7 +259,7 @@ static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource) {
 static il_stmt_return* CLIL_return(ClassLoader* self, AST* asource) {
 	assert(asource->Tag == AST_RETURN_T);
 	AST* afact = FirstAST(asource);
-	il_factor* ilfact = CLILFactor(self, afact);
+	ILFactor* ilfact = CLILFactor(self, afact);
 	il_stmt_return* ret = NewILReturn();
 	ret->fact = ilfact;
 	return ret;

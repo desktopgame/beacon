@@ -4,22 +4,22 @@
 #include "../../call_context.h"
 struct GenericType;
 struct Enviroment;
-struct il_factor_binary_op;
-typedef struct il_factor_shift_op {
-	struct il_factor_binary_op* parent;
+struct ILFactor_binary_op;
+typedef struct ILFactor_shift_op {
+	struct ILFactor_binary_op* parent;
 	OperatorType type;
 	int operator_index;
-} il_factor_shift_op;
+} ILFactor_shift_op;
 
-il_factor_shift_op* NewILShiftOp(OperatorType type);
+ILFactor_shift_op* NewILShiftOp(OperatorType type);
 
-struct GenericType* EvalILShiftOp(il_factor_shift_op * self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILShiftOp(ILFactor_shift_op * self, struct Enviroment* env, CallContext* cctx);
 
-void GenerateILShiftOp(il_factor_shift_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILShiftOp(ILFactor_shift_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILShiftOp(il_factor_shift_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILShiftOp(ILFactor_shift_op* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILShiftOp(il_factor_shift_op* self);
+void DeleteILShiftOp(ILFactor_shift_op* self);
 
-char* ILShiftOpToString(il_factor_shift_op* self, struct Enviroment* env);
+char* ILShiftOpToString(ILFactor_shift_op* self, struct Enviroment* env);
 #endif

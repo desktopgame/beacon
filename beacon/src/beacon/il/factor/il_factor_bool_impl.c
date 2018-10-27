@@ -5,19 +5,19 @@
 #include "../../env/namespace.h"
 #include "../../env/TYPE_IMPL.h"
 
-il_factor * WrapILBool(il_factor_bool * self) {
-	il_factor* ret = il_factor_new(ILFACTOR_BOOL_T);
+ILFactor * WrapILBool(ILFactor_bool * self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_BOOL_T);
 	ret->u.bool_ = self;
 	return ret;
 }
 
-il_factor_bool * NewILBool(bool b) {
-	il_factor_bool* ret = (il_factor_bool*)MEM_MALLOC(sizeof(il_factor_bool));
+ILFactor_bool * NewILBool(bool b) {
+	ILFactor_bool* ret = (ILFactor_bool*)MEM_MALLOC(sizeof(ILFactor_bool));
 	ret->a = b;
 	return ret;
 }
 
-void GenerateILBool(il_factor_bool * self, Enviroment * env, CallContext* cctx) {
+void GenerateILBool(ILFactor_bool * self, Enviroment * env, CallContext* cctx) {
 	if (self->a) {
 		AddOpcodeBuf(env->Bytecode, OP_TRUE);
 	} else {
@@ -25,14 +25,14 @@ void GenerateILBool(il_factor_bool * self, Enviroment * env, CallContext* cctx) 
 	}
 }
 
-GenericType* EvalILBool(il_factor_bool * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILBool(ILFactor_bool * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_BOOL;
 }
 
-char* ILBoolToString(il_factor_bool* self, Enviroment* env) {
+char* ILBoolToString(ILFactor_bool* self, Enviroment* env) {
 	return Strdup(self->a ? "true" : "false");
 }
 
-void DeleteILBool(il_factor_bool * self) {
+void DeleteILBool(ILFactor_bool * self) {
 	MEM_FREE(self);
 }

@@ -42,72 +42,72 @@ typedef enum ILFactorType {
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
 //ために、スーパーセットの定義ではサブセットを前方宣言します。
 //サブセットはこのファイルをインクルードして、
-//il_factor で計算可能な要素を抽象的に扱えます。
+//ILFactor で計算可能な要素を抽象的に扱えます。
 //例えば、関数の実行には計算可能な実引数が必要ですが、
 //関数自体が計算可能な要素です。
 //ここでは関数呼び出しを前方宣言し、
-//関数呼び出しを表す構造体では実引数の一覧を il_factor型で定義します。
+//関数呼び出しを表す構造体では実引数の一覧を ILFactor型で定義します。
 //詳細は il_factor_impl.h を参照してください。
-struct il_factor_int;
-struct il_factor_double;
-struct il_factor_char;
-struct il_factor_string;
-struct il_factor_variable;
-struct il_factor_unary_op;
-struct il_factor_binary_op;
-struct il_factor_assign_op;
-struct il_factor_this;
-struct il_factor_super;
-struct il_factor_new_instance;
-struct il_factor_bool;
-struct il_factor_null;
-struct il_factor_as;
-struct il_factor_inc;
-struct il_factor_dec;
-struct il_factor_call_op;
-struct il_factor_member_op;
-struct il_factor_instanceof;
-struct il_factor_explicit_binary_op;
-struct il_factor_explicit_unary_op;
-struct il_factor_Property;
-struct il_factor_subscript;
+struct ILFactor_int;
+struct ILFactor_double;
+struct ILFactor_char;
+struct ILFactor_string;
+struct ILFactor_variable;
+struct ILFactor_unary_op;
+struct ILFactor_binary_op;
+struct ILFactor_assign_op;
+struct ILFactor_this;
+struct ILFactor_super;
+struct ILFactor_new_instance;
+struct ILFactor_bool;
+struct ILFactor_null;
+struct ILFactor_as;
+struct ILFactor_inc;
+struct ILFactor_dec;
+struct ILFactor_call_op;
+struct ILFactor_member_op;
+struct ILFactor_instanceof;
+struct ILFactor_explicit_binary_op;
+struct ILFactor_explicit_unary_op;
+struct ILFactor_Property;
+struct ILFactor_subscript;
 
 /**
  * 計算可能な要素.
  */
-typedef struct il_factor {
+typedef struct ILFactor {
 	ILFactorType type;
 	int lineno;
 	union {
-		struct il_factor_int* int_;
-		struct il_factor_double* double_;
-		struct il_factor_char* char_;
-		struct il_factor_string* string_;
-		struct il_factor_variable* variable_;
-		struct il_factor_unary_op* unary_;
-		struct il_factor_assign_op* assign_;
-		struct il_factor_binary_op* binary_;
-		struct il_factor_this* this_;
-		struct il_factor_super* super_;
-		struct il_factor_new_instance* new_instance_;
-		struct il_factor_cAST* cast_;
-		struct il_factor_bool* bool_;
-		struct il_factor_null* null_;
-		struct il_factor_as* as_;
-		struct il_factor_inc* inc_;
-		struct il_factor_dec* dec_;
-		struct il_factor_call_op* call_;
-		struct il_factor_member_op* member_;
-		struct il_factor_instanceof* instanceof_;
-		struct il_factor_explicit_binary_op* exp_binary_op;
-		struct il_factor_explicit_unary_op* exp_unary_op;
-		struct il_factor_Property* prop;
-		struct il_factor_subscript* subscript;
+		struct ILFactor_int* int_;
+		struct ILFactor_double* double_;
+		struct ILFactor_char* char_;
+		struct ILFactor_string* string_;
+		struct ILFactor_variable* variable_;
+		struct ILFactor_unary_op* unary_;
+		struct ILFactor_assign_op* assign_;
+		struct ILFactor_binary_op* binary_;
+		struct ILFactor_this* this_;
+		struct ILFactor_super* super_;
+		struct ILFactor_new_instance* new_instance_;
+		struct ILFactor_cAST* cast_;
+		struct ILFactor_bool* bool_;
+		struct ILFactor_null* null_;
+		struct ILFactor_as* as_;
+		struct ILFactor_inc* inc_;
+		struct ILFactor_dec* dec_;
+		struct ILFactor_call_op* call_;
+		struct ILFactor_member_op* member_;
+		struct ILFactor_instanceof* instanceof_;
+		struct ILFactor_explicit_binary_op* exp_binary_op;
+		struct ILFactor_explicit_unary_op* exp_unary_op;
+		struct ILFactor_Property* prop;
+		struct ILFactor_subscript* subscript;
 	} u;
-} il_factor;
+} ILFactor;
 
-#define il_factor_new(type) (MallocILFactor(type, __FILE__, __LINE__))
-il_factor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
+#define ILFactor_new(type) (MallocILFactor(type, __FILE__, __LINE__))
+ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
 
 /**
  * オペコードを生成します.
@@ -116,7 +116,7 @@ il_factor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
  * @param env
  * @param cctx
  */
-void GenerateILFactor(il_factor* self, Enviroment* env, CallContext* cctx);
+void GenerateILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 因子を読み込みます.
@@ -125,7 +125,7 @@ void GenerateILFactor(il_factor* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILFactor(il_factor* self, Enviroment* env, CallContext* cctx);
+void LoadILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
 
 /**
  * この因子が表す型を返します.
@@ -135,7 +135,7 @@ void LoadILFactor(il_factor* self, Enviroment* env, CallContext* cctx);
  * @param cctx
  * @return
  */
-GenericType* EvalILFactor(il_factor* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
 
 /**
  * ファクターの文字列表現を返します.
@@ -144,7 +144,7 @@ GenericType* EvalILFactor(il_factor* self, Enviroment* env, CallContext* cctx);
  * @param ilctx
  * @return
  */
-char* ILFactorToString(il_factor* self, Enviroment* env);
+char* ILFactorToString(ILFactor* self, Enviroment* env);
 
 /**
  * @param sb
@@ -162,5 +162,5 @@ void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env);
  * 計算可能な要素を開放します.
  * @param self
  */
-void DeleteILFactor(il_factor* self);
+void DeleteILFactor(ILFactor* self);
 #endif // !SIGNAL_IL_IL_FACTOR_INTERFACE_H

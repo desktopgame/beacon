@@ -9,35 +9,35 @@
 #include "../../error.h"
 #include <assert.h>
 
-static void check_context(il_factor_this * self, Enviroment * env, CallContext* cctx);
+static void check_context(ILFactor_this * self, Enviroment * env, CallContext* cctx);
 
-il_factor_this* NewILThis() {
-	il_factor_this* ret = (il_factor_this*)MEM_MALLOC(sizeof(il_factor_this));
+ILFactor_this* NewILThis() {
+	ILFactor_this* ret = (ILFactor_this*)MEM_MALLOC(sizeof(ILFactor_this));
 	ret->resolved = NULL;
 	return ret;
 }
 
-void GenerateILThis(il_factor_this * self, Enviroment * env, CallContext* cctx) {
+void GenerateILThis(ILFactor_this * self, Enviroment * env, CallContext* cctx) {
 	AddOpcodeBuf(env->Bytecode, OP_THIS);
 }
 
-void LoadILThis(il_factor_this * self, Enviroment * env, CallContext* cctx) {
+void LoadILThis(ILFactor_this * self, Enviroment * env, CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-GenericType* EvalILThis(il_factor_this * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILThis(ILFactor_this * self, Enviroment * env, CallContext* cctx) {
 	return GetTypeCContext(cctx)->generic_self;
 }
 
-char* ILThisToString(il_factor_this* self, Enviroment* env) {
+char* ILThisToString(ILFactor_this* self, Enviroment* env) {
 	return Strdup("this");
 }
 
-void DeleteILThis(il_factor_this * self) {
+void DeleteILThis(ILFactor_this * self) {
 	MEM_FREE(self);
 }
 //private
-static void check_context(il_factor_this * self, Enviroment * env, CallContext* cctx) {
+static void check_context(ILFactor_this * self, Enviroment * env, CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}

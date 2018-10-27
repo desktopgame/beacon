@@ -10,7 +10,7 @@
 //proto
 static void DeleteILElifList_impl(VectorItem item);
 static void DeleteILIf_stmt(VectorItem item);
-static void check_condition_type(il_factor* fact, Enviroment* env, CallContext* cctx);
+static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
 
 il_stmt * WrapILIf(il_stmt_if * self) {
 	il_stmt* ret = il_stmt_new(ILSTMT_IF_T);
@@ -164,7 +164,7 @@ static void DeleteILIf_stmt(VectorItem item) {
 	DeleteILStmt(e);
 }
 
-static void check_condition_type(il_factor* fact, Enviroment* env, CallContext* cctx) {
+static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx) {
 	GenericType* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->CoreType != TYPE_BOOL) {
 		char* condstr = ILFactorToString(fact, env);

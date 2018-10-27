@@ -7,7 +7,7 @@
  */
 typedef struct ILArgument {
 	//char* name;
-	il_factor* Factor;
+	ILFactor* Factor;
 } ILArgument;
 
 /**

@@ -3,24 +3,24 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 
-struct il_factor_binary_op;
+struct ILFactor_binary_op;
 struct GenericType;
 struct Enviroment;
-typedef struct il_factor_logic_op {
-	struct il_factor_binary_op* parent;
+typedef struct ILFactor_logic_op {
+	struct ILFactor_binary_op* parent;
 	OperatorType type;
 	int operator_index;
-} il_factor_logic_op;
+} ILFactor_logic_op;
 
-il_factor_logic_op* NewILLogicOp(OperatorType type);
+ILFactor_logic_op* NewILLogicOp(OperatorType type);
 
-struct GenericType* EvalILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILLogicOp(ILFactor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
-void GenerateILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILLogicOp(ILFactor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILLogicOp(il_factor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILLogicOp(ILFactor_logic_op* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILLogicOp(il_factor_logic_op* self);
+void DeleteILLogicOp(ILFactor_logic_op* self);
 
-char* ILLogicOpToString(il_factor_logic_op* self, struct Enviroment* env);
+char* ILLogicOpToString(ILFactor_logic_op* self, struct Enviroment* env);
 #endif

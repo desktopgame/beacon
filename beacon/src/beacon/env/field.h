@@ -9,7 +9,7 @@ struct type;
 struct GenericType;
 struct Object;
 struct Enviroment;
-struct il_factor;
+struct ILFactor;
 /**
  * フィールドを表す構造体.
  */
@@ -20,7 +20,7 @@ typedef struct Field {
 	struct Object* static_value;
 	AccessLevel access;
 	ModifierType modifier;
-	struct il_factor* initial_value;
+	struct ILFactor* initial_value;
 	struct Enviroment* initial_value_env;
 	bool not_initialized_at_ctor;
 } Field;

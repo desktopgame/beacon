@@ -7,7 +7,7 @@ struct Enviroment;
 struct GenericType;
 struct Method;
 
-typedef struct il_factor_invoke_static {
+typedef struct ILFactor_invoke_static {
 	StringView namev;
 	FQCNCache* fqcn;
 	Vector* args;
@@ -15,17 +15,17 @@ typedef struct il_factor_invoke_static {
 	struct Method* m;
 	int index;
 	struct GenericType* resolved;
-} il_factor_invoke_static;
+} ILFactor_invoke_static;
 
-il_factor_invoke_static* NewILInvokeStatic(StringView namev);
+ILFactor_invoke_static* NewILInvokeStatic(StringView namev);
 
-void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvokeStatic(ILFactor_invoke_static* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInvokeStatic(il_factor_invoke_static * self, Enviroment * env, CallContext* cctx);
+void LoadILInvokeStatic(ILFactor_invoke_static * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvokeStatic(ILFactor_invoke_static * self, Enviroment * env, CallContext* cctx);
 
-char* ILInvokeStaticToString(il_factor_invoke_static* self, Enviroment* env);
+char* ILInvokeStaticToString(ILFactor_invoke_static* self, Enviroment* env);
 
-void DeleteILInvokeStatic(il_factor_invoke_static* self);
+void DeleteILInvokeStatic(ILFactor_invoke_static* self);
 #endif

@@ -13,7 +13,7 @@ struct SymbolEntry;
 typedef struct il_stmt_variable_init {
 	GenericCache* fqcn;
 	StringView namev;
-	il_factor* fact;
+	ILFactor* fact;
 	struct SymbolEntry* sym;
 } il_stmt_variable_init;
 

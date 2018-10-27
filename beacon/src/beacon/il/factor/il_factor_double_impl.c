@@ -10,32 +10,32 @@
 #pragma warning(disable:4996)
 #endif
 
-il_factor * WrapILDouble(il_factor_double * self) {
-	il_factor* ret = il_factor_new(ILFACTOR_DOUBLE_T);
+ILFactor * WrapILDouble(ILFactor_double * self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_DOUBLE_T);
 	ret->u.double_ = self;
 	return ret;
 }
 
-il_factor_double * NewILDouble(double d) {
-	il_factor_double* ret = (il_factor_double*)MEM_MALLOC(sizeof(il_factor_double));
+ILFactor_double * NewILDouble(double d) {
+	ILFactor_double* ret = (ILFactor_double*)MEM_MALLOC(sizeof(ILFactor_double));
 	ret->value = d;
 	return ret;
 }
 
-void GenerateILDouble(il_factor_double * self, Enviroment* env, CallContext* cctx) {
+void GenerateILDouble(ILFactor_double * self, Enviroment* env, CallContext* cctx) {
 	int index = AddCDoubleEnviroment(env, self->value);
 	AddOpcodeBuf(env->Bytecode, OP_DCONST);
 	AddOpcodeBuf(env->Bytecode, index);
 }
 
-void LoadILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
+void LoadILDouble(ILFactor_double * self, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILDouble(il_factor_double * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILDouble(ILFactor_double * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_DOUBLE;
 }
 
-char* ILDoubleToString(il_factor_double* self, Enviroment* env) {
+char* ILDoubleToString(ILFactor_double* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char block[32] = {0};
 	int res = sprintf(block, "%lf", self->value);
@@ -44,6 +44,6 @@ char* ILDoubleToString(il_factor_double* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILDouble(il_factor_double * self) {
+void DeleteILDouble(ILFactor_double * self) {
 	MEM_FREE(self);
 }

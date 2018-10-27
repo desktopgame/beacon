@@ -9,14 +9,14 @@
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx);
-static void resolve_default(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx);
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx);
-static void il_factor_invoke_static_args_delete(VectorItem item);
-static void il_factor_invoke_static_typeargs_delete(VectorItem item);
+static void resolve_non_default(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx);
+static void resolve_default(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx);
+static void ILFactor_invoke_static_check(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx);
+static void ILFactor_invoke_static_args_delete(VectorItem item);
+static void ILFactor_invoke_static_typeargs_delete(VectorItem item);
 
-il_factor_invoke_static* NewILInvokeStatic(StringView namev) {
-	il_factor_invoke_static* ret = (il_factor_invoke_static*)MEM_MALLOC(sizeof(il_factor_invoke_static));
+ILFactor_invoke_static* NewILInvokeStatic(StringView namev) {
+	ILFactor_invoke_static* ret = (ILFactor_invoke_static*)MEM_MALLOC(sizeof(ILFactor_invoke_static));
 	ret->args = NULL;
 	ret->fqcn = NULL;
 	ret->type_args = NULL;
@@ -27,7 +27,7 @@ il_factor_invoke_static* NewILInvokeStatic(StringView namev) {
 	return ret;
 }
 
-void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInvokeStatic(ILFactor_invoke_static* self, Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 		assert(e->GType != NULL);
@@ -46,12 +46,12 @@ void GenerateILInvokeStatic(il_factor_invoke_static* self, Enviroment* env, Call
 	AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 }
 
-void LoadILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
-	il_factor_invoke_static_check(self, env, cctx);
+void LoadILInvokeStatic(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx) {
+	ILFactor_invoke_static_check(self, env, cctx);
 }
 
-GenericType* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
-	il_factor_invoke_static_check(self, env, cctx);
+GenericType* EvalILInvokeStatic(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx) {
+	ILFactor_invoke_static_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(GetLastBCError()) {
 		return NULL;
@@ -67,7 +67,7 @@ GenericType* EvalILInvokeStatic(il_factor_invoke_static * self, Enviroment* env,
 	return NULL;
 }
 
-char* ILInvokeStaticToString(il_factor_invoke_static* self, Enviroment* env) {
+char* ILInvokeStaticToString(ILFactor_invoke_static* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);
@@ -79,15 +79,15 @@ char* ILInvokeStaticToString(il_factor_invoke_static* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILInvokeStatic(il_factor_invoke_static* self) {
-	DeleteVector(self->args, il_factor_invoke_static_args_delete);
-	DeleteVector(self->type_args, il_factor_invoke_static_typeargs_delete);
+void DeleteILInvokeStatic(ILFactor_invoke_static* self) {
+	DeleteVector(self->args, ILFactor_invoke_static_args_delete);
+	DeleteVector(self->type_args, ILFactor_invoke_static_typeargs_delete);
 	DeleteFQCNCache(self->fqcn);
 	MEM_FREE(self);
 }
 //private
-//FIXME:il_factor_invokeからのコピペ
-static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
+//FIXME:ILFactor_invokeからのコピペ
+static void resolve_non_default(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -98,7 +98,7 @@ static void resolve_non_default(il_factor_invoke_static * self, Enviroment* env,
 	self->resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
 
-static void resolve_default(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
+static void resolve_default(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -110,7 +110,7 @@ static void resolve_default(il_factor_invoke_static * self, Enviroment* env, Cal
 	PopCallContext(cctx);
 }
 
-static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviroment* env, CallContext* cctx) {
+static void ILFactor_invoke_static_check(ILFactor_invoke_static * self, Enviroment* env, CallContext* cctx) {
 	type* ty =GetEvalTypeCContext(cctx, self->fqcn);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
@@ -147,12 +147,12 @@ static void il_factor_invoke_static_check(il_factor_invoke_static * self, Enviro
 	PopCallContext(cctx);
 }
 
-static void il_factor_invoke_static_args_delete(VectorItem item) {
+static void ILFactor_invoke_static_args_delete(VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 
-static void il_factor_invoke_static_typeargs_delete(VectorItem item) {
+static void ILFactor_invoke_static_typeargs_delete(VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

@@ -16,7 +16,7 @@ typedef enum bound_invoke {
 	BOUND_INVOKE_UNDEFINED_T
 } bound_invoke;
 
-typedef struct il_factor_invoke_bound {
+typedef struct ILFactor_invoke_bound {
 	StringView namev;
 	Vector* type_args;
 	Vector* args;
@@ -27,19 +27,19 @@ typedef struct il_factor_invoke_bound {
 	int index;
 	struct GenericType* resolved;
 	bound_invoke tag;
-} il_factor_invoke_bound;
+} ILFactor_invoke_bound;
 
-il_factor_invoke_bound* NewILInvokeBound(StringView namev);
+ILFactor_invoke_bound* NewILInvokeBound(StringView namev);
 
-void GenerateILInvokeBound(il_factor_invoke_bound* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvokeBound(ILFactor_invoke_bound* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
+void LoadILInvokeBound(ILFactor_invoke_bound * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILInvokeBound(il_factor_invoke_bound * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvokeBound(ILFactor_invoke_bound * self, Enviroment * env, CallContext* cctx);
 
-char* ILInvokeBoundToString(il_factor_invoke_bound* self, Enviroment* env);
+char* ILInvokeBoundToString(ILFactor_invoke_bound* self, Enviroment* env);
 
-void DeleteILInvokeBound(il_factor_invoke_bound* self);
+void DeleteILInvokeBound(ILFactor_invoke_bound* self);
 
-struct OperatorOverload* FindSetILInvokeBound(il_factor_invoke_bound* self, il_factor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* FindSetILInvokeBound(ILFactor_invoke_bound* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

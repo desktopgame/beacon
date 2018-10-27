@@ -8,7 +8,7 @@
  * elif (...) { ... } を表す要素.
  */
 typedef struct il_stmt_elif {
-	il_factor* condition;
+	ILFactor* condition;
 	Vector* body;
 } il_stmt_elif;
 
@@ -26,7 +26,7 @@ typedef struct il_stmt_else {
  * を表す要素.
  */
 typedef struct il_stmt_if {
-	il_factor* condition;
+	ILFactor* condition;
 	Vector* body;
 	Vector* elif_list;
 	il_stmt_else* else_body;

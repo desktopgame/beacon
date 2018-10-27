@@ -14,21 +14,21 @@
 #include "../../il/il_factor_impl.h"
 
 //proto
-static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env, CallContext* cctx, bool* swap);
-static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap);
-static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap);
-static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap);
-static void il_factor_member_op_typearg_delete(VectorItem item);
+static void ILFactor_member_op_check(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, bool* swap);
+static void ILFactor_member_op_check_static(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap);
+static void ILFactor_member_op_check_prop(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap);
+static void ILFactor_member_op_check_static_prop(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap);
+static void ILFactor_member_op_typearg_delete(VectorItem item);
 
-il_factor* WrapILMemberOp(il_factor_member_op* self) {
-	il_factor* ret = il_factor_new(ILFACTOR_MEMBER_OP_T);
+ILFactor* WrapILMemberOp(ILFactor_member_op* self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_MEMBER_OP_T);
 	ret->u.member_ = self;
 	self->parent = ret;
 	return ret;
 }
 
-il_factor_member_op* NewILMemberOp(StringView namev) {
-	il_factor_member_op* ret = (il_factor_member_op*)MEM_MALLOC(sizeof(il_factor_member_op));
+ILFactor_member_op* NewILMemberOp(StringView namev) {
+	ILFactor_member_op* ret = (ILFactor_member_op*)MEM_MALLOC(sizeof(ILFactor_member_op));
 	ret->fact = NULL;
 	ret->type_args = NewVector();
 	ret->namev = namev;
@@ -37,27 +37,27 @@ il_factor_member_op* NewILMemberOp(StringView namev) {
 	return ret;
 }
 
-void LoadILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILMemberOp(ILFactor_member_op* self, Enviroment* env, CallContext* cctx) {
 	bool swap;
 	LoadILFactor(self->fact, env, cctx);
-	il_factor_member_op_check(self, env, cctx, &swap);
+	ILFactor_member_op_check(self, env, cctx, &swap);
 }
 
-void GenerateILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILMemberOp(ILFactor_member_op* self, Enviroment* env, CallContext* cctx) {
 	if(!IsStaticModifier(self->f->modifier)) {
 		GenerateILFactor(self->fact, env, cctx);
 	}
 	GenerateGetField(env->Bytecode, self->f, self->index);
 }
 
-GenericType* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallContext* cctx) {
-	//il_factor_member_op_checkは、
+GenericType* EvalILMemberOp(ILFactor_member_op* self, Enviroment* env, CallContext* cctx) {
+	//ILFactor_member_op_checkは、
 	//フィールドアクセスとプロパティアクセスを区別して、
 	//プロパティなら木構造を入れ替える
 	//入れ替えられたなら swap は true になる
 	bool swap = false;
-	il_factor* parent = self->parent;
-	il_factor_member_op_check(self, env, cctx, &swap);
+	ILFactor* parent = self->parent;
+	ILFactor_member_op_check(self, env, cctx, &swap);
 	if(swap) {
 		return EvalILFactor(parent, env, cctx);
 	}
@@ -71,7 +71,7 @@ GenericType* EvalILMemberOp(il_factor_member_op* self, Enviroment* env, CallCont
 	return AtVector(a->TypeArgs, self->f->gtype->VirtualTypeIndex);
 }
 
-char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env) {
+char* ILMemberOpToString(ILFactor_member_op* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
@@ -81,25 +81,25 @@ char* ILMemberOpToString(il_factor_member_op* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILMemberOp(il_factor_member_op* self) {
+void DeleteILMemberOp(ILFactor_member_op* self) {
 	DeleteILFactor(self->fact);
-	DeleteVector(self->type_args, il_factor_member_op_typearg_delete);
+	DeleteVector(self->type_args, ILFactor_member_op_typearg_delete);
 	MEM_FREE(self);
 }
 //private
-static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env, CallContext* cctx, bool* swap) {
+static void ILFactor_member_op_check(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, bool* swap) {
 	(*swap) = false;
 	if(self->index != -1) {
 		return;
 	}
 	//レシーバの型を取得
-	il_factor* fact = self->fact;
+	ILFactor* fact = self->fact;
 	GenericType* gtype = EvalILFactor(fact, env, cctx);
 	BC_ERROR();
 	//レシーバの型が特定できない場合は
 	//変数名を型として静的フィールドで解決する
 	if(gtype == NULL) {
-		return il_factor_member_op_check_static(self, env, cctx, gtype, swap);
+		return ILFactor_member_op_check_static(self, env, cctx, gtype, swap);
 	}
 	//レシーバのインスタンスフィールドを検索
 	type* ctype = gtype->CoreType;
@@ -109,7 +109,7 @@ static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env
 	self->index = temp;
 	//インスタンスフィールドではない場合プロパティを検索
 	if(temp == -1) {
-		il_factor_member_op_check_prop(self, env, cctx, gtype, swap);
+		ILFactor_member_op_check_prop(self, env, cctx, gtype, swap);
 	} else {
 		#if defined(DEBUG)
 		const char* clname = Ref2Str(GetClassCContext(cctx)->namev);
@@ -121,9 +121,9 @@ static void il_factor_member_op_check(il_factor_member_op* self, Enviroment* env
 	}
 }
 
-static void il_factor_member_op_check_static(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap) {
-	il_factor* fact = self->fact;
-	il_factor_variable* ilvar = fact->u.variable_;
+static void ILFactor_member_op_check_static(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap) {
+	ILFactor* fact = self->fact;
+	ILFactor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
 	const char* ilvarname = Ref2Str(ilvar->u.static_->fqcn->Name);
 	#endif
@@ -139,18 +139,18 @@ static void il_factor_member_op_check_static(il_factor_member_op* self, Envirome
 	self->f = FindTreeSFieldClass(TYPE2CLASS(ccT), self->namev, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		il_factor_member_op_check_static_prop(self, env, cctx, receiver_type, swap);
+		ILFactor_member_op_check_static_prop(self, env, cctx, receiver_type, swap);
 	}
 }
 
-static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
+static void ILFactor_member_op_check_prop(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
 	const char* name = Ref2Str(self->namev);
 	#endif
 	type* ctype = receiver_type->CoreType;
 	Property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
-	il_factor_Property* factp = il_factor_Property_new();
+	ILFactor_Property* factp = ILFactor_Property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;
 	factp->p = p;
@@ -172,11 +172,11 @@ static void il_factor_member_op_check_prop(il_factor_member_op* self, Enviroment
 	(*swap) = true;
 }
 
-static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
+static void ILFactor_member_op_check_static_prop(ILFactor_member_op* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	type* ctype = receiver_type->CoreType;
 	Property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->namev, &temp);
-	il_factor_Property* factp = il_factor_Property_new();
+	ILFactor_Property* factp = ILFactor_Property_new();
 	factp->fact = self->fact;
 	factp->namev = self->namev;
 	factp->p = p;
@@ -197,7 +197,7 @@ static void il_factor_member_op_check_static_prop(il_factor_member_op* self, Env
 }
 
 
-static void il_factor_member_op_typearg_delete(VectorItem item) {
+static void ILFactor_member_op_typearg_delete(VectorItem item) {
 //	GenericCache* e = (GenericCache*)item;
 //	DeleteGenericCache(e);
 	ILTypeArgument* e = (ILTypeArgument*)item;

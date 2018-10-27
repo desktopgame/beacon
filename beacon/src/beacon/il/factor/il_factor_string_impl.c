@@ -8,36 +8,36 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 
-il_factor * WrapILString(il_factor_string * self) {
-	il_factor* ret = il_factor_new(ILFACTOR_STRING_T);
+ILFactor * WrapILString(ILFactor_string * self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_STRING_T);
 	ret->u.string_ = self;
 	return ret;
 }
 
-il_factor_string * NewILString(StringView valuev) {
-	il_factor_string* ret = (il_factor_string*)MEM_MALLOC(sizeof(il_factor_string));
+ILFactor_string * NewILString(StringView valuev) {
+	ILFactor_string* ret = (ILFactor_string*)MEM_MALLOC(sizeof(ILFactor_string));
 	ret->valuev = valuev;
 	return ret;
 }
 
-void GenerateILString(il_factor_string * self, Enviroment* env, CallContext* cctx) {
+void GenerateILString(ILFactor_string * self, Enviroment* env, CallContext* cctx) {
 	int index = AddCStringEnviroment(env, self->valuev);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_SCONST);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)index);
 }
 
-void LoadILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
+void LoadILString(ILFactor_string * self, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILString(il_factor_string * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILString(ILFactor_string * self, Enviroment * env, CallContext* cctx) {
 //	assert(TYPE_STRING->generic_self->CoreType != NULL);
 	return GENERIC_STRING;
 }
 
-char* ILStringToString(il_factor_string* self, Enviroment* env) {
+char* ILStringToString(ILFactor_string* self, Enviroment* env) {
 	return Strdup(Ref2Str(self->valuev));
 }
 
-void DeleteILString(il_factor_string * self) {
+void DeleteILString(ILFactor_string * self) {
 	MEM_FREE(self);
 }

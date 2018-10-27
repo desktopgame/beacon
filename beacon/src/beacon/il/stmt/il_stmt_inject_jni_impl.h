@@ -7,7 +7,7 @@ struct SymbolEntry;
 
 typedef struct il_stmt_inject_jni {
 	StringView namev;
-	il_factor* fact;
+	ILFactor* fact;
 	struct SymbolEntry* se;
 } il_stmt_inject_jni;
 

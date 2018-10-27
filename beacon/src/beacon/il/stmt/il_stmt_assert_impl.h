@@ -6,8 +6,8 @@ struct Enviroment;
 struct il_stmt;
 
 typedef struct il_stmt_assert {
-	il_factor* condition;
-	il_factor* message;
+	ILFactor* condition;
+	ILFactor* message;
 	struct il_stmt* parent;
 } il_stmt_assert;
 

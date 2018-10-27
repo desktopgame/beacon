@@ -8,24 +8,24 @@
 /**
  * 整数リテラルを表す要素.
  */
-typedef struct il_factor_int {
+typedef struct ILFactor_int {
 	int32_t value;
 	int count;
-} il_factor_int;
+} ILFactor_int;
 
-il_factor* WrapILInt(il_factor_int* self);
+ILFactor* WrapILInt(ILFactor_int* self);
 
-#define il_factor_int_new(i) (MallocILInt(i, __FILE__, __LINE__))
-il_factor_int* MallocILInt(int32_t i, const char* filename, int lineno);
+#define ILFactor_int_new(i) (MallocILInt(i, __FILE__, __LINE__))
+ILFactor_int* MallocILInt(int32_t i, const char* filename, int lineno);
 
-void GenerateILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
+void GenerateILInt(ILFactor_int* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
+void LoadILInt(ILFactor_int* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILInt(il_factor_int* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILInt(ILFactor_int* self, Enviroment* env, CallContext* cctx);
 
-char* ILIntToString(il_factor_int* self, Enviroment* env);
+char* ILIntToString(ILFactor_int* self, Enviroment* env);
 
-void DeleteILInt(il_factor_int* self);
+void DeleteILInt(ILFactor_int* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_INT_H

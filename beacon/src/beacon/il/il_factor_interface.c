@@ -10,14 +10,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-il_factor* MallocILFactor(ILFactorType type, const char* filename, int lineno) {
-	il_factor* ret = mem_malloc(sizeof(il_factor), filename, lineno);
+ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno) {
+	ILFactor* ret = mem_malloc(sizeof(ILFactor), filename, lineno);
 	ret->type = type;
 	ret->lineno = -1;
 	return ret;
 }
 
-void GenerateILFactor(il_factor * self, Enviroment* env, CallContext* cctx) {
+void GenerateILFactor(ILFactor * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -94,7 +94,7 @@ void GenerateILFactor(il_factor * self, Enviroment* env, CallContext* cctx) {
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void LoadILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
+void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -135,7 +135,7 @@ void LoadILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 			LoadILNewInstance(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
-			//il_factor_bool_load(self->u.bool_, depth);
+			//ILFactor_bool_load(self->u.bool_, depth);
 			break;
 		case ILFACTOR_NULL_T:
 			LoadILNull(NULL, env, cctx);
@@ -169,7 +169,7 @@ void LoadILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILFactor(il_factor * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
@@ -248,7 +248,7 @@ GenericType* EvalILFactor(il_factor * self, Enviroment * env, CallContext* cctx)
 	return ret;
 }
 
-char* ILFactorToString(il_factor* self, Enviroment* env) {
+char* ILFactorToString(ILFactor* self, Enviroment* env) {
 	if(GetLastBCError()) {
 		return NULL;
 	}
@@ -337,7 +337,7 @@ void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env) {
 	}
 }
 
-void DeleteILFactor(il_factor * self) {
+void DeleteILFactor(ILFactor * self) {
 	if (self == NULL) {
 		return;
 	}

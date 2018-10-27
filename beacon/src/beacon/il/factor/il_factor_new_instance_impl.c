@@ -16,17 +16,17 @@
 
 //proto
 static void DeleteILNewInstance_typearg(VectorItem item);
-static void il_factor_new_instance_find(il_factor_new_instance * self, Enviroment * env, CallContext* cctx);
+static void ILFactor_new_instance_find(ILFactor_new_instance * self, Enviroment * env, CallContext* cctx);
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
-il_factor * WrapILNewInstance(il_factor_new_instance * self) {
-	il_factor* ret = il_factor_new(ILFACTOR_NEW_INSTANCE_T);
+ILFactor * WrapILNewInstance(ILFactor_new_instance * self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_NEW_INSTANCE_T);
 	ret->u.new_instance_ = self;
 	return ret;
 }
 
-il_factor_new_instance * NewILNewInstance() {
-	il_factor_new_instance* ret = (il_factor_new_instance*)MEM_MALLOC(sizeof(il_factor_new_instance));
+ILFactor_new_instance * NewILNewInstance() {
+	ILFactor_new_instance* ret = (ILFactor_new_instance*)MEM_MALLOC(sizeof(ILFactor_new_instance));
 	ret->fqcnc = FQCNCache_new();
 	ret->type_args = NewVector();
 	ret->argument_list = NewVector();
@@ -36,8 +36,8 @@ il_factor_new_instance * NewILNewInstance() {
 	return ret;
 }
 
-void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
-	il_factor_new_instance_find(self, env, cctx);
+void GenerateILNewInstance(ILFactor_new_instance * self, Enviroment * env, CallContext* cctx) {
+	ILFactor_new_instance_find(self, env, cctx);
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 		assert(e->GType != NULL);
@@ -58,8 +58,8 @@ void GenerateILNewInstance(il_factor_new_instance * self, Enviroment * env, Call
 	AddOpcodeBuf(env->Bytecode, self->constructor_index);
 }
 
-void LoadILNewInstance(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
-	il_factor_new_instance_find(self, env, cctx);
+void LoadILNewInstance(ILFactor_new_instance * self, Enviroment * env, CallContext* cctx) {
+	ILFactor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return;
 	}
@@ -69,8 +69,8 @@ void LoadILNewInstance(il_factor_new_instance * self, Enviroment * env, CallCont
 	}
 }
 
-GenericType* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
-	il_factor_new_instance_find(self, env, cctx);
+GenericType* EvalILNewInstance(ILFactor_new_instance * self, Enviroment * env, CallContext* cctx) {
+	ILFactor_new_instance_find(self, env, cctx);
 	if(GetLastBCError()) {
 		return NULL;
 	}
@@ -93,7 +93,7 @@ GenericType* EvalILNewInstance(il_factor_new_instance * self, Enviroment * env, 
 	return self->instance_type;
 }
 
-char* ILNewInstanceToString(il_factor_new_instance* self, Enviroment* env) {
+char* ILNewInstanceToString(ILFactor_new_instance* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
 	char* type = FQCNCacheToString(self->fqcnc);
@@ -104,7 +104,7 @@ char* ILNewInstanceToString(il_factor_new_instance* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILNewInstance(il_factor_new_instance * self) {
+void DeleteILNewInstance(ILFactor_new_instance * self) {
 	DeleteVector(self->argument_list, il_Factor_new_instace_delete_arg);
 	DeleteVector(self->type_args, DeleteILNewInstance_typearg);
 	DeleteFQCNCache(self->fqcnc);
@@ -117,7 +117,7 @@ static void DeleteILNewInstance_typearg(VectorItem item) {
 	DeleteILTypeArgument(e);
 }
 
-static void il_factor_new_instance_find(il_factor_new_instance * self, Enviroment * env, CallContext* cctx) {
+static void ILFactor_new_instance_find(ILFactor_new_instance * self, Enviroment * env, CallContext* cctx) {
 	if(self->constructor_index != -1) {
 		return;
 	}

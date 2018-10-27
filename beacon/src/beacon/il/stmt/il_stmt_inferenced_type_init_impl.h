@@ -12,7 +12,7 @@ struct SymbolEntry;
  */
 typedef struct il_stmt_inferenced_type_init {
 	StringView namev;
-	il_factor* fact;
+	ILFactor* fact;
 	struct SymbolEntry* sym;
 } il_stmt_inferenced_type_init;
 

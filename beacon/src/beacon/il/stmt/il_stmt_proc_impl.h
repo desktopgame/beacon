@@ -7,7 +7,7 @@
  * 式のみで構成される文を表す要素.
  */
 typedef struct il_stmt_proc {
-	il_factor* factor;
+	ILFactor* factor;
 } il_stmt_proc;
 
 /**

@@ -8,24 +8,24 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
-il_factor* WrapILInstanceOf(il_factor_instanceof* self) {
-	il_factor* ret = il_factor_new(ILFACTOR_INSTANCEOF_T);
+ILFactor* WrapILInstanceOf(ILFactor_instanceof* self) {
+	ILFactor* ret = ILFactor_new(ILFACTOR_INSTANCEOF_T);
 	ret->u.instanceof_ = self;
 	return ret;
 }
 
-il_factor_instanceof* NewILInstanceOf() {
-	il_factor_instanceof* ret = (il_factor_instanceof*)MEM_MALLOC(sizeof(il_factor_instanceof));
+ILFactor_instanceof* NewILInstanceOf() {
+	ILFactor_instanceof* ret = (ILFactor_instanceof*)MEM_MALLOC(sizeof(ILFactor_instanceof));
 	ret->fact = NULL;
 	ret->gcache = NewGenericCache();
 	return ret;
 }
 
-void LoadILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx) {
+void LoadILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 }
 
-void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx) {
 	GenericType* gtype = ResolveImportManager(NULL, self->gcache, cctx);
 	type* type = gtype->CoreType;
 	GenerateILFactor(self->fact, env, cctx);
@@ -34,11 +34,11 @@ void GenerateILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallConte
 	AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 }
 
-GenericType* EvalILInstanceOf(il_factor_instanceof* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx) {
 	return TYPE_BOOL->generic_self;
 }
 
-char* ILInstanceOfToString(il_factor_instanceof* self, Enviroment* env) {
+char* ILInstanceOfToString(ILFactor_instanceof* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->fact, env);
 	char* b = GenericCacheToString(self->gcache);
@@ -50,7 +50,7 @@ char* ILInstanceOfToString(il_factor_instanceof* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILInstanceOf(il_factor_instanceof* self) {
+void DeleteILInstanceOf(ILFactor_instanceof* self) {
 	DeleteILFactor(self->fact);
 	DeleteGenericCache(self->gcache);
 	MEM_FREE(self);
