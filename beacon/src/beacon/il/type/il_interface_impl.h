@@ -8,45 +8,45 @@ struct ILMethod;
 /**
  * インターフェースを表す要素.
  */
-typedef struct il_interface {
+typedef struct ILInterface {
 	StringView namev;
 	Vector* method_list;
 	Vector* extends_list;
 	Vector* GetParameterListType;
 	Vector* prop_list;
-} il_interface;
+} ILInterface;
 
 /**
  * 型をスーパーセットにラップします.
  * @param self
  * @return
  */
-ILType* WrapILInterface(il_interface* self);
+ILType* WrapILInterface(ILInterface* self);
 
 /**
  * インターフェースを作成します.
  * @param namev
  * @return
  */
-il_interface* NewILInterface(StringView namev);
+ILInterface* NewILInterface(StringView namev);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void AddPropertyILInterface(il_interface* self, struct ILProperty* prop);
+void AddPropertyILInterface(ILInterface* self, struct ILProperty* prop);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param method
  */
-void AddMethodILInterface(il_interface* self, struct ILMethod* method);
+void AddMethodILInterface(ILInterface* self, struct ILMethod* method);
 
 /**
  * インターフェースを開放します.
  * @param self
  */
-void DeleteILInterface(il_interface* self);
+void DeleteILInterface(ILInterface* self);
 #endif // !SIGNAL_IL_IL_INTERFACE_H
