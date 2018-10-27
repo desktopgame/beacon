@@ -6,8 +6,8 @@ struct GenericType;
 struct FQCNCache;
 
 typedef struct ILInstanceOf {
-	ILFactor* fact;
-	struct GenericCache* gcache;
+	ILFactor* Source;
+	struct GenericCache* GCache;
 } ILInstanceOf;
 
 ILFactor* WrapILInstanceOf(ILInstanceOf* self);

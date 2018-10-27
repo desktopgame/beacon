@@ -269,8 +269,8 @@ static ILInstanceOf* CLIL_instanceof(ClassLoader* self, AST* source) {
 	AST* afact = FirstAST(source);
 	AST* atype = SecondAST(source);
 	ILInstanceOf* ret = NewILInstanceOf();
-	ret->fact = CLILFactor(self, afact);
-	CLILGenericCache(atype, ret->gcache);
+	ret->Source = CLILFactor(self, afact);
+	CLILGenericCache(atype, ret->GCache);
 	return ret;
 }
 

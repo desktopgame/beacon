@@ -16,19 +16,19 @@ ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
 
 ILInstanceOf* NewILInstanceOf() {
 	ILInstanceOf* ret = (ILInstanceOf*)MEM_MALLOC(sizeof(ILInstanceOf));
-	ret->fact = NULL;
-	ret->gcache = NewGenericCache();
+	ret->Source = NULL;
+	ret->GCache = NewGenericCache();
 	return ret;
 }
 
 void LoadILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->fact, env, cctx);
+	LoadILFactor(self->Source, env, cctx);
 }
 
 void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gtype = ResolveImportManager(NULL, self->gcache, cctx);
+	GenericType* gtype = ResolveImportManager(NULL, self->GCache, cctx);
 	type* type = gtype->CoreType;
-	GenerateILFactor(self->fact, env, cctx);
+	GenerateILFactor(self->Source, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	GenerateGenericType(gtype, env);
 	AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
@@ -40,8 +40,8 @@ GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* 
 
 char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
-	char* a = ILFactorToString(self->fact, env);
-	char* b = GenericCacheToString(self->gcache);
+	char* a = ILFactorToString(self->Source, env);
+	char* b = GenericCacheToString(self->GCache);
 	AppendsBuffer(sb, a);
 	AppendsBuffer(sb, " is ");
 	AppendsBuffer(sb, b);
@@ -51,7 +51,7 @@ char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env) {
 }
 
 void DeleteILInstanceOf(ILInstanceOf* self) {
-	DeleteILFactor(self->fact);
-	DeleteGenericCache(self->gcache);
+	DeleteILFactor(self->Source);
+	DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }
