@@ -7,22 +7,22 @@
 /**
  * 浮動小数リテラルを表す要素.
  */
-typedef struct ILFactor_double {
-	double value;
-} ILFactor_double;
+typedef struct ILDouble {
+	double Value;
+} ILDouble;
 
-ILFactor* WrapILDouble(ILFactor_double* self);
+ILFactor* WrapILDouble(ILDouble* self);
 
-ILFactor_double* NewILDouble(double d);
+ILDouble* NewILDouble(double d);
 
-void GenerateILDouble(ILFactor_double* self, Enviroment* env, CallContext* cctx);
+void GenerateILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
 
-void LoadILDouble(ILFactor_double* self, Enviroment* env, CallContext* cctx);
+void LoadILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILDouble(ILFactor_double* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
 
-char* ILDoubleToString(ILFactor_double* self, Enviroment* env);
+char* ILDoubleToString(ILDouble* self, Enviroment* env);
 
-void DeleteILDouble(ILFactor_double* self);
+void DeleteILDouble(ILDouble* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_DOUBLE_H
