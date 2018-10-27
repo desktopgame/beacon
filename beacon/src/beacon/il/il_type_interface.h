@@ -11,7 +11,7 @@ typedef enum ILTypeTag {
 	ILTYPE_ENUM_T,
 } ILTypeTag;
 
-struct il_class;
+struct ILClass;
 struct il_interface;
 struct il_enum;
 struct ILField;
@@ -25,7 +25,7 @@ struct ILConstructor;
 typedef struct ILType {
 	ILTypeTag Tag;
 	union {
-		struct il_class* Class;
+		struct ILClass* Class;
 		struct il_interface* Interface;
 		struct il_enum* Enum;
 	} Kind;

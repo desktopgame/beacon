@@ -10,7 +10,7 @@ struct ILMethod;
 /**
  * クラスを表す要素.
  */
-typedef struct il_class {
+typedef struct ILClass {
 	StringView namev;
 //	FQCNCache* super;
 //	Vector* implement_list;
@@ -25,46 +25,46 @@ typedef struct il_class {
 	Vector* prop_list;
 	Vector* sprop_list;
 	bool is_abstract;
-} il_class;
+} ILClass;
 
 /**
  * この型をスーパーセットにラップします.
  * @param self
  * @return
  */
-ILType* WrapILClass(il_class* self);
+ILType* WrapILClass(ILClass* self);
 
 /**
  * クラスを表す要素を作成します.
  * @param namev
  * @return
  */
-il_class* NewILClass(StringView namev);
+ILClass* NewILClass(StringView namev);
 
 /**
  * フィールドを追加します.
  * @param self
  * @param f
  */
-void AddFieldILClass(il_class* self, struct ILField* f);
+void AddFieldILClass(ILClass* self, struct ILField* f);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void AddPropertyILClass(il_class* self, struct ILProperty* prop);
+void AddPropertyILClass(ILClass* self, struct ILProperty* prop);
 
 /**
  * メソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodILClass(il_class* self, struct ILMethod* m);
+void AddMethodILClass(ILClass* self, struct ILMethod* m);
 
 /**
  * クラスと含まれるメンバー宣言の一覧を解放します.
  * @param self
  */
-void DeleteILClass(il_class* self);
+void DeleteILClass(ILClass* self);
 #endif // !SIGNAL_IL_IL_CLASS_H

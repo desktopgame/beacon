@@ -91,7 +91,7 @@ static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* cu
  */
 static void class_loader_ilload_abstract_class(ClassLoader* self, ILNamespace* current, AST* aclass_decl);
 static void class_loader_ilload_class(ClassLoader* self, ILNamespace* current, AST* aclass_decl);
-static il_class* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, AST* aclass_decl);
+static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, AST* aclass_decl);
 static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* current, AST* ainterface_decl);
 static void class_loader_ilload_enum(ClassLoader* self, ILNamespace* current, AST* aenum_decl);
 
@@ -235,21 +235,21 @@ static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* cu
 
 static void class_loader_ilload_abstract_class(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_ABSTRACT_CLASS_DECL_T);
-	il_class* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
+	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
 	ilc->is_abstract = true;
 }
 
 static void class_loader_ilload_class(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_CLASS_DECL_T);
-	il_class* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
+	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
 	ilc->is_abstract = false;
 }
 
-static il_class* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
+static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
 	AST* atypename = FirstAST(aclass_decl);
 	AST* aextend_list = SecondAST(aclass_decl);
 	AST* amember_tree = AtAST(aclass_decl, 2);
-	il_class* ilclassz = NewILClass(atypename->Attr.StringVValue);
+	ILClass* ilclassz = NewILClass(atypename->Attr.StringVValue);
 	ILType* iltype = WrapILClass(ilclassz);
 	//class Foo<A, B>
 	CLILTypeParameter(self, FirstAST(atypename), ilclassz->GetParameterListType);
