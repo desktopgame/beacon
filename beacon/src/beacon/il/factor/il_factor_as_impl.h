@@ -15,10 +15,10 @@ typedef enum CastMode {
  * as演算子を表す構造体.
  */
 typedef struct ILAs {
-	ILFactor* fact;
-	GenericCache* fqcn;
-	GenericType* gtype;
-	CastMode mode;
+	ILFactor* Source;
+	GenericCache* GCache;
+	GenericType* GType;
+	CastMode Mode;
 } ILAs;
 
 struct Enviroment;

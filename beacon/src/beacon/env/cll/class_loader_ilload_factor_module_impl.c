@@ -238,8 +238,8 @@ static ILFactor_new_instance* CLIL_new_instance(ClassLoader* self, AST* source) 
 
 static ILAs* CLIL_as(ClassLoader* self, AST* source) {
 	ILAs* ret = NewILAs();
-	ret->fact = CLILFactor(self, FirstAST(source));
-	CLILGenericCache(SecondAST(source), ret->fqcn);
+	ret->Source = CLILFactor(self, FirstAST(source));
+	CLILGenericCache(SecondAST(source), ret->GCache);
 	return ret;
 }
 
