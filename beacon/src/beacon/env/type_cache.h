@@ -10,7 +10,7 @@ struct ClassLoader;
 /**
  * 何を読み込むためのキャッシュかを表す列挙型.
  */
-typedef enum cache_kind {
+typedef enum TypeCacheKind {
 	CACHEKIND_CLASS_DECL_T,
 	CACHEKIND_CLASS_IMPL_T,
 
@@ -19,7 +19,7 @@ typedef enum cache_kind {
 
 	CACHEKIND_ENUM_DECL_T,
 	CACHEKIND_ENUM_IMPL_T,
-} cache_kind;
+} TypeCacheKind;
 
 /**
  * クラスロード時に使用される一時的なキャッシュです.
@@ -37,7 +37,7 @@ typedef struct type_cache {
 	il_type* iltype;
 	type* tp;
 	Namespace* scope;
-	cache_kind kind;
+	TypeCacheKind kind;
 	bool consume;
 } type_cache;
 
@@ -49,7 +49,7 @@ type_cache * InitTypeCache(
 	il_type* iltype,
 	type* tp,
 	Namespace* scope,
-	cache_kind kind
+	TypeCacheKind kind
 	);
 
 void DeleteTypeCache(type_cache* self);
