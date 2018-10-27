@@ -8,24 +8,24 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
-ILFactor* WrapILInstanceOf(ILFactor_instanceof* self) {
+ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_INSTANCEOF_T);
 	ret->u.instanceof_ = self;
 	return ret;
 }
 
-ILFactor_instanceof* NewILInstanceOf() {
-	ILFactor_instanceof* ret = (ILFactor_instanceof*)MEM_MALLOC(sizeof(ILFactor_instanceof));
+ILInstanceOf* NewILInstanceOf() {
+	ILInstanceOf* ret = (ILInstanceOf*)MEM_MALLOC(sizeof(ILInstanceOf));
 	ret->fact = NULL;
 	ret->gcache = NewGenericCache();
 	return ret;
 }
 
-void LoadILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx) {
+void LoadILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 }
 
-void GenerateILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
 	GenericType* gtype = ResolveImportManager(NULL, self->gcache, cctx);
 	type* type = gtype->CoreType;
 	GenerateILFactor(self->fact, env, cctx);
@@ -34,11 +34,11 @@ void GenerateILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContex
 	AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 }
 
-GenericType* EvalILInstanceOf(ILFactor_instanceof* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
 	return TYPE_BOOL->generic_self;
 }
 
-char* ILInstanceOfToString(ILFactor_instanceof* self, Enviroment* env) {
+char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->fact, env);
 	char* b = GenericCacheToString(self->gcache);
@@ -50,7 +50,7 @@ char* ILInstanceOfToString(ILFactor_instanceof* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILInstanceOf(ILFactor_instanceof* self) {
+void DeleteILInstanceOf(ILInstanceOf* self) {
 	DeleteILFactor(self->fact);
 	DeleteGenericCache(self->gcache);
 	MEM_FREE(self);

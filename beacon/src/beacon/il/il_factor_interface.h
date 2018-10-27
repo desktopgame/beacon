@@ -66,7 +66,7 @@ struct ILFactor_inc;
 struct ILFactor_dec;
 struct ILFactor_call_op;
 struct ILFactor_member_op;
-struct ILFactor_instanceof;
+struct ILInstanceOf;
 struct ILFactor_explicit_binary_op;
 struct ILFactor_explicit_unary_op;
 struct ILFactor_Property;
@@ -98,7 +98,7 @@ typedef struct ILFactor {
 		struct ILFactor_dec* dec_;
 		struct ILFactor_call_op* call_;
 		struct ILFactor_member_op* member_;
-		struct ILFactor_instanceof* instanceof_;
+		struct ILInstanceOf* instanceof_;
 		struct ILFactor_explicit_binary_op* exp_binary_op;
 		struct ILFactor_explicit_unary_op* exp_unary_op;
 		struct ILFactor_Property* prop;
