@@ -29,42 +29,42 @@ ILType * WrapILClass(ILClass * self) {
 
 ILClass* NewILClass(StringView namev) {
 	ILClass* ret = (ILClass*)MEM_MALLOC(sizeof(ILClass));
-	ret->namev = namev;
-	ret->extend_list = NewVector();
-	ret->field_list = NewVector();
-	ret->sfield_list = NewVector();
-	ret->method_list = NewVector();
-	ret->smethod_list = NewVector();
-	ret->constructor_list = NewVector();
-	ret->GetParameterListType = NewVector();
-	ret->operator_overload_list = NewVector();
-	ret->prop_list = NewVector();
-	ret->sprop_list = NewVector();
-	ret->is_abstract = false;
+	ret->Name = namev;
+	ret->Extends = NewVector();
+	ret->Fields = NewVector();
+	ret->StaticFields = NewVector();
+	ret->Methods = NewVector();
+	ret->StaticMethods = NewVector();
+	ret->Constructors = NewVector();
+	ret->TypeParameters = NewVector();
+	ret->OperatorOverloads = NewVector();
+	ret->Properties = NewVector();
+	ret->StaticProperties = NewVector();
+	ret->IsAbstract = false;
 	return ret;
 }
 
 void AddFieldILClass(ILClass * self, ILField * f) {
 	if (IsStaticModifier(f->Modifier)) {
-		PushVector(self->sfield_list, f);
+		PushVector(self->StaticFields, f);
 	} else {
-		PushVector(self->field_list, f);
+		PushVector(self->Fields, f);
 	}
 }
 
 void AddPropertyILClass(ILClass* self, ILProperty* prop) {
 	if(IsStaticModifier(prop->Modifier)) {
-		PushVector(self->sprop_list, prop);
+		PushVector(self->StaticProperties, prop);
 	} else {
-		PushVector(self->prop_list, prop);
+		PushVector(self->Properties, prop);
 	}
 }
 
 void AddMethodILClass(ILClass * self, ILMethod * m) {
 	if (IsStaticModifier(m->Modifier)) {
-		PushVector(self->smethod_list, m);
+		PushVector(self->StaticMethods, m);
 	} else {
-		PushVector(self->method_list, m);
+		PushVector(self->Methods, m);
 	}
 }
 
@@ -74,16 +74,16 @@ void DeleteILClass(ILClass * self) {
 	}
 	//printf("free class %s\n", self->name);
 	//MEM_FREE(self->super);
-	DeleteVector(self->field_list, ILClass_DeleteField);
-	DeleteVector(self->sfield_list, ILClass_DeleteField);
-	DeleteVector(self->method_list, ILClass_DeleteMethod);
-	DeleteVector(self->smethod_list, ILClass_DeleteMethod);
-	DeleteVector(self->constructor_list, ILClass_ctor_delete);
-	DeleteVector(self->extend_list, ILClass_extend_delete);
-	DeleteVector(self->GetParameterListType, ILClass_DeleteTypeParameter);
-	DeleteVector(self->operator_overload_list, DeleteILClass_operator_overload);
-	DeleteVector(self->prop_list, ILClass_prop_delete);
-	DeleteVector(self->sprop_list, ILClass_prop_delete);
+	DeleteVector(self->Fields, ILClass_DeleteField);
+	DeleteVector(self->StaticFields, ILClass_DeleteField);
+	DeleteVector(self->Methods, ILClass_DeleteMethod);
+	DeleteVector(self->StaticMethods, ILClass_DeleteMethod);
+	DeleteVector(self->Constructors, ILClass_ctor_delete);
+	DeleteVector(self->Extends, ILClass_extend_delete);
+	DeleteVector(self->TypeParameters, ILClass_DeleteTypeParameter);
+	DeleteVector(self->OperatorOverloads, DeleteILClass_operator_overload);
+	DeleteVector(self->Properties, ILClass_prop_delete);
+	DeleteVector(self->StaticProperties, ILClass_prop_delete);
 	MEM_FREE(self);
 }
 

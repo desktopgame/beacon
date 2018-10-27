@@ -11,20 +11,18 @@ struct ILMethod;
  * クラスを表す要素.
  */
 typedef struct ILClass {
-	StringView namev;
-//	FQCNCache* super;
-//	Vector* implement_list;
-	Vector* extend_list;
-	Vector* field_list;
-	Vector* sfield_list;
-	Vector* method_list;
-	Vector* smethod_list;
-	Vector* constructor_list;
-	Vector* GetParameterListType;
-	Vector* operator_overload_list;
-	Vector* prop_list;
-	Vector* sprop_list;
-	bool is_abstract;
+	StringView Name;
+	Vector* Extends;
+	Vector* Fields;
+	Vector* StaticFields;
+	Vector* Methods;
+	Vector* StaticMethods;
+	Vector* Constructors;
+	Vector* TypeParameters;
+	Vector* OperatorOverloads;
+	Vector* Properties;
+	Vector* StaticProperties;
+	bool IsAbstract;
 } ILClass;
 
 /**

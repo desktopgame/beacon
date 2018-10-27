@@ -495,7 +495,7 @@ bool CLBC_ctor_impl(ClassLoader* self, ILType* iltype, type* tp, ILConstructor* 
 void CLBC_ctors_decl(ClassLoader* self, ILType* iltype, type* tp, Namespace* scope) {
 	CL_ERROR(self);
 	class_* classz = tp->u.class_;
-	Vector* ilcons_list = iltype->Kind.Class->constructor_list;
+	Vector* ilcons_list = iltype->Kind.Class->Constructors;
 	for (int i = 0; i < ilcons_list->Length; i++) {
 		if(!CLBC_ctor_decl(self, iltype, tp, AtVector(ilcons_list, i), scope)) {
 			break;
@@ -515,7 +515,7 @@ void CLBC_ctors_impl(ClassLoader* self, ILType* iltype, type* tp) {
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
 	for (int i = 0; i < constructors->Length; i++) {
-		if(!CLBC_ctor_impl(self, iltype, tp, AtVector(iltype->Kind.Class->constructor_list,i),AtVector(constructors, i), scope)) {
+		if(!CLBC_ctor_impl(self, iltype, tp, AtVector(iltype->Kind.Class->Constructors,i),AtVector(constructors, i), scope)) {
 			break;
 		}
 	}
@@ -590,7 +590,7 @@ bool CLBC_operator_overload_impl(ClassLoader* self, ILType* iltype, type* tp, IL
 
 void CLBC_operator_overloads_decl(ClassLoader* self, ILType* iltype, type* tp, Namespace* scope) {
 	CL_ERROR(self);
-	Vector* opov_list = iltype->Kind.Class->operator_overload_list;
+	Vector* opov_list = iltype->Kind.Class->OperatorOverloads;
 	for (int i = 0; i < opov_list->Length; i++) {
 		if(!CLBC_operator_overload_decl(self, iltype, tp, AtVector(opov_list, i), scope)) {
 			break;
@@ -603,8 +603,8 @@ void CLBC_operator_overloads_impl(ClassLoader* self, ILType* iltype, type* tp, N
 	CL_ERROR(self);
 	Vector* opov_list = tp->u.class_->operator_overload_list;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
-	for (int i = 0; i < iltype->Kind.Class->operator_overload_list->Length; i++) {
-		if(!CLBC_operator_overload_impl(self, iltype, tp, AtVector(iltype->Kind.Class->operator_overload_list, i), AtVector(opov_list, i), scope)) {
+	for (int i = 0; i < iltype->Kind.Class->OperatorOverloads->Length; i++) {
+		if(!CLBC_operator_overload_impl(self, iltype, tp, AtVector(iltype->Kind.Class->OperatorOverloads, i), AtVector(opov_list, i), scope)) {
 			break;
 		}
 	}

@@ -101,7 +101,7 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel le
 	ret->Get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
 	AddPropertyILType(current, ret);
 	if(ret->Set->IsShort != ret->Get->IsShort) {
-		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->Kind.Class->namev), Ref2Str(propname));
+		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->Kind.Class->Name), Ref2Str(propname));
 	}
 }
 
@@ -159,7 +159,7 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, Acce
 	ilcons->Chain = ilchain;
 	CLILParameterList(self, ilcons->Parameters, aparams);
 	CLILBody(self, ilcons->Statements, abody);
-	PushVector(current->Kind.Class->constructor_list, ilcons);
+	PushVector(current->Kind.Class->Constructors, ilcons);
 }
 
 void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, AccessLevel level) {
@@ -182,7 +182,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 	CLILParameterList(self, ilopov->Parameters, aparam_list);
 	CLILBody(self, ilopov->Statements, abody);
 	CLILGenericCache(areturn, ilopov->ReturnGCache);
-	PushVector(current->Kind.Class->operator_overload_list, ilopov);
+	PushVector(current->Kind.Class->OperatorOverloads, ilopov);
 }
 //private
 static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level) {

@@ -214,8 +214,8 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 	if((tp->state & TYPE_REGISTER) > 0) {
 		return;
 	}
-	cls->is_abstract = iltype->Kind.Class->is_abstract;
-	InitGenericSelf(tp, iltype->Kind.Class->GetParameterListType->Length);
+	cls->is_abstract = iltype->Kind.Class->IsAbstract;
+	InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
@@ -308,11 +308,11 @@ static type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
 }
 
 static type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType* iltype) {
-	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Class->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Class->Name);
 	class_* outClass = NULL;
 	//取得できなかった
 	if (tp == NULL) {
-		outClass = NewClass(iltype->Kind.Class->namev);
+		outClass = NewClass(iltype->Kind.Class->Name);
 		tp = WrapClass(outClass);
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);
@@ -321,20 +321,20 @@ static type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType
 		if((tp->state & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			DupTypeParameterList(iltype->Kind.Class->GetParameterListType, outClass->GetParameterListType);
+			DupTypeParameterList(iltype->Kind.Class->TypeParameters, outClass->GetParameterListType);
 		}
 	}
 	return tp;
 }
 
 static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* iltype, type* tp, class_* cls) {
-	InitGenericSelf(tp, iltype->Kind.Class->GetParameterListType->Length);
-	DupTypeParameterList(iltype->Kind.Class->GetParameterListType, cls->GetParameterListType);
+	InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
+	DupTypeParameterList(iltype->Kind.Class->TypeParameters, cls->GetParameterListType);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = parent;
 	cctx->Ty = tp;
-	for (int i = 0; i < iltype->Kind.Class->extend_list->Length; i++) {
-		GenericCache* e = (GenericCache*)AtVector(iltype->Kind.Class->extend_list, i);
+	for (int i = 0; i < iltype->Kind.Class->Extends->Length; i++) {
+		GenericCache* e = (GenericCache*)AtVector(iltype->Kind.Class->Extends, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
 			GenericType* gtp = ResolveImportManager(parent, e, cctx);

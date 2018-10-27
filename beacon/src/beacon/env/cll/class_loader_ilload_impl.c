@@ -236,13 +236,13 @@ static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* cu
 static void class_loader_ilload_abstract_class(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_ABSTRACT_CLASS_DECL_T);
 	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
-	ilc->is_abstract = true;
+	ilc->IsAbstract = true;
 }
 
 static void class_loader_ilload_class(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_CLASS_DECL_T);
 	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
-	ilc->is_abstract = false;
+	ilc->IsAbstract = false;
 }
 
 static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, AST* aclass_decl) {
@@ -252,9 +252,9 @@ static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* cu
 	ILClass* ilclassz = NewILClass(atypename->Attr.StringVValue);
 	ILType* iltype = WrapILClass(ilclassz);
 	//class Foo<A, B>
-	CLILTypeParameter(self, FirstAST(atypename), ilclassz->GetParameterListType);
+	CLILTypeParameter(self, FirstAST(atypename), ilclassz->TypeParameters);
 	//class Foo : X, Y 
-	CLILTypenameList(self, ilclassz->extend_list, aextend_list);
+	CLILTypenameList(self, ilclassz->Extends, aextend_list);
 	//public:
 	//    ....
 	//    ....
