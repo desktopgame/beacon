@@ -50,7 +50,7 @@ typedef enum ILFactorType {
 //詳細は il_factor_impl.h を参照してください。
 struct ILFactor_int;
 struct ILFactor_double;
-struct ILFactor_char;
+struct ILChar;
 struct ILFactor_string;
 struct ILFactor_variable;
 struct ILFactor_unary_op;
@@ -81,7 +81,7 @@ typedef struct ILFactor {
 	union {
 		struct ILFactor_int* int_;
 		struct ILFactor_double* double_;
-		struct ILFactor_char* char_;
+		struct ILChar* char_;
 		struct ILFactor_string* string_;
 		struct ILFactor_variable* variable_;
 		struct ILFactor_unary_op* unary_;
