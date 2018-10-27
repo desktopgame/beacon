@@ -51,7 +51,7 @@ typedef enum ILFactorType {
 struct ILFactor_int;
 struct ILDouble;
 struct ILChar;
-struct ILFactor_string;
+struct ILString;
 struct ILFactor_variable;
 struct ILFactor_unary_op;
 struct ILFactor_binary_op;
@@ -82,7 +82,7 @@ typedef struct ILFactor {
 		struct ILFactor_int* int_;
 		struct ILDouble* double_;
 		struct ILChar* char_;
-		struct ILFactor_string* string_;
+		struct ILString* string_;
 		struct ILFactor_variable* variable_;
 		struct ILFactor_unary_op* unary_;
 		struct ILAssignOp* assign_;

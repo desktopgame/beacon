@@ -40,9 +40,9 @@ void LoadILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx) 
 	LoadILFactor(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = ILFactorToString(self->condition, env);
-		ILFactor_string* ilstr = NewILString(InternString(str));
+		ILString* ilstr = NewILString(InternString(str));
 		self->message = WrapILString(ilstr);
-		assert(ilstr->valuev != 0);
+		assert(ilstr->Value != 0);
 		MEM_FREE(str);
 		self->message->lineno = self->parent->lineno;
 	}

@@ -8,22 +8,22 @@
 /**
  * 文字列を表す要素.
  */
-typedef struct ILFactor_string {
-	StringView valuev;
-} ILFactor_string;
+typedef struct ILString {
+	StringView Value;
+} ILString;
 
-ILFactor* WrapILString(ILFactor_string* self);
+ILFactor* WrapILString(ILString* self);
 
-ILFactor_string* NewILString(StringView valuev);
+ILString* NewILString(StringView valuev);
 
-void GenerateILString(ILFactor_string* self, Enviroment* env, CallContext* cctx);
+void GenerateILString(ILString* self, Enviroment* env, CallContext* cctx);
 
-void LoadILString(ILFactor_string* self, Enviroment* env, CallContext* cctx);
+void LoadILString(ILString* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILString(ILFactor_string* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILString(ILString* self, Enviroment* env, CallContext* cctx);
 
-char* ILStringToString(ILFactor_string* self, Enviroment* env);
+char* ILStringToString(ILString* self, Enviroment* env);
 
-void DeleteILString(ILFactor_string* self);
+void DeleteILString(ILString* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_STRING_H
