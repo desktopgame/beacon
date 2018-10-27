@@ -6,7 +6,7 @@
 #include "../util/mem.h"
 #include "il_print_layout.h"
 
-il_stmt* MallocILStmt(il_stmt_type type, const char* filename, int lineno) {
+il_stmt* MallocILStmt(ILStatementTag type, const char* filename, int lineno) {
 	il_stmt* ret = mem_malloc(sizeof(il_stmt), filename, lineno);
 	ret->type = type;
 	ret->lineno = -1;

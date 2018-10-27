@@ -8,7 +8,7 @@
 /**
  * 文の種類を表す列挙型.
  */
-typedef enum il_stmt_type {
+typedef enum ILStatementTag {
 	ILSTMT_PROC_T,
 	ILSTMT_IF_T,
 	ILSTMT_WHILE_T,
@@ -26,7 +26,7 @@ typedef enum il_stmt_type {
 	ILSTMT_YIELD_RETURN_T,
 	ILSTMT_YIELD_BREAK_T,
 	ILSTMT_INJECT_JNI_T,
-} il_stmt_type;
+} ILStatementTag;
 
 //詳細は il_stmt_impl.h を参照してください。
 struct il_stmt_proc;
@@ -49,7 +49,7 @@ struct il_stmt_inject_jni;
  * 文を表す要素です.
  */
 typedef struct il_stmt {
-	il_stmt_type type;
+	ILStatementTag type;
 	int lineno;
 	union {
 		struct il_stmt_proc* proc_;
@@ -71,7 +71,7 @@ typedef struct il_stmt {
 } il_stmt;
 
 #define il_stmt_new(type) (MallocILStmt(type, __FILE__, __LINE__))
-il_stmt* MallocILStmt(il_stmt_type type, const char* filename, int lineno);
+il_stmt* MallocILStmt(ILStatementTag type, const char* filename, int lineno);
 
 /**
  * 文を生成します.
