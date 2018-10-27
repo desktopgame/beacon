@@ -15,18 +15,18 @@ struct ILFactor_excor_op;
  * 二項演算子を表す要素.
  */
 typedef struct ILBinaryOp {
-	OperatorType type;
-	OperatorCategory category;
-	ILFactor* left;
-	ILFactor* right;
-	bool load;
+	OperatorType Type;
+	OperatorCategory Category;
+	ILFactor* Left;
+	ILFactor* Right;
+	bool IsLoaded;
 	union {
-		struct ILFactor_arithmetic_op* arithmetic_op;
-		struct ILFactor_logic_op* logic_op;
-		struct ILFactor_compare_op* compare_op;
-		struct ILFactor_shift_op* shift_op;
-		struct ILFactor_excor_op* excor_op;
-	} u;
+		struct ILFactor_arithmetic_op* ArithmeticOp;
+		struct ILFactor_logic_op* LogicOp;
+		struct ILFactor_compare_op* CompareOp;
+		struct ILFactor_shift_op* ShiftOp;
+		struct ILFactor_excor_op* ExcorOp;
+	} Kind;
 } ILBinaryOp;
 
 ILFactor* WrapILBinaryOp(ILBinaryOp* self);

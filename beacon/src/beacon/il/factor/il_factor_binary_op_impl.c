@@ -28,72 +28,72 @@ ILFactor * WrapILBinaryOp(ILBinaryOp * self) {
 
 ILBinaryOp * NewILBinaryOp(OperatorType type) {
 	ILBinaryOp* ret = (ILBinaryOp*)MEM_MALLOC(sizeof(ILBinaryOp));
-	ret->type = type;
-	ret->left = NULL;
-	ret->right = NULL;
-	ret->load = false;
+	ret->Type = type;
+	ret->Left = NULL;
+	ret->Right = NULL;
+	ret->IsLoaded = false;
 	return ret;
 }
 
 void GenerateILBinaryOp(ILBinaryOp * self, Enviroment* env, CallContext* cctx) {
-	switch(self->category) {
+	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			GenerateILArithmeticOp(self->u.arithmetic_op, env, cctx);
+			GenerateILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			GenerateILCompareOp(self->u.compare_op, env, cctx);
+			GenerateILCompareOp(self->Kind.CompareOp, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
-			GenerateILLogicOp(self->u.logic_op, env, cctx);
+			GenerateILLogicOp(self->Kind.LogicOp, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
-			GenerateILShiftOp(self->u.shift_op, env, cctx);
+			GenerateILShiftOp(self->Kind.ShiftOp, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
-			GenerateILExcorOp(self->u.excor_op, env, cctx);
+			GenerateILExcorOp(self->Kind.ExcorOp, env, cctx);
 			break;
 	}
 }
 
 void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
-	if(self->load) {
+	if(self->IsLoaded) {
 		return;
 	}
-	self->load = true;
-	LoadILFactor(self->left, env, cctx);
+	self->IsLoaded = true;
+	LoadILFactor(self->Left, env, cctx);
 	BC_ERROR();
-	LoadILFactor(self->right, env, cctx);
+	LoadILFactor(self->Right, env, cctx);
 	BC_ERROR();
 	//カテゴリーわけ
-	if(IsArithmeticOperator(self->type)) {
-		self->category = OPERATOR_CARITHMERIC_T;
-		ILFactor_arithmetic_op* arith = NewILArithmeticOp(self->type);
+	if(IsArithmeticOperator(self->Type)) {
+		self->Category = OPERATOR_CARITHMERIC_T;
+		ILFactor_arithmetic_op* arith = NewILArithmeticOp(self->Type);
 		arith->parent = self;
-		self->u.arithmetic_op = arith;
+		self->Kind.ArithmeticOp = arith;
 		LoadILArithmeticOp(arith, env, cctx);
-	} else if(IsCompareOperator(self->type)) {
-		self->category = OPERATOR_CCOMPARE_T;
-		ILFactor_compare_op* comp = NewILCompareOp(self->type);
+	} else if(IsCompareOperator(self->Type)) {
+		self->Category = OPERATOR_CCOMPARE_T;
+		ILFactor_compare_op* comp = NewILCompareOp(self->Type);
 		comp->parent = self;
-		self->u.compare_op = comp;
+		self->Kind.CompareOp = comp;
 		LoadILCompareOp(comp, env, cctx);
-	} else if(IsBitOperator(self->type) || IsLogicOperator(self->type)) {
-		self->category = OPERATOR_CLOGIC_T;
-		ILFactor_logic_op* logic = NewILLogicOp(self->type);
+	} else if(IsBitOperator(self->Type) || IsLogicOperator(self->Type)) {
+		self->Category = OPERATOR_CLOGIC_T;
+		ILFactor_logic_op* logic = NewILLogicOp(self->Type);
 		logic->parent = self;
-		self->u.logic_op = logic;
+		self->Kind.LogicOp = logic;
 		LoadILLogicOp(logic, env, cctx);
-	} else if(IsShiftOperator(self->type)) {
-		self->category = OPERATOR_CSHIFT_T;
-		ILFactor_shift_op* shift = NewILShiftOp(self->type);
+	} else if(IsShiftOperator(self->Type)) {
+		self->Category = OPERATOR_CSHIFT_T;
+		ILFactor_shift_op* shift = NewILShiftOp(self->Type);
 		shift->parent = self;
-		self->u.shift_op = shift;
+		self->Kind.ShiftOp = shift;
 		LoadILShiftOp(shift, env, cctx);
-	} else if(self->type == OPERATOR_EXCOR_T) {
-		self->category = OPERATOR_CEXCOR_T;
-		ILFactor_excor_op* excor = NewILExcorOp(self->type);
+	} else if(self->Type == OPERATOR_EXCOR_T) {
+		self->Category = OPERATOR_CEXCOR_T;
+		ILFactor_excor_op* excor = NewILExcorOp(self->Type);
 		excor->parent = self;
-		self->u.excor_op = excor;
+		self->Kind.ExcorOp = excor;
 		LoadILExcorOp(excor, env, cctx);
 	} else {
 		assert(false);
@@ -103,21 +103,21 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 GenericType* EvalILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 	LoadILBinaryOp(self, env, cctx);
 	GenericType* ret = NULL;
-	switch(self->category) {
+	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			ret = EvalILArithmeticOp(self->u.arithmetic_op, env, cctx);
+			ret = EvalILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			ret = EvalILCompareOp(self->u.compare_op, env, cctx);
+			ret = EvalILCompareOp(self->Kind.CompareOp, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
-			ret = EvalILLogicOp(self->u.logic_op, env, cctx);
+			ret = EvalILLogicOp(self->Kind.LogicOp, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
-			ret = EvalILShiftOp(self->u.shift_op, env, cctx);
+			ret = EvalILShiftOp(self->Kind.ShiftOp, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
-			ret = EvalILExcorOp(self->u.excor_op, env, cctx);
+			ret = EvalILExcorOp(self->Kind.ExcorOp, env, cctx);
 			break;
 	}
 //	assert(ret != NULL);
@@ -126,21 +126,21 @@ GenericType* EvalILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cc
 
 char* ILBinaryOpToString(ILBinaryOp* self, Enviroment* env) {
 	char* ret = NULL;
-	switch(self->category) {
+	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			ret = ILArithmeticOpToString(self->u.arithmetic_op, env);
+			ret = ILArithmeticOpToString(self->Kind.ArithmeticOp, env);
 			break;
 		case OPERATOR_CLOGIC_T:
-			ret = ILLogicOpToString(self->u.logic_op, env);
+			ret = ILLogicOpToString(self->Kind.LogicOp, env);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			ret = ILCompareOpToString(self->u.compare_op, env);
+			ret = ILCompareOpToString(self->Kind.CompareOp, env);
 			break;
 		case OPERATOR_CSHIFT_T:
-			ret = ILShiftOpToString(self->u.shift_op, env);
+			ret = ILShiftOpToString(self->Kind.ShiftOp, env);
 			break;
 		case OPERATOR_CEXCOR_T:
-			ret = ILExcorOpToString(self->u.excor_op, env);
+			ret = ILExcorOpToString(self->Kind.ExcorOp, env);
 			break;
 	}
 	assert(ret != NULL);
@@ -148,34 +148,34 @@ char* ILBinaryOpToString(ILBinaryOp* self, Enviroment* env) {
 }
 
 void DeleteILBinaryOp(ILBinaryOp * self) {
-	switch(self->category) {
+	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			DeleteILArithmeticOp(self->u.arithmetic_op);
+			DeleteILArithmeticOp(self->Kind.ArithmeticOp);
 			break;
 		case OPERATOR_CLOGIC_T:
-			DeleteILLogicOp(self->u.logic_op);
+			DeleteILLogicOp(self->Kind.LogicOp);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			DeleteILCompareOp(self->u.compare_op);
+			DeleteILCompareOp(self->Kind.CompareOp);
 			break;
 		case OPERATOR_CSHIFT_T:
-			DeleteILShiftOp(self->u.shift_op);
+			DeleteILShiftOp(self->Kind.ShiftOp);
 			break;
 		case OPERATOR_CEXCOR_T:
-			DeleteILExcorOp(self->u.excor_op);
+			DeleteILExcorOp(self->Kind.ExcorOp);
 			break;
 	}
-	DeleteILFactor(self->left);
-	DeleteILFactor(self->right);
+	DeleteILFactor(self->Left);
+	DeleteILFactor(self->Right);
 	MEM_FREE(self);
 }
 
 char* ILBinaryOpToString_simple(ILBinaryOp* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
-	char* a = ILFactorToString(self->left, env);
-	char* b = ILFactorToString(self->right, env);
+	char* a = ILFactorToString(self->Left, env);
+	char* b = ILFactorToString(self->Right, env);
 	AppendsBuffer(sb, a);
-	AppendfBuffer(sb, " %s ", OperatorToString(self->type));
+	AppendfBuffer(sb, " %s ", OperatorToString(self->Type));
 	AppendsBuffer(sb, b);
 	MEM_FREE(a);
 	MEM_FREE(b);
@@ -203,7 +203,7 @@ int GetIndexILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx) {
 	  IsDoubleDoubleBinaryOp(self, env, cctx)) {
 		  return -1;
 	}
-	return GetIndexILBinaryOp2(self->left, self->right, self->type, env, cctx);
+	return GetIndexILBinaryOp2(self->Left, self->Right, self->Type, env, cctx);
 }
 
 int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, Enviroment* env, CallContext* cctx) {
@@ -226,7 +226,7 @@ int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, E
 }
 
 GenericType* ApplyILBinaryOp(ILBinaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->left, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->Left, env, cctx);
 	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;
 	GenericType* ret = ApplyGenericType(gtype,cctx);
@@ -236,8 +236,8 @@ GenericType* ApplyILBinaryOp(ILBinaryOp* self, GenericType* gtype, Enviroment* e
 
 //private
 static bool type_test(ILBinaryOp* self, Enviroment* env, CallContext* cctx, type* t) {
-	GenericType* lgtype = EvalILFactor(self->left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->right, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->Left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->Right, env, cctx);
 	return GENERIC2TYPE(lgtype) == t &&
 	       GENERIC2TYPE(rgtype) == t;
 }

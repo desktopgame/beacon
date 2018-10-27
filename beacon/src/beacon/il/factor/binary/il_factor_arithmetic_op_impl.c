@@ -22,8 +22,8 @@ ILFactor_arithmetic_op* NewILArithmeticOp(OperatorType type) {
 }
 
 GenericType* EvalILArithmeticOp(ILFactor_arithmetic_op * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;
@@ -49,8 +49,8 @@ GenericType* EvalILArithmeticOp(ILFactor_arithmetic_op * self, Enviroment* env, 
 void GenerateILArithmeticOp(ILFactor_arithmetic_op* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
 		} else if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
@@ -59,8 +59,8 @@ void GenerateILArithmeticOp(ILFactor_arithmetic_op* self, Enviroment* env, CallC
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}

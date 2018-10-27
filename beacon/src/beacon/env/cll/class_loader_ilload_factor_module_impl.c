@@ -173,8 +173,8 @@ static ILBinaryOp* CLIL_binary(ClassLoader* self, AST* source, OperatorType type
 	ILBinaryOp* ret = NewILBinaryOp(type);
 	AST* aleft = FirstAST(source);
 	AST* aright = SecondAST(source);
-	ret->left = CLILFactor(self, aleft);
-	ret->right = CLILFactor(self, aright);
+	ret->Left = CLILFactor(self, aleft);
+	ret->Right = CLILFactor(self, aright);
 	return ret;
 }
 
@@ -206,8 +206,8 @@ static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, Operat
 	ILBinaryOp* bin = NewILBinaryOp(type);
 	AST* aleft = FirstAST(source);
 	AST* aright = SecondAST(source);
-	bin->left = CLILFactor(self, aleft);
-	bin->right = CLILFactor(self, aright);
+	bin->Left = CLILFactor(self, aleft);
+	bin->Right = CLILFactor(self, aright);
 	ret->Left = CLILFactor(self, aleft);
 	ret->Right = WrapILBinaryOp(bin);
 	ret->Right->lineno = aright->Lineno;

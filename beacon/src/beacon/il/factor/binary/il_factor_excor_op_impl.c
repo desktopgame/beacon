@@ -17,8 +17,8 @@ ILFactor_excor_op* NewILExcorOp(OperatorType type) {
 }
 
 GenericType* EvalILExcorOp(ILFactor_excor_op * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->parent->right, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
@@ -42,8 +42,8 @@ GenericType* EvalILExcorOp(ILFactor_excor_op * self, Enviroment* env, CallContex
 void GenerateILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->Bytecode, OP_IEXCOR);
 		} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
@@ -52,8 +52,8 @@ void GenerateILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cc
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}

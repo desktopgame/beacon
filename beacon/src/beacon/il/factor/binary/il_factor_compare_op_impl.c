@@ -30,8 +30,8 @@ GenericType* EvalILCompareOp(ILFactor_compare_op * self, Enviroment* env, CallCo
 void GenerateILCompareOp(ILFactor_compare_op* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
 		} else if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
@@ -45,8 +45,8 @@ void GenerateILCompareOp(ILFactor_compare_op* self, Enviroment* env, CallContext
 //			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}

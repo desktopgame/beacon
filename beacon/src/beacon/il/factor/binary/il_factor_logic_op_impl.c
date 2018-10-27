@@ -26,7 +26,7 @@ GenericType* EvalILLogicOp(ILFactor_logic_op* self, Enviroment* env, CallContext
 	} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
 		return TYPE2GENERIC(TYPE_BOOL);
 	} else {
-		GenericType* lgtype = EvalILFactor(self->parent->left, env, cctx);
+		GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
 		//プリミティブ型同士でないのに
 		//演算子オーバーロードもない
 		if(self->operator_index == -1) {
@@ -43,8 +43,8 @@ GenericType* EvalILLogicOp(ILFactor_logic_op* self, Enviroment* env, CallContext
 
 void GenerateILLogicOp(ILFactor_logic_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
 		} else if(IsBoolBoolBinaryOp(self->parent, env, cctx)) {
@@ -53,8 +53,8 @@ void GenerateILLogicOp(ILFactor_logic_op* self, Enviroment* env, CallContext* cc
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->right, env, cctx);
-		GenerateILFactor(self->parent->left, env, cctx);
+		GenerateILFactor(self->parent->Right, env, cctx);
+		GenerateILFactor(self->parent->Left, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
