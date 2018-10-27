@@ -2,20 +2,20 @@
 #define BEACON_IL_IL_FACTOR_ASSIGN_OP_IMPL_H
 #include "../il_factor_interface.h"
 struct GenericType;
-typedef struct ILFactor_assign_op {
+typedef struct ILAssignOp {
 	ILFactor* left;
 	ILFactor* right;
-} ILFactor_assign_op;
+} ILAssignOp;
 
-ILFactor* WrapILAssignOp(ILFactor_assign_op* self);
+ILFactor* WrapILAssignOp(ILAssignOp* self);
 
-ILFactor_assign_op* NewILAssignOp();
+ILAssignOp* NewILAssignOp();
 
-void LoadILAssignOp(ILFactor_assign_op* self, Enviroment* env, CallContext* cctx);
+void LoadILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILAssignOp(ILFactor_assign_op* self, Enviroment* env, CallContext* cctx);
+void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILAssignOp(ILFactor_assign_op* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILAssignOp(ILFactor_assign_op* self);
+void DeleteILAssignOp(ILAssignOp* self);
 #endif
