@@ -12,9 +12,9 @@
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 
-static ILPropertyBody* CLILProperty_body(ClassLoader* self, il_type* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level);
+static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level);
 
-void CLILMemberTree(ClassLoader* self, il_type* current, AST* atree) {
+void CLILMemberTree(ClassLoader* self, ILType* current, AST* atree) {
 	if (atree->Tag == AST_ACCESS_MEMBER_TREE_T) {
 		for (int i = 0; i < atree->Children->Length; i++) {
 			CLILMemberTree(self, current, AtAST(atree, i));
@@ -27,7 +27,7 @@ void CLILMemberTree(ClassLoader* self, il_type* current, AST* atree) {
 	}
 }
 
-void CLILMemberList(ClassLoader* self, il_type* current, AST* amember, AccessLevel level) {
+void CLILMemberList(ClassLoader* self, ILType* current, AST* amember, AccessLevel level) {
 	if(amember->Tag == AST_MEMBER_DECL_LIST_T) {
 		for(int i=0; i<amember->Children->Length; i++) {
 			CLILMemberList(self, current, AtAST(amember, i), level);
@@ -48,7 +48,7 @@ void CLILMemberList(ClassLoader* self, il_type* current, AST* amember, AccessLev
 	}
 }
 
-void CLILField(ClassLoader* self, il_type* current, AST* afield, AccessLevel level) {
+void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel level) {
 	//assert(current->Tag == ilTYPE_CLASS_T);
 	AST* amodifier = FirstAST(afield);
 	AST* aGetTypeName = SecondAST(afield);
@@ -79,7 +79,7 @@ void CLILField(ClassLoader* self, il_type* current, AST* afield, AccessLevel lev
 	}
 }
 
-void CLILProperty(ClassLoader* self, il_type* current, AST* aprop, AccessLevel level) {
+void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel level) {
 	AST* amod = AtAST(aprop, 0);
 	AST* atypename = AtAST(aprop, 1);
 	AST* aset = AtAST(aprop, 2);
@@ -105,7 +105,7 @@ void CLILProperty(ClassLoader* self, il_type* current, AST* aprop, AccessLevel l
 	}
 }
 
-void CLILMethod(ClassLoader* self, il_type* current, AST* amethod, AccessLevel level) {
+void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, AccessLevel level) {
 	assert(current->tag == ilTYPE_CLASS_T || current->tag == ilTYPE_INTERFACE_T);
 	AST* amodifier = AtAST(amethod, 0);
 	AST* afunc_name = AtAST(amethod, 1);
@@ -133,7 +133,7 @@ void CLILMethod(ClassLoader* self, il_type* current, AST* amethod, AccessLevel l
 	}
 }
 
-void CLILConstructor(ClassLoader* self, il_type* current, AST* aconstructor, AccessLevel level) {
+void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, AccessLevel level) {
 	//assert(current->Tag == ilTYPE_CLASS_T);
 	AST* aparams = AtAST(aconstructor, 0);
 	AST* achain = AtAST(aconstructor, 1);
@@ -162,7 +162,7 @@ void CLILConstructor(ClassLoader* self, il_type* current, AST* aconstructor, Acc
 	PushVector(current->u.class_->constructor_list, ilcons);
 }
 
-void CLILOperatorOverload(ClassLoader* self, il_type* current, AST* aopov, AccessLevel level) {
+void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, AccessLevel level) {
 	//assert(aopov->Tag == AST_OPERATOR_OVERLOAD_T);
 	OperatorType ot = aopov->Attr.OperatorValue;
 	AST* aparam_list = AtAST(aopov, 0);
@@ -185,7 +185,7 @@ void CLILOperatorOverload(ClassLoader* self, il_type* current, AST* aopov, Acces
 	PushVector(current->u.class_->operator_overload_list, ilopov);
 }
 //private
-static ILPropertyBody* CLILProperty_body(ClassLoader* self, il_type* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level) {
+static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level) {
 	ILPropertyBody* ret = ILPropertyBody_new(tag);
 	assert(abody->Tag == AST_PROP_SET_T || abody->Tag == AST_PROP_GET_T);
 	AST* aacess = FirstAST(abody);

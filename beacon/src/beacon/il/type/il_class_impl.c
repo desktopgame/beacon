@@ -20,8 +20,8 @@ static void il_class_DeleteTypeParameter(VectorItem item);
 static void DeleteILClass_operator_overload(VectorItem item);
 static void il_class_prop_delete(VectorItem item );
 
-il_type * WrapILClass(il_class * self) {
-	il_type* ret = NewILType();
+ILType * WrapILClass(il_class * self) {
+	ILType* ret = NewILType();
 	ret->tag = ilTYPE_CLASS_T;
 	ret->u.class_ = self;
 	return ret;

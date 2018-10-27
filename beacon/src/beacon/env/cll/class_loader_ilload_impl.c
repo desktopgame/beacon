@@ -250,7 +250,7 @@ static il_class* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* c
 	AST* aextend_list = SecondAST(aclass_decl);
 	AST* amember_tree = AtAST(aclass_decl, 2);
 	il_class* ilclassz = NewILClass(atypename->Attr.StringVValue);
-	il_type* iltype = WrapILClass(ilclassz);
+	ILType* iltype = WrapILClass(ilclassz);
 	//class Foo<A, B>
 	CLILTypeParameter(self, FirstAST(atypename), ilclassz->GetParameterListType);
 	//class Foo : X, Y 
@@ -270,7 +270,7 @@ static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* curren
 	AST* aextends_list = SecondAST(ainterface_decl);
 	AST* amember_tree = AtAST(ainterface_decl, 2);
 	il_interface* ilinter = NewILInterface(atypename->Attr.StringVValue);
-	il_type* iltype = WrapILInterface(ilinter);
+	ILType* iltype = WrapILInterface(ilinter);
 	//interface Foo<A, B>
 	CLILTypeParameter(self, FirstAST(atypename), ilinter->GetParameterListType);
 	//interface Foo : XXX, YYY, CCC

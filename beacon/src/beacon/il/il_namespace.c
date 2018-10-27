@@ -38,7 +38,7 @@ void DeleteILNamespace(ILNamespace* self) {
 
 //private
 static void il_NamespaceDeleteType(VectorItem item) {
-	il_type* e = (il_type*)item;
+	ILType* e = (ILType*)item;
 	DeleteILType(e);
 }
 

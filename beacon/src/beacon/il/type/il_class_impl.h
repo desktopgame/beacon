@@ -32,7 +32,7 @@ typedef struct il_class {
  * @param self
  * @return
  */
-il_type* WrapILClass(il_class* self);
+ILType* WrapILClass(il_class* self);
 
 /**
  * クラスを表す要素を作成します.

@@ -13,7 +13,7 @@ TypeCache * NewTypeCache() {
 	return ret;
 }
 
-TypeCache * InitTypeCache(TypeCache * self, ClassLoader * context, il_type * iltype, type * tp, Namespace * scope, TypeCacheKind kind) {
+TypeCache * InitTypeCache(TypeCache * self, ClassLoader * context, ILType * iltype, type * tp, Namespace * scope, TypeCacheKind kind) {
 	self->Context = context;
 	self->ILType = iltype;
 	self->Type = tp;

@@ -3,7 +3,7 @@
 #define BEACON_IL_IL_PARAMETER_H
 #include "../env/generic_cache.h"
 #include "../util/string_pool.h"
-//#include "il_type.h"
+//#include "ILType.h"
 /**
  * パラメータの種類を表す列挙型.
  */

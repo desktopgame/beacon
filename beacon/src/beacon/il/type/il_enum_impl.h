@@ -10,7 +10,7 @@ typedef struct il_enum {
 	Vector* item_vec;
 } il_enum;
 
-il_type* WrapILEnum(il_enum* self);
+ILType* WrapILEnum(il_enum* self);
 
 il_enum* NewILEnum(StringView namev);
 

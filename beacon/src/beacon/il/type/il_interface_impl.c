@@ -11,8 +11,8 @@ static void il_interface_DeleteMethod(VectorItem item);
 static void il_interface_DeleteTypeParameter(VectorItem item);
 static void il_interface_DeleteProperty(VectorItem item);
 
-il_type * WrapILInterface(il_interface * self) {
-	il_type* ret = NewILType();
+ILType * WrapILInterface(il_interface * self) {
+	ILType* ret = NewILType();
 	ret->tag = ilTYPE_INTERFACE_T;
 	ret->u.interface_ = self;
 	return ret;

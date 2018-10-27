@@ -6,8 +6,8 @@
 //proto
 static void il_enum_name_delete(il_enum* self);
 
-il_type * WrapILEnum(il_enum * self) {
-	il_type* ret = NewILType();
+ILType * WrapILEnum(il_enum * self) {
+	ILType* ret = NewILType();
 	ret->tag = ilTYPE_ENUM_T;
 	ret->u.enum_ = self;
 	return ret;

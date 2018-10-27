@@ -11,7 +11,7 @@
  * @param current
  * @param atree
  */
-void CLILMemberTree(ClassLoader* self, il_type* current, AST* atree);
+void CLILMemberTree(ClassLoader* self, ILType* current, AST* atree);
 
 /**
  * メンバーを IL に変換します.
@@ -21,7 +21,7 @@ void CLILMemberTree(ClassLoader* self, il_type* current, AST* atree);
  * @param amember
  * @param level
  */
-void CLILMemberList(ClassLoader* self, il_type* current, AST* amember, AccessLevel level);
+void CLILMemberList(ClassLoader* self, ILType* current, AST* amember, AccessLevel level);
 
 /**
  * フィールドを IL に変換します.
@@ -30,7 +30,7 @@ void CLILMemberList(ClassLoader* self, il_type* current, AST* amember, AccessLev
  * @param afield
  * @param level
  */
-void CLILField(ClassLoader* self, il_type* current, AST* afield, AccessLevel level);
+void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel level);
 
 /**
  * プロパティを IL に変換します.
@@ -39,7 +39,7 @@ void CLILField(ClassLoader* self, il_type* current, AST* afield, AccessLevel lev
  * @param aprop
  * @param level
  */
-void CLILProperty(ClassLoader* self, il_type* current, AST* aprop, AccessLevel level);
+void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel level);
 
 /**
  * メソッドを IL に変換します.
@@ -48,7 +48,7 @@ void CLILProperty(ClassLoader* self, il_type* current, AST* aprop, AccessLevel l
  * @param amethod
  * @param level
  */
-void CLILMethod(ClassLoader* self, il_type* current, AST* amethod, AccessLevel level);
+void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, AccessLevel level);
 
 /**
  * コンストラクタを IL に変換します.
@@ -57,7 +57,7 @@ void CLILMethod(ClassLoader* self, il_type* current, AST* amethod, AccessLevel l
  * @param aconstructor
  * @param level
  */
-void CLILConstructor(ClassLoader* self, il_type* current, AST* aconstructor, AccessLevel level);
+void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, AccessLevel level);
 
 /**
  * 演算子オーバーロードを IL に変換します.
@@ -66,5 +66,5 @@ void CLILConstructor(ClassLoader* self, il_type* current, AST* aconstructor, Acc
  * @param aopov
  * @param level
  */
-void CLILOperatorOverload(ClassLoader* self, il_type* current, AST* aopov, AccessLevel level);
+void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, AccessLevel level);
 #endif

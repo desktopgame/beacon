@@ -22,73 +22,73 @@ struct ILConstructor;
 /**
  * 名前空間に含めることが出来る型.
  */
-typedef struct il_type {
+typedef struct ILType {
 	ILTypeTag tag;
 	union {
 		struct il_class* class_;
 		struct il_interface* interface_;
 		struct il_enum* enum_;
 	} u;
-} il_type;
+} ILType;
 
 /**
  * 型を作成します.
  * @return
  */
-il_type* NewILType();
+ILType* NewILType();
 
 /**
  * メソッドの一覧を返します.
  * @param self
  * @return
  */
-Vector* GetMethodsILType(il_type* self);
+Vector* GetMethodsILType(ILType* self);
 
 /**
  * 静的メソッドの一覧を返します.
  * @param self
  * @return
  */
-Vector* GetSMethodsILType(il_type* self);
+Vector* GetSMethodsILType(ILType* self);
 
 /**
  * コンストラクタを追加します.
  * @param self
  * @param ctor
  */
-void AddConstructorILType(il_type* self, struct ILConstructor* ctor);
+void AddConstructorILType(ILType* self, struct ILConstructor* ctor);
 
 /**
  * フィールドを追加します.
  * @param self
  * @param field
  */
-void AddFieldILType(il_type* self, struct ILField* field);
+void AddFieldILType(ILType* self, struct ILField* field);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void AddPropertyILType(il_type* self, struct ILProperty* prop);
+void AddPropertyILType(ILType* self, struct ILProperty* prop);
 
 /**
  * メソッドを追加します.
  * @param self
  * @param field
  */
-void AddMethodILType(il_type* self, struct ILMethod* method);
+void AddMethodILType(ILType* self, struct ILMethod* method);
 
 /**
  * 型を開放します.
  * @param self
  */
-void DeleteILType(il_type* self);
+void DeleteILType(ILType* self);
 
 /**
  * 型変数の一覧を返します.
  * @param self
  * @return
  */
-Vector* GetTypeParametersILType(il_type* self);
+Vector* GetTypeParametersILType(ILType* self);
 #endif // !SIGNAL_IL_IL_TYPE_INTERFACE_H
