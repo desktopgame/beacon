@@ -5,20 +5,20 @@
 
 TypeCache * NewTypeCache() {
 	TypeCache* ret = (TypeCache*)MEM_MALLOC(sizeof(TypeCache));
-	ret->context = NULL;
-	ret->iltype = NULL;
-	ret->tp = NULL;
-	ret->scope = NULL;
-	ret->consume = false;
+	ret->Context = NULL;
+	ret->ILType = NULL;
+	ret->Type = NULL;
+	ret->Scope = NULL;
+	ret->IsConsume = false;
 	return ret;
 }
 
 TypeCache * InitTypeCache(TypeCache * self, ClassLoader * context, il_type * iltype, type * tp, Namespace * scope, TypeCacheKind kind) {
-	self->context = context;
-	self->iltype = iltype;
-	self->tp = tp;
-	self->scope = scope;
-	self->kind = kind;
+	self->Context = context;
+	self->ILType = iltype;
+	self->Type = tp;
+	self->Scope = scope;
+	self->Kind = kind;
 	return self;
 }
 

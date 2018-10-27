@@ -33,12 +33,12 @@ typedef enum TypeCacheKind {
  * つまり宣言ロード時に予約された実装の読み込みが必要な情報を表すキャッシュです。
  */
 typedef struct TypeCache {
-	struct ClassLoader* context;
-	il_type* iltype;
-	type* tp;
-	Namespace* scope;
-	TypeCacheKind kind;
-	bool consume;
+	struct ClassLoader* Context;
+	il_type* ILType;
+	type* Type;
+	Namespace* Scope;
+	TypeCacheKind Kind;
+	bool IsConsume;
 } TypeCache;
 
 TypeCache* NewTypeCache();

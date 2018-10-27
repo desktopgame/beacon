@@ -184,12 +184,12 @@ static void CLBC_excec_class_decl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
 		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
-		if (e->kind != CACHEKIND_CLASS_DECL_T || e->consume) {
+		if (e->Kind != CACHEKIND_CLASS_DECL_T || e->IsConsume) {
 			continue;
 		}
 		count++;
-		e->consume = true;
-		CLBC_class_decl(e->context, e->iltype, e->tp, e->scope);
+		e->IsConsume = true;
+		CLBC_class_decl(e->Context, e->ILType, e->Type, e->Scope);
 	}
 }
 
@@ -197,12 +197,12 @@ static void CLBC_excec_class_impl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
 		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
-		if (e->kind != CACHEKIND_CLASS_IMPL_T || e->consume) {
+		if (e->Kind != CACHEKIND_CLASS_IMPL_T || e->IsConsume) {
 			continue;
 		}
 		count++;
-		e->consume = true;
-		CLBC_class_impl(e->context, e->iltype, e->tp, e->scope);
+		e->IsConsume = true;
+		CLBC_class_impl(e->Context, e->ILType, e->Type, e->Scope);
 	}
 }
 
@@ -211,12 +211,12 @@ static void CLBC_excec_interface_decl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
 		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
-		if (e->kind != CACHEKIND_INTERFACE_DECL_T || e->consume) {
+		if (e->Kind != CACHEKIND_INTERFACE_DECL_T || e->IsConsume) {
 			continue;
 		}
 		count++;
-		e->consume = true;
-		CLBC_interface_decl(e->context, e->iltype, e->tp, e->scope);
+		e->IsConsume = true;
+		CLBC_interface_decl(e->Context, e->ILType, e->Type, e->Scope);
 	}
 }
 
@@ -225,12 +225,12 @@ static void CLBC_excec_interface_impl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
 		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
-		if (e->kind != CACHEKIND_INTERFACE_IMPL_T || e->consume) {
+		if (e->Kind != CACHEKIND_INTERFACE_IMPL_T || e->IsConsume) {
 			continue;
 		}
 		count++;
-		e->consume = true;
-		CLBC_interface_impl(e->context, e->iltype, e->tp, e->scope);
+		e->IsConsume = true;
+		CLBC_interface_impl(e->Context, e->ILType, e->Type, e->Scope);
 	}
 }
 
@@ -239,12 +239,12 @@ static void CLBC_excec_enum_decl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
 		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
-		if (e->kind != CACHEKIND_ENUM_DECL_T || e->consume) {
+		if (e->Kind != CACHEKIND_ENUM_DECL_T || e->IsConsume) {
 			continue;
 		}
 		count++;
-		e->consume = true;
-		CLBC_enum_decl(e->context, e->iltype, e->tp, e->scope);
+		e->IsConsume = true;
+		CLBC_enum_decl(e->Context, e->ILType, e->Type, e->Scope);
 	}
 }
 
@@ -253,12 +253,12 @@ static void CLBC_excec_enum_impl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
 		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
-		if (e->kind != CACHEKIND_ENUM_IMPL_T || e->consume) {
+		if (e->Kind != CACHEKIND_ENUM_IMPL_T || e->IsConsume) {
 			continue;
 		}
 		count++;
-		e->consume = true;
-		CLBC_enum_impl(e->context, e->iltype, e->tp, e->scope);
+		e->IsConsume = true;
+		CLBC_enum_impl(e->Context, e->ILType, e->Type, e->Scope);
 	}
 }
 
