@@ -12,7 +12,7 @@ struct Constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
  */
-typedef struct ILFactor_new_instance {
+typedef struct ILNewInstance {
 	Vector* argument_list;
 	FQCNCache* fqcnc;
 	Vector* type_args;
@@ -20,20 +20,20 @@ typedef struct ILFactor_new_instance {
 	GenericType* instance_type;
 	struct Constructor* c;
 	int constructor_index;
-} ILFactor_new_instance;
+} ILNewInstance;
 
-ILFactor* WrapILNewInstance(ILFactor_new_instance* self);
+ILFactor* WrapILNewInstance(ILNewInstance* self);
 
-ILFactor_new_instance* NewILNewInstance();
+ILNewInstance* NewILNewInstance();
 
-void GenerateILNewInstance(ILFactor_new_instance* self, Enviroment* env, CallContext* cctx);
+void GenerateILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
 
-void LoadILNewInstance(ILFactor_new_instance* self, Enviroment* env, CallContext* cctx);
+void LoadILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILNewInstance(ILFactor_new_instance* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
 
-char* ILNewInstanceToString(ILFactor_new_instance* self, Enviroment* env);
+char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env);
 
-void DeleteILNewInstance(ILFactor_new_instance* self);
+void DeleteILNewInstance(ILNewInstance* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H

@@ -58,7 +58,7 @@ struct ILBinaryOp;
 struct ILAssignOp;
 struct ILThis;
 struct ILSuper;
-struct ILFactor_new_instance;
+struct ILNewInstance;
 struct ILBool;
 struct ILFactor_null;
 struct ILAs;
@@ -89,7 +89,7 @@ typedef struct ILFactor {
 		struct ILBinaryOp* binary_;
 		struct ILThis* this_;
 		struct ILSuper* super_;
-		struct ILFactor_new_instance* new_instance_;
+		struct ILNewInstance* new_instance_;
 		struct ILFactor_cAST* cast_;
 		struct ILBool* bool_;
 		struct ILFactor_null* null_;

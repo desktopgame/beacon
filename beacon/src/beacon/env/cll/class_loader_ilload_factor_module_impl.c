@@ -15,7 +15,7 @@ static ILFactor_explicit_binary_op* CLIL_explicit_binary(ClassLoader* self, AST*
 static ILAssignOp* CLIL_assign(ClassLoader* self, AST* source);
 static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_variable* CLIL_variable(ClassLoader* self, AST* source);
-static ILFactor_new_instance* CLIL_new_instance(ClassLoader* self, AST* source);
+static ILNewInstance* CLIL_new_instance(ClassLoader* self, AST* source);
 static ILAs* CLIL_as(ClassLoader* self, AST* source);
 static ILFactor_call_op* CLIL_call_op(ClassLoader* self, AST* source);
 static ILFactor_member_op* CLIL_member_op(ClassLoader* self, AST* source);
@@ -224,12 +224,12 @@ static ILFactor_variable* CLIL_variable(ClassLoader* self, AST* source) {
 	return ilvar;
 }
 
-static ILFactor_new_instance* CLIL_new_instance(ClassLoader* self, AST* source) {
+static ILNewInstance* CLIL_new_instance(ClassLoader* self, AST* source) {
 	assert(source->Tag == AST_NEW_INSTANCE_T);
 	AST* afqcn = FirstAST(source);
 	AST* atype_args = SecondAST(source);
 	AST* aargs = AtAST(source, 2);
-	ILFactor_new_instance* ret = NewILNewInstance();
+	ILNewInstance* ret = NewILNewInstance();
 	CLILFQCNCache(afqcn, ret->fqcnc);
 	CLILTypeArgument(self, atype_args, ret->type_args);
 	CLILArgumentList(self, ret->argument_list, aargs);

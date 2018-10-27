@@ -193,7 +193,7 @@ static void Loadclass_loader_toplevel(ClassLoader* self) {
 	}
 	//var $world = new beacon::lang::World();
 	ILStatement_inferenced_type_init* createWorldStmt = NewILInferencedTypeInit(InternString("$world"));
-	ILFactor_new_instance* newWorldInstance = NewILNewInstance();
+	ILNewInstance* newWorldInstance = NewILNewInstance();
 	newWorldInstance->fqcnc->Name = InternString("World");
 	createWorldStmt->fact = WrapILNewInstance(newWorldInstance);
 	ILStatement* body = WrapILInferencedTypeInit(createWorldStmt);
