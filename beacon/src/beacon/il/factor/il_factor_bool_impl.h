@@ -10,7 +10,7 @@ struct type;
  * boolリテラルを表す要素.
  */
 typedef struct ILBool {
-	bool a;
+	bool Value;
 } ILBool;
 
 ILFactor* WrapILBool(ILBool* self);

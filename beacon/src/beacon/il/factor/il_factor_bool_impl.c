@@ -13,12 +13,12 @@ ILFactor * WrapILBool(ILBool * self) {
 
 ILBool * NewILBool(bool b) {
 	ILBool* ret = (ILBool*)MEM_MALLOC(sizeof(ILBool));
-	ret->a = b;
+	ret->Value = b;
 	return ret;
 }
 
 void GenerateILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
-	if (self->a) {
+	if (self->Value) {
 		AddOpcodeBuf(env->Bytecode, OP_TRUE);
 	} else {
 		AddOpcodeBuf(env->Bytecode, OP_FALSE);
@@ -30,7 +30,7 @@ GenericType* EvalILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
 }
 
 char* ILBoolToString(ILBool* self, Enviroment* env) {
-	return Strdup(self->a ? "true" : "false");
+	return Strdup(self->Value ? "true" : "false");
 }
 
 void DeleteILBool(ILBool * self) {
