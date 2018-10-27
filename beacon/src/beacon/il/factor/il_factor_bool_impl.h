@@ -9,20 +9,20 @@ struct type;
 /**
  * boolリテラルを表す要素.
  */
-typedef struct ILFactor_bool {
+typedef struct ILBool {
 	bool a;
-} ILFactor_bool;
+} ILBool;
 
-ILFactor* WrapILBool(ILFactor_bool* self);
+ILFactor* WrapILBool(ILBool* self);
 
-ILFactor_bool* NewILBool(bool b);
+ILBool* NewILBool(bool b);
 
-void GenerateILBool(ILFactor_bool* self, Enviroment* env, CallContext* cctx);
+void GenerateILBool(ILBool* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILBool(ILFactor_bool* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILBool(ILBool* self, Enviroment* env, CallContext* cctx);
 
-char* ILBoolToString(ILFactor_bool* self, Enviroment* env);
+char* ILBoolToString(ILBool* self, Enviroment* env);
 
-void DeleteILBool(ILFactor_bool* self);
+void DeleteILBool(ILBool* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_BOOL_H

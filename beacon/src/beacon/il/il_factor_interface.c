@@ -135,7 +135,7 @@ void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 			LoadILNewInstance(self->u.new_instance_, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
-			//ILFactor_bool_load(self->u.bool_, depth);
+			//ILBool_load(self->u.bool_, depth);
 			break;
 		case ILFACTOR_NULL_T:
 			LoadILNull(NULL, env, cctx);

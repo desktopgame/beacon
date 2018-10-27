@@ -6,8 +6,8 @@
 #include <stdio.h>
 //proto
 static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source);
-static ILFactor_bool* CLIL_true(ClassLoader* self, AST* source);
-static ILFactor_bool* CLIL_false(ClassLoader* self, AST* source);
+static ILBool* CLIL_true(ClassLoader* self, AST* source);
+static ILBool* CLIL_false(ClassLoader* self, AST* source);
 static ILFactor_unary_op* CLIL_unary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_binary_op* CLIL_binary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_explicit_unary_op* CLIL_explicit_unary(ClassLoader* self, AST* source, OperatorType type);
@@ -154,11 +154,11 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 	return fact;
 }
 
-static ILFactor_bool * CLIL_true(ClassLoader * self, AST* source) {
+static ILBool * CLIL_true(ClassLoader * self, AST* source) {
 	return NewILBool(true);
 }
 
-static ILFactor_bool * CLIL_false(ClassLoader * self, AST* source) {
+static ILBool * CLIL_false(ClassLoader * self, AST* source) {
 	return NewILBool(false);
 }
 
