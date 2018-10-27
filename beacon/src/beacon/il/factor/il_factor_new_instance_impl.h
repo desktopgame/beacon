@@ -13,13 +13,13 @@ struct Constructor;
  * コンストラクタの呼び出しを表す要素.
  */
 typedef struct ILNewInstance {
-	Vector* argument_list;
-	FQCNCache* fqcnc;
-	Vector* type_args;
+	Vector* Arguments;
+	FQCNCache* FQCNCache;
+	Vector* TypeArgs;
 //	GenericCache* fqcn;
-	GenericType* instance_type;
-	struct Constructor* c;
-	int constructor_index;
+	GenericType* InstanceGType;
+	struct Constructor* Constructor;
+	int ConstructorIndex;
 } ILNewInstance;
 
 ILFactor* WrapILNewInstance(ILNewInstance* self);

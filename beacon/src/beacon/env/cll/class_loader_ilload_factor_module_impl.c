@@ -230,9 +230,9 @@ static ILNewInstance* CLIL_new_instance(ClassLoader* self, AST* source) {
 	AST* atype_args = SecondAST(source);
 	AST* aargs = AtAST(source, 2);
 	ILNewInstance* ret = NewILNewInstance();
-	CLILFQCNCache(afqcn, ret->fqcnc);
-	CLILTypeArgument(self, atype_args, ret->type_args);
-	CLILArgumentList(self, ret->argument_list, aargs);
+	CLILFQCNCache(afqcn, ret->FQCNCache);
+	CLILTypeArgument(self, atype_args, ret->TypeArgs);
+	CLILArgumentList(self, ret->Arguments, aargs);
 	return ret;
 }
 

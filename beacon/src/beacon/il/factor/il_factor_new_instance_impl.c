@@ -27,26 +27,26 @@ ILFactor * WrapILNewInstance(ILNewInstance * self) {
 
 ILNewInstance * NewILNewInstance() {
 	ILNewInstance* ret = (ILNewInstance*)MEM_MALLOC(sizeof(ILNewInstance));
-	ret->fqcnc = FQCNCache_new();
-	ret->type_args = NewVector();
-	ret->argument_list = NewVector();
-	ret->c = NULL;
-	ret->constructor_index = -1;
-	ret->instance_type = NULL;
+	ret->FQCNCache = FQCNCache_new();
+	ret->TypeArgs = NewVector();
+	ret->Arguments = NewVector();
+	ret->Constructor = NULL;
+	ret->ConstructorIndex = -1;
+	ret->InstanceGType = NULL;
 	return ret;
 }
 
 void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
-	for(int i=0; i<self->type_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
+	for(int i=0; i<self->TypeArgs->Length; i++) {
+		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		GenerateGenericType(e->GType, env);
 	}
 	//実引数を全てスタックへ
-	for (int i = 0; i < self->argument_list->Length; i++) {
-		ILArgument* ilarg = (ILArgument*)AtVector(self->argument_list, i);
+	for (int i = 0; i < self->Arguments->Length; i++) {
+		ILArgument* ilarg = (ILArgument*)AtVector(self->Arguments, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);
 		if(GetLastBCError()) {
 			return;
@@ -54,8 +54,8 @@ void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* 
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->Bytecode, self->c->Parent->absolute_index);
-	AddOpcodeBuf(env->Bytecode, self->constructor_index);
+	AddOpcodeBuf(env->Bytecode, self->Constructor->Parent->absolute_index);
+	AddOpcodeBuf(env->Bytecode, self->ConstructorIndex);
 }
 
 void LoadILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
@@ -64,8 +64,8 @@ void LoadILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx
 		return;
 	}
 	//抽象クラスはインスタンス化できない
-	if(IsAbstractType(self->c->Parent)) {
-		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->c->Parent)));
+	if(IsAbstractType(self->Constructor->Parent)) {
+		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->Constructor->Parent)));
 	}
 }
 
@@ -75,39 +75,39 @@ GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallConte
 		return NULL;
 	}
 	//型引数がないのでそのまま
-	if (self->type_args->Length == 0) {
-		GenericType* ret = RefGenericType(self->c->Parent);
+	if (self->TypeArgs->Length == 0) {
+		GenericType* ret = RefGenericType(self->Constructor->Parent);
 		return ret;
 	}
 	//FQCNCache typename_group
-	if (self->instance_type == NULL) {
+	if (self->InstanceGType == NULL) {
 		Namespace* scope = NULL;
-		GenericType* a = generic_NewType(self->c->Parent);
-		for (int i = 0; i < self->type_args->Length; i++) {
-			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
+		GenericType* a = generic_NewType(self->Constructor->Parent);
+		for (int i = 0; i < self->TypeArgs->Length; i++) {
+			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 			GenericType* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
 			AddArgsGenericType(a, arg);
 		}
-		self->instance_type = a;
+		self->InstanceGType = a;
 	}
-	return self->instance_type;
+	return self->InstanceGType;
 }
 
 char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
-	char* type = FQCNCacheToString(self->fqcnc);
+	char* type = FQCNCacheToString(self->FQCNCache);
 	AppendsBuffer(sb, type);
-	ILTypeArgsToString(sb, self->type_args, env);
-	ILArgsToString(sb, self->argument_list, env);
+	ILTypeArgsToString(sb, self->TypeArgs, env);
+	ILArgsToString(sb, self->Arguments, env);
 	MEM_FREE(type);
 	return ReleaseBuffer(sb);
 }
 
 void DeleteILNewInstance(ILNewInstance * self) {
-	DeleteVector(self->argument_list, il_Factor_new_instace_delete_arg);
-	DeleteVector(self->type_args, DeleteILNewInstance_typearg);
-	DeleteFQCNCache(self->fqcnc);
+	DeleteVector(self->Arguments, il_Factor_new_instace_delete_arg);
+	DeleteVector(self->TypeArgs, DeleteILNewInstance_typearg);
+	DeleteFQCNCache(self->FQCNCache);
 	MEM_FREE(self);
 }
 
@@ -118,20 +118,20 @@ static void DeleteILNewInstance_typearg(VectorItem item) {
 }
 
 static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
-	if(self->constructor_index != -1) {
+	if(self->ConstructorIndex != -1) {
 		return;
 	}
 	#if defined(DEBUG)
-	const char* namea = Ref2Str(self->fqcnc->Name);
-	if(self->fqcnc->Name == InternString("Vector")) {
+	const char* namea = Ref2Str(self->FQCNCache->Name);
+	if(self->FQCNCache->Name == InternString("Vector")) {
 		int a = 0;
 	}
 	#endif
 	//コンストラクタで生成するオブジェクトの肩を取得
-	type* ty = GetEvalTypeCContext(cctx, self->fqcnc);
+	type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
-			Ref2Str(self->fqcnc->Name)
+			Ref2Str(self->FQCNCache->Name)
 		);
 		return;
 	}
@@ -140,10 +140,10 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	int temp = -1;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = cls->parent->generic_self;
-	cfr->Kind.Resolve.TypeArgs = self->type_args;
-	ResolveILTypeArgument(self->type_args, cctx);
-	self->c = ILFindConstructorClass(cls, self->argument_list, env, cctx, &temp);
-	self->constructor_index = temp;
+	cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
+	ResolveILTypeArgument(self->TypeArgs, cctx);
+	self->Constructor = ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
+	self->ConstructorIndex = temp;
 	PopCallContext(cctx);
 	if(temp == -1) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
