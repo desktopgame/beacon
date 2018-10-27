@@ -5,11 +5,11 @@
 #include "../../env/generic_cache.h"
 #include "../../env/generic_type.h"
 
-typedef enum cast_mode {
+typedef enum CastMode {
 	CAST_DOWN_T,
 	CAST_UP_T,
 	CAST_UNKNOWN_T,
-} cast_mode;
+} CastMode;
 
 /**
  * as演算子を表す構造体.
@@ -18,7 +18,7 @@ typedef struct ILFactor_as {
 	ILFactor* fact;
 	GenericCache* fqcn;
 	GenericType* gtype;
-	cast_mode mode;
+	CastMode mode;
 } ILFactor_as;
 
 struct Enviroment;

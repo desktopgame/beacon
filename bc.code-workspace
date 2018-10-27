@@ -138,7 +138,8 @@
 			"il_factor_explicit_binary_op_impl.h": "c",
 			"il_factor_not_op_impl.h": "c",
 			"il_factor_variable_impl.h": "c",
-			"il_stmt_interface.h": "c"
+			"il_stmt_interface.h": "c",
+			"generic_cache.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
