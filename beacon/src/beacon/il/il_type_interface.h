@@ -5,11 +5,11 @@
 /**
  * 型の種類を判別する列挙.
  */
-typedef enum il_type_tag {
+typedef enum ILTypeTag {
 	ilTYPE_CLASS_T,
 	ilTYPE_INTERFACE_T,
 	ilTYPE_ENUM_T,
-} il_type_tag;
+} ILTypeTag;
 
 struct il_class;
 struct il_interface;
@@ -23,7 +23,7 @@ struct ILConstructor;
  * 名前空間に含めることが出来る型.
  */
 typedef struct il_type {
-	il_type_tag tag;
+	ILTypeTag tag;
 	union {
 		struct il_class* class_;
 		struct il_interface* interface_;
