@@ -14,28 +14,28 @@ typedef enum CastMode {
 /**
  * as演算子を表す構造体.
  */
-typedef struct ILFactor_as {
+typedef struct ILAs {
 	ILFactor* fact;
 	GenericCache* fqcn;
 	GenericType* gtype;
 	CastMode mode;
-} ILFactor_as;
+} ILAs;
 
 struct Enviroment;
 struct type;
 struct Field;
 
-ILFactor* WrapILAs(ILFactor_as* self);
+ILFactor* WrapILAs(ILAs* self);
 
-ILFactor_as* NewILAs();
+ILAs* NewILAs();
 
-void GenerateILAs(ILFactor_as* self, Enviroment* env, CallContext* cctx);
+void GenerateILAs(ILAs* self, Enviroment* env, CallContext* cctx);
 
-void LoadILAs(ILFactor_as* self, Enviroment* env, CallContext* cctx);
+void LoadILAs(ILAs* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILAs(ILFactor_as* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILAs(ILAs* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILAs(ILFactor_as* self);
+void DeleteILAs(ILAs* self);
 
-char* ILAsToString(ILFactor_as* self, Enviroment* env);
+char* ILAsToString(ILAs* self, Enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

@@ -16,7 +16,7 @@ static ILAssignOp* CLIL_assign(ClassLoader* self, AST* source);
 static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_variable* CLIL_variable(ClassLoader* self, AST* source);
 static ILFactor_new_instance* CLIL_new_instance(ClassLoader* self, AST* source);
-static ILFactor_as* CLIL_as(ClassLoader* self, AST* source);
+static ILAs* CLIL_as(ClassLoader* self, AST* source);
 static ILFactor_call_op* CLIL_call_op(ClassLoader* self, AST* source);
 static ILFactor_member_op* CLIL_member_op(ClassLoader* self, AST* source);
 static ILFactor_instanceof* CLIL_instanceof(ClassLoader* self, AST* source);
@@ -236,8 +236,8 @@ static ILFactor_new_instance* CLIL_new_instance(ClassLoader* self, AST* source) 
 	return ret;
 }
 
-static ILFactor_as* CLIL_as(ClassLoader* self, AST* source) {
-	ILFactor_as* ret = NewILAs();
+static ILAs* CLIL_as(ClassLoader* self, AST* source) {
+	ILAs* ret = NewILAs();
 	ret->fact = CLILFactor(self, FirstAST(source));
 	CLILGenericCache(SecondAST(source), ret->fqcn);
 	return ret;

@@ -61,7 +61,7 @@ struct ILFactor_super;
 struct ILFactor_new_instance;
 struct ILFactor_bool;
 struct ILFactor_null;
-struct ILFactor_as;
+struct ILAs;
 struct ILFactor_inc;
 struct ILFactor_dec;
 struct ILFactor_call_op;
@@ -93,7 +93,7 @@ typedef struct ILFactor {
 		struct ILFactor_cAST* cast_;
 		struct ILFactor_bool* bool_;
 		struct ILFactor_null* null_;
-		struct ILFactor_as* as_;
+		struct ILAs* as_;
 		struct ILFactor_inc* inc_;
 		struct ILFactor_dec* dec_;
 		struct ILFactor_call_op* call_;
