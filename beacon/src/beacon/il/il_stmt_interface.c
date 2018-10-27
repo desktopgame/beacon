@@ -6,14 +6,14 @@
 #include "../util/mem.h"
 #include "il_print_layout.h"
 
-il_stmt* MallocILStmt(ILStatementTag type, const char* filename, int lineno) {
-	il_stmt* ret = mem_malloc(sizeof(il_stmt), filename, lineno);
+ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno) {
+	ILStatement* ret = mem_malloc(sizeof(ILStatement), filename, lineno);
 	ret->type = type;
 	ret->lineno = -1;
 	return ret;
 }
 
-void GenerateILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
+void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -80,7 +80,7 @@ void GenerateILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
 	AddRangeEnviroment(env, self->lineno);
 }
 
-void LoadILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
+void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 	if(GetLastBCError()) {
 		return;
 	}
@@ -144,7 +144,7 @@ void LoadILStmt(il_stmt * self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-void DeleteILStmt(il_stmt * self) {
+void DeleteILStmt(ILStatement * self) {
 	switch (self->type) {
 		case ILSTMT_IF_T:
 			DeleteILIf(self->u.if_);
@@ -189,7 +189,7 @@ void DeleteILStmt(il_stmt * self) {
 			DeleteILYieldReturn(self->u.yield_return);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			//il_stmt_yield_break_delete(self->u.yield_break);
+			//ILStatement_yield_break_delete(self->u.yield_break);
 			break;
 		case ILSTMT_INJECT_JNI_T:
 			DeleteILInjectJni(self->u.inject_jni);

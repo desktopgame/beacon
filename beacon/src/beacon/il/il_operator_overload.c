@@ -29,6 +29,6 @@ static void DeleteILOperatorOverload_parameter(VectorItem item) {
 }
 
 static void DeleteILOperatorOverload_stmt(VectorItem item) {
-	il_stmt* e = (il_stmt*)item;
+	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }

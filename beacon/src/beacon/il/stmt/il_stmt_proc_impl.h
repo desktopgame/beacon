@@ -6,22 +6,22 @@
 /**
  * 式のみで構成される文を表す要素.
  */
-typedef struct il_stmt_proc {
+typedef struct ILStatement_proc {
 	ILFactor* factor;
-} il_stmt_proc;
+} ILStatement_proc;
 
 /**
  * 式のみで構成される文を表す要素をスーパーセットにラップします.
  * @param self
  * @return
  */
-il_stmt* WrapILProc(il_stmt_proc* self);
+ILStatement* WrapILProc(ILStatement_proc* self);
 
 /**
  * 式のみで構成される文を表す要素を作成します.
  * @return
  */
-il_stmt_proc* NewILProc();
+ILStatement_proc* NewILProc();
 
 /**
  * 式のみで構成される文を生成します.
@@ -29,7 +29,7 @@ il_stmt_proc* NewILProc();
  * @param env
  * @param cctx
  */
-void GenerateILProc(il_stmt_proc* self, Enviroment* env, CallContext* cctx);
+void GenerateILProc(ILStatement_proc* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式のみで構成される文を読み込みます.
@@ -37,11 +37,11 @@ void GenerateILProc(il_stmt_proc* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILProc(il_stmt_proc* self, Enviroment* env, CallContext* cctx);
+void LoadILProc(ILStatement_proc* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式のみで構成される文を表す要素を開放します.
  * @param self
  */
-void DeleteILProc(il_stmt_proc* self);
+void DeleteILProc(ILStatement_proc* self);
 #endif // !SIGNAL_IL_IL_STMT_EXPR_H

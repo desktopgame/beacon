@@ -104,7 +104,7 @@ static void class_loader_ilload_enum(ClassLoader* self, ILNamespace* current, AS
 static void class_loader_ilload_identifier_list(ClassLoader* self, Vector* list, AST* asource);
 
 //static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source);
-//static il_stmt* class_loader_ilload_bodyImpl(ClassLoader* self, AST* source);
+//static ILStatement* class_loader_ilload_bodyImpl(ClassLoader* self, AST* source);
 
 void ILLoadClassLoader(ClassLoader* self, AST* source_code) {
 	assert(self->ILCode == NULL);

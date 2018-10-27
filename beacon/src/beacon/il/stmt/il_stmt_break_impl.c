@@ -3,8 +3,8 @@
 #include "../../util/text.h"
 #include <stdio.h>
 
-il_stmt * WrapILBreak() {
-	il_stmt* ret = il_stmt_new(ILSTMT_BREAK_T);
+ILStatement * WrapILBreak() {
+	ILStatement* ret = ILStatement_new(ILSTMT_BREAK_T);
 	return ret;
 }
 

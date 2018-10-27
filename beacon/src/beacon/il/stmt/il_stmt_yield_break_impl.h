@@ -3,7 +3,7 @@
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 
-void GenerateILYieldBreak(il_stmt_yield_break* self, Enviroment* env, CallContext* cctx);
+void GenerateILYieldBreak(ILStatement_yield_break* self, Enviroment* env, CallContext* cctx);
 
-void LoadILYieldBreak(il_stmt_yield_break * self, Enviroment* env, CallContext* cctx);
+void LoadILYieldBreak(ILStatement_yield_break * self, Enviroment* env, CallContext* cctx);
 #endif

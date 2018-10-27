@@ -7,22 +7,22 @@ struct Enviroment;
 /**
  * 値の返却を表す要素.
  */
-typedef struct il_stmt_return {
+typedef struct ILStatement_return {
 	ILFactor* fact;
-} il_stmt_return;
+} ILStatement_return;
 
 /**
  * 式を返却する文をスーパーセットにラップします.
  * @param self
  * @return
  */
-il_stmt* WrapILReturn(il_stmt_return* self);
+ILStatement* WrapILReturn(ILStatement_return* self);
 
 /**
  * 式を返却する文を作成します.
  * @return
  */
-il_stmt_return* NewILReturn();
+ILStatement_return* NewILReturn();
 
 /**
  * 式を返却する文を生成します.
@@ -30,7 +30,7 @@ il_stmt_return* NewILReturn();
  * @param env
  * @param cctx
  */
-void GenerateILReturn(il_stmt_return* self, Enviroment* env, CallContext* cctx);
+void GenerateILReturn(ILStatement_return* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式を返却する文を読み込みます.
@@ -38,11 +38,11 @@ void GenerateILReturn(il_stmt_return* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILReturn(il_stmt_return* self, Enviroment* env, CallContext* cctx);
+void LoadILReturn(ILStatement_return* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式を返却する文を開放します.
  * @param self
  */
-void DeleteILReturn(il_stmt_return* self);
+void DeleteILReturn(ILStatement_return* self);
 #endif // !SIGNAL_IL_IL_STMT_RETURN_H

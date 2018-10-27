@@ -5,17 +5,17 @@
 
 struct Enviroment;
 
-typedef struct il_stmt_throw {
+typedef struct ILStatement_throw {
 	ILFactor* fact;
-} il_stmt_throw;
+} ILStatement_throw;
 
-il_stmt* WrapILThrow(il_stmt_throw* self);
+ILStatement* WrapILThrow(ILStatement_throw* self);
 
-il_stmt_throw* NewILThrow();
+ILStatement_throw* NewILThrow();
 
-void GenerateILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx);
+void GenerateILThrow(ILStatement_throw* self, Enviroment* env, CallContext* cctx);
 
-void LoadILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx);
+void LoadILThrow(ILStatement_throw* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILThrow(il_stmt_throw* self);
+void DeleteILThrow(ILStatement_throw* self);
 #endif

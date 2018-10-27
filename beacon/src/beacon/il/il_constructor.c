@@ -31,6 +31,6 @@ static void ILConstructor_DeleteParameter(VectorItem item) {
 }
 
 static void ILConstructor_stmt_delete(VectorItem item) {
-	il_stmt* e = (il_stmt*)item;
+	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }

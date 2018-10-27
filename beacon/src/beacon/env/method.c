@@ -27,7 +27,7 @@
 //proto
 static void method_DeleteParameter(VectorItem item);
 static void method_DeleteTypeParameter(VectorItem item);
-static void method_count(il_stmt* s, int* yeild_ret, int* ret);
+static void method_count(ILStatement* s, int* yeild_ret, int* ret);
 static Constructor* create_delegate_ctor(Method* self, type* ty, ClassLoader* cll,int op_len);
 static Method* create_has_next(Method* self, type* ty,ClassLoader* cll, Vector* stmt_list, int* out_op_len);
 static Method* create_next(Method* self, type* ty,ClassLoader* cll, GenericType* a, Vector* stmt_list, int* out_op_len);
@@ -213,7 +213,7 @@ bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error) {
 	for(int i=0; i<stmt_list->Length; i++) {
 		int yrtemp = 0;
 		int rtemp = 0;
-		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
+		ILStatement* e = (ILStatement*)AtVector(stmt_list, i);
 		method_count(e, &yrtemp, &rtemp);
 		yield_ret += yrtemp;
 		ret += rtemp;
@@ -259,24 +259,24 @@ static void method_DeleteTypeParameter(VectorItem item) {
 	DeleteTypeParameter(e);
 }
 
-static void method_count(il_stmt* s, int* yield_ret, int* ret) {
+static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 	switch (s->type) {
 		case ILSTMT_IF_T:
 		{
 			//if() { ... }
-			il_stmt_if* sif = s->u.if_;
+			ILStatement_if* sif = s->u.if_;
 			for(int i=0; i<sif->body->Length; i++) {
-				method_count((il_stmt*)AtVector(sif->body, i), yield_ret, ret);
+				method_count((ILStatement*)AtVector(sif->body, i), yield_ret, ret);
 			}
 			for(int i=0; i<sif->elif_list->Length; i++) {
-				il_stmt_elif* seif = (il_stmt_elif*)AtVector(sif->elif_list, i);
+				ILStatement_elif* seif = (ILStatement_elif*)AtVector(sif->elif_list, i);
 				Vector* body = seif->body;
 				for(int j=0; j<body->Length; j++) {
-					method_count((il_stmt*)AtVector(body, j), yield_ret, ret);
+					method_count((ILStatement*)AtVector(body, j), yield_ret, ret);
 				}
 			}
 			for(int i=0; i<sif->else_body->body->Length; i++) {
-				il_stmt* e = AtVector(sif->else_body->body, i);
+				ILStatement* e = AtVector(sif->else_body->body, i);
 				method_count(e, yield_ret, ret);
 			}
 			break;
@@ -290,9 +290,9 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_WHILE_T:
 		{
-			il_stmt_while* whi = s->u.while_;
+			ILStatement_while* whi = s->u.while_;
 			for(int i=0; i<whi->statement_list->Length; i++) {
-				il_stmt* e = AtVector(whi->statement_list, i);
+				ILStatement* e = AtVector(whi->statement_list, i);
 				method_count(e, yield_ret, ret);
 			}
 			break;
@@ -303,16 +303,16 @@ static void method_count(il_stmt* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_TRY_T:
 		{
-			il_stmt_try* tr = s->u.try_;
+			ILStatement_try* tr = s->u.try_;
 			for(int i=0; i<tr->statement_list->Length; i++) {
-				il_stmt* e = (il_stmt*)AtVector(tr->statement_list, i);
+				ILStatement* e = (ILStatement*)AtVector(tr->statement_list, i);
 				method_count(e, yield_ret, ret);
 			}
 			Vector* catches = tr->catch_list;
 			for(int i=0; i<catches->Length; i++) {
-				il_stmt_catch* ce = (il_stmt_catch*)AtVector(catches, i);
+				ILStatement_catch* ce = (ILStatement_catch*)AtVector(catches, i);
 				for(int j=0; j<ce->statement_list->Length; j++) {
-					il_stmt* e = (il_stmt*)AtVector(ce->statement_list, j);
+					ILStatement* e = (ILStatement*)AtVector(ce->statement_list, j);
 					method_count(e, yield_ret, ret);
 				}
 			}
@@ -405,11 +405,11 @@ static Method* create_has_next(Method* self, type* ty, ClassLoader* cll, Vector*
 	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_SWAP_SELF);
 	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_RESUME);
 	for(int i=0; i<stmt_list->Length; i++) {
-		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
+		ILStatement* e = (ILStatement*)AtVector(stmt_list, i);
 		LoadILStmt(e, envSmt, cctx);
 	}
 	for(int i=0; i<stmt_list->Length; i++) {
-		il_stmt* e = (il_stmt*)AtVector(stmt_list, i);
+		ILStatement* e = (ILStatement*)AtVector(stmt_list, i);
 		GenerateILStmt(e, envSmt, cctx);
 	}
 	AddOpcodeBuf(envSmt->Bytecode, OP_CORO_EXIT);

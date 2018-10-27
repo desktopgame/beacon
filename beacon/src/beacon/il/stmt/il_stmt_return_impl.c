@@ -6,37 +6,37 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
-static void check_method_return(il_stmt_return * self, Enviroment * env, CallContext* cctx);
+static void check_method_return(ILStatement_return * self, Enviroment * env, CallContext* cctx);
 
-il_stmt * WrapILReturn(il_stmt_return * self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_RETURN_T);
+ILStatement * WrapILReturn(ILStatement_return * self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_RETURN_T);
 	ret->u.return_ = self;
 	return ret;
 }
 
-il_stmt_return * NewILReturn() {
-	il_stmt_return* ret = (il_stmt_return*)MEM_MALLOC(sizeof(il_stmt_return));
+ILStatement_return * NewILReturn() {
+	ILStatement_return* ret = (ILStatement_return*)MEM_MALLOC(sizeof(ILStatement_return));
 	ret->fact = NULL;
 	return ret;
 }
 
-void GenerateILReturn(il_stmt_return * self, Enviroment * env, CallContext* cctx) {
+void GenerateILReturn(ILStatement_return * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_RETURN);
 }
 
-void LoadILReturn(il_stmt_return * self, Enviroment * env, CallContext* cctx) {
+void LoadILReturn(ILStatement_return * self, Enviroment * env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 	BC_ERROR();
 	check_method_return(self, env, cctx);
 }
 
-void DeleteILReturn(il_stmt_return * self) {
+void DeleteILReturn(ILStatement_return * self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }
 //private
-static void check_method_return(il_stmt_return * self, Enviroment * env, CallContext* cctx) {
+static void check_method_return(ILStatement_return * self, Enviroment * env, CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}

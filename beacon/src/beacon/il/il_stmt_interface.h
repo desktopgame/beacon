@@ -29,49 +29,49 @@ typedef enum ILStatementTag {
 } ILStatementTag;
 
 //詳細は il_stmt_impl.h を参照してください。
-struct il_stmt_proc;
-struct il_stmt_if;
-struct il_stmt_while;
-struct il_stmt_variable_decl;
-struct il_stmt_variable_init;
-struct il_stmt_return;
-typedef void* il_stmt_return_empty;
-struct il_stmt_inferenced_type_init;
-struct il_stmt_try;
-struct il_stmt_throw;
-struct il_stmt_assert;
-struct il_stmt_defer;
-struct il_stmt_yield_return;
-typedef void* il_stmt_yield_break;
-struct il_stmt_inject_jni;
+struct ILStatement_proc;
+struct ILStatement_if;
+struct ILStatement_while;
+struct ILStatement_variable_decl;
+struct ILStatement_variable_init;
+struct ILStatement_return;
+typedef void* ILStatement_return_empty;
+struct ILStatement_inferenced_type_init;
+struct ILStatement_try;
+struct ILStatement_throw;
+struct ILStatement_assert;
+struct ILStatement_defer;
+struct ILStatement_yield_return;
+typedef void* ILStatement_yield_break;
+struct ILStatement_inject_jni;
 
 /**
  * 文を表す要素です.
  */
-typedef struct il_stmt {
+typedef struct ILStatement {
 	ILStatementTag type;
 	int lineno;
 	union {
-		struct il_stmt_proc* proc_;
-		struct il_stmt_if* if_;
-		struct il_stmt_while* while_;
-		struct il_stmt_variable_decl* variable_decl;
-		struct il_stmt_variable_init* variable_init;
-		struct il_stmt_return* return_;
-		il_stmt_return_empty return_empty;
-		struct il_stmt_inferenced_type_init* inferenced_type_init;
-		struct il_stmt_try* try_;
-		struct il_stmt_throw* throw_;
-		struct il_stmt_assert* bcassert_;
-		struct il_stmt_defer* defer_;
-		struct il_stmt_yield_return* yield_return;
-		il_stmt_yield_break yield_break;
-		struct il_stmt_inject_jni* inject_jni;
+		struct ILStatement_proc* proc_;
+		struct ILStatement_if* if_;
+		struct ILStatement_while* while_;
+		struct ILStatement_variable_decl* variable_decl;
+		struct ILStatement_variable_init* variable_init;
+		struct ILStatement_return* return_;
+		ILStatement_return_empty return_empty;
+		struct ILStatement_inferenced_type_init* inferenced_type_init;
+		struct ILStatement_try* try_;
+		struct ILStatement_throw* throw_;
+		struct ILStatement_assert* bcassert_;
+		struct ILStatement_defer* defer_;
+		struct ILStatement_yield_return* yield_return;
+		ILStatement_yield_break yield_break;
+		struct ILStatement_inject_jni* inject_jni;
 	} u;
-} il_stmt;
+} ILStatement;
 
-#define il_stmt_new(type) (MallocILStmt(type, __FILE__, __LINE__))
-il_stmt* MallocILStmt(ILStatementTag type, const char* filename, int lineno);
+#define ILStatement_new(type) (MallocILStmt(type, __FILE__, __LINE__))
+ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno);
 
 /**
  * 文を生成します.
@@ -79,7 +79,7 @@ il_stmt* MallocILStmt(ILStatementTag type, const char* filename, int lineno);
  * @param env
  * @param cctx
  */
-void GenerateILStmt(il_stmt* self, Enviroment* env, CallContext* cctx);
+void GenerateILStmt(ILStatement* self, Enviroment* env, CallContext* cctx);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
@@ -87,11 +87,11 @@ void GenerateILStmt(il_stmt* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILStmt(il_stmt * self, Enviroment* env, CallContext* cctx);
+void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx);
 
 /**
  * 文を開放します.
  * @param self
  */
-void DeleteILStmt(il_stmt* self);
+void DeleteILStmt(ILStatement* self);
 #endif // !SIGNAL_IL_IL_STMT_INTERFACE_H

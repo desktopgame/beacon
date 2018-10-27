@@ -20,6 +20,6 @@ void DeleteILPropertyBody(ILPropertyBody* self) {
 }
 //private
 static void ILPropertyBody_stmt_delete(VectorItem item) {
-	il_stmt* e = (il_stmt*)item;
+	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }

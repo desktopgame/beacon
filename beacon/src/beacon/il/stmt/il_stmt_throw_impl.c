@@ -6,24 +6,24 @@
 #include "../../env/type_interface.h"
 #include <stdio.h>
 
-il_stmt* WrapILThrow(il_stmt_throw* self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_THROW_T);
+ILStatement* WrapILThrow(ILStatement_throw* self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_THROW_T);
 	ret->u.throw_ = self;
 	return ret;
 }
 
-il_stmt_throw* NewILThrow() {
-	il_stmt_throw* ret = (il_stmt_throw*)MEM_MALLOC(sizeof(il_stmt_throw));
+ILStatement_throw* NewILThrow() {
+	ILStatement_throw* ret = (ILStatement_throw*)MEM_MALLOC(sizeof(ILStatement_throw));
 	ret->fact = NULL;
 	return ret;
 }
 
-void GenerateILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
+void GenerateILThrow(ILStatement_throw* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_THROW);
 }
 
-void LoadILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
+void LoadILThrow(ILStatement_throw* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->fact, env, cctx);
 	GenericType* tgt = EvalILFactor(self->fact, env, cctx);
 	if(DistanceGenericType(GENERIC_EXCEPTION, tgt, cctx) < 0) {
@@ -36,7 +36,7 @@ void LoadILThrow(il_stmt_throw* self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-void DeleteILThrow(il_stmt_throw* self) {
+void DeleteILThrow(ILStatement_throw* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

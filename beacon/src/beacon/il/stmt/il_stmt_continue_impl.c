@@ -3,8 +3,8 @@
 #include "../../util/text.h"
 #include <stdio.h>
 
-il_stmt * WrapILContinue() {
-	il_stmt* ret = il_stmt_new(ILSTMT_CONTINUE_T);
+ILStatement * WrapILContinue() {
+	ILStatement* ret = ILStatement_new(ILSTMT_CONTINUE_T);
 	return ret;
 }
 

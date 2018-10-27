@@ -10,26 +10,26 @@ struct SymbolEntry;
 /**
  * 変数の初期化を表す要素.
  */
-typedef struct il_stmt_variable_init {
+typedef struct ILStatement_variable_init {
 	GenericCache* fqcn;
 	StringView namev;
 	ILFactor* fact;
 	struct SymbolEntry* sym;
-} il_stmt_variable_init;
+} ILStatement_variable_init;
 
 /**
  * 変数の初期化を表す要素をスーパーセットにラップします.
  * @param self
  * @return
  */
-il_stmt* WrapILVariableInit(il_stmt_variable_init* self);
+ILStatement* WrapILVariableInit(ILStatement_variable_init* self);
 
 /**
  * 変数の初期化を表す要素を作成します.
  * @param namev
  * @return
  */
-il_stmt_variable_init* NewILVariableInit(StringView namev);
+ILStatement_variable_init* NewILVariableInit(StringView namev);
 
 /**
  * 変数の初期化を表す要素を出力します.
@@ -37,7 +37,7 @@ il_stmt_variable_init* NewILVariableInit(StringView namev);
  * @param env
  * @param ccctx
  */
-void GenerateILVariableInit(il_stmt_variable_init* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableInit(ILStatement_variable_init* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を読み込みます.
@@ -45,11 +45,11 @@ void GenerateILVariableInit(il_stmt_variable_init* self, Enviroment* env, CallCo
  * @param env
  * @param cctx
  */
-void LoadILVariableInit(il_stmt_variable_init* self, Enviroment* env, CallContext* cctx);
+void LoadILVariableInit(ILStatement_variable_init* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を開放します.
  * @param self
  */
-void DeleteILVariableInit(il_stmt_variable_init* self);
+void DeleteILVariableInit(ILStatement_variable_init* self);
 #endif // !SIGNAL_IL_IL_STMT_VARIABLE_INIT_H

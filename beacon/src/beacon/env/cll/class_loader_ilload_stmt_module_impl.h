@@ -3,9 +3,9 @@
 #include "../../util/vector.h"
 struct ClassLoader;
 struct AST;
-struct il_stmt;
+struct ILStatement;
 
-struct il_stmt* CLILStmt(struct ClassLoader* self, struct AST* source);
+struct ILStatement* CLILStmt(struct ClassLoader* self, struct AST* source);
 
 void CLILBody(struct ClassLoader* self, Vector* list, struct AST* source);
 #endif

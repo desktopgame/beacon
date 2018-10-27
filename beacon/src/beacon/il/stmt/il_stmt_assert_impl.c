@@ -6,22 +6,22 @@
 #include "../il_factor_impl.h"
 #include <assert.h>
 
-il_stmt* WrapILAssert(il_stmt_assert* self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_ASSERT_T);
+ILStatement* WrapILAssert(ILStatement_assert* self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_ASSERT_T);
 	ret->u.bcassert_ = self;
 	self->parent = ret;
 	return ret;
 }
 
-il_stmt_assert* NewILAssert() {
-	il_stmt_assert* ret = (il_stmt_assert*)MEM_MALLOC(sizeof(il_stmt_assert));
+ILStatement_assert* NewILAssert() {
+	ILStatement_assert* ret = (ILStatement_assert*)MEM_MALLOC(sizeof(ILStatement_assert));
 	ret->condition = NULL;
 	ret->message = NULL;
 	ret->parent = NULL;
 	return ret;
 }
 
-void GenerateILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) {
+void GenerateILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
 	Label* gt = AddLabelOpcodeBuf(env->Bytecode, 0);
 	GenerateILFactor(self->condition, env, cctx);
@@ -36,7 +36,7 @@ void GenerateILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) 
 	gt->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void LoadILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) {
+void LoadILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->condition, env, cctx);
 	if(self->message == NULL) {
 		char* str = ILFactorToString(self->condition, env);
@@ -49,7 +49,7 @@ void LoadILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->message, env, cctx);
 }
 
-void DeleteILAssert(il_stmt_assert* self) {
+void DeleteILAssert(ILStatement_assert* self) {
 	DeleteILFactor(self->condition);
 	DeleteILFactor(self->message);
 	MEM_FREE(self);

@@ -3,18 +3,18 @@
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 
-typedef struct il_stmt_yield_return {
+typedef struct ILStatement_yield_return {
 	ILFactor* fact;
-} il_stmt_yield_return;
+} ILStatement_yield_return;
 
-il_stmt* WrapILYieldReturn(il_stmt_yield_return* self);
+ILStatement* WrapILYieldReturn(ILStatement_yield_return* self);
 
-#define il_stmt_yield_return_new() (MallocILYieldReturn(__FILE__, __LINE__))
-il_stmt_yield_return* MallocILYieldReturn(const char* filename, int lineno);
+#define ILStatement_yield_return_new() (MallocILYieldReturn(__FILE__, __LINE__))
+ILStatement_yield_return* MallocILYieldReturn(const char* filename, int lineno);
 
-void GenerateILYieldReturn(il_stmt_yield_return* self, Enviroment* env, CallContext* cctx);
+void GenerateILYieldReturn(ILStatement_yield_return* self, Enviroment* env, CallContext* cctx);
 
-void LoadILYieldReturn(il_stmt_yield_return * self, Enviroment* env, CallContext* cctx);
+void LoadILYieldReturn(ILStatement_yield_return * self, Enviroment* env, CallContext* cctx);
 
-void DeleteILYieldReturn(il_stmt_yield_return* self);
+void DeleteILYieldReturn(ILStatement_yield_return* self);
 #endif

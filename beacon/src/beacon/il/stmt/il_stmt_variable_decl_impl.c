@@ -8,24 +8,24 @@
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
 
-il_stmt * WrapILVariableDecl(il_stmt_variable_decl * self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_VARIABLE_DECL_T);
+ILStatement * WrapILVariableDecl(ILStatement_variable_decl * self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_VARIABLE_DECL_T);
 	ret->u.variable_decl = self;
 	return ret;
 }
 
-il_stmt_variable_decl * NewILVariableDecl(StringView namev) {
-	il_stmt_variable_decl* ret = (il_stmt_variable_decl*)MEM_MALLOC(sizeof(il_stmt_variable_decl));
+ILStatement_variable_decl * NewILVariableDecl(StringView namev) {
+	ILStatement_variable_decl* ret = (ILStatement_variable_decl*)MEM_MALLOC(sizeof(ILStatement_variable_decl));
 	ret->namev = namev;
 	ret->fqcn = NewGenericCache();
 	return ret;
 }
 
-void GenerateILVariableDecl(il_stmt_variable_decl * self, Enviroment * env, CallContext* cctx) {
+void GenerateILVariableDecl(ILStatement_variable_decl * self, Enviroment * env, CallContext* cctx) {
 
 }
 
-void LoadILVariableDecl(il_stmt_variable_decl * self, Enviroment* env, CallContext* cctx) {
+void LoadILVariableDecl(ILStatement_variable_decl * self, Enviroment* env, CallContext* cctx) {
 	if(IsContainsSymbol(env->Symboles, self->namev)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->namev)
@@ -42,7 +42,7 @@ void LoadILVariableDecl(il_stmt_variable_decl * self, Enviroment* env, CallConte
 	}
 }
 
-void DeleteILVariableDecl(il_stmt_variable_decl * self) {
+void DeleteILVariableDecl(ILStatement_variable_decl * self) {
 	if (self == NULL) {
 		return;
 	}

@@ -648,7 +648,7 @@ void CLBC_body(ClassLoader* self, Vector* stmt_list, Enviroment* dest, CallConte
 			break;
 		}
 		VectorItem e = AtVector(stmt_list, i);
-		il_stmt* s = (il_stmt*)e;
+		ILStatement* s = (ILStatement*)e;
 		LoadILStmt(s, dest, cctx);
 	}
 	//オペコードを生成
@@ -657,7 +657,7 @@ void CLBC_body(ClassLoader* self, Vector* stmt_list, Enviroment* dest, CallConte
 			break;
 		}
 		VectorItem e = AtVector(stmt_list, i);
-		il_stmt* s = (il_stmt*)e;
+		ILStatement* s = (ILStatement*)e;
 		GenerateILStmt(s, dest, cctx);
 	}
 }

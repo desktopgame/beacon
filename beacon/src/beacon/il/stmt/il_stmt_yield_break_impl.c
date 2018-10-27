@@ -1,9 +1,9 @@
 #include "il_stmt_yield_break_impl.h"
 #include "../../util/text.h"
 
-void GenerateILYieldBreak(il_stmt_yield_break* self, Enviroment* env, CallContext* cctx) {
+void GenerateILYieldBreak(ILStatement_yield_break* self, Enviroment* env, CallContext* cctx) {
 	AddOpcodeBuf(env->Bytecode, OP_CORO_EXIT);
 }
 
-void LoadILYieldBreak(il_stmt_yield_break * self, Enviroment* env, CallContext* cctx) {
+void LoadILYieldBreak(ILStatement_yield_break * self, Enviroment* env, CallContext* cctx) {
 }

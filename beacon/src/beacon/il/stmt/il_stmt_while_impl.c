@@ -7,23 +7,23 @@
 #include "../call_context.h"
 
 //proto
-static void il_stmt_while_stmt_delete(VectorItem item);
+static void ILStatement_while_stmt_delete(VectorItem item);
 static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
 
-il_stmt * WrapILWhile(il_stmt_while * self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_WHILE_T);
+ILStatement * WrapILWhile(ILStatement_while * self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_WHILE_T);
 	ret->u.while_ = self;
 	return ret;
 }
 
-il_stmt_while * NewILWhile() {
-	il_stmt_while* ret = (il_stmt_while*)MEM_MALLOC(sizeof(il_stmt_while));
+ILStatement_while * NewILWhile() {
+	ILStatement_while* ret = (ILStatement_while*)MEM_MALLOC(sizeof(ILStatement_while));
 	ret->statement_list = NewVector();
 	ret->condition = NULL;
 	return ret;
 }
 
-void GenerateILWhile(il_stmt_while * self, Enviroment * env, CallContext* cctx) {
+void GenerateILWhile(ILStatement_while * self, Enviroment * env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	int prev = AddNOPOpcodeBuf(env->Bytecode);
 	Label* prevLab = AddLabelOpcodeBuf(env->Bytecode, prev);
@@ -36,7 +36,7 @@ void GenerateILWhile(il_stmt_while * self, Enviroment * env, CallContext* cctx) 
 	AddOpcodeBuf(env->Bytecode, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->statement_list->Length; i++) {
-		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
+		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
 		GenerateILStmt(e, env, cctx);
 	}
 	//prevLab へ行って再判定
@@ -49,17 +49,17 @@ void GenerateILWhile(il_stmt_while * self, Enviroment * env, CallContext* cctx) 
 	env->Symboles->ScopeDepth--;
 }
 
-void DeleteILWhile(il_stmt_while * self) {
-	DeleteVector(self->statement_list, il_stmt_while_stmt_delete);
+void DeleteILWhile(ILStatement_while * self) {
+	DeleteVector(self->statement_list, ILStatement_while_stmt_delete);
 	DeleteILFactor(self->condition);
 	MEM_FREE(self);
 }
 
-void LoadILWhile(il_stmt_while* self, Enviroment* env, CallContext* cctx) {
+void LoadILWhile(ILStatement_while* self, Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->statement_list->Length; i++) {
-		il_stmt* e = (il_stmt*)AtVector(self->statement_list, i);
+		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
 	}
 	check_condition_type(self->condition, env, cctx);
@@ -67,8 +67,8 @@ void LoadILWhile(il_stmt_while* self, Enviroment* env, CallContext* cctx) {
 }
 
 //private
-static void il_stmt_while_stmt_delete(VectorItem item) {
-	il_stmt* e = (il_stmt*)item;
+static void ILStatement_while_stmt_delete(VectorItem item) {
+	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }
 

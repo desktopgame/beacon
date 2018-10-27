@@ -3,21 +3,21 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 struct Enviroment;
-struct il_stmt;
+struct ILStatement;
 
-typedef struct il_stmt_assert {
+typedef struct ILStatement_assert {
 	ILFactor* condition;
 	ILFactor* message;
-	struct il_stmt* parent;
-} il_stmt_assert;
+	struct ILStatement* parent;
+} ILStatement_assert;
 
-il_stmt* WrapILAssert(il_stmt_assert* self);
+ILStatement* WrapILAssert(ILStatement_assert* self);
 
-il_stmt_assert* NewILAssert();
+ILStatement_assert* NewILAssert();
 
-void GenerateILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx);
+void GenerateILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx);
 
-void LoadILAssert(il_stmt_assert* self, Enviroment* env, CallContext* cctx);
+void LoadILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILAssert(il_stmt_assert* self);
+void DeleteILAssert(ILStatement_assert* self);
 #endif

@@ -7,32 +7,32 @@
 
 struct Enviroment;
 
-typedef struct il_stmt_try {
+typedef struct ILStatement_try {
 	Vector* statement_list;
 	Vector* catch_list;
-} il_stmt_try;
+} ILStatement_try;
 
-typedef struct il_stmt_catch {
+typedef struct ILStatement_catch {
 	GenericCache* fqcn;
 	StringView namev;
 	Vector* statement_list;
-} il_stmt_catch;
+} ILStatement_catch;
 
-il_stmt* WrapILTry(il_stmt_try* self);
+ILStatement* WrapILTry(ILStatement_try* self);
 
-il_stmt_try* NewILTry();
+ILStatement_try* NewILTry();
 
-il_stmt_catch* NewILCatch(StringView namev);
+ILStatement_catch* NewILCatch(StringView namev);
 
-void GenerateILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx);
+void GenerateILTry(ILStatement_try* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx);
+void GenerateILCatch(ILStatement_catch* self, Enviroment* env, CallContext* cctx);
 
-void LoadILTry(il_stmt_try* self, Enviroment* env, CallContext* cctx);
+void LoadILTry(ILStatement_try* self, Enviroment* env, CallContext* cctx);
 
-void LoadILCatch(il_stmt_catch* self, Enviroment* env, CallContext* cctx);
+void LoadILCatch(ILStatement_catch* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILCatch(il_stmt_catch* self);
+void DeleteILCatch(ILStatement_catch* self);
 
-void DeleteILTry(il_stmt_try* self);
+void DeleteILTry(ILStatement_try* self);
 #endif

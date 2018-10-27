@@ -3,7 +3,7 @@
 #define BEACON_IL_IL_STMT_CONTINUE_H
 #include "../il_stmt_interface.h"
 
-il_stmt* WrapILContinue();
+ILStatement* WrapILContinue();
 
 void GenerateILContinue(void* empty, Enviroment* env, CallContext* cctx);
 

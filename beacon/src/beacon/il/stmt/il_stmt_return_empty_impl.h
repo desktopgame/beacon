@@ -8,7 +8,7 @@
  * @param env
  * @param cctx
  */
-void GenerateILReturnEmpty(il_stmt_return_empty self, Enviroment* env, CallContext* cctx);
+void GenerateILReturnEmpty(ILStatement_return_empty self, Enviroment* env, CallContext* cctx);
 
 /**
  * 式を返却する文を読み込みます.
@@ -16,5 +16,5 @@ void GenerateILReturnEmpty(il_stmt_return_empty self, Enviroment* env, CallConte
  * @param env
  * @param cctx
  */
-void LoadILReturnEmpty(il_stmt_return_empty self, Enviroment* env, CallContext* cctx);
+void LoadILReturnEmpty(ILStatement_return_empty self, Enviroment* env, CallContext* cctx);
 #endif

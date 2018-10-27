@@ -3,29 +3,29 @@
 #include "../../util/io.h"
 #include "../../vm/symbol_entry.h"
 
-il_stmt* WrapILInjectJNI(il_stmt_inject_jni* self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_INJECT_JNI_T);
+ILStatement* WrapILInjectJNI(ILStatement_inject_jni* self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_INJECT_JNI_T);
 	ret->u.inject_jni = self;
 	//JNIに関しては後からソースの先頭に付け加えられるので必ず0
 	ret->lineno = 0;
 	return ret;
 }
 
-il_stmt_inject_jni* NewILInjectJNI(StringView namev) {
-	il_stmt_inject_jni* ret = (il_stmt_inject_jni*)MEM_MALLOC(sizeof(il_stmt_inject_jni));
+ILStatement_inject_jni* NewILInjectJNI(StringView namev) {
+	ILStatement_inject_jni* ret = (ILStatement_inject_jni*)MEM_MALLOC(sizeof(ILStatement_inject_jni));
 	ret->namev = namev;
 	ret->fact = NULL;
 	ret->se = NULL;
 	return ret;
 }
 
-void GenerateILInjectJNI(il_stmt_inject_jni* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInjectJNI(ILStatement_inject_jni* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
 	AddOpcodeBuf(env->Bytecode, self->se->Index);
 }
 
-void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, CallContext* cctx) {
+void LoadILInjectJNI(ILStatement_inject_jni * self, Enviroment* env, CallContext* cctx) {
 	if(self->se != NULL) {
 		return;
 	}
@@ -35,7 +35,7 @@ void LoadILInjectJNI(il_stmt_inject_jni * self, Enviroment* env, CallContext* cc
 	self->se = EntrySymbolTable(env->Symboles, gtype, self->namev);
 }
 
-void DeleteILInjectJni(il_stmt_inject_jni* self) {
+void DeleteILInjectJni(ILStatement_inject_jni* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

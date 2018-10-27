@@ -7,27 +7,27 @@
 #include <stdio.h>
 #include <string.h>
 
-il_stmt * WrapILInferencedTypeInit(il_stmt_inferenced_type_init * self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_INFERENCED_TYPE_INIT_T);
+ILStatement * WrapILInferencedTypeInit(ILStatement_inferenced_type_init * self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_INFERENCED_TYPE_INIT_T);
 	ret->u.inferenced_type_init = self;
 	return ret;
 }
 
-il_stmt_inferenced_type_init * NewILInferencedTypeInit(StringView namev) {
-	il_stmt_inferenced_type_init* ret = (il_stmt_inferenced_type_init*)MEM_MALLOC(sizeof(il_stmt_inferenced_type_init));
+ILStatement_inferenced_type_init * NewILInferencedTypeInit(StringView namev) {
+	ILStatement_inferenced_type_init* ret = (ILStatement_inferenced_type_init*)MEM_MALLOC(sizeof(ILStatement_inferenced_type_init));
 	ret->namev = namev;
 	ret->fact = NULL;
 	return ret;
 }
 
-void GenerateILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
+void GenerateILInferencedTypeInit(ILStatement_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
 	//右辺の方で宣言する
 	GenerateILFactor(self->fact, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
 	AddOpcodeBuf(env->Bytecode, self->sym->Index);
 }
 
-void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
+void LoadILInferencedTypeInit(ILStatement_inferenced_type_init * self, Enviroment * env, CallContext* cctx) {
 	//代入するオブジェクトを計算
 	LoadILFactor(self->fact, env, cctx);
 	GenericType* gtp = EvalILFactor(self->fact, env, cctx);
@@ -52,7 +52,7 @@ void LoadILInferencedTypeInit(il_stmt_inferenced_type_init * self, Enviroment * 
 	self->sym = e;
 }
 
-void DeleteILInferencedTypeInit(il_stmt_inferenced_type_init * self) {
+void DeleteILInferencedTypeInit(ILStatement_inferenced_type_init * self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

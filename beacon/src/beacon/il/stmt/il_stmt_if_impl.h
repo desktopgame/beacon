@@ -7,17 +7,17 @@
 /**
  * elif (...) { ... } を表す要素.
  */
-typedef struct il_stmt_elif {
+typedef struct ILStatement_elif {
 	ILFactor* condition;
 	Vector* body;
-} il_stmt_elif;
+} ILStatement_elif;
 
 /**
  * } else { ... } を表す要素.
  */
-typedef struct il_stmt_else {
+typedef struct ILStatement_else {
 	Vector* body;
-} il_stmt_else;
+} ILStatement_else;
 
 /**
  * if (...) {
@@ -25,31 +25,31 @@ typedef struct il_stmt_else {
  * }
  * を表す要素.
  */
-typedef struct il_stmt_if {
+typedef struct ILStatement_if {
 	ILFactor* condition;
 	Vector* body;
 	Vector* elif_list;
-	il_stmt_else* else_body;
-} il_stmt_if;
+	ILStatement_else* else_body;
+} ILStatement_if;
 
 /**
  * if をスーパーセットにラップします.
  * @param self
  * @return
  */
-il_stmt* WrapILIf(il_stmt_if* self);
+ILStatement* WrapILIf(ILStatement_if* self);
 
 /**
  * if を表す要素を作成します.
  * @return
  */
-il_stmt_if* NewILIf();
+ILStatement_if* NewILIf();
 
 /**
  * elif を表す要素を作成します.
  * @return
  */
-il_stmt_elif* NewILElif();
+ILStatement_elif* NewILElif();
 
 /**
  * elif の一覧を表す要素を作成します.
@@ -61,12 +61,12 @@ Vector* NewILElifList();
  * else を表す要素を作成します.
  * @return
  */
-il_stmt_else* NewILElse();
+ILStatement_else* NewILElse();
 
 /**
  * elif を一覧に加えます.
  */
-void PushILElifList(Vector* self, il_stmt_elif* child);
+void PushILElifList(Vector* self, ILStatement_elif* child);
 
 /**
  * if とその子要素を生成します.
@@ -74,7 +74,7 @@ void PushILElifList(Vector* self, il_stmt_elif* child);
  * @param env
  * @param cctx
  */
-void GenerateILIf(il_stmt_if* self, Enviroment* env, CallContext* cctx);
+void GenerateILIf(ILStatement_if* self, Enviroment* env, CallContext* cctx);
 
 /**
  * if とその子要素を読み込みます.
@@ -82,19 +82,19 @@ void GenerateILIf(il_stmt_if* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILIf(il_stmt_if* self, Enviroment* env, CallContext* cctx);
+void LoadILIf(ILStatement_if* self, Enviroment* env, CallContext* cctx);
 
 /**
  * if を表す要素を開放します.
  * @param self
  */
-void DeleteILIf(il_stmt_if* self);
+void DeleteILIf(ILStatement_if* self);
 
 /**
  * elif を表す要素を開放します.
  * @param self
  */
-void DeleteILElif(il_stmt_elif* self);
+void DeleteILElif(ILStatement_elif* self);
 
 /**
  * elifの一覧 を表す要素を開放します.
@@ -106,5 +106,5 @@ void DeleteILElifList(Vector* self);
  * else を表す要素を開放します.
  * @param self
  */
-void DeleteILElse(il_stmt_else* self);
+void DeleteILElse(ILStatement_else* self);
 #endif // !SIGNAL_IL_IL_STMT_IF_IMPL_H

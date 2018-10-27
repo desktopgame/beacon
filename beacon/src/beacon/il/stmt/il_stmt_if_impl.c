@@ -12,14 +12,14 @@ static void DeleteILElifList_impl(VectorItem item);
 static void DeleteILIf_stmt(VectorItem item);
 static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
 
-il_stmt * WrapILIf(il_stmt_if * self) {
-	il_stmt* ret = il_stmt_new(ILSTMT_IF_T);
+ILStatement * WrapILIf(ILStatement_if * self) {
+	ILStatement* ret = ILStatement_new(ILSTMT_IF_T);
 	ret->u.if_ = self;
 	return ret;
 }
 
-il_stmt_if * NewILIf() {
-	il_stmt_if* ret = (il_stmt_if*)MEM_MALLOC(sizeof(il_stmt_if));
+ILStatement_if * NewILIf() {
+	ILStatement_if* ret = (ILStatement_if*)MEM_MALLOC(sizeof(ILStatement_if));
 	ret->condition = NULL;
 	ret->elif_list = NewVector();
 	ret->else_body = NewILElse();
@@ -27,8 +27,8 @@ il_stmt_if * NewILIf() {
 	return ret;
 }
 
-il_stmt_elif * NewILElif() {
-	il_stmt_elif* ret = (il_stmt_elif*)MEM_MALLOC(sizeof(il_stmt_elif));
+ILStatement_elif * NewILElif() {
+	ILStatement_elif* ret = (ILStatement_elif*)MEM_MALLOC(sizeof(ILStatement_elif));
 	ret->condition = NULL;
 	ret->body = NewVector();
 	return ret;
@@ -38,17 +38,17 @@ Vector * NewILElifList() {
 	return NewVector();
 }
 
-il_stmt_else * NewILElse() {
-	il_stmt_else* ret = (il_stmt_else*)MEM_MALLOC(sizeof(il_stmt_else));
+ILStatement_else * NewILElse() {
+	ILStatement_else* ret = (ILStatement_else*)MEM_MALLOC(sizeof(ILStatement_else));
 	ret->body = NewVector();
 	return ret;
 }
 
-void PushILElifList(Vector * self, il_stmt_elif * child) {
+void PushILElifList(Vector * self, ILStatement_elif * child) {
 	PushVector(self, child);
 }
 
-void GenerateILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
+void GenerateILIf(ILStatement_if * self, Enviroment* env, CallContext* cctx) {
 	//if(...)
 	env->Symboles->ScopeDepth++;
 	GenerateILFactor(self->condition, env, cctx);
@@ -58,7 +58,7 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 	AddOpcodeBuf(env->Bytecode, l1);
 	for (int i = 0; i < self->body->Length; i++) {
-		il_stmt* stmt = (il_stmt*)AtVector(self->body, i);
+		ILStatement* stmt = (ILStatement*)AtVector(self->body, i);
 		GenerateILStmt(stmt, env, cctx);
 	}
 	//条件が満たされて実行されたら最後までジャンプ
@@ -67,14 +67,14 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 	l1->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	// elif(...)
 	for (int i = 0; i < self->elif_list->Length; i++) {
-		il_stmt_elif* elif = (il_stmt_elif*)AtVector(self->elif_list, i);
+		ILStatement_elif* elif = (ILStatement_elif*)AtVector(self->elif_list, i);
 		GenerateILFactor(elif->condition, env, cctx);
 		Label* l2 = AddLabelOpcodeBuf(env->Bytecode, -1);
 		// { ... }
 		AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 		AddOpcodeBuf(env->Bytecode, l2);
 		for (int j = 0; j < elif->body->Length; j++) {
-			il_stmt* stmt = (il_stmt*)AtVector(elif->body, j);
+			ILStatement* stmt = (ILStatement*)AtVector(elif->body, j);
 			GenerateILStmt(stmt, env, cctx);
 		}
 		//条件が満たされて実行されたら最後までジャンプ
@@ -88,7 +88,7 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 		tail->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	} else {
 		for (int i = 0; i < self->else_body->body->Length; i++) {
-			il_stmt* stmt = (il_stmt*)AtVector(self->else_body->body, i);
+			ILStatement* stmt = (ILStatement*)AtVector(self->else_body->body, i);
 			GenerateILStmt(stmt, env, cctx);
 		}
 		tail->Cursor = AddNOPOpcodeBuf(env->Bytecode);
@@ -96,26 +96,26 @@ void GenerateILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth--;
 }
 
-void LoadILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
+void LoadILIf(ILStatement_if * self, Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->body->Length; i++) {
-		il_stmt* e = (il_stmt*)AtVector(self->body, i);
+		ILStatement* e = (ILStatement*)AtVector(self->body, i);
 		LoadILStmt(e, env, cctx);
 		BC_ERROR();
 	}
 	for(int i=0; i<self->elif_list->Length; i++) {
-		il_stmt_elif* e = (il_stmt_elif*)AtVector(self->elif_list, i);
+		ILStatement_elif* e = (ILStatement_elif*)AtVector(self->elif_list, i);
 		LoadILFactor(e->condition, env, cctx);
 		for(int j=0; j<e->body->Length; j++) {
-			il_stmt* st = (il_stmt*)AtVector(e->body, j);
+			ILStatement* st = (ILStatement*)AtVector(e->body, j);
 			LoadILStmt(st, env, cctx);
 			BC_ERROR();
 		}
 		BC_ERROR();
 	}
 	for(int i=0; i<self->else_body->body->Length; i++) {
-		il_stmt* e = (il_stmt*)AtVector(self->else_body->body, i);
+		ILStatement* e = (ILStatement*)AtVector(self->else_body->body, i);
 		LoadILStmt(e, env, cctx);
 		BC_ERROR();
 	}
@@ -123,14 +123,14 @@ void LoadILIf(il_stmt_if * self, Enviroment* env, CallContext* cctx) {
 	BC_ERROR();
 	check_condition_type(self->condition, env, cctx);
 	for(int i=0; i<self->elif_list->Length; i++) {
-		il_stmt_elif* elif = AtVector(self->elif_list, i);
+		ILStatement_elif* elif = AtVector(self->elif_list, i);
 		check_condition_type(elif->condition, env, cctx);
 		BC_ERROR();
 	}
 	env->Symboles->ScopeDepth--;
 }
 
-void DeleteILIf(il_stmt_if * self) {
+void DeleteILIf(ILStatement_if * self) {
 	DeleteVector(self->elif_list, DeleteILElifList_impl);
 	DeleteILElse(self->else_body);
 	DeleteVector(self->body, DeleteILIf_stmt);
@@ -138,7 +138,7 @@ void DeleteILIf(il_stmt_if * self) {
 	MEM_FREE(self);
 }
 
-void DeleteILElif(il_stmt_elif * self) {
+void DeleteILElif(ILStatement_elif * self) {
 	DeleteILFactor(self->condition);
 	DeleteVector(self->body, DeleteILIf_stmt);
 	MEM_FREE(self);
@@ -148,19 +148,19 @@ void DeleteILElifList(Vector * self) {
 	DeleteVector(self, DeleteILElifList_impl);
 }
 
-void DeleteILElse(il_stmt_else * self) {
+void DeleteILElse(ILStatement_else * self) {
 	DeleteVector(self->body, DeleteILIf_stmt);
 	MEM_FREE(self);
 }
 
 //private
 static void DeleteILElifList_impl(VectorItem item) {
-	il_stmt_elif* el = (il_stmt_elif*)item;
+	ILStatement_elif* el = (ILStatement_elif*)item;
 	DeleteILElif(el);
 }
 
 static void DeleteILIf_stmt(VectorItem item) {
-	il_stmt* e = (il_stmt*)item;
+	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }
 
