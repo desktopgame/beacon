@@ -23,12 +23,12 @@ struct ILConstructor;
  * 名前空間に含めることが出来る型.
  */
 typedef struct ILType {
-	ILTypeTag tag;
+	ILTypeTag Tag;
 	union {
-		struct il_class* class_;
-		struct il_interface* interface_;
-		struct il_enum* enum_;
-	} u;
+		struct il_class* Class;
+		struct il_interface* Interface;
+		struct il_enum* Enum;
+	} Kind;
 } ILType;
 
 /**

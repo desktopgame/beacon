@@ -59,15 +59,15 @@ static void CLBC_class_decl(ClassLoader * self, ILType * iltype, type * tp, Name
 	const char* name = Ref2Str(GetTypeName(tp));
 	#endif
 	CL_ERROR(self);
-	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->field_list, scope);
-	CLBC_fields_decl(self, iltype, tp, iltype->u.class_->sfield_list, scope);
+	CLBC_fields_decl(self, iltype, tp, iltype->Kind.Class->field_list, scope);
+	CLBC_fields_decl(self, iltype, tp, iltype->Kind.Class->sfield_list, scope);
 	CL_ERROR(self);
-	CLBC_properties_decl(self, iltype, tp, iltype->u.class_->prop_list, scope);
-	CLBC_properties_decl(self, iltype, tp, iltype->u.class_->sprop_list, scope);
+	CLBC_properties_decl(self, iltype, tp, iltype->Kind.Class->prop_list, scope);
+	CLBC_properties_decl(self, iltype, tp, iltype->Kind.Class->sprop_list, scope);
 	CL_ERROR(self);
 
-	CLBC_methods_decl(self, iltype, tp, iltype->u.class_->method_list, scope);
-	CLBC_methods_decl(self, iltype, tp, iltype->u.class_->smethod_list, scope);
+	CLBC_methods_decl(self, iltype, tp, iltype->Kind.Class->method_list, scope);
+	CLBC_methods_decl(self, iltype, tp, iltype->Kind.Class->smethod_list, scope);
 	CL_ERROR(self);
 
 	CLBC_ctors_decl(self, iltype, tp, scope);
@@ -90,15 +90,15 @@ static void CLBC_class_impl(ClassLoader * self, ILType * iltype, type * tp, Name
 	CreateVTableClass(tp->u.class_);
 	CreateOperatorVTClass(tp->u.class_);
 	CL_ERROR(self);
-	CLBC_fields_impl(self, scope, tp, iltype->u.class_->field_list, (TYPE2CLASS(tp))->field_list);
-	CLBC_fields_impl(self, scope, tp, iltype->u.class_->sfield_list, (TYPE2CLASS(tp))->sfield_list);
+	CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->field_list, (TYPE2CLASS(tp))->field_list);
+	CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->sfield_list, (TYPE2CLASS(tp))->sfield_list);
 	CL_ERROR(self);
-	CLBC_properties_impl(self, iltype, tp, iltype->u.class_->prop_list, tp->u.class_->prop_list, scope);
-	CLBC_properties_impl(self, iltype, tp, iltype->u.class_->sprop_list, tp->u.class_->sprop_list, scope);
+	CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->prop_list, tp->u.class_->prop_list, scope);
+	CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->sprop_list, tp->u.class_->sprop_list, scope);
 	CL_ERROR(self);
 
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->method_list, ((TYPE2CLASS(tp))->method_list));
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.class_->smethod_list, ((TYPE2CLASS(tp))->smethod_list));
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->method_list, ((TYPE2CLASS(tp))->method_list));
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->smethod_list, ((TYPE2CLASS(tp))->smethod_list));
 	CL_ERROR(self);
 
 	CLBC_ctors_impl(self, iltype, tp);
@@ -116,8 +116,8 @@ static void CLBC_interface_decl(ClassLoader * self, ILType * iltype, type * tp, 
 	}
 	assert(tp->u.interface_->method_list->Length == 0);
 	CL_ERROR(self);
-	CLBC_methods_decl(self, iltype, tp, iltype->u.interface_->method_list, scope);
-	CLBC_properties_decl(self, iltype, tp, iltype->u.interface_->prop_list, scope);
+	CLBC_methods_decl(self, iltype, tp, iltype->Kind.Interface->method_list, scope);
+	CLBC_properties_decl(self, iltype, tp, iltype->Kind.Interface->prop_list, scope);
 	//privateなメンバーは定義できない
 	for(int i=0; i<tp->u.interface_->method_list->Length; i++) {
 		Method* e = AtVector(tp->u.interface_->method_list, i);
@@ -150,7 +150,7 @@ static void CLBC_interface_impl(ClassLoader * self, ILType * iltype, type * tp, 
 		return;
 	}
 	CL_ERROR(self);
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->u.interface_->method_list, tp->u.interface_->method_list);
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Interface->method_list, tp->u.interface_->method_list);
 	tp->state = tp->state | TYPE_IMPL;
 }
 

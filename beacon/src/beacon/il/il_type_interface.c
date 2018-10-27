@@ -9,68 +9,68 @@
 
 ILType * NewILType() {
 	ILType* ret = (ILType*)MEM_MALLOC(sizeof(ILType));
-	ret->tag = ilTYPE_CLASS_T;
+	ret->Tag = ilTYPE_CLASS_T;
 	return ret;
 }
 
 Vector * GetMethodsILType(ILType * self) {
-	if (self->tag == ilTYPE_CLASS_T) {
-		return self->u.class_->method_list;
-	} else if (self->tag == ilTYPE_INTERFACE_T) {
-		return self->u.interface_->method_list;
+	if (self->Tag == ilTYPE_CLASS_T) {
+		return self->Kind.Class->method_list;
+	} else if (self->Tag == ilTYPE_INTERFACE_T) {
+		return self->Kind.Interface->method_list;
 	}
 	return NULL;
 }
 
 Vector * GetSMethodsILType(ILType * self) {
-	if (self->tag == ilTYPE_CLASS_T) {
-		return self->u.class_->smethod_list;
-	} else if (self->tag == ilTYPE_INTERFACE_T) {
+	if (self->Tag == ilTYPE_CLASS_T) {
+		return self->Kind.Class->smethod_list;
+	} else if (self->Tag == ilTYPE_INTERFACE_T) {
 		return NULL;
 	}
 	return NULL;
 }
 
 void AddConstructorILType(ILType * self, ILConstructor * ctor) {
-	assert(self->tag == ilTYPE_CLASS_T);
-	if (self->tag == ilTYPE_CLASS_T) {
+	assert(self->Tag == ilTYPE_CLASS_T);
+	if (self->Tag == ilTYPE_CLASS_T) {
 	}
 }
 
 void AddFieldILType(ILType * self, ILField * field) {
-	assert(self->tag == ilTYPE_CLASS_T);
-	if (self->tag == ilTYPE_CLASS_T) {
-		AddFieldILClass(self->u.class_, field);
+	assert(self->Tag == ilTYPE_CLASS_T);
+	if (self->Tag == ilTYPE_CLASS_T) {
+		AddFieldILClass(self->Kind.Class, field);
 	}
 }
 
 void AddPropertyILType(ILType* self, ILProperty* prop) {
-	if (self->tag == ilTYPE_CLASS_T) {
-		AddPropertyILClass(self->u.class_, prop);
-	} else if(self->tag == ilTYPE_INTERFACE_T) {
-		AddPropertyILInterface(self->u.interface_, prop);
+	if (self->Tag == ilTYPE_CLASS_T) {
+		AddPropertyILClass(self->Kind.Class, prop);
+	} else if(self->Tag == ilTYPE_INTERFACE_T) {
+		AddPropertyILInterface(self->Kind.Interface, prop);
 	}
 }
 
 void AddMethodILType(ILType * self, ILMethod * method) {
-	if (self->tag == ilTYPE_CLASS_T) {
-		AddMethodILClass(self->u.class_, method);
-	} else if (self->tag == ilTYPE_INTERFACE_T) {
-		AddMethodILInterface(self->u.interface_, method);
+	if (self->Tag == ilTYPE_CLASS_T) {
+		AddMethodILClass(self->Kind.Class, method);
+	} else if (self->Tag == ilTYPE_INTERFACE_T) {
+		AddMethodILInterface(self->Kind.Interface, method);
 	}
 }
 
 void DeleteILType(ILType * self) {
-	if (self->tag == ilTYPE_CLASS_T) {
-		DeleteILClass(self->u.class_);
-	} else if (self->tag == ilTYPE_INTERFACE_T) {
-		DeleteILInterface(self->u.interface_);
-	} else if(self->tag == ilTYPE_ENUM_T) {
-		DeleteILEnum(self->u.enum_);
+	if (self->Tag == ilTYPE_CLASS_T) {
+		DeleteILClass(self->Kind.Class);
+	} else if (self->Tag == ilTYPE_INTERFACE_T) {
+		DeleteILInterface(self->Kind.Interface);
+	} else if(self->Tag == ilTYPE_ENUM_T) {
+		DeleteILEnum(self->Kind.Enum);
 	}
 	MEM_FREE(self);
 }
 
 Vector* GetTypeParametersILType(ILType* self) {
-	return self->tag == ilTYPE_INTERFACE_T ? self->u.interface_->GetParameterListType : self->u.class_->GetParameterListType;
+	return self->Tag == ilTYPE_INTERFACE_T ? self->Kind.Interface->GetParameterListType : self->Kind.Class->GetParameterListType;
 }

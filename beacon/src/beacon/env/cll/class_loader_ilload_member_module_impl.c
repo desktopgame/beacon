@@ -55,10 +55,10 @@ void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel leve
 	AST* aaccess_name = AtAST(afield, 2);
 	AST* afact = AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
-	if(current->tag == ilTYPE_INTERFACE_T) {
+	if(current->Tag == ilTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_FIELD_T,
-			Ref2Str(current->u.interface_->namev),
+			Ref2Str(current->Kind.Interface->namev),
 			Ref2Str(aaccess_name->Attr.StringVValue)
 		);
 		return;
@@ -101,12 +101,12 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel le
 	ret->Get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
 	AddPropertyILType(current, ret);
 	if(ret->Set->IsShort != ret->Get->IsShort) {
-		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->u.class_->namev), Ref2Str(propname));
+		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->Kind.Class->namev), Ref2Str(propname));
 	}
 }
 
 void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, AccessLevel level) {
-	assert(current->tag == ilTYPE_CLASS_T || current->tag == ilTYPE_INTERFACE_T);
+	assert(current->Tag == ilTYPE_CLASS_T || current->Tag == ilTYPE_INTERFACE_T);
 	AST* amodifier = AtAST(amethod, 0);
 	AST* afunc_name = AtAST(amethod, 1);
 	AST* ageneric = AtAST(amethod, 2);
@@ -140,10 +140,10 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, Acce
 	AST* abody = AtAST(aconstructor, 2);
 	ILConstructorChain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
-	if(current->tag == ilTYPE_INTERFACE_T) {
+	if(current->Tag == ilTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_CTOR_T,
-			Ref2Str(current->u.interface_->namev)
+			Ref2Str(current->Kind.Interface->namev)
 		);
 		return;
 	}
@@ -159,7 +159,7 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, Acce
 	ilcons->Chain = ilchain;
 	CLILParameterList(self, ilcons->Parameters, aparams);
 	CLILBody(self, ilcons->Statements, abody);
-	PushVector(current->u.class_->constructor_list, ilcons);
+	PushVector(current->Kind.Class->constructor_list, ilcons);
 }
 
 void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, AccessLevel level) {
@@ -169,10 +169,10 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 	AST* abody = AtAST(aopov, 1);
 	AST* areturn = AtAST(aopov, 2);
 	//インターフェイスはコンストラクタを持てない
-	if(current->tag == ilTYPE_INTERFACE_T) {
+	if(current->Tag == ilTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_OPOV_T,
-			Ref2Str(current->u.interface_->namev),
+			Ref2Str(current->Kind.Interface->namev),
 			OperatorToString(ot)
 		);
 		return;
@@ -182,7 +182,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 	CLILParameterList(self, ilopov->Parameters, aparam_list);
 	CLILBody(self, ilopov->Statements, abody);
 	CLILGenericCache(areturn, ilopov->ReturnGCache);
-	PushVector(current->u.class_->operator_overload_list, ilopov);
+	PushVector(current->Kind.Class->operator_overload_list, ilopov);
 }
 //private
 static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level) {

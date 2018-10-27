@@ -22,8 +22,8 @@ static void il_class_prop_delete(VectorItem item );
 
 ILType * WrapILClass(il_class * self) {
 	ILType* ret = NewILType();
-	ret->tag = ilTYPE_CLASS_T;
-	ret->u.class_ = self;
+	ret->Tag = ilTYPE_CLASS_T;
+	ret->Kind.Class = self;
 	return ret;
 }
 

@@ -13,8 +13,8 @@ static void il_interface_DeleteProperty(VectorItem item);
 
 ILType * WrapILInterface(il_interface * self) {
 	ILType* ret = NewILType();
-	ret->tag = ilTYPE_INTERFACE_T;
-	ret->u.interface_ = self;
+	ret->Tag = ilTYPE_INTERFACE_T;
+	ret->Kind.Interface = self;
 	return ret;
 }
 

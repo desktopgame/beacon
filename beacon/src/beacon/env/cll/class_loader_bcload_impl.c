@@ -145,11 +145,11 @@ static void CLBC_type_list(ClassLoader* self, Vector* iltype_list, Namespace* pa
 	for (int i = 0; i < iltype_list->Length; i++) {
 		VectorItem e = AtVector(iltype_list, i);
 		ILType* ilt = (ILType*)e;
-		if (ilt->tag == ilTYPE_CLASS_T) {
+		if (ilt->Tag == ilTYPE_CLASS_T) {
 			CLBC_class(self, ilt, parent);
-		} else if (ilt->tag == ilTYPE_INTERFACE_T) {
+		} else if (ilt->Tag == ilTYPE_INTERFACE_T) {
 			CLBC_interface(self, ilt, parent);
-		} else if (ilt->tag == ilTYPE_ENUM_T) {
+		} else if (ilt->Tag == ilTYPE_ENUM_T) {
 			CLBC_enum(self, ilt, parent);
 		}
 		CL_ERROR(self);
@@ -158,8 +158,8 @@ static void CLBC_type_list(ClassLoader* self, Vector* iltype_list, Namespace* pa
 
 static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	CL_ERROR(self);
-	assert(iltype->tag == ilTYPE_ENUM_T);
-	il_enum* ilenum = iltype->u.enum_;
+	assert(iltype->Tag == ilTYPE_ENUM_T);
+	il_enum* ilenum = iltype->Kind.Enum;
 	type* tp = CLBC_get_or_load_enum(parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
@@ -207,15 +207,15 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 	CL_ERROR(self);
 	//既に登録されていたら二重に登録しないように
 	//例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
-	assert(iltype->tag == ilTYPE_CLASS_T);
+	assert(iltype->Tag == ilTYPE_CLASS_T);
 	type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
 	if((tp->state & TYPE_REGISTER) > 0) {
 		return;
 	}
-	cls->is_abstract = iltype->u.class_->is_abstract;
-	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->Length);
+	cls->is_abstract = iltype->Kind.Class->is_abstract;
+	InitGenericSelf(tp, iltype->Kind.Class->GetParameterListType->Length);
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
@@ -243,7 +243,7 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 
 static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	CL_ERROR(self);
-	assert(iltype->tag == ilTYPE_INTERFACE_T);
+	assert(iltype->Tag == ilTYPE_INTERFACE_T);
 	//NOTE:後で親関数から渡すようにする
 	type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	CL_ERROR(self);
@@ -251,7 +251,7 @@ static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * pare
 	if((tp->state & TYPE_REGISTER) > 0) {
 		return;
 	}
-	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
+	InitGenericSelf(tp, iltype->Kind.Interface->GetParameterListType->Length);
 	//宣言のロードを予約
 	TypeCache* tc = InitTypeCache(
 		NewTypeCache(),
@@ -295,9 +295,9 @@ static void CLBC_check_superclass(class_* cls) {
 
 static type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
 	class_* outClass = NULL;
-	type* tp = FindTypeFromNamespace(parent, iltype->u.enum_->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Enum->namev);
 	if (tp == NULL) {
-		outClass = NewClass(iltype->u.enum_->namev);
+		outClass = NewClass(iltype->Kind.Enum->namev);
 		outClass->location = parent;
 		tp = WrapClass(outClass);
 		AddTypeNamespace(parent, tp);
@@ -308,11 +308,11 @@ static type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
 }
 
 static type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType* iltype) {
-	type* tp = FindTypeFromNamespace(parent, iltype->u.class_->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Class->namev);
 	class_* outClass = NULL;
 	//取得できなかった
 	if (tp == NULL) {
-		outClass = NewClass(iltype->u.class_->namev);
+		outClass = NewClass(iltype->Kind.Class->namev);
 		tp = WrapClass(outClass);
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);
@@ -321,20 +321,20 @@ static type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType
 		if((tp->state & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			DupTypeParameterList(iltype->u.class_->GetParameterListType, outClass->GetParameterListType);
+			DupTypeParameterList(iltype->Kind.Class->GetParameterListType, outClass->GetParameterListType);
 		}
 	}
 	return tp;
 }
 
 static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* iltype, type* tp, class_* cls) {
-	InitGenericSelf(tp, iltype->u.class_->GetParameterListType->Length);
-	DupTypeParameterList(iltype->u.class_->GetParameterListType, cls->GetParameterListType);
+	InitGenericSelf(tp, iltype->Kind.Class->GetParameterListType->Length);
+	DupTypeParameterList(iltype->Kind.Class->GetParameterListType, cls->GetParameterListType);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = parent;
 	cctx->Ty = tp;
-	for (int i = 0; i < iltype->u.class_->extend_list->Length; i++) {
-		GenericCache* e = (GenericCache*)AtVector(iltype->u.class_->extend_list, i);
+	for (int i = 0; i < iltype->Kind.Class->extend_list->Length; i++) {
+		GenericCache* e = (GenericCache*)AtVector(iltype->Kind.Class->extend_list, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
 			GenericType* gtp = ResolveImportManager(parent, e, cctx);
@@ -371,10 +371,10 @@ static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* il
 }
 
 static type* CLBC_get_or_load_interface(ClassLoader* self, Namespace* parent, ILType* iltype) {
-	type* tp = FindTypeFromNamespace(parent, iltype->u.interface_->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Interface->namev);
 	interface_* inter = NULL;
 	if (tp == NULL) {
-		inter = NewInterface(iltype->u.interface_->namev);
+		inter = NewInterface(iltype->Kind.Interface->namev);
 		tp = WrapInterface(inter);
 		CLBC_register_interface(self, parent, iltype, tp, inter);
 		CL_ERROR_RET(self, tp);
@@ -390,13 +390,13 @@ static type* CLBC_get_or_load_interface(ClassLoader* self, Namespace* parent, IL
 }
 
 static void CLBC_register_interface(ClassLoader* self, Namespace* parent, ILType* iltype, type* tp, interface_* inter) {
-	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
-	DupTypeParameterList(iltype->u.interface_->GetParameterListType, inter->GetParameterListType);
+	InitGenericSelf(tp, iltype->Kind.Interface->GetParameterListType->Length);
+	DupTypeParameterList(iltype->Kind.Interface->GetParameterListType, inter->GetParameterListType);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = parent;
 	cctx->Ty = tp;
-	for (int i = 0; i < iltype->u.interface_->extends_list->Length; i++) {
-		GenericCache* e = (GenericCache*)AtVector(iltype->u.interface_->extends_list, i);
+	for (int i = 0; i < iltype->Kind.Interface->extends_list->Length; i++) {
+		GenericCache* e = (GenericCache*)AtVector(iltype->Kind.Interface->extends_list, i);
 		//インターフェースはインターフェースのみ継承
 		GenericType* gtp = ResolveImportManager(parent, e, cctx);
 		type* E = GENERIC2TYPE(gtp);
