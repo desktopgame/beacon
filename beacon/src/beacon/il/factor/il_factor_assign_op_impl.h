@@ -3,8 +3,8 @@
 #include "../il_factor_interface.h"
 struct GenericType;
 typedef struct ILAssignOp {
-	ILFactor* left;
-	ILFactor* right;
+	ILFactor* Left;
+	ILFactor* Right;
 } ILAssignOp;
 
 ILFactor* WrapILAssignOp(ILAssignOp* self);

@@ -30,16 +30,16 @@ ILFactor* WrapILAssignOp(ILAssignOp* self) {
 
 ILAssignOp* NewILAssignOp() {
 	ILAssignOp* ret = (ILAssignOp*)MEM_MALLOC(sizeof(ILAssignOp));
-	ret->left = NULL;
-	ret->right = NULL;
+	ret->Left = NULL;
+	ret->Right = NULL;
 	return ret;
 }
 
 void LoadILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->left, env, cctx);
-	LoadILFactor(self->right, env, cctx);
+	LoadILFactor(self->Left, env, cctx);
+	LoadILFactor(self->Right, env, cctx);
 	//voidは代入できない
-	GenericType* gret = EvalILFactor(self->right, env, cctx);
+	GenericType* gret = EvalILFactor(self->Right, env, cctx);
 	BC_ERROR();
 	if(gret->CoreType != NULL &&
 	   gret->CoreType == TYPE_VOID) {
@@ -49,24 +49,24 @@ void LoadILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 }
 
 void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	if(self->left->type == ILFACTOR_VARIABLE_T) {
+	if(self->Left->type == ILFACTOR_VARIABLE_T) {
 		generate_assign_to_variable(self, env, cctx);
 		//NOTE:constかどうかの検査
 	//foo.bar = xxx
-	} else if(self->left->type == ILFACTOR_MEMBER_OP_T) {
-		ILFactor_member_op* ilmem = self->left->u.member_;
+	} else if(self->Left->type == ILFACTOR_MEMBER_OP_T) {
+		ILFactor_member_op* ilmem = self->Left->u.member_;
 		ILFactor* ilsrc = ilmem->fact;
 		if(ilsrc->type == ILFACTOR_VARIABLE_T) {
 			assign_by_namebase(self, env, cctx);
 		//インスタンスフィールドへの代入
 		} else {
-			assign_to_field(self, ilmem->fact, self->right, ilmem->namev, env, cctx);
+			assign_to_field(self, ilmem->fact, self->Right, ilmem->namev, env, cctx);
 		}
-	} else if(self->left->type == ILFACTOR_PROPERTY_T) {
+	} else if(self->Left->type == ILFACTOR_PROPERTY_T) {
 		assign_to_Property(self, env, cctx);
-	} else if(self->left->type == ILFACTOR_SUBSCRIPT_T) {
+	} else if(self->Left->type == ILFACTOR_SUBSCRIPT_T) {
 		assign_to_array(self, env, cctx);
-	} else if(self->left->type == ILFACTOR_CALL_OP_T) {
+	} else if(self->Left->type == ILFACTOR_CALL_OP_T) {
 		assign_by_call(self, env, cctx);
 	} else {
 		assert(false);
@@ -74,17 +74,17 @@ void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 }
 
 GenericType* EvalILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	return EvalILFactor(self->right, env, cctx);
+	return EvalILFactor(self->Right, env, cctx);
 }
 
 void DeleteILAssignOp(ILAssignOp* self) {
-	DeleteILFactor(self->left);
-	DeleteILFactor(self->right);
+	DeleteILFactor(self->Left);
+	DeleteILFactor(self->Right);
 	MEM_FREE(self);
 }
 //private
 static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_member_op* ilmem = self->left->u.member_;
+	ILFactor_member_op* ilmem = self->Left->u.member_;
 	ILFactor* ilsrc = ilmem->fact;
 	ILFactor_variable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
@@ -93,7 +93,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 		int temp = -1;
 		Field* sf = FindSFieldClass(cls, ilmem->namev, &temp);
 		assert(temp != -1);
-		GenerateILFactor(self->right, env, cctx);
+		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutField(env->Bytecode, sf, temp);
 		//指定の静的フィールドにアクセスできない
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
@@ -116,7 +116,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 			return;
 		}
 	} else {
-		assign_to_field(self, ilmem->fact, self->right, ilmem->namev, env, cctx);
+		assign_to_field(self, ilmem->fact, self->Right, ilmem->namev, env, cctx);
 	}
 }
 
@@ -144,7 +144,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 }
 
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_Property* prop = self->left->u.prop;
+	ILFactor_Property* prop = self->Left->u.prop;
 	Property* pp = prop->p;
 	bool is_static = IsStaticModifier(prop->p->Modifier);
 	BC_ERROR();
@@ -163,7 +163,7 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 		);
 		return;
 	}
-	if(DistanceGenericType(prop->p->GType, EvalILFactor(self->right, env, cctx), cctx) < 0) {
+	if(DistanceGenericType(prop->p->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
 			Ref2Str(GetTypeName(prop->p->Parent)),
 			Ref2Str(prop->p->Name)
@@ -172,18 +172,18 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 	}
 	//省略記法なら初期化されてるかチェック
 	if(pp->IsShort && !IsStaticModifier(pp->Modifier)) {
-		check_final(prop->fact, self->right, prop->p->SourceRef->namev, env, cctx);
+		check_final(prop->fact, self->Right, prop->p->SourceRef->namev, env, cctx);
 	}
 	BC_ERROR();
 	if(!is_static) {
 		GenerateILFactor(prop->fact, env, cctx);
 	}
-	GenerateILFactor(self->right, env, cctx);
+	GenerateILFactor(self->Right, env, cctx);
 	GeneratePutProperty(env->Bytecode, pp, prop->index);
 }
 
 static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_subscript* subs = self->left->u.subscript;
+	ILFactor_subscript* subs = self->Left->u.subscript;
 	GenerateILFactor(subs->receiver, env, cctx);
 	GenerateILFactor(subs->pos, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
@@ -191,7 +191,7 @@ static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx
 }
 
 static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_call_op* call = self->left->u.call_;
+	ILFactor_call_op* call = self->Left->u.call_;
 	if(call->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ThrowBCError(
 			BCERROR_LHS_IS_NOT_SUBSCRIPT_T,
@@ -200,9 +200,9 @@ static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx)
 		return;
 	}
 	if(call->type == ILCALL_TYPE_INVOKE_T) {
-		assign_by_invoke(call->u.invoke_, self->right, env, cctx);
+		assign_by_invoke(call->u.invoke_, self->Right, env, cctx);
 	} else if(call->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		assign_by_invoke_bound(call->u.invoke_bound_, self->right, env, cctx);
+		assign_by_invoke_bound(call->u.invoke_bound_, self->Right, env, cctx);
 	} else {
 		assert(false);
 	}
@@ -254,7 +254,7 @@ static void assign_by_invoke_bound(ILFactor_invoke_bound* lhs, ILFactor* rhs, En
 }
 
 static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(self->right, env, cctx);
+	GenericType* gt = EvalILFactor(self->Right, env, cctx);
 	int dist = DistanceGenericType(f->gtype, gt, cctx);
 	if(dist >= 0) {
 		return true;
@@ -297,15 +297,15 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 }
 
 static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	assert(self->left->type == ILFACTOR_VARIABLE_T);
-	ILFactor_variable* ilvar = self->left->u.variable_;
+	assert(self->Left->type == ILFACTOR_VARIABLE_T);
+	ILFactor_variable* ilvar = self->Left->u.variable_;
 	if(ilvar->type == ILVARIABLE_TYPE_LOCAL_T) {
 		generate_assign_to_variable_local(self, env, cctx);
 	}
 }
 
 static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_variable* ilvar = self->left->u.variable_;
+	ILFactor_variable* ilvar = self->Left->u.variable_;
 	ILFactor_variable_local* illoc = ilvar->u.local_;
 	//src のような名前がローカル変数を示す場合
 	if(illoc->type == VARIABLE_LOCAL_SCOPE_T) {
@@ -314,10 +314,10 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		#endif
 		SymbolEntry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->fqcn->Name);
 		//e==NULL の時変数がない
-		GenerateILFactor(self->right, env, cctx);
+		GenerateILFactor(self->Right, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
 		AddOpcodeBuf(env->Bytecode, e->Index);
-		if(DistanceGenericType(e->GType, EvalILFactor(self->right, env, cctx), cctx) < 0) {
+		if(DistanceGenericType(e->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
 			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->fqcn->Name)
 			);
@@ -344,7 +344,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		if(!IsStaticModifier(f->modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
-		GenerateILFactor(self->right, env, cctx);
+		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutField(env->Bytecode, f, temp);
 		//assert(!IsStaticModifier(f->modifier));
 	//src のような名前がプロパティを示す場合
@@ -365,7 +365,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		if(!IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
-		GenerateILFactor(self->right, env, cctx);
+		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutProperty(env->Bytecode, p, temp);
 		assert(!IsStaticModifier(p->Modifier));
 	}

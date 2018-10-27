@@ -195,8 +195,8 @@ static ILAssignOp* CLIL_assign(ClassLoader* self, AST* source) {
 	ILAssignOp* ret = NewILAssignOp();
 	AST* aleft = FirstAST(source);
 	AST* aright = SecondAST(source);
-	ret->left = CLILFactor(self, aleft);
-	ret->right = CLILFactor(self, aright);
+	ret->Left = CLILFactor(self, aleft);
+	ret->Right = CLILFactor(self, aright);
 	return ret;
 }
 
@@ -208,9 +208,9 @@ static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, Operat
 	AST* aright = SecondAST(source);
 	bin->left = CLILFactor(self, aleft);
 	bin->right = CLILFactor(self, aright);
-	ret->left = CLILFactor(self, aleft);
-	ret->right = WrapILBinaryOp(bin);
-	ret->right->lineno = aright->Lineno;
+	ret->Left = CLILFactor(self, aleft);
+	ret->Right = WrapILBinaryOp(bin);
+	ret->Right->lineno = aright->Lineno;
 	return ret;
 }
 
