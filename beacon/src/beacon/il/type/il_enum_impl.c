@@ -4,28 +4,28 @@
 #include <stdio.h>
 
 //proto
-static void il_enum_name_delete(il_enum* self);
+static void ILEnum_name_delete(ILEnum* self);
 
-ILType * WrapILEnum(il_enum * self) {
+ILType * WrapILEnum(ILEnum * self) {
 	ILType* ret = NewILType();
 	ret->Tag = ILTYPE_ENUM_T;
 	ret->Kind.Enum = self;
 	return ret;
 }
 
-il_enum * NewILEnum(StringView namev) {
-	il_enum* ret = (il_enum*)MEM_MALLOC(sizeof(il_enum));
-	ret->namev = namev;
-	ret->item_vec = NewVector();
+ILEnum * NewILEnum(StringView namev) {
+	ILEnum* ret = (ILEnum*)MEM_MALLOC(sizeof(ILEnum));
+	ret->Name = namev;
+	ret->Items = NewVector();
 	return ret;
 }
 
-void DeleteILEnum(il_enum * self) {
-	DeleteVector(self->item_vec, il_enum_name_delete);
+void DeleteILEnum(ILEnum * self) {
+	DeleteVector(self->Items, ILEnum_name_delete);
 	MEM_FREE(self);
 }
 
 //private
-static void il_enum_name_delete(il_enum* self) {
+static void ILEnum_name_delete(ILEnum* self) {
 
 }

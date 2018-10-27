@@ -5,14 +5,14 @@
 #include "../../util/string_pool.h"
 #include "../il_type_interface.h"
 
-typedef struct il_enum {
-	StringView namev;
-	Vector* item_vec;
-} il_enum;
+typedef struct ILEnum {
+	StringView Name;
+	Vector* Items;
+} ILEnum;
 
-ILType* WrapILEnum(il_enum* self);
+ILType* WrapILEnum(ILEnum* self);
 
-il_enum* NewILEnum(StringView namev);
+ILEnum* NewILEnum(StringView namev);
 
-void DeleteILEnum(il_enum* self);
+void DeleteILEnum(ILEnum* self);
 #endif // !SIGNAL_IL_IL_ENUM_H

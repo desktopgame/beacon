@@ -286,8 +286,8 @@ static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* curren
 static void class_loader_ilload_enum(ClassLoader * self, ILNamespace * current, AST* aenum_decl) {
 	assert(aenum_decl->Tag == AST_ENUM_DECL_T);
 	AST* aname_list = FirstAST(aenum_decl);
-	il_enum* ilenum = NewILEnum(aenum_decl->Attr.StringVValue);
-	class_loader_ilload_identifier_list(self, ilenum->item_vec, aname_list);
+	ILEnum* ilenum = NewILEnum(aenum_decl->Attr.StringVValue);
+	class_loader_ilload_identifier_list(self, ilenum->Items, aname_list);
 	PushVector(current->TypeList, WrapILEnum(ilenum));
 }
 

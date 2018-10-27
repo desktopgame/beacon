@@ -159,7 +159,7 @@ static void CLBC_type_list(ClassLoader* self, Vector* iltype_list, Namespace* pa
 static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	CL_ERROR(self);
 	assert(iltype->Tag == ILTYPE_ENUM_T);
-	il_enum* ilenum = iltype->Kind.Enum;
+	ILEnum* ilenum = iltype->Kind.Enum;
 	type* tp = CLBC_get_or_load_enum(parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
@@ -168,8 +168,8 @@ static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	}
 	InitGenericSelf(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
-	for (int i = 0; i < ilenum->item_vec->Length; i++) {
-		StringView str = (StringView)AtVector(ilenum->item_vec, i);
+	for (int i = 0; i < ilenum->Items->Length; i++) {
+		StringView str = (StringView)AtVector(ilenum->Items, i);
 		Field* f = NewField(str);
 		f->modifier = MODIFIER_STATIC_T;
 		f->access = ACCESS_PUBLIC_T;
@@ -295,9 +295,9 @@ static void CLBC_check_superclass(class_* cls) {
 
 static type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
 	class_* outClass = NULL;
-	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Enum->namev);
+	type* tp = FindTypeFromNamespace(parent, iltype->Kind.Enum->Name);
 	if (tp == NULL) {
-		outClass = NewClass(iltype->Kind.Enum->namev);
+		outClass = NewClass(iltype->Kind.Enum->Name);
 		outClass->location = parent;
 		tp = WrapClass(outClass);
 		AddTypeNamespace(parent, tp);
