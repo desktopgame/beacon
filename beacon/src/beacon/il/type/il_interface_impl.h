@@ -9,11 +9,11 @@ struct ILMethod;
  * インターフェースを表す要素.
  */
 typedef struct ILInterface {
-	StringView namev;
-	Vector* method_list;
-	Vector* extends_list;
-	Vector* GetParameterListType;
-	Vector* prop_list;
+	StringView Name;
+	Vector* Methods;
+	Vector* Extends;
+	Vector* TypeParameters;
+	Vector* Properties;
 } ILInterface;
 
 /**

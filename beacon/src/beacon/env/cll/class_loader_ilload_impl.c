@@ -272,9 +272,9 @@ static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* curren
 	ILInterface* ilinter = NewILInterface(atypename->Attr.StringVValue);
 	ILType* iltype = WrapILInterface(ilinter);
 	//interface Foo<A, B>
-	CLILTypeParameter(self, FirstAST(atypename), ilinter->GetParameterListType);
+	CLILTypeParameter(self, FirstAST(atypename), ilinter->TypeParameters);
 	//interface Foo : XXX, YYY, CCC
-	CLILTypenameList(self, ilinter->extends_list, aextends_list);
+	CLILTypenameList(self, ilinter->Extends, aextends_list);
 	//public:
 	//    ...
 	if (!IsBlankAST(amember_tree)) {

@@ -20,27 +20,27 @@ ILType * WrapILInterface(ILInterface * self) {
 
 ILInterface * NewILInterface(StringView namev) {
 	ILInterface* ret = (ILInterface*)MEM_MALLOC(sizeof(ILInterface));
-	ret->extends_list = NewVector();
-	ret->method_list = NewVector();
-	ret->namev = namev;
-	ret->GetParameterListType = NewVector();
-	ret->prop_list = NewVector();
+	ret->Extends = NewVector();
+	ret->Methods = NewVector();
+	ret->Name = namev;
+	ret->TypeParameters = NewVector();
+	ret->Properties = NewVector();
 	return ret;
 }
 
 void AddPropertyILInterface(ILInterface* self, ILProperty* prop) {
-	PushVector(self->prop_list, prop);
+	PushVector(self->Properties, prop);
 }
 
 void AddMethodILInterface(ILInterface * self, ILMethod * method) {
-	PushVector(self->method_list, method);
+	PushVector(self->Methods, method);
 }
 
 void DeleteILInterface(ILInterface * self) {
-	DeleteVector(self->extends_list, ILInterface_fqcn_delete);
-	DeleteVector(self->method_list, ILInterface_DeleteMethod);
-	DeleteVector(self->GetParameterListType, ILInterface_DeleteTypeParameter);
-	DeleteVector(self->prop_list, ILInterface_DeleteProperty);
+	DeleteVector(self->Extends, ILInterface_fqcn_delete);
+	DeleteVector(self->Methods, ILInterface_DeleteMethod);
+	DeleteVector(self->TypeParameters, ILInterface_DeleteTypeParameter);
+	DeleteVector(self->Properties, ILInterface_DeleteProperty);
 	MEM_FREE(self);
 }
 //private 

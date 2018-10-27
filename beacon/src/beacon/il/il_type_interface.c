@@ -17,7 +17,7 @@ Vector * GetMethodsILType(ILType * self) {
 	if (self->Tag == ILTYPE_CLASS_T) {
 		return self->Kind.Class->Methods;
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
-		return self->Kind.Interface->method_list;
+		return self->Kind.Interface->Methods;
 	}
 	return NULL;
 }
@@ -72,5 +72,5 @@ void DeleteILType(ILType * self) {
 }
 
 Vector* GetTypeParametersILType(ILType* self) {
-	return self->Tag == ILTYPE_INTERFACE_T ? self->Kind.Interface->GetParameterListType : self->Kind.Class->TypeParameters;
+	return self->Tag == ILTYPE_INTERFACE_T ? self->Kind.Interface->TypeParameters : self->Kind.Class->TypeParameters;
 }

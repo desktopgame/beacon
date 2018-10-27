@@ -116,8 +116,8 @@ static void CLBC_interface_decl(ClassLoader * self, ILType * iltype, type * tp, 
 	}
 	assert(tp->u.interface_->method_list->Length == 0);
 	CL_ERROR(self);
-	CLBC_methods_decl(self, iltype, tp, iltype->Kind.Interface->method_list, scope);
-	CLBC_properties_decl(self, iltype, tp, iltype->Kind.Interface->prop_list, scope);
+	CLBC_methods_decl(self, iltype, tp, iltype->Kind.Interface->Methods, scope);
+	CLBC_properties_decl(self, iltype, tp, iltype->Kind.Interface->Properties, scope);
 	//privateなメンバーは定義できない
 	for(int i=0; i<tp->u.interface_->method_list->Length; i++) {
 		Method* e = AtVector(tp->u.interface_->method_list, i);
@@ -150,7 +150,7 @@ static void CLBC_interface_impl(ClassLoader * self, ILType * iltype, type * tp, 
 		return;
 	}
 	CL_ERROR(self);
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Interface->method_list, tp->u.interface_->method_list);
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Interface->Methods, tp->u.interface_->method_list);
 	tp->state = tp->state | TYPE_IMPL;
 }
 

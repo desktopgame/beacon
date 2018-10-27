@@ -58,7 +58,7 @@ void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel leve
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_FIELD_T,
-			Ref2Str(current->Kind.Interface->namev),
+			Ref2Str(current->Kind.Interface->Name),
 			Ref2Str(aaccess_name->Attr.StringVValue)
 		);
 		return;
@@ -143,7 +143,7 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, Acce
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_CTOR_T,
-			Ref2Str(current->Kind.Interface->namev)
+			Ref2Str(current->Kind.Interface->Name)
 		);
 		return;
 	}
@@ -172,7 +172,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		ThrowBCError(
 			BCERROR_INTERFACE_HAS_OPOV_T,
-			Ref2Str(current->Kind.Interface->namev),
+			Ref2Str(current->Kind.Interface->Name),
 			OperatorToString(ot)
 		);
 		return;
