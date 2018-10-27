@@ -123,7 +123,7 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 		//this super
 	} else if (source->Tag == AST_THIS_T) {
 		ILFactor* ret = ILFactor_new(ILFACTOR_THIS_T);
-		ILFactor_this* th = NewILThis();
+		ILThis* th = NewILThis();
 		ret->u.this_ = th;
 		return ret;
 	} else if (source->Tag == AST_SUPER_T) {
