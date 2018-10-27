@@ -9,7 +9,7 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source);
 static ILBool* CLIL_true(ClassLoader* self, AST* source);
 static ILBool* CLIL_false(ClassLoader* self, AST* source);
 static ILFactor_unary_op* CLIL_unary(ClassLoader* self, AST* source, OperatorType type);
-static ILFactor_binary_op* CLIL_binary(ClassLoader* self, AST* source, OperatorType type);
+static ILBinaryOp* CLIL_binary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_explicit_unary_op* CLIL_explicit_unary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_explicit_binary_op* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type);
 static ILAssignOp* CLIL_assign(ClassLoader* self, AST* source);
@@ -169,8 +169,8 @@ static ILFactor_unary_op* CLIL_unary(ClassLoader* self, AST* source, OperatorTyp
 	return ret;
 }
 
-static ILFactor_binary_op* CLIL_binary(ClassLoader* self, AST* source, OperatorType type) {
-	ILFactor_binary_op* ret = NewILBinaryOp(type);
+static ILBinaryOp* CLIL_binary(ClassLoader* self, AST* source, OperatorType type) {
+	ILBinaryOp* ret = NewILBinaryOp(type);
 	AST* aleft = FirstAST(source);
 	AST* aright = SecondAST(source);
 	ret->left = CLILFactor(self, aleft);
@@ -203,7 +203,7 @@ static ILAssignOp* CLIL_assign(ClassLoader* self, AST* source) {
 static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, OperatorType type) {
 	//a += b
 	ILAssignOp* ret = NewILAssignOp();
-	ILFactor_binary_op* bin = NewILBinaryOp(type);
+	ILBinaryOp* bin = NewILBinaryOp(type);
 	AST* aleft = FirstAST(source);
 	AST* aright = SecondAST(source);
 	bin->left = CLILFactor(self, aleft);

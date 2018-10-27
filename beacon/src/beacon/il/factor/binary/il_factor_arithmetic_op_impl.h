@@ -2,11 +2,11 @@
 #define BEACON_IL_FACTOR_BIN_IL_FACTOR_ARITHMETIC_H
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
-struct ILFactor_binary_op;
+struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
 typedef struct ILFactor_arithmetic_op {
-	struct ILFactor_binary_op* parent;
+	struct ILBinaryOp* parent;
 	int operator_index;
 	OperatorType type;
 } ILFactor_arithmetic_op;

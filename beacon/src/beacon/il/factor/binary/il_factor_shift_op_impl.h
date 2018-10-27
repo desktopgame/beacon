@@ -4,9 +4,9 @@
 #include "../../call_context.h"
 struct GenericType;
 struct Enviroment;
-struct ILFactor_binary_op;
+struct ILBinaryOp;
 typedef struct ILFactor_shift_op {
-	struct ILFactor_binary_op* parent;
+	struct ILBinaryOp* parent;
 	OperatorType type;
 	int operator_index;
 } ILFactor_shift_op;

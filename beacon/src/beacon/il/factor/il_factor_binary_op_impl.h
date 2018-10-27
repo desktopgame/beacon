@@ -14,7 +14,7 @@ struct ILFactor_excor_op;
 /**
  * 二項演算子を表す要素.
  */
-typedef struct ILFactor_binary_op {
+typedef struct ILBinaryOp {
 	OperatorType type;
 	OperatorCategory category;
 	ILFactor* left;
@@ -27,35 +27,35 @@ typedef struct ILFactor_binary_op {
 		struct ILFactor_shift_op* shift_op;
 		struct ILFactor_excor_op* excor_op;
 	} u;
-} ILFactor_binary_op;
+} ILBinaryOp;
 
-ILFactor* WrapILBinaryOp(ILFactor_binary_op* self);
+ILFactor* WrapILBinaryOp(ILBinaryOp* self);
 
-ILFactor_binary_op* NewILBinaryOp(OperatorType type);
+ILBinaryOp* NewILBinaryOp(OperatorType type);
 
-void GenerateILBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+void GenerateILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-void LoadILBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+void LoadILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-char* ILBinaryOpToString(ILFactor_binary_op* self, Enviroment* env);
+char* ILBinaryOpToString(ILBinaryOp* self, Enviroment* env);
 
-void DeleteILBinaryOp(ILFactor_binary_op* self);
+void DeleteILBinaryOp(ILBinaryOp* self);
 
-char* ILBinaryOpToString_simple(ILFactor_binary_op* self, Enviroment* env);
+char* ILBinaryOpToString_simple(ILBinaryOp* self, Enviroment* env);
 
-bool IsIntIntBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+bool IsIntIntBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-bool IsDoubleDoubleBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+bool IsDoubleDoubleBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-bool IsBoolBoolBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+bool IsBoolBoolBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-bool IsCharCharBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+bool IsCharCharBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-int GetIndexILBinaryOp(ILFactor_binary_op* self, Enviroment* env, CallContext* cctx);
+int GetIndexILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
 int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, Enviroment* env, CallContext* cctx);
 
-GenericType* ApplyILBinaryOp(ILFactor_binary_op* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
+GenericType* ApplyILBinaryOp(ILBinaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H

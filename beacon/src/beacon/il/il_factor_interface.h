@@ -54,7 +54,7 @@ struct ILChar;
 struct ILString;
 struct ILFactor_variable;
 struct ILFactor_unary_op;
-struct ILFactor_binary_op;
+struct ILBinaryOp;
 struct ILAssignOp;
 struct ILThis;
 struct ILSuper;
@@ -86,7 +86,7 @@ typedef struct ILFactor {
 		struct ILFactor_variable* variable_;
 		struct ILFactor_unary_op* unary_;
 		struct ILAssignOp* assign_;
-		struct ILFactor_binary_op* binary_;
+		struct ILBinaryOp* binary_;
 		struct ILThis* this_;
 		struct ILSuper* super_;
 		struct ILFactor_new_instance* new_instance_;
