@@ -181,7 +181,7 @@ static void CLBC_enum(ClassLoader * self, il_type * iltype, Namespace * parent) 
 		AddFieldClass(cls, f);
 	}
 	//宣言のロードを予約
-	type_cache* tc = InitTypeCache(
+	TypeCache* tc = InitTypeCache(
 		NewTypeCache(),
 		self,
 		iltype,
@@ -191,7 +191,7 @@ static void CLBC_enum(ClassLoader * self, il_type * iltype, Namespace * parent) 
 	);
 	PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
-	type_cache* mtc = InitTypeCache(
+	TypeCache* mtc = InitTypeCache(
 		NewTypeCache(),
 		self,
 		iltype,
@@ -219,7 +219,7 @@ static void CLBC_class(ClassLoader* self, il_type* iltype, Namespace* parent) {
 	//デフォルトで親に Object を持つように
 	CLBC_check_superclass(cls);
 	//宣言のロードを予約
-	type_cache* tc = InitTypeCache(
+	TypeCache* tc = InitTypeCache(
 		NewTypeCache(),
 		self,
 		iltype,
@@ -229,7 +229,7 @@ static void CLBC_class(ClassLoader* self, il_type* iltype, Namespace* parent) {
 	);
 	PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
-	type_cache* mtc = InitTypeCache(
+	TypeCache* mtc = InitTypeCache(
 		NewTypeCache(),
 		self,
 		iltype,
@@ -253,7 +253,7 @@ static void CLBC_interface(ClassLoader * self, il_type * iltype, Namespace * par
 	}
 	InitGenericSelf(tp, iltype->u.interface_->GetParameterListType->Length);
 	//宣言のロードを予約
-	type_cache* tc = InitTypeCache(
+	TypeCache* tc = InitTypeCache(
 		NewTypeCache(),
 		self,
 		iltype,
@@ -263,7 +263,7 @@ static void CLBC_interface(ClassLoader * self, il_type * iltype, Namespace * par
 	);
 	PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
-	type_cache* mtc = InitTypeCache(
+	TypeCache* mtc = InitTypeCache(
 		NewTypeCache(),
 		self,
 		iltype,

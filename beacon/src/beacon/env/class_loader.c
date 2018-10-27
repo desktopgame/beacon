@@ -154,7 +154,7 @@ static void Linkclass_loader_recursive(ClassLoader* self, LinkType type) {
 }
 
 static void class_loader_cache_delete(VectorItem item) {
-	type_cache* e = (type_cache*)item;
+	TypeCache* e = (TypeCache*)item;
 	DeleteTypeCache(e);
 }
 

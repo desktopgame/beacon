@@ -183,7 +183,7 @@ static void CLBC_excec_class_decl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
+		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_CLASS_DECL_T || e->consume) {
 			continue;
 		}
@@ -196,7 +196,7 @@ static void CLBC_excec_class_decl(ClassLoader* self) {
 static void CLBC_excec_class_impl(ClassLoader* self) {
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
+		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_CLASS_IMPL_T || e->consume) {
 			continue;
 		}
@@ -210,7 +210,7 @@ static void CLBC_excec_interface_decl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
+		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_INTERFACE_DECL_T || e->consume) {
 			continue;
 		}
@@ -224,7 +224,7 @@ static void CLBC_excec_interface_impl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
+		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_INTERFACE_IMPL_T || e->consume) {
 			continue;
 		}
@@ -238,7 +238,7 @@ static void CLBC_excec_enum_decl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
+		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_ENUM_DECL_T || e->consume) {
 			continue;
 		}
@@ -252,7 +252,7 @@ static void CLBC_excec_enum_impl(ClassLoader* self) {
 	CL_ERROR(self);
 	int count = 0;
 	for (int i = 0; i < self->TypeCaches->Length; i++) {
-		type_cache* e = (type_cache*)AtVector(self->TypeCaches, i);
+		TypeCache* e = (TypeCache*)AtVector(self->TypeCaches, i);
 		if (e->kind != CACHEKIND_ENUM_IMPL_T || e->consume) {
 			continue;
 		}
