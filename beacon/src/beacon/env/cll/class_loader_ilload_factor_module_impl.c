@@ -33,7 +33,7 @@ ILFactor* CLILFactor(ClassLoader* self, AST* source) {
 //private
 static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 	if (source->Tag == AST_INT_T) {
-		return WrapILInt(ILFactor_int_new(source->Attr.IntValue));
+		return WrapILInt(ILInt_new(source->Attr.IntValue));
 	} else if (source->Tag == AST_DOUBLE_T) {
 		return WrapILDouble(NewILDouble(source->Attr.DoubleValue));
 	} else if (source->Tag == AST_CHAR_T) {

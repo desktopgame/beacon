@@ -48,7 +48,7 @@ typedef enum ILFactorType {
 //ここでは関数呼び出しを前方宣言し、
 //関数呼び出しを表す構造体では実引数の一覧を ILFactor型で定義します。
 //詳細は il_factor_impl.h を参照してください。
-struct ILFactor_int;
+struct ILInt;
 struct ILDouble;
 struct ILChar;
 struct ILString;
@@ -79,7 +79,7 @@ typedef struct ILFactor {
 	ILFactorType type;
 	int lineno;
 	union {
-		struct ILFactor_int* int_;
+		struct ILInt* int_;
 		struct ILDouble* double_;
 		struct ILChar* char_;
 		struct ILString* string_;

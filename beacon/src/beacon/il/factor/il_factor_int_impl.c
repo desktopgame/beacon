@@ -9,43 +9,43 @@
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
-ILFactor * WrapILInt(ILFactor_int * self) {
+ILFactor * WrapILInt(ILInt * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_INT_T);
 	ret->u.int_ = self;
 	return ret;
 }
 
-ILFactor_int * MallocILInt(int32_t i, const char* filename, int lineno) {
-	ILFactor_int* ret = (ILFactor_int*)mem_malloc(sizeof(ILFactor_int), filename, lineno);
-	ret->value = i;
-	ret->count = 0;
+ILInt * MallocILInt(int32_t i, const char* filename, int lineno) {
+	ILInt* ret = (ILInt*)mem_malloc(sizeof(ILInt), filename, lineno);
+	ret->Value = i;
+	ret->Count = 0;
 	return ret;
 }
 
-void GenerateILInt(ILFactor_int * self, Enviroment* env, CallContext* cctx) {
-	assert(self->count == 0);
-	int index = AddCIntEnviroment(env, self->value);
+void GenerateILInt(ILInt * self, Enviroment* env, CallContext* cctx) {
+	assert(self->Count == 0);
+	int index = AddCIntEnviroment(env, self->Value);
 	AddOpcodeBuf(env->Bytecode, OP_ICONST);
 	AddOpcodeBuf(env->Bytecode, index);
-	self->count++;
+	self->Count++;
 }
 
-void LoadILInt(ILFactor_int * self, Enviroment * env, CallContext* cctx) {
+void LoadILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILInt(ILFactor_int * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
 	return GENERIC_INT;
 }
 
-char* ILIntToString(ILFactor_int* self, Enviroment* env) {
+char* ILIntToString(ILInt* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char block[32];
-	int res = sprintf(block, "%d", self->value);
+	int res = sprintf(block, "%d", self->Value);
 	assert(res >= 0);
 	AppendsBuffer(sb, block);
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILInt(ILFactor_int * self) {
+void DeleteILInt(ILInt * self) {
 	MEM_FREE(self);
 }
