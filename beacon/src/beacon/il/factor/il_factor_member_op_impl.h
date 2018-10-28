@@ -12,27 +12,27 @@ struct Field;
 /**
  * メンバアクセスを表す要素.
  */
-typedef struct ILFactor_member_op {
-	ILFactor* parent;
-	ILFactor* fact;
-	StringView namev;
-	Vector* type_args;
-	int index;
-	struct Field* f;
-} ILFactor_member_op;
+typedef struct ILMemberOp {
+	ILFactor* Parent;
+	ILFactor* Source;
+	StringView Name;
+	Vector* TypeArgs;
+	int Index;
+	struct Field* Field;
+} ILMemberOp;
 
-ILFactor* WrapILMemberOp(ILFactor_member_op* self);
+ILFactor* WrapILMemberOp(ILMemberOp* self);
 
-ILFactor_member_op* NewILMemberOp(StringView namev);
+ILMemberOp* NewILMemberOp(StringView namev);
 
-void LoadILMemberOp(ILFactor_member_op* self, Enviroment* env, CallContext* cctx);
+void LoadILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILMemberOp(ILFactor_member_op* self, Enviroment* env, CallContext* cctx);
+void GenerateILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILMemberOp(ILFactor_member_op* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
 
-char* ILMemberOpToString(ILFactor_member_op* self, Enviroment* env);
+char* ILMemberOpToString(ILMemberOp* self, Enviroment* env);
 
-void DeleteILMemberOp(ILFactor_member_op* self);
+void DeleteILMemberOp(ILMemberOp* self);
 
 #endif

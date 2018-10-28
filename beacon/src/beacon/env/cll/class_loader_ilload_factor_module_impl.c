@@ -18,7 +18,7 @@ static ILFactor_variable* CLIL_variable(ClassLoader* self, AST* source);
 static ILNewInstance* CLIL_new_instance(ClassLoader* self, AST* source);
 static ILAs* CLIL_as(ClassLoader* self, AST* source);
 static ILFactor_call_op* CLIL_call_op(ClassLoader* self, AST* source);
-static ILFactor_member_op* CLIL_member_op(ClassLoader* self, AST* source);
+static ILMemberOp* CLIL_member_op(ClassLoader* self, AST* source);
 static ILInstanceOf* CLIL_instanceof(ClassLoader* self, AST* source);
 static ILFactor_subscript* CLIL_subscript(ClassLoader* self, AST* source);
 
@@ -253,14 +253,14 @@ static ILFactor_call_op* CLIL_call_op(ClassLoader* self, AST* source) {
 	return ret;
 }
 
-static ILFactor_member_op* CLIL_member_op(ClassLoader* self, AST* source) {
+static ILMemberOp* CLIL_member_op(ClassLoader* self, AST* source) {
 	assert(source->Tag == AST_FIELD_ACCESS_T);
 	AST* afact = FirstAST(source);
 	AST* aname = SecondAST(source);
 	AST* atype_args = AtAST(source, 2);
-	ILFactor_member_op* ret = NewILMemberOp(aname->Attr.StringVValue);
-	ret->fact = CLILFactor(self, afact);
-	CLILTypeArgument(self, atype_args, ret->type_args);
+	ILMemberOp* ret = NewILMemberOp(aname->Attr.StringVValue);
+	ret->Source = CLILFactor(self, afact);
+	CLILTypeArgument(self, atype_args, ret->TypeArgs);
 	return ret;
 }
 

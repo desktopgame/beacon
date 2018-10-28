@@ -54,13 +54,13 @@ void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 		//NOTE:constかどうかの検査
 	//foo.bar = xxx
 	} else if(self->Left->type == ILFACTOR_MEMBER_OP_T) {
-		ILFactor_member_op* ilmem = self->Left->u.member_;
-		ILFactor* ilsrc = ilmem->fact;
+		ILMemberOp* ilmem = self->Left->u.member_;
+		ILFactor* ilsrc = ilmem->Source;
 		if(ilsrc->type == ILFACTOR_VARIABLE_T) {
 			assign_by_namebase(self, env, cctx);
 		//インスタンスフィールドへの代入
 		} else {
-			assign_to_field(self, ilmem->fact, self->Right, ilmem->namev, env, cctx);
+			assign_to_field(self, ilmem->Source, self->Right, ilmem->Name, env, cctx);
 		}
 	} else if(self->Left->type == ILFACTOR_PROPERTY_T) {
 		assign_to_Property(self, env, cctx);
@@ -84,14 +84,14 @@ void DeleteILAssignOp(ILAssignOp* self) {
 }
 //private
 static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_member_op* ilmem = self->Left->u.member_;
-	ILFactor* ilsrc = ilmem->fact;
+	ILMemberOp* ilmem = self->Left->u.member_;
+	ILFactor* ilsrc = ilmem->Source;
 	ILFactor_variable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
 	if(ilvar->type == ILVARIABLE_TYPE_STATIC_T) {
 		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->u.static_->fqcn));
 		int temp = -1;
-		Field* sf = FindSFieldClass(cls, ilmem->namev, &temp);
+		Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
 		assert(temp != -1);
 		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutField(env->Bytecode, sf, temp);
@@ -116,7 +116,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 			return;
 		}
 	} else {
-		assign_to_field(self, ilmem->fact, self->Right, ilmem->namev, env, cctx);
+		assign_to_field(self, ilmem->Source, self->Right, ilmem->Name, env, cctx);
 	}
 }
 
