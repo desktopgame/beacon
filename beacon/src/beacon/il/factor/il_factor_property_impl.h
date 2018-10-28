@@ -6,23 +6,23 @@
 struct Enviroment;
 struct GenericType;
 
-typedef struct ILFactor_Property {
+typedef struct ILPropertyAccess {
 	ILFactor* fact;
 	StringView namev;
 	int index;
 	Property* p;
-} ILFactor_Property;
+} ILPropertyAccess;
 
-#define ILFactor_Property_new() (MallocILPropertyAccess(__FILE__, __LINE__))
-ILFactor_Property* MallocILPropertyAccess(const char* filename, int lineno);
+#define ILPropertyAccess_new() (MallocILPropertyAccess(__FILE__, __LINE__))
+ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno);
 
-void GenerateILPropertyAccess(ILFactor_Property* self, Enviroment* env, CallContext* cctx);
+void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
 
-void LoadILProperty(ILFactor_Property* self, Enviroment* env, CallContext* cctx);
+void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILProperty(ILFactor_Property* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
 
-char* ILPropertyToString(ILFactor_Property* self, Enviroment* env);
+char* ILPropertyToString(ILPropertyAccess* self, Enviroment* env);
 
-void DeleteILPropertyAccess(ILFactor_Property* self);
+void DeleteILPropertyAccess(ILPropertyAccess* self);
 #endif

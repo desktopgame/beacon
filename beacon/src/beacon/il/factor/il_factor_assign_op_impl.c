@@ -144,7 +144,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 }
 
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_Property* prop = self->Left->u.prop;
+	ILPropertyAccess* prop = self->Left->u.prop;
 	Property* pp = prop->p;
 	bool is_static = IsStaticModifier(prop->p->Modifier);
 	BC_ERROR();

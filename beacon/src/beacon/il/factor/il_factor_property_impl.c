@@ -8,8 +8,8 @@
 #include <assert.h>
 
 
-ILFactor_Property* MallocILPropertyAccess(const char* filename, int lineno) {
-	ILFactor_Property* ret = mem_malloc(sizeof(ILFactor_Property), filename, lineno);
+ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno) {
+	ILPropertyAccess* ret = mem_malloc(sizeof(ILPropertyAccess), filename, lineno);
 	ret->fact = NULL;
 	ret->index = -1;
 	ret->namev = ZERO_VIEW;
@@ -17,12 +17,12 @@ ILFactor_Property* MallocILPropertyAccess(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILPropertyAccess(ILFactor_Property* self, Enviroment* env, CallContext* cctx) {
+void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->fact, env, cctx);
 	GenerateGetProperty(env->Bytecode, self->p, self->index);
 }
 
-void LoadILProperty(ILFactor_Property* self, Enviroment* env, CallContext* cctx) {
+void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
 	GenericType* receiver = EvalILFactor(self->fact, env, cctx);
 	type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
@@ -37,11 +37,11 @@ void LoadILProperty(ILFactor_Property* self, Enviroment* env, CallContext* cctx)
 	}
 }
 
-GenericType* EvalILProperty(ILFactor_Property* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
 	return self->p->GType;
 }
 
-char* ILPropertyToString(ILFactor_Property* self, Enviroment* env) {
+char* ILPropertyToString(ILPropertyAccess* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->fact, env);
 	AppendsBuffer(sb, name);
@@ -51,7 +51,7 @@ char* ILPropertyToString(ILFactor_Property* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILPropertyAccess(ILFactor_Property* self) {
+void DeleteILPropertyAccess(ILPropertyAccess* self) {
 	DeleteILFactor(self->fact);
 	MEM_FREE(self);
 }

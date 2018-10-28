@@ -69,7 +69,7 @@ struct ILMemberOp;
 struct ILInstanceOf;
 struct ILFactor_explicit_binary_op;
 struct ILFactor_explicit_unary_op;
-struct ILFactor_Property;
+struct ILPropertyAccess;
 struct ILFactor_subscript;
 
 /**
@@ -101,7 +101,7 @@ typedef struct ILFactor {
 		struct ILInstanceOf* instanceof_;
 		struct ILFactor_explicit_binary_op* exp_binary_op;
 		struct ILFactor_explicit_unary_op* exp_unary_op;
-		struct ILFactor_Property* prop;
+		struct ILPropertyAccess* prop;
 		struct ILFactor_subscript* subscript;
 	} u;
 } ILFactor;
