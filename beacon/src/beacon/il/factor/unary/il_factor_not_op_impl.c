@@ -23,26 +23,26 @@ GenericType* EvalILNotOp(ILFactor_not_op * self, Enviroment * env, CallContext* 
 
 void GenerateILNotOp(ILFactor_not_op* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->Arg, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
-		GenericType* gt = EvalILFactor(self->parent->a, env, cctx);
+		GenericType* gt = EvalILFactor(self->parent->Arg, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
 			AddOpcodeBuf(env->Bytecode, OP_BNOT);
 		} else {
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->a, env, cctx);
+		GenerateILFactor(self->parent->Arg, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		AddOpcodeBuf(env->Bytecode, self->operator_index);
 	}
 }
 
 void LoadILNotOp(ILFactor_not_op* self, Enviroment* env, CallContext* cctx) {
-	 LoadILFactor(self->parent->a, env, cctx);
-	GenericType* gt = EvalILFactor(self->parent->a, env, cctx);
+	 LoadILFactor(self->parent->Arg, env, cctx);
+	GenericType* gt = EvalILFactor(self->parent->Arg, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
 		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);
 	}

@@ -14,14 +14,14 @@ struct ILFactor_not_op;
  * 単項演算子を表す要素.
  */
 typedef struct ILUnaryOp {
-	OperatorType type;
-	OperatorCategory category;
-	ILFactor* a;
+	OperatorType Type;
+	OperatorCategory Category;
+	ILFactor* Arg;
 	union {
-		struct ILFactor_childa_op* childa_op;
-		struct ILFactor_negative_op* negative_op;
-		struct ILFactor_not_op* not_op;
-	} u;
+		struct ILFactor_childa_op* ChildaOp;
+		struct ILFactor_negative_op* NegativeOp;
+		struct ILFactor_not_op* NotOp;
+	} Kind;
 } ILUnaryOp;
 
 ILFactor* WrapILUnaryOp(ILUnaryOp* self);

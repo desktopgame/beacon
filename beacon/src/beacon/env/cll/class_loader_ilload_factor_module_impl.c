@@ -165,7 +165,7 @@ static ILBool * CLIL_false(ClassLoader * self, AST* source) {
 static ILUnaryOp* CLIL_unary(ClassLoader* self, AST* source, OperatorType type) {
 	ILUnaryOp* ret = NewILUnaryOp(type);
 	AST* a = FirstAST(source);
-	ret->a = CLILFactor(self, a);
+	ret->Arg = CLILFactor(self, a);
 	return ret;
 }
 
