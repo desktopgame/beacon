@@ -151,22 +151,22 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 	type* ctype = receiver_type->CoreType;
 	Property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->Name, &temp);
 	ILPropertyAccess* factp = ILPropertyAccess_new();
-	factp->fact = self->Source;
-	factp->namev = self->Name;
-	factp->p = p;
-	factp->index = temp;
+	factp->Source = self->Source;
+	factp->Name = self->Name;
+	factp->Property = p;
+	factp->Index = temp;
 	self->Source = NULL;
 	self->Parent->type = ILFACTOR_PROPERTY_T;
 	self->Parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
 		ThrowBCError(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Name));
-		DeleteILFactor(factp->fact);
-		factp->fact = NULL;
+		DeleteILFactor(factp->Source);
+		factp->Source = NULL;
 	} else if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
-		DeleteILFactor(factp->fact);
-		factp->fact = NULL;
+		DeleteILFactor(factp->Source);
+		factp->Source = NULL;
 	}
 	DeleteILMemberOp(self);
 	(*swap) = true;
@@ -177,18 +177,18 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, Call
 	type* ctype = receiver_type->CoreType;
 	Property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->Name, &temp);
 	ILPropertyAccess* factp = ILPropertyAccess_new();
-	factp->fact = self->Source;
-	factp->namev = self->Name;
-	factp->p = p;
-	factp->index = temp;
+	factp->Source = self->Source;
+	factp->Name = self->Name;
+	factp->Property = p;
+	factp->Index = temp;
 	self->Source = NULL;
 	self->Parent->type = ILFACTOR_PROPERTY_T;
 	self->Parent->u.prop = factp;
 	//プロパティの可視性を確認
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
-		DeleteILFactor(factp->fact);
-		factp->fact = NULL;
+		DeleteILFactor(factp->Source);
+		factp->Source = NULL;
 	}
 	DeleteILMemberOp(self);
 	assert(temp != -1);

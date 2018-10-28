@@ -145,8 +145,8 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	ILPropertyAccess* prop = self->Left->u.prop;
-	Property* pp = prop->p;
-	bool is_static = IsStaticModifier(prop->p->Modifier);
+	Property* pp = prop->Property;
+	bool is_static = IsStaticModifier(prop->Property->Modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
@@ -163,23 +163,23 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 		);
 		return;
 	}
-	if(DistanceGenericType(prop->p->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
+	if(DistanceGenericType(prop->Property->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
-			Ref2Str(GetTypeName(prop->p->Parent)),
-			Ref2Str(prop->p->Name)
+			Ref2Str(GetTypeName(prop->Property->Parent)),
+			Ref2Str(prop->Property->Name)
 		);
 		return;
 	}
 	//省略記法なら初期化されてるかチェック
 	if(pp->IsShort && !IsStaticModifier(pp->Modifier)) {
-		check_final(prop->fact, self->Right, prop->p->SourceRef->namev, env, cctx);
+		check_final(prop->Source, self->Right, prop->Property->SourceRef->namev, env, cctx);
 	}
 	BC_ERROR();
 	if(!is_static) {
-		GenerateILFactor(prop->fact, env, cctx);
+		GenerateILFactor(prop->Source, env, cctx);
 	}
 	GenerateILFactor(self->Right, env, cctx);
-	GeneratePutProperty(env->Bytecode, pp, prop->index);
+	GeneratePutProperty(env->Bytecode, pp, prop->Index);
 }
 
 static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx) {

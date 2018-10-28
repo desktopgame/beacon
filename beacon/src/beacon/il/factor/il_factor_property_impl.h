@@ -7,10 +7,10 @@ struct Enviroment;
 struct GenericType;
 
 typedef struct ILPropertyAccess {
-	ILFactor* fact;
-	StringView namev;
-	int index;
-	Property* p;
+	ILFactor* Source;
+	StringView Name;
+	int Index;
+	Property* Property;
 } ILPropertyAccess;
 
 #define ILPropertyAccess_new() (MallocILPropertyAccess(__FILE__, __LINE__))
