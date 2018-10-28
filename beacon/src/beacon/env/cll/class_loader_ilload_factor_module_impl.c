@@ -8,7 +8,7 @@
 static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source);
 static ILBool* CLIL_true(ClassLoader* self, AST* source);
 static ILBool* CLIL_false(ClassLoader* self, AST* source);
-static ILFactor_unary_op* CLIL_unary(ClassLoader* self, AST* source, OperatorType type);
+static ILUnaryOp* CLIL_unary(ClassLoader* self, AST* source, OperatorType type);
 static ILBinaryOp* CLIL_binary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_explicit_unary_op* CLIL_explicit_unary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_explicit_binary_op* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type);
@@ -162,8 +162,8 @@ static ILBool * CLIL_false(ClassLoader * self, AST* source) {
 	return NewILBool(false);
 }
 
-static ILFactor_unary_op* CLIL_unary(ClassLoader* self, AST* source, OperatorType type) {
-	ILFactor_unary_op* ret = NewILUnaryOp(type);
+static ILUnaryOp* CLIL_unary(ClassLoader* self, AST* source, OperatorType type) {
+	ILUnaryOp* ret = NewILUnaryOp(type);
 	AST* a = FirstAST(source);
 	ret->a = CLILFactor(self, a);
 	return ret;

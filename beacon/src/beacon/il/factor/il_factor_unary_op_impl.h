@@ -13,7 +13,7 @@ struct ILFactor_not_op;
 /**
  * 単項演算子を表す要素.
  */
-typedef struct ILFactor_unary_op {
+typedef struct ILUnaryOp {
 	OperatorType type;
 	OperatorCategory category;
 	ILFactor* a;
@@ -22,27 +22,27 @@ typedef struct ILFactor_unary_op {
 		struct ILFactor_negative_op* negative_op;
 		struct ILFactor_not_op* not_op;
 	} u;
-} ILFactor_unary_op;
+} ILUnaryOp;
 
-ILFactor* WrapILUnaryOp(ILFactor_unary_op* self);
+ILFactor* WrapILUnaryOp(ILUnaryOp* self);
 
-ILFactor_unary_op* NewILUnaryOp(OperatorType type);
+ILUnaryOp* NewILUnaryOp(OperatorType type);
 
-void GenerateILUnaryOp(ILFactor_unary_op* self, Enviroment* env, CallContext* cctx);
+void GenerateILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
 
-void LoadILUnaryOp(ILFactor_unary_op* self, Enviroment* env, CallContext* cctx);
+void LoadILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILUnaryOp(ILFactor_unary_op* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
 
-char* ILUnaryOpToString(ILFactor_unary_op* self, Enviroment* env);
+char* ILUnaryOpToString(ILUnaryOp* self, Enviroment* env);
 
-void DeleteILUnaryOp(ILFactor_unary_op* self);
+void DeleteILUnaryOp(ILUnaryOp* self);
 
-char* ILUnaryOpToString_simple(ILFactor_unary_op* self, Enviroment* env);
+char* ILUnaryOpToString_simple(ILUnaryOp* self, Enviroment* env);
 
-int GetIndexILUnaryOp(ILFactor_unary_op* self, Enviroment* env, CallContext* cctx);
+int GetIndexILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
 
 int GetIndexILUnaryOp2(ILFactor* receiver, OperatorType otype, Enviroment* env, CallContext* cctx);
 
-GenericType* ApplyILUnaryOp(ILFactor_unary_op* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
+GenericType* ApplyILUnaryOp(ILUnaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

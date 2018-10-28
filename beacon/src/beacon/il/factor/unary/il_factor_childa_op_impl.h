@@ -2,12 +2,12 @@
 #define BEACON_IL_FACTOR_UNARY_IL_FACTOR_CHILDA_OP_IMPL_H
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
-struct ILFactor_unary_op;
+struct ILUnaryOp;
 struct GenericType;
 struct Enviroment;
 
 typedef struct ILFactor_childa_op {
-	struct ILFactor_unary_op* parent;
+	struct ILUnaryOp* parent;
 	OperatorType type;
 	int operator_index;
 } ILFactor_childa_op;
