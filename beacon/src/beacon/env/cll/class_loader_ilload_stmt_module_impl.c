@@ -16,7 +16,7 @@ static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource);
 static ILIf* CLIL_if_else(ClassLoader* self, AST* asource);
 static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource);
 static ILStatement_while* CLIL_while(ClassLoader* self, AST* asource);
-static ILStatement_return* CLIL_return(ClassLoader* self, AST* asource);
+static ILReturn* CLIL_return(ClassLoader* self, AST* asource);
 static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource);
 static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
 static ILStatement_throw* CLIL_throw(ClassLoader* self, AST* asource);
@@ -116,7 +116,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_RETURN_T:
 		{
-			ILStatement_return* ilret = CLIL_return(self, asource);
+			ILReturn* ilret = CLIL_return(self, asource);
 			return WrapILReturn(ilret);
 		}
 		case AST_RETURN_EMPTY_T:
@@ -256,11 +256,11 @@ static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource) {
 	}
 }
 
-static ILStatement_return* CLIL_return(ClassLoader* self, AST* asource) {
+static ILReturn* CLIL_return(ClassLoader* self, AST* asource) {
 	assert(asource->Tag == AST_RETURN_T);
 	AST* afact = FirstAST(asource);
 	ILFactor* ilfact = CLILFactor(self, afact);
-	ILStatement_return* ret = NewILReturn();
+	ILReturn* ret = NewILReturn();
 	ret->fact = ilfact;
 	return ret;
 }
