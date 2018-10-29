@@ -127,8 +127,8 @@ static void ILInvokeBound_check(ILCallOp* self, Enviroment* env) {
 	ILInvokeBound* bnd = NewILInvokeBound(ilvar->FQCN->Name);
 	assert(ilvar->FQCN->Scope->Length == 0);
 	//入れ替え
-	bnd->args = self->Arguments;
-	bnd->type_args = ilvar->TypeArgs;
+	bnd->Arguments = self->Arguments;
+	bnd->TypeArgs = ilvar->TypeArgs;
 	self->Arguments = NULL;
 	ilvar->TypeArgs = NULL;
 	self->Kind.InvokeBound = bnd;

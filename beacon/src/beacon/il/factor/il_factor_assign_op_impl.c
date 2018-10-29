@@ -231,14 +231,14 @@ static void assign_by_invoke(ILFactor_invoke* lhs, ILFactor* rhs, Enviroment* en
 static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx) {
 	int temp = -1;
 	FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
-	assert(lhs->args->Length == 1);
-	for(int i=0; i<lhs->args->Length; i++) {
-		ILArgument* arg = AtVector(lhs->args, i);
+	assert(lhs->Arguments->Length == 1);
+	for(int i=0; i<lhs->Arguments->Length; i++) {
+		ILArgument* arg = AtVector(lhs->Arguments, i);
 		GenerateILFactor(arg->Factor, env, cctx);
 	}
 	GenerateILFactor(rhs, env, cctx);
 	//GenerateILFactor(lhs->receiver, env, cctx);
-	subscript_descriptor subs = lhs->u.subscript;
+	subscript_descriptor subs = lhs->Kind.Subscript;
 	if(subs.tag == SUBSCRIPT_LOCAL_T) {
 		AddOpcodeBuf(env->Bytecode, OP_LOAD);
 		AddOpcodeBuf(env->Bytecode, subs.index);

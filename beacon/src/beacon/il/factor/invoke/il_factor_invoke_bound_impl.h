@@ -17,16 +17,16 @@ typedef enum BoundInvokeTag {
 } BoundInvokeTag;
 
 typedef struct ILInvokeBound {
-	StringView namev;
-	Vector* type_args;
-	Vector* args;
+	StringView Name;
+	Vector* TypeArgs;
+	Vector* Arguments;
 	union {
-		struct Method* m;
-		subscript_descriptor subscript;
-	} u;
-	int index;
-	struct GenericType* resolved;
-	BoundInvokeTag tag;
+		struct Method* Method;
+		subscript_descriptor Subscript;
+	} Kind;
+	int Index;
+	struct GenericType* Resolved;
+	BoundInvokeTag Tag;
 } ILInvokeBound;
 
 ILInvokeBound* NewILInvokeBound(StringView namev);
