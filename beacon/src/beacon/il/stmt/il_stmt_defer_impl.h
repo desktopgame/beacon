@@ -2,17 +2,17 @@
 #define BEACON_IL_IL_STMT_DEFER_IMPL_H
 #include "../il_stmt_interface.h"
 
-typedef struct ILStatement_defer {
-	ILStatement* stmt;
-} ILStatement_defer;
+typedef struct ILDefer {
+	ILStatement* Task;
+} ILDefer;
 
-ILStatement* WrapILDefer(ILStatement_defer* self);
+ILStatement* WrapILDefer(ILDefer* self);
 
-ILStatement_defer* NewILDefer();
+ILDefer* NewILDefer();
 
-void LoadILDefer(ILStatement_defer* self, Enviroment* env, CallContext* cctx);
+void LoadILDefer(ILDefer* self, Enviroment* env, CallContext* cctx);
 
-void GenerateILDefer(ILStatement_defer* self, Enviroment* env, CallContext* cctx);
+void GenerateILDefer(ILDefer* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILDefer(ILStatement_defer* self);
+void DeleteILDefer(ILDefer* self);
 #endif

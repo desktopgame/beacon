@@ -40,7 +40,7 @@ struct ILStatement_inferenced_type_init;
 struct ILStatement_try;
 struct ILStatement_throw;
 struct ILAssert;
-struct ILStatement_defer;
+struct ILDefer;
 struct ILStatement_yield_return;
 typedef void* ILStatement_yield_break;
 struct ILStatement_inject_jni;
@@ -63,7 +63,7 @@ typedef struct ILStatement {
 		struct ILStatement_try* try_;
 		struct ILStatement_throw* throw_;
 		struct ILAssert* bcassert_;
-		struct ILStatement_defer* defer_;
+		struct ILDefer* defer_;
 		struct ILStatement_yield_return* yield_return;
 		ILStatement_yield_break yield_break;
 		struct ILStatement_inject_jni* inject_jni;

@@ -21,7 +21,7 @@ static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource);
 static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
 static ILStatement_throw* CLIL_throw(ClassLoader* self, AST* asource);
 static ILAssert* CLIL_assert(ClassLoader* self, AST* asource);
-static ILStatement_defer* CLIL_defer(ClassLoader* self, AST* asource);
+static ILDefer* CLIL_defer(ClassLoader* self, AST* asource);
 static ILStatement_yield_return* CLIL_yield_return(ClassLoader* self, AST* asource);
 
 ILStatement* CLILStmt(ClassLoader* self, AST* source) {
@@ -142,7 +142,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_STMT_DEFER_T:
 		{
-			ILStatement_defer* ildef = CLIL_defer(self, asource);
+			ILDefer* ildef = CLIL_defer(self, asource);
 			return WrapILDefer(ildef);
 		}
 		case AST_YIELD_RETURN_T:
@@ -310,11 +310,11 @@ static ILAssert* CLIL_assert(ClassLoader* self, AST* asource) {
 	return ret;
 }
 
-static ILStatement_defer* CLIL_defer(ClassLoader* self, AST* asource) {
+static ILDefer* CLIL_defer(ClassLoader* self, AST* asource) {
 	assert(asource->Tag == AST_STMT_DEFER_T);
 	AST* astmt = FirstAST(asource);
-	ILStatement_defer* ret = NewILDefer();
-	ret->stmt = CLILStmt(self, astmt);
+	ILDefer* ret = NewILDefer();
+	ret->Task = CLILStmt(self, astmt);
 	return ret;
 }
 
