@@ -43,17 +43,17 @@ void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_LOAD);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Entry->Index);
 	} else if(self->Type == VARIABLE_LOCAL_FIELD_T) {
-		Field* f = self->Kind.FieldI.fi;
+		Field* f = self->Kind.FieldI.Field;
 		if(!IsStaticModifier(f->modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
-		GenerateGetField(env->Bytecode, f, self->Kind.FieldI.index);
+		GenerateGetField(env->Bytecode, f, self->Kind.FieldI.Index);
 	} else if(self->Type == VARIABLE_LOCAL_PROPERTY_T) {
-		Property* p = self->Kind.PropertyI.p;
+		Property* p = self->Kind.PropertyI.Property;
 		if(!IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
-		GenerateGetProperty(env->Bytecode, p, self->Kind.PropertyI.index);
+		GenerateGetProperty(env->Bytecode, p, self->Kind.PropertyI.Index);
 	}
 }
 
@@ -119,13 +119,13 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 	FieldWithIndex fwi = {};
 #endif
 	Field* f = FindTreeFieldClass(TYPE2CLASS(tp), self->Name, &temp);
-	fwi.fi = f;
-	fwi.index = temp;
+	fwi.Field = f;
+	fwi.Index = temp;
 	self->Type = VARIABLE_LOCAL_FIELD_T;
 	if(temp == -1) {
 		f = FindTreeSFieldClass(TYPE2CLASS(tp), self->Name, &temp);
-		fwi.fi = f;
-		fwi.index = temp;
+		fwi.Field = f;
+		fwi.Index = temp;
 		self->Type = VARIABLE_LOCAL_FIELD_T;
 	}
 	self->Kind.FieldI = fwi;
@@ -156,8 +156,8 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * en
 #else
 	PropertyWithIndex pwi = {};
 #endif
-	pwi.p = p;
-	pwi.index = temp;
+	pwi.Property = p;
+	pwi.Index = temp;
 	self->Type = VARIABLE_LOCAL_PROPERTY_T;
 	self->Kind.PropertyI = pwi;
 	//プロパティにアクセスできない

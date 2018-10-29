@@ -17,13 +17,13 @@ typedef enum VariableLocalType {
 } VariableLocalType;
 
 typedef struct FieldWithIndex {
-	struct Field* fi;
-	int index;
+	struct Field* Field;
+	int Index;
 } FieldWithIndex;
 
 typedef struct PropertyWithIndex {
-	struct Property* p;
-	int index;
+	struct Property* Property;
+	int Index;
 } PropertyWithIndex;
 
 /**
