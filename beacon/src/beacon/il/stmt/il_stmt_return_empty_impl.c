@@ -7,17 +7,17 @@
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
 
-static void check_method_return(ILStatement_return_empty self, Enviroment * env, CallContext* cctx);
+static void check_method_return(ILReturnEmpty self, Enviroment * env, CallContext* cctx);
 
-void GenerateILReturnEmpty(ILStatement_return_empty self, Enviroment* env, CallContext* cctx) {
+void GenerateILReturnEmpty(ILReturnEmpty self, Enviroment* env, CallContext* cctx) {
 	AddOpcodeBuf(env->Bytecode, OP_RETURN);
 }
 
-void LoadILReturnEmpty(ILStatement_return_empty self, Enviroment* env, CallContext* cctx) {
+void LoadILReturnEmpty(ILReturnEmpty self, Enviroment* env, CallContext* cctx) {
 	check_method_return(self, env, cctx);
 }
 //private
-static void check_method_return(ILStatement_return_empty self, Enviroment * env, CallContext* cctx) {
+static void check_method_return(ILReturnEmpty self, Enviroment * env, CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}

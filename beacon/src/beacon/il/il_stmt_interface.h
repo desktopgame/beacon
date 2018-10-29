@@ -35,7 +35,7 @@ struct ILStatement_while;
 struct ILStatement_variable_decl;
 struct ILStatement_variable_init;
 struct ILStatement_return;
-typedef void* ILStatement_return_empty;
+typedef void* ILReturnEmpty;
 struct ILInferencedTypeInit;
 struct ILStatement_try;
 struct ILStatement_throw;
@@ -58,7 +58,7 @@ typedef struct ILStatement {
 		struct ILStatement_variable_decl* variable_decl;
 		struct ILStatement_variable_init* variable_init;
 		struct ILStatement_return* return_;
-		ILStatement_return_empty return_empty;
+		ILReturnEmpty return_empty;
 		struct ILInferencedTypeInit* inferenced_type_init;
 		struct ILStatement_try* try_;
 		struct ILStatement_throw* throw_;
