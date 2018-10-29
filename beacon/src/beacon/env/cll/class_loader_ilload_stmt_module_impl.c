@@ -261,7 +261,7 @@ static ILReturn* CLIL_return(ClassLoader* self, AST* asource) {
 	AST* afact = FirstAST(asource);
 	ILFactor* ilfact = CLILFactor(self, afact);
 	ILReturn* ret = NewILReturn();
-	ret->fact = ilfact;
+	ret->Factor = ilfact;
 	return ret;
 }
 

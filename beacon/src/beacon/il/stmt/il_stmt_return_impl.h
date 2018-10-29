@@ -8,7 +8,7 @@ struct Enviroment;
  * 値の返却を表す要素.
  */
 typedef struct ILReturn {
-	ILFactor* fact;
+	ILFactor* Factor;
 } ILReturn;
 
 /**
