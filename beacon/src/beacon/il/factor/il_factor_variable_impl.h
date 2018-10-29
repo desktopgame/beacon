@@ -36,7 +36,7 @@ typedef struct ILVariable {
 	ILVariableType Type;
 	union {
 		ILVariableLocal* Local;
-		ILVariable_static* Static;
+		ILVariableStatic* Static;
 	} Kind;
 } ILVariable;
 

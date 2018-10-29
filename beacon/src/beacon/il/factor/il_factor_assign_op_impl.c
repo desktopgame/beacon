@@ -89,7 +89,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 	ILVariable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
 	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
-		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->fqcn));
+		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
 		int temp = -1;
 		Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
 		assert(temp != -1);

@@ -118,11 +118,11 @@ static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallCon
 }
 
 static void ILVariable_check_static(ILVariable* self, Enviroment* env, CallContext* cctx) {
-	ILVariable_static* st = NewILVariableStatic();
+	ILVariableStatic* st = NewILVariableStatic();
 	self->Type = ILVARIABLE_TYPE_STATIC_T;
 	//値を入れ替え
-	st->fqcn = self->FQCN;
-	st->type_args = self->TypeArgs;
+	st->FQCN = self->FQCN;
+	st->TypeArgs = self->TypeArgs;
 	self->FQCN = NULL;
 	self->TypeArgs = NULL;
 	self->Kind.Static = st;
