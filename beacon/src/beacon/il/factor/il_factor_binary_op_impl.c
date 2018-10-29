@@ -85,7 +85,7 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 		LoadILLogicOp(logic, env, cctx);
 	} else if(IsShiftOperator(self->Type)) {
 		self->Category = OPERATOR_CSHIFT_T;
-		ILFactor_shift_op* shift = NewILShiftOp(self->Type);
+		ILShiftOp* shift = NewILShiftOp(self->Type);
 		shift->parent = self;
 		self->Kind.ShiftOp = shift;
 		LoadILShiftOp(shift, env, cctx);

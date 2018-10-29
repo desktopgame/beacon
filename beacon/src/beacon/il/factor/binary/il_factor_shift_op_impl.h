@@ -5,21 +5,21 @@
 struct GenericType;
 struct Enviroment;
 struct ILBinaryOp;
-typedef struct ILFactor_shift_op {
+typedef struct ILShiftOp {
 	struct ILBinaryOp* parent;
 	OperatorType type;
 	int operator_index;
-} ILFactor_shift_op;
+} ILShiftOp;
 
-ILFactor_shift_op* NewILShiftOp(OperatorType type);
+ILShiftOp* NewILShiftOp(OperatorType type);
 
-struct GenericType* EvalILShiftOp(ILFactor_shift_op * self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILShiftOp(ILShiftOp * self, struct Enviroment* env, CallContext* cctx);
 
-void GenerateILShiftOp(ILFactor_shift_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILShiftOp(ILShiftOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILShiftOp(ILFactor_shift_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILShiftOp(ILShiftOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILShiftOp(ILFactor_shift_op* self);
+void DeleteILShiftOp(ILShiftOp* self);
 
-char* ILShiftOpToString(ILFactor_shift_op* self, struct Enviroment* env);
+char* ILShiftOpToString(ILShiftOp* self, struct Enviroment* env);
 #endif

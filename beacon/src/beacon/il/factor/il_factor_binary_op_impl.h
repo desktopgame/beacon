@@ -8,7 +8,7 @@
 struct ILArithmeticOp;
 struct ILLogicOp;
 struct ILCompareOp;
-struct ILFactor_shift_op;
+struct ILShiftOp;
 struct ILExcorOp;
 
 /**
@@ -24,7 +24,7 @@ typedef struct ILBinaryOp {
 		struct ILArithmeticOp* ArithmeticOp;
 		struct ILLogicOp* LogicOp;
 		struct ILCompareOp* CompareOp;
-		struct ILFactor_shift_op* ShiftOp;
+		struct ILShiftOp* ShiftOp;
 		struct ILExcorOp* ExcorOp;
 	} Kind;
 } ILBinaryOp;

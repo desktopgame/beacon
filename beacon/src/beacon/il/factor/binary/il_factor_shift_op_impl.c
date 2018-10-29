@@ -12,15 +12,15 @@
 static Opcode operator_to_iopcode(OperatorType type);
 static Opcode operator_to_dopcode(OperatorType type);
 
-ILFactor_shift_op* NewILShiftOp(OperatorType type) {
-	ILFactor_shift_op* ret = (ILFactor_shift_op*)MEM_MALLOC(sizeof(ILFactor_shift_op));
+ILShiftOp* NewILShiftOp(OperatorType type) {
+	ILShiftOp* ret = (ILShiftOp*)MEM_MALLOC(sizeof(ILShiftOp));
 	ret->parent = NULL;
 	ret->type = type;
 	ret->operator_index = -1;
 	return ret;
 }
 
-GenericType* EvalILShiftOp(ILFactor_shift_op * self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx) {
 	GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
 	GenericType* rgtype = EvalILFactor(self->parent->Right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,7 +46,7 @@ GenericType* EvalILShiftOp(ILFactor_shift_op * self, Enviroment* env, CallContex
 	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILShiftOp(ILFactor_shift_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILShiftOp(ILShiftOp* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->Right, env, cctx);
 		GenerateILFactor(self->parent->Left, env, cctx);
@@ -66,17 +66,17 @@ void GenerateILShiftOp(ILFactor_shift_op* self, Enviroment* env, CallContext* cc
 	}
 }
 
-void LoadILShiftOp(ILFactor_shift_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILShiftOp(ILShiftOp* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx)) {
 		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 
-void DeleteILShiftOp(ILFactor_shift_op* self) {
+void DeleteILShiftOp(ILShiftOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILShiftOpToString(ILFactor_shift_op* self, Enviroment* env) {
+char* ILShiftOpToString(ILShiftOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
