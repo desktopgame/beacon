@@ -62,7 +62,7 @@ void LoadILUnaryOp(ILUnaryOp * self, Enviroment * env, CallContext* cctx) {
 	} else if(self->Type == OPERATOR_CHILDA_T) {
 		self->Category = OPERATOR_CCHILDA_T;
 		ILChildaOp* childa = NewILChildaOp(self->Type);
-		childa->parent = self;
+		childa->Parent = self;
 		self->Kind.ChildaOp = childa;
 		LoadILChildaOp(childa, env, cctx);
 	} else {

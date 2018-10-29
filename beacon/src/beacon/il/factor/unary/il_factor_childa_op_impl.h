@@ -7,9 +7,9 @@ struct GenericType;
 struct Enviroment;
 
 typedef struct ILChildaOp {
-	struct ILUnaryOp* parent;
-	OperatorType type;
-	int operator_index;
+	struct ILUnaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
 } ILChildaOp;
 
 ILChildaOp* NewILChildaOp(OperatorType type);
