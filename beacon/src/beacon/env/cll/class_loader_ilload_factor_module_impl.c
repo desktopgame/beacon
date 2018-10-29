@@ -219,8 +219,8 @@ static ILFactor_variable* CLIL_variable(ClassLoader* self, AST* source) {
 	AST* atype_args = SecondAST(source);
 
 	ILFactor_variable* ilvar = ILFactor_variable_new();
-	CLILFQCNCache(afqcn, ilvar->fqcn);
-	CLILTypeArgument(self, atype_args, ilvar->type_args);
+	CLILFQCNCache(afqcn, ilvar->FQCN);
+	CLILTypeArgument(self, atype_args, ilvar->TypeArgs);
 	return ilvar;
 }
 

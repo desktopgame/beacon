@@ -124,13 +124,13 @@ static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 static void ILFactor_invoke_bound_check(ILCallOp* self, Enviroment* env) {
 	ILFactor* receiver = self->Receiver;
 	ILFactor_variable* ilvar = receiver->u.variable_;
-	ILFactor_invoke_bound* bnd = NewILInvokeBound(ilvar->fqcn->Name);
-	assert(ilvar->fqcn->Scope->Length == 0);
+	ILFactor_invoke_bound* bnd = NewILInvokeBound(ilvar->FQCN->Name);
+	assert(ilvar->FQCN->Scope->Length == 0);
 	//入れ替え
 	bnd->args = self->Arguments;
-	bnd->type_args = ilvar->type_args;
+	bnd->type_args = ilvar->TypeArgs;
 	self->Arguments = NULL;
-	ilvar->type_args = NULL;
+	ilvar->TypeArgs = NULL;
 	self->Kind.InvokeBound = bnd;
 	self->Type = ILCALL_TYPE_INVOKE_BOUND_T;
 }
@@ -149,17 +149,17 @@ static void ILMemberOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx)
 static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx) {
 	ILFactor_variable* ilvar = ilmem->Source->u.variable_;
 	//Namespace::Class.foo()
-	if(ilvar->fqcn->Scope->Length > 0) {
+	if(ilvar->FQCN->Scope->Length > 0) {
 		ILMemberOp_check_static(self, ilmem, ilvar, env, cctx);
 	//hoge.foo()
 	} else {
 		#if defined(DEBUG)
-		const char* clname = Ref2Str(ilvar->fqcn->Name);
+		const char* clname = Ref2Str(ilvar->FQCN->Name);
 		#endif
 		Namespace* cur = GetNamespaceCContext(cctx);
-		class_* ctype = FindClassFromNamespace(cur, ilvar->fqcn->Name);
+		class_* ctype = FindClassFromNamespace(cur, ilvar->FQCN->Name);
 		if(ctype == NULL) {
-			ctype = FindClassFromNamespace(GetLangNamespace(), ilvar->fqcn->Name);
+			ctype = FindClassFromNamespace(GetLangNamespace(), ilvar->FQCN->Name);
 		}
 		if(ctype != NULL) {
 			ILMemberOp_check_static(self, ilmem, ilvar, env, cctx);
@@ -189,10 +189,10 @@ static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILFactor_
 	//入れ替える
 	st->type_args = ilmem->TypeArgs;
 	st->args = self->Arguments;
-	st->fqcn = ilvar->fqcn;
+	st->fqcn = ilvar->FQCN;
 	self->Arguments = NULL;
 	ilmem->TypeArgs = NULL;
-	ilvar->fqcn = NULL;
+	ilvar->FQCN = NULL;
 }
 
 static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {

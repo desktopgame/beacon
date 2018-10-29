@@ -30,14 +30,14 @@ typedef enum ILVariableType {
  * 変数を表す要素.
  */
 typedef struct ILFactor_variable {
-	FQCNCache* fqcn;
-	Vector* type_args;
-	int index;
-	ILVariableType type;
+	FQCNCache* FQCN;
+	Vector* TypeArgs;
+	int Index;
+	ILVariableType Type;
 	union {
-		ILFactor_variable_local* local_;
-		ILFactor_variable_static* static_;
-	} u;
+		ILFactor_variable_local* Local;
+		ILFactor_variable_static* Static;
+	} Kind;
 } ILFactor_variable;
 
 ILFactor* WrapILVariable(ILFactor_variable* self);

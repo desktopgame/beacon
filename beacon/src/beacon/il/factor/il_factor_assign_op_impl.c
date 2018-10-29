@@ -88,8 +88,8 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 	ILFactor* ilsrc = ilmem->Source;
 	ILFactor_variable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
-	if(ilvar->type == ILVARIABLE_TYPE_STATIC_T) {
-		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->u.static_->fqcn));
+	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
+		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->fqcn));
 		int temp = -1;
 		Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
 		assert(temp != -1);
@@ -299,27 +299,27 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	assert(self->Left->type == ILFACTOR_VARIABLE_T);
 	ILFactor_variable* ilvar = self->Left->u.variable_;
-	if(ilvar->type == ILVARIABLE_TYPE_LOCAL_T) {
+	if(ilvar->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		generate_assign_to_variable_local(self, env, cctx);
 	}
 }
 
 static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	ILFactor_variable* ilvar = self->Left->u.variable_;
-	ILFactor_variable_local* illoc = ilvar->u.local_;
+	ILFactor_variable_local* illoc = ilvar->Kind.Local;
 	//src のような名前がローカル変数を示す場合
 	if(illoc->type == VARIABLE_LOCAL_SCOPE_T) {
 		#if defined(DEBUG)
-		const char* vname = Ref2Str(ilvar->fqcn->Name);
+		const char* vname = Ref2Str(ilvar->FQCN->Name);
 		#endif
-		SymbolEntry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->fqcn->Name);
+		SymbolEntry* e = EntrySymbolTable(env->Symboles, NULL, ilvar->FQCN->Name);
 		//e==NULL の時変数がない
 		GenerateILFactor(self->Right, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
 		AddOpcodeBuf(env->Bytecode, e->Index);
 		if(DistanceGenericType(e->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
 			ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
-				Ref2Str(ilvar->fqcn->Name)
+				Ref2Str(ilvar->FQCN->Name)
 			);
 			return;
 		}

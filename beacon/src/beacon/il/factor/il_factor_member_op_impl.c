@@ -125,11 +125,11 @@ static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallConte
 	ILFactor* fact = self->Source;
 	ILFactor_variable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
-	const char* ilvarname = Ref2Str(ilvar->u.static_->fqcn->Name);
+	const char* ilvarname = Ref2Str(ilvar->Kind.Static->fqcn->Name);
 	#endif
 	//Name.call
 	//の Name を型名として解決する
-	GenericType* ref = ResolvefImportManager(cctx->Scope, ilvar->u.static_->fqcn, cctx);
+	GenericType* ref = ResolvefImportManager(cctx->Scope, ilvar->Kind.Static->fqcn, cctx);
 	receiver_type = ref;
 	//Name.call
 	//の call をフィールドとして解決する
