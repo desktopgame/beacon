@@ -9,49 +9,49 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-ILFactor_not_op* NewILNotOp(OperatorType type) {
-	ILFactor_not_op* ret = (ILFactor_not_op*)MEM_MALLOC(sizeof(ILFactor_not_op));
-	ret->parent = NULL;
-	ret->type = type;
-	ret->operator_index = -1;
+ILNotOp* NewILNotOp(OperatorType type) {
+	ILNotOp* ret = (ILNotOp*)MEM_MALLOC(sizeof(ILNotOp));
+	ret->Parent = NULL;
+	ret->Type = type;
+	ret->OperatorIndex = -1;
 	return ret;
 }
 
-GenericType* EvalILNotOp(ILFactor_not_op * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILNotOp(ILNotOp * self, Enviroment * env, CallContext* cctx) {
 	return TYPE2GENERIC(TYPE_BOOL);
 }
 
-void GenerateILNotOp(ILFactor_not_op* self, Enviroment* env, CallContext* cctx) {
-	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->Arg, env, cctx);
+void GenerateILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
+	if(self->OperatorIndex == -1) {
+		GenerateILFactor(self->Parent->Arg, env, cctx);
 		if(GetLastBCError()) {
 			return;
 		}
-		GenericType* gt = EvalILFactor(self->parent->Arg, env, cctx);
+		GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
 		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
 			AddOpcodeBuf(env->Bytecode, OP_BNOT);
 		} else {
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->Arg, env, cctx);
+		GenerateILFactor(self->Parent->Arg, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->Bytecode, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 	}
 }
 
-void LoadILNotOp(ILFactor_not_op* self, Enviroment* env, CallContext* cctx) {
-	 LoadILFactor(self->parent->Arg, env, cctx);
-	GenericType* gt = EvalILFactor(self->parent->Arg, env, cctx);
+void LoadILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
+	 LoadILFactor(self->Parent->Arg, env, cctx);
+	GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
 	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
-		self->operator_index = GetIndexILUnaryOp(self->parent, env, cctx);
+		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }
 
-void DeleteILNotOp(ILFactor_not_op* self) {
+void DeleteILNotOp(ILNotOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILNotOpToString(ILFactor_not_op* self, Enviroment* env) {
-	return ILUnaryOpToString_simple(self->parent, env);
+char* ILNotOpToString(ILNotOp* self, Enviroment* env) {
+	return ILUnaryOpToString_simple(self->Parent, env);
 }

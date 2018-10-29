@@ -8,7 +8,7 @@
 //struct opcode_buf;
 struct ILChildaOp;
 struct ILNegativeOp;
-struct ILFactor_not_op;
+struct ILNotOp;
 
 /**
  * 単項演算子を表す要素.
@@ -20,7 +20,7 @@ typedef struct ILUnaryOp {
 	union {
 		struct ILChildaOp* ChildaOp;
 		struct ILNegativeOp* NegativeOp;
-		struct ILFactor_not_op* NotOp;
+		struct ILNotOp* NotOp;
 	} Kind;
 } ILUnaryOp;
 

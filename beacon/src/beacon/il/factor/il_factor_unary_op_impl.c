@@ -49,8 +49,8 @@ void LoadILUnaryOp(ILUnaryOp * self, Enviroment * env, CallContext* cctx) {
 	//カテゴリーわけ
 	if(self->Type == OPERATOR_NOT_T) {
 		self->Category = OPERATOR_CNOT_T;
-		ILFactor_not_op* not = NewILNotOp(self->Type);
-		not->parent = self;
+		ILNotOp* not = NewILNotOp(self->Type);
+		not->Parent = self;
 		self->Kind.NotOp = not;
 		LoadILNotOp(not, env, cctx);
 	} else if(self->Type == OPERATOR_NEGATIVE_T) {

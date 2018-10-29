@@ -6,21 +6,21 @@ struct ILUnaryOp;
 struct GenericType;
 struct Enviroment;
 
-typedef struct ILFactor_not_op {
-	struct ILUnaryOp* parent;
-	OperatorType type;
-	int operator_index;
-} ILFactor_not_op;
+typedef struct ILNotOp {
+	struct ILUnaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
+} ILNotOp;
 
-ILFactor_not_op* NewILNotOp(OperatorType type);
+ILNotOp* NewILNotOp(OperatorType type);
 
-struct GenericType* EvalILNotOp(ILFactor_not_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILNotOp(ILNotOp * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILNotOp(ILFactor_not_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILNotOp(ILNotOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILNotOp(ILFactor_not_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILNotOp(ILNotOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILNotOp(ILFactor_not_op* self);
+void DeleteILNotOp(ILNotOp* self);
 
-char* ILNotOpToString(ILFactor_not_op* self, struct Enviroment* env);
+char* ILNotOpToString(ILNotOp* self, struct Enviroment* env);
 #endif
