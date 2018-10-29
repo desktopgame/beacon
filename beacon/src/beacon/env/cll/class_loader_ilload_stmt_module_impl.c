@@ -202,8 +202,8 @@ static ILIf* CLIL_if(ClassLoader* self, AST* asource) {
 	AST* acond = FirstAST(asource);
 	AST* abody = SecondAST(asource);
 	ILFactor* ilcond = CLILFactor(self, acond);
-	CLILBody(self, ret->body, abody);
-	ret->condition = ilcond;
+	CLILBody(self, ret->Body, abody);
+	ret->Condition = ilcond;
 	return ret;
 }
 
@@ -211,7 +211,7 @@ static ILIf* CLIL_if_elif_list(ClassLoader* self, AST* asource) {
 	AST* aif = FirstAST(asource);
 	AST* aelif_list = SecondAST(asource);
 	ILIf* ilif = CLIL_if(self, aif);
-	CLIL_elif_list(self, ilif->elif_list, aelif_list);
+	CLIL_elif_list(self, ilif->ElifList, aelif_list);
 	return ilif;
 }
 
@@ -220,7 +220,7 @@ static ILIf* CLIL_if_else(ClassLoader* self, AST* asource) {
 	AST* aelse = SecondAST(asource);
 	AST* abody = FirstAST(aelse);
 	ILIf* ilif = CLIL_if(self, aif);
-	CLILBody(self, ilif->else_body->body, abody);
+	CLILBody(self, ilif->Else->Body, abody);
 	return ilif;
 }
 
@@ -228,7 +228,7 @@ static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource) {
 	AST* aif_eliflist = FirstAST(asource);
 	AST* aelse = SecondAST(asource);
 	ILIf* ilif = CLIL_if_elif_list(self, aif_eliflist);
-	CLILBody(self, ilif->else_body->body, FirstAST(aelse));
+	CLILBody(self, ilif->Else->Body, FirstAST(aelse));
 	return ilif;
 }
 
@@ -250,8 +250,8 @@ static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource) {
 		AST* acond = FirstAST(asource);
 		AST* abody = SecondAST(asource);
 		ILElif* ilelif = NewILElif();
-		ilelif->condition = CLILFactor(self, acond);
-		CLILBody(self, ilelif->body, abody);
+		ilelif->Condition = CLILFactor(self, acond);
+		CLILBody(self, ilelif->Body, abody);
 		PushILElifList(list, ilelif);
 	}
 }

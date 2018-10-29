@@ -8,15 +8,15 @@
  * elif (...) { ... } を表す要素.
  */
 typedef struct ILElif {
-	ILFactor* condition;
-	Vector* body;
+	ILFactor* Condition;
+	Vector* Body;
 } ILElif;
 
 /**
  * } else { ... } を表す要素.
  */
 typedef struct ILElse {
-	Vector* body;
+	Vector* Body;
 } ILElse;
 
 /**
@@ -26,10 +26,10 @@ typedef struct ILElse {
  * を表す要素.
  */
 typedef struct ILIf {
-	ILFactor* condition;
-	Vector* body;
-	Vector* elif_list;
-	ILElse* else_body;
+	ILFactor* Condition;
+	Vector* Body;
+	Vector* ElifList;
+	ILElse* Else;
 } ILIf;
 
 /**

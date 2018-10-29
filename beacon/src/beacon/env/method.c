@@ -265,18 +265,18 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 		{
 			//if() { ... }
 			ILIf* sif = s->u.if_;
-			for(int i=0; i<sif->body->Length; i++) {
-				method_count((ILStatement*)AtVector(sif->body, i), yield_ret, ret);
+			for(int i=0; i<sif->Body->Length; i++) {
+				method_count((ILStatement*)AtVector(sif->Body, i), yield_ret, ret);
 			}
-			for(int i=0; i<sif->elif_list->Length; i++) {
-				ILElif* seif = (ILElif*)AtVector(sif->elif_list, i);
-				Vector* body = seif->body;
+			for(int i=0; i<sif->ElifList->Length; i++) {
+				ILElif* seif = (ILElif*)AtVector(sif->ElifList, i);
+				Vector* body = seif->Body;
 				for(int j=0; j<body->Length; j++) {
 					method_count((ILStatement*)AtVector(body, j), yield_ret, ret);
 				}
 			}
-			for(int i=0; i<sif->else_body->body->Length; i++) {
-				ILStatement* e = AtVector(sif->else_body->body, i);
+			for(int i=0; i<sif->Else->Body->Length; i++) {
+				ILStatement* e = AtVector(sif->Else->Body, i);
 				method_count(e, yield_ret, ret);
 			}
 			break;
