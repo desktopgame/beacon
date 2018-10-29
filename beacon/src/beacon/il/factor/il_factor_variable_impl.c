@@ -108,7 +108,7 @@ static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallCon
 		ILVariable_check_static(self, env, cctx);
 	//ただのローカル変数の場合
 	} else {
-		ILVariable_local* lc = NewILVariableLocal(self->FQCN->Name);
+		ILVariableLocal* lc = NewILVariableLocal(self->FQCN->Name);
 		self->Type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
 		lc->type_args = self->TypeArgs;

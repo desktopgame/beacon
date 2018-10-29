@@ -9,47 +9,47 @@ struct GenericType;
 struct Field;
 struct Property;
 
-typedef enum variable_local_type {
+typedef enum VariableLocalType {
 	VARIABLE_LOCAL_SCOPE_T,
 	VARIABLE_LOCAL_FIELD_T,
 	VARIABLE_LOCAL_PROPERTY_T,
 	VARIABLE_LOCAL_UNDEFINED_T,
-} variable_local_type;
+} VariableLocalType;
 
-typedef struct field_with_index {
+typedef struct FieldWithIndex {
 	struct Field* fi;
 	int index;
-} field_with_index;
+} FieldWithIndex;
 
-typedef struct Property_with_index {
+typedef struct PropertyWithIndex {
 	struct Property* p;
 	int index;
-} Property_with_index;
+} PropertyWithIndex;
 
 /**
  * ローカル変数を表す構造体.
  */
-typedef struct ILVariable_local {
+typedef struct ILVariableLocal {
 	StringView namev;
-	variable_local_type type;
+	VariableLocalType type;
 	struct GenericType* gt;
 	union {
 		struct SymbolEntry* entry_;
-		field_with_index f_with_i;
-		Property_with_index p_with_i;
+		FieldWithIndex f_with_i;
+		PropertyWithIndex p_with_i;
 	} u;
 	Vector* type_args;
-} ILVariable_local;
+} ILVariableLocal;
 
-ILVariable_local* NewILVariableLocal(StringView namev);
+ILVariableLocal* NewILVariableLocal(StringView namev);
 
-void GenerateILVariableLocal(ILVariable_local* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext* cctx);
 
-void LoadILVariableLocal(ILVariable_local * self, Enviroment * env, CallContext* cctx);
+void LoadILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILVariableLocal(ILVariable_local * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
 
-char* ILVariableLocalToString(ILVariable_local * self, Enviroment * env);
+char* ILVariableLocalToString(ILVariableLocal * self, Enviroment * env);
 
-void DeleteILVariableLocal(ILVariable_local* self);
+void DeleteILVariableLocal(ILVariableLocal* self);
 #endif

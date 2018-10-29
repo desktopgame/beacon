@@ -14,13 +14,13 @@
 #include <stdio.h>
 
 static void DeleteILVariableLocal_typeargs(VectorItem item);
-static void LoadILVariableLocalImpl(ILVariable_local * self, Enviroment * env, CallContext* cctx);
-static void LoadILVariableLocal_field(ILVariable_local * self, Enviroment * env, CallContext* cctx);
-static void LoadILVariableLocal_Property(ILVariable_local * self, Enviroment * env, CallContext* cctx);
-static void set_gtype(ILVariable_local * self, GenericType* gt);
+static void LoadILVariableLocalImpl(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
+static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
+static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
+static void set_gtype(ILVariableLocal * self, GenericType* gt);
 
-ILVariable_local* NewILVariableLocal(StringView namev) {
-	ILVariable_local* ret = (ILVariable_local*)MEM_MALLOC(sizeof(ILVariable_local));
+ILVariableLocal* NewILVariableLocal(StringView namev) {
+	ILVariableLocal* ret = (ILVariableLocal*)MEM_MALLOC(sizeof(ILVariableLocal));
 	ret->namev = namev;
 	ret->type = VARIABLE_LOCAL_UNDEFINED_T;
 	ret->type_args = NULL;
@@ -28,7 +28,7 @@ ILVariable_local* NewILVariableLocal(StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableLocal(ILVariable_local* self, Enviroment* env, CallContext* cctx) {
+void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	if(self->type == VARIABLE_LOCAL_SCOPE_T) {
@@ -57,24 +57,24 @@ void GenerateILVariableLocal(ILVariable_local* self, Enviroment* env, CallContex
 	}
 }
 
-void LoadILVariableLocal(ILVariable_local * self, Enviroment * env, CallContext* cctx) {
+void LoadILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	if(self->type != VARIABLE_LOCAL_UNDEFINED_T) {
 		return;
 	}
 	LoadILVariableLocalImpl(self, env, cctx);
 }
 
-GenericType* EvalILVariableLocal(ILVariable_local * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->type != VARIABLE_LOCAL_UNDEFINED_T);
 	return self->gt;
 }
 
-char* ILVariableLocalToString(ILVariable_local * self, Enviroment * env) {
+char* ILVariableLocalToString(ILVariableLocal * self, Enviroment * env) {
 	return Strdup(Ref2Str(self->namev));
 }
 
-void DeleteILVariableLocal(ILVariable_local* self) {
+void DeleteILVariableLocal(ILVariableLocal* self) {
 	DeleteVector(self->type_args, DeleteILVariableLocal_typeargs);
 //	generic_DeleteType(self->gt);
 	MEM_FREE(self);
@@ -85,7 +85,7 @@ static void DeleteILVariableLocal_typeargs(VectorItem item) {
 	DeleteILTypeArgument(e);
 }
 
-static void LoadILVariableLocalImpl(ILVariable_local * self, Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocalImpl(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	//NOTE:変数宣言の後にその変数を使用する場合、
 	//factorはload時点でシンボルエントリーを取得しようとするが、
 	//stmtはgenerate時点でシンボルテーブルへ書き込むので、
@@ -102,7 +102,7 @@ static void LoadILVariableLocalImpl(ILVariable_local * self, Enviroment * env, C
 	}
 }
 
-static void LoadILVariableLocal_field(ILVariable_local * self, Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	//対応するフィールドを検索
 	self->type = VARIABLE_LOCAL_FIELD_T;
 	//NOTE:トップレベルではここが空なので、
@@ -114,9 +114,9 @@ static void LoadILVariableLocal_field(ILVariable_local * self, Enviroment * env,
 	}
 	int temp = -1;
 #if defined(_MSC_VER)
-	field_with_index fwi;
+	FieldWithIndex fwi;
 #else
-	field_with_index fwi = {};
+	FieldWithIndex fwi = {};
 #endif
 	Field* f = FindTreeFieldClass(TYPE2CLASS(tp), self->namev, &temp);
 	fwi.fi = f;
@@ -140,7 +140,7 @@ static void LoadILVariableLocal_field(ILVariable_local * self, Enviroment * env,
 	set_gtype(self, f->gtype);
 }
 
-static void LoadILVariableLocal_Property(ILVariable_local * self, Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	int temp = -1;
 	type* tp = GetTypeCContext(cctx);
 	Property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->namev, &temp);
@@ -152,9 +152,9 @@ static void LoadILVariableLocal_Property(ILVariable_local * self, Enviroment * e
 		return;
 	}
 #if defined(_MSC_VER)
-	Property_with_index pwi;
+	PropertyWithIndex pwi;
 #else
-	Property_with_index pwi = {};
+	PropertyWithIndex pwi = {};
 #endif
 	pwi.p = p;
 	pwi.index = temp;
@@ -167,7 +167,7 @@ static void LoadILVariableLocal_Property(ILVariable_local * self, Enviroment * e
 	set_gtype(self, p->GType);
 }
 
-static void set_gtype(ILVariable_local * self, GenericType* gt) {
+static void set_gtype(ILVariableLocal * self, GenericType* gt) {
 	//GenericType* gt = f->gtype;
 	//virtual_type vt = f->vtype;
 	if(gt->Tag == GENERIC_TYPE_TAG_NONE_T) {
