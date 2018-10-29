@@ -38,7 +38,7 @@ struct ILReturn;
 typedef void* ILReturnEmpty;
 struct ILInferencedTypeInit;
 struct ILStatement_try;
-struct ILStatement_throw;
+struct ILThrow;
 struct ILAssert;
 struct ILDefer;
 struct ILStatement_yield_return;
@@ -61,7 +61,7 @@ typedef struct ILStatement {
 		ILReturnEmpty return_empty;
 		struct ILInferencedTypeInit* inferenced_type_init;
 		struct ILStatement_try* try_;
-		struct ILStatement_throw* throw_;
+		struct ILThrow* throw_;
 		struct ILAssert* bcassert_;
 		struct ILDefer* defer_;
 		struct ILStatement_yield_return* yield_return;

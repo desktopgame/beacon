@@ -19,7 +19,7 @@ static ILStatement_while* CLIL_while(ClassLoader* self, AST* asource);
 static ILReturn* CLIL_return(ClassLoader* self, AST* asource);
 static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource);
 static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
-static ILStatement_throw* CLIL_throw(ClassLoader* self, AST* asource);
+static ILThrow* CLIL_throw(ClassLoader* self, AST* asource);
 static ILAssert* CLIL_assert(ClassLoader* self, AST* asource);
 static ILDefer* CLIL_defer(ClassLoader* self, AST* asource);
 static ILStatement_yield_return* CLIL_yield_return(ClassLoader* self, AST* asource);
@@ -132,7 +132,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_STMT_THROW_T:
 		{
-			ILStatement_throw* ilthrow = CLIL_throw(self, asource);
+			ILThrow* ilthrow = CLIL_throw(self, asource);
 			return WrapILThrow(ilthrow);
 		}
 		case AST_STMT_ASSERT_T:
@@ -291,8 +291,8 @@ static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource) {
 	}
 }
 
-static ILStatement_throw* CLIL_throw(ClassLoader* self, AST* asource) {
-	ILStatement_throw* ret = NewILThrow();
+static ILThrow* CLIL_throw(ClassLoader* self, AST* asource) {
+	ILThrow* ret = NewILThrow();
 	ret->fact = CLILFactor(self, FirstAST(asource));
 	return ret;
 }
