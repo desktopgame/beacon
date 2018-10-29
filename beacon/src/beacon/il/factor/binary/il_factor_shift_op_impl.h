@@ -6,9 +6,9 @@ struct GenericType;
 struct Enviroment;
 struct ILBinaryOp;
 typedef struct ILShiftOp {
-	struct ILBinaryOp* parent;
-	OperatorType type;
-	int operator_index;
+	struct ILBinaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
 } ILShiftOp;
 
 ILShiftOp* NewILShiftOp(OperatorType type);

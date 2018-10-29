@@ -14,15 +14,15 @@ static Opcode operator_to_dopcode(OperatorType type);
 
 ILShiftOp* NewILShiftOp(OperatorType type) {
 	ILShiftOp* ret = (ILShiftOp*)MEM_MALLOC(sizeof(ILShiftOp));
-	ret->parent = NULL;
-	ret->type = type;
-	ret->operator_index = -1;
+	ret->Parent = NULL;
+	ret->Type = type;
+	ret->OperatorIndex = -1;
 	return ret;
 }
 
 GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->parent->Right, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;
@@ -35,40 +35,40 @@ GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx)
 	   GENERIC2TYPE(rgtype) == cint) {
 		return TYPE2GENERIC(cdouble);
 	}
-	if(self->operator_index == -1) {
+	if(self->OperatorIndex == -1) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
-			OperatorToString(self->type)
+			OperatorToString(self->Type)
 		);
 		return NULL;
 	}
-	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
+	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->OperatorIndex);
+	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
 void GenerateILShiftOp(ILShiftOp* self, Enviroment* env, CallContext* cctx) {
-	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->Right, env, cctx);
-		GenerateILFactor(self->parent->Left, env, cctx);
-		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
+	if(self->OperatorIndex == -1) {
+		GenerateILFactor(self->Parent->Right, env, cctx);
+		GenerateILFactor(self->Parent->Left, env, cctx);
+		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->Type));
 		} else {
 			ThrowBCError(
 				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
-				OperatorToString(self->type)
+				OperatorToString(self->Type)
 			);
 		}
 	} else {
-		GenerateILFactor(self->parent->Right, env, cctx);
-		GenerateILFactor(self->parent->Left, env, cctx);
+		GenerateILFactor(self->Parent->Right, env, cctx);
+		GenerateILFactor(self->Parent->Left, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->Bytecode, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 	}
 }
 
 void LoadILShiftOp(ILShiftOp* self, Enviroment* env, CallContext* cctx) {
-	if(!IsIntIntBinaryOp(self->parent, env, cctx)) {
-		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
+	if(!IsIntIntBinaryOp(self->Parent, env, cctx)) {
+		self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -77,7 +77,7 @@ void DeleteILShiftOp(ILShiftOp* self) {
 }
 
 char* ILShiftOpToString(ILShiftOp* self, Enviroment* env) {
-	return ILBinaryOpToString_simple(self->parent, env);
+	return ILBinaryOpToString_simple(self->Parent, env);
 }
 //static
 static Opcode operator_to_iopcode(OperatorType type) {
