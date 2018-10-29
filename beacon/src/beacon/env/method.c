@@ -290,7 +290,7 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_WHILE_T:
 		{
-			ILStatement_while* whi = s->u.while_;
+			ILWhile* whi = s->u.while_;
 			for(int i=0; i<whi->statement_list->Length; i++) {
 				ILStatement* e = AtVector(whi->statement_list, i);
 				method_count(e, yield_ret, ret);

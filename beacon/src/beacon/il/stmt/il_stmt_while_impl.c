@@ -7,23 +7,23 @@
 #include "../call_context.h"
 
 //proto
-static void ILStatement_while_stmt_delete(VectorItem item);
+static void ILWhile_stmt_delete(VectorItem item);
 static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
 
-ILStatement * WrapILWhile(ILStatement_while * self) {
+ILStatement * WrapILWhile(ILWhile * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_WHILE_T);
 	ret->u.while_ = self;
 	return ret;
 }
 
-ILStatement_while * NewILWhile() {
-	ILStatement_while* ret = (ILStatement_while*)MEM_MALLOC(sizeof(ILStatement_while));
+ILWhile * NewILWhile() {
+	ILWhile* ret = (ILWhile*)MEM_MALLOC(sizeof(ILWhile));
 	ret->statement_list = NewVector();
 	ret->condition = NULL;
 	return ret;
 }
 
-void GenerateILWhile(ILStatement_while * self, Enviroment * env, CallContext* cctx) {
+void GenerateILWhile(ILWhile * self, Enviroment * env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	int prev = AddNOPOpcodeBuf(env->Bytecode);
 	Label* prevLab = AddLabelOpcodeBuf(env->Bytecode, prev);
@@ -49,13 +49,13 @@ void GenerateILWhile(ILStatement_while * self, Enviroment * env, CallContext* cc
 	env->Symboles->ScopeDepth--;
 }
 
-void DeleteILWhile(ILStatement_while * self) {
-	DeleteVector(self->statement_list, ILStatement_while_stmt_delete);
+void DeleteILWhile(ILWhile * self) {
+	DeleteVector(self->statement_list, ILWhile_stmt_delete);
 	DeleteILFactor(self->condition);
 	MEM_FREE(self);
 }
 
-void LoadILWhile(ILStatement_while* self, Enviroment* env, CallContext* cctx) {
+void LoadILWhile(ILWhile* self, Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->condition, env, cctx);
 	for(int i=0; i<self->statement_list->Length; i++) {
@@ -67,7 +67,7 @@ void LoadILWhile(ILStatement_while* self, Enviroment* env, CallContext* cctx) {
 }
 
 //private
-static void ILStatement_while_stmt_delete(VectorItem item) {
+static void ILWhile_stmt_delete(VectorItem item) {
 	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }

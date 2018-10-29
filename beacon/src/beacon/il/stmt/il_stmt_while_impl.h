@@ -7,18 +7,18 @@
 
 struct Enviroment;
 
-typedef struct ILStatement_while {
+typedef struct ILWhile {
 	ILFactor* condition;
 	Vector* statement_list;
-} ILStatement_while;
+} ILWhile;
 
-ILStatement* WrapILWhile(ILStatement_while* self);
+ILStatement* WrapILWhile(ILWhile* self);
 
-ILStatement_while* NewILWhile();
+ILWhile* NewILWhile();
 
-void GenerateILWhile(ILStatement_while* self, Enviroment* env, CallContext* cctx);
+void GenerateILWhile(ILWhile* self, Enviroment* env, CallContext* cctx);
 
-void LoadILWhile(ILStatement_while* self, Enviroment* env, CallContext* cctx);
+void LoadILWhile(ILWhile* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILWhile(ILStatement_while* self);
+void DeleteILWhile(ILWhile* self);
 #endif // !SIGNAL_IL_IL_STMT_WHILE_H

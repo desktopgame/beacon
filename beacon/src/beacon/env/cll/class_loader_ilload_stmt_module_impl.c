@@ -15,7 +15,7 @@ static ILIf* CLIL_if_elif_list(ClassLoader* self, AST* asource);
 static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource);
 static ILIf* CLIL_if_else(ClassLoader* self, AST* asource);
 static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource);
-static ILStatement_while* CLIL_while(ClassLoader* self, AST* asource);
+static ILWhile* CLIL_while(ClassLoader* self, AST* asource);
 static ILReturn* CLIL_return(ClassLoader* self, AST* asource);
 static ILTry* CLIL_try(ClassLoader* self, AST* asource);
 static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
@@ -103,7 +103,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_WHILE_T:
 		{
-			ILStatement_while* ilwh = CLIL_while(self, asource);
+			ILWhile* ilwh = CLIL_while(self, asource);
 			return WrapILWhile(ilwh);
 		}
 		case AST_BREAK_T:
@@ -232,10 +232,10 @@ static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource) {
 	return ilif;
 }
 
-static ILStatement_while * CLIL_while(ClassLoader * self, AST* asource) {
+static ILWhile * CLIL_while(ClassLoader * self, AST* asource) {
 	AST* acond = FirstAST(asource);
 	AST* abody = SecondAST(asource);
-	ILStatement_while* ilwhile = NewILWhile();
+	ILWhile* ilwhile = NewILWhile();
 	ilwhile->condition = CLILFactor(self, acond);
 	CLILBody(self, ilwhile->statement_list, abody);
 	return ilwhile;
