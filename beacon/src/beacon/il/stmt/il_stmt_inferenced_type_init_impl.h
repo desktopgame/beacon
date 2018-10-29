@@ -11,9 +11,9 @@ struct SymbolEntry;
  * var y = new X::Y();
  */
 typedef struct ILInferencedTypeInit {
-	StringView namev;
-	ILFactor* fact;
-	struct SymbolEntry* sym;
+	StringView Name;
+	ILFactor* Value;
+	struct SymbolEntry* Symbol;
 } ILInferencedTypeInit;
 
 /**

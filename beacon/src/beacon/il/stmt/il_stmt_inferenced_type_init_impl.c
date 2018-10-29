@@ -15,22 +15,22 @@ ILStatement * WrapILInferencedTypeInit(ILInferencedTypeInit * self) {
 
 ILInferencedTypeInit * NewILInferencedTypeInit(StringView namev) {
 	ILInferencedTypeInit* ret = (ILInferencedTypeInit*)MEM_MALLOC(sizeof(ILInferencedTypeInit));
-	ret->namev = namev;
-	ret->fact = NULL;
+	ret->Name = namev;
+	ret->Value = NULL;
 	return ret;
 }
 
 void GenerateILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, CallContext* cctx) {
 	//右辺の方で宣言する
-	GenerateILFactor(self->fact, env, cctx);
+	GenerateILFactor(self->Value, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->sym->Index);
+	AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
 void LoadILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, CallContext* cctx) {
 	//代入するオブジェクトを計算
-	LoadILFactor(self->fact, env, cctx);
-	GenericType* gtp = EvalILFactor(self->fact, env, cctx);
+	LoadILFactor(self->Value, env, cctx);
+	GenericType* gtp = EvalILFactor(self->Value, env, cctx);
 	BC_ERROR();
 	//voidは代入できない
 	if(gtp->CoreType != NULL &&
@@ -39,20 +39,20 @@ void LoadILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, Cal
 		return;
 	}
 	//変数を登録
-	if(IsContainsSymbol(env->Symboles, self->namev)) {
+	if(IsContainsSymbol(env->Symboles, self->Name)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
-			Ref2Str(self->namev)
+			Ref2Str(self->Name)
 		);
 	}
 	SymbolEntry* e = EntrySymbolTable(
 		env->Symboles,
 		gtp,
-		self->namev
+		self->Name
 	);
-	self->sym = e;
+	self->Symbol = e;
 }
 
 void DeleteILInferencedTypeInit(ILInferencedTypeInit * self) {
-	DeleteILFactor(self->fact);
+	DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }

@@ -173,7 +173,7 @@ static ILInferencedTypeInit * CLIL_inferenced_type_init(ClassLoader * self, AST*
 	AST* aname = FirstAST(asource);
 	AST* afact = SecondAST(asource);
 	ILInferencedTypeInit* ret = NewILInferencedTypeInit(aname->Attr.StringVValue);
-	ret->fact = CLILFactor(self, afact);
+	ret->Value = CLILFactor(self, afact);
 	return ret;
 }
 
