@@ -12,44 +12,44 @@ ILFactor* WrapILSubscript(ILSubscript* self) {
 
 ILSubscript* MallocILSubscript(const char* filename, int lineno) {
 	ILSubscript* ret = mem_malloc(sizeof(ILSubscript), filename, lineno);
-	ret->receiver = NULL;
-	ret->pos = NULL;
-	ret->operator_index = -1;
-	ret->opov = NULL;
+	ret->Receiver = NULL;
+	ret->Position = NULL;
+	ret->OperatorIndex = -1;
+	ret->Operator = NULL;
 	return ret;
 }
 
 void GenerateILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->pos, env, cctx);
-	GenerateILFactor(self->receiver, env, cctx);
+	GenerateILFactor(self->Position, env, cctx);
+	GenerateILFactor(self->Receiver, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
-	AddOpcodeBuf(env->Bytecode, self->operator_index);
+	AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 }
 
 void LoadILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
-	if(self->operator_index != -1) {
+	if(self->OperatorIndex != -1) {
 		return;
 	}
-	LoadILFactor(self->receiver, env, cctx);
-	LoadILFactor(self->pos, env, cctx);
-	GenericType* receiver_gtype = EvalILFactor(self->receiver, env, cctx);
-	GenericType* arg_gtype = EvalILFactor(self->pos, env, cctx);
+	LoadILFactor(self->Receiver, env, cctx);
+	LoadILFactor(self->Position, env, cctx);
+	GenericType* receiver_gtype = EvalILFactor(self->Receiver, env, cctx);
+	GenericType* arg_gtype = EvalILFactor(self->Position, env, cctx);
 	Vector* args = NewVector();
 	PushVector(args, arg_gtype);
 	int temp = -1;
-	self->opov = GFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
-	self->operator_index = temp;
+	self->Operator = GFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
+	self->OperatorIndex = temp;
 	DeleteVector(args, VectorDeleterOfNull);
 }
 
 GenericType* EvalILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
-	return ApplyGenericType(self->opov->ReturnGType, cctx);
+	return ApplyGenericType(self->Operator->ReturnGType, cctx);
 }
 
 char* ILSubscriptToString(ILSubscript* self, Enviroment* env) {
 	Buffer* buf = NewBuffer();
-	char* src = ILFactorToString(self->receiver, env);
-	char* pos = ILFactorToString(self->pos, env);
+	char* src = ILFactorToString(self->Receiver, env);
+	char* pos = ILFactorToString(self->Position, env);
 	AppendsBuffer(buf, src);
 	AppendBuffer(buf, '[');
 	AppendsBuffer(buf, pos);
@@ -60,7 +60,7 @@ char* ILSubscriptToString(ILSubscript* self, Enviroment* env) {
 }
 
 void DeleteILSubscript(ILSubscript* self) {
-	DeleteILFactor(self->receiver);
-	DeleteILFactor(self->pos);
+	DeleteILFactor(self->Receiver);
+	DeleteILFactor(self->Position);
 	MEM_FREE(self);
 }

@@ -278,7 +278,7 @@ static ILSubscript* CLIL_subscript(ClassLoader* self, AST* source) {
 	ILSubscript* ret = ILSubscript_new();
 	AST* afact = FirstAST(source);
 	AST* apos = SecondAST(source);
-	ret->receiver = CLILFactor(self, afact);
-	ret->pos = CLILFactor(self, apos);
+	ret->Receiver = CLILFactor(self, afact);
+	ret->Position = CLILFactor(self, apos);
 	return ret;
 }

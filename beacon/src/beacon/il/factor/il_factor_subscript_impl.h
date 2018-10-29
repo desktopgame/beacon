@@ -5,10 +5,10 @@
 struct OperatorOverload;
 
 typedef struct ILSubscript {
-	ILFactor* receiver;
-	ILFactor* pos;
-	int operator_index;
-	struct OperatorOverload* opov;
+	ILFactor* Receiver;
+	ILFactor* Position;
+	int OperatorIndex;
+	struct OperatorOverload* Operator;
 } ILSubscript;
 
 ILFactor* WrapILSubscript(ILSubscript* self);
