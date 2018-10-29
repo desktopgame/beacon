@@ -29,7 +29,7 @@ typedef enum ILStatementTag {
 } ILStatementTag;
 
 //詳細は il_stmt_impl.h を参照してください。
-struct ILStatement_proc;
+struct ILProc;
 struct ILIf;
 struct ILStatement_while;
 struct ILStatement_variable_decl;
@@ -52,7 +52,7 @@ typedef struct ILStatement {
 	ILStatementTag type;
 	int lineno;
 	union {
-		struct ILStatement_proc* proc_;
+		struct ILProc* proc_;
 		struct ILIf* if_;
 		struct ILStatement_while* while_;
 		struct ILStatement_variable_decl* variable_decl;

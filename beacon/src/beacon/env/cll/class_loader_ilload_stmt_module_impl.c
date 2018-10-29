@@ -61,7 +61,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		{
 			AST* afact = FirstAST(asource);
 			ILFactor* ilfact = CLILFactor(self, afact);
-			ILStatement_proc* ilproc = NewILProc();
+			ILProc* ilproc = NewILProc();
 				ilproc->factor = ilfact;
 			assert(ilfact != NULL);
 			return WrapILProc(ilproc);
