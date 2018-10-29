@@ -191,7 +191,7 @@ static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx
 }
 
 static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_call_op* call = self->Left->u.call_;
+	ILCallOp* call = self->Left->u.call_;
 	if(call->type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ThrowBCError(
 			BCERROR_LHS_IS_NOT_SUBSCRIPT_T,

@@ -1,5 +1,5 @@
-#ifndef BEACON_IL_ILFactor_call_op_H
-#define BEACON_IL_ILFactor_call_op_H
+#ifndef BEACON_IL_ILCallOp_H
+#define BEACON_IL_ILCallOp_H
 #include "../../util/vector.h"
 #include "../il_factor_interface.h"
 #include "invoke/il_factor_invoke_impl.h"
@@ -22,7 +22,7 @@ typedef enum ILCallType {
 /**
  * 関数呼び出し演算子を表す構造体.
  */
-typedef struct ILFactor_call_op {
+typedef struct ILCallOp {
 	ILFactor* parent;
 	ILFactor* receiver;
 	//Vector* type_argument_list;
@@ -33,20 +33,20 @@ typedef struct ILFactor_call_op {
 		ILFactor_invoke_static* invoke_static_;
 		ILFactor_invoke_bound* invoke_bound_;
 	} u;
-} ILFactor_call_op;
+} ILCallOp;
 
-ILFactor* WrapCallOp(ILFactor_call_op* self);
+ILFactor* WrapCallOp(ILCallOp* self);
 
-ILFactor_call_op* NewILCallOp();
+ILCallOp* NewILCallOp();
 
-void LoadCallOp(ILFactor_call_op* self, Enviroment* env, CallContext* cctx);
+void LoadCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILCallOp(ILFactor_call_op* self, Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx);
 
-char* ILCallOpToString(ILFactor_call_op* self, Enviroment* env);
+char* ILCallOpToString(ILCallOp* self, Enviroment* env);
 
-void GenerateILCallOp(ILFactor_call_op* self, Enviroment* env, CallContext* cctx);
+void GenerateILCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILCallOp(ILFactor_call_op* self);
+void DeleteILCallOp(ILCallOp* self);
 
 #endif

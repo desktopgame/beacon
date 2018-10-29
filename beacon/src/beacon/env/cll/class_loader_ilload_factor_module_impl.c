@@ -17,7 +17,7 @@ static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, Operat
 static ILFactor_variable* CLIL_variable(ClassLoader* self, AST* source);
 static ILNewInstance* CLIL_new_instance(ClassLoader* self, AST* source);
 static ILAs* CLIL_as(ClassLoader* self, AST* source);
-static ILFactor_call_op* CLIL_call_op(ClassLoader* self, AST* source);
+static ILCallOp* CLIL_call_op(ClassLoader* self, AST* source);
 static ILMemberOp* CLIL_member_op(ClassLoader* self, AST* source);
 static ILInstanceOf* CLIL_instanceof(ClassLoader* self, AST* source);
 static ILFactor_subscript* CLIL_subscript(ClassLoader* self, AST* source);
@@ -243,9 +243,9 @@ static ILAs* CLIL_as(ClassLoader* self, AST* source) {
 	return ret;
 }
 
-static ILFactor_call_op* CLIL_call_op(ClassLoader* self, AST* source) {
+static ILCallOp* CLIL_call_op(ClassLoader* self, AST* source) {
 	assert(source->Tag == AST_OP_CALL_T);
-	ILFactor_call_op* ret = NewILCallOp();
+	ILCallOp* ret = NewILCallOp();
 	AST* afact = FirstAST(source);
 	AST* aargs = SecondAST(source);
 	ret->receiver = CLILFactor(self, afact);
