@@ -159,8 +159,8 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		{
 			ILInjectJNI* jni = NewILInjectJNI(asource->Attr.StringVValue);
 			AST* afact = FirstAST(asource);
-			jni->fact = CLILFactor(self, afact);
-			jni->fact->lineno = 0;
+			jni->Value = CLILFactor(self, afact);
+			jni->Value->lineno = 0;
 			return WrapILInjectJNI(jni);
 		}
 		default:

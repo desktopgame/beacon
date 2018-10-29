@@ -13,29 +13,29 @@ ILStatement* WrapILInjectJNI(ILInjectJNI* self) {
 
 ILInjectJNI* NewILInjectJNI(StringView namev) {
 	ILInjectJNI* ret = (ILInjectJNI*)MEM_MALLOC(sizeof(ILInjectJNI));
-	ret->namev = namev;
-	ret->fact = NULL;
-	ret->se = NULL;
+	ret->Name = namev;
+	ret->Value = NULL;
+	ret->Symbol = NULL;
 	return ret;
 }
 
 void GenerateILInjectJNI(ILInjectJNI* self, Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->fact, env, cctx);
+	GenerateILFactor(self->Value, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->se->Index);
+	AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
 void LoadILInjectJNI(ILInjectJNI * self, Enviroment* env, CallContext* cctx) {
-	if(self->se != NULL) {
+	if(self->Symbol != NULL) {
 		return;
 	}
-	self->fact->lineno = 0;
-	LoadILFactor(self->fact, env, cctx);
-	GenericType* gtype = EvalILFactor(self->fact, env, cctx);
-	self->se = EntrySymbolTable(env->Symboles, gtype, self->namev);
+	self->Value->lineno = 0;
+	LoadILFactor(self->Value, env, cctx);
+	GenericType* gtype = EvalILFactor(self->Value, env, cctx);
+	self->Symbol = EntrySymbolTable(env->Symboles, gtype, self->Name);
 }
 
 void DeleteILInjectJni(ILInjectJNI* self) {
-	DeleteILFactor(self->fact);
+	DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }

@@ -6,9 +6,9 @@
 struct SymbolEntry;
 
 typedef struct ILInjectJNI {
-	StringView namev;
-	ILFactor* fact;
-	struct SymbolEntry* se;
+	StringView Name;
+	ILFactor* Value;
+	struct SymbolEntry* Symbol;
 } ILInjectJNI;
 
 ILStatement* WrapILInjectJNI(ILInjectJNI* self);
