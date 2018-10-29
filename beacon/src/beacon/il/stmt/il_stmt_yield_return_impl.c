@@ -19,12 +19,12 @@ ILStatement* WrapILYieldReturn(ILYieldReturn* self) {
 
 ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno) {
 	ILYieldReturn* ret = (ILYieldReturn*)mem_malloc(sizeof(ILYieldReturn), filename, lineno);
-	ret->fact = NULL;
+	ret->Value = NULL;
 	return ret;
 }
 
 void GenerateILYieldReturn(ILYieldReturn* self, Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->fact, env, cctx);
+	GenerateILFactor(self->Value, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_CORO_NEXT);
 }
 
@@ -33,7 +33,7 @@ void LoadILYieldReturn(ILYieldReturn * self, Enviroment* env, CallContext* cctx)
 }
 
 void DeleteILYieldReturn(ILYieldReturn* self) {
-	DeleteILFactor(self->fact);
+	DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }
 //private
@@ -44,7 +44,7 @@ static void check_IsYieldMethod_return(ILYieldReturn * self, Enviroment * env, C
 	Method* m = GetMethodCContext(cctx);
 	GenericType* arg = AtVector(m->ReturnGType->TypeArgs, 0);
 	//戻り値の型に互換性がない
-	if(DistanceGenericType(arg, EvalILFactor(self->fact, env, cctx), cctx) < 0) {
+	if(DistanceGenericType(arg, EvalILFactor(self->Value, env, cctx), cctx) < 0) {
 		ThrowBCError(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
 			Ref2Str(GetTypeName(m->Parent)),
 			Ref2Str(m->Name)

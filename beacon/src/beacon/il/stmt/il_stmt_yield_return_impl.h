@@ -4,7 +4,7 @@
 #include "../il_factor_interface.h"
 
 typedef struct ILYieldReturn {
-	ILFactor* fact;
+	ILFactor* Value;
 } ILYieldReturn;
 
 ILStatement* WrapILYieldReturn(ILYieldReturn* self);

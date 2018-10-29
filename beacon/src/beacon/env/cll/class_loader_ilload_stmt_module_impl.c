@@ -320,6 +320,6 @@ static ILDefer* CLIL_defer(ClassLoader* self, AST* asource) {
 
 static ILYieldReturn* CLIL_yield_return(ClassLoader* self, AST* asource) {
 	ILYieldReturn* ret = ILYieldReturn_new();
-	ret->fact = CLILFactor(self, FirstAST(asource));
+	ret->Value = CLILFactor(self, FirstAST(asource));
 	return ret;
 }
