@@ -5,21 +5,21 @@
 struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
-typedef struct ILFactor_compare_op {
+typedef struct ILCompareOp {
 	struct ILBinaryOp* parent;
 	OperatorType type;
 	int operator_index;
-} ILFactor_compare_op;
+} ILCompareOp;
 
-ILFactor_compare_op* NewILCompareOp(OperatorType type);
+ILCompareOp* NewILCompareOp(OperatorType type);
 
-struct GenericType* EvalILCompareOp(ILFactor_compare_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILCompareOp(ILCompareOp * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILCompareOp(ILFactor_compare_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILCompareOp(ILCompareOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILCompareOp(ILFactor_compare_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILCompareOp(ILCompareOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILCompareOp(ILFactor_compare_op* self);
+void DeleteILCompareOp(ILCompareOp* self);
 
-char* ILCompareOpToString(ILFactor_compare_op* self, struct Enviroment* env);
+char* ILCompareOpToString(ILCompareOp* self, struct Enviroment* env);
 #endif

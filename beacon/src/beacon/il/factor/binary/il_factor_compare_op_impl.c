@@ -13,21 +13,21 @@ static Opcode operator_to_iopcode(OperatorType type);
 static Opcode operator_to_dopcode(OperatorType type);
 static Opcode operator_to_copcode(OperatorType type);
 
-ILFactor_compare_op* NewILCompareOp(OperatorType type) {
-	ILFactor_compare_op* ret = (ILFactor_compare_op*)MEM_MALLOC(sizeof(ILFactor_compare_op));
+ILCompareOp* NewILCompareOp(OperatorType type) {
+	ILCompareOp* ret = (ILCompareOp*)MEM_MALLOC(sizeof(ILCompareOp));
 	ret->type = type;
 	ret->parent = NULL;
 	ret->operator_index = -1;
 	return ret;
 }
 
-GenericType* EvalILCompareOp(ILFactor_compare_op * self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILCompareOp(ILCompareOp * self, Enviroment* env, CallContext* cctx) {
 	GenericType* ret = TYPE2GENERIC(TYPE_BOOL);
 	assert(ret != NULL);
 	return ret;
 }
 
-void GenerateILCompareOp(ILFactor_compare_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILCompareOp(ILCompareOp* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->Right, env, cctx);
@@ -52,7 +52,7 @@ void GenerateILCompareOp(ILFactor_compare_op* self, Enviroment* env, CallContext
 	}
 }
 
-void LoadILCompareOp(ILFactor_compare_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILCompareOp(ILCompareOp* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsDoubleDoubleBinaryOp(self->parent, env, cctx) &&
 	   !IsCharCharBinaryOp(self->parent, env, cctx)) {
@@ -60,11 +60,11 @@ void LoadILCompareOp(ILFactor_compare_op* self, Enviroment* env, CallContext* cc
 	}
 }
 
-void DeleteILCompareOp(ILFactor_compare_op* self) {
+void DeleteILCompareOp(ILCompareOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILCompareOpToString(ILFactor_compare_op* self, Enviroment* env) {
+char* ILCompareOpToString(ILCompareOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }
 //static
