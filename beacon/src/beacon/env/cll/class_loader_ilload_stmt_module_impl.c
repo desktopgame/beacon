@@ -10,11 +10,11 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource);
 static ILStatement_inferenced_type_init* CLIL_inferenced_type_init(ClassLoader* self, AST* asource);
 static ILStatement_variable_decl* CLIL_variable_decl(ClassLoader* self, AST* asource);
 static ILStatement_variable_init* CLIL_variable_init(ClassLoader* self, AST* asource);
-static ILStatement_if* CLIL_if(ClassLoader* self, AST* asource);
-static ILStatement_if* CLIL_if_elif_list(ClassLoader* self, AST* asource);
+static ILIf* CLIL_if(ClassLoader* self, AST* asource);
+static ILIf* CLIL_if_elif_list(ClassLoader* self, AST* asource);
 static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource);
-static ILStatement_if* CLIL_if_else(ClassLoader* self, AST* asource);
-static ILStatement_if* CLIL_if_elif_list_else(ClassLoader* self, AST* asource);
+static ILIf* CLIL_if_else(ClassLoader* self, AST* asource);
+static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource);
 static ILStatement_while* CLIL_while(ClassLoader* self, AST* asource);
 static ILStatement_return* CLIL_return(ClassLoader* self, AST* asource);
 static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource);
@@ -83,22 +83,22 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_IF_T:
 		{
-			ILStatement_if* ilif = CLIL_if(self, asource);
+			ILIf* ilif = CLIL_if(self, asource);
 			return WrapILIf(ilif);
 		}
 		case AST_IF_ELIF_LIST_T:
 		{
-			ILStatement_if* ilif = CLIL_if_elif_list(self, asource);
+			ILIf* ilif = CLIL_if_elif_list(self, asource);
 			return WrapILIf(ilif);
 		}
 		case AST_IF_ELSE_T:
 		{
-			ILStatement_if* ilif = CLIL_if_else(self, asource);
+			ILIf* ilif = CLIL_if_else(self, asource);
 			return WrapILIf(ilif);
 		}
 		case AST_IF_ELIF_LIST_ELSE_T:
 		{
-			ILStatement_if* ilif = CLIL_if_elif_list_else(self, asource);
+			ILIf* ilif = CLIL_if_elif_list_else(self, asource);
 			return WrapILIf(ilif);
 		}
 		case AST_WHILE_T:
@@ -196,9 +196,9 @@ static ILStatement_variable_init* CLIL_variable_init(ClassLoader* self, AST* aso
 	return ret;
 }
 
-static ILStatement_if* CLIL_if(ClassLoader* self, AST* asource) {
+static ILIf* CLIL_if(ClassLoader* self, AST* asource) {
 	assert(asource->Tag == AST_IF_T);
-	ILStatement_if* ret = NewILIf();
+	ILIf* ret = NewILIf();
 	AST* acond = FirstAST(asource);
 	AST* abody = SecondAST(asource);
 	ILFactor* ilcond = CLILFactor(self, acond);
@@ -207,27 +207,27 @@ static ILStatement_if* CLIL_if(ClassLoader* self, AST* asource) {
 	return ret;
 }
 
-static ILStatement_if* CLIL_if_elif_list(ClassLoader* self, AST* asource) {
+static ILIf* CLIL_if_elif_list(ClassLoader* self, AST* asource) {
 	AST* aif = FirstAST(asource);
 	AST* aelif_list = SecondAST(asource);
-	ILStatement_if* ilif = CLIL_if(self, aif);
+	ILIf* ilif = CLIL_if(self, aif);
 	CLIL_elif_list(self, ilif->elif_list, aelif_list);
 	return ilif;
 }
 
-static ILStatement_if* CLIL_if_else(ClassLoader* self, AST* asource) {
+static ILIf* CLIL_if_else(ClassLoader* self, AST* asource) {
 	AST* aif = FirstAST(asource);
 	AST* aelse = SecondAST(asource);
 	AST* abody = FirstAST(aelse);
-	ILStatement_if* ilif = CLIL_if(self, aif);
+	ILIf* ilif = CLIL_if(self, aif);
 	CLILBody(self, ilif->else_body->body, abody);
 	return ilif;
 }
 
-static ILStatement_if* CLIL_if_elif_list_else(ClassLoader* self, AST* asource) {
+static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource) {
 	AST* aif_eliflist = FirstAST(asource);
 	AST* aelse = SecondAST(asource);
-	ILStatement_if* ilif = CLIL_if_elif_list(self, aif_eliflist);
+	ILIf* ilif = CLIL_if_elif_list(self, aif_eliflist);
 	CLILBody(self, ilif->else_body->body, FirstAST(aelse));
 	return ilif;
 }
@@ -249,7 +249,7 @@ static void CLIL_elif_list(ClassLoader* self, Vector* list, AST* asource) {
 	} else if (asource->Tag == AST_ELIF_T) {
 		AST* acond = FirstAST(asource);
 		AST* abody = SecondAST(asource);
-		ILStatement_elif* ilelif = NewILElif();
+		ILElif* ilelif = NewILElif();
 		ilelif->condition = CLILFactor(self, acond);
 		CLILBody(self, ilelif->body, abody);
 		PushILElifList(list, ilelif);

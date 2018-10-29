@@ -264,12 +264,12 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 		case ILSTMT_IF_T:
 		{
 			//if() { ... }
-			ILStatement_if* sif = s->u.if_;
+			ILIf* sif = s->u.if_;
 			for(int i=0; i<sif->body->Length; i++) {
 				method_count((ILStatement*)AtVector(sif->body, i), yield_ret, ret);
 			}
 			for(int i=0; i<sif->elif_list->Length; i++) {
-				ILStatement_elif* seif = (ILStatement_elif*)AtVector(sif->elif_list, i);
+				ILElif* seif = (ILElif*)AtVector(sif->elif_list, i);
 				Vector* body = seif->body;
 				for(int j=0; j<body->Length; j++) {
 					method_count((ILStatement*)AtVector(body, j), yield_ret, ret);
