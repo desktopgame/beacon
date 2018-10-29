@@ -6,29 +6,29 @@
 #include "../il_factor_impl.h"
 #include <assert.h>
 
-ILStatement* WrapILAssert(ILStatement_assert* self) {
+ILStatement* WrapILAssert(ILAssert* self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_ASSERT_T);
 	ret->u.bcassert_ = self;
-	self->parent = ret;
+	self->Parent = ret;
 	return ret;
 }
 
-ILStatement_assert* NewILAssert() {
-	ILStatement_assert* ret = (ILStatement_assert*)MEM_MALLOC(sizeof(ILStatement_assert));
-	ret->condition = NULL;
-	ret->message = NULL;
-	ret->parent = NULL;
+ILAssert* NewILAssert() {
+	ILAssert* ret = (ILAssert*)MEM_MALLOC(sizeof(ILAssert));
+	ret->Condition = NULL;
+	ret->Message = NULL;
+	ret->Parent = NULL;
 	return ret;
 }
 
-void GenerateILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx) {
+void GenerateILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
 	Label* gt = AddLabelOpcodeBuf(env->Bytecode, 0);
-	GenerateILFactor(self->condition, env, cctx);
+	GenerateILFactor(self->Condition, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_TRUE);
 	AddOpcodeBuf(env->Bytecode, gt);
 
-	GenerateILFactor(self->message, env, cctx);
+	GenerateILFactor(self->Message, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
 	AddOpcodeBuf(env->Bytecode, FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"))->absolute_index);
 	AddOpcodeBuf(env->Bytecode, 0);
@@ -36,21 +36,21 @@ void GenerateILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cc
 	gt->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void LoadILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->condition, env, cctx);
-	if(self->message == NULL) {
-		char* str = ILFactorToString(self->condition, env);
+void LoadILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
+	LoadILFactor(self->Condition, env, cctx);
+	if(self->Message == NULL) {
+		char* str = ILFactorToString(self->Condition, env);
 		ILString* ilstr = NewILString(InternString(str));
-		self->message = WrapILString(ilstr);
+		self->Message = WrapILString(ilstr);
 		assert(ilstr->Value != 0);
 		MEM_FREE(str);
-		self->message->lineno = self->parent->lineno;
+		self->Message->lineno = self->Parent->lineno;
 	}
-	LoadILFactor(self->message, env, cctx);
+	LoadILFactor(self->Message, env, cctx);
 }
 
-void DeleteILAssert(ILStatement_assert* self) {
-	DeleteILFactor(self->condition);
-	DeleteILFactor(self->message);
+void DeleteILAssert(ILAssert* self) {
+	DeleteILFactor(self->Condition);
+	DeleteILFactor(self->Message);
 	MEM_FREE(self);
 }

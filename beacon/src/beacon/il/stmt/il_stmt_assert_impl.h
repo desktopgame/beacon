@@ -5,19 +5,19 @@
 struct Enviroment;
 struct ILStatement;
 
-typedef struct ILStatement_assert {
-	ILFactor* condition;
-	ILFactor* message;
-	struct ILStatement* parent;
-} ILStatement_assert;
+typedef struct ILAssert {
+	ILFactor* Condition;
+	ILFactor* Message;
+	struct ILStatement* Parent;
+} ILAssert;
 
-ILStatement* WrapILAssert(ILStatement_assert* self);
+ILStatement* WrapILAssert(ILAssert* self);
 
-ILStatement_assert* NewILAssert();
+ILAssert* NewILAssert();
 
-void GenerateILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx);
+void GenerateILAssert(ILAssert* self, Enviroment* env, CallContext* cctx);
 
-void LoadILAssert(ILStatement_assert* self, Enviroment* env, CallContext* cctx);
+void LoadILAssert(ILAssert* self, Enviroment* env, CallContext* cctx);
 
-void DeleteILAssert(ILStatement_assert* self);
+void DeleteILAssert(ILAssert* self);
 #endif

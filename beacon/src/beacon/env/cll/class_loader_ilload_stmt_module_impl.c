@@ -20,7 +20,7 @@ static ILStatement_return* CLIL_return(ClassLoader* self, AST* asource);
 static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource);
 static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
 static ILStatement_throw* CLIL_throw(ClassLoader* self, AST* asource);
-static ILStatement_assert* CLIL_assert(ClassLoader* self, AST* asource);
+static ILAssert* CLIL_assert(ClassLoader* self, AST* asource);
 static ILStatement_defer* CLIL_defer(ClassLoader* self, AST* asource);
 static ILStatement_yield_return* CLIL_yield_return(ClassLoader* self, AST* asource);
 
@@ -137,7 +137,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_STMT_ASSERT_T:
 		{
-			ILStatement_assert* ilas = CLIL_assert(self, asource);
+			ILAssert* ilas = CLIL_assert(self, asource);
 			return WrapILAssert(ilas);
 		}
 		case AST_STMT_DEFER_T:
@@ -297,15 +297,15 @@ static ILStatement_throw* CLIL_throw(ClassLoader* self, AST* asource) {
 	return ret;
 }
 
-static ILStatement_assert* CLIL_assert(ClassLoader* self, AST* asource) {
-	ILStatement_assert* ret = NewILAssert();
+static ILAssert* CLIL_assert(ClassLoader* self, AST* asource) {
+	ILAssert* ret = NewILAssert();
 	AST* afact = FirstAST(asource);
 	AST* amsg = SecondAST(asource);
-	ret->condition = CLILFactor(self, afact);
+	ret->Condition = CLILFactor(self, afact);
 	if(IsBlankAST(amsg)) {
-		ret->message = NULL;
+		ret->Message = NULL;
 	} else {
-		ret->message = CLILFactor(self, amsg);
+		ret->Message = CLILFactor(self, amsg);
 	}
 	return ret;
 }
