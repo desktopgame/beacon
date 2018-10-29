@@ -181,8 +181,8 @@ static ILVariableDecl* CLIL_variable_decl(ClassLoader* self, AST* asource) {
 	AST* afqcn = FirstAST(asource);
 	AST* aname = SecondAST(asource);
 	ILVariableDecl* ret = NewILVariableDecl(aname->Attr.StringVValue);
-	ret->namev = aname->Attr.StringVValue;
-	CLILGenericCache(FirstAST(afqcn), ret->fqcn);
+	ret->Name = aname->Attr.StringVValue;
+	CLILGenericCache(FirstAST(afqcn), ret->GCache);
 	return ret;
 }
 

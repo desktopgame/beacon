@@ -9,8 +9,8 @@ struct Enviroment;
  * 型宣言を表す要素.
  */
 typedef struct ILVariableDecl {
-	GenericCache* fqcn;
-	StringView namev;
+	GenericCache* GCache;
+	StringView Name;
 } ILVariableDecl;
 /**
  * 型宣言を表す要素をスーパーセットにラップします.
