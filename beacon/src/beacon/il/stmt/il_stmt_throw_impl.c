@@ -14,18 +14,18 @@ ILStatement* WrapILThrow(ILThrow* self) {
 
 ILThrow* NewILThrow() {
 	ILThrow* ret = (ILThrow*)MEM_MALLOC(sizeof(ILThrow));
-	ret->fact = NULL;
+	ret->Factor = NULL;
 	return ret;
 }
 
 void GenerateILThrow(ILThrow* self, Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->fact, env, cctx);
+	GenerateILFactor(self->Factor, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_THROW);
 }
 
 void LoadILThrow(ILThrow* self, Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->fact, env, cctx);
-	GenericType* tgt = EvalILFactor(self->fact, env, cctx);
+	LoadILFactor(self->Factor, env, cctx);
+	GenericType* tgt = EvalILFactor(self->Factor, env, cctx);
 	if(DistanceGenericType(GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->CoreType != NULL) {
 			ThrowBCError(
@@ -37,6 +37,6 @@ void LoadILThrow(ILThrow* self, Enviroment* env, CallContext* cctx) {
 }
 
 void DeleteILThrow(ILThrow* self) {
-	DeleteILFactor(self->fact);
+	DeleteILFactor(self->Factor);
 	MEM_FREE(self);
 }

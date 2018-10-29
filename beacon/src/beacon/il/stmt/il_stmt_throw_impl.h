@@ -6,7 +6,7 @@
 struct Enviroment;
 
 typedef struct ILThrow {
-	ILFactor* fact;
+	ILFactor* Factor;
 } ILThrow;
 
 ILStatement* WrapILThrow(ILThrow* self);

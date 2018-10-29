@@ -293,7 +293,7 @@ static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource) {
 
 static ILThrow* CLIL_throw(ClassLoader* self, AST* asource) {
 	ILThrow* ret = NewILThrow();
-	ret->fact = CLILFactor(self, FirstAST(asource));
+	ret->Factor = CLILFactor(self, FirstAST(asource));
 	return ret;
 }
 
