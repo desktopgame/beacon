@@ -18,8 +18,8 @@ ILStatement * WrapILWhile(ILWhile * self) {
 
 ILWhile * NewILWhile() {
 	ILWhile* ret = (ILWhile*)MEM_MALLOC(sizeof(ILWhile));
-	ret->statement_list = NewVector();
-	ret->condition = NULL;
+	ret->Statements = NewVector();
+	ret->Condition = NULL;
 	return ret;
 }
 
@@ -31,12 +31,12 @@ void GenerateILWhile(ILWhile * self, Enviroment * env, CallContext* cctx) {
 	PushVector(cctx->Control.WhileStartTable, prevLab);
 	PushVector(cctx->Control.WhileEndTable, nextLab);
 	//条件を満たさないなら nextLab へ
-	GenerateILFactor(self->condition, env, cctx);
+	GenerateILFactor(self->Condition, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
 	AddOpcodeBuf(env->Bytecode, nextLab);
 	//全てのステートメントを実行
-	for (int i = 0; i < self->statement_list->Length; i++) {
-		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
+	for (int i = 0; i < self->Statements->Length; i++) {
+		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		GenerateILStmt(e, env, cctx);
 	}
 	//prevLab へ行って再判定
@@ -50,19 +50,19 @@ void GenerateILWhile(ILWhile * self, Enviroment * env, CallContext* cctx) {
 }
 
 void DeleteILWhile(ILWhile * self) {
-	DeleteVector(self->statement_list, ILWhile_stmt_delete);
-	DeleteILFactor(self->condition);
+	DeleteVector(self->Statements, ILWhile_stmt_delete);
+	DeleteILFactor(self->Condition);
 	MEM_FREE(self);
 }
 
 void LoadILWhile(ILWhile* self, Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
-	LoadILFactor(self->condition, env, cctx);
-	for(int i=0; i<self->statement_list->Length; i++) {
-		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
+	LoadILFactor(self->Condition, env, cctx);
+	for(int i=0; i<self->Statements->Length; i++) {
+		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		LoadILStmt(e, env, cctx);
 	}
-	check_condition_type(self->condition, env, cctx);
+	check_condition_type(self->Condition, env, cctx);
 	env->Symboles->ScopeDepth--;
 }
 

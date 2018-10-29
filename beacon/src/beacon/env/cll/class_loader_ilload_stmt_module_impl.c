@@ -236,8 +236,8 @@ static ILWhile * CLIL_while(ClassLoader * self, AST* asource) {
 	AST* acond = FirstAST(asource);
 	AST* abody = SecondAST(asource);
 	ILWhile* ilwhile = NewILWhile();
-	ilwhile->condition = CLILFactor(self, acond);
-	CLILBody(self, ilwhile->statement_list, abody);
+	ilwhile->Condition = CLILFactor(self, acond);
+	CLILBody(self, ilwhile->Statements, abody);
 	return ilwhile;
 }
 

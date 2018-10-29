@@ -8,8 +8,8 @@
 struct Enviroment;
 
 typedef struct ILWhile {
-	ILFactor* condition;
-	Vector* statement_list;
+	ILFactor* Condition;
+	Vector* Statements;
 } ILWhile;
 
 ILStatement* WrapILWhile(ILWhile* self);
