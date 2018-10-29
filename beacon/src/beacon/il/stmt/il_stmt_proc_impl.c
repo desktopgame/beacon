@@ -11,19 +11,19 @@ ILStatement * WrapILProc(ILProc * self) {
 
 ILProc * NewILProc() {
 	ILProc* ret = (ILProc*)MEM_MALLOC(sizeof(ILProc));
-	ret->factor = NULL;
+	ret->Factor = NULL;
 	return ret;
 }
 
 void GenerateILProc(ILProc * self, Enviroment * env, CallContext* cctx) {
-	GenerateILFactor(self->factor, env, cctx);
+	GenerateILFactor(self->Factor, env, cctx);
 }
 
 void LoadILProc(ILProc * self, Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->factor, env, cctx);
+	LoadILFactor(self->Factor, env, cctx);
 }
 
 void DeleteILProc(ILProc * self) {
-	DeleteILFactor(self->factor);
+	DeleteILFactor(self->Factor);
 	MEM_FREE(self);
 }

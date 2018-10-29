@@ -7,7 +7,7 @@
  * 式のみで構成される文を表す要素.
  */
 typedef struct ILProc {
-	ILFactor* factor;
+	ILFactor* Factor;
 } ILProc;
 
 /**
