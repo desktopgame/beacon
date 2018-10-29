@@ -20,11 +20,11 @@ struct Field;
  * variable Namespace::Class variable<|T|> Namespace::Class<|T|>
  * </code>
  */
-typedef enum il_variable_type {
+typedef enum ILVariableType {
 	ILVARIABLE_TYPE_LOCAL_T,
 	ILVARIABLE_TYPE_STATIC_T,
 	ILVARIABLE_TYPE_UNDEFINED_T
-} il_variable_type;
+} ILVariableType;
 
 /**
  * 変数を表す要素.
@@ -33,7 +33,7 @@ typedef struct ILFactor_variable {
 	FQCNCache* fqcn;
 	Vector* type_args;
 	int index;
-	il_variable_type type;
+	ILVariableType type;
 	union {
 		ILFactor_variable_local* local_;
 		ILFactor_variable_static* static_;
