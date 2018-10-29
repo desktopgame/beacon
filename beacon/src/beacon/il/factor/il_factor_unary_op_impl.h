@@ -7,7 +7,7 @@
 
 //struct opcode_buf;
 struct ILChildaOp;
-struct ILFactor_negative_op;
+struct ILNegativeOp;
 struct ILFactor_not_op;
 
 /**
@@ -19,7 +19,7 @@ typedef struct ILUnaryOp {
 	ILFactor* Arg;
 	union {
 		struct ILChildaOp* ChildaOp;
-		struct ILFactor_negative_op* NegativeOp;
+		struct ILNegativeOp* NegativeOp;
 		struct ILFactor_not_op* NotOp;
 	} Kind;
 } ILUnaryOp;

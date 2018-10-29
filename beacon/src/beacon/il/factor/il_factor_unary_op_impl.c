@@ -55,8 +55,8 @@ void LoadILUnaryOp(ILUnaryOp * self, Enviroment * env, CallContext* cctx) {
 		LoadILNotOp(not, env, cctx);
 	} else if(self->Type == OPERATOR_NEGATIVE_T) {
 		self->Category = OPERATOR_NEGATIVE_T;
-		ILFactor_negative_op* neg = ILFactor_negative_op_new(self->Type);
-		neg->parent = self;
+		ILNegativeOp* neg = ILNegativeOp_new(self->Type);
+		neg->Parent = self;
 		self->Kind.NegativeOp = neg;
 		LoadILNegativeOp(neg, env, cctx);
 	} else if(self->Type == OPERATOR_CHILDA_T) {

@@ -6,22 +6,22 @@ struct ILUnaryOp;
 struct GenericType;
 struct Enviroment;
 
-typedef struct ILFactor_negative_op {
-	struct ILUnaryOp* parent;
-	OperatorType type;
-	int operator_index;
-} ILFactor_negative_op;
+typedef struct ILNegativeOp {
+	struct ILUnaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
+} ILNegativeOp;
 
-#define ILFactor_negative_op_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
-ILFactor_negative_op* MallocILNegativeOp(OperatorType type, const char* filename, int lineno);
+#define ILNegativeOp_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
+ILNegativeOp* MallocILNegativeOp(OperatorType type, const char* filename, int lineno);
 
-struct GenericType* EvalILNegativeOp(ILFactor_negative_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILNegativeOp(ILNegativeOp * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILNegativeOp(ILFactor_negative_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILNegativeOp(ILNegativeOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILNegativeOp(ILFactor_negative_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILNegativeOp(ILNegativeOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILNegativeOp(ILFactor_negative_op* self);
+void DeleteILNegativeOp(ILNegativeOp* self);
 
-char* ILNegativeOpToString(ILFactor_negative_op* self, struct Enviroment* env);
+char* ILNegativeOpToString(ILNegativeOp* self, struct Enviroment* env);
 #endif
