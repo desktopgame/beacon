@@ -12,12 +12,12 @@ struct GenericType;
 /**
  * 関数呼び出し演算子の種類を表す列挙型.
  */
-typedef enum ilcall_type {
+typedef enum ILCallType {
 	ILCALL_TYPE_INVOKE_T,
 	ILCALL_TYPE_INVOKE_STATIC_T,
 	ILCALL_TYPE_INVOKE_BOUND_T,
 	ILCALL_TYPE_UNDEFINED_T,
-} ilcall_type;
+} ILCallType;
 
 /**
  * 関数呼び出し演算子を表す構造体.
@@ -27,7 +27,7 @@ typedef struct ILFactor_call_op {
 	ILFactor* receiver;
 	//Vector* type_argument_list;
 	Vector* argument_list;
-	ilcall_type type;
+	ILCallType type;
 	union {
 		ILFactor_invoke* invoke_;
 		ILFactor_invoke_static* invoke_static_;
