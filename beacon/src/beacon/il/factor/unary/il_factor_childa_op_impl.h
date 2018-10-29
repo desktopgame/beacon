@@ -6,21 +6,21 @@ struct ILUnaryOp;
 struct GenericType;
 struct Enviroment;
 
-typedef struct ILFactor_childa_op {
+typedef struct ILChildaOp {
 	struct ILUnaryOp* parent;
 	OperatorType type;
 	int operator_index;
-} ILFactor_childa_op;
+} ILChildaOp;
 
-ILFactor_childa_op* NewILChildaOp(OperatorType type);
+ILChildaOp* NewILChildaOp(OperatorType type);
 
-struct GenericType* EvalILChildaOp(ILFactor_childa_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILChildaOp(ILChildaOp * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILChildaOp(ILFactor_childa_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILChildaOp(ILChildaOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILChildaOp(ILFactor_childa_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILChildaOp(ILChildaOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILChildaOp(ILFactor_childa_op* self);
+void DeleteILChildaOp(ILChildaOp* self);
 
-char* ILChildaOpToString(ILFactor_childa_op* self, struct Enviroment* env);
+char* ILChildaOpToString(ILChildaOp* self, struct Enviroment* env);
 #endif

@@ -6,7 +6,7 @@
 #include "../../ast/operator_type.h"
 
 //struct opcode_buf;
-struct ILFactor_childa_op;
+struct ILChildaOp;
 struct ILFactor_negative_op;
 struct ILFactor_not_op;
 
@@ -18,7 +18,7 @@ typedef struct ILUnaryOp {
 	OperatorCategory Category;
 	ILFactor* Arg;
 	union {
-		struct ILFactor_childa_op* ChildaOp;
+		struct ILChildaOp* ChildaOp;
 		struct ILFactor_negative_op* NegativeOp;
 		struct ILFactor_not_op* NotOp;
 	} Kind;
