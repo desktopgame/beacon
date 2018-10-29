@@ -269,8 +269,8 @@ static ILTry* CLIL_try(ClassLoader* self, AST* asource) {
 	AST* abody = FirstAST(asource);
 	AST* acatch_list = SecondAST(asource);
 	ILTry* ret = NewILTry();
-	CLILBody(self, ret->statement_list, abody);
-	CLIL_catch_list(self, ret->catch_list, acatch_list);
+	CLILBody(self, ret->Statements, abody);
+	CLIL_catch_list(self, ret->Catches, acatch_list);
 	return ret;
 }
 
@@ -280,8 +280,8 @@ static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource) {
 		AST* aname = SecondAST(asource);
 		AST* abody = AtAST(asource, 2);
 		ILCatch* ilcatch = NewILCatch(aname->Attr.StringVValue);
-		CLILGenericCache(FirstAST(atypename), ilcatch->fqcn);
-		CLILBody(self, ilcatch->statement_list, abody);
+		CLILGenericCache(FirstAST(atypename), ilcatch->GCache);
+		CLILBody(self, ilcatch->Statements, abody);
 		PushVector(dest, ilcatch);
 
 	} else if(asource->Tag == AST_STMT_CATCH_LIST_T) {

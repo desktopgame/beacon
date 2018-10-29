@@ -304,15 +304,15 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 		case ILSTMT_TRY_T:
 		{
 			ILTry* tr = s->u.try_;
-			for(int i=0; i<tr->statement_list->Length; i++) {
-				ILStatement* e = (ILStatement*)AtVector(tr->statement_list, i);
+			for(int i=0; i<tr->Statements->Length; i++) {
+				ILStatement* e = (ILStatement*)AtVector(tr->Statements, i);
 				method_count(e, yield_ret, ret);
 			}
-			Vector* catches = tr->catch_list;
+			Vector* catches = tr->Catches;
 			for(int i=0; i<catches->Length; i++) {
 				ILCatch* ce = (ILCatch*)AtVector(catches, i);
-				for(int j=0; j<ce->statement_list->Length; j++) {
-					ILStatement* e = (ILStatement*)AtVector(ce->statement_list, j);
+				for(int j=0; j<ce->Statements->Length; j++) {
+					ILStatement* e = (ILStatement*)AtVector(ce->Statements, j);
 					method_count(e, yield_ret, ret);
 				}
 			}

@@ -8,14 +8,14 @@
 struct Enviroment;
 
 typedef struct ILTry {
-	Vector* statement_list;
-	Vector* catch_list;
+	Vector* Statements;
+	Vector* Catches;
 } ILTry;
 
 typedef struct ILCatch {
-	GenericCache* fqcn;
-	StringView namev;
-	Vector* statement_list;
+	GenericCache* GCache;
+	StringView Name;
+	Vector* Statements;
 } ILCatch;
 
 ILStatement* WrapILTry(ILTry* self);

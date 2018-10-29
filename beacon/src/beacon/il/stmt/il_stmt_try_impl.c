@@ -23,16 +23,16 @@ ILStatement* WrapILTry(ILTry* self) {
 
 ILTry* NewILTry() {
 	ILTry* ret = (ILTry*)MEM_MALLOC(sizeof(ILTry));
-	ret->statement_list = NewVector();
-	ret->catch_list = NewVector();
+	ret->Statements = NewVector();
+	ret->Catches = NewVector();
 	return ret;
 }
 
 ILCatch* NewILCatch(StringView namev) {
 	ILCatch* ret = (ILCatch*)MEM_MALLOC(sizeof(ILCatch));
-	ret->namev = namev;
-	ret->fqcn = NewGenericCache();
-	ret->statement_list = NewVector();
+	ret->Name = namev;
+	ret->GCache = NewGenericCache();
+	ret->Statements = NewVector();
 	return ret;
 }
 
@@ -46,8 +46,8 @@ void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 	AddOpcodeBuf(env->Bytecode, catch_start);
 	//例外が発生するかもしれない
 	//ステートメントの一覧
-	for (int i = 0; i < self->statement_list->Length; i++) {
-		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
+	for (int i = 0; i < self->Statements->Length; i++) {
+		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		GenerateILStmt(e, env, cctx);
 	}
 	AddOpcodeBuf(env->Bytecode, OP_TRY_EXIT);
@@ -58,11 +58,11 @@ void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 	catch_start->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 	//全てのcatch節に対して
 	Label* nextCause = NULL;
-	for (int i = 0; i < self->catch_list->Length; i++) {
+	for (int i = 0; i < self->Catches->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
-		ILCatch* ilcatch = (ILCatch*)AtVector(self->catch_list, i);
-		GenericType* exgType = ResolveImportManager(NULL, ilcatch->fqcn, cctx);
-		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->namev)->Index;
+		ILCatch* ilcatch = (ILCatch*)AtVector(self->Catches, i);
+		GenericType* exgType = ResolveImportManager(NULL, ilcatch->GCache, cctx);
+		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->Name)->Index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
 			int head = AddNOPOpcodeBuf(env->Bytecode);
@@ -82,8 +82,8 @@ void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
 		AddOpcodeBuf(env->Bytecode, exIndex);
 		//catchの内側のステートメントを生成
-		for (int j = 0; j < ilcatch->statement_list->Length; j++) {
-			ILStatement* e = (ILStatement*)AtVector(ilcatch->statement_list, j);
+		for (int j = 0; j < ilcatch->Statements->Length; j++) {
+			ILStatement* e = (ILStatement*)AtVector(ilcatch->Statements, j);
 			GenerateILStmt(e, env, cctx);
 		}
 		//catchされたので、
@@ -106,34 +106,34 @@ void GenerateILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
 }
 
 void LoadILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
-	for(int i=0; i<self->statement_list->Length; i++) {
-		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
+	for(int i=0; i<self->Statements->Length; i++) {
+		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		LoadILStmt(e, env, cctx);
 	}
-	for(int i=0; i<self->catch_list->Length; i++) {
-		ILCatch* e = (ILCatch*)AtVector(self->catch_list, i);
+	for(int i=0; i<self->Catches->Length; i++) {
+		ILCatch* e = (ILCatch*)AtVector(self->Catches, i);
 		LoadILCatch(e, env, cctx);
 	}
 }
 
 void LoadILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
-	GenericType* exgType = ResolveImportManager(NULL, self->fqcn, cctx);
-	EntrySymbolTable(env->Symboles, exgType, self->namev);
-	for(int i=0; i<self->statement_list->Length; i++) {
-		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
+	GenericType* exgType = ResolveImportManager(NULL, self->GCache, cctx);
+	EntrySymbolTable(env->Symboles, exgType, self->Name);
+	for(int i=0; i<self->Statements->Length; i++) {
+		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		LoadILStmt(e, env, cctx);
 	}
 }
 
 void DeleteILCatch(ILCatch* self) {
-	DeleteGenericCache(self->fqcn);
-	DeleteVector(self->statement_list, ILCatch_stmt_delete);
+	DeleteGenericCache(self->GCache);
+	DeleteVector(self->Statements, ILCatch_stmt_delete);
 	MEM_FREE(self);
 }
 
 void DeleteILTry(ILTry* self) {
-	DeleteVector(self->statement_list, ILCatch_stmt_delete);
-	DeleteVector(self->catch_list, ILTry_catch_delete);
+	DeleteVector(self->Statements, ILCatch_stmt_delete);
+	DeleteVector(self->Catches, ILTry_catch_delete);
 	MEM_FREE(self);
 }
 //private
