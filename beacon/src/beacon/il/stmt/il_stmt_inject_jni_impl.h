@@ -5,19 +5,19 @@
 #include "../il_stmt_interface.h"
 struct SymbolEntry;
 
-typedef struct ILStatement_inject_jni {
+typedef struct ILInjectJNI {
 	StringView namev;
 	ILFactor* fact;
 	struct SymbolEntry* se;
-} ILStatement_inject_jni;
+} ILInjectJNI;
 
-ILStatement* WrapILInjectJNI(ILStatement_inject_jni* self);
+ILStatement* WrapILInjectJNI(ILInjectJNI* self);
 
-ILStatement_inject_jni* NewILInjectJNI(StringView namev);
+ILInjectJNI* NewILInjectJNI(StringView namev);
 
-void GenerateILInjectJNI(ILStatement_inject_jni* self, Enviroment* env, CallContext* cctx);
+void GenerateILInjectJNI(ILInjectJNI* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInjectJNI(ILStatement_inject_jni * self, Enviroment* env, CallContext* cctx);
+void LoadILInjectJNI(ILInjectJNI * self, Enviroment* env, CallContext* cctx);
 
-void DeleteILInjectJni(ILStatement_inject_jni* self);
+void DeleteILInjectJni(ILInjectJNI* self);
 #endif

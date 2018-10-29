@@ -43,7 +43,7 @@ struct ILAssert;
 struct ILDefer;
 struct ILStatement_yield_return;
 typedef void* ILStatement_yield_break;
-struct ILStatement_inject_jni;
+struct ILInjectJNI;
 
 /**
  * 文を表す要素です.
@@ -66,7 +66,7 @@ typedef struct ILStatement {
 		struct ILDefer* defer_;
 		struct ILStatement_yield_return* yield_return;
 		ILStatement_yield_break yield_break;
-		struct ILStatement_inject_jni* inject_jni;
+		struct ILInjectJNI* inject_jni;
 	} u;
 } ILStatement;
 

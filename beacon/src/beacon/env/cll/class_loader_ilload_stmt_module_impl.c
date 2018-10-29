@@ -157,7 +157,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_INJECT_JNI_VALUE_T:
 		{
-			ILStatement_inject_jni* jni = NewILInjectJNI(asource->Attr.StringVValue);
+			ILInjectJNI* jni = NewILInjectJNI(asource->Attr.StringVValue);
 			AST* afact = FirstAST(asource);
 			jni->fact = CLILFactor(self, afact);
 			jni->fact->lineno = 0;
