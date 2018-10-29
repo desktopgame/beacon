@@ -8,7 +8,7 @@
 //proto
 static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource);
 static ILInferencedTypeInit* CLIL_inferenced_type_init(ClassLoader* self, AST* asource);
-static ILStatement_variable_decl* CLIL_variable_decl(ClassLoader* self, AST* asource);
+static ILVariableDecl* CLIL_variable_decl(ClassLoader* self, AST* asource);
 static ILStatement_variable_init* CLIL_variable_init(ClassLoader* self, AST* asource);
 static ILIf* CLIL_if(ClassLoader* self, AST* asource);
 static ILIf* CLIL_if_elif_list(ClassLoader* self, AST* asource);
@@ -68,7 +68,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_STMT_VARIABLE_DECL_T:
 		{
-			ILStatement_variable_decl* ilvardecl = CLIL_variable_decl(self, asource);
+			ILVariableDecl* ilvardecl = CLIL_variable_decl(self, asource);
 			return WrapILVariableDecl(ilvardecl);
 		}
 		case AST_STMT_VARIABLE_INIT_T:
@@ -177,10 +177,10 @@ static ILInferencedTypeInit * CLIL_inferenced_type_init(ClassLoader * self, AST*
 	return ret;
 }
 
-static ILStatement_variable_decl* CLIL_variable_decl(ClassLoader* self, AST* asource) {
+static ILVariableDecl* CLIL_variable_decl(ClassLoader* self, AST* asource) {
 	AST* afqcn = FirstAST(asource);
 	AST* aname = SecondAST(asource);
-	ILStatement_variable_decl* ret = NewILVariableDecl(aname->Attr.StringVValue);
+	ILVariableDecl* ret = NewILVariableDecl(aname->Attr.StringVValue);
 	ret->namev = aname->Attr.StringVValue;
 	CLILGenericCache(FirstAST(afqcn), ret->fqcn);
 	return ret;

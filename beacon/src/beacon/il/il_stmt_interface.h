@@ -32,7 +32,7 @@ typedef enum ILStatementTag {
 struct ILProc;
 struct ILIf;
 struct ILStatement_while;
-struct ILStatement_variable_decl;
+struct ILVariableDecl;
 struct ILStatement_variable_init;
 struct ILReturn;
 typedef void* ILReturnEmpty;
@@ -55,7 +55,7 @@ typedef struct ILStatement {
 		struct ILProc* proc_;
 		struct ILIf* if_;
 		struct ILStatement_while* while_;
-		struct ILStatement_variable_decl* variable_decl;
+		struct ILVariableDecl* variable_decl;
 		struct ILStatement_variable_init* variable_init;
 		struct ILReturn* return_;
 		ILReturnEmpty return_empty;
