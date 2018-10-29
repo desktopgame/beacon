@@ -4,25 +4,25 @@
 
 struct OperatorOverload;
 
-typedef struct ILFactor_subscript {
+typedef struct ILSubscript {
 	ILFactor* receiver;
 	ILFactor* pos;
 	int operator_index;
 	struct OperatorOverload* opov;
-} ILFactor_subscript;
+} ILSubscript;
 
-ILFactor* WrapILSubscript(ILFactor_subscript* self);
+ILFactor* WrapILSubscript(ILSubscript* self);
 
-#define ILFactor_subscript_new() (MallocILSubscript(__FILE__, __LINE__))
-ILFactor_subscript* MallocILSubscript(const char* filename, int lineno);
+#define ILSubscript_new() (MallocILSubscript(__FILE__, __LINE__))
+ILSubscript* MallocILSubscript(const char* filename, int lineno);
 
-void GenerateILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cctx);
+void GenerateILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
 
-void LoadILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cctx);
+void LoadILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
 
-char* ILSubscriptToString(ILFactor_subscript* self, Enviroment* env);
+char* ILSubscriptToString(ILSubscript* self, Enviroment* env);
 
-void DeleteILSubscript(ILFactor_subscript* self);
+void DeleteILSubscript(ILSubscript* self);
 #endif

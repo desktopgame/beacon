@@ -17,7 +17,7 @@ static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Envirom
 static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILFactor_variable* ilvar, Enviroment* env, CallContext* cctx);
 static void ILFactor_invoke_bound_check(ILCallOp* self, Enviroment* env);
 static void ILMemberOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
-static void ILFactor_subscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
+static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
 
 static void ILCallOp_argument_delete(VectorItem item);
 static void ILCallOp_type_argument_delete(VectorItem item);
@@ -116,7 +116,7 @@ static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 		ILMemberOp_check(self, env, cctx);
 	//a()() の場合
 	} else if(receiver->type == ILFACTOR_CALL_OP_T) {
-		ILFactor_subscript_check(self, env, cctx);
+		ILSubscript_check(self, env, cctx);
 	}
 	assert(self->Type != ILCALL_TYPE_UNDEFINED_T);
 }
@@ -195,7 +195,7 @@ static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILFactor_
 	ilvar->fqcn = NULL;
 }
 
-static void ILFactor_subscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
+static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	ILFactor* receiver = self->Receiver;
 	ILCallOp* call_left = receiver->u.call_;
 	ILFactor_invoke* iv = NewILInvoke(ZERO_VIEW);

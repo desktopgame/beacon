@@ -20,7 +20,7 @@ static ILAs* CLIL_as(ClassLoader* self, AST* source);
 static ILCallOp* CLIL_call_op(ClassLoader* self, AST* source);
 static ILMemberOp* CLIL_member_op(ClassLoader* self, AST* source);
 static ILInstanceOf* CLIL_instanceof(ClassLoader* self, AST* source);
-static ILFactor_subscript* CLIL_subscript(ClassLoader* self, AST* source);
+static ILSubscript* CLIL_subscript(ClassLoader* self, AST* source);
 
 ILFactor* CLILFactor(ClassLoader* self, AST* source) {
 	ILFactor* ret = CLILFactorImpl(self, source);
@@ -274,8 +274,8 @@ static ILInstanceOf* CLIL_instanceof(ClassLoader* self, AST* source) {
 	return ret;
 }
 
-static ILFactor_subscript* CLIL_subscript(ClassLoader* self, AST* source) {
-	ILFactor_subscript* ret = ILFactor_subscript_new();
+static ILSubscript* CLIL_subscript(ClassLoader* self, AST* source) {
+	ILSubscript* ret = ILSubscript_new();
 	AST* afact = FirstAST(source);
 	AST* apos = SecondAST(source);
 	ret->receiver = CLILFactor(self, afact);

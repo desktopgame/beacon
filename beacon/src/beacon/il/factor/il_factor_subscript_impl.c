@@ -4,14 +4,14 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../env/operator_overload.h"
 
-ILFactor* WrapILSubscript(ILFactor_subscript* self) {
+ILFactor* WrapILSubscript(ILSubscript* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_SUBSCRIPT_T);
 	ret->u.subscript = self;
 	return ret;
 }
 
-ILFactor_subscript* MallocILSubscript(const char* filename, int lineno) {
-	ILFactor_subscript* ret = mem_malloc(sizeof(ILFactor_subscript), filename, lineno);
+ILSubscript* MallocILSubscript(const char* filename, int lineno) {
+	ILSubscript* ret = mem_malloc(sizeof(ILSubscript), filename, lineno);
 	ret->receiver = NULL;
 	ret->pos = NULL;
 	ret->operator_index = -1;
@@ -19,14 +19,14 @@ ILFactor_subscript* MallocILSubscript(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cctx) {
+void GenerateILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->pos, env, cctx);
 	GenerateILFactor(self->receiver, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->Bytecode, self->operator_index);
 }
 
-void LoadILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cctx) {
+void LoadILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
 	if(self->operator_index != -1) {
 		return;
 	}
@@ -42,11 +42,11 @@ void LoadILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cct
 	DeleteVector(args, VectorDeleterOfNull);
 }
 
-GenericType* EvalILSubscript(ILFactor_subscript* self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
 	return ApplyGenericType(self->opov->ReturnGType, cctx);
 }
 
-char* ILSubscriptToString(ILFactor_subscript* self, Enviroment* env) {
+char* ILSubscriptToString(ILSubscript* self, Enviroment* env) {
 	Buffer* buf = NewBuffer();
 	char* src = ILFactorToString(self->receiver, env);
 	char* pos = ILFactorToString(self->pos, env);
@@ -59,7 +59,7 @@ char* ILSubscriptToString(ILFactor_subscript* self, Enviroment* env) {
 	return ReleaseBuffer(buf);
 }
 
-void DeleteILSubscript(ILFactor_subscript* self) {
+void DeleteILSubscript(ILSubscript* self) {
 	DeleteILFactor(self->receiver);
 	DeleteILFactor(self->pos);
 	MEM_FREE(self);

@@ -183,7 +183,7 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 }
 
 static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_subscript* subs = self->Left->u.subscript;
+	ILSubscript* subs = self->Left->u.subscript;
 	GenerateILFactor(subs->receiver, env, cctx);
 	GenerateILFactor(subs->pos, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);

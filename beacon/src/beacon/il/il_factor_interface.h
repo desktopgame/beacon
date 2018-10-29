@@ -70,7 +70,7 @@ struct ILInstanceOf;
 struct ILFactor_explicit_binary_op;
 struct ILFactor_explicit_unary_op;
 struct ILPropertyAccess;
-struct ILFactor_subscript;
+struct ILSubscript;
 
 /**
  * 計算可能な要素.
@@ -102,7 +102,7 @@ typedef struct ILFactor {
 		struct ILFactor_explicit_binary_op* exp_binary_op;
 		struct ILFactor_explicit_unary_op* exp_unary_op;
 		struct ILPropertyAccess* prop;
-		struct ILFactor_subscript* subscript;
+		struct ILSubscript* subscript;
 	} u;
 } ILFactor;
 
