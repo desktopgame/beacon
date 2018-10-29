@@ -7,9 +7,9 @@ struct Enviroment;
 struct GenericType;
 
 typedef struct ILExplicitUnaryOp {
-	struct ILFactor* receiver;
-	OperatorType type;
-	int index;
+	struct ILFactor* Receiver;
+	OperatorType Type;
+	int Index;
 } ILExplicitUnaryOp;
 
 struct ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self);

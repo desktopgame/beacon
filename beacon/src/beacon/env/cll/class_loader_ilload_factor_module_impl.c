@@ -180,7 +180,7 @@ static ILBinaryOp* CLIL_binary(ClassLoader* self, AST* source, OperatorType type
 
 static ILExplicitUnaryOp* CLIL_explicit_unary(ClassLoader* self, AST* source, OperatorType type) {
 	ILExplicitUnaryOp* ret = NewILExplicitUnaryOp(type);
-	ret->receiver = CLILFactor(self, FirstAST(source));
+	ret->Receiver = CLILFactor(self, FirstAST(source));
 	return ret;
 }
 
