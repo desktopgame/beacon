@@ -6,9 +6,9 @@ struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
 typedef struct ILArithmeticOp {
-	struct ILBinaryOp* parent;
-	int operator_index;
-	OperatorType type;
+	struct ILBinaryOp* Parent;
+	int OperatorIndex;
+	OperatorType Type;
 } ILArithmeticOp;
 
 ILArithmeticOp* NewILArithmeticOp(OperatorType type);

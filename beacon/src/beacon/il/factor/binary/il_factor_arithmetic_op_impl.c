@@ -15,61 +15,61 @@ static Opcode operator_to_dopcode(OperatorType type);
 
 ILArithmeticOp* NewILArithmeticOp(OperatorType type) {
 	ILArithmeticOp* ret = (ILArithmeticOp*)MEM_MALLOC(sizeof(ILArithmeticOp));
-	ret->type = type;
-	ret->parent = NULL;
-	ret->operator_index = -1;
+	ret->Type = type;
+	ret->Parent = NULL;
+	ret->OperatorIndex = -1;
 	return ret;
 }
 
 GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->parent->Right, env, cctx);
+	GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
+	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	type* cint = TYPE_INT;
 	type* cdouble = TYPE_DOUBLE;
-	if(IsIntIntBinaryOp(self->parent, env, cctx)) {
+	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
 		return TYPE2GENERIC(cint);
 	}
-	if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
+	if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
 		return TYPE2GENERIC(cdouble);
 	}
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
-	if(self->operator_index == -1) {
+	if(self->OperatorIndex == -1) {
 		ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
-			OperatorToString(self->type)
+			OperatorToString(self->Type)
 		);
 		return NULL;
 	}
-	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->operator_index);
-	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
+	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->OperatorIndex);
+	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
 void GenerateILArithmeticOp(ILArithmeticOp* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
-	if(self->operator_index == -1) {
-		GenerateILFactor(self->parent->Right, env, cctx);
-		GenerateILFactor(self->parent->Left, env, cctx);
-		if(IsIntIntBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->type));
-		} else if(IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
-			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_dopcode(self->type));
+	if(self->OperatorIndex == -1) {
+		GenerateILFactor(self->Parent->Right, env, cctx);
+		GenerateILFactor(self->Parent->Left, env, cctx);
+		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->Type));
+		} else if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
+			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_dopcode(self->Type));
 		} else {
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->parent->Right, env, cctx);
-		GenerateILFactor(self->parent->Left, env, cctx);
+		GenerateILFactor(self->Parent->Right, env, cctx);
+		GenerateILFactor(self->Parent->Left, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
-		AddOpcodeBuf(env->Bytecode, self->operator_index);
+		AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 	}
 }
 
 void LoadILArithmeticOp(ILArithmeticOp* self, Enviroment* env, CallContext* cctx) {
-	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
-	   !IsDoubleDoubleBinaryOp(self->parent, env, cctx)) {
-		self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
+	if(!IsIntIntBinaryOp(self->Parent, env, cctx) &&
+	   !IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
+		self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -78,7 +78,7 @@ void DeleteILArithmeticOp(ILArithmeticOp* self) {
 }
 
 char* ILArithmeticOpToString(ILArithmeticOp* self, Enviroment* env) {
-	return ILBinaryOpToString_simple(self->parent, env);
+	return ILBinaryOpToString_simple(self->Parent, env);
 }
 //static
 static Opcode operator_to_iopcode(OperatorType type) {
