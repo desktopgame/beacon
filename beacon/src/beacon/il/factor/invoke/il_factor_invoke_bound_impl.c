@@ -236,7 +236,7 @@ static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env
 			return;
 		}
 	}
-	subscript_descriptor subs = self->Kind.Subscript;
+	SubscriptDescriptor subs = self->Kind.Subscript;
 	if(subs.tag == SUBSCRIPT_LOCAL_T) {
 		AddOpcodeBuf(env->Bytecode, OP_LOAD);
 		AddOpcodeBuf(env->Bytecode, subs.index);
@@ -274,7 +274,7 @@ static GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env
 		cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
 	} else {
 		cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-		cfr->Kind.InstanceInvoke.Receiver = ApplyGenericType(subscript_descriptor_receiver(&self->Kind.Subscript), cctx);
+		cfr->Kind.InstanceInvoke.Receiver = ApplyGenericType(SubscriptDescriptor_receiver(&self->Kind.Subscript), cctx);
 		cfr->Kind.InstanceInvoke.Args = self->Arguments;
 		cfr->Kind.InstanceInvoke.TypeArgs = self->TypeArgs;
 	}

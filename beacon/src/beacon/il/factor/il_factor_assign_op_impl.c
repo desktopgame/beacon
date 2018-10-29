@@ -238,7 +238,7 @@ static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment
 	}
 	GenerateILFactor(rhs, env, cctx);
 	//GenerateILFactor(lhs->receiver, env, cctx);
-	subscript_descriptor subs = lhs->Kind.Subscript;
+	SubscriptDescriptor subs = lhs->Kind.Subscript;
 	if(subs.tag == SUBSCRIPT_LOCAL_T) {
 		AddOpcodeBuf(env->Bytecode, OP_LOAD);
 		AddOpcodeBuf(env->Bytecode, subs.index);

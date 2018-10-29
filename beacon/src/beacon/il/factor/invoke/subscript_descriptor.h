@@ -6,15 +6,15 @@ struct SymbolEntry;
 struct Field;
 struct Property;
 
-typedef enum subscript_tag {
+typedef enum SubscriptTag {
 	SUBSCRIPT_LOCAL_T,
 	SUBSCRIPT_FIELD_T,
 	SUBSCRIPT_PROPERTY_T,
 	SUBSCRIPT_UNDEFINED_T
-} subscript_tag;
+} SubscriptTag;
 
-typedef struct subscript_descriptor {
-	subscript_tag tag;
+typedef struct SubscriptDescriptor {
+	SubscriptTag tag;
 	struct OperatorOverload* opov;
 	int index;
 	union {
@@ -22,7 +22,7 @@ typedef struct subscript_descriptor {
 		struct Field* fi;
 		struct Property* prop;
 	} u;
-} subscript_descriptor;
+} SubscriptDescriptor;
 
-struct GenericType* subscript_descriptor_receiver(const subscript_descriptor* desc);
+struct GenericType* SubscriptDescriptor_receiver(const SubscriptDescriptor* desc);
 #endif

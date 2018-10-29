@@ -22,7 +22,7 @@ typedef struct ILInvokeBound {
 	Vector* Arguments;
 	union {
 		struct Method* Method;
-		subscript_descriptor Subscript;
+		SubscriptDescriptor Subscript;
 	} Kind;
 	int Index;
 	struct GenericType* Resolved;
