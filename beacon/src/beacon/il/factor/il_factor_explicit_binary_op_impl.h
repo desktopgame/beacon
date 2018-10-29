@@ -6,22 +6,22 @@ struct ILFactor;
 struct Enviroment;
 struct GenericType;
 
-typedef struct ILFactor_explicit_binary_op {
+typedef struct ILExplicitBinaryOp {
 	struct ILFactor* receiver;
 	struct ILFactor* arg;
 	OperatorType type;
 	int index;
-} ILFactor_explicit_binary_op;
+} ILExplicitBinaryOp;
 
-struct ILFactor* WrapILExplicitBinaryOp(ILFactor_explicit_binary_op* self);
+struct ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self);
 
-ILFactor_explicit_binary_op* NewILExplicitBinaryOp(OperatorType type);
+ILExplicitBinaryOp* NewILExplicitBinaryOp(OperatorType type);
 
-void GenerateILExplicitBinaryOp(ILFactor_explicit_binary_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILExplicitBinaryOp(ILFactor_explicit_binary_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILExplicitBinaryOp(ILFactor_explicit_binary_op* self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILExplicitBinaryOp(ILFactor_explicit_binary_op* self);
+void DeleteILExplicitBinaryOp(ILExplicitBinaryOp* self);
 #endif

@@ -11,7 +11,7 @@ static ILBool* CLIL_false(ClassLoader* self, AST* source);
 static ILUnaryOp* CLIL_unary(ClassLoader* self, AST* source, OperatorType type);
 static ILBinaryOp* CLIL_binary(ClassLoader* self, AST* source, OperatorType type);
 static ILFactor_explicit_unary_op* CLIL_explicit_unary(ClassLoader* self, AST* source, OperatorType type);
-static ILFactor_explicit_binary_op* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type);
+static ILExplicitBinaryOp* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type);
 static ILAssignOp* CLIL_assign(ClassLoader* self, AST* source);
 static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, OperatorType type);
 static ILVariable* CLIL_variable(ClassLoader* self, AST* source);
@@ -184,8 +184,8 @@ static ILFactor_explicit_unary_op* CLIL_explicit_unary(ClassLoader* self, AST* s
 	return ret;
 }
 
-static ILFactor_explicit_binary_op* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type) {
-	ILFactor_explicit_binary_op* ret = NewILExplicitBinaryOp(type);
+static ILExplicitBinaryOp* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type) {
+	ILExplicitBinaryOp* ret = NewILExplicitBinaryOp(type);
 	ret->receiver = CLILFactor(self, FirstAST(source));
 	ret->arg = CLILFactor(self, SecondAST(source));
 	return ret;
