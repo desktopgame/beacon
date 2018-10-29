@@ -6,21 +6,21 @@ struct ILFactor;
 struct Enviroment;
 struct GenericType;
 
-typedef struct ILFactor_explicit_unary_op {
+typedef struct ILExplicitUnaryOp {
 	struct ILFactor* receiver;
 	OperatorType type;
 	int index;
-} ILFactor_explicit_unary_op;
+} ILExplicitUnaryOp;
 
-struct ILFactor* WrapILExplicitUnaryOp(ILFactor_explicit_unary_op* self);
+struct ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self);
 
-ILFactor_explicit_unary_op* NewILExplicitUnaryOp(OperatorType type);
+ILExplicitUnaryOp* NewILExplicitUnaryOp(OperatorType type);
 
-void GenerateILExplicitUnaryOp(ILFactor_explicit_unary_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILExplicitUnaryOp(ILFactor_explicit_unary_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILExplicitUnaryOp(ILFactor_explicit_unary_op* self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILExplicitUnaryOp(ILFactor_explicit_unary_op* self);
+void DeleteILExplicitUnaryOp(ILExplicitUnaryOp* self);
 #endif
