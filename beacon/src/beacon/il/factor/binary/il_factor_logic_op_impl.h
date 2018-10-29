@@ -7,9 +7,9 @@ struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
 typedef struct ILLogicOp {
-	struct ILBinaryOp* parent;
-	OperatorType type;
-	int operator_index;
+	struct ILBinaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
 } ILLogicOp;
 
 ILLogicOp* NewILLogicOp(OperatorType type);
