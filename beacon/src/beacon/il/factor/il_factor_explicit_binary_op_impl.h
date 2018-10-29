@@ -7,10 +7,10 @@ struct Enviroment;
 struct GenericType;
 
 typedef struct ILExplicitBinaryOp {
-	struct ILFactor* receiver;
-	struct ILFactor* arg;
-	OperatorType type;
-	int index;
+	struct ILFactor* Receiver;
+	struct ILFactor* Arg;
+	OperatorType Type;
+	int Index;
 } ILExplicitBinaryOp;
 
 struct ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self);

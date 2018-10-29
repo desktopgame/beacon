@@ -186,8 +186,8 @@ static ILFactor_explicit_unary_op* CLIL_explicit_unary(ClassLoader* self, AST* s
 
 static ILExplicitBinaryOp* CLIL_explicit_binary(ClassLoader* self, AST* source, OperatorType type) {
 	ILExplicitBinaryOp* ret = NewILExplicitBinaryOp(type);
-	ret->receiver = CLILFactor(self, FirstAST(source));
-	ret->arg = CLILFactor(self, SecondAST(source));
+	ret->Receiver = CLILFactor(self, FirstAST(source));
+	ret->Arg = CLILFactor(self, SecondAST(source));
 	return ret;
 }
 
