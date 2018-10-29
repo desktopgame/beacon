@@ -29,8 +29,8 @@ typedef struct ILCallOp {
 	Vector* Arguments;
 	ILCallType Type;
 	union {
-		ILFactor_invoke* Invoke;
-		ILFactor_invoke_static* InvokeStatic;
+		ILInvoke* Invoke;
+		ILInvoke_static* InvokeStatic;
 		ILInvokeBound* InvokeBound;
 	} Kind;
 } ILCallOp;

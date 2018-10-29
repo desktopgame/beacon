@@ -15,7 +15,7 @@ static void assign_to_field(ILAssignOp* self,ILFactor* receiver, ILFactor* sourc
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx);
-static void assign_by_invoke(ILFactor_invoke* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
+static void assign_by_invoke(ILInvoke* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
 static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
 static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx);
 static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx);
@@ -208,7 +208,7 @@ static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx)
 	}
 }
 
-static void assign_by_invoke(ILFactor_invoke* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx) {
+static void assign_by_invoke(ILInvoke* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx) {
 	int temp = -1;
 	if(lhs->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		ThrowBCError(BCERROR_ASSIGN_TO_INVOKE_T,

@@ -15,16 +15,16 @@
 #include <stdio.h>
 
 //proto
-static void resolve_non_default(ILFactor_invoke * self, Enviroment* env, CallContext* cctx);
-static void resolve_default(ILFactor_invoke * self, Enviroment* env, CallContext* cctx);
-static void ILFactor_invoke_args_delete(VectorItem item);
-static void ILFactor_invoke_check(ILFactor_invoke * self, Enviroment* env, CallContext* cctx);
-static GenericType* ILFactor_invoke_return_gtype(ILFactor_invoke* self);
-static void GenerateILInvoke_method(ILFactor_invoke* self, Enviroment* env, CallContext* cctx);
-static void GenerateILInvoke_subscript(ILFactor_invoke* self, Enviroment* env, CallContext* cctx);
+static void resolve_non_default(ILInvoke * self, Enviroment* env, CallContext* cctx);
+static void resolve_default(ILInvoke * self, Enviroment* env, CallContext* cctx);
+static void ILInvoke_args_delete(VectorItem item);
+static void ILInvoke_check(ILInvoke * self, Enviroment* env, CallContext* cctx);
+static GenericType* ILInvoke_return_gtype(ILInvoke* self);
+static void GenerateILInvoke_method(ILInvoke* self, Enviroment* env, CallContext* cctx);
+static void GenerateILInvoke_subscript(ILInvoke* self, Enviroment* env, CallContext* cctx);
 
-ILFactor_invoke* NewILInvoke(StringView namev) {
-	ILFactor_invoke* ret = (ILFactor_invoke*)MEM_MALLOC(sizeof(ILFactor_invoke));
+ILInvoke* NewILInvoke(StringView namev) {
+	ILInvoke* ret = (ILInvoke*)MEM_MALLOC(sizeof(ILInvoke));
 	ret->args = NULL;
 	ret->receiver = NULL;
 	ret->type_args = NULL;
@@ -35,12 +35,12 @@ ILFactor_invoke* NewILInvoke(StringView namev) {
 	return ret;
 }
 
-void GenerateILInvoke(ILFactor_invoke* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInvoke(ILInvoke* self, Enviroment* env, CallContext* cctx) {
 	GenerateILInvoke_method(self, env, cctx);
 	GenerateILInvoke_subscript(self, env, cctx);
 }
 
-void LoadILInvoke(ILFactor_invoke * self, Enviroment* env, CallContext* cctx) {
+void LoadILInvoke(ILInvoke * self, Enviroment* env, CallContext* cctx) {
 	if(self->index != -1) {
 		return;
 	}
@@ -49,16 +49,16 @@ void LoadILInvoke(ILFactor_invoke * self, Enviroment* env, CallContext* cctx) {
 	cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
 	cfr->Kind.InstanceInvoke.Receiver = EvalILFactor(self->receiver, env, cctx);
 	LoadILFactor(self->receiver, env, cctx);
-	ILFactor_invoke_check(self, env, cctx);
+	ILInvoke_check(self, env, cctx);
 	PopCallContext(cctx);
 }
 
-GenericType* EvalILInvoke(ILFactor_invoke * self, Enviroment* env, CallContext* cctx) {
-	ILFactor_invoke_check(self, env, cctx);
+GenericType* EvalILInvoke(ILInvoke * self, Enviroment* env, CallContext* cctx) {
+	ILInvoke_check(self, env, cctx);
 	if(GetLastBCError()) {
 		return NULL;
 	}
-	GenericType* rgtp = ILFactor_invoke_return_gtype(self);
+	GenericType* rgtp = ILInvoke_return_gtype(self);
 	GenericType* ret = NULL;
 	//型変数をそのまま返す場合
 	if(rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
@@ -72,7 +72,7 @@ GenericType* EvalILInvoke(ILFactor_invoke * self, Enviroment* env, CallContext* 
 	return ret;
 }
 
-char* ILInvokeToString(ILFactor_invoke* self, Enviroment* env) {
+char* ILInvokeToString(ILInvoke* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* invstr = ILFactorToString(self->receiver, env);
 	AppendsBuffer(sb, invstr);
@@ -84,15 +84,15 @@ char* ILInvokeToString(ILFactor_invoke* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILInvoke(ILFactor_invoke* self) {
-	DeleteVector(self->args, ILFactor_invoke_args_delete);
+void DeleteILInvoke(ILInvoke* self) {
+	DeleteVector(self->args, ILInvoke_args_delete);
 	DeleteVector(self->type_args, VectorDeleterOfNull);
 	DeleteILFactor(self->receiver);
 	//generic_DeleteType(self->resolved);
 	MEM_FREE(self);
 }
 
-OperatorOverload* FindSetILInvoke(ILFactor_invoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
+OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
@@ -102,12 +102,12 @@ OperatorOverload* FindSetILInvoke(ILFactor_invoke* self, ILFactor* value, Enviro
 	return opov;
 }
 //private
-static void resolve_non_default(ILFactor_invoke * self, Enviroment* env, CallContext* cctx) {
+static void resolve_non_default(ILInvoke * self, Enviroment* env, CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
 	GenericType* receivergType = EvalILFactor(self->receiver, env, cctx);
-	GenericType* rgtp = ILFactor_invoke_return_gtype(self);
+	GenericType* rgtp = ILInvoke_return_gtype(self);
 	if(rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
@@ -122,12 +122,12 @@ static void resolve_non_default(ILFactor_invoke * self, Enviroment* env, CallCon
 	}
 }
 
-static void resolve_default(ILFactor_invoke * self, Enviroment* env, CallContext* cctx) {
+static void resolve_default(ILInvoke * self, Enviroment* env, CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
 	GenericType* receivergType = EvalILFactor(self->receiver, env, cctx);
-	GenericType* rgtp = ILFactor_invoke_return_gtype(self);
+	GenericType* rgtp = ILInvoke_return_gtype(self);
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
@@ -139,7 +139,7 @@ static void resolve_default(ILFactor_invoke * self, Enviroment* env, CallContext
 	PopCallContext(cctx);
 }
 
-static void ILFactor_invoke_check(ILFactor_invoke * self, Enviroment * env, CallContext* cctx) {
+static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx) {
 	//レシーバの読み込み
 	LoadILFactor(self->receiver, env, cctx);
 	if(GetLastBCError()) {
@@ -196,17 +196,17 @@ static void ILFactor_invoke_check(ILFactor_invoke * self, Enviroment * env, Call
 	}
 }
 
-static void ILFactor_invoke_args_delete(VectorItem item) {
+static void ILInvoke_args_delete(VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 
-static GenericType* ILFactor_invoke_return_gtype(ILFactor_invoke* self) {
+static GenericType* ILInvoke_return_gtype(ILInvoke* self) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->ReturnGType : self->u.opov->ReturnGType;
 }
 
-static void GenerateILInvoke_method(ILFactor_invoke* self, Enviroment* env, CallContext* cctx) {
+static void GenerateILInvoke_method(ILInvoke* self, Enviroment* env, CallContext* cctx) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	if(self->tag != INSTANCE_INVOKE_METHOD_T) {
 		return;
@@ -238,7 +238,7 @@ static void GenerateILInvoke_method(ILFactor_invoke* self, Enviroment* env, Call
 	}
 }
 
-static void GenerateILInvoke_subscript(ILFactor_invoke* self, Enviroment* env, CallContext* cctx) {
+static void GenerateILInvoke_subscript(ILInvoke* self, Enviroment* env, CallContext* cctx) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	if(self->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		return;

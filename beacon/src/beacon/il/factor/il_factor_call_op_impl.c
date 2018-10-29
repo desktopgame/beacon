@@ -171,7 +171,7 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Envirom
 
 static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx) {
 	//入れ替える
-	ILFactor_invoke* iv = NewILInvoke(ilmem->Name);
+	ILInvoke* iv = NewILInvoke(ilmem->Name);
 	iv->args = self->Arguments;
 	iv->receiver = ilmem->Source;
 	iv->type_args = ilmem->TypeArgs;
@@ -183,7 +183,7 @@ static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Envirom
 }
 
 static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, Enviroment* env, CallContext* cctx) {
-	ILFactor_invoke_static* st = NewILInvokeStatic(ilmem->Name);
+	ILInvoke_static* st = NewILInvokeStatic(ilmem->Name);
 	self->Type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->Kind.InvokeStatic = st;
 	//入れ替える
@@ -198,7 +198,7 @@ static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariabl
 static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	ILFactor* receiver = self->Receiver;
 	ILCallOp* call_left = receiver->u.call_;
-	ILFactor_invoke* iv = NewILInvoke(ZERO_VIEW);
+	ILInvoke* iv = NewILInvoke(ZERO_VIEW);
 	GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
 	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
 	int temp;

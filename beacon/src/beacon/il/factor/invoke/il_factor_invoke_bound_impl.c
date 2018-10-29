@@ -75,7 +75,7 @@ OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, Env
 }
 
 //private
-//FIXME:ILFactor_invokeからのコピペ
+//FIXME:ILInvokeからのコピペ
 static void DeleteILInvokeBound_typeargs(VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);

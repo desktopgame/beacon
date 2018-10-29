@@ -8,13 +8,13 @@ struct GenericType;
 struct OperatorOverload;
 struct Method;
 
-typedef enum instance_invoke {
+typedef enum InstanceInvokeTag {
 	INSTANCE_INVOKE_METHOD_T,
 	INSTANCE_INVOKE_SUBSCRIPT_T,
 	INSTANCE_INVOKE_UNDEFINED_T
-} instance_invoke;
+} InstanceInvokeTag;
 
-typedef struct ILFactor_invoke {
+typedef struct ILInvoke {
 	ILFactor* receiver;
 	Vector* args;
 	Vector* type_args;
@@ -25,20 +25,20 @@ typedef struct ILFactor_invoke {
 		struct OperatorOverload* opov;
 	} u;
 	struct GenericType* resolved;
-	instance_invoke tag;
-} ILFactor_invoke;
+	InstanceInvokeTag tag;
+} ILInvoke;
 
-ILFactor_invoke* NewILInvoke(StringView namev);
+ILInvoke* NewILInvoke(StringView namev);
 
-void GenerateILInvoke(ILFactor_invoke* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvoke(ILInvoke* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInvoke(ILFactor_invoke * self, Enviroment * env, CallContext* cctx);
+void LoadILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILInvoke(ILFactor_invoke * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
 
-char* ILInvokeToString(ILFactor_invoke* self, Enviroment* env);
+char* ILInvokeToString(ILInvoke* self, Enviroment* env);
 
-void DeleteILInvoke(ILFactor_invoke* self);
+void DeleteILInvoke(ILInvoke* self);
 
-struct OperatorOverload* FindSetILInvoke(ILFactor_invoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif
