@@ -187,9 +187,9 @@ static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariabl
 	self->Type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->Kind.InvokeStatic = st;
 	//入れ替える
-	st->type_args = ilmem->TypeArgs;
-	st->args = self->Arguments;
-	st->fqcn = ilvar->FQCN;
+	st->TypeArgs = ilmem->TypeArgs;
+	st->Arguments = self->Arguments;
+	st->FQCN = ilvar->FQCN;
 	self->Arguments = NULL;
 	ilmem->TypeArgs = NULL;
 	ilvar->FQCN = NULL;

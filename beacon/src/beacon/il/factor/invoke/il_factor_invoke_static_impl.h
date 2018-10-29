@@ -8,13 +8,13 @@ struct GenericType;
 struct Method;
 
 typedef struct ILInvokeStatic {
-	StringView namev;
-	FQCNCache* fqcn;
-	Vector* args;
-	Vector* type_args;
-	struct Method* m;
-	int index;
-	struct GenericType* resolved;
+	StringView Name;
+	FQCNCache* FQCN;
+	Vector* Arguments;
+	Vector* TypeArgs;
+	struct Method* Method;
+	int Index;
+	struct GenericType* Resolved;
 } ILInvokeStatic;
 
 ILInvokeStatic* NewILInvokeStatic(StringView namev);

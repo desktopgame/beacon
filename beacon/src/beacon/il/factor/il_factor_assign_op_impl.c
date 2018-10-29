@@ -195,7 +195,7 @@ static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx)
 	if(call->Type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ThrowBCError(
 			BCERROR_LHS_IS_NOT_SUBSCRIPT_T,
-			Ref2Str(call->Kind.InvokeStatic->namev)
+			Ref2Str(call->Kind.InvokeStatic->Name)
 		);
 		return;
 	}
