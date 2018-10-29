@@ -10,25 +10,25 @@ struct SymbolEntry;
  * 推論された型の初期化を表す要素.
  * var y = new X::Y();
  */
-typedef struct ILStatement_inferenced_type_init {
+typedef struct ILInferencedTypeInit {
 	StringView namev;
 	ILFactor* fact;
 	struct SymbolEntry* sym;
-} ILStatement_inferenced_type_init;
+} ILInferencedTypeInit;
 
 /**
  * 推論された型の初期化を表す要素をスーパーセットにラップします.
  * @param self
  * @return
  */
-ILStatement* WrapILInferencedTypeInit(ILStatement_inferenced_type_init* self);
+ILStatement* WrapILInferencedTypeInit(ILInferencedTypeInit* self);
 
 /**
  * 推論された型の初期化を表す要素を作成します.
  * @param namev
  * @return
  */
-ILStatement_inferenced_type_init* NewILInferencedTypeInit(StringView namev);
+ILInferencedTypeInit* NewILInferencedTypeInit(StringView namev);
 
 /**
  * 推論された型の初期化を表す要素を生成します.
@@ -36,7 +36,7 @@ ILStatement_inferenced_type_init* NewILInferencedTypeInit(StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILInferencedTypeInit(ILStatement_inferenced_type_init* self, Enviroment* env, CallContext* cctx);
+void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
@@ -44,11 +44,11 @@ void GenerateILInferencedTypeInit(ILStatement_inferenced_type_init* self, Enviro
  * @param env
  * @param cctx
  */
-void LoadILInferencedTypeInit(ILStatement_inferenced_type_init* self, Enviroment* env, CallContext* cctx);
+void LoadILInferencedTypeInit(ILInferencedTypeInit* self, Enviroment* env, CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.
  * @param self
  */
-void DeleteILInferencedTypeInit(ILStatement_inferenced_type_init* self);
+void DeleteILInferencedTypeInit(ILInferencedTypeInit* self);
 #endif // !SIGNAL_IL_IL_STMT_INFERENCED_TYPE_INIT

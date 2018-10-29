@@ -7,7 +7,7 @@
 #include "../class_loader.h"
 //proto
 static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource);
-static ILStatement_inferenced_type_init* CLIL_inferenced_type_init(ClassLoader* self, AST* asource);
+static ILInferencedTypeInit* CLIL_inferenced_type_init(ClassLoader* self, AST* asource);
 static ILStatement_variable_decl* CLIL_variable_decl(ClassLoader* self, AST* asource);
 static ILStatement_variable_init* CLIL_variable_init(ClassLoader* self, AST* asource);
 static ILIf* CLIL_if(ClassLoader* self, AST* asource);
@@ -78,7 +78,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_INFERENCED_TYPE_INIT_T:
 		{
-			ILStatement_inferenced_type_init* ilinfer = CLIL_inferenced_type_init(self, asource);
+			ILInferencedTypeInit* ilinfer = CLIL_inferenced_type_init(self, asource);
 			return WrapILInferencedTypeInit(ilinfer);
 		}
 		case AST_IF_T:
@@ -169,10 +169,10 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 	return NULL;
 }
 
-static ILStatement_inferenced_type_init * CLIL_inferenced_type_init(ClassLoader * self, AST* asource) {
+static ILInferencedTypeInit * CLIL_inferenced_type_init(ClassLoader * self, AST* asource) {
 	AST* aname = FirstAST(asource);
 	AST* afact = SecondAST(asource);
-	ILStatement_inferenced_type_init* ret = NewILInferencedTypeInit(aname->Attr.StringVValue);
+	ILInferencedTypeInit* ret = NewILInferencedTypeInit(aname->Attr.StringVValue);
 	ret->fact = CLILFactor(self, afact);
 	return ret;
 }
