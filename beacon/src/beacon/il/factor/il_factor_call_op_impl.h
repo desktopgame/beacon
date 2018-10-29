@@ -31,7 +31,7 @@ typedef struct ILCallOp {
 	union {
 		ILFactor_invoke* Invoke;
 		ILFactor_invoke_static* InvokeStatic;
-		ILFactor_invoke_bound* InvokeBound;
+		ILInvokeBound* InvokeBound;
 	} Kind;
 } ILCallOp;
 

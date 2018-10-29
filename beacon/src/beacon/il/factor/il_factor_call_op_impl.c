@@ -15,7 +15,7 @@ static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
 static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx);
 static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx);
 static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, Enviroment* env, CallContext* cctx);
-static void ILFactor_invoke_bound_check(ILCallOp* self, Enviroment* env);
+static void ILInvokeBound_check(ILCallOp* self, Enviroment* env);
 static void ILMemberOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
 static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
 
@@ -110,7 +110,7 @@ static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	ILFactor* receiver = self->Receiver;
 	//hoge() foo() Namespace::Class() の場合
 	if(receiver->type == ILFACTOR_VARIABLE_T) {
-		ILFactor_invoke_bound_check(self, env);
+		ILInvokeBound_check(self, env);
 	//hoge().hoge() Namespace::Class.foo() の場合
 	} else if(receiver->type == ILFACTOR_MEMBER_OP_T) {
 		ILMemberOp_check(self, env, cctx);
@@ -121,10 +121,10 @@ static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	assert(self->Type != ILCALL_TYPE_UNDEFINED_T);
 }
 
-static void ILFactor_invoke_bound_check(ILCallOp* self, Enviroment* env) {
+static void ILInvokeBound_check(ILCallOp* self, Enviroment* env) {
 	ILFactor* receiver = self->Receiver;
 	ILVariable* ilvar = receiver->u.variable_;
-	ILFactor_invoke_bound* bnd = NewILInvokeBound(ilvar->FQCN->Name);
+	ILInvokeBound* bnd = NewILInvokeBound(ilvar->FQCN->Name);
 	assert(ilvar->FQCN->Scope->Length == 0);
 	//入れ替え
 	bnd->args = self->Arguments;

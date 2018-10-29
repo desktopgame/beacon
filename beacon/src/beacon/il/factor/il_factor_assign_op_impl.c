@@ -16,7 +16,7 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void assign_by_invoke(ILFactor_invoke* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
-static void assign_by_invoke_bound(ILFactor_invoke_bound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
+static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
 static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx);
 static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallContext* cctx);
@@ -228,7 +228,7 @@ static void assign_by_invoke(ILFactor_invoke* lhs, ILFactor* rhs, Enviroment* en
 	AddOpcodeBuf(env->Bytecode, OP_NOP);
 }
 
-static void assign_by_invoke_bound(ILFactor_invoke_bound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx) {
+static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx) {
 	int temp = -1;
 	FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
 	assert(lhs->args->Length == 1);
