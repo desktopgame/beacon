@@ -248,8 +248,8 @@ static ILCallOp* CLIL_call_op(ClassLoader* self, AST* source) {
 	ILCallOp* ret = NewILCallOp();
 	AST* afact = FirstAST(source);
 	AST* aargs = SecondAST(source);
-	ret->receiver = CLILFactor(self, afact);
-	CLILArgumentList(self, ret->argument_list, aargs);
+	ret->Receiver = CLILFactor(self, afact);
+	CLILArgumentList(self, ret->Arguments, aargs);
 	return ret;
 }
 

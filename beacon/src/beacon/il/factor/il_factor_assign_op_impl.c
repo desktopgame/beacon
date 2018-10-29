@@ -192,17 +192,17 @@ static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx
 
 static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	ILCallOp* call = self->Left->u.call_;
-	if(call->type == ILCALL_TYPE_INVOKE_STATIC_T) {
+	if(call->Type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ThrowBCError(
 			BCERROR_LHS_IS_NOT_SUBSCRIPT_T,
-			Ref2Str(call->u.invoke_static_->namev)
+			Ref2Str(call->Kind.InvokeStatic->namev)
 		);
 		return;
 	}
-	if(call->type == ILCALL_TYPE_INVOKE_T) {
-		assign_by_invoke(call->u.invoke_, self->Right, env, cctx);
-	} else if(call->type == ILCALL_TYPE_INVOKE_BOUND_T) {
-		assign_by_invoke_bound(call->u.invoke_bound_, self->Right, env, cctx);
+	if(call->Type == ILCALL_TYPE_INVOKE_T) {
+		assign_by_invoke(call->Kind.Invoke, self->Right, env, cctx);
+	} else if(call->Type == ILCALL_TYPE_INVOKE_BOUND_T) {
+		assign_by_invoke_bound(call->Kind.InvokeBound, self->Right, env, cctx);
 	} else {
 		assert(false);
 	}

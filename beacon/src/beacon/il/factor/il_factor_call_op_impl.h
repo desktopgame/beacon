@@ -23,16 +23,16 @@ typedef enum ILCallType {
  * 関数呼び出し演算子を表す構造体.
  */
 typedef struct ILCallOp {
-	ILFactor* parent;
-	ILFactor* receiver;
+	ILFactor* Parent;
+	ILFactor* Receiver;
 	//Vector* type_argument_list;
-	Vector* argument_list;
-	ILCallType type;
+	Vector* Arguments;
+	ILCallType Type;
 	union {
-		ILFactor_invoke* invoke_;
-		ILFactor_invoke_static* invoke_static_;
-		ILFactor_invoke_bound* invoke_bound_;
-	} u;
+		ILFactor_invoke* Invoke;
+		ILFactor_invoke_static* InvokeStatic;
+		ILFactor_invoke_bound* InvokeBound;
+	} Kind;
 } ILCallOp;
 
 ILFactor* WrapCallOp(ILCallOp* self);
