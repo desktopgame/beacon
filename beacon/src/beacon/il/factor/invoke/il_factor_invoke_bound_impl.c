@@ -274,7 +274,7 @@ static GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env
 		cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
 	} else {
 		cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-		cfr->Kind.InstanceInvoke.Receiver = ApplyGenericType(SubscriptDescriptor_receiver(&self->Kind.Subscript), cctx);
+		cfr->Kind.InstanceInvoke.Receiver = ApplyGenericType(GetSubscriptReceiver(&self->Kind.Subscript), cctx);
 		cfr->Kind.InstanceInvoke.Args = self->Arguments;
 		cfr->Kind.InstanceInvoke.TypeArgs = self->TypeArgs;
 	}

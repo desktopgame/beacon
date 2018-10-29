@@ -24,5 +24,5 @@ typedef struct SubscriptDescriptor {
 	} u;
 } SubscriptDescriptor;
 
-struct GenericType* SubscriptDescriptor_receiver(const SubscriptDescriptor* desc);
+struct GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc);
 #endif
