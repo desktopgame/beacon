@@ -8,15 +8,15 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-ILFactor_excor_op* NewILExcorOp(OperatorType type) {
-	ILFactor_excor_op* ret = (ILFactor_excor_op*)MEM_MALLOC(sizeof(ILFactor_excor_op));
+ILExcorOp* NewILExcorOp(OperatorType type) {
+	ILExcorOp* ret = (ILExcorOp*)MEM_MALLOC(sizeof(ILExcorOp));
 	ret->type = type;
 	ret->parent = NULL;
 	ret->operator_index = -1;
 	return ret;
 }
 
-GenericType* EvalILExcorOp(ILFactor_excor_op * self, Enviroment* env, CallContext* cctx) {
+GenericType* EvalILExcorOp(ILExcorOp * self, Enviroment* env, CallContext* cctx) {
 	GenericType* lgtype = EvalILFactor(self->parent->Left, env, cctx);
 	GenericType* rgtype = EvalILFactor(self->parent->Right, env, cctx);
 	assert(lgtype != NULL);
@@ -39,7 +39,7 @@ GenericType* EvalILExcorOp(ILFactor_excor_op * self, Enviroment* env, CallContex
 	return ApplyILBinaryOp(self->parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cctx) {
+void GenerateILExcorOp(ILExcorOp* self, Enviroment* env, CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->operator_index == -1) {
 		GenerateILFactor(self->parent->Right, env, cctx);
@@ -59,17 +59,17 @@ void GenerateILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cc
 	}
 }
 
-void LoadILExcorOp(ILFactor_excor_op* self, Enviroment* env, CallContext* cctx) {
+void LoadILExcorOp(ILExcorOp* self, Enviroment* env, CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->parent, env, cctx) &&
 	   !IsBoolBoolBinaryOp(self->parent, env, cctx)) {
 	self->operator_index = GetIndexILBinaryOp(self->parent, env, cctx);
 	}
 }
 
-void DeleteILExcorOp(ILFactor_excor_op* self) {
+void DeleteILExcorOp(ILExcorOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILExcorOpToString(ILFactor_excor_op* self, Enviroment* env) {
+char* ILExcorOpToString(ILExcorOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->parent, env);
 }

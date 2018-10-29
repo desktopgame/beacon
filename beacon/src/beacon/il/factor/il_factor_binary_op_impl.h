@@ -9,7 +9,7 @@ struct ILArithmeticOp;
 struct ILFactor_logic_op;
 struct ILCompareOp;
 struct ILFactor_shift_op;
-struct ILFactor_excor_op;
+struct ILExcorOp;
 
 /**
  * 二項演算子を表す要素.
@@ -25,7 +25,7 @@ typedef struct ILBinaryOp {
 		struct ILFactor_logic_op* LogicOp;
 		struct ILCompareOp* CompareOp;
 		struct ILFactor_shift_op* ShiftOp;
-		struct ILFactor_excor_op* ExcorOp;
+		struct ILExcorOp* ExcorOp;
 	} Kind;
 } ILBinaryOp;
 

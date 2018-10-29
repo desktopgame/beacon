@@ -6,21 +6,21 @@ struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
 
-typedef struct ILFactor_excor_op {
+typedef struct ILExcorOp {
 	struct ILBinaryOp* parent;
 	OperatorType type;
 	int operator_index;
-} ILFactor_excor_op;
+} ILExcorOp;
 
-ILFactor_excor_op* NewILExcorOp(OperatorType type);
+ILExcorOp* NewILExcorOp(OperatorType type);
 
-struct GenericType* EvalILExcorOp(ILFactor_excor_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILExcorOp(ILExcorOp * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILExcorOp(ILFactor_excor_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILExcorOp(ILExcorOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILExcorOp(ILFactor_excor_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILExcorOp(ILExcorOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILExcorOp(ILFactor_excor_op* self);
+void DeleteILExcorOp(ILExcorOp* self);
 
-char* ILExcorOpToString(ILFactor_excor_op* self, struct Enviroment* env);
+char* ILExcorOpToString(ILExcorOp* self, struct Enviroment* env);
 #endif
