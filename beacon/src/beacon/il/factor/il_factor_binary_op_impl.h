@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 struct ILArithmeticOp;
-struct ILFactor_logic_op;
+struct ILLogicOp;
 struct ILCompareOp;
 struct ILFactor_shift_op;
 struct ILExcorOp;
@@ -22,7 +22,7 @@ typedef struct ILBinaryOp {
 	bool IsLoaded;
 	union {
 		struct ILArithmeticOp* ArithmeticOp;
-		struct ILFactor_logic_op* LogicOp;
+		struct ILLogicOp* LogicOp;
 		struct ILCompareOp* CompareOp;
 		struct ILFactor_shift_op* ShiftOp;
 		struct ILExcorOp* ExcorOp;

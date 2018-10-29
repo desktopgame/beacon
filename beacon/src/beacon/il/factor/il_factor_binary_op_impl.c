@@ -79,7 +79,7 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 		LoadILCompareOp(comp, env, cctx);
 	} else if(IsBitOperator(self->Type) || IsLogicOperator(self->Type)) {
 		self->Category = OPERATOR_CLOGIC_T;
-		ILFactor_logic_op* logic = NewILLogicOp(self->Type);
+		ILLogicOp* logic = NewILLogicOp(self->Type);
 		logic->parent = self;
 		self->Kind.LogicOp = logic;
 		LoadILLogicOp(logic, env, cctx);

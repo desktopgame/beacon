@@ -6,21 +6,21 @@
 struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
-typedef struct ILFactor_logic_op {
+typedef struct ILLogicOp {
 	struct ILBinaryOp* parent;
 	OperatorType type;
 	int operator_index;
-} ILFactor_logic_op;
+} ILLogicOp;
 
-ILFactor_logic_op* NewILLogicOp(OperatorType type);
+ILLogicOp* NewILLogicOp(OperatorType type);
 
-struct GenericType* EvalILLogicOp(ILFactor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+struct GenericType* EvalILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
 
-void GenerateILLogicOp(ILFactor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILLogicOp(ILFactor_logic_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILLogicOp(ILFactor_logic_op* self);
+void DeleteILLogicOp(ILLogicOp* self);
 
-char* ILLogicOpToString(ILFactor_logic_op* self, struct Enviroment* env);
+char* ILLogicOpToString(ILLogicOp* self, struct Enviroment* env);
 #endif
