@@ -5,22 +5,22 @@
 struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
-typedef struct ILFactor_arithmetic_op {
+typedef struct ILArithmeticOp {
 	struct ILBinaryOp* parent;
 	int operator_index;
 	OperatorType type;
-} ILFactor_arithmetic_op;
+} ILArithmeticOp;
 
-ILFactor_arithmetic_op* NewILArithmeticOp(OperatorType type);
+ILArithmeticOp* NewILArithmeticOp(OperatorType type);
 
 
-struct GenericType* EvalILArithmeticOp(ILFactor_arithmetic_op * self, struct Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct Enviroment * env, CallContext* cctx);
 
-void GenerateILArithmeticOp(ILFactor_arithmetic_op* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILArithmeticOp(ILArithmeticOp* self, struct Enviroment* env, CallContext* cctx);
 
-void LoadILArithmeticOp(ILFactor_arithmetic_op* self, struct Enviroment* env, CallContext* cctx);
+void LoadILArithmeticOp(ILArithmeticOp* self, struct Enviroment* env, CallContext* cctx);
 
-void DeleteILArithmeticOp(ILFactor_arithmetic_op* self);
+void DeleteILArithmeticOp(ILArithmeticOp* self);
 
-char* ILArithmeticOpToString(ILFactor_arithmetic_op* self, struct Enviroment* env);
+char* ILArithmeticOpToString(ILArithmeticOp* self, struct Enviroment* env);
 #endif

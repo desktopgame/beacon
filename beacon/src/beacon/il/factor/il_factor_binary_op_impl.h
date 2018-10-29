@@ -5,7 +5,7 @@
 #include "../../ast/operator_type.h"
 #include <stdbool.h>
 
-struct ILFactor_arithmetic_op;
+struct ILArithmeticOp;
 struct ILFactor_logic_op;
 struct ILFactor_compare_op;
 struct ILFactor_shift_op;
@@ -21,7 +21,7 @@ typedef struct ILBinaryOp {
 	ILFactor* Right;
 	bool IsLoaded;
 	union {
-		struct ILFactor_arithmetic_op* ArithmeticOp;
+		struct ILArithmeticOp* ArithmeticOp;
 		struct ILFactor_logic_op* LogicOp;
 		struct ILFactor_compare_op* CompareOp;
 		struct ILFactor_shift_op* ShiftOp;

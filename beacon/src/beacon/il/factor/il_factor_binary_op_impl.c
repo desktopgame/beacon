@@ -67,7 +67,7 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 	//カテゴリーわけ
 	if(IsArithmeticOperator(self->Type)) {
 		self->Category = OPERATOR_CARITHMERIC_T;
-		ILFactor_arithmetic_op* arith = NewILArithmeticOp(self->Type);
+		ILArithmeticOp* arith = NewILArithmeticOp(self->Type);
 		arith->parent = self;
 		self->Kind.ArithmeticOp = arith;
 		LoadILArithmeticOp(arith, env, cctx);
