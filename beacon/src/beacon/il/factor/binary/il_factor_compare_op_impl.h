@@ -6,9 +6,9 @@ struct ILBinaryOp;
 struct GenericType;
 struct Enviroment;
 typedef struct ILCompareOp {
-	struct ILBinaryOp* parent;
-	OperatorType type;
-	int operator_index;
+	struct ILBinaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
 } ILCompareOp;
 
 ILCompareOp* NewILCompareOp(OperatorType type);

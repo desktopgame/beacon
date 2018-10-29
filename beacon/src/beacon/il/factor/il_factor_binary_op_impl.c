@@ -74,7 +74,7 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 	} else if(IsCompareOperator(self->Type)) {
 		self->Category = OPERATOR_CCOMPARE_T;
 		ILCompareOp* comp = NewILCompareOp(self->Type);
-		comp->parent = self;
+		comp->Parent = self;
 		self->Kind.CompareOp = comp;
 		LoadILCompareOp(comp, env, cctx);
 	} else if(IsBitOperator(self->Type) || IsLogicOperator(self->Type)) {
