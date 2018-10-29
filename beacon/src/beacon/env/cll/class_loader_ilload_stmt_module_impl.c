@@ -22,7 +22,7 @@ static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
 static ILThrow* CLIL_throw(ClassLoader* self, AST* asource);
 static ILAssert* CLIL_assert(ClassLoader* self, AST* asource);
 static ILDefer* CLIL_defer(ClassLoader* self, AST* asource);
-static ILStatement_yield_return* CLIL_yield_return(ClassLoader* self, AST* asource);
+static ILYieldReturn* CLIL_yield_return(ClassLoader* self, AST* asource);
 
 ILStatement* CLILStmt(ClassLoader* self, AST* source) {
 	ILStatement* ret = CLILBodyImpl(self, source);
@@ -318,8 +318,8 @@ static ILDefer* CLIL_defer(ClassLoader* self, AST* asource) {
 	return ret;
 }
 
-static ILStatement_yield_return* CLIL_yield_return(ClassLoader* self, AST* asource) {
-	ILStatement_yield_return* ret = ILStatement_yield_return_new();
+static ILYieldReturn* CLIL_yield_return(ClassLoader* self, AST* asource) {
+	ILYieldReturn* ret = ILYieldReturn_new();
 	ret->fact = CLILFactor(self, FirstAST(asource));
 	return ret;
 }

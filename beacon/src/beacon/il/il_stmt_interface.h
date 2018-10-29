@@ -41,7 +41,7 @@ struct ILTry;
 struct ILThrow;
 struct ILAssert;
 struct ILDefer;
-struct ILStatement_yield_return;
+struct ILYieldReturn;
 typedef void* ILStatement_yield_break;
 struct ILInjectJNI;
 
@@ -64,7 +64,7 @@ typedef struct ILStatement {
 		struct ILThrow* throw_;
 		struct ILAssert* bcassert_;
 		struct ILDefer* defer_;
-		struct ILStatement_yield_return* yield_return;
+		struct ILYieldReturn* yield_return;
 		ILStatement_yield_break yield_break;
 		struct ILInjectJNI* inject_jni;
 	} u;
