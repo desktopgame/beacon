@@ -7,9 +7,9 @@ struct GenericType;
 struct Enviroment;
 
 typedef struct ILExcorOp {
-	struct ILBinaryOp* parent;
-	OperatorType type;
-	int operator_index;
+	struct ILBinaryOp* Parent;
+	OperatorType Type;
+	int OperatorIndex;
 } ILExcorOp;
 
 ILExcorOp* NewILExcorOp(OperatorType type);

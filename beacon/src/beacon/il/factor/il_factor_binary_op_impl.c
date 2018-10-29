@@ -92,7 +92,7 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 	} else if(self->Type == OPERATOR_EXCOR_T) {
 		self->Category = OPERATOR_CEXCOR_T;
 		ILExcorOp* excor = NewILExcorOp(self->Type);
-		excor->parent = self;
+		excor->Parent = self;
 		self->Kind.ExcorOp = excor;
 		LoadILExcorOp(excor, env, cctx);
 	} else {
