@@ -191,8 +191,8 @@ static ILVariableInit* CLIL_variable_init(ClassLoader* self, AST* asource) {
 	AST* aident = SecondAST(asource);
 	AST* afact = AtAST(asource, 2);
 	ILVariableInit* ret = NewILVariableInit(aident->Attr.StringVValue);
-	CLILGenericCache(afqcn, ret->fqcn);
-	ret->fact = CLILFactor(self, afact);
+	CLILGenericCache(afqcn, ret->GCache);
+	ret->Value = CLILFactor(self, afact);
 	return ret;
 }
 

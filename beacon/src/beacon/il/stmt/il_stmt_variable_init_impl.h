@@ -11,10 +11,10 @@ struct SymbolEntry;
  * 変数の初期化を表す要素.
  */
 typedef struct ILVariableInit {
-	GenericCache* fqcn;
-	StringView namev;
-	ILFactor* fact;
-	struct SymbolEntry* sym;
+	GenericCache* GCache;
+	StringView Name;
+	ILFactor* Value;
+	struct SymbolEntry* Symbol;
 } ILVariableInit;
 
 /**

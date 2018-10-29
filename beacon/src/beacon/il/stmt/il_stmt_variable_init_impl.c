@@ -18,17 +18,17 @@ ILStatement * WrapILVariableInit(ILVariableInit * self) {
 
 ILVariableInit * NewILVariableInit(StringView namev) {
 	ILVariableInit* ret = (ILVariableInit*)MEM_MALLOC(sizeof(ILVariableInit));
-	ret->namev = namev;
-	ret->fact = NULL;
-	ret->fqcn = NewGenericCache();
+	ret->Name = namev;
+	ret->Value = NULL;
+	ret->GCache = NewGenericCache();
 	return ret;
 }
 
 void GenerateILVariableInit(ILVariableInit * self, Enviroment * env, CallContext* cctx) {
-	GenerateILFactor(self->fact, env, cctx);
+	GenerateILFactor(self->Value, env, cctx);
 	//宣言型と代入型が異なる場合
-	GenericType* ga = EvalILFactor(self->fact, env, cctx);
-	GenericType* gb = ResolveImportManager(NULL, self->fqcn, cctx);
+	GenericType* ga = EvalILFactor(self->Value, env, cctx);
+	GenericType* gb = ResolveImportManager(NULL, self->GCache, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
 	BC_ERROR();
@@ -40,39 +40,39 @@ void GenerateILVariableInit(ILVariableInit * self, Enviroment * env, CallContext
 	int dist = DistanceGenericType(gb, ga, cctx);
 	if (dist < 0) {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
-			Ref2Str(self->namev)
+			Ref2Str(self->Name)
 		);
 	}
 	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->sym->Index);
+	AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
 void LoadILVariableInit(ILVariableInit * self, Enviroment * env, CallContext* cctx) {
-	LoadILFactor(self->fact, env, cctx);
-	if(IsContainsSymbol(env->Symboles, self->namev)) {
+	LoadILFactor(self->Value, env, cctx);
+	if(IsContainsSymbol(env->Symboles, self->Name)) {
 		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
-			Ref2Str(self->namev)
+			Ref2Str(self->Name)
 		);
 	}
-	GenericType* gt = ResolveImportManager(NULL, self->fqcn, cctx);
+	GenericType* gt = ResolveImportManager(NULL, self->GCache, cctx);
 	if(gt == NULL) {
 		ThrowBCError(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
-			Ref2Str(self->fqcn->FQCN->Name)
+			Ref2Str(self->GCache->FQCN->Name)
 		);
 		return;
 	}
 	SymbolEntry* e = EntrySymbolTable(
 		env->Symboles,
 		gt,
-		self->namev
+		self->Name
 	);
-	self->sym = e;
+	self->Symbol = e;
 	assert(e->GType != NULL);
 }
 
 void DeleteILVariableInit(ILVariableInit * self) {
-	DeleteILFactor(self->fact);
-	DeleteGenericCache(self->fqcn);
+	DeleteILFactor(self->Value);
+	DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }
