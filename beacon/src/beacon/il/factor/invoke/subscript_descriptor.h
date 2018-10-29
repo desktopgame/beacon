@@ -14,14 +14,14 @@ typedef enum SubscriptTag {
 } SubscriptTag;
 
 typedef struct SubscriptDescriptor {
-	SubscriptTag tag;
-	struct OperatorOverload* opov;
-	int index;
+	SubscriptTag Tag;
+	struct OperatorOverload* Operator;
+	int Index;
 	union {
-		struct SymbolEntry* local;
-		struct Field* fi;
-		struct Property* prop;
-	} u;
+		struct SymbolEntry* Local;
+		struct Field* Field;
+		struct Property* Property;
+	} Kind;
 } SubscriptDescriptor;
 
 struct GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc);

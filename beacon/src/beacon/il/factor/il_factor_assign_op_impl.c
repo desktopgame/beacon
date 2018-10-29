@@ -239,15 +239,15 @@ static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment
 	GenerateILFactor(rhs, env, cctx);
 	//GenerateILFactor(lhs->receiver, env, cctx);
 	SubscriptDescriptor subs = lhs->Kind.Subscript;
-	if(subs.tag == SUBSCRIPT_LOCAL_T) {
+	if(subs.Tag == SUBSCRIPT_LOCAL_T) {
 		AddOpcodeBuf(env->Bytecode, OP_LOAD);
-		AddOpcodeBuf(env->Bytecode, subs.index);
-	} else if(subs.tag == SUBSCRIPT_FIELD_T) {
+		AddOpcodeBuf(env->Bytecode, subs.Index);
+	} else if(subs.Tag == SUBSCRIPT_FIELD_T) {
 		AddOpcodeBuf(env->Bytecode, OP_THIS);
-		GenerateGetField(env->Bytecode, subs.u.fi, subs.index);
-	} else if(subs.tag == SUBSCRIPT_PROPERTY_T) {
+		GenerateGetField(env->Bytecode, subs.Kind.Field, subs.Index);
+	} else if(subs.Tag == SUBSCRIPT_PROPERTY_T) {
 		AddOpcodeBuf(env->Bytecode, OP_THIS);
-		GenerateGetProperty(env->Bytecode, subs.u.prop, subs.index);
+		GenerateGetProperty(env->Bytecode, subs.Kind.Property, subs.Index);
 	}
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 	AddOpcodeBuf(env->Bytecode, temp);

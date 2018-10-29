@@ -5,12 +5,12 @@
 #include "../../../vm/symbol_entry.h"
 
 GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc) {
-	if(desc->tag == SUBSCRIPT_LOCAL_T) {
-		return desc->u.local->GType;
-	} else if(desc->tag == SUBSCRIPT_FIELD_T) {
-		return desc->u.fi->gtype;
-	} else if(desc->tag == SUBSCRIPT_PROPERTY_T) {
-		return desc->u.prop->GType;
+	if(desc->Tag == SUBSCRIPT_LOCAL_T) {
+		return desc->Kind.Local->GType;
+	} else if(desc->Tag == SUBSCRIPT_FIELD_T) {
+		return desc->Kind.Field->gtype;
+	} else if(desc->Tag == SUBSCRIPT_PROPERTY_T) {
+		return desc->Kind.Property->GType;
 	}
 	return NULL;
 }

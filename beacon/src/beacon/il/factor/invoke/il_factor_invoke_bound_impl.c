@@ -69,7 +69,7 @@ OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, Env
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->Arguments, 0))->Factor);
 	PushVector(args, value);
-	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->Kind.Subscript.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	OperatorOverload* opov = ILFindOperatorOverloadClass(TYPE2CLASS(self->Kind.Subscript.Operator->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -140,29 +140,29 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 	SymbolEntry* local = EntrySymbolTable(env->Symboles, NULL, self->Name);
 	if(receiver_gtype == NULL && local != NULL) {
 		receiver_gtype = local->GType;
-		self->Kind.Subscript.tag = SUBSCRIPT_LOCAL_T;
-		self->Kind.Subscript.u.local = local;
-		self->Kind.Subscript.index = local->Index;
+		self->Kind.Subscript.Tag = SUBSCRIPT_LOCAL_T;
+		self->Kind.Subscript.Kind.Local = local;
+		self->Kind.Subscript.Index = local->Index;
 	}
 	//フィールドとして解決する
 	Field* fi = FindFieldClass(GetClassCContext(cctx), self->Name, &temp);
 	if(receiver_gtype == NULL && fi != NULL) {
 		receiver_gtype = fi->gtype;
-		self->Kind.Subscript.tag = SUBSCRIPT_FIELD_T;
-		self->Kind.Subscript.u.fi = fi;
-		self->Kind.Subscript.index = temp;
+		self->Kind.Subscript.Tag = SUBSCRIPT_FIELD_T;
+		self->Kind.Subscript.Kind.Field = fi;
+		self->Kind.Subscript.Index = temp;
 	}
 	//プロパティとして解決する
 	Property* prop = FindPropertyClass(GetClassCContext(cctx), self->Name, &temp);
 	if(receiver_gtype == NULL && prop != NULL) {
 		receiver_gtype = prop->GType;
-		self->Kind.Subscript.tag = SUBSCRIPT_PROPERTY_T;
-		self->Kind.Subscript.u.prop = prop;
-		self->Kind.Subscript.index = temp;
+		self->Kind.Subscript.Tag = SUBSCRIPT_PROPERTY_T;
+		self->Kind.Subscript.Kind.Property = prop;
+		self->Kind.Subscript.Index = temp;
 	}
 	if(receiver_gtype != NULL) {
 		self->Tag = BOUND_INVOKE_SUBSCRIPT_T;
-		self->Kind.Subscript.opov = ArgFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
+		self->Kind.Subscript.Operator = ArgFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
 		self->Index = temp;
 		if(temp == -1) {
 			ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
@@ -237,15 +237,15 @@ static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env
 		}
 	}
 	SubscriptDescriptor subs = self->Kind.Subscript;
-	if(subs.tag == SUBSCRIPT_LOCAL_T) {
+	if(subs.Tag == SUBSCRIPT_LOCAL_T) {
 		AddOpcodeBuf(env->Bytecode, OP_LOAD);
-		AddOpcodeBuf(env->Bytecode, subs.index);
-	} else if(subs.tag == SUBSCRIPT_FIELD_T) {
+		AddOpcodeBuf(env->Bytecode, subs.Index);
+	} else if(subs.Tag == SUBSCRIPT_FIELD_T) {
 		AddOpcodeBuf(env->Bytecode, OP_THIS);
-		GenerateGetField(env->Bytecode, subs.u.fi, subs.index);
-	} else if(subs.tag == SUBSCRIPT_PROPERTY_T) {
+		GenerateGetField(env->Bytecode, subs.Kind.Field, subs.Index);
+	} else if(subs.Tag == SUBSCRIPT_PROPERTY_T) {
 		AddOpcodeBuf(env->Bytecode, OP_THIS);
-		GenerateGetProperty(env->Bytecode, subs.u.prop, subs.index);
+		GenerateGetProperty(env->Bytecode, subs.Kind.Property, subs.Index);
 	} else {
 		assert(false);
 	}
@@ -257,7 +257,7 @@ static GenericType* ILInvokeBound_return_gtype(ILInvokeBound* self, CallContext*
 	assert(self->Tag != BOUND_INVOKE_UNDEFINED_T);
 	return ApplyGenericType(self->Tag == BOUND_INVOKE_METHOD_T ?
 			self->Kind.Method->ReturnGType :
-			self->Kind.Subscript.opov->ReturnGType, cctx);
+			self->Kind.Subscript.Operator->ReturnGType, cctx);
 }
 
 static GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
