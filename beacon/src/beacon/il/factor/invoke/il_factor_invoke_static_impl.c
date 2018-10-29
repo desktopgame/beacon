@@ -9,14 +9,14 @@
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(ILInvoke_static * self, Enviroment* env, CallContext* cctx);
-static void resolve_default(ILInvoke_static * self, Enviroment* env, CallContext* cctx);
-static void ILInvoke_static_check(ILInvoke_static * self, Enviroment* env, CallContext* cctx);
-static void ILInvoke_static_args_delete(VectorItem item);
-static void ILInvoke_static_typeargs_delete(VectorItem item);
+static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx);
+static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx);
+static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx);
+static void ILInvokeStatic_args_delete(VectorItem item);
+static void ILInvokeStatic_typeargs_delete(VectorItem item);
 
-ILInvoke_static* NewILInvokeStatic(StringView namev) {
-	ILInvoke_static* ret = (ILInvoke_static*)MEM_MALLOC(sizeof(ILInvoke_static));
+ILInvokeStatic* NewILInvokeStatic(StringView namev) {
+	ILInvokeStatic* ret = (ILInvokeStatic*)MEM_MALLOC(sizeof(ILInvokeStatic));
 	ret->args = NULL;
 	ret->fqcn = NULL;
 	ret->type_args = NULL;
@@ -27,7 +27,7 @@ ILInvoke_static* NewILInvokeStatic(StringView namev) {
 	return ret;
 }
 
-void GenerateILInvokeStatic(ILInvoke_static* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
 		assert(e->GType != NULL);
@@ -46,12 +46,12 @@ void GenerateILInvokeStatic(ILInvoke_static* self, Enviroment* env, CallContext*
 	AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 }
 
-void LoadILInvokeStatic(ILInvoke_static * self, Enviroment* env, CallContext* cctx) {
-	ILInvoke_static_check(self, env, cctx);
+void LoadILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+	ILInvokeStatic_check(self, env, cctx);
 }
 
-GenericType* EvalILInvokeStatic(ILInvoke_static * self, Enviroment* env, CallContext* cctx) {
-	ILInvoke_static_check(self, env, cctx);
+GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+	ILInvokeStatic_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(GetLastBCError()) {
 		return NULL;
@@ -67,7 +67,7 @@ GenericType* EvalILInvokeStatic(ILInvoke_static * self, Enviroment* env, CallCon
 	return NULL;
 }
 
-char* ILInvokeStaticToString(ILInvoke_static* self, Enviroment* env) {
+char* ILInvokeStaticToString(ILInvokeStatic* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = FQCNCacheToString(self->fqcn);
 	AppendsBuffer(sb, name);
@@ -79,15 +79,15 @@ char* ILInvokeStaticToString(ILInvoke_static* self, Enviroment* env) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteILInvokeStatic(ILInvoke_static* self) {
-	DeleteVector(self->args, ILInvoke_static_args_delete);
-	DeleteVector(self->type_args, ILInvoke_static_typeargs_delete);
+void DeleteILInvokeStatic(ILInvokeStatic* self) {
+	DeleteVector(self->args, ILInvokeStatic_args_delete);
+	DeleteVector(self->type_args, ILInvokeStatic_typeargs_delete);
 	DeleteFQCNCache(self->fqcn);
 	MEM_FREE(self);
 }
 //private
 //FIXME:ILInvokeからのコピペ
-static void resolve_non_default(ILInvoke_static * self, Enviroment* env, CallContext* cctx) {
+static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -98,7 +98,7 @@ static void resolve_non_default(ILInvoke_static * self, Enviroment* env, CallCon
 	self->resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
 
-static void resolve_default(ILInvoke_static * self, Enviroment* env, CallContext* cctx) {
+static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
@@ -110,7 +110,7 @@ static void resolve_default(ILInvoke_static * self, Enviroment* env, CallContext
 	PopCallContext(cctx);
 }
 
-static void ILInvoke_static_check(ILInvoke_static * self, Enviroment* env, CallContext* cctx) {
+static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
 	type* ty =GetEvalTypeCContext(cctx, self->fqcn);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
@@ -147,12 +147,12 @@ static void ILInvoke_static_check(ILInvoke_static * self, Enviroment* env, CallC
 	PopCallContext(cctx);
 }
 
-static void ILInvoke_static_args_delete(VectorItem item) {
+static void ILInvokeStatic_args_delete(VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 
-static void ILInvoke_static_typeargs_delete(VectorItem item) {
+static void ILInvokeStatic_typeargs_delete(VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

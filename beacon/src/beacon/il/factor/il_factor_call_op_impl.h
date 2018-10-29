@@ -30,7 +30,7 @@ typedef struct ILCallOp {
 	ILCallType Type;
 	union {
 		ILInvoke* Invoke;
-		ILInvoke_static* InvokeStatic;
+		ILInvokeStatic* InvokeStatic;
 		ILInvokeBound* InvokeBound;
 	} Kind;
 } ILCallOp;

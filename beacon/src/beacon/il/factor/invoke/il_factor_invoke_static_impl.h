@@ -7,7 +7,7 @@ struct Enviroment;
 struct GenericType;
 struct Method;
 
-typedef struct ILInvoke_static {
+typedef struct ILInvokeStatic {
 	StringView namev;
 	FQCNCache* fqcn;
 	Vector* args;
@@ -15,17 +15,17 @@ typedef struct ILInvoke_static {
 	struct Method* m;
 	int index;
 	struct GenericType* resolved;
-} ILInvoke_static;
+} ILInvokeStatic;
 
-ILInvoke_static* NewILInvokeStatic(StringView namev);
+ILInvokeStatic* NewILInvokeStatic(StringView namev);
 
-void GenerateILInvokeStatic(ILInvoke_static* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* cctx);
 
-void LoadILInvokeStatic(ILInvoke_static * self, Enviroment * env, CallContext* cctx);
+void LoadILInvokeStatic(ILInvokeStatic * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILInvokeStatic(ILInvoke_static * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment * env, CallContext* cctx);
 
-char* ILInvokeStaticToString(ILInvoke_static* self, Enviroment* env);
+char* ILInvokeStaticToString(ILInvokeStatic* self, Enviroment* env);
 
-void DeleteILInvokeStatic(ILInvoke_static* self);
+void DeleteILInvokeStatic(ILInvokeStatic* self);
 #endif

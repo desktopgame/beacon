@@ -183,7 +183,7 @@ static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Envirom
 }
 
 static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, Enviroment* env, CallContext* cctx) {
-	ILInvoke_static* st = NewILInvokeStatic(ilmem->Name);
+	ILInvokeStatic* st = NewILInvokeStatic(ilmem->Name);
 	self->Type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->Kind.InvokeStatic = st;
 	//入れ替える
