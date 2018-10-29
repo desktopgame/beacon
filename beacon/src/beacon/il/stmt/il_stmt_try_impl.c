@@ -11,32 +11,32 @@
 #include <stdio.h>
 
 //proto
-static void ILStatement_catch_stmt_delete(void* item);
-static void ILStatement_try_catch_delete(void* item);
+static void ILCatch_stmt_delete(void* item);
+static void ILTry_catch_delete(void* item);
 
-ILStatement* WrapILTry(ILStatement_try* self) {
+ILStatement* WrapILTry(ILTry* self) {
 	ILStatement* ret = (ILStatement*)MEM_MALLOC(sizeof(ILStatement));
 	ret->type = ILSTMT_TRY_T;
 	ret->u.try_ = self;
 	return ret;
 }
 
-ILStatement_try* NewILTry() {
-	ILStatement_try* ret = (ILStatement_try*)MEM_MALLOC(sizeof(ILStatement_try));
+ILTry* NewILTry() {
+	ILTry* ret = (ILTry*)MEM_MALLOC(sizeof(ILTry));
 	ret->statement_list = NewVector();
 	ret->catch_list = NewVector();
 	return ret;
 }
 
-ILStatement_catch* NewILCatch(StringView namev) {
-	ILStatement_catch* ret = (ILStatement_catch*)MEM_MALLOC(sizeof(ILStatement_catch));
+ILCatch* NewILCatch(StringView namev) {
+	ILCatch* ret = (ILCatch*)MEM_MALLOC(sizeof(ILCatch));
 	ret->namev = namev;
 	ret->fqcn = NewGenericCache();
 	ret->statement_list = NewVector();
 	return ret;
 }
 
-void GenerateILTry(ILStatement_try* self, Enviroment* env, CallContext* cctx) {
+void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 	Label* try_end = AddLabelOpcodeBuf(env->Bytecode, -1);
 	Label* catch_start = AddLabelOpcodeBuf(env->Bytecode, -1);
 	AddOpcodeBuf(env->Bytecode, OP_TRY_ENTER);
@@ -60,7 +60,7 @@ void GenerateILTry(ILStatement_try* self, Enviroment* env, CallContext* cctx) {
 	Label* nextCause = NULL;
 	for (int i = 0; i < self->catch_list->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
-		ILStatement_catch* ilcatch = (ILStatement_catch*)AtVector(self->catch_list, i);
+		ILCatch* ilcatch = (ILCatch*)AtVector(self->catch_list, i);
 		GenericType* exgType = ResolveImportManager(NULL, ilcatch->fqcn, cctx);
 		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->namev)->Index;
 		//直前のケースのジャンプ先をここに
@@ -101,22 +101,22 @@ void GenerateILTry(ILStatement_try* self, Enviroment* env, CallContext* cctx) {
 	try_end->Cursor = AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void GenerateILCatch(ILStatement_catch* self, Enviroment* env, CallContext* cctx) {
+void GenerateILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
 
 }
 
-void LoadILTry(ILStatement_try* self, Enviroment* env, CallContext* cctx) {
+void LoadILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->statement_list->Length; i++) {
 		ILStatement* e = (ILStatement*)AtVector(self->statement_list, i);
 		LoadILStmt(e, env, cctx);
 	}
 	for(int i=0; i<self->catch_list->Length; i++) {
-		ILStatement_catch* e = (ILStatement_catch*)AtVector(self->catch_list, i);
+		ILCatch* e = (ILCatch*)AtVector(self->catch_list, i);
 		LoadILCatch(e, env, cctx);
 	}
 }
 
-void LoadILCatch(ILStatement_catch* self, Enviroment* env, CallContext* cctx) {
+void LoadILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
 	GenericType* exgType = ResolveImportManager(NULL, self->fqcn, cctx);
 	EntrySymbolTable(env->Symboles, exgType, self->namev);
 	for(int i=0; i<self->statement_list->Length; i++) {
@@ -125,24 +125,24 @@ void LoadILCatch(ILStatement_catch* self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-void DeleteILCatch(ILStatement_catch* self) {
+void DeleteILCatch(ILCatch* self) {
 	DeleteGenericCache(self->fqcn);
-	DeleteVector(self->statement_list, ILStatement_catch_stmt_delete);
+	DeleteVector(self->statement_list, ILCatch_stmt_delete);
 	MEM_FREE(self);
 }
 
-void DeleteILTry(ILStatement_try* self) {
-	DeleteVector(self->statement_list, ILStatement_catch_stmt_delete);
-	DeleteVector(self->catch_list, ILStatement_try_catch_delete);
+void DeleteILTry(ILTry* self) {
+	DeleteVector(self->statement_list, ILCatch_stmt_delete);
+	DeleteVector(self->catch_list, ILTry_catch_delete);
 	MEM_FREE(self);
 }
 //private
-static void ILStatement_catch_stmt_delete(void* item) {
+static void ILCatch_stmt_delete(void* item) {
 	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }
 
-static void ILStatement_try_catch_delete(void* item) {
-	ILStatement_catch* e = (ILStatement_catch*)item;
+static void ILTry_catch_delete(void* item) {
+	ILCatch* e = (ILCatch*)item;
 	DeleteILCatch(e);
 }

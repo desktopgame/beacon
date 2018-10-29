@@ -17,7 +17,7 @@ static ILIf* CLIL_if_else(ClassLoader* self, AST* asource);
 static ILIf* CLIL_if_elif_list_else(ClassLoader* self, AST* asource);
 static ILStatement_while* CLIL_while(ClassLoader* self, AST* asource);
 static ILReturn* CLIL_return(ClassLoader* self, AST* asource);
-static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource);
+static ILTry* CLIL_try(ClassLoader* self, AST* asource);
 static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource);
 static ILThrow* CLIL_throw(ClassLoader* self, AST* asource);
 static ILAssert* CLIL_assert(ClassLoader* self, AST* asource);
@@ -127,7 +127,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_STMT_TRY_T:
 		{
-			ILStatement_try* iltry = CLIL_try(self, asource);
+			ILTry* iltry = CLIL_try(self, asource);
 			return WrapILTry(iltry);
 		}
 		case AST_STMT_THROW_T:
@@ -265,10 +265,10 @@ static ILReturn* CLIL_return(ClassLoader* self, AST* asource) {
 	return ret;
 }
 
-static ILStatement_try* CLIL_try(ClassLoader* self, AST* asource) {
+static ILTry* CLIL_try(ClassLoader* self, AST* asource) {
 	AST* abody = FirstAST(asource);
 	AST* acatch_list = SecondAST(asource);
-	ILStatement_try* ret = NewILTry();
+	ILTry* ret = NewILTry();
 	CLILBody(self, ret->statement_list, abody);
 	CLIL_catch_list(self, ret->catch_list, acatch_list);
 	return ret;
@@ -279,7 +279,7 @@ static void CLIL_catch_list(ClassLoader* self, Vector* dest, AST* asource) {
 		AST* atypename = FirstAST(asource);
 		AST* aname = SecondAST(asource);
 		AST* abody = AtAST(asource, 2);
-		ILStatement_catch* ilcatch = NewILCatch(aname->Attr.StringVValue);
+		ILCatch* ilcatch = NewILCatch(aname->Attr.StringVValue);
 		CLILGenericCache(FirstAST(atypename), ilcatch->fqcn);
 		CLILBody(self, ilcatch->statement_list, abody);
 		PushVector(dest, ilcatch);
