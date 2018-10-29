@@ -14,7 +14,7 @@
 static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
 static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx);
 static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx);
-static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILFactor_variable* ilvar, Enviroment* env, CallContext* cctx);
+static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, Enviroment* env, CallContext* cctx);
 static void ILFactor_invoke_bound_check(ILCallOp* self, Enviroment* env);
 static void ILMemberOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
 static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx);
@@ -123,7 +123,7 @@ static void ILCallOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 
 static void ILFactor_invoke_bound_check(ILCallOp* self, Enviroment* env) {
 	ILFactor* receiver = self->Receiver;
-	ILFactor_variable* ilvar = receiver->u.variable_;
+	ILVariable* ilvar = receiver->u.variable_;
 	ILFactor_invoke_bound* bnd = NewILInvokeBound(ilvar->FQCN->Name);
 	assert(ilvar->FQCN->Scope->Length == 0);
 	//入れ替え
@@ -147,7 +147,7 @@ static void ILMemberOp_check(ILCallOp* self, Enviroment* env, CallContext* cctx)
 }
 
 static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Enviroment* env, CallContext* cctx) {
-	ILFactor_variable* ilvar = ilmem->Source->u.variable_;
+	ILVariable* ilvar = ilmem->Source->u.variable_;
 	//Namespace::Class.foo()
 	if(ilvar->FQCN->Scope->Length > 0) {
 		ILMemberOp_check_static(self, ilmem, ilvar, env, cctx);
@@ -182,7 +182,7 @@ static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, Envirom
 	self->Arguments = NULL;
 }
 
-static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILFactor_variable* ilvar, Enviroment* env, CallContext* cctx) {
+static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, Enviroment* env, CallContext* cctx) {
 	ILFactor_invoke_static* st = NewILInvokeStatic(ilmem->Name);
 	self->Type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->Kind.InvokeStatic = st;

@@ -5,20 +5,20 @@
 struct Enviroment;
 struct GenericType;
 
-typedef struct ILFactor_variable_static {
+typedef struct ILVariable_static {
 	FQCNCache* fqcn;
 	Vector* type_args;
-} ILFactor_variable_static;
+} ILVariable_static;
 
-ILFactor_variable_static* NewILVariableStatic();
+ILVariable_static* NewILVariableStatic();
 
-void GenerateILVariableStatic(ILFactor_variable_static* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableStatic(ILVariable_static* self, Enviroment* env, CallContext* cctx);
 
-void LoadILVariableStatic(ILFactor_variable_static * self, Enviroment * env, CallContext* cctx);
+void LoadILVariableStatic(ILVariable_static * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILVariableStatic(ILFactor_variable_static * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILVariableStatic(ILVariable_static * self, Enviroment * env, CallContext* cctx);
 
-char* ILVariableStaticToString(ILFactor_variable_static * self, Enviroment * env);
+char* ILVariableStaticToString(ILVariable_static * self, Enviroment * env);
 
-void DeleteILVariableStatic(ILFactor_variable_static* self);
+void DeleteILVariableStatic(ILVariable_static* self);
 #endif

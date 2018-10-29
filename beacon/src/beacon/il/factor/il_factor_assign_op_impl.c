@@ -86,7 +86,7 @@ void DeleteILAssignOp(ILAssignOp* self) {
 static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	ILMemberOp* ilmem = self->Left->u.member_;
 	ILFactor* ilsrc = ilmem->Source;
-	ILFactor_variable* ilvar = ilsrc->u.variable_;
+	ILVariable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
 	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
 		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->fqcn));
@@ -298,15 +298,15 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 
 static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	assert(self->Left->type == ILFACTOR_VARIABLE_T);
-	ILFactor_variable* ilvar = self->Left->u.variable_;
+	ILVariable* ilvar = self->Left->u.variable_;
 	if(ilvar->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		generate_assign_to_variable_local(self, env, cctx);
 	}
 }
 
 static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_variable* ilvar = self->Left->u.variable_;
-	ILFactor_variable_local* illoc = ilvar->Kind.Local;
+	ILVariable* ilvar = self->Left->u.variable_;
+	ILVariable_local* illoc = ilvar->Kind.Local;
 	//src のような名前がローカル変数を示す場合
 	if(illoc->type == VARIABLE_LOCAL_SCOPE_T) {
 		#if defined(DEBUG)

@@ -6,30 +6,30 @@
 
 static void ILFactor_static_delete_typeargs(VectorItem item);
 
-ILFactor_variable_static* NewILVariableStatic() {
-	ILFactor_variable_static* ret = (ILFactor_variable_static*)MEM_MALLOC(sizeof(ILFactor_variable_static));
+ILVariable_static* NewILVariableStatic() {
+	ILVariable_static* ret = (ILVariable_static*)MEM_MALLOC(sizeof(ILVariable_static));
 	ret->fqcn = NULL;
 	ret->type_args = NULL;
 	return ret;
 }
 
-void GenerateILVariableStatic(ILFactor_variable_static* self, Enviroment* env, CallContext* cctx) {
+void GenerateILVariableStatic(ILVariable_static* self, Enviroment* env, CallContext* cctx) {
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
-void LoadILVariableStatic(ILFactor_variable_static * self, Enviroment * env, CallContext* cctx) {
+void LoadILVariableStatic(ILVariable_static * self, Enviroment * env, CallContext* cctx) {
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-GenericType* EvalILVariableStatic(ILFactor_variable_static * self, Enviroment * env, CallContext* cctx) {
+GenericType* EvalILVariableStatic(ILVariable_static * self, Enviroment * env, CallContext* cctx) {
 	return NULL;
 }
 
-char* ILVariableStaticToString(ILFactor_variable_static * self, Enviroment * env) {
+char* ILVariableStaticToString(ILVariable_static * self, Enviroment * env) {
 	return NULL;
 }
 
-void DeleteILVariableStatic(ILFactor_variable_static* self) {
+void DeleteILVariableStatic(ILVariable_static* self) {
 	DeleteFQCNCache(self->fqcn);
 	DeleteVector(self->type_args, ILFactor_static_delete_typeargs);
 	MEM_FREE(self);

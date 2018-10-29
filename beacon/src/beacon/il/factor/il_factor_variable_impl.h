@@ -29,30 +29,30 @@ typedef enum ILVariableType {
 /**
  * 変数を表す要素.
  */
-typedef struct ILFactor_variable {
+typedef struct ILVariable {
 	FQCNCache* FQCN;
 	Vector* TypeArgs;
 	int Index;
 	ILVariableType Type;
 	union {
-		ILFactor_variable_local* Local;
-		ILFactor_variable_static* Static;
+		ILVariable_local* Local;
+		ILVariable_static* Static;
 	} Kind;
-} ILFactor_variable;
+} ILVariable;
 
-ILFactor* WrapILVariable(ILFactor_variable* self);
+ILFactor* WrapILVariable(ILVariable* self);
 
-#define ILFactor_variable_new() (MallocILVariable(__FILE__, __LINE__))
-ILFactor_variable* MallocILVariable(const char* filename, int lineno);
+#define ILVariable_new() (MallocILVariable(__FILE__, __LINE__))
+ILVariable* MallocILVariable(const char* filename, int lineno);
 
-void GenerateILVariable(ILFactor_variable* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
 
-void LoadILVariable(ILFactor_variable* self, Enviroment* env, CallContext* cctx);
+void LoadILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILVariable(ILFactor_variable* self, Enviroment* env, CallContext* cctx);
+GenericType* EvalILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
 
-char* ILVariableToString(ILFactor_variable* self, Enviroment* env);
+char* ILVariableToString(ILVariable* self, Enviroment* env);
 
-void DeleteILVariable(ILFactor_variable* self);
+void DeleteILVariable(ILVariable* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_VARIABLE_H

@@ -123,7 +123,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 
 static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap) {
 	ILFactor* fact = self->Source;
-	ILFactor_variable* ilvar = fact->u.variable_;
+	ILVariable* ilvar = fact->u.variable_;
 	#if defined(DEBUG)
 	const char* ilvarname = Ref2Str(ilvar->Kind.Static->fqcn->Name);
 	#endif

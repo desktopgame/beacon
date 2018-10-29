@@ -29,7 +29,7 @@ typedef struct Property_with_index {
 /**
  * ローカル変数を表す構造体.
  */
-typedef struct ILFactor_variable_local {
+typedef struct ILVariable_local {
 	StringView namev;
 	variable_local_type type;
 	struct GenericType* gt;
@@ -39,17 +39,17 @@ typedef struct ILFactor_variable_local {
 		Property_with_index p_with_i;
 	} u;
 	Vector* type_args;
-} ILFactor_variable_local;
+} ILVariable_local;
 
-ILFactor_variable_local* NewILVariableLocal(StringView namev);
+ILVariable_local* NewILVariableLocal(StringView namev);
 
-void GenerateILVariableLocal(ILFactor_variable_local* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableLocal(ILVariable_local* self, Enviroment* env, CallContext* cctx);
 
-void LoadILVariableLocal(ILFactor_variable_local * self, Enviroment * env, CallContext* cctx);
+void LoadILVariableLocal(ILVariable_local * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILVariableLocal(ILFactor_variable_local * self, Enviroment * env, CallContext* cctx);
+struct GenericType* EvalILVariableLocal(ILVariable_local * self, Enviroment * env, CallContext* cctx);
 
-char* ILVariableLocalToString(ILFactor_variable_local * self, Enviroment * env);
+char* ILVariableLocalToString(ILVariable_local * self, Enviroment * env);
 
-void DeleteILVariableLocal(ILFactor_variable_local* self);
+void DeleteILVariableLocal(ILVariable_local* self);
 #endif

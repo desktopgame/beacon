@@ -13,27 +13,27 @@
 #include <string.h>
 
 //proto
-static void ILFactor_variable_check(ILFactor_variable* self, Enviroment* env, CallContext* cctx);
-static void ILFactor_variable_check_instance(ILFactor_variable* self, Enviroment* env, CallContext* cctx);
-static void ILFactor_variable_check_static(ILFactor_variable* self, Enviroment* env, CallContext* cctx);
+static void ILVariable_check(ILVariable* self, Enviroment* env, CallContext* cctx);
+static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallContext* cctx);
+static void ILVariable_check_static(ILVariable* self, Enviroment* env, CallContext* cctx);
 static void DeleteILFactor_typeargs(VectorItem item);
 
-ILFactor * WrapILVariable(ILFactor_variable * self) {
+ILFactor * WrapILVariable(ILVariable * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_VARIABLE_T);
 	ret->u.variable_ = self;
 	return ret;
 }
 
-ILFactor_variable * MallocILVariable(const char* filename, int lineno) {
-	ILFactor_variable* ret = (ILFactor_variable*)mem_malloc(sizeof(ILFactor_variable), filename, lineno);
+ILVariable * MallocILVariable(const char* filename, int lineno) {
+	ILVariable* ret = (ILVariable*)mem_malloc(sizeof(ILVariable), filename, lineno);
 	ret->FQCN = MallocFQCNCache(filename, lineno);
 	ret->TypeArgs = MallocVector(filename, lineno);
 	ret->Type = ILVARIABLE_TYPE_UNDEFINED_T;
 	return ret;
 }
 
-void GenerateILVariable(ILFactor_variable * self, Enviroment* env, CallContext* cctx) {
-	ILFactor_variable_check(self, env, cctx);
+void GenerateILVariable(ILVariable * self, Enviroment* env, CallContext* cctx) {
+	ILVariable_check(self, env, cctx);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		GenerateILVariableLocal(self->Kind.Local, env, cctx);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
@@ -41,8 +41,8 @@ void GenerateILVariable(ILFactor_variable * self, Enviroment* env, CallContext* 
 	}
 }
 
-void LoadILVariable(ILFactor_variable * self, Enviroment * env, CallContext* cctx) {
-	ILFactor_variable_check(self, env, cctx);
+void LoadILVariable(ILVariable * self, Enviroment * env, CallContext* cctx) {
+	ILVariable_check(self, env, cctx);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		LoadILVariableLocal(self->Kind.Local, env, cctx);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
@@ -50,8 +50,8 @@ void LoadILVariable(ILFactor_variable * self, Enviroment * env, CallContext* cct
 	}
 }
 
-GenericType* EvalILVariable(ILFactor_variable * self, Enviroment * env, CallContext* cctx) {
-	ILFactor_variable_check(self, env, cctx);
+GenericType* EvalILVariable(ILVariable * self, Enviroment * env, CallContext* cctx) {
+	ILVariable_check(self, env, cctx);
 	GenericType* ret = NULL;
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		ret = EvalILVariableLocal(self->Kind.Local, env, cctx);
@@ -61,7 +61,7 @@ GenericType* EvalILVariable(ILFactor_variable * self, Enviroment * env, CallCont
 	return ret;
 }
 
-char* ILVariableToString(ILFactor_variable* self, Enviroment* env) {
+char* ILVariableToString(ILVariable* self, Enviroment* env) {
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		return ILVariableLocalToString(self->Kind.Local, env);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
@@ -70,7 +70,7 @@ char* ILVariableToString(ILFactor_variable* self, Enviroment* env) {
 	return NULL;
 }
 
-void DeleteILVariable(ILFactor_variable * self) {
+void DeleteILVariable(ILVariable * self) {
 	//MEM_FREE(self->name);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		DeleteILVariableLocal(self->Kind.Local);
@@ -83,21 +83,21 @@ void DeleteILVariable(ILFactor_variable * self) {
 }
 
 //private
-static void ILFactor_variable_check(ILFactor_variable* self, Enviroment* env, CallContext* cctx) {
+static void ILVariable_check(ILVariable* self, Enviroment* env, CallContext* cctx) {
 	if(self->Type != ILVARIABLE_TYPE_UNDEFINED_T) {
 		return;
 	}
 	assert(self->FQCN != NULL);
 	//hoge, foo のような文字列の場合
 	if(self->FQCN->Scope->Length == 0) {
-		ILFactor_variable_check_instance(self, env, cctx);
+		ILVariable_check_instance(self, env, cctx);
 	//Namespace::Hoge Namespace::Foo のような文字列の場合.
 	} else if(self->FQCN->Scope->Length > 0) {
-		ILFactor_variable_check_static(self, env, cctx);
+		ILVariable_check_static(self, env, cctx);
 	}
 }
 
-static void ILFactor_variable_check_instance(ILFactor_variable* self, Enviroment* env, CallContext* cctx) {
+static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallContext* cctx) {
 	Namespace* cur = GetNamespaceCContext(cctx);
 	class_* ctype = FindClassFromNamespace(cur, self->FQCN->Name);
 	if(ctype == NULL) {
@@ -105,10 +105,10 @@ static void ILFactor_variable_check_instance(ILFactor_variable* self, Enviroment
 	}
 	//現在の名前空間から参照できるクラスがある場合
 	if(ctype != NULL) {
-		ILFactor_variable_check_static(self, env, cctx);
+		ILVariable_check_static(self, env, cctx);
 	//ただのローカル変数の場合
 	} else {
-		ILFactor_variable_local* lc = NewILVariableLocal(self->FQCN->Name);
+		ILVariable_local* lc = NewILVariableLocal(self->FQCN->Name);
 		self->Type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
 		lc->type_args = self->TypeArgs;
@@ -117,8 +117,8 @@ static void ILFactor_variable_check_instance(ILFactor_variable* self, Enviroment
 	}
 }
 
-static void ILFactor_variable_check_static(ILFactor_variable* self, Enviroment* env, CallContext* cctx) {
-	ILFactor_variable_static* st = NewILVariableStatic();
+static void ILVariable_check_static(ILVariable* self, Enviroment* env, CallContext* cctx) {
+	ILVariable_static* st = NewILVariableStatic();
 	self->Type = ILVARIABLE_TYPE_STATIC_T;
 	//値を入れ替え
 	st->fqcn = self->FQCN;

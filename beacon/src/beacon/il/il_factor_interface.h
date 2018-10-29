@@ -52,7 +52,7 @@ struct ILInt;
 struct ILDouble;
 struct ILChar;
 struct ILString;
-struct ILFactor_variable;
+struct ILVariable;
 struct ILUnaryOp;
 struct ILBinaryOp;
 struct ILAssignOp;
@@ -83,7 +83,7 @@ typedef struct ILFactor {
 		struct ILDouble* double_;
 		struct ILChar* char_;
 		struct ILString* string_;
-		struct ILFactor_variable* variable_;
+		struct ILVariable* variable_;
 		struct ILUnaryOp* unary_;
 		struct ILAssignOp* assign_;
 		struct ILBinaryOp* binary_;
