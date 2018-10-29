@@ -111,7 +111,7 @@ static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallCon
 		ILVariableLocal* lc = NewILVariableLocal(self->FQCN->Name);
 		self->Type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
-		lc->type_args = self->TypeArgs;
+		lc->TypeArgs = self->TypeArgs;
 		self->TypeArgs = NULL;
 		self->Kind.Local = lc;
 	}

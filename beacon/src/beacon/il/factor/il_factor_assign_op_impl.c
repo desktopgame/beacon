@@ -308,7 +308,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 	ILVariable* ilvar = self->Left->u.variable_;
 	ILVariableLocal* illoc = ilvar->Kind.Local;
 	//src のような名前がローカル変数を示す場合
-	if(illoc->type == VARIABLE_LOCAL_SCOPE_T) {
+	if(illoc->Type == VARIABLE_LOCAL_SCOPE_T) {
 		#if defined(DEBUG)
 		const char* vname = Ref2Str(ilvar->FQCN->Name);
 		#endif
@@ -324,11 +324,11 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 			return;
 		}
 	//src のような名前がフィールドを示す場合
-	} else if(illoc->type == VARIABLE_LOCAL_FIELD_T) {
+	} else if(illoc->Type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		Field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
+		Field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
 		if(temp == -1) {
-			f = FindTreeSFieldClass(GetClassCContext(cctx), illoc->namev, &temp);
+			f = FindTreeSFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
 		}
 		assert(temp != -1);
 		//フィールドはstaticでないが
@@ -348,9 +348,9 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		GeneratePutField(env->Bytecode, f, temp);
 		//assert(!IsStaticModifier(f->modifier));
 	//src のような名前がプロパティを示す場合
-	} else if(illoc->type == VARIABLE_LOCAL_PROPERTY_T) {
+	} else if(illoc->Type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		Property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->namev, &temp);
+		Property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->Name, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
