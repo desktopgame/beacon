@@ -31,6 +31,7 @@ release : all
 .PHONY : package
 package :
 	make release
+	ruby auto/doxy.rb
 	ruby auto/packager.rb
 
 #Test
