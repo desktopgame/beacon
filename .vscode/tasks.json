@@ -12,41 +12,19 @@
 			"command": "go run script/gen.go"
 		},
 		{
-			"label": "make db",
+			"label": "test",
 			"type": "shell",
 			"options": {
 				"cwd": "../beacon/beacon/src"
 			},
 			"command": "make",
 			"args": [
-				"db"
-			]
-		},
-		{
-			"label": "make rb",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/src"
-			},
-			"command": "make",
-			"args": [
-				"rb"
-			]
-		},
-		{
-			"label": "make cov",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/src"
-			},
-			"command": "make",
-			"args": [
-				"cov"
+				"test"
 			],
 			"problemMatcher": []
 		},
 		{
-			"label": "make clean",
+			"label": "clean",
 			"type": "shell",
 			"options": {
 				"cwd": "../beacon/beacon/src"
@@ -57,63 +35,15 @@
 			]
 		},
 		{
-			"label": "test",
+			"label": "package",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/bin/"
+				"cwd": "../beacon/beacon/src"
 			},
-			"command": "./a.out",
+			"command": "make",
 			"args": [
-				"--test"
+				"package"
 			]
 		},
-		{
-			"label": "ast",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/bin/"
-			},
-			"command": "./a.out",
-			"args": [
-				"--ast",
-				"main.bc"
-			]
-		},
-		{
-			"label": "il",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/bin/"
-			},
-			"command": "./a.out",
-			"args": [
-				"--il",
-				"main.bc"
-			]
-		},
-		{
-			"label": "run",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/bin/"
-			},
-			"command": "./a.out",
-			"args": [
-				"--run",
-				"main.bc"
-			]
-		},
-		{
-			"label": "op",
-			"type": "shell",
-			"options": {
-				"cwd": "../beacon/beacon/bin/"
-			},
-			"command": "./a.out",
-			"args": [
-				"--op",
-				"main.bc"
-			]
-		}
 	]
 }

@@ -18,26 +18,32 @@ OBJDIRS   = $(addprefix $(OBJROOT)/, $(SRCDIRS))
 DEPENDS   = $(OBJECTS:.o=.d)
 
 #Debug Build
-.PHONY : db
-db : CXXFLAGS += $(CXXDEBUG)
-db : all
+.PHONY : debug
+debug : CXXFLAGS += $(CXXDEBUG)
+debug : all
 
 #Release Build
-.PHONY : rb
-rb : CXXFLAGS += $(CXXRELEASE)
-rb : all
+.PHONY : release
+release : CXXFLAGS += $(CXXRELEASE)
+release : all
 
-#Coverage
-.PHONY: cov
-cov :
+#Package
+.PHONY : package
+package :
+	make release
+	ruby auto/packager.rb
+
+#Test
+.PHONY: test
+test :
 	make clean
-	make db
-	ruby lcov.rb
+	make debug
+	ruby auto/lcov.rb
 
 #Clean
 .PHONY: clean
 clean:
-	ruby clean.rb
+	ruby auto/clean.rb
 
 #install
 .PHONY: install
