@@ -22,7 +22,7 @@ static void ILMemberOp_typearg_delete(VectorItem item);
 
 ILFactor* WrapILMemberOp(ILMemberOp* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_MEMBER_OP_T);
-	ret->u.member_ = self;
+	ret->Kind.MemberOp = self;
 	self->Parent = ret;
 	return ret;
 }
@@ -123,7 +123,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 
 static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallContext* cctx, GenericType* receiver_type, bool* swap) {
 	ILFactor* fact = self->Source;
-	ILVariable* ilvar = fact->u.variable_;
+	ILVariable* ilvar = fact->Kind.Variable;
 	#if defined(DEBUG)
 	const char* ilvarname = Ref2Str(ilvar->Kind.Static->FQCN->Name);
 	#endif
@@ -156,8 +156,8 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 	factp->Property = p;
 	factp->Index = temp;
 	self->Source = NULL;
-	self->Parent->type = ILFACTOR_PROPERTY_T;
-	self->Parent->u.prop = factp;
+	self->Parent->Type = ILFACTOR_PROPERTY_T;
+	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
 		ThrowBCError(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Name));
@@ -182,8 +182,8 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, Call
 	factp->Property = p;
 	factp->Index = temp;
 	self->Source = NULL;
-	self->Parent->type = ILFACTOR_PROPERTY_T;
-	self->Parent->u.prop = factp;
+	self->Parent->Type = ILFACTOR_PROPERTY_T;
+	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));

@@ -6,7 +6,7 @@
 
 ILFactor* WrapILSubscript(ILSubscript* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_SUBSCRIPT_T);
-	ret->u.subscript = self;
+	ret->Kind.Subscript = self;
 	return ret;
 }
 

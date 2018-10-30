@@ -10,7 +10,7 @@
 
 ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_INSTANCEOF_T);
-	ret->u.instanceof_ = self;
+	ret->Kind.InstanceOf = self;
 	return ret;
 }
 

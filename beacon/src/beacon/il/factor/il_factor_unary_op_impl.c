@@ -13,7 +13,7 @@
 
 ILFactor * WrapILUnaryOp(ILUnaryOp * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_UNARY_OP_T);
-	ret->u.unary_ = self;
+	ret->Kind.UnaryOp = self;
 	return ret;
 }
 

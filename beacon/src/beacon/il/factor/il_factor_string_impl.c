@@ -10,7 +10,7 @@
 
 ILFactor * WrapILString(ILString * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_STRING_T);
-	ret->u.string_ = self;
+	ret->Kind.String = self;
 	return ret;
 }
 

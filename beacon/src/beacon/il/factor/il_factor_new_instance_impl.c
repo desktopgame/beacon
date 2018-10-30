@@ -21,7 +21,7 @@ static void il_Factor_new_instace_delete_arg(VectorItem item);
 
 ILFactor * WrapILNewInstance(ILNewInstance * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_NEW_INSTANCE_T);
-	ret->u.new_instance_ = self;
+	ret->Kind.NewInstance = self;
 	return ret;
 }
 

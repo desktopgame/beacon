@@ -10,7 +10,7 @@
 
 ILFactor * WrapILAs(ILAs * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_AS_T);
-	ret->u.as_ = self;
+	ret->Kind.As = self;
 	return ret;
 }
 

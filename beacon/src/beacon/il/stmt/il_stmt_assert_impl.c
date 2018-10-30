@@ -44,7 +44,7 @@ void LoadILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
 		self->Message = WrapILString(ilstr);
 		assert(ilstr->Value != 0);
 		MEM_FREE(str);
-		self->Message->lineno = self->Parent->lineno;
+		self->Message->Lineno = self->Parent->lineno;
 	}
 	LoadILFactor(self->Message, env, cctx);
 }

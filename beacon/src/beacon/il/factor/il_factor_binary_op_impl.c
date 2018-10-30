@@ -22,7 +22,7 @@ static bool type_test(ILBinaryOp* self, Enviroment* env, CallContext* cctx, Type
 
 ILFactor * WrapILBinaryOp(ILBinaryOp * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_BINARY_OP_T);
-	ret->u.binary_ = self;
+	ret->Kind.BinaryOp = self;
 	return ret;
 }
 

@@ -12,7 +12,7 @@
 
 ILFactor * WrapILDouble(ILDouble * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_DOUBLE_T);
-	ret->u.double_ = self;
+	ret->Kind.Double = self;
 	return ret;
 }
 

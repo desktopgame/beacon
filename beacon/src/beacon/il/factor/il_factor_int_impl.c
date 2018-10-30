@@ -11,7 +11,7 @@
 #endif
 ILFactor * WrapILInt(ILInt * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_INT_T);
-	ret->u.int_ = self;
+	ret->Kind.Int = self;
 	return ret;
 }
 

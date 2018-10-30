@@ -24,7 +24,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 
 ILFactor* WrapILAssignOp(ILAssignOp* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_ASSIGN_T);
-	ret->u.assign_ = self;
+	ret->Kind.AssignOp = self;
 	return ret;
 }
 
@@ -49,24 +49,24 @@ void LoadILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 }
 
 void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	if(self->Left->type == ILFACTOR_VARIABLE_T) {
+	if(self->Left->Type == ILFACTOR_VARIABLE_T) {
 		generate_assign_to_variable(self, env, cctx);
 		//NOTE:constかどうかの検査
 	//foo.bar = xxx
-	} else if(self->Left->type == ILFACTOR_MEMBER_OP_T) {
-		ILMemberOp* ilmem = self->Left->u.member_;
+	} else if(self->Left->Type == ILFACTOR_MEMBER_OP_T) {
+		ILMemberOp* ilmem = self->Left->Kind.MemberOp;
 		ILFactor* ilsrc = ilmem->Source;
-		if(ilsrc->type == ILFACTOR_VARIABLE_T) {
+		if(ilsrc->Type == ILFACTOR_VARIABLE_T) {
 			assign_by_namebase(self, env, cctx);
 		//インスタンスフィールドへの代入
 		} else {
 			assign_to_field(self, ilmem->Source, self->Right, ilmem->Name, env, cctx);
 		}
-	} else if(self->Left->type == ILFACTOR_PROPERTY_T) {
+	} else if(self->Left->Type == ILFACTOR_PROPERTY_T) {
 		assign_to_Property(self, env, cctx);
-	} else if(self->Left->type == ILFACTOR_SUBSCRIPT_T) {
+	} else if(self->Left->Type == ILFACTOR_SUBSCRIPT_T) {
 		assign_to_array(self, env, cctx);
-	} else if(self->Left->type == ILFACTOR_CALL_OP_T) {
+	} else if(self->Left->Type == ILFACTOR_CALL_OP_T) {
 		assign_by_call(self, env, cctx);
 	} else {
 		assert(false);
@@ -84,9 +84,9 @@ void DeleteILAssignOp(ILAssignOp* self) {
 }
 //private
 static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILMemberOp* ilmem = self->Left->u.member_;
+	ILMemberOp* ilmem = self->Left->Kind.MemberOp;
 	ILFactor* ilsrc = ilmem->Source;
-	ILVariable* ilvar = ilsrc->u.variable_;
+	ILVariable* ilvar = ilsrc->Kind.Variable;
 	//staticなフィールドへの代入
 	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
 		Class* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
@@ -144,7 +144,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 }
 
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILPropertyAccess* prop = self->Left->u.prop;
+	ILPropertyAccess* prop = self->Left->Kind.PropertyAccess;
 	Property* pp = prop->Property;
 	bool is_static = IsStaticModifier(prop->Property->Modifier);
 	BC_ERROR();
@@ -183,7 +183,7 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 }
 
 static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILSubscript* subs = self->Left->u.subscript;
+	ILSubscript* subs = self->Left->Kind.Subscript;
 	GenerateILFactor(subs->Receiver, env, cctx);
 	GenerateILFactor(subs->Position, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
@@ -191,7 +191,7 @@ static void assign_to_array(ILAssignOp* self, Enviroment* env, CallContext* cctx
 }
 
 static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILCallOp* call = self->Left->u.call_;
+	ILCallOp* call = self->Left->Kind.Call;
 	if(call->Type == ILCALL_TYPE_INVOKE_STATIC_T) {
 		ThrowBCError(
 			BCERROR_LHS_IS_NOT_SUBSCRIPT_T,
@@ -297,15 +297,15 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 }
 
 static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	assert(self->Left->type == ILFACTOR_VARIABLE_T);
-	ILVariable* ilvar = self->Left->u.variable_;
+	assert(self->Left->Type == ILFACTOR_VARIABLE_T);
+	ILVariable* ilvar = self->Left->Kind.Variable;
 	if(ilvar->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		generate_assign_to_variable_local(self, env, cctx);
 	}
 }
 
 static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	ILVariable* ilvar = self->Left->u.variable_;
+	ILVariable* ilvar = self->Left->Kind.Variable;
 	ILVariableLocal* illoc = ilvar->Kind.Local;
 	//src のような名前がローカル変数を示す場合
 	if(illoc->Type == VARIABLE_LOCAL_SCOPE_T) {

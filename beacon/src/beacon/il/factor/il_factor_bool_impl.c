@@ -7,7 +7,7 @@
 
 ILFactor * WrapILBool(ILBool * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_BOOL_T);
-	ret->u.bool_ = self;
+	ret->Kind.Bool = self;
 	return ret;
 }
 

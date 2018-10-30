@@ -160,7 +160,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 			ILInjectJNI* jni = NewILInjectJNI(asource->Attr.StringVValue);
 			AST* afact = FirstAST(asource);
 			jni->Value = CLILFactor(self, afact);
-			jni->Value->lineno = 0;
+			jni->Value->Lineno = 0;
 			return WrapILInjectJNI(jni);
 		}
 		default:

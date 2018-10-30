@@ -199,7 +199,7 @@ static void Loadclass_loader_toplevel(ClassLoader* self) {
 	ILStatement* body = WrapILInferencedTypeInit(createWorldStmt);
 	//これをやらないと -1 のまま
 	body->lineno = 0;
-	createWorldStmt->Value->lineno = 0;
+	createWorldStmt->Value->Lineno = 0;
 	//worldをselfにする
 	CallContext* cctx = NewCallContext(CALL_TOP_T);
 	cctx->Ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));

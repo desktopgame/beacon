@@ -20,7 +20,7 @@ static void DeleteILFactor_typeargs(VectorItem item);
 
 ILFactor * WrapILVariable(ILVariable * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_VARIABLE_T);
-	ret->u.variable_ = self;
+	ret->Kind.Variable = self;
 	return ret;
 }
 

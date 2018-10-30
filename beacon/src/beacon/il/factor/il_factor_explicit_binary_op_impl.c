@@ -10,7 +10,7 @@
 
 ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_EXPLICIT_BINARY_OP_T);
-	ret->u.exp_binary_op = self;
+	ret->Kind.ExpBinaryOp = self;
 	return ret;
 }
 

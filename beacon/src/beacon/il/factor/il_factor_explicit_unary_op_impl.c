@@ -9,7 +9,7 @@
 
 ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_EXPLICIT_UNARY_OP_T);
-	ret->u.exp_unary_op = self;
+	ret->Kind.ExpUnaryOp = self;
 	return ret;
 }
 

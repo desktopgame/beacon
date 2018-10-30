@@ -25,7 +25,7 @@ static ILSubscript* CLIL_subscript(ClassLoader* self, AST* source);
 ILFactor* CLILFactor(ClassLoader* self, AST* source) {
 	ILFactor* ret = CLILFactorImpl(self, source);
 	assert(source->Lineno >= 0);
-	ret->lineno = source->Lineno;
+	ret->Lineno = source->Lineno;
 	return ret;
 }
 
@@ -124,12 +124,12 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 	} else if (source->Tag == AST_THIS_T) {
 		ILFactor* ret = ILFactor_new(ILFACTOR_THIS_T);
 		ILThis* th = NewILThis();
-		ret->u.this_ = th;
+		ret->Kind.This = th;
 		return ret;
 	} else if (source->Tag == AST_SUPER_T) {
 		ILFactor* ret = ILFactor_new(ILFACTOR_SUPER_T);
 		ILSuper* sp = NewILSuper();
-		ret->u.super_ = sp;
+		ret->Kind.Super = sp;
 		return ret;
 	} else if (source->Tag == AST_NEW_INSTANCE_T) {
 		return WrapILNewInstance(CLIL_new_instance(self, source));
@@ -139,7 +139,7 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 		return WrapILBool(CLIL_false(self, source));
 	} else if (source->Tag == AST_NULL_T) {
 		ILFactor* ret = ILFactor_new(ILFACTOR_NULL_T);
-		ret->u.null_ = NULL;
+		ret->Kind.Null = NULL;
 		return ret;
 	} else if (source->Tag == AST_AS_T) {
 		return WrapILAs(CLIL_as(self, source));
@@ -210,7 +210,7 @@ static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, AST* source, Operat
 	bin->Right = CLILFactor(self, aright);
 	ret->Left = CLILFactor(self, aleft);
 	ret->Right = WrapILBinaryOp(bin);
-	ret->Right->lineno = aright->Lineno;
+	ret->Right->Lineno = aright->Lineno;
 	return ret;
 }
 

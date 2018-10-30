@@ -9,7 +9,7 @@
 
 ILFactor * WrapILChar(ILChar * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_CHAR_T);
-	ret->u.char_ = self;
+	ret->Kind.Char = self;
 	return ret;
 }
 
