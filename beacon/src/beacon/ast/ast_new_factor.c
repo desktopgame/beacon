@@ -9,19 +9,19 @@ AST* NewASTBool(bool b) {
 }
 
 AST* NewASTTrue() {
-	return ast_new(AST_TRUE_T);
+	return NewAST(AST_TRUE_T);
 }
 
 AST* NewASTFalse() {
-	return ast_new(AST_FALSE_T);
+	return NewAST(AST_FALSE_T);
 }
 
 AST* NewASTNull() {
-	return ast_new(AST_NULL_T);
+	return NewAST(AST_NULL_T);
 }
 
 AST* NewASTAs(AST* afact, AST* atypename) {
-	AST* ret = ast_new(AST_AS_T);
+	AST* ret = NewAST(AST_AS_T);
 	PushAST(ret, afact);
 	PushAST(ret, atypename);
 	return ret;
@@ -29,43 +29,43 @@ AST* NewASTAs(AST* afact, AST* atypename) {
 
 
 AST* NewASTNameReference(AST* atypename) {
-	AST* ret = ast_new(AST_NAME_REFERENCE_T);
+	AST* ret = NewAST(AST_NAME_REFERENCE_T);
 	PushAST(ret, atypename);
 	return ret;
 }
 
 AST* NewASTVariable(AST* a, AST* atype_args) {
-	AST* ret = ast_new(AST_VARIABLE_T);
+	AST* ret = NewAST(AST_VARIABLE_T);
 	PushAST(ret, a);
 	PushAST(ret, atype_args);
 	return ret;
 }
 
 AST* NewASTVariableFromString(StringView strv, AST* atype_args) {
-	AST* ret = ast_new(AST_VARIABLE_T);
+	AST* ret = NewAST(AST_VARIABLE_T);
 	ret->Attr.StringVValue = strv;
 	PushAST(ret, atype_args);
 	return ret;
 }
 
 AST* NewASTOpCall(AST* areceiver, AST* aargs) {
-	AST* ret = ast_new(AST_OP_CALL_T);
+	AST* ret = NewAST(AST_OP_CALL_T);
 	PushAST(ret, areceiver);
 	PushAST(ret, aargs);
 	return ret;
 }
 
 AST* NewASTThis() {
-	return ast_new(AST_THIS_T);
+	return NewAST(AST_THIS_T);
 }
 
 AST* NewASTSuper() {
-	return ast_new(AST_SUPER_T);
+	return NewAST(AST_SUPER_T);
 }
 
 AST* NewASTFieldAccess(AST* afact, StringView namev, AST* atype_args) {
-	AST* ret = ast_new(AST_FIELD_ACCESS_T);
-	AST* aname = ast_new(AST_IDENTIFIER_T);
+	AST* ret = NewAST(AST_FIELD_ACCESS_T);
+	AST* aname = NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = namev;
 	PushAST(ret, afact);
 	PushAST(ret, aname);
@@ -74,7 +74,7 @@ AST* NewASTFieldAccess(AST* afact, StringView namev, AST* atype_args) {
 }
 
 AST* NewASTNewInstance(AST* afqcn, AST* atype_args, AST* argument_list) {
-	AST* ret = ast_new(AST_NEW_INSTANCE_T);
+	AST* ret = NewAST(AST_NEW_INSTANCE_T);
 	PushAST(ret, afqcn);
 	PushAST(ret, atype_args);
 	PushAST(ret, argument_list);
@@ -82,14 +82,14 @@ AST* NewASTNewInstance(AST* afqcn, AST* atype_args, AST* argument_list) {
 }
 
 AST* NewASTInstanceTof(AST* afact, AST* atype) {
-	AST* ret = ast_new(AST_INSTANCEOF_T);
+	AST* ret = NewAST(AST_INSTANCEOF_T);
 	PushAST(ret, afact);
 	PushAST(ret, atype);
 	return ret;
 }
 
 AST* NewASTExplicitBiOperator(AST* afact, OperatorType type, AST* aarg) {
-	AST* ret = ast_new(AST_EXPLICIT_BIOPERATOR_T);
+	AST* ret = NewAST(AST_EXPLICIT_BIOPERATOR_T);
 	ret->Attr.OperatorValue = type;
 	PushAST(ret, afact);
 	PushAST(ret, aarg);
@@ -97,14 +97,14 @@ AST* NewASTExplicitBiOperator(AST* afact, OperatorType type, AST* aarg) {
 }
 
 AST* NewASTExplicitUOperator(AST* afact, OperatorType type) {
-	AST* ret = ast_new(AST_EXPLICIT_UOPERATOR_T);
+	AST* ret = NewAST(AST_EXPLICIT_UOPERATOR_T);
 	ret->Attr.OperatorValue = type;
 	PushAST(ret, afact);
 	return ret;
 }
 
 AST* NewASTSubscriptAccess(AST* afact, AST* aindex) {
-	AST* ret = ast_new(AST_SUBSCRIPT_ACCESS_T);
+	AST* ret = NewAST(AST_SUBSCRIPT_ACCESS_T);
 	PushAST(ret, afact);
 	PushAST(ret, aindex);
 	return ret;

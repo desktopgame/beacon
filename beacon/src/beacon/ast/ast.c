@@ -33,21 +33,21 @@ AST* MallocAST(ASTTag tag, const char* filename, int lineno) {
 	return ret;
 }
 
-AST* NewASTNamespacePath(StringView namev) {
-	AST* ret = ast_new(AST_NAMESPACE_PATH_T);
-	ret->Attr.StringVValue = namev;
+AST* NewASTNamespacePath(StringView name) {
+	AST* ret = NewAST(AST_NAMESPACE_PATH_T);
+	ret->Attr.StringVValue = name;
 	return ret;
 }
 
-AST* NewASTNamespacePathList(AST* aforward, StringView namev) {
-	AST* ret = ast_new(AST_NAMESPACE_PATH_LIST_T);
+AST* NewASTNamespacePathList(AST* aforward, StringView name) {
+	AST* ret = NewAST(AST_NAMESPACE_PATH_LIST_T);
 	PushAST(ret, aforward);
-	PushAST(ret, NewASTNamespacePath(namev));
+	PushAST(ret, NewASTNamespacePath(name));
 	return ret;
 }
 
 AST* NewASTImportPath(AST* astr) {
-	AST* ret = ast_new(AST_IMPORT_PATH_T);
+	AST* ret = NewAST(AST_IMPORT_PATH_T);
 	ret->Attr.StringVValue = astr->Attr.StringVValue;
 	astr->Attr.StringVValue = 0;
 	MEM_FREE(astr);
@@ -55,20 +55,20 @@ AST* NewASTImportPath(AST* astr) {
 }
 
 AST* NewASTImportDecl(AST* aimport_path) {
-	AST* ret = ast_new(AST_IMPORT_DECL_T);
+	AST* ret = NewAST(AST_IMPORT_DECL_T);
 	PushAST(ret, aimport_path);
 	return ret;
 }
 
 AST* NewASTImportDeclList(AST* aimport, AST* aimport_list) {
-	AST* ret = ast_new(AST_IMPORT_DECL_LIST_T);
+	AST* ret = NewAST(AST_IMPORT_DECL_LIST_T);
 	PushAST(ret, aimport);
 	PushAST(ret, aimport_list);
 	return ret;
 }
 
 AST* NewASTScope(AST* astmt_list) {
-	AST* ret = ast_new(AST_SCOPE_T);
+	AST* ret = NewAST(AST_SCOPE_T);
 	PushAST(ret, astmt_list);
 	return ret;
 }
@@ -78,24 +78,24 @@ AST* NewASTScopeEmpty() {
 }
 
 AST* NewASTBlank() {
-	return ast_new(AST_BLANK_T);
+	return NewAST(AST_BLANK_T);
 }
 
-AST* NewASTIdentifier(StringView strv) {
-	AST* ret = ast_new(AST_IDENTIFIER_T);
-	ret->Attr.StringVValue = strv;
+AST* NewASTIdentifier(StringView str) {
+	AST* ret = NewAST(AST_IDENTIFIER_T);
+	ret->Attr.StringVValue = str;
 	return ret;
 }
 
-AST* NewASTIdentifierList(StringView strv, AST* aident_list) {
-	AST* ret = ast_new(AST_IDENTIFIER_LIST_T);
+AST* NewASTIdentifierList(StringView str, AST* aident_list) {
+	AST* ret = NewAST(AST_IDENTIFIER_LIST_T);
 	PushAST(ret, aident_list);
-	PushAST(ret, NewASTIdentifier(strv));
+	PushAST(ret, NewASTIdentifier(str));
 	return ret;
 }
 
 AST* NewASTProc(AST* aexpr) {
-	AST* ret = ast_new(AST_PROC_T);
+	AST* ret = NewAST(AST_PROC_T);
 	PushAST(ret, aexpr);
 	return ret;
 }
