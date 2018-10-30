@@ -44,7 +44,7 @@ StringView GetTypeName(Type* self) {
 	if (self->Tag == TYPE_CLASS_T) {
 		return self->Kind.Class->Name;
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		return self->Kind.Interface->namev;
+		return self->Kind.Interface->Name;
 	}
 	return 0;
 }
@@ -102,7 +102,7 @@ VTable * GetVTableType(Type* self) {
 		CreateVTableClass(self->Kind.Class);
 		return self->Kind.Class->VT;
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		return self->Kind.Interface->vt;
+		return self->Kind.Interface->VT;
 	}
 	return NULL;
 }
@@ -149,7 +149,7 @@ int GetGenericIndexType(Type* self, StringView namev) {
 	assert(self->Tag != TYPE_ENUM_T);
 	Vector* v = NULL;
 	if (self->Tag == TYPE_CLASS_T) v = self->Kind.Class->TypeParameters;
-	if (self->Tag == TYPE_INTERFACE_T) v = self->Kind.Interface->GetParameterListType;
+	if (self->Tag == TYPE_INTERFACE_T) v = self->Kind.Interface->TypeParameters;
 	//全ての型変数と比べる
 	int ret = -1;
 	for (int i = 0; i < v->Length; i++) {
@@ -187,8 +187,8 @@ GenericType * FindImplementType(Type* self, Type* a) {
 		}
 	} else if (self->Tag == TYPE_INTERFACE_T) {
 		Interface* inter = self->Kind.Interface;
-		for (int i = 0; i < inter->impl_list->Length; i++) {
-			GenericType* e = (GenericType*)AtVector(inter->impl_list, i);
+		for (int i = 0; i < inter->Implements->Length; i++) {
+			GenericType* e = (GenericType*)AtVector(inter->Implements, i);
 			if (e->CoreType == a) {
 				return e;
 			}
@@ -202,7 +202,7 @@ Vector* GetParameterListType(Type* self) {
 	if(self->Tag == TYPE_CLASS_T) {
 		return self->Kind.Class->TypeParameters;
 	} else if(self->Tag == TYPE_INTERFACE_T) {
-		return self->Kind.Interface->GetParameterListType;
+		return self->Kind.Interface->TypeParameters;
 	}
 }
 
@@ -211,7 +211,7 @@ Vector* GetImplementList(Type* self) {
 	if(self->Tag == TYPE_CLASS_T) {
 		return self->Kind.Class->Implements;
 	} else if(self->Tag == TYPE_INTERFACE_T) {
-		return self->Kind.Interface->impl_list;
+		return self->Kind.Interface->Implements;
 	}
 }
 
@@ -220,7 +220,7 @@ GenericType * TypeParameterAtType(Type* self, int index) {
 	if (self->Tag == TYPE_CLASS_T) {
 		return (GenericType*)AtVector(self->Kind.Class->TypeParameters, index);
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		return (GenericType*)AtVector(self->Kind.Interface->GetParameterListType, index);
+		return (GenericType*)AtVector(self->Kind.Interface->TypeParameters, index);
 	}
 	return NULL;
 }

@@ -17,14 +17,14 @@ struct Type;
  * インターフェースを表す構造体.
  */
 typedef struct Interface {
-	struct Type* parent;
-	StringView namev;
-	Vector* impl_list;
-	Vector* prop_list;
-	Vector* method_list;
-	Namespace* location;
-	VTable* vt;
-	Vector* GetParameterListType;
+	struct Type* Parent;
+	StringView Name;
+	Vector* Implements;
+	Vector* Properties;
+	Vector* Methods;
+	Namespace* Location;
+	VTable* VT;
+	Vector* TypeParameters;
 } Interface;
 
 /**

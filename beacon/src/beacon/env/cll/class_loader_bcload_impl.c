@@ -366,7 +366,7 @@ static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* il
 	//重複するインターフェイスを検出
 	Interface* inter = NULL;
 	if((inter = IsValidInterface(tp))) {
-		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(inter->namev));
+		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(inter->Name));
 	}
 }
 
@@ -383,7 +383,7 @@ static Type* CLBC_get_or_load_interface(ClassLoader* self, Namespace* parent, IL
 		if((tp->State & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
-			DupTypeParameterList(GetTypeParametersILType(iltype), inter->GetParameterListType);
+			DupTypeParameterList(GetTypeParametersILType(iltype), inter->TypeParameters);
 		}
 	}
 	return tp;
@@ -391,7 +391,7 @@ static Type* CLBC_get_or_load_interface(ClassLoader* self, Namespace* parent, IL
 
 static void CLBC_register_interface(ClassLoader* self, Namespace* parent, ILType* iltype, Type* tp, Interface* inter) {
 	InitGenericSelf(tp, iltype->Kind.Interface->TypeParameters->Length);
-	DupTypeParameterList(iltype->Kind.Interface->TypeParameters, inter->GetParameterListType);
+	DupTypeParameterList(iltype->Kind.Interface->TypeParameters, inter->TypeParameters);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = parent;
 	cctx->Ty = tp;
@@ -407,16 +407,16 @@ static void CLBC_register_interface(ClassLoader* self, Namespace* parent, ILType
 			return;
 		//インターフェイスの時のみ追加
 		} else {
-			PushVector(inter->impl_list, gtp);
+			PushVector(inter->Implements, gtp);
 		}
 	}
 	//場所を設定
-	inter->location = parent;
+	inter->Location = parent;
 	DeleteCallContext(cctx);
 	AddTypeNamespace(parent, tp);
 	//重複するインターフェイスを検出
 	Interface* ovinter = NULL;
 	if((ovinter = IsValidInterface(tp))) {
-		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(ovinter->namev));
+		ThrowBCError(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(ovinter->Name));
 	}
 }

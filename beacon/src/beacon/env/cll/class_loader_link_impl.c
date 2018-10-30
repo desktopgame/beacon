@@ -114,13 +114,13 @@ static void CLBC_interface_decl(ClassLoader * self, ILType * iltype, Type* tp, N
 	if((tp->State & TYPE_DECL) > 0) {
 		return;
 	}
-	assert(tp->Kind.Interface->method_list->Length == 0);
+	assert(tp->Kind.Interface->Methods->Length == 0);
 	CL_ERROR(self);
 	CLBC_methods_decl(self, iltype, tp, iltype->Kind.Interface->Methods, scope);
 	CLBC_properties_decl(self, iltype, tp, iltype->Kind.Interface->Properties, scope);
 	//privateなメンバーは定義できない
-	for(int i=0; i<tp->Kind.Interface->method_list->Length; i++) {
-		Method* e = AtVector(tp->Kind.Interface->method_list, i);
+	for(int i=0; i<tp->Kind.Interface->Methods->Length; i++) {
+		Method* e = AtVector(tp->Kind.Interface->Methods, i);
 		if(e->Access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
@@ -129,8 +129,8 @@ static void CLBC_interface_decl(ClassLoader * self, ILType * iltype, Type* tp, N
 			);
 		}
 	}
-	for(int i=0; i<tp->Kind.Interface->prop_list->Length; i++) {
-		Property* e = AtVector(tp->Kind.Interface->prop_list, i);
+	for(int i=0; i<tp->Kind.Interface->Properties->Length; i++) {
+		Property* e = AtVector(tp->Kind.Interface->Properties, i);
 		if(e->Access == ACCESS_PRIVATE_T) {
 			ThrowBCError(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
@@ -150,7 +150,7 @@ static void CLBC_interface_impl(ClassLoader * self, ILType * iltype, Type* tp, N
 		return;
 	}
 	CL_ERROR(self);
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Interface->Methods, tp->Kind.Interface->method_list);
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Interface->Methods, tp->Kind.Interface->Methods);
 	tp->State = tp->State | TYPE_IMPL;
 }
 

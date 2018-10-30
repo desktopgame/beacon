@@ -451,7 +451,7 @@ static void CreateVTableClass_interface(Class* self) {
 	for (int i = 0; i < tbl->Length; i++) {
 		//GenericType* gtp = (GenericType*)AtVector(tbl, i);
 		Interface* inter = (Interface*)AtVector(tbl, i);
-		VTable* interVT = inter->vt;
+		VTable* interVT = inter->VT;
 		VTable* newVT = NewVTable();
 		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧

@@ -4,8 +4,8 @@
 #include "../type_parameter.h"
 
 bool IsMethodParameterValidInterface(Interface* inter, Method** out_method, StringView* out_name) {
-	for(int i=0; i<inter->method_list->Length; i++) {
-		Method* m = (Method*)AtVector(inter->method_list, i);
+	for(int i=0; i<inter->Methods->Length; i++) {
+		Method* m = (Method*)AtVector(inter->Methods, i);
 		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
@@ -15,12 +15,12 @@ bool IsMethodParameterValidInterface(Interface* inter, Method** out_method, Stri
 }
 
 bool IsTypeParameterValidInterface(Interface* inter, StringView* out_name) {
-	return !IsOverwrappedTypeParameterName(inter->GetParameterListType, out_name);
+	return !IsOverwrappedTypeParameterName(inter->TypeParameters, out_name);
 }
 
 bool IsMethodTypeParameterValidInterface(Interface* inter, Method** out_method, StringView* out_name) {
-	for(int i=0; i<inter->method_list->Length; i++) {
-		Method* m = (Method*)AtVector(inter->method_list, i);
+	for(int i=0; i<inter->Methods->Length; i++) {
+		Method* m = (Method*)AtVector(inter->Methods, i);
 		if(IsOverwrappedParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
