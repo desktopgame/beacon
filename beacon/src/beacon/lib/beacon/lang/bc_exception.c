@@ -15,7 +15,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 void InitBCException() {
 	Namespace* lang = GetLangNamespace();
 	Type* exceptionType = NewPreloadClass(InternString("Exception"));
-	class_* exceptionClass = TYPE2CLASS(exceptionType);
+	Class* exceptionClass = TYPE2CLASS(exceptionType);
 	AddTypeNamespace(lang, exceptionType);
 	DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
@@ -27,8 +27,8 @@ Type* GetBCExceptionType() {
 //private
 static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Namespace* lang = GetLangNamespace();
-	class_* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
-	class_* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
+	Class* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
+	Class* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
 	Object* self= (Object*)AtVector(fr->VariableTable, 0);
 	//FXIME:???
 	Heap* h = GetHeap();

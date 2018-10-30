@@ -6,7 +6,7 @@
 #include "opcode_buf.h"
 #include "symbol_table.h"
 #include <stdbool.h>
-struct class_;
+struct Class;
 struct Object;
 struct ClassLoader;
 struct FQCNCache;

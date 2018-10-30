@@ -87,7 +87,7 @@ interface_ * GetInterfaceFQCN(FQCNCache * self, Namespace * current) {
 	return TypeToInterface(GetTypeFQCN(self, current));
 }
 
-class_ * GetClassFQCN(FQCNCache * self, Namespace * current) {
+Class* GetClassFQCN(FQCNCache * self, Namespace * current) {
 	return TypeToClass(GetTypeFQCN(self, current));
 }
 

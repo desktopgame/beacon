@@ -11,7 +11,7 @@ static bool IsValidFieldClassImpl(Vector* field_vec, Field** out);
 static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out);
 static bool methods_is_all_abstract(Vector* v);
 
-bool IsImplementInterfaceMethodValidClass(class_* cls, Method** out) {
+bool IsImplementInterfaceMethodValidClass(Class* cls, Method** out) {
 	(*out) = NULL;
 	bool contains = true;
 	#if defined(DEBUG)
@@ -44,7 +44,7 @@ bool IsImplementInterfaceMethodValidClass(class_* cls, Method** out) {
 	return contains;
 }
 
-bool IsImplementInterfacePropertyValidClass(class_* cls, Property** out) {
+bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
 	(*out) = NULL;
 	//全ての実装インターフェイスを取得する
 	Vector* gimpl_list = GetGenericInterfaceListClass(cls);
@@ -84,7 +84,7 @@ bool IsImplementInterfacePropertyValidClass(class_* cls, Property** out) {
 	return true;
 }
 
-bool IsImplementAbstractClassValidClass(class_* cls, Method** out) {
+bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
 	(*out) = NULL;
 	//これ自体が抽象クラス
 	if(cls->is_abstract) {
@@ -95,7 +95,7 @@ bool IsImplementAbstractClassValidClass(class_* cls, Method** out) {
 	if(gsuper == NULL) {
 		return true;
 	}
-	class_* csuper = TYPE2CLASS(GENERIC2TYPE(gsuper));
+	Class* csuper = TYPE2CLASS(GENERIC2TYPE(gsuper));
 	//親が具象クラスならtrue
 	if(!csuper->is_abstract) {
 		return true;
@@ -125,17 +125,17 @@ bool IsImplementAbstractClassValidClass(class_* cls, Method** out) {
 	return ret;
 }
 
-bool IsValidFieldClass(class_* cls, Field** out) {
+bool IsValidFieldClass(Class* cls, Field** out) {
 	return IsValidFieldClassImpl(cls->field_list, out) &&
 		   IsValidFieldClassImpl(cls->sfield_list, out);
 }
 
-bool IsValidPropertyClass(class_* self, Property** out) {
+bool IsValidPropertyClass(Class* self, Property** out) {
 	return IsValidPropertyClassImpl(self->prop_list, out) &&
 	       IsValidPropertyClassImpl(self->sprop_list, out);
 }
 
-bool IsMethodParameterValidClass(class_* cls, Method** out_method, StringView* out_name) {
+bool IsMethodParameterValidClass(Class* cls, Method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<cls->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(cls->method_list, i);
@@ -154,7 +154,7 @@ bool IsMethodParameterValidClass(class_* cls, Method** out_method, StringView* o
 	return true;
 }
 
-bool IsConstructorParameterValidClass(class_* self, Constructor** out_ctor, StringView* out_name) {
+bool IsConstructorParameterValidClass(Class* self, Constructor** out_ctor, StringView* out_name) {
 	for(int i=0; i<self->constructor_list->Length; i++) {
 		Constructor* ctor = (Constructor*)AtVector(self->constructor_list, i);
 		if(IsOverwrappedParameterName(ctor->Parameters, out_name)) {
@@ -165,11 +165,11 @@ bool IsConstructorParameterValidClass(class_* self, Constructor** out_ctor, Stri
 	return true;
 }
 
-bool IsTypeParameterValidClass(class_* self, StringView* out_name) {
+bool IsTypeParameterValidClass(Class* self, StringView* out_name) {
 	return !IsOverwrappedTypeParameterName(self->GetParameterListType, out_name);
 }
 
-bool IsMethodTypeParameterValidClass(class_* self, Method** out_method, StringView* out_name) {
+bool IsMethodTypeParameterValidClass(Class* self, Method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);

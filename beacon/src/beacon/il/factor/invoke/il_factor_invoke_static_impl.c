@@ -119,7 +119,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 		);
 		return;
 	}
-	class_* cls = TYPE2CLASS(ty);
+	Class* cls = TYPE2CLASS(ty);
 	#if defined(DEBUG)
 	const char* classname = Ref2Str(cls->namev);
 	const char* methodname = Ref2Str(self->Name);

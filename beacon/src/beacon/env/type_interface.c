@@ -169,7 +169,7 @@ GenericType * FindImplementType(Type* self, Type* a) {
 	//selfがクラスなら
 	if (self->Tag == TYPE_CLASS_T) {
 
-		class_* ptr = self->Kind.Class;
+		Class* ptr = self->Kind.Class;
 		while (ptr != NULL) {
 			if (a->Tag == TYPE_CLASS_T &&
 				ptr == a->Kind.Class) {
@@ -235,7 +235,7 @@ void DeleteType(Type* self) {
 	MEM_FREE(self);
 }
 
-class_* CastClassType(Type* self) {
+Class* CastClassType(Type* self) {
 	assert(self->Tag == TYPE_CLASS_T);
 	return self->Kind.Class;
 }
@@ -255,7 +255,7 @@ GenericType* BaselineType(Type* abstract, Type* concrete) {
 	#endif
 	Type* ptr = concrete;
 	do {
-		class_* cls = TYPE2CLASS(ptr);
+		Class* cls = TYPE2CLASS(ptr);
 		if(cls->super_class != NULL &&
 		   cls->super_class->CoreType == abstract) {
 			return cls->super_class;
@@ -309,7 +309,7 @@ bool IsAbstractType(Type* self) {
 	return self->Tag == TYPE_INTERFACE_T;
 }
 
-class_* TypeToClass(Type* self) {
+Class* TypeToClass(Type* self) {
 	if(self == NULL || self->Tag != TYPE_CLASS_T) {
 		return NULL;
 	}

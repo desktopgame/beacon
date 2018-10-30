@@ -14,7 +14,7 @@ static void bc_console_read(Method* parent, Frame* fr, Enviroment* env);
 void InitBCConsole() {
 	Namespace* lang = GetLangNamespace();
 	Type* consoleType = NewPreloadClass(InternString("Console"));
-	class_* consoleClass = TYPE2CLASS(consoleType);
+	Class* consoleClass = TYPE2CLASS(consoleType);
 	AddTypeNamespace(lang, consoleType);
 	DefineNativeMethodClass(consoleClass, "writeLine", bc_console_writeLine);
 	DefineNativeMethodClass(consoleClass, "write", bc_console_write);

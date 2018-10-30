@@ -157,7 +157,7 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Envirom
 		const char* clname = Ref2Str(ilvar->FQCN->Name);
 		#endif
 		Namespace* cur = GetNamespaceCContext(cctx);
-		class_* ctype = FindClassFromNamespace(cur, ilvar->FQCN->Name);
+		Class* ctype = FindClassFromNamespace(cur, ilvar->FQCN->Name);
 		if(ctype == NULL) {
 			ctype = FindClassFromNamespace(GetLangNamespace(), ilvar->FQCN->Name);
 		}
@@ -200,7 +200,7 @@ static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx
 	ILCallOp* call_left = receiver->u.call_;
 	ILInvoke* iv = NewILInvoke(ZERO_VIEW);
 	GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
-	class_* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
+	Class* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
 	int temp;
 	iv->u.opov = ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
 	iv->index = temp;

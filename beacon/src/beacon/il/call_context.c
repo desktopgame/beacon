@@ -59,7 +59,7 @@ Type* GetTypeCContext(CallContext* self) {
 	return self->Ty;
 }
 
-class_* GetClassCContext(CallContext* self) {
+Class* GetClassCContext(CallContext* self) {
 	return TYPE2CLASS(GetTypeCContext(self));
 }
 

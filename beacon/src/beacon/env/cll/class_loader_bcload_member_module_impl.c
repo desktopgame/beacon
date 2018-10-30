@@ -437,7 +437,7 @@ void CLBC_methods_impl(ClassLoader* self, Namespace* scope, ILType* iltype, Type
 bool CLBC_ctor_decl(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* ilcons, Namespace* scope) {
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilcons->Parameters;
-	class_* classz = tp->Kind.Class;
+	Class* classz = tp->Kind.Class;
 	//実行時のメソッド情報を作成する
 	Constructor* cons = NewConstructor();
 	Vector* parameter_list = cons->Parameters;
@@ -494,7 +494,7 @@ bool CLBC_ctor_impl(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* 
 
 void CLBC_ctors_decl(ClassLoader* self, ILType* iltype, Type* tp, Namespace* scope) {
 	CL_ERROR(self);
-	class_* classz = tp->Kind.Class;
+	Class* classz = tp->Kind.Class;
 	Vector* ilcons_list = iltype->Kind.Class->Constructors;
 	for (int i = 0; i < ilcons_list->Length; i++) {
 		if(!CLBC_ctor_decl(self, iltype, tp, AtVector(ilcons_list, i), scope)) {
@@ -506,7 +506,7 @@ void CLBC_ctors_decl(ClassLoader* self, ILType* iltype, Type* tp, Namespace* sco
 void CLBC_ctors_impl(ClassLoader* self, ILType* iltype, Type* tp) {
 	CL_ERROR(self);
 	assert(tp->Tag == TYPE_CLASS_T);
-	class_* classz = tp->Kind.Class;
+	Class* classz = tp->Kind.Class;
 	Namespace* scope = classz->location;
 	Vector* constructors = classz->constructor_list;
 	if (iltype->Tag != ILTYPE_CLASS_T) {
@@ -687,7 +687,7 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 
 static void CLBC_chain(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
 	//親クラスがないなら作成
-	class_* classz = tp->Kind.Class;
+	Class* classz = tp->Kind.Class;
 	if (classz->super_class == NULL &&
 		ilcons->Chain == NULL) {
 		CLBC_chain_root(self, iltype, tp, ilcons, ilchain, env);
@@ -709,7 +709,7 @@ static void CLBC_chain_root(ClassLoader * self, ILType * iltype, Type* tp, ILCon
 }
 
 static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	class_* classz = tp->Kind.Class;
+	Class* classz = tp->Kind.Class;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
@@ -742,7 +742,7 @@ static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILCon
 }
 
 static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	class_* classz = tp->Kind.Class;
+	Class* classz = tp->Kind.Class;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;

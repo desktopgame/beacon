@@ -30,7 +30,7 @@ typedef enum MethodType {
 typedef struct Method {
 	StringView Name;
 	MethodType Type;
-	//struct class_* decleared_type;
+	//struct Class* decleared_type;
 	struct Type* Parent;
 	struct GenericType* ReturnGType;
 	Vector* Parameters;

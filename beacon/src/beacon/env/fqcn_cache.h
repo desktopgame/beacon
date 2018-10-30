@@ -5,7 +5,7 @@
 #include "../util/string_pool.h"
 struct Namespace;
 struct Type;
-struct class_;
+struct Class;
 struct interface_;
 //struct Enviroment;
 /**
@@ -75,7 +75,7 @@ struct interface_* GetInterfaceFQCN(FQCNCache* self, struct Namespace* current);
  * @param current
  * @return
  */
-struct class_* GetClassFQCN(FQCNCache* self, struct Namespace* current);
+struct Class* GetClassFQCN(FQCNCache* self, struct Namespace* current);
 
 /**
  * 文字列に変換して返します.

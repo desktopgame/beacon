@@ -16,7 +16,7 @@ static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env);
 void InitBCArray() {
 	Namespace* lang = GetLangNamespace();
 	Type* arrayType = NewPreloadClass(InternString("Array"));
-	class_* arrayClass = TYPE2CLASS(arrayType);
+	Class* arrayClass = TYPE2CLASS(arrayType);
 	AddTypeNamespace(lang, arrayType);
 	DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
 	DefineNativeMethodClass(arrayClass, "nativeSet", bc_array_nativeSet);

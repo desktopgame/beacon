@@ -5,7 +5,7 @@
 #include "control_structure.h"
 struct Namespace;
 struct Type;
-struct class_;
+struct Class;
 struct Method;
 struct Constructor;
 struct OperatorOverload;
@@ -56,7 +56,7 @@ struct Method* GetMethodCContext(CallContext* self);
 
 struct Type* GetTypeCContext(CallContext* self);
 
-struct class_* GetClassCContext(CallContext* self);
+struct Class* GetClassCContext(CallContext* self);
 
 struct GenericType* GetReceiverCContext(CallContext* self);
 

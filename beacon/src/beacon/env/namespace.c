@@ -83,7 +83,7 @@ Type* FindTypeFromNamespace(Namespace * self, StringView namev) {
 	return GetNumericMapValue(self->TypeMap, namev);
 }
 
-class_ * FindClassFromNamespace(Namespace * self, StringView namev) {
+Class* FindClassFromNamespace(Namespace * self, StringView namev) {
 	return TypeToClass(FindTypeFromNamespace(self, namev));
 }
 

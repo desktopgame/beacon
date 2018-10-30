@@ -17,7 +17,7 @@ static void bc_system_nativeExec(Method* parent, Frame* fr, Enviroment* env);
 void InitBCSystem() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	Type* systemType = NewPreloadClass(InternString("System"));
-	class_* systemClass = TYPE2CLASS(systemType);
+	Class* systemClass = TYPE2CLASS(systemType);
 	AddTypeNamespace(unsafe, systemType);
 	DefineNativeMethodClass(systemClass, "nativeExit", bc_system_nativeExit);
 	DefineNativeMethodClass(systemClass, "nativeAbort", bc_system_nativeAbort);

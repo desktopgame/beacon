@@ -5,7 +5,7 @@
 void InitBCVoid() {
 	Namespace* lang = GetLangNamespace();
 	Type* voidType = NewPreloadClass(InternString("Void"));
-	class_* voidClass = TYPE2CLASS(voidType);
+	Class* voidClass = TYPE2CLASS(voidType);
 	AddTypeNamespace(lang, voidType);
 }
 

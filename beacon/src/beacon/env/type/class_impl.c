@@ -32,22 +32,22 @@
 #endif
 
 //private
-static void CreateVTableClass_top(class_* self);
-static void CreateVTableClass_override(class_* self);
-static void CreateVTableClass_interface(class_* self);
+static void CreateVTableClass_top(Class* self);
+static void CreateVTableClass_override(Class* self);
+static void CreateVTableClass_interface(Class* self);
 static void class_impl_delete(VectorItem item);
 static void class_DeleteField(VectorItem item);
 static void class_DeleteMethod(VectorItem item);
 static void class_ctor_delete(VectorItem item);
 static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
-static Method* class_find_impl_method(class_* self, Method* virtualMethod);
+static Method* class_find_impl_method(Class* self, Method* virtualMethod);
 static void class_VTable_vec_delete(VectorItem item);
 static void class_DeleteTypeParameter(VectorItem item);
 static void class_GenericType_list_delete(VectorItem item);
 static void DeleteClass_OperatorOverload(VectorItem item);
 static void DeleteClass_Property(VectorItem item);
 
-Type* WrapClass(class_ * self) {
+Type* WrapClass(Class* self) {
 	Type* ret = NewType();
 	ret->Tag = TYPE_CLASS_T;
 	ret->Kind.Class = self;
@@ -55,8 +55,8 @@ Type* WrapClass(class_ * self) {
 	return ret;
 }
 
-class_ * NewClass(StringView namev) {
-	class_* ret = (class_*)MEM_MALLOC(sizeof(class_));
+Class* NewClass(StringView namev) {
+	Class* ret = (Class*)MEM_MALLOC(sizeof(Class));
 	ret->namev = namev;
 	ret->parent = NULL;
 	ret->location = NULL;
@@ -80,22 +80,22 @@ class_ * NewClass(StringView namev) {
 	return ret;
 }
 
-class_* NewClassProxy(GenericType* gt, StringView namev) {
+Class* NewClassProxy(GenericType* gt, StringView namev) {
 	assert(gt->CoreType->Tag == TYPE_INTERFACE_T);
-	class_* ret = NewClass(namev);
+	Class* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
 	PushVector(ret->impl_list, gt);
 	return ret;
 }
 
 Type* NewPreloadClass(StringView namev) {
-	class_* cl = NewClass(namev);
+	Class* cl = NewClass(namev);
 	Type* tp = WrapClass(cl);
 	tp->State = TYPE_PENDING;
 	if (TYPE_OBJECT == NULL) {
 		return tp;
 	}
-	class_* objCls = TYPE_OBJECT->Kind.Class;
+	Class* objCls = TYPE_OBJECT->Kind.Class;
 	if (cl != objCls) {
 		InitGenericSelf(objCls->parent, 0);
 		cl->super_class = objCls->parent->GenericSelf;
@@ -103,7 +103,7 @@ Type* NewPreloadClass(StringView namev) {
 	return tp;
 }
 
-void AllocFieldsClass(class_ * self, Object * o, Frame* fr) {
+void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
 	assert(o->Tag == OBJECT_REF_T);
 	Heap* he = GetHeap();
 	for (int i = 0; i < self->field_list->Length; i++) {
@@ -130,10 +130,10 @@ void AllocFieldsClass(class_ * self, Object * o, Frame* fr) {
 	}
 }
 
-void FreeClassFields(class_ * self, Object * o) {
+void FreeClassFields(Class* self, Object * o) {
 }
 
-void AddFieldClass(class_ * self, Field* f) {
+void AddFieldClass(Class* self, Field* f) {
 	assert(f != NULL);
 	if (IsStaticModifier(f->modifier)) {
 		PushVector(self->sfield_list, f);
@@ -142,7 +142,7 @@ void AddFieldClass(class_ * self, Field* f) {
 	}
 }
 
-void AddPropertyClass(class_* self, Property* p) {
+void AddPropertyClass(Class* self, Property* p) {
 	if (IsStaticModifier(p->Modifier)) {
 		PushVector(self->sprop_list, p);
 	} else {
@@ -165,7 +165,7 @@ void AddPropertyClass(class_* self, Property* p) {
 	}
 }
 
-void AddMethodClass(class_ * self, Method * m) {
+void AddMethodClass(Class* self, Method * m) {
 	assert(m != NULL);
 	if (IsStaticModifier(m->Modifier)) {
 		PushVector(self->smethod_list, m);
@@ -174,25 +174,25 @@ void AddMethodClass(class_ * self, Method * m) {
 	}
 }
 
-void AddConstructorClass(class_ * self, Constructor* c) {
+void AddConstructorClass(Class* self, Constructor* c) {
 	PushVector(self->constructor_list, c);
 }
 
-void DefineNativeMethodClass(class_* self, const char* name, NativeImpl impl) {
+void DefineNativeMethodClass(Class* self, const char* name, NativeImpl impl) {
 	DefineNativeMethodByRefClass(self, InternString(name), impl);
 }
 
-void DefineNativeMethodByRefClass(class_ * self, StringView namev, NativeImpl impl) {
+void DefineNativeMethodByRefClass(Class* self, StringView namev, NativeImpl impl) {
 	NativeMethodRef* ref = NewNativeMethodRef(impl);
 	PutNumericMap(self->NativeMethodRef_nmap, namev, ref);
 }
 
-int DistanceClass(class_ * super, class_ * sub) {
+int DistanceClass(Class* super, Class* sub) {
 	if (super == sub) {
 		return 0;
 	}
 	int depth = 0;
-	class_* pointee = sub;
+	Class* pointee = sub;
 	do {
 		if (pointee == super) {
 			return depth;
@@ -212,7 +212,7 @@ int DistanceClass(class_ * super, class_ * sub) {
 	return depth;
 }
 
-void CreateVTableClass(class_ * self) {
+void CreateVTableClass(Class* self) {
 	//TEST(!strcmp(self->name, "Int"));
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
@@ -235,7 +235,7 @@ void CreateVTableClass(class_ * self) {
 	assert(self->vt->Elements->Length != 0);
 }
 
-void CreateOperatorVTClass(class_* self) {
+void CreateOperatorVTClass(Class* self) {
 	if(self->ovt != NULL) {
 		return;
 	}
@@ -261,8 +261,8 @@ void CreateOperatorVTClass(class_* self) {
 	}
 }
 
-int CountAllFieldClass(class_ * self) {
-	class_* pt = self;
+int CountAllFieldClass(Class* self) {
+	Class* pt = self;
 	int sum = 0;
 	do {
 		sum += (pt->field_list->Length);
@@ -274,8 +274,8 @@ int CountAllFieldClass(class_ * self) {
 	return sum;
 }
 
-int CountAllSFieldClass(class_ * self) {
-	class_* pt = self;
+int CountAllSFieldClass(Class* self) {
+	Class* pt = self;
 	int sum = 0;
 	do {
 		sum += (pt->sfield_list->Length);
@@ -287,8 +287,8 @@ int CountAllSFieldClass(class_ * self) {
 	return sum;
 }
 
-int CountAllPropertyClass(class_* self) {
-	class_* pt = self;
+int CountAllPropertyClass(Class* self) {
+	Class* pt = self;
 	int sum = 0;
 	do {
 		sum += (pt->prop_list->Length);
@@ -300,8 +300,8 @@ int CountAllPropertyClass(class_* self) {
 	return sum;
 }
 
-int CountAllSPropertyClass(class_* self) {
-	class_* pt = self;
+int CountAllSPropertyClass(Class* self) {
+	Class* pt = self;
 	int sum = 0;
 	do {
 		sum += (pt->sprop_list->Length);
@@ -313,8 +313,8 @@ int CountAllSPropertyClass(class_* self) {
 	return sum;
 }
 
-int CountAllMethodClass(class_ * self) {
-	class_* pt = self;
+int CountAllMethodClass(Class* self) {
+	Class* pt = self;
 	int sum = 0;
 	do {
 		sum += (pt->method_list->Length);
@@ -326,8 +326,8 @@ int CountAllMethodClass(class_ * self) {
 	return sum;
 }
 
-int CountAllSMethodClass(class_ * self) {
-	class_* pt = self;
+int CountAllSMethodClass(Class* self) {
+	Class* pt = self;
 	int sum = 0;
 	do {
 		sum += (pt->smethod_list->Length);
@@ -339,7 +339,7 @@ int CountAllSMethodClass(class_ * self) {
 	return sum;
 }
 
-Object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_args) {
+Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	Constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
@@ -366,7 +366,7 @@ Object * NewInstanceClass(class_* self, Frame* fr, Vector* args, Vector* type_ar
 	return inst;
 }
 
-void LinkAllClass(class_ * self) {
+void LinkAllClass(Class* self) {
 	for (int i = 0; i < self->field_list->Length; i++) {
 		Field* f = (Field*)AtVector(self->field_list, i);
 		f->parent = self->parent;
@@ -381,7 +381,7 @@ void LinkAllClass(class_ * self) {
 	}
 }
 
-void UnlinkClass(class_ * self) {
+void UnlinkClass(Class* self) {
 	if (self->super_class != NULL) {
 		self->super_class->CoreType->Kind.Class->ref_count--;
 	}
@@ -402,7 +402,7 @@ void UnlinkClass(class_ * self) {
 	DeleteVector(self->vt_vec, class_VTable_vec_delete);
 }
 
-void DeleteClass(class_ * self) {
+void DeleteClass(Class* self) {
 //	printf("unlink %s\n", Ref2Str(self->namev));
 //	assert(self->ref_count == 0);
 //	MEM_FREE(self->name);
@@ -412,7 +412,7 @@ void DeleteClass(class_ * self) {
 }
 
 //private
-static void CreateVTableClass_top(class_* self) {
+static void CreateVTableClass_top(Class* self) {
 	for (int i = 0; i < self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
@@ -422,7 +422,7 @@ static void CreateVTableClass_top(class_* self) {
 	}
 }
 
-static void CreateVTableClass_override(class_* self) {
+static void CreateVTableClass_override(Class* self) {
 	#if defined(DEBUG)
 	const char* clname = Ref2Str(self->namev);
 	#endif
@@ -441,7 +441,7 @@ static void CreateVTableClass_override(class_* self) {
 	DeleteCallContext(cctx);
 }
 
-static void CreateVTableClass_interface(class_* self) {
+static void CreateVTableClass_interface(Class* self) {
 	#if defined(DEBUG) || defined(_DEBUG)
 	const char* clname = Ref2Str(GetTypeName(self->parent));
 	#endif
@@ -508,7 +508,7 @@ static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) 
 	DeleteNativeMethodRef(e);
 }
 
-static Method* class_find_impl_method(class_* self, Method* virtualMethod) {
+static Method* class_find_impl_method(Class* self, Method* virtualMethod) {
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->parent->Location;
 	cctx->Ty = self->parent;

@@ -10,10 +10,10 @@
 #endif
 
 //proto
-static class_* exception_class();
+static Class* exception_class();
 
 Object * NewSimpleException(Frame* fr, const char* message) {
-	class_* excClass = exception_class();
+	Class* excClass = exception_class();
 	Vector* args = NewVector();
 	PushVector(args, Object_string_new(message));
 	Object* e = NewInstanceClass(excClass, fr, args, NULL);
@@ -34,9 +34,9 @@ Object * NewSimplefException(Frame* fr, const char * message, ...) {
 }
 
 //private
-static class_* exception_class() {
+static Class* exception_class() {
 	Namespace* lang = GetLangNamespace();
-	class_* excClass = FindClassFromNamespace(lang, InternString("Exception"));
+	Class* excClass = FindClassFromNamespace(lang, InternString("Exception"));
 	assert(excClass != NULL);
 	return excClass;
 }

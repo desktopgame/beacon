@@ -29,7 +29,7 @@ struct ScriptContext;
 #define GENERIC_EXCEPTION ((GetExceptionTypeNamespace()->GenericSelf))
 
 struct Type;
-struct class_;
+struct Class;
 struct interface_;
 /**
  * 名前空間を表す構造体.
@@ -102,7 +102,7 @@ struct Type* FindTypeFromNamespace(Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct class_* FindClassFromNamespace(Namespace* self, StringView namev);
+struct Class* FindClassFromNamespace(Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.

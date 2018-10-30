@@ -136,7 +136,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 		return;
 	}
 	//使用するコンストラクタを取得
-	class_* cls = TYPE2CLASS(ty);
+	Class* cls = TYPE2CLASS(ty);
 	int temp = -1;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = cls->parent->GenericSelf;

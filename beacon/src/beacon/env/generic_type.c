@@ -287,8 +287,8 @@ static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, 
 
 static int DistanceGenericType_class(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	//otherからselfまで辿る
-	class_* baseline = self->CoreType->Kind.Class;
-	class_* ptr = other->CoreType->Kind.Class;
+	Class* baseline = self->CoreType->Kind.Class;
+	Class* ptr = other->CoreType->Kind.Class;
 	GenericType* target = other;
 	while (baseline != ptr) {
 		target = ptr->super_class;

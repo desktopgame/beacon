@@ -234,7 +234,7 @@ Type* CreateIteratorTypeFromMethod(Method* self,  ClassLoader* cll, Vector* stmt
 	Type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	GenericType* iterImplGT = ApplyGenericType(self->ReturnGType, lCctx);
-	class_* iterImplC = NewClassProxy(iterImplGT, iterName);
+	Class* iterImplC = NewClassProxy(iterImplGT, iterName);
 	Type* iterImplT = WrapClass(iterImplC);
 	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);
 	InitGenericSelf(iterImplT, 0);

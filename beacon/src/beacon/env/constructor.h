@@ -4,7 +4,7 @@
 #include "../ast/access_level.h"
 #include "../util/vector.h"
 struct Type;
-struct class_;
+struct Class;
 struct Enviroment;
 struct Object;
 struct Frame;

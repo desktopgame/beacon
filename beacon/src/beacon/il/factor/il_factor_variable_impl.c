@@ -99,7 +99,7 @@ static void ILVariable_check(ILVariable* self, Enviroment* env, CallContext* cct
 
 static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallContext* cctx) {
 	Namespace* cur = GetNamespaceCContext(cctx);
-	class_* ctype = FindClassFromNamespace(cur, self->FQCN->Name);
+	Class* ctype = FindClassFromNamespace(cur, self->FQCN->Name);
 	if(ctype == NULL) {
 		ctype = FindClassFromNamespace(GetLangNamespace(), self->FQCN->Name);
 	}

@@ -23,7 +23,7 @@ static void bc_locale_nativeGetFracDigits(Method* parent, Frame* fr, Enviroment*
 void InitBCLocaleType() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	Type* localeType = NewPreloadClass(InternString("Locale"));
-	class_* localeClass = TYPE2CLASS(localeType);
+	Class* localeClass = TYPE2CLASS(localeType);
 	AddTypeNamespace(unsafe, localeType);
 	DefineNativeMethodClass(localeClass, "nativeSetLocale", bc_locale_nativeSetLocale);
 	DefineNativeMethodClass(localeClass, "nativeGetDecimalPoint", bc_locale_nativeGetDecimalPoint);

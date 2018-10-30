@@ -531,7 +531,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = TYPE2CLASS(tp);
+				Class* cls = TYPE2CLASS(tp);
 				Object* obj = (Object*)TopVector(self->ValueStack);
 				//仮想関数テーブル更新
 				CreateVTableClass(cls);
@@ -559,7 +559,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int constructorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->Tag == TYPE_CLASS_T);
-				class_* cls = TYPE2CLASS(tp);
+				Class* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(cls->namev);
 				#endif
@@ -607,7 +607,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int ctorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->Tag == TYPE_CLASS_T);
-				class_* cls = tp->Kind.Class;
+				Class* cls = tp->Kind.Class;
 				Constructor* ctor = (Constructor*)AtVector(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				Frame* sub = SubFrame(self);
@@ -688,7 +688,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = tp->Kind.Class;
+				Class* cls = tp->Kind.Class;
 				Field* f = GetSFieldClass(cls, fieldIndex);
 				Object* sv = (Object*)PopVector(self->ValueStack);
 				f->static_value = sv;
@@ -750,7 +750,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = tp->Kind.Class;
+				Class* cls = tp->Kind.Class;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
@@ -766,7 +766,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = tp->Kind.Class;
+				Class* cls = tp->Kind.Class;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
@@ -895,7 +895,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				class_* cl = TYPE2CLASS(o->GType->CoreType);
+				Class* cl = TYPE2CLASS(o->GType->CoreType);
 				if(self->Receiver != NULL) {
 					cl = TYPE2CLASS(self->Receiver);
 				}
@@ -907,7 +907,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int index = (int)GetEnviromentSourceAt(env, ++IDX);
 				Object* o = (Object*)TopVector(self->ValueStack);
-				class_* cl = TYPE2CLASS(o->GType->CoreType);
+				Class* cl = TYPE2CLASS(o->GType->CoreType);
 				#if defined(DEBUG)
 				char* clname = Ref2Str(cl->namev);
 				#endif

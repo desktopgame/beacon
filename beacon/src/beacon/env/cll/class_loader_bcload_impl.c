@@ -85,13 +85,13 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent);
  */
 static void CLBC_interface(ClassLoader* self, ILType* iltype, Namespace* parent);
 
-static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* iltype, class_* classz, ILMethod* ilmethod, Method* me);
+static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* iltype, Class* classz, ILMethod* ilmethod, Method* me);
 static void CLBC_debug_NativeMethod(Method* parent, Frame* fr, Enviroment* env);
 
-static void CLBC_check_superclass(class_* cls);
+static void CLBC_check_superclass(Class* cls);
 static Type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype);
 static Type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType* iltype);
-static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* iltype, Type* tp, class_* cls);
+static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* iltype, Type* tp, Class* cls);
 static Type* CLBC_get_or_load_interface(ClassLoader* self, Namespace* parent, ILType* iltype);
 static void CLBC_register_interface(ClassLoader* self, Namespace* parent, ILType* iltype, Type* tp, interface_* inter);
 
@@ -162,7 +162,7 @@ static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	ILEnum* ilenum = iltype->Kind.Enum;
 	Type* tp = CLBC_get_or_load_enum(parent, iltype);
 	CL_ERROR(self);
-	class_* cls = TYPE2CLASS(tp);
+	Class* cls = TYPE2CLASS(tp);
 	if((tp->State & TYPE_REGISTER) > 0) {
 		return;
 	}
@@ -210,7 +210,7 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 	assert(iltype->Tag == ILTYPE_CLASS_T);
 	Type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
-	class_* cls = TYPE2CLASS(tp);
+	Class* cls = TYPE2CLASS(tp);
 	if((tp->State & TYPE_REGISTER) > 0) {
 		return;
 	}
@@ -275,7 +275,7 @@ static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * pare
 	tp->State = tp->State | TYPE_REGISTER;
 }
 
-static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* ilclass, class_* classz, ILMethod* ilmethod, Method* me) {
+static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* ilclass, Class* classz, ILMethod* ilmethod, Method* me) {
 //	native_method.h で、実行時にリンクするようにしたので不要
 //	me->u.NativeMethod->ref = NewNativeMethodRef(class_loader_sgload_debug_NativeMethod);
 }
@@ -284,8 +284,8 @@ static void CLBC_debug_NativeMethod(Method* parent, Frame*fr, Enviroment* env) {
 
 }
 
-static void CLBC_check_superclass(class_* cls) {
-	class_* objClass = TYPE_OBJECT->Kind.Class;
+static void CLBC_check_superclass(Class* cls) {
+	Class* objClass = TYPE_OBJECT->Kind.Class;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {
 			cls->super_class = GENERIC_OBJECT;
@@ -294,7 +294,7 @@ static void CLBC_check_superclass(class_* cls) {
 }
 
 static Type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
-	class_* outClass = NULL;
+	Class* outClass = NULL;
 	Type* tp = FindTypeFromNamespace(parent, iltype->Kind.Enum->Name);
 	if (tp == NULL) {
 		outClass = NewClass(iltype->Kind.Enum->Name);
@@ -309,7 +309,7 @@ static Type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
 
 static Type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType* iltype) {
 	Type* tp = FindTypeFromNamespace(parent, iltype->Kind.Class->Name);
-	class_* outClass = NULL;
+	Class* outClass = NULL;
 	//取得できなかった
 	if (tp == NULL) {
 		outClass = NewClass(iltype->Kind.Class->Name);
@@ -327,7 +327,7 @@ static Type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType
 	return tp;
 }
 
-static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* iltype, Type* tp, class_* cls) {
+static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* iltype, Type* tp, Class* cls) {
 	InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
 	DupTypeParameterList(iltype->Kind.Class->TypeParameters, cls->GetParameterListType);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);

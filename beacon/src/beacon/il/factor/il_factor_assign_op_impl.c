@@ -89,7 +89,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 	ILVariable* ilvar = ilsrc->u.variable_;
 	//staticなフィールドへの代入
 	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
-		class_* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
+		Class* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
 		int temp = -1;
 		Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
 		assert(temp != -1);
@@ -122,7 +122,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 
 static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	GenericType* gt = EvalILFactor(receiver, env, cctx);
-	class_* cls = TYPE2CLASS(gt->CoreType);
+	Class* cls = TYPE2CLASS(gt->CoreType);
 	int temp = -1;
 	Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
@@ -269,7 +269,7 @@ static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, Cal
 
 static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	GenericType* gt = EvalILFactor(receiver, env, cctx);
-	class_* cls = TYPE2CLASS(gt->CoreType);
+	Class* cls = TYPE2CLASS(gt->CoreType);
 	int temp = -1;
 	Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);

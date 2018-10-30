@@ -141,7 +141,7 @@ int GetIndexILUnaryOp2(ILFactor* receiver, OperatorType otype, Enviroment* env, 
 	if(gtype->VirtualTypeIndex != -1) {
 		assert(false);
 	}
-	class_* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
+	Class* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
 	int temp = 0;
 	GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
 	DeleteVector(args, VectorDeleterOfNull);

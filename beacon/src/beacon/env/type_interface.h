@@ -18,7 +18,7 @@ typedef enum TypeTag {
 } TypeTag;
 
 struct Namespace;
-struct class_;
+struct Class;
 struct interface_;
 struct Field;
 struct Method;
@@ -61,7 +61,7 @@ typedef struct Type {
 	int AbsoluteIndex;
 	TypeState State;
 	union {
-		struct class_* Class;
+		struct Class* Class;
 		struct interface_* Interface;
 	} Kind;
 } Type;
@@ -214,7 +214,7 @@ void DeleteType(Type* self);
  * @param self
  * @return
  */
-struct class_* CastClassType(Type* self);
+struct Class* CastClassType(Type* self);
 /**
  * このタイプをインターフェイスにキャストします.
  * @param self
@@ -251,7 +251,7 @@ bool IsAbstractType(Type* self);
  * @param self
  * @return
  */
-struct class_* TypeToClass(Type* self);
+struct Class* TypeToClass(Type* self);
 /**
  * 可能なら self を interface へ変換します.
  * 失敗したなら NULL

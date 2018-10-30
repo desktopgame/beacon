@@ -346,7 +346,7 @@ static void CLBC_check_class(ClassLoader * self, ILType * iltype, Type* tp, Name
 	}
 	//コンストラクタで初期化されていない final フィールドの確認
 	//これはコンストラクタが生成されてからでないといけない
-	class_* cls = TYPE2CLASS(tp);
+	Class* cls = TYPE2CLASS(tp);
 	for(int i=0; i<cls->field_list->Length; i++) {
 		Field* fi = AtVector(cls->field_list, i);
 		//インスタンス定数が

@@ -6,7 +6,7 @@
 
 struct GenericType;
 struct Type;
-struct class_;
+struct Class;
 struct interface_;
 struct Namespace;
 

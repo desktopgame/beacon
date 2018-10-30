@@ -10,7 +10,7 @@
 #include "../../util/string_pool.h"
 #include "../../vm/enviroment.h"
 struct Type;
-struct class_;
+struct Class;
 struct Constructor;
 /**
  * 仮引数と実引数のマッチ率を返します.
@@ -77,7 +77,7 @@ Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, in
  * @param outIndex
  * @return
  */
-Method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
+Method* MetaScopedILFindMethod(struct Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -87,7 +87,7 @@ Method* MetaScopedILFindMethod(struct class_* context, Vector* method_vec, Strin
  * @param outIndex
  * @return
  */
-Method* MetaScopedGFindMethod(struct class_* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
+Method* MetaScopedGFindMethod(struct Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -121,7 +121,7 @@ Constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typear
  * @param outIndex
  * @return
  */
-Constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
+Constructor* MetaScopedILFindConstructor(struct Class* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -132,7 +132,7 @@ Constructor* MetaScopedILFindConstructor(struct class_* context, Vector* ctor_ve
  * @param outIndex
  * @return
  */
-Constructor* MetaScopedRFindConstructor(struct class_* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct Frame* fr, int* outIndex);
+Constructor* MetaScopedRFindConstructor(struct Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct Frame* fr, int* outIndex);
 
 /**
  * 演算子オーバーロードを検索します.
