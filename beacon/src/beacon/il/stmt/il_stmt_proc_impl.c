@@ -5,7 +5,7 @@
 
 ILStatement * WrapILProc(ILProc * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_PROC_T);
-	ret->u.proc_ = self;
+	ret->Kind.Proc = self;
 	return ret;
 }
 

@@ -8,7 +8,7 @@
 
 ILStatement* WrapILThrow(ILThrow* self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_THROW_T);
-	ret->u.throw_ = self;
+	ret->Kind.Throw = self;
 	return ret;
 }
 

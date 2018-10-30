@@ -14,7 +14,7 @@ static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* c
 
 ILStatement * WrapILIf(ILIf * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_IF_T);
-	ret->u.if_ = self;
+	ret->Kind.If = self;
 	return ret;
 }
 

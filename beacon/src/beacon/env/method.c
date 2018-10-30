@@ -260,11 +260,11 @@ static void method_DeleteTypeParameter(VectorItem item) {
 }
 
 static void method_count(ILStatement* s, int* yield_ret, int* ret) {
-	switch (s->type) {
+	switch (s->Type) {
 		case ILSTMT_IF_T:
 		{
 			//if() { ... }
-			ILIf* sif = s->u.if_;
+			ILIf* sif = s->Kind.If;
 			for(int i=0; i<sif->Body->Length; i++) {
 				method_count((ILStatement*)AtVector(sif->Body, i), yield_ret, ret);
 			}
@@ -290,7 +290,7 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_WHILE_T:
 		{
-			ILWhile* whi = s->u.while_;
+			ILWhile* whi = s->Kind.While;
 			for(int i=0; i<whi->Statements->Length; i++) {
 				ILStatement* e = AtVector(whi->Statements, i);
 				method_count(e, yield_ret, ret);
@@ -303,7 +303,7 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_TRY_T:
 		{
-			ILTry* tr = s->u.try_;
+			ILTry* tr = s->Kind.Try;
 			for(int i=0; i<tr->Statements->Length; i++) {
 				ILStatement* e = (ILStatement*)AtVector(tr->Statements, i);
 				method_count(e, yield_ret, ret);

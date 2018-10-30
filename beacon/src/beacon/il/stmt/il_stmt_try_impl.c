@@ -16,8 +16,8 @@ static void ILTry_catch_delete(void* item);
 
 ILStatement* WrapILTry(ILTry* self) {
 	ILStatement* ret = (ILStatement*)MEM_MALLOC(sizeof(ILStatement));
-	ret->type = ILSTMT_TRY_T;
-	ret->u.try_ = self;
+	ret->Type = ILSTMT_TRY_T;
+	ret->Kind.Try = self;
 	return ret;
 }
 

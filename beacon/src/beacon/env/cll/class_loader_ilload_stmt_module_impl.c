@@ -27,7 +27,7 @@ static ILYieldReturn* CLIL_yield_return(ClassLoader* self, AST* asource);
 ILStatement* CLILStmt(ClassLoader* self, AST* source) {
 	ILStatement* ret = CLILBodyImpl(self, source);
 	assert(source->Lineno >= 0);
-	ret->lineno = source->Lineno;
+	ret->Lineno = source->Lineno;
 	return ret;
 }
 
@@ -42,7 +42,7 @@ void CLILBody(ClassLoader* self, Vector* list, AST* source) {
 	} else {
 		ILStatement* stmt = CLILBodyImpl(self, source);
 		if (stmt != NULL) {
-			stmt->lineno = source->Lineno;
+			stmt->Lineno = source->Lineno;
 			assert(source->Lineno >= 0);
 			PushVector(list, stmt);
 		}
@@ -122,7 +122,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		case AST_RETURN_EMPTY_T:
 		{
 			ILStatement* ret = ILStatement_new(ILSTMT_RETURN_EMPTY_T);
-			ret->u.return_empty = NULL;
+			ret->Kind.ReturnEmpty = NULL;
 			return ret;
 		}
 		case AST_STMT_TRY_T:
@@ -152,7 +152,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		case AST_YIELD_BREAK_T:
 		{
 			ILStatement* ret = ILStatement_new(ILSTMT_YIELD_BREAK_T);
-			ret->u.yield_break = NULL;
+			ret->Kind.YieldBreak = NULL;
 			return ret;
 		}
 		case AST_INJECT_JNI_VALUE_T:

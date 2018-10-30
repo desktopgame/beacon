@@ -8,7 +8,7 @@
 
 ILStatement* WrapILAssert(ILAssert* self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_ASSERT_T);
-	ret->u.bcassert_ = self;
+	ret->Kind.Assert = self;
 	self->Parent = ret;
 	return ret;
 }
@@ -44,7 +44,7 @@ void LoadILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
 		self->Message = WrapILString(ilstr);
 		assert(ilstr->Value != 0);
 		MEM_FREE(str);
-		self->Message->Lineno = self->Parent->lineno;
+		self->Message->Lineno = self->Parent->Lineno;
 	}
 	LoadILFactor(self->Message, env, cctx);
 }

@@ -11,8 +11,8 @@
 
 ILStatement * WrapILVariableInit(ILVariableInit * self) {
 	ILStatement* ret = (ILStatement*)MEM_MALLOC(sizeof(ILVariableInit));
-	ret->type = ILSTMT_VARIABLE_INIT_T;
-	ret->u.variable_init = self;
+	ret->Type = ILSTMT_VARIABLE_INIT_T;
+	ret->Kind.VariableInit = self;
 	return ret;
 }
 

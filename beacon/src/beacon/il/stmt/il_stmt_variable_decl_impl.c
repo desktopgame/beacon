@@ -10,7 +10,7 @@
 
 ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_VARIABLE_DECL_T);
-	ret->u.variable_decl = self;
+	ret->Kind.VariableDecl = self;
 	return ret;
 }
 

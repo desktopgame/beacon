@@ -10,7 +10,7 @@ static void check_method_return(ILReturn * self, Enviroment * env, CallContext* 
 
 ILStatement * WrapILReturn(ILReturn * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_RETURN_T);
-	ret->u.return_ = self;
+	ret->Kind.Return = self;
 	return ret;
 }
 

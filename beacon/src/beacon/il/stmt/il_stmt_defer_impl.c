@@ -4,7 +4,7 @@
 
 ILStatement* WrapILDefer(ILDefer* self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_DEFER_T);
-	ret->u.defer_ = self;
+	ret->Kind.Defer = self;
 	return ret;
 }
 

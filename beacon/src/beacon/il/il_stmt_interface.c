@@ -8,8 +8,8 @@
 
 ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno) {
 	ILStatement* ret = mem_malloc(sizeof(ILStatement), filename, lineno);
-	ret->type = type;
-	ret->lineno = -1;
+	ret->Type = type;
+	ret->Lineno = -1;
 	return ret;
 }
 
@@ -18,30 +18,30 @@ void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 		return;
 	}
 	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->lineno);
-	switch (self->type) {
+	SetBCErrorLine(self->Lineno);
+	switch (self->Type) {
 		case ILSTMT_IF_T:
-			GenerateILIf(self->u.if_, env, cctx);
-			//DeleteILIf(self->u.if_);
+			GenerateILIf(self->Kind.If, env, cctx);
+			//DeleteILIf(self->Kind.If);
 			break;
 		case ILSTMT_PROC_T:
-			GenerateILProc(self->u.proc_, env, cctx);
-			//DeleteILProc(self->u.proc_);
+			GenerateILProc(self->Kind.Proc, env, cctx);
+			//DeleteILProc(self->Kind.Proc);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
-			GenerateILVariableDecl(self->u.variable_decl, env, cctx);
+			GenerateILVariableDecl(self->Kind.VariableDecl, env, cctx);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
-			GenerateILVariableInit(self->u.variable_init, env, cctx);
+			GenerateILVariableInit(self->Kind.VariableInit, env, cctx);
 			break;
 		case ILSTMT_RETURN_T:
-			GenerateILReturn(self->u.return_, env, cctx);
+			GenerateILReturn(self->Kind.Return, env, cctx);
 			break;
 		case ILSTMT_RETURN_EMPTY_T:
 			GenerateILReturnEmpty(NULL, env, cctx);
 			break;
 		case ILSTMT_WHILE_T:
-			GenerateILWhile(self->u.while_, env, cctx);
+			GenerateILWhile(self->Kind.While, env, cctx);
 			break;
 		case ILSTMT_BREAK_T:
 			GenerateILBreak(NULL, env, cctx);
@@ -50,34 +50,34 @@ void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 			GenerateILContinue(NULL, env, cctx);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
-			GenerateILInferencedTypeInit(self->u.inferenced_type_init, env, cctx);
+			GenerateILInferencedTypeInit(self->Kind.InferencedTypeInit, env, cctx);
 			break;
 		case ILSTMT_TRY_T:
-			GenerateILTry(self->u.try_, env, cctx);
+			GenerateILTry(self->Kind.Try, env, cctx);
 			break;
 		case ILSTMT_THROW_T:
-			GenerateILThrow(self->u.throw_, env, cctx);
+			GenerateILThrow(self->Kind.Throw, env, cctx);
 			break;
 		case ILSTMT_ASSERT_T:
-			GenerateILAssert(self->u.bcassert_, env, cctx);
+			GenerateILAssert(self->Kind.Assert, env, cctx);
 			break;
 		case ILSTMT_DEFER_T:
-			GenerateILDefer(self->u.defer_, env, cctx);
+			GenerateILDefer(self->Kind.Defer, env, cctx);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
-			GenerateILYieldReturn(self->u.yield_return, env, cctx);
+			GenerateILYieldReturn(self->Kind.YieldReturn, env, cctx);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			GenerateILYieldBreak(self->u.yield_break, env, cctx);
+			GenerateILYieldBreak(self->Kind.YieldBreak, env, cctx);
 			break;
 		case ILSTMT_INJECT_JNI_T:
-			GenerateILInjectJNI(self->u.inject_jni, env, cctx);
+			GenerateILInjectJNI(self->Kind.InjectJNI, env, cctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
 	}
-	AddRangeEnviroment(env, self->lineno);
+	AddRangeEnviroment(env, self->Lineno);
 }
 
 void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
@@ -85,28 +85,28 @@ void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 		return;
 	}
 	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->lineno);
-	switch (self->type) {
+	SetBCErrorLine(self->Lineno);
+	switch (self->Type) {
 		case ILSTMT_IF_T:
-			LoadILIf(self->u.if_, env, cctx);
+			LoadILIf(self->Kind.If, env, cctx);
 			break;
 		case ILSTMT_PROC_T:
-			LoadILProc(self->u.proc_, env, cctx);
+			LoadILProc(self->Kind.Proc, env, cctx);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
-			LoadILVariableDecl(self->u.variable_decl, env, cctx);
+			LoadILVariableDecl(self->Kind.VariableDecl, env, cctx);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
-			LoadILVariableInit(self->u.variable_init, env, cctx);
+			LoadILVariableInit(self->Kind.VariableInit, env, cctx);
 			break;
 		case ILSTMT_RETURN_T:
-			LoadILReturn(self->u.return_, env, cctx);
+			LoadILReturn(self->Kind.Return, env, cctx);
 			break;
 		case ILSTMT_RETURN_EMPTY_T:
 			LoadILReturnEmpty(NULL, env, cctx);
 			break;
 		case ILSTMT_WHILE_T:
-			LoadILWhile(self->u.while_, env, cctx);
+			LoadILWhile(self->Kind.While, env, cctx);
 			break;
 		case ILSTMT_BREAK_T:
 			LoadILBreak(NULL, env, cctx);
@@ -115,28 +115,28 @@ void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 			LoadILContinue(NULL, env, cctx);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
-			LoadILInferencedTypeInit(self->u.inferenced_type_init, env, cctx);
+			LoadILInferencedTypeInit(self->Kind.InferencedTypeInit, env, cctx);
 			break;
 		case ILSTMT_TRY_T:
-			LoadILTry(self->u.try_, env, cctx);
+			LoadILTry(self->Kind.Try, env, cctx);
 			break;
 		case ILSTMT_THROW_T:
-			LoadILThrow(self->u.throw_, env, cctx);
+			LoadILThrow(self->Kind.Throw, env, cctx);
 			break;
 		case ILSTMT_ASSERT_T:
-			LoadILAssert(self->u.bcassert_, env, cctx);
+			LoadILAssert(self->Kind.Assert, env, cctx);
 			break;
 		case ILSTMT_DEFER_T:
-			LoadILDefer(self->u.defer_, env, cctx);
+			LoadILDefer(self->Kind.Defer, env, cctx);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
-			LoadILYieldReturn(self->u.yield_return, env, cctx);
+			LoadILYieldReturn(self->Kind.YieldReturn, env, cctx);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			LoadILYieldBreak(self->u.yield_break, env, cctx);
+			LoadILYieldBreak(self->Kind.YieldBreak, env, cctx);
 			break;
 		case ILSTMT_INJECT_JNI_T:
-			LoadILInjectJNI(self->u.inject_jni, env, cctx);
+			LoadILInjectJNI(self->Kind.InjectJNI, env, cctx);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");
@@ -145,24 +145,24 @@ void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 }
 
 void DeleteILStmt(ILStatement * self) {
-	switch (self->type) {
+	switch (self->Type) {
 		case ILSTMT_IF_T:
-			DeleteILIf(self->u.if_);
+			DeleteILIf(self->Kind.If);
 			break;
 		case ILSTMT_PROC_T:
-			DeleteILProc(self->u.proc_);
+			DeleteILProc(self->Kind.Proc);
 			break;
 		case ILSTMT_VARIABLE_DECL_T:
-			DeleteILVariableDecl(self->u.variable_decl);
+			DeleteILVariableDecl(self->Kind.VariableDecl);
 			break;
 		case ILSTMT_VARIABLE_INIT_T:
-			DeleteILVariableInit(self->u.variable_init);
+			DeleteILVariableInit(self->Kind.VariableInit);
 			break;
 		case ILSTMT_RETURN_T:
-			DeleteILReturn(self->u.return_);
+			DeleteILReturn(self->Kind.Return);
 			break;
 		case ILSTMT_WHILE_T:
-			DeleteILWhile(self->u.while_);
+			DeleteILWhile(self->Kind.While);
 			break;
 		case ILSTMT_BREAK_T:
 			DeleteILBreak(NULL);
@@ -171,28 +171,28 @@ void DeleteILStmt(ILStatement * self) {
 			DeleteILContinue(NULL);
 			break;
 		case ILSTMT_INFERENCED_TYPE_INIT_T:
-			DeleteILInferencedTypeInit(self->u.inferenced_type_init);
+			DeleteILInferencedTypeInit(self->Kind.InferencedTypeInit);
 			break;
 		case ILSTMT_TRY_T:
-			DeleteILTry(self->u.try_);
+			DeleteILTry(self->Kind.Try);
 			break;
 		case ILSTMT_THROW_T:
-			DeleteILThrow(self->u.throw_);
+			DeleteILThrow(self->Kind.Throw);
 			break;
 		case ILSTMT_ASSERT_T:
-			DeleteILAssert(self->u.bcassert_);
+			DeleteILAssert(self->Kind.Assert);
 			break;
 		case ILSTMT_DEFER_T:
-			DeleteILDefer(self->u.defer_);
+			DeleteILDefer(self->Kind.Defer);
 			break;
 		case ILSTMT_YIELD_RETURN_T:
-			DeleteILYieldReturn(self->u.yield_return);
+			DeleteILYieldReturn(self->Kind.YieldReturn);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			//ILStatement_yield_break_delete(self->u.yield_break);
+			//ILStatement_yield_break_delete(self->Kind.YieldBreak);
 			break;
 		case ILSTMT_INJECT_JNI_T:
-			DeleteILInjectJni(self->u.inject_jni);
+			DeleteILInjectJni(self->Kind.InjectJNI);
 			break;
 		default:
 			//ERROR("ステートメントを開放出来ませんでした。");

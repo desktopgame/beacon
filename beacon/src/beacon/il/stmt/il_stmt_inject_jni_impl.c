@@ -5,9 +5,9 @@
 
 ILStatement* WrapILInjectJNI(ILInjectJNI* self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_INJECT_JNI_T);
-	ret->u.inject_jni = self;
+	ret->Kind.InjectJNI = self;
 	//JNIに関しては後からソースの先頭に付け加えられるので必ず0
-	ret->lineno = 0;
+	ret->Lineno = 0;
 	return ret;
 }
 

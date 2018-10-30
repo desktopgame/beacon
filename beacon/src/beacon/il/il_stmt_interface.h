@@ -49,25 +49,25 @@ struct ILInjectJNI;
  * 文を表す要素です.
  */
 typedef struct ILStatement {
-	ILStatementTag type;
-	int lineno;
+	ILStatementTag Type;
+	int Lineno;
 	union {
-		struct ILProc* proc_;
-		struct ILIf* if_;
-		struct ILWhile* while_;
-		struct ILVariableDecl* variable_decl;
-		struct ILVariableInit* variable_init;
-		struct ILReturn* return_;
-		ILReturnEmpty return_empty;
-		struct ILInferencedTypeInit* inferenced_type_init;
-		struct ILTry* try_;
-		struct ILThrow* throw_;
-		struct ILAssert* bcassert_;
-		struct ILDefer* defer_;
-		struct ILYieldReturn* yield_return;
-		ILStatement_yield_break yield_break;
-		struct ILInjectJNI* inject_jni;
-	} u;
+		struct ILProc* Proc;
+		struct ILIf* If;
+		struct ILWhile* While;
+		struct ILVariableDecl* VariableDecl;
+		struct ILVariableInit* VariableInit;
+		struct ILReturn* Return;
+		ILReturnEmpty ReturnEmpty;
+		struct ILInferencedTypeInit* InferencedTypeInit;
+		struct ILTry* Try;
+		struct ILThrow* Throw;
+		struct ILAssert* Assert;
+		struct ILDefer* Defer;
+		struct ILYieldReturn* YieldReturn;
+		ILStatement_yield_break YieldBreak;
+		struct ILInjectJNI* InjectJNI;
+	} Kind;
 } ILStatement;
 
 #define ILStatement_new(type) (MallocILStmt(type, __FILE__, __LINE__))

@@ -12,7 +12,7 @@ static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* c
 
 ILStatement * WrapILWhile(ILWhile * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_WHILE_T);
-	ret->u.while_ = self;
+	ret->Kind.While = self;
 	return ret;
 }
 

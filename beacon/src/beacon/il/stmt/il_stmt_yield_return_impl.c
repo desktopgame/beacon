@@ -12,8 +12,8 @@ static void check_IsYieldMethod_return(ILYieldReturn * self, Enviroment * env, C
 
 ILStatement* WrapILYieldReturn(ILYieldReturn* self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_YIELD_RETURN_T);
-	ret->type = ILSTMT_YIELD_RETURN_T;
-	ret->u.yield_return = self;
+	ret->Type = ILSTMT_YIELD_RETURN_T;
+	ret->Kind.YieldReturn = self;
 	return ret;
 }
 

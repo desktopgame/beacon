@@ -198,7 +198,7 @@ static void Loadclass_loader_toplevel(ClassLoader* self) {
 	createWorldStmt->Value = WrapILNewInstance(newWorldInstance);
 	ILStatement* body = WrapILInferencedTypeInit(createWorldStmt);
 	//これをやらないと -1 のまま
-	body->lineno = 0;
+	body->Lineno = 0;
 	createWorldStmt->Value->Lineno = 0;
 	//worldをselfにする
 	CallContext* cctx = NewCallContext(CALL_TOP_T);

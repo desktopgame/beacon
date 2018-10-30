@@ -9,7 +9,7 @@
 
 ILStatement * WrapILInferencedTypeInit(ILInferencedTypeInit * self) {
 	ILStatement* ret = ILStatement_new(ILSTMT_INFERENCED_TYPE_INIT_T);
-	ret->u.inferenced_type_init = self;
+	ret->Kind.InferencedTypeInit = self;
 	return ret;
 }
 
