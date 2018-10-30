@@ -450,7 +450,7 @@ static void CreateVTableClass_interface(Class* self) {
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < tbl->Length; i++) {
 		//GenericType* gtp = (GenericType*)AtVector(tbl, i);
-		interface_* inter = (interface_*)AtVector(tbl, i);
+		Interface* inter = (Interface*)AtVector(tbl, i);
 		VTable* interVT = inter->vt;
 		VTable* newVT = NewVTable();
 		assert(interVT != NULL);

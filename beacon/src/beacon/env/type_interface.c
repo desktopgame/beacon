@@ -186,7 +186,7 @@ GenericType * FindImplementType(Type* self, Type* a) {
 			ptr = ptr->SuperClass->CoreType->Kind.Class;
 		}
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		interface_* inter = self->Kind.Interface;
+		Interface* inter = self->Kind.Interface;
 		for (int i = 0; i < inter->impl_list->Length; i++) {
 			GenericType* e = (GenericType*)AtVector(inter->impl_list, i);
 			if (e->CoreType == a) {
@@ -240,7 +240,7 @@ Class* CastClassType(Type* self) {
 	return self->Kind.Class;
 }
 
-interface_* CastInterfaceType(Type* self) {
+Interface* CastInterfaceType(Type* self) {
 	assert(self->Tag == TYPE_INTERFACE_T);
 	return self->Kind.Interface;
 }
@@ -279,7 +279,7 @@ GenericType* BaselineType(Type* abstract, Type* concrete) {
 	return NULL;
 }
 
-interface_* IsValidInterface(Type* self) {
+Interface* IsValidInterface(Type* self) {
 #if defined(_MSC_VER)
 	//コンパイラが初期化されていないローカル変数として認識してしまうのでその対策
 	Vector* impl_list = NULL;
@@ -289,11 +289,11 @@ interface_* IsValidInterface(Type* self) {
 #endif
 	for(int i=0; i<impl_list->Length; i++) {
 		GenericType* gE = AtVector(impl_list, i);
-		interface_* iE = TYPE2INTERFACE(GENERIC2TYPE(gE));
+		Interface* iE = TYPE2INTERFACE(GENERIC2TYPE(gE));
 		for(int j=0; j<impl_list->Length; j++) {
 			if(i == j) { continue; }
 			GenericType* gE2 = AtVector(impl_list, j);
-			interface_* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE2));
+			Interface* iE2 = TYPE2INTERFACE(GENERIC2TYPE(gE2));
 			if(iE == iE2) {
 				return iE2;
 			}
@@ -316,7 +316,7 @@ Class* TypeToClass(Type* self) {
 	return self->Kind.Class;
 }
 
-interface_* TypeToInterface(Type* self) {
+Interface* TypeToInterface(Type* self) {
 	if(self == NULL || self->Tag != TYPE_INTERFACE_T) {
 		return NULL;
 	}

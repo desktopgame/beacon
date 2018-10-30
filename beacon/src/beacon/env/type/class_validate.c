@@ -55,7 +55,7 @@ bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
 	//全てのインターフェイスに
 	for(int i=0;i<gimpl_list->Length; i++) {
 		GenericType* e = AtVector(gimpl_list, i);
-		interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(e));
+		Interface* inter = TYPE2INTERFACE(GENERIC2TYPE(e));
 		bool valid = true;
 		for(int j=0; j<inter->prop_list->Length; j++) {
 			int temp = 0;

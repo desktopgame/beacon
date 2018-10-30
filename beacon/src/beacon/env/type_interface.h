@@ -19,7 +19,7 @@ typedef enum TypeTag {
 
 struct Namespace;
 struct Class;
-struct interface_;
+struct Interface;
 struct Field;
 struct Method;
 struct Property;
@@ -62,7 +62,7 @@ typedef struct Type {
 	TypeState State;
 	union {
 		struct Class* Class;
-		struct interface_* Interface;
+		struct Interface* Interface;
 	} Kind;
 } Type;
 
@@ -220,7 +220,7 @@ struct Class* CastClassType(Type* self);
  * @param self
  * @return
  */
-struct interface_* CastInterfaceType(Type* self);
+struct Interface* CastInterfaceType(Type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.
@@ -236,7 +236,7 @@ struct GenericType* BaselineType(Type* abstract, Type* concrete);
  * @param self
  * @return
  */
-struct interface_* IsValidInterface(Type* self);
+struct Interface* IsValidInterface(Type* self);
 
 /**
  * 抽象クラスかインターフェイスなら true.
@@ -258,5 +258,5 @@ struct Class* TypeToClass(Type* self);
  * @param self
  * @return
  */
-struct interface_* TypeToInterface(Type* self);
+struct Interface* TypeToInterface(Type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

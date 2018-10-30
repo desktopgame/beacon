@@ -7,7 +7,7 @@
 struct GenericType;
 struct Type;
 struct Class;
-struct interface_;
+struct Interface;
 struct Namespace;
 
 /**

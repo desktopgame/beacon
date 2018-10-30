@@ -9,7 +9,7 @@
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
 struct Type;
-struct interface_;
+struct Interface;
 struct Frame;
 struct Enviroment;
 struct CallContext;

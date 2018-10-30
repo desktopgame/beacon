@@ -16,7 +16,7 @@ struct Type;
 /**
  * インターフェースを表す構造体.
  */
-typedef struct interface_ {
+typedef struct Interface {
 	struct Type* parent;
 	StringView namev;
 	Vector* impl_list;
@@ -25,35 +25,35 @@ typedef struct interface_ {
 	Namespace* location;
 	VTable* vt;
 	Vector* GetParameterListType;
-} interface_;
+} Interface;
 
 /**
  * インターフェイスをスーパーセットにラップします.
  * @param self
  * @return
  */
-Type* WrapInterface(interface_* self);
+Type* WrapInterface(Interface* self);
 
 /** 
  * インターフェイスを作成します.
  * @param namev
  * @return
  */
-interface_* NewInterface(StringView namev);
+Interface* NewInterface(StringView namev);
 
 /**
  * インターフェイスにメソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodInterface(interface_* self, struct Method* m);
+void AddMethodInterface(Interface* self, struct Method* m);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param p
  */
-void AddPropertyInterface(interface_* self, struct Property* p);
+void AddPropertyInterface(Interface* self, struct Property* p);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -65,7 +65,7 @@ void AddPropertyInterface(interface_* self, struct Property* p);
  * @param outIndex
  * @return
  */
-struct Method* ILFindMethodInterface(interface_* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
+struct Method* ILFindMethodInterface(Interface* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -75,7 +75,7 @@ struct Method* ILFindMethodInterface(interface_* self, StringView namev, Vector 
  * @param outIndex
  * @return
  */
-struct Method* GFindMethodInterface(interface_* self, StringView namev, Vector* gargs, int* outIndex);
+struct Method* GFindMethodInterface(Interface* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
@@ -90,25 +90,25 @@ Vector* FlattenMethodInterfaceList(Vector* inter_list);
  * @param self
  * @return 呼び出し側で開放してください
  */
-Vector* FlattenMethodInterface(interface_* self);
+Vector* FlattenMethodInterface(Interface* self);
 
 /**
  * メソッドの一覧から VTable を作成します.
  * @param self
  */
-void CreateVTableInterface(interface_* self);
+void CreateVTableInterface(Interface* self);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
-void UnlinkInterface(interface_* self);
+void UnlinkInterface(Interface* self);
 
 /**
  * インターフェイスを開放します.
  * @param self
  */
-void DeleteInterface(interface_* self);
+void DeleteInterface(Interface* self);
 
 /**
  * self に find が含まれるなら NULL 以外の値を返します.
@@ -116,28 +116,28 @@ void DeleteInterface(interface_* self);
  * @param find
  * @return
  */
-struct GenericType* IsContainsTypeInterface(struct GenericType* source, interface_* find);
+struct GenericType* IsContainsTypeInterface(struct GenericType* source, Interface* find);
 
 /**
  * 関数型インターフェイスであるならtrue.
  * @param self
  * @return
  */
-bool IsFunctionalInterface(interface_* self);
+bool IsFunctionalInterface(Interface* self);
 
 /**
  * 関数型インターフェイスであるなら一つだけ定義されたメソッドを返します.
  * @param self
  * @return
  */
-struct Method* GetFunctionInterface(interface_* self);
+struct Method* GetFunctionInterface(Interface* self);
 
 /**
  * このインターフェイスを除く継承された全てのインターフェイスを返します.
  * @param self
  * @return
  */
-Vector* GetGenericInterfaceTreeInterface(interface_* self);
+Vector* GetGenericInterfaceTreeInterface(Interface* self);
 
 /**
  * @param self
@@ -145,5 +145,5 @@ Vector* GetGenericInterfaceTreeInterface(interface_* self);
  * @param out_baseline
  * @return
  */
-struct GenericType* FindInterfaceInterface(interface_* self, Type* tinter);
+struct GenericType* FindInterfaceInterface(Interface* self, Type* tinter);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

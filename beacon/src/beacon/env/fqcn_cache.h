@@ -6,7 +6,7 @@
 struct Namespace;
 struct Type;
 struct Class;
-struct interface_;
+struct Interface;
 //struct Enviroment;
 /**
  * Full Quality Class Name を表す構造体.
@@ -66,7 +66,7 @@ struct Type* GetTypeFQCN(FQCNCache* self, struct Namespace* current);
  * @param current
  * @return
  */
-struct interface_* GetInterfaceFQCN(FQCNCache* self, struct Namespace* current);
+struct Interface* GetInterfaceFQCN(FQCNCache* self, struct Namespace* current);
 
 /**
  * X::Y の表すタイプを返します.

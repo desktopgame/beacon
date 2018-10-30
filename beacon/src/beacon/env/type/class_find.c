@@ -404,7 +404,7 @@ Method * GetImplMethodClass(Class* self, Type* interType, int interMIndex) {
 	int declIndex = -1;
 	for (int i = 0; i < tbl->Length; i++) {
 		GenericType* e = AtVector(tbl, i);
-		interface_* inter = e->CoreType->Kind.Interface;
+		Interface* inter = e->CoreType->Kind.Interface;
 		if (inter == interType->Kind.Interface) {
 			declIndex = i;
 			break;

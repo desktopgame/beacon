@@ -87,7 +87,7 @@ Class* FindClassFromNamespace(Namespace * self, StringView namev) {
 	return TypeToClass(FindTypeFromNamespace(self, namev));
 }
 
-interface_ * FindInterfaceFromNamespace(Namespace * self, StringView namev) {
+Interface* FindInterfaceFromNamespace(Namespace * self, StringView namev) {
 	return TypeToInterface(FindTypeFromNamespace(self, namev));
 }
 

@@ -30,7 +30,7 @@ struct ScriptContext;
 
 struct Type;
 struct Class;
-struct interface_;
+struct Interface;
 /**
  * 名前空間を表す構造体.
  */
@@ -110,7 +110,7 @@ struct Class* FindClassFromNamespace(Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct interface_* FindInterfaceFromNamespace(Namespace* self, StringView namev);
+struct Interface* FindInterfaceFromNamespace(Namespace* self, StringView namev);
 
 /**
  * beacon 名前空間を返します.

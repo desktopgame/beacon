@@ -806,7 +806,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				GenericType* a = PopVector(self->TypeArgs);
 				a = ApplyGenericType(a, GetSGThreadCContext());
 				if(a->CoreType->Tag == TYPE_INTERFACE_T) {
-					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
+					Interface* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
 					DeleteVector(inter_list, VectorDeleterOfNull);
@@ -835,7 +835,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(a->CoreType->Tag == TYPE_CLASS_T) {
 					PushVector(self->ValueStack, o);
 				} else if(a->CoreType->Tag == TYPE_INTERFACE_T) {
-					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
+					Interface* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
 					DeleteVector(inter_list, VectorDeleterOfNull);
