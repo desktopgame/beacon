@@ -38,7 +38,7 @@ Field* FindTreeFieldClass(class_ * self, StringView namev, int * outIndex) {
 		if(supergtype == NULL) {
 			break;
 		}
-		pointee = supergtype->CoreType->u.class_;
+		pointee = supergtype->CoreType->Kind.Class;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -66,7 +66,7 @@ Field* FindTreeSFieldClass(class_ * self, StringView namev, int * outIndex) {
 		if(pointee->super_class == NULL) {
 			break;
 		}
-		pointee = pointee->super_class->CoreType->u.class_;
+		pointee = pointee->super_class->CoreType->Kind.Class;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -78,7 +78,7 @@ Field* GetFieldClass(class_ * self, int index) {
 		index < all) {
 		return AtVector(self->field_list, self->field_list->Length - (all - index));
 	}
-	return GetFieldClass(self->super_class->CoreType->u.class_, index);
+	return GetFieldClass(self->super_class->CoreType->Kind.Class, index);
 }
 
 Field* GetSFieldClass(class_ * self, int index) {
@@ -88,7 +88,7 @@ Field* GetSFieldClass(class_ * self, int index) {
 		index < all) {
 		return AtVector(self->sfield_list, self->sfield_list->Length - (all - index));
 	}
-	return GetSFieldClass(self->super_class->CoreType->u.class_, index);
+	return GetSFieldClass(self->super_class->CoreType->Kind.Class, index);
 }
 
 bool IsContainsFieldClass(class_* self, Field* f) {
@@ -199,7 +199,7 @@ Property* GetPropertyClass(class_* self, int index) {
 		index < all) {
 		return AtVector(self->prop_list, self->prop_list->Length - (all - index));
 	}
-	return GetPropertyClass(self->super_class->CoreType->u.class_, index);
+	return GetPropertyClass(self->super_class->CoreType->Kind.Class, index);
 }
 
 Property* GetSPropertyClass(class_* self, int index) {
@@ -209,7 +209,7 @@ Property* GetSPropertyClass(class_* self, int index) {
 		index < all) {
 		return AtVector(self->sprop_list, self->sprop_list->Length - (all - index));
 	}
-	return GetPropertyClass(self->super_class->CoreType->u.class_, index);
+	return GetPropertyClass(self->super_class->CoreType->Kind.Class, index);
 }
 
 Property* FindPropertyClass(class_* self, StringView namev, int* outIndex) {
@@ -236,7 +236,7 @@ Property* FindTreePropertyClass(class_* self, StringView namev, int* outIndex) {
 		if(supergtype == NULL) {
 			break;
 		}
-		pointee = supergtype->CoreType->u.class_;
+		pointee = supergtype->CoreType->Kind.Class;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -265,7 +265,7 @@ Property* FindTreeSPropertyClass(class_* self, StringView namev, int* outIndex) 
 		if(supergtype == NULL) {
 			break;
 		}
-		pointee = supergtype->CoreType->u.class_;
+		pointee = supergtype->CoreType->Kind.Class;
 	} while (pointee != NULL);
 	return NULL;
 }
@@ -338,7 +338,7 @@ Method* GFindMethodClass(class_* self, StringView namev, Vector* gargs, int* out
 
 Method* GFindEqMethodClass(class_* self, int* outIndex) {
 	Vector* gargs = NewVector();
-	PushVector(gargs, TYPE_OBJECT->generic_self);
+	PushVector(gargs, TYPE_OBJECT->GenericSelf);
 	Method* ret = GFindMethodClass(self, InternString("equals"), gargs, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
@@ -388,7 +388,7 @@ Method * GetSMethodClass(class_* self, int index) {
 		index < all) {
 		return AtVector(self->smethod_list, self->smethod_list->Length - (all - index));
 	}
-	return GetSMethodClass(self->super_class->CoreType->u.class_, index);
+	return GetSMethodClass(self->super_class->CoreType->Kind.Class, index);
 	//*/
 	return AtVector(self->smethod_list, index);
 }
@@ -404,8 +404,8 @@ Method * GetImplMethodClass(class_ * self, Type* interType, int interMIndex) {
 	int declIndex = -1;
 	for (int i = 0; i < tbl->Length; i++) {
 		GenericType* e = AtVector(tbl, i);
-		interface_* inter = e->CoreType->u.interface_;
-		if (inter == interType->u.interface_) {
+		interface_* inter = e->CoreType->Kind.Interface;
+		if (inter == interType->Kind.Interface) {
 			declIndex = i;
 			break;
 		}
@@ -500,7 +500,7 @@ Vector* FindTreeMethodClass(class_* self, Method* m) {
 		}
 		//親クラスへ
 		if(ptr->super_class != NULL) {
-			ptr = ptr->super_class->CoreType->u.class_;
+			ptr = ptr->super_class->CoreType->Kind.Class;
 		} else {
 			ptr = NULL;
 		}
@@ -513,7 +513,7 @@ bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
 	(*outM) = NULL;
 	bool ret = false;
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->Scope = m->Parent->location;
+	cctx->Scope = m->Parent->Location;
 	cctx->Ty = m->Parent;
 	for(int i=0; i<method_list->Length; i++) {
 		Method* mE = AtVector(method_list, i);
@@ -577,7 +577,7 @@ Vector* GetInterfaceTreeClass(class_* self) {
 }
 
 GenericType* FindInterfaceTypeClass(class_* self, Type* tinter, GenericType** out_baseline) {
-	assert(tinter->tag == TYPE_INTERFACE_T);
+	assert(tinter->Tag == TYPE_INTERFACE_T);
 	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す
 	GenericType* ret = NULL;

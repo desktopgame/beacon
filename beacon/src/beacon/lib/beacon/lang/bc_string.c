@@ -36,7 +36,7 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 
 	//String#charArrayを取得
 	int temp = 0;
-	FindFieldClass(TYPE_STRING->u.class_, InternString("charArray"), &temp);
+	FindFieldClass(TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
 	Object* charArr = AtVector(self->u.field_vec, temp);
 	//これを char* へ変換
 	Buffer* sb = NewBuffer();

@@ -26,7 +26,7 @@ void LoadILThis(ILThis * self, Enviroment * env, CallContext* cctx) {
 }
 
 GenericType* EvalILThis(ILThis * self, Enviroment * env, CallContext* cctx) {
-	return GetTypeCContext(cctx)->generic_self;
+	return GetTypeCContext(cctx)->GenericSelf;
 }
 
 char* ILThisToString(ILThis* self, Enviroment* env) {

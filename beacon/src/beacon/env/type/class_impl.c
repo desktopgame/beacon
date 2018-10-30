@@ -49,8 +49,8 @@ static void DeleteClass_Property(VectorItem item);
 
 Type* WrapClass(class_ * self) {
 	Type* ret = NewType();
-	ret->tag = TYPE_CLASS_T;
-	ret->u.class_ = self;
+	ret->Tag = TYPE_CLASS_T;
+	ret->Kind.Class = self;
 	self->parent = ret;
 	return ret;
 }
@@ -81,7 +81,7 @@ class_ * NewClass(StringView namev) {
 }
 
 class_* NewClassProxy(GenericType* gt, StringView namev) {
-	assert(gt->CoreType->tag == TYPE_INTERFACE_T);
+	assert(gt->CoreType->Tag == TYPE_INTERFACE_T);
 	class_* ret = NewClass(namev);
 	ret->super_class = GENERIC_OBJECT;
 	PushVector(ret->impl_list, gt);
@@ -91,14 +91,14 @@ class_* NewClassProxy(GenericType* gt, StringView namev) {
 Type* NewPreloadClass(StringView namev) {
 	class_* cl = NewClass(namev);
 	Type* tp = WrapClass(cl);
-	tp->state = TYPE_PENDING;
+	tp->State = TYPE_PENDING;
 	if (TYPE_OBJECT == NULL) {
 		return tp;
 	}
-	class_* objCls = TYPE_OBJECT->u.class_;
+	class_* objCls = TYPE_OBJECT->Kind.Class;
 	if (cl != objCls) {
 		InitGenericSelf(objCls->parent, 0);
-		cl->super_class = objCls->parent->generic_self;
+		cl->super_class = objCls->parent->GenericSelf;
 	}
 	return tp;
 }
@@ -202,7 +202,7 @@ int DistanceClass(class_ * super, class_ * sub) {
 			depth = -1;
 			break;
 		}
-		pointee = super_gtype->CoreType->u.class_;
+		pointee = super_gtype->CoreType->Kind.Class;
 		depth++;
 		if (pointee == NULL) {
 			depth = -1;
@@ -269,7 +269,7 @@ int CountAllFieldClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->CoreType->u.class_;
+		pt = pt->super_class->CoreType->Kind.Class;
 	} while (pt != NULL);
 	return sum;
 }
@@ -282,7 +282,7 @@ int CountAllSFieldClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->CoreType->u.class_;
+		pt = pt->super_class->CoreType->Kind.Class;
 	} while (pt != NULL);
 	return sum;
 }
@@ -295,7 +295,7 @@ int CountAllPropertyClass(class_* self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->CoreType->u.class_;
+		pt = pt->super_class->CoreType->Kind.Class;
 	} while (pt != NULL);
 	return sum;
 }
@@ -308,7 +308,7 @@ int CountAllSPropertyClass(class_* self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->CoreType->u.class_;
+		pt = pt->super_class->CoreType->Kind.Class;
 	} while (pt != NULL);
 	return sum;
 }
@@ -321,7 +321,7 @@ int CountAllMethodClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->CoreType->u.class_;
+		pt = pt->super_class->CoreType->Kind.Class;
 	} while (pt != NULL);
 	return sum;
 }
@@ -334,7 +334,7 @@ int CountAllSMethodClass(class_ * self) {
 		if(pt->super_class == NULL) {
 			break;
 		}
-		pt = pt->super_class->CoreType->u.class_;
+		pt = pt->super_class->CoreType->Kind.Class;
 	} while (pt != NULL);
 	return sum;
 }
@@ -383,7 +383,7 @@ void LinkAllClass(class_ * self) {
 
 void UnlinkClass(class_ * self) {
 	if (self->super_class != NULL) {
-		self->super_class->CoreType->u.class_->ref_count--;
+		self->super_class->CoreType->Kind.Class->ref_count--;
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_DeleteType(self->super_class);
@@ -427,10 +427,10 @@ static void CreateVTableClass_override(class_* self) {
 	const char* clname = Ref2Str(self->namev);
 	#endif
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->Scope = self->parent->location;
+	cctx->Scope = self->parent->Location;
 	cctx->Ty = self->super_class->CoreType;
-	CreateVTableClass(self->super_class->CoreType->u.class_);
-	CopyVTable(self->super_class->CoreType->u.class_->vt, self->vt);
+	CreateVTableClass(self->super_class->CoreType->Kind.Class);
+	CopyVTable(self->super_class->CoreType->Kind.Class->vt, self->vt);
 	for (int i = 0; i < self->method_list->Length; i++) {
 		Method* m = (Method*)AtVector(self->method_list, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
@@ -510,7 +510,7 @@ static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) 
 
 static Method* class_find_impl_method(class_* self, Method* virtualMethod) {
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
-	cctx->Scope = self->parent->location;
+	cctx->Scope = self->parent->Location;
 	cctx->Ty = self->parent;
 	Method* ret = NULL;
 	VTable* clVT = self->vt;

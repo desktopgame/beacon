@@ -103,7 +103,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 	}
 	//レシーバのインスタンスフィールドを検索
 	Type* ctype = gtype->CoreType;
-	assert(ctype->tag == TYPE_CLASS_T);
+	assert(ctype->Tag == TYPE_CLASS_T);
 	int temp = -1;
 	self->Field = FindTreeFieldClass(TYPE2CLASS(ctype), self->Name, &temp);
 	self->Index = temp;
@@ -134,7 +134,7 @@ static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallConte
 	//Name.call
 	//の call をフィールドとして解決する
 	Type* ccT = receiver_type->CoreType;
-	assert(ccT->tag == TYPE_CLASS_T);
+	assert(ccT->Tag == TYPE_CLASS_T);
 	int temp = -1;
 	self->Field = FindTreeSFieldClass(TYPE2CLASS(ccT), self->Name, &temp);
 	self->Index = temp;

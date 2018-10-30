@@ -20,8 +20,8 @@ static void DeleteInterface_Property(VectorItem item);
 
 Type* WrapInterface(interface_ * self) {
 	Type* ret = NewType();
-	ret->tag = TYPE_INTERFACE_T;
-	ret->u.interface_ = self;
+	ret->Tag = TYPE_INTERFACE_T;
+	ret->Kind.Interface = self;
 	self->parent = ret;
 	return ret;
 }
@@ -114,13 +114,13 @@ void DeleteInterface(interface_ * self) {
 }
 
 GenericType* IsContainsTypeInterface(GenericType* source, interface_* find) {
-	interface_* self = source->CoreType->u.interface_;
+	interface_* self = source->CoreType->Kind.Interface;
 	if(self == find) {
 		return source;
 	}
 	for(int i=0; i<self->impl_list->Length; i++) {
 		GenericType* gE = AtVector(self->impl_list, i);
-		if(gE->CoreType->u.interface_ == find) {
+		if(gE->CoreType->Kind.Interface == find) {
 			return gE;
 		}
 	}
@@ -147,7 +147,7 @@ Vector* GetGenericInterfaceTreeInterface(interface_* self) {
 }
 
 GenericType* FindInterfaceInterface(interface_* self, Type* tinter) {
-	assert(tinter->tag == TYPE_INTERFACE_T);
+	assert(tinter->Tag == TYPE_INTERFACE_T);
 	if (self == TYPE2INTERFACE(tinter)) {
 		return NULL;
 	}

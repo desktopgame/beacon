@@ -42,12 +42,12 @@ void LoadILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 	self->GType = ResolveImportManager(GetNamespaceCContext(cctx), self->GCache, cctx);
 	GenericType* a = EvalILFactor(self->Source, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
-	if(self->GType->CoreType != NULL && GENERIC2TYPE(self->GType)->tag == TYPE_INTERFACE_T) {
+	if(self->GType->CoreType != NULL && GENERIC2TYPE(self->GType)->Tag == TYPE_INTERFACE_T) {
 		self->Mode = CAST_UP_T;
 		return;
 	}
 	//キャスト先がインターフェイスなら常にアップキャスト
-	if(a->CoreType != NULL && GENERIC2TYPE(a)->tag == TYPE_INTERFACE_T) {
+	if(a->CoreType != NULL && GENERIC2TYPE(a)->Tag == TYPE_INTERFACE_T) {
 		self->Mode = CAST_DOWN_T;
 		return;
 	}

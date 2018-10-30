@@ -54,7 +54,7 @@ void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* 
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->Bytecode, self->Constructor->Parent->absolute_index);
+	AddOpcodeBuf(env->Bytecode, self->Constructor->Parent->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, self->ConstructorIndex);
 }
 
@@ -139,7 +139,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	class_* cls = TYPE2CLASS(ty);
 	int temp = -1;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-	cfr->Kind.Resolve.GType = cls->parent->generic_self;
+	cfr->Kind.Resolve.GType = cls->parent->GenericSelf;
 	cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
 	ResolveILTypeArgument(self->TypeArgs, cctx);
 	self->Constructor = ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);

@@ -6,7 +6,7 @@
 void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
 	if(IsStaticModifier(fi->modifier)) {
 		AddOpcodeBuf(buf, OP_GET_STATIC);
-		AddOpcodeBuf(buf, fi->parent->absolute_index);
+		AddOpcodeBuf(buf, fi->parent->AbsoluteIndex);
 		AddOpcodeBuf(buf, index);
 	} else {
 		AddOpcodeBuf(buf, OP_GET_FIELD);
@@ -16,11 +16,11 @@ void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
 
 void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 	if(prop->IsShort) {
-		GenerateGetField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->u.class_, prop));
+		GenerateGetField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->Kind.Class, prop));
 	} else {
 		if(IsStaticModifier(prop->Modifier)) {
 			AddOpcodeBuf(buf, OP_GET_STATIC_PROPERTY);
-			AddOpcodeBuf(buf, prop->Parent->absolute_index);
+			AddOpcodeBuf(buf, prop->Parent->AbsoluteIndex);
 			AddOpcodeBuf(buf, index);
 		} else {
 			AddOpcodeBuf(buf, OP_GET_PROPERTY);
@@ -32,7 +32,7 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
 	if(IsStaticModifier(fi->modifier)) {
 		AddOpcodeBuf(buf, OP_PUT_STATIC);
-		AddOpcodeBuf(buf, fi->parent->absolute_index);
+		AddOpcodeBuf(buf, fi->parent->AbsoluteIndex);
 		AddOpcodeBuf(buf, index);
 	} else {
 		AddOpcodeBuf(buf, OP_PUT_FIELD);
@@ -42,11 +42,11 @@ void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
 
 void GeneratePutProperty(OpcodeBuf* buf, Property* prop, int index) {
 	if(prop->IsShort) {
-		GeneratePutField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->u.class_, prop));
+		GeneratePutField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->Kind.Class, prop));
 	} else {
 		if(IsStaticModifier(prop->Modifier)) {
 			AddOpcodeBuf(buf, OP_PUT_STATIC_PROPERTY);
-			AddOpcodeBuf(buf, prop->Parent->absolute_index);
+			AddOpcodeBuf(buf, prop->Parent->AbsoluteIndex);
 			AddOpcodeBuf(buf, index);
 		} else {
 			AddOpcodeBuf(buf, OP_PUT_PROPERTY);

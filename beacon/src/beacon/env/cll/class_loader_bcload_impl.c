@@ -163,7 +163,7 @@ static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	Type* tp = CLBC_get_or_load_enum(parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
-	if((tp->state & TYPE_REGISTER) > 0) {
+	if((tp->State & TYPE_REGISTER) > 0) {
 		return;
 	}
 	InitGenericSelf(tp, 0);
@@ -174,7 +174,7 @@ static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 		f->modifier = MODIFIER_STATIC_T;
 		f->access = ACCESS_PUBLIC_T;
 		f->static_value = NULL;
-		f->gtype = TYPE_INT->generic_self;
+		f->gtype = TYPE_INT->GenericSelf;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
 		f->parent = tp;
 		//f->static_value->paint = PAINT_MARKED_T;
@@ -200,7 +200,7 @@ static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 		CACHEKIND_ENUM_IMPL_T
 	);
 	PushVector(self->TypeCaches, mtc);
-	tp->state = tp->state | TYPE_REGISTER;
+	tp->State = tp->State | TYPE_REGISTER;
 }
 
 static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
@@ -211,7 +211,7 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 	Type* tp = CLBC_get_or_load_class(self, parent, iltype);
 	CL_ERROR(self);
 	class_* cls = TYPE2CLASS(tp);
-	if((tp->state & TYPE_REGISTER) > 0) {
+	if((tp->State & TYPE_REGISTER) > 0) {
 		return;
 	}
 	cls->is_abstract = iltype->Kind.Class->IsAbstract;
@@ -238,7 +238,7 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent) {
 		CACHEKIND_CLASS_IMPL_T
 	);
 	PushVector(self->TypeCaches, mtc);
-	tp->state = tp->state | TYPE_REGISTER;
+	tp->State = tp->State | TYPE_REGISTER;
 }
 
 static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * parent) {
@@ -248,7 +248,7 @@ static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * pare
 	Type* tp = CLBC_get_or_load_interface(self, parent, iltype);
 	CL_ERROR(self);
 	interface_* inter = TYPE2INTERFACE(tp);
-	if((tp->state & TYPE_REGISTER) > 0) {
+	if((tp->State & TYPE_REGISTER) > 0) {
 		return;
 	}
 	InitGenericSelf(tp, iltype->Kind.Interface->TypeParameters->Length);
@@ -272,7 +272,7 @@ static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * pare
 		CACHEKIND_INTERFACE_IMPL_T
 	);
 	PushVector(self->TypeCaches, mtc);
-	tp->state = tp->state | TYPE_REGISTER;
+	tp->State = tp->State | TYPE_REGISTER;
 }
 
 static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* ilclass, class_* classz, ILMethod* ilmethod, Method* me) {
@@ -285,7 +285,7 @@ static void CLBC_debug_NativeMethod(Method* parent, Frame*fr, Enviroment* env) {
 }
 
 static void CLBC_check_superclass(class_* cls) {
-	class_* objClass = TYPE_OBJECT->u.class_;
+	class_* objClass = TYPE_OBJECT->Kind.Class;
 	if (cls != objClass) {
 		if (cls->super_class == NULL) {
 			cls->super_class = GENERIC_OBJECT;
@@ -302,7 +302,7 @@ static Type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype) {
 		tp = WrapClass(outClass);
 		AddTypeNamespace(parent, tp);
 	} else {
-		outClass = tp->u.class_;
+		outClass = tp->Kind.Class;
 	}
 	return tp;
 }
@@ -317,8 +317,8 @@ static Type* CLBC_get_or_load_class(ClassLoader* self, Namespace* parent, ILType
 		CLBC_register_class(self, parent, iltype, tp, outClass);
 		CL_ERROR_RET(self, tp);
 	} else {
-		outClass = tp->u.class_;
-		if((tp->state & TYPE_REGISTER) == 0) {
+		outClass = tp->Kind.Class;
+		if((tp->State & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
 			DupTypeParameterList(iltype->Kind.Class->TypeParameters, outClass->GetParameterListType);
@@ -339,9 +339,9 @@ static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* il
 		if (i == 0) {
 			GenericType* gtp = ResolveImportManager(parent, e, cctx);
 			assert(gtp != NULL);
-			if (gtp->CoreType->tag == TYPE_CLASS_T) {
+			if (gtp->CoreType->Tag == TYPE_CLASS_T) {
 				cls->super_class = gtp;
-			} else if (gtp->CoreType->tag == TYPE_INTERFACE_T) {
+			} else if (gtp->CoreType->Tag == TYPE_INTERFACE_T) {
 				PushVector(cls->impl_list, gtp);
 			} else assert(false);
 		//二つ目以降はインターフェースのみ
@@ -352,7 +352,7 @@ static void CLBC_register_class(ClassLoader* self, Namespace* parent, ILType* il
 			const char* Estr = Ref2Str(GetTypeName(E));
 			#endif
 			PushVector(cls->impl_list, gtp);
-			if(E->tag != TYPE_INTERFACE_T) {
+			if(E->Tag != TYPE_INTERFACE_T) {
 				ThrowBCError(BCERROR_CLASS_FIRST_T, Ref2Str(GetTypeName(tp)));
 				AddTypeNamespace(parent, tp);
 				DeleteCallContext(cctx);
@@ -379,8 +379,8 @@ static Type* CLBC_get_or_load_interface(ClassLoader* self, Namespace* parent, IL
 		CLBC_register_interface(self, parent, iltype, tp, inter);
 		CL_ERROR_RET(self, tp);
 	} else {
-		inter = tp->u.interface_;
-		if((tp->state & TYPE_REGISTER) == 0) {
+		inter = tp->Kind.Interface;
+		if((tp->State & TYPE_REGISTER) == 0) {
 			//もしネイティブメソッドのために
 			//既に登録されていたならここが型変数がNULLになってしまう
 			DupTypeParameterList(GetTypeParametersILType(iltype), inter->GetParameterListType);
@@ -400,7 +400,7 @@ static void CLBC_register_interface(ClassLoader* self, Namespace* parent, ILType
 		//インターフェースはインターフェースのみ継承
 		GenericType* gtp = ResolveImportManager(parent, e, cctx);
 		Type* E = GENERIC2TYPE(gtp);
-		if(E->tag != TYPE_INTERFACE_T) {
+		if(E->Tag != TYPE_INTERFACE_T) {
 			ThrowBCError(BCERROR_INTERFACE_ONLY_T, Ref2Str(GetTypeName(tp)));
 			AddTypeNamespace(parent, tp);
 			DeleteCallContext(cctx);

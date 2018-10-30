@@ -68,7 +68,7 @@ GenericType* GetReceiverCContext(CallContext* self) {
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.Receiver;
 	} else if(cfr->Tag == FRAME_SELF_INVOKE_T) {
-		return self->Ty->generic_self;
+		return self->Ty->GenericSelf;
 	} else if(cfr->Tag == FRAME_RESOLVE_T) {
 		return cfr->Kind.Resolve.GType;
 	}

@@ -269,7 +269,7 @@ static void Loadclass_loader_toplevel_function(ClassLoader* self) {
 		}
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
-		PushVector(worldT->u.class_->method_list, m);
+		PushVector(worldT->Kind.Class->method_list, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}

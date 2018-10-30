@@ -55,15 +55,15 @@ typedef enum TypeState {
  * 型を表す構造体.
  */
 typedef struct Type {
-	TypeTag tag;
-	struct Namespace* location;
-	struct GenericType* generic_self;
-	int absolute_index;
-	TypeState state;
+	TypeTag Tag;
+	struct Namespace* Location;
+	struct GenericType* GenericSelf;
+	int AbsoluteIndex;
+	TypeState State;
 	union {
-		struct class_* class_;
-		struct interface_* interface_;
-	} u;
+		struct class_* Class;
+		struct interface_* Interface;
+	} Kind;
 } Type;
 
 /**

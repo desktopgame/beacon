@@ -35,7 +35,7 @@ void ExecuteOperatorOverload(OperatorOverload* self, Frame* fr, Enviroment* env)
 	ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
-	if(self->ReturnGType != TYPE_VOID->generic_self &&
+	if(self->ReturnGType != TYPE_VOID->GenericSelf &&
 	   sub->ValueStack->Length > 0) {
 		Object* o = (Object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, o);

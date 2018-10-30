@@ -277,7 +277,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	cctx->Ty = tp;
 	cctx->Kind.Method = method;
 	//インターフェースなら空
-	if (tp->tag == TYPE_INTERFACE_T ||
+	if (tp->Tag == TYPE_INTERFACE_T ||
 	   IsAbstractModifier(method->Modifier)) {
 		method->Type = METHOD_TYPE_ABSTRACT_T;
 		method->Kind.Script = NULL;
@@ -291,7 +291,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
 	if(IsAbstractModifier(method->Modifier) &&
-	  (tp->tag == TYPE_CLASS_T &&
+	  (tp->Tag == TYPE_CLASS_T &&
 	  !TYPE2CLASS(tp)->is_abstract)) {
 		ThrowBCError(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->Name));
 		DeleteMethod(method);
@@ -300,7 +300,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	}
 	//メソッドの本文が省略されているが、
 	//ネイティブメソッドでも抽象メソッドでもない
-	if(tp->tag == TYPE_CLASS_T &&
+	if(tp->Tag == TYPE_CLASS_T &&
 	   ilmethod->IsNoStmt &&
 		(!IsAbstractModifier(method->Modifier) && !IsNativeModifier(method->Modifier))
 	) {
@@ -310,7 +310,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 		return false;
 	}
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
-	if(tp->tag == TYPE_CLASS_T &&
+	if(tp->Tag == TYPE_CLASS_T &&
 	   !ilmethod->IsNoStmt &&
 		(IsAbstractModifier(method->Modifier) || IsNativeModifier(method->Modifier))
 	) {
@@ -437,7 +437,7 @@ void CLBC_methods_impl(ClassLoader* self, Namespace* scope, ILType* iltype, Type
 bool CLBC_ctor_decl(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* ilcons, Namespace* scope) {
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilcons->Parameters;
-	class_* classz = tp->u.class_;
+	class_* classz = tp->Kind.Class;
 	//実行時のメソッド情報を作成する
 	Constructor* cons = NewConstructor();
 	Vector* parameter_list = cons->Parameters;
@@ -494,7 +494,7 @@ bool CLBC_ctor_impl(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* 
 
 void CLBC_ctors_decl(ClassLoader* self, ILType* iltype, Type* tp, Namespace* scope) {
 	CL_ERROR(self);
-	class_* classz = tp->u.class_;
+	class_* classz = tp->Kind.Class;
 	Vector* ilcons_list = iltype->Kind.Class->Constructors;
 	for (int i = 0; i < ilcons_list->Length; i++) {
 		if(!CLBC_ctor_decl(self, iltype, tp, AtVector(ilcons_list, i), scope)) {
@@ -505,8 +505,8 @@ void CLBC_ctors_decl(ClassLoader* self, ILType* iltype, Type* tp, Namespace* sco
 
 void CLBC_ctors_impl(ClassLoader* self, ILType* iltype, Type* tp) {
 	CL_ERROR(self);
-	assert(tp->tag == TYPE_CLASS_T);
-	class_* classz = tp->u.class_;
+	assert(tp->Tag == TYPE_CLASS_T);
+	class_* classz = tp->Kind.Class;
 	Namespace* scope = classz->location;
 	Vector* constructors = classz->constructor_list;
 	if (iltype->Tag != ILTYPE_CLASS_T) {
@@ -544,7 +544,7 @@ bool CLBC_operator_overload_decl(ClassLoader* self, ILType* iltype, Type* tp, IL
 		PushVector(opov->Parameters, param);
 	}
 	CLBC_parameter_list(self, scope, ilopov->Parameters, opov->Parameters, cctx);
-	PushVector(tp->u.class_->operator_overload_list, opov);
+	PushVector(tp->Kind.Class->operator_overload_list, opov);
 	//オペレータオーバロードの妥当性をテストする
 	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
 		DeleteCallContext(cctx);
@@ -601,7 +601,7 @@ void CLBC_operator_overloads_decl(ClassLoader* self, ILType* iltype, Type* tp, N
 
 void CLBC_operator_overloads_impl(ClassLoader* self, ILType* iltype, Type* tp, Namespace* scope) {
 	CL_ERROR(self);
-	Vector* opov_list = tp->u.class_->operator_overload_list;
+	Vector* opov_list = tp->Kind.Class->operator_overload_list;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
 	for (int i = 0; i < iltype->Kind.Class->OperatorOverloads->Length; i++) {
 		if(!CLBC_operator_overload_impl(self, iltype, tp, AtVector(iltype->Kind.Class->OperatorOverloads, i), AtVector(opov_list, i), scope)) {
@@ -629,7 +629,7 @@ bool CLBC_corutine(ClassLoader* self, Method* mt, Enviroment* env,  Vector* ilpa
 		}
 		mt->Kind.Script->Env = env;
 		AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-		AddOpcodeBuf(env->Bytecode, iterT->absolute_index);
+		AddOpcodeBuf(env->Bytecode, iterT->AbsoluteIndex);
 		AddOpcodeBuf(env->Bytecode, 0);
 		AddOpcodeBuf(env->Bytecode, OP_RETURN);
 		return true;
@@ -687,7 +687,7 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 
 static void CLBC_chain(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
 	//親クラスがないなら作成
-	class_* classz = tp->u.class_;
+	class_* classz = tp->Kind.Class;
 	if (classz->super_class == NULL &&
 		ilcons->Chain == NULL) {
 		CLBC_chain_root(self, iltype, tp, ilcons, ilchain, env);
@@ -705,15 +705,15 @@ static void CLBC_chain(ClassLoader* self, ILType* iltype, Type* tp, ILConstructo
 static void CLBC_chain_root(ClassLoader * self, ILType * iltype, Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_NEW_OBJECT);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
 }
 
 static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	class_* classz = tp->u.class_;
+	class_* classz = tp->Kind.Class;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->CoreType->u.class_, env, cctx, &emptyTemp);
+	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->CoreType->Kind.Class, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
@@ -734,15 +734,15 @@ static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILCon
 	ilcons->Chain = ch_empty;
 	//親クラスへ連鎖
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->super_class->CoreType->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->super_class->CoreType->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
 }
 
 static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	class_* classz = tp->u.class_;
+	class_* classz = tp->Kind.Class;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
@@ -757,11 +757,11 @@ static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILCo
 	if (chain->Type == CHAIN_TYPE_THIS_T) {
 		chainTarget = ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->absolute_index));
+		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
-		chainTarget = ILFindConstructorClass(classz->super_class->CoreType->u.class_, chain->Arguments, env, cctx, &temp);
+		chainTarget = ILFindConstructorClass(classz->super_class->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
-		AddOpcodeBuf(env->Bytecode, classz->super_class->CoreType->absolute_index);
+		AddOpcodeBuf(env->Bytecode, classz->super_class->CoreType->AbsoluteIndex);
 	}
 	if(chainTarget == NULL) {
 		ThrowBCError(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,
@@ -775,7 +775,7 @@ static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILCo
 	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
 	//親クラスへのチェインなら即座にフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
 }
 
 static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type* tp, OperatorOverload* opov) {

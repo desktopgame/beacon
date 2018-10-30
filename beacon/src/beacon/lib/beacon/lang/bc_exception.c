@@ -72,7 +72,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		}
 	} while (temp != NULL);
 	//配列へ
-	Object* arr = NewBCArray(stackTraceElementClass->parent->generic_self, stackTraceElementVec->Length, fr);
+	Object* arr = NewBCArray(stackTraceElementClass->parent->GenericSelf, stackTraceElementVec->Length, fr);
 	for (int i = 0; i < stackTraceElementVec->Length; i++) {
 		SetBCArray(arr, i, AtVector(stackTraceElementVec, i));
 	}

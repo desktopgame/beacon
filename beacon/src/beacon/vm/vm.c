@@ -539,7 +539,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				obj->VPtr = cls->vt;
 				//ジェネリック型を実体化
 				if(cls->GetParameterListType->Length == 0) {
-					obj->GType = tp->generic_self;
+					obj->GType = tp->GenericSelf;
 				} else {
 					GenericType* g = generic_NewType(tp);
 					for(int i=0; i<cls->GetParameterListType->Length; i++) {
@@ -558,7 +558,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int constructorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				assert(tp->tag == TYPE_CLASS_T);
+				assert(tp->Tag == TYPE_CLASS_T);
 				class_* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(cls->namev);
@@ -606,8 +606,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int ctorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				assert(tp->tag == TYPE_CLASS_T);
-				class_* cls = tp->u.class_;
+				assert(tp->Tag == TYPE_CLASS_T);
+				class_* cls = tp->Kind.Class;
 				Constructor* ctor = (Constructor*)AtVector(cls->constructor_list, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				Frame* sub = SubFrame(self);
@@ -688,7 +688,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = tp->u.class_;
+				class_* cls = tp->Kind.Class;
 				Field* f = GetSFieldClass(cls, fieldIndex);
 				Object* sv = (Object*)PopVector(self->ValueStack);
 				f->static_value = sv;
@@ -700,7 +700,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* cls = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				Field* f = GetSFieldClass(cls->u.class_, fieldIndex);
+				Field* f = GetSFieldClass(cls->Kind.Class, fieldIndex);
 				PushVector(self->ValueStack, NON_NULL(f->static_value));
 				break;
 			}
@@ -750,7 +750,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = tp->u.class_;
+				class_* cls = tp->Kind.Class;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
@@ -766,7 +766,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
-				class_* cls = tp->u.class_;
+				class_* cls = tp->Kind.Class;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
 				Frame* sub = SubFrame(self);
@@ -805,7 +805,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* o = PopVector(self->ValueStack);
 				GenericType* a = PopVector(self->TypeArgs);
 				a = ApplyGenericType(a, GetSGThreadCContext());
-				if(a->CoreType->tag == TYPE_INTERFACE_T) {
+				if(a->CoreType->Tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
@@ -832,9 +832,9 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				GenericType* a = PopVector(self->TypeArgs);
 				a = ApplyGenericType(a, GetSGThreadCContext());
 				assert(a->CoreType != NULL);
-				if(a->CoreType->tag == TYPE_CLASS_T) {
+				if(a->CoreType->Tag == TYPE_CLASS_T) {
 					PushVector(self->ValueStack, o);
-				} else if(a->CoreType->tag == TYPE_INTERFACE_T) {
+				} else if(a->CoreType->Tag == TYPE_INTERFACE_T) {
 					interface_* inter = TYPE2INTERFACE(GENERIC2TYPE(a));
 					Vector* inter_list = GetInterfaceTreeClass(TYPE2CLASS(GENERIC2TYPE(o->GType)));
 					int iter = FindVector(inter_list, inter);
@@ -857,7 +857,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, o)) {
 					break;
 				}
-				Method* m = GetImplMethodClass(o->GType->CoreType->u.class_, tp, methodIndex);
+				Method* m = GetImplMethodClass(o->GType->CoreType->Kind.Class, tp, methodIndex);
 				CallContext* cctx = GetSGThreadCContext();
 				ExecuteMethod(m, self, env);
 				break;
@@ -867,7 +867,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int absClassIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int methodIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* cls = (Type*)AtVector(ctx->TypeList, absClassIndex);
-				Method* m = GetSMethodClass(cls->u.class_, methodIndex);
+				Method* m = GetSMethodClass(cls->Kind.Class, methodIndex);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(GetTypeName(cls));
 				const char* mname = Ref2Str(m->Name);
@@ -1247,7 +1247,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	//例外のメッセージを取得
 	Type* exceptionT = FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"));
 	int temp = -1;
-	FindFieldClass(exceptionT->u.class_, InternString("message"), &temp);
+	FindFieldClass(exceptionT->Kind.Class, InternString("message"), &temp);
 	Object* ex = self->Exception;
 	Object* msg = AtVector(ex->u.field_vec, temp);
 	Buffer* cstr = AtVector(msg->NativeSlotVec, 0);
@@ -1262,14 +1262,14 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	Type* stackTraceElementT = FindTypeFromNamespace(GetLangNamespace(), InternString("StackTraceElement"));
 	//Exception#stackTraceを取得
 	temp = -1;
-	FindFieldClass(exceptionT->u.class_, InternString("stackTrace"), &temp);
+	FindFieldClass(exceptionT->Kind.Class, InternString("stackTrace"), &temp);
 	Object* stackTraceObj = AtVector(ex->u.field_vec, temp);
 	//StackTraceElement#fileName
 	//StackTraceElement#lineIndex を取得
 	int fileNameptr = -1;
 	int lineIndexptr = -1;
-	FindFieldClass(stackTraceElementT->u.class_, InternString("fileName"), &fileNameptr);
-	FindFieldClass(stackTraceElementT->u.class_, InternString("lineIndex"), &lineIndexptr);
+	FindFieldClass(stackTraceElementT->Kind.Class, InternString("fileName"), &fileNameptr);
+	FindFieldClass(stackTraceElementT->Kind.Class, InternString("lineIndex"), &lineIndexptr);
 	int stackLen = GetLengthBCArray(stackTraceObj);
 	for(int i=0; i<stackLen; i++) {
 		Object* e = GetBCArray(stackTraceObj, i);

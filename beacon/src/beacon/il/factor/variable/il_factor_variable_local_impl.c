@@ -108,7 +108,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
 	Type* tp = GetTypeCContext(cctx);
-	if(tp->tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
+	if(tp->Tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
 		ThrowBCError(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->Name));
 		return;
 	}

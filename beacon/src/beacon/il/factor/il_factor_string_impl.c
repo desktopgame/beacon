@@ -30,7 +30,7 @@ void LoadILString(ILString * self, Enviroment * env, CallContext* cctx) {
 }
 
 GenericType* EvalILString(ILString * self, Enviroment * env, CallContext* cctx) {
-//	assert(TYPE_STRING->generic_self->CoreType != NULL);
+//	assert(TYPE_STRING->GenericSelf->CoreType != NULL);
 	return GENERIC_STRING;
 }
 

@@ -42,7 +42,7 @@ void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* 
 		}
 	}
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)self->Method->Parent->absolute_index);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)self->Method->Parent->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
 }
 

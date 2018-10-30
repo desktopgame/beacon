@@ -66,9 +66,9 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 
 struct Type* AddTypeNamespace(Namespace* self, Type* type) {
 	ScriptContext* ctx = GetCurrentScriptContext();
-	type->location = self;
+	type->Location = self;
 	PutNumericMap(self->TypeMap, GetTypeName(type), type);
-	type->absolute_index = ctx->TypeList->Length;
+	type->AbsoluteIndex = ctx->TypeList->Length;
 	PushVector(ctx->TypeList, type);
 	return type;
 }

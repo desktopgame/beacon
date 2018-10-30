@@ -36,7 +36,7 @@ Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
 	Vector* type_args = NewVector();
 	PushVector(args, Object_int_new(length));
 	PushVector(type_args, gtype);
-	Object* ret = NewInstanceClass(arrayType->u.class_, fr, args,type_args);
+	Object* ret = NewInstanceClass(arrayType->Kind.Class, fr, args,type_args);
 	DeleteVector(args, VectorDeleterOfNull);
 	DeleteVector(type_args, VectorDeleterOfNull);
 
@@ -60,7 +60,7 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Type* tp = parent->Parent;
 	//Array#lengthを取り出す
 	int temp = 0;
-	Field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);
+	Field* lengthField = FindFieldClass(tp->Kind.Class, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	Object* self = AtVector(fr->VariableTable, 0);

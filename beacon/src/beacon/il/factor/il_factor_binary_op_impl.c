@@ -217,7 +217,7 @@ int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, E
 	//PushVector(args, lgtype);
 	PushVector(args, rgtype);
 	Type* lctype = GENERIC2TYPE(lgtype);
-	assert(lctype->tag == TYPE_CLASS_T);
+	assert(lctype->Tag == TYPE_CLASS_T);
 	class_* lclass = TYPE2CLASS(lctype);
 	int temp = 0;
 	GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);

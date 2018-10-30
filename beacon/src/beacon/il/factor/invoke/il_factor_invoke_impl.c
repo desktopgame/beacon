@@ -222,9 +222,9 @@ static void GenerateILInvoke_method(ILInvoke* self, Enviroment* env, CallContext
 		GenerateILFactor(e->Factor, env, cctx);
 	}
 	GenerateILFactor(self->receiver, env, cctx);
-	if(self->u.m->Parent->tag == TYPE_INTERFACE_T) {
+	if(self->u.m->Parent->Tag == TYPE_INTERFACE_T) {
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKEINTERFACE);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->Parent->absolute_index);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->Parent->AbsoluteIndex);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 	} else {
 		assert(!IsStaticModifier(self->u.m->Modifier));

@@ -107,10 +107,10 @@ void EachStaticScriptContext(ScriptContext* self, static_each act) {
 	ScriptContext* ctx = self;
 	for (int i = 0; i < ctx->TypeList->Length; i++) {
 		Type* e = (Type*)AtVector(ctx->TypeList, i);
-		if (e->tag != TYPE_CLASS_T) {
+		if (e->Tag != TYPE_CLASS_T) {
 			continue;
 		}
-		class_* cls = e->u.class_;
+		class_* cls = e->Kind.Class;
 		for (int j = 0; j < cls->sfield_list->Length; j++) {
 			Field* f = (Field*)AtVector(cls->sfield_list, j);
 			if(IsStaticModifier(f->modifier)) {

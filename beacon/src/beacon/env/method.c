@@ -77,7 +77,7 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 		ExecuteNativeMethod(self->Kind.Native, self, a, env);
 		//戻り値を残す
 		//例外によって終了した場合には戻り値がない
-		if(self->ReturnGType != TYPE_VOID->generic_self &&
+		if(self->ReturnGType != TYPE_VOID->GenericSelf &&
 	  		 a->ValueStack->Length > 0) {
 			PushVector(fr->ValueStack, PopVector(a->ValueStack));
 		}
@@ -365,7 +365,7 @@ static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cl
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)ty->absolute_index);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)ty->AbsoluteIndex);
 	AddOpcodeBuf(envIterCons->Bytecode, OP_CORO_INIT);
 	AddOpcodeBuf(envIterCons->Bytecode, iterCons->Parameters->Length);
 	AddOpcodeBuf(envIterCons->Bytecode, op_len);
@@ -382,7 +382,7 @@ static Method* create_has_next(Method* self, Type* ty, ClassLoader* cll, Vector*
 	ScriptMethod* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
-	cctx->Scope = self->Parent->location;
+	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
 	cctx->Kind.Method = self;
 	envSmt->ContextRef = cll;
@@ -433,7 +433,7 @@ static Method* create_next(Method* self, Type* ty, ClassLoader* cll,GenericType*
 	ScriptMethod* smt = NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
-	cctx->Scope = self->Parent->location;
+	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
 	cctx->Kind.Method = mt;
 
@@ -443,7 +443,7 @@ static Method* create_next(Method* self, Type* ty, ClassLoader* cll,GenericType*
 	AddOpcodeBuf(envSmt->Bytecode, (VectorItem)OP_CORO_CURRENT);
 
 	envSmt->ContextRef = cll;
-	cctx->Scope = self->Parent->location;
+	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
 	cctx->Kind.Method = self;
 	smt->Env = envSmt;

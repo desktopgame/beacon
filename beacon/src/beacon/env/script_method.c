@@ -53,7 +53,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
-	if(parent->ReturnGType != TYPE_VOID->generic_self &&
+	if(parent->ReturnGType != TYPE_VOID->GenericSelf &&
 	   sub->ValueStack->Length > 0) {
 		Object* o = (Object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, NON_NULL(o));

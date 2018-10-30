@@ -97,13 +97,13 @@ Object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	ShrinkBuffer(sb);
 	//String#charArrayを埋める
 	int temp = 0;
-	FindFieldClass(strType->u.class_, InternString("charArray"), &temp);
+	FindFieldClass(strType->Kind.Class, InternString("charArray"), &temp);
 	AssignVector(ret->u.field_vec, temp, arr);
 	VectorItem* test = AtVector(ret->u.field_vec, temp);
 	assert(test != NULL);
 	//Array#lengthを埋める
 	temp = 0;
-	FindFieldClass(arrType->u.class_, InternString("length"), &temp);
+	FindFieldClass(arrType->Kind.Class, InternString("length"), &temp);
 	AssignVector(arr->u.field_vec, temp, Object_int_new(sb->Length));
 	//C形式の文字列でも保存
 	AssignVector(ret->NativeSlotVec, 0, sb);

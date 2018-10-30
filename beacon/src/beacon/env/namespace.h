@@ -18,15 +18,15 @@ struct ScriptContext;
 #define TYPE_EXCEPTION (GetExceptionTypeNamespace())
 
 
-#define GENERIC_OBJECT ((GetObjectTypeNamespace()->generic_self))
-#define GENERIC_INT ((GetIntTypeNamespace()->generic_self))
-#define GENERIC_DOUBLE ((GetDoubleTypeNamespace()->generic_self))
-#define GENERIC_CHAR ((GetCharTypeNamespace()->generic_self))
-#define GENERIC_STRING ((GetStringTypeNamespace()->generic_self))
-#define GENERIC_BOOL ((GetBoolTypeNamespace()->generic_self))
-#define GENERIC_VOID ((GetVoidTypeNamespace()->generic_self))
-#define GENERIC_NULL ((GetNullTypeNamespace()->generic_self))
-#define GENERIC_EXCEPTION ((GetExceptionTypeNamespace()->generic_self))
+#define GENERIC_OBJECT ((GetObjectTypeNamespace()->GenericSelf))
+#define GENERIC_INT ((GetIntTypeNamespace()->GenericSelf))
+#define GENERIC_DOUBLE ((GetDoubleTypeNamespace()->GenericSelf))
+#define GENERIC_CHAR ((GetCharTypeNamespace()->GenericSelf))
+#define GENERIC_STRING ((GetStringTypeNamespace()->GenericSelf))
+#define GENERIC_BOOL ((GetBoolTypeNamespace()->GenericSelf))
+#define GENERIC_VOID ((GetVoidTypeNamespace()->GenericSelf))
+#define GENERIC_NULL ((GetNullTypeNamespace()->GenericSelf))
+#define GENERIC_EXCEPTION ((GetExceptionTypeNamespace()->GenericSelf))
 
 struct Type;
 struct class_;

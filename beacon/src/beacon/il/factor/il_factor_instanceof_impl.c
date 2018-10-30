@@ -35,7 +35,7 @@ void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx
 }
 
 GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
-	return TYPE_BOOL->generic_self;
+	return TYPE_BOOL->GenericSelf;
 }
 
 char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env) {

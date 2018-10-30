@@ -50,15 +50,15 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 	#endif
 	//Int, Double
 	if(CoreType != NULL && fqcn->TypeArgs->Length == 0) {
-		assert(CoreType->generic_self != NULL);
-		return CoreType->generic_self;
+		assert(CoreType->GenericSelf != NULL);
+		return CoreType->GenericSelf;
 	}
 	//Array[T], Dictionary[K, V]
 	if(CoreType != NULL && fqcn->TypeArgs->Length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
 		GenericType* normalGType = generic_NewType(CoreType);
-		assert(CoreType->tag != TYPE_ENUM_T);
+		assert(CoreType->Tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->TypeArgs->Length; i++) {
 			GenericCache* e = (GenericCache*)AtVector(fqcn->TypeArgs, i);
 			GenericType* child = ResolveImportManager(scope, e, cctx);
@@ -98,7 +98,7 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 	//Int
 	//Foo::MyClass
 	if(CoreType != NULL) {
-		return CoreType->generic_self;
+		return CoreType->GenericSelf;
 	}
 	//Foo::UndefinedClassName
 	if(fqcn->Scope->Length > 0) {

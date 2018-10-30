@@ -37,7 +37,7 @@ GenericType* RefGenericType(Type* CoreType) {
 	if(CoreType == NULL) {
 		return generic_NewType(CoreType);
 	}
-	return CoreType->generic_self;
+	return CoreType->GenericSelf;
 }
 
 GenericType* MallocGenericType(struct Type* CoreType, const char* filename, int lineno) {
@@ -79,7 +79,7 @@ void CollectGenericType() {
 	//全ての型に定義された自身を参照するための generic をマーク
 	for(int i=0; i<ctx->TypeList->Length; i++) {
 		Type* e= (Type*)AtVector(ctx->TypeList, i);
-		GenericType_recursive_mark(e->generic_self);
+		GenericType_recursive_mark(e->GenericSelf);
 	}
 	Vector* alive = NewVector();
 	Vector* dead = NewVector();
@@ -99,7 +99,7 @@ void LostownershipGenericType(GenericType* a) {
 		return;
 	}
 	assert(a->CoreType != NULL);
-	assert(a->CoreType->generic_self == a);
+	assert(a->CoreType->GenericSelf == a);
 	generic_DeleteTypercr_self(a);
 }
 
@@ -176,7 +176,7 @@ void GenerateGenericType(GenericType* self, Enviroment* env) {
 		}
 	} else {
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_UNIQUE_TYPE);
-		AddOpcodeBuf(env->Bytecode, self->CoreType->absolute_index);
+		AddOpcodeBuf(env->Bytecode, self->CoreType->AbsoluteIndex);
 	}
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		GenericType* e = (GenericType*)AtVector(self->TypeArgs, i);
@@ -277,9 +277,9 @@ static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, 
 	if(other->CoreType == TYPE_NULL) {
 		return 1;
 	}
-	if (self->CoreType->tag == TYPE_CLASS_T) {
+	if (self->CoreType->Tag == TYPE_CLASS_T) {
 		return DistanceGenericType_class(dist, self, other, fr, cctx);
-	} else if (self->CoreType->tag == TYPE_INTERFACE_T) {
+	} else if (self->CoreType->Tag == TYPE_INTERFACE_T) {
 		return DistanceGenericType_interface(dist, self, other, fr, cctx);
 	}
 	return dist;
@@ -287,12 +287,12 @@ static int DistanceGenericType_nogeneric(GenericType* self, GenericType* other, 
 
 static int DistanceGenericType_class(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
 	//otherからselfまで辿る
-	class_* baseline = self->CoreType->u.class_;
-	class_* ptr = other->CoreType->u.class_;
+	class_* baseline = self->CoreType->Kind.Class;
+	class_* ptr = other->CoreType->Kind.Class;
 	GenericType* target = other;
 	while (baseline != ptr) {
 		target = ptr->super_class;
-		ptr = ptr->super_class->CoreType->u.class_;
+		ptr = ptr->super_class->CoreType->Kind.Class;
 	}
 	assert(target != NULL);
 	assert(self->TypeArgs->Length == target->TypeArgs->Length);
@@ -309,7 +309,7 @@ static int DistanceGenericType_class(int dist, GenericType* self, GenericType* o
 }
 
 static int DistanceGenericType_interface(int dist, GenericType* self, GenericType* other, Frame* fr, CallContext* cctx) {
-	if (other->CoreType->tag == TYPE_CLASS_T) {
+	if (other->CoreType->Tag == TYPE_CLASS_T) {
 		//クラスからインターフェイスを探す
 		GenericType* impl_baseline = NULL;
 		GenericType* impl = FindInterfaceTypeClass(TYPE2CLASS(GENERIC2TYPE(other)), (GENERIC2TYPE(self)), &impl_baseline);
@@ -328,7 +328,7 @@ static int DistanceGenericType_interface(int dist, GenericType* self, GenericTyp
 		}
 		DeleteVector(gargs, VectorDeleterOfNull);
 		return dist;
-	} else if (other->CoreType->tag == TYPE_INTERFACE_T) {
+	} else if (other->CoreType->Tag == TYPE_INTERFACE_T) {
 		GenericType* impl = FindInterfaceInterface(TYPE2INTERFACE(GENERIC2TYPE(other)), (GENERIC2TYPE(self)));
 		if (impl == NULL) {
 			impl = other;

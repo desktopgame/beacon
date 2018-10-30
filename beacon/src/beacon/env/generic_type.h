@@ -7,7 +7,7 @@
 #include <assert.h>
 
 #define GENERIC2TYPE(gtype) (GenericTypeToType(gtype))
-#define TYPE2GENERIC(type) (type->generic_self)
+#define TYPE2GENERIC(type) (type->GenericSelf)
 
 struct Type;
 struct Method;
@@ -56,7 +56,7 @@ typedef struct GenericType {
 #define generic_NewType(ctype) (MallocGenericType(ctype, __FILE__, __LINE__))
 
 /**
- * CoreTypeがNULL以外なら generic_selfを参照し、
+ * CoreTypeがNULL以外なら GenericSelfを参照し、
  * NULLなら新規作成します。
  * @param CoreType
  * @return
@@ -85,7 +85,7 @@ GenericType* CloneGenericType(GenericType* self);
 void CollectGenericType();
 
 /**
- * type#generic_self を解放する時に使います.
+ * type#GenericSelf を解放する時に使います.
  * CollectGenericType より後に呼び出してください。
  * @param a
  */
