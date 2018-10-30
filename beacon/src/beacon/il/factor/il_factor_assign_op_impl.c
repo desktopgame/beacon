@@ -98,7 +98,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 		//指定の静的フィールドにアクセスできない
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
 			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-				Ref2Str(GetTypeName(cls->parent)),
+				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(sf->namev)
 			);
 			return;
@@ -106,7 +106,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 		//finalなので書き込めない
 		if(IsFinalModifier(sf->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(GetTypeName(cls->parent)),
+				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(sf->namev)
 			);
 			return;
@@ -136,7 +136,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 	//指定のインスタンスフィールドにアクセスできない
 	if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(GetTypeName(cls->parent)),
+			Ref2Str(GetTypeName(cls->Parent)),
 			Ref2Str(f->namev)
 		);
 	}
@@ -278,7 +278,7 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 		//finalなので書き込めない
 		if(IsFinalModifier(f->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(GetTypeName(cls->parent)),
+				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(f->namev)
 			);
 		}
@@ -287,7 +287,7 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 		if(IsFinalModifier(f->modifier) &&
 		   IsStaticModifier(f->modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(GetTypeName(cls->parent)),
+				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(f->namev)
 			);
 		}

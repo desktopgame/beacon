@@ -42,7 +42,7 @@ StringView GetTypeName(Type* self) {
 		return InternString("NULL");
 	}
 	if (self->Tag == TYPE_CLASS_T) {
-		return self->Kind.Class->namev;
+		return self->Kind.Class->Name;
 	} else if (self->Tag == TYPE_INTERFACE_T) {
 		return self->Kind.Interface->namev;
 	}
@@ -100,7 +100,7 @@ Method* ILFindSMethodType(Type* self, StringView namev, Vector* args, Enviroment
 VTable * GetVTableType(Type* self) {
 	if (self->Tag == TYPE_CLASS_T) {
 		CreateVTableClass(self->Kind.Class);
-		return self->Kind.Class->vt;
+		return self->Kind.Class->VT;
 	} else if (self->Tag == TYPE_INTERFACE_T) {
 		return self->Kind.Interface->vt;
 	}
@@ -148,7 +148,7 @@ void UnlinkType(Type* self) {
 int GetGenericIndexType(Type* self, StringView namev) {
 	assert(self->Tag != TYPE_ENUM_T);
 	Vector* v = NULL;
-	if (self->Tag == TYPE_CLASS_T) v = self->Kind.Class->GetParameterListType;
+	if (self->Tag == TYPE_CLASS_T) v = self->Kind.Class->TypeParameters;
 	if (self->Tag == TYPE_INTERFACE_T) v = self->Kind.Interface->GetParameterListType;
 	//全ての型変数と比べる
 	int ret = -1;
@@ -173,17 +173,17 @@ GenericType * FindImplementType(Type* self, Type* a) {
 		while (ptr != NULL) {
 			if (a->Tag == TYPE_CLASS_T &&
 				ptr == a->Kind.Class) {
-				return RefGenericType(ptr->parent);
+				return RefGenericType(ptr->Parent);
 			}
 			if (a->Tag == TYPE_INTERFACE_T) {
-				for (int i = 0; i < ptr->impl_list->Length; i++) {
-					GenericType* inter = (GenericType*)AtVector(ptr->impl_list, i);
+				for (int i = 0; i < ptr->Implements->Length; i++) {
+					GenericType* inter = (GenericType*)AtVector(ptr->Implements, i);
 					if (inter->CoreType == a) {
 						return inter;
 					}
 				}
 			}
-			ptr = ptr->super_class->CoreType->Kind.Class;
+			ptr = ptr->SuperClass->CoreType->Kind.Class;
 		}
 	} else if (self->Tag == TYPE_INTERFACE_T) {
 		interface_* inter = self->Kind.Interface;
@@ -200,7 +200,7 @@ GenericType * FindImplementType(Type* self, Type* a) {
 Vector* GetParameterListType(Type* self) {
 	assert(self != NULL);
 	if(self->Tag == TYPE_CLASS_T) {
-		return self->Kind.Class->GetParameterListType;
+		return self->Kind.Class->TypeParameters;
 	} else if(self->Tag == TYPE_INTERFACE_T) {
 		return self->Kind.Interface->GetParameterListType;
 	}
@@ -209,7 +209,7 @@ Vector* GetParameterListType(Type* self) {
 Vector* GetImplementList(Type* self) {
 	assert(self != NULL);
 	if(self->Tag == TYPE_CLASS_T) {
-		return self->Kind.Class->impl_list;
+		return self->Kind.Class->Implements;
 	} else if(self->Tag == TYPE_INTERFACE_T) {
 		return self->Kind.Interface->impl_list;
 	}
@@ -218,7 +218,7 @@ Vector* GetImplementList(Type* self) {
 GenericType * TypeParameterAtType(Type* self, int index) {
 	assert(self->Tag != TYPE_ENUM_T);
 	if (self->Tag == TYPE_CLASS_T) {
-		return (GenericType*)AtVector(self->Kind.Class->GetParameterListType, index);
+		return (GenericType*)AtVector(self->Kind.Class->TypeParameters, index);
 	} else if (self->Tag == TYPE_INTERFACE_T) {
 		return (GenericType*)AtVector(self->Kind.Interface->GetParameterListType, index);
 	}
@@ -256,13 +256,13 @@ GenericType* BaselineType(Type* abstract, Type* concrete) {
 	Type* ptr = concrete;
 	do {
 		Class* cls = TYPE2CLASS(ptr);
-		if(cls->super_class != NULL &&
-		   cls->super_class->CoreType == abstract) {
-			return cls->super_class;
+		if(cls->SuperClass != NULL &&
+		   cls->SuperClass->CoreType == abstract) {
+			return cls->SuperClass;
 		}
 		if(abstract->Tag == TYPE_INTERFACE_T) {
-			for(int i=0; i<cls->impl_list->Length; i++) {
-				GenericType* gE = (GenericType*)AtVector(cls->impl_list, i);
+			for(int i=0; i<cls->Implements->Length; i++) {
+				GenericType* gE = (GenericType*)AtVector(cls->Implements, i);
 				GenericType* impl = IsContainsTypeInterface(gE, abstract->Kind.Interface);
 				if(impl) {
 					return impl;
@@ -270,10 +270,10 @@ GenericType* BaselineType(Type* abstract, Type* concrete) {
 			}
 		}
 		//次へ
-		if(cls->super_class == NULL) {
+		if(cls->SuperClass == NULL) {
 			ptr = NULL;
 		} else {
-			ptr = cls->super_class->CoreType;
+			ptr = cls->SuperClass->CoreType;
 		}
 	} while(ptr != NULL);
 	return NULL;
@@ -304,7 +304,7 @@ interface_* IsValidInterface(Type* self) {
 
 bool IsAbstractType(Type* self) {
 	if(self->Tag == TYPE_CLASS_T) {
-		return TYPE2CLASS(self)->is_abstract;
+		return TYPE2CLASS(self)->IsAbstract;
 	}
 	return self->Tag == TYPE_INTERFACE_T;
 }

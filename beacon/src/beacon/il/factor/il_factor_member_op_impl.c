@@ -112,7 +112,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 		ILMemberOp_check_prop(self, env, cctx, gtype, swap);
 	} else {
 		#if defined(DEBUG)
-		const char* clname = Ref2Str(GetClassCContext(cctx)->namev);
+		const char* clname = Ref2Str(GetClassCContext(cctx)->Name);
 		#endif
 		//フィールドの可視性を確認
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), self->Field)) {

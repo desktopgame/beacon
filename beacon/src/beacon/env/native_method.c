@@ -18,7 +18,7 @@ NativeMethod * NewNativeMethod() {
 void ExecuteNativeMethod(NativeMethod * self, Method * parent, Frame* fr, Enviroment* env) {
 	if (self->Ref == NULL) {
 		Class* declared = parent->Parent->Kind.Class;
-		self->Ref = GetNumericMapValue(declared->NativeMethodRef_nmap, parent->Name);
+		self->Ref = GetNumericMapValue(declared->NativeMethodRefMap, parent->Name);
 	}
 	self->Ref->Body(parent, fr, env);
 }

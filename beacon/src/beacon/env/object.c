@@ -126,7 +126,7 @@ Object * GetTrueObject() {
 		ctx->True = Object_malloc(OBJECT_BOOL_T);
 		ctx->True->u.bool_ = true;
 		ctx->True->GType = GENERIC_BOOL;
-		ctx->True->VPtr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->True->VPtr = TYPE2CLASS(TYPE_BOOL)->VT;
 		ctx->True->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->True;
@@ -138,7 +138,7 @@ Object * GetFalseObject() {
 		ctx->False = Object_malloc(OBJECT_BOOL_T);
 		ctx->False->u.bool_ = false;
 		ctx->False->GType = GENERIC_BOOL;
-		ctx->False->VPtr = TYPE2CLASS(TYPE_BOOL)->vt;
+		ctx->False->VPtr = TYPE2CLASS(TYPE_BOOL)->VT;
 		ctx->False->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->False;

@@ -224,10 +224,10 @@ static void Loadclass_loader_toplevel_function(ClassLoader* self) {
 	Vector* funcs = self->ILCode->FunctionList;
 	Type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
-	Vector* methods = TYPE2CLASS(worldT)->method_list;
+	Vector* methods = TYPE2CLASS(worldT)->Methods;
 	if(methods->Length > 0) {
 		DeleteVector(methods, DeleteMethod);
-		TYPE2CLASS(worldT)->method_list = NewVector();
+		TYPE2CLASS(worldT)->Methods = NewVector();
 	}
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->Length; i++) {
@@ -269,14 +269,14 @@ static void Loadclass_loader_toplevel_function(ClassLoader* self) {
 		}
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
-		PushVector(worldT->Kind.Class->method_list, m);
+		PushVector(worldT->Kind.Class->Methods, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);
 	}
 	//実装のロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		Method* m = AtVector(TYPE2CLASS(worldT)->method_list, i);
+		Method* m = AtVector(TYPE2CLASS(worldT)->Methods, i);
 		ScriptMethod* sm = m->Kind.Script;
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->Scope = GetLangNamespace();

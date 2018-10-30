@@ -139,7 +139,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	Class* cls = TYPE2CLASS(ty);
 	int temp = -1;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
-	cfr->Kind.Resolve.GType = cls->parent->GenericSelf;
+	cfr->Kind.Resolve.GType = cls->Parent->GenericSelf;
 	cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
 	ResolveILTypeArgument(self->TypeArgs, cctx);
 	self->Constructor = ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
@@ -147,7 +147,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	PopCallContext(cctx);
 	if(temp == -1) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
-			Ref2Str(cls->namev)
+			Ref2Str(cls->Name)
 		);
 	}
 }

@@ -535,14 +535,14 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* obj = (Object*)TopVector(self->ValueStack);
 				//仮想関数テーブル更新
 				CreateVTableClass(cls);
-				obj->GType = RefGenericType(cls->parent);
-				obj->VPtr = cls->vt;
+				obj->GType = RefGenericType(cls->Parent);
+				obj->VPtr = cls->VT;
 				//ジェネリック型を実体化
-				if(cls->GetParameterListType->Length == 0) {
+				if(cls->TypeParameters->Length == 0) {
 					obj->GType = tp->GenericSelf;
 				} else {
 					GenericType* g = generic_NewType(tp);
-					for(int i=0; i<cls->GetParameterListType->Length; i++) {
+					for(int i=0; i<cls->TypeParameters->Length; i++) {
 						AddArgsGenericType(g, (GenericType*)AtVector(self->TypeArgs, i));
 					}
 					obj->GType = g;
@@ -561,9 +561,9 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				assert(tp->Tag == TYPE_CLASS_T);
 				Class* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
-				const char* clsname = Ref2Str(cls->namev);
+				const char* clsname = Ref2Str(cls->Name);
 				#endif
-				Constructor* ctor = (Constructor*)AtVector(cls->constructor_list, constructorIndex);
+				Constructor* ctor = (Constructor*)AtVector(cls->Constructors, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
 				Frame* sub = SubFrame(self);
@@ -578,11 +578,11 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					AssignVector(cfr->Kind.StaticInvoke.Args, (ctor->Parameters->Length - i), o->GType);
 				}
 				//コンストラクタに渡された型引数を引き継ぐ
-				int typeparams = cls->GetParameterListType->Length;
+				int typeparams = cls->TypeParameters->Length;
 				for(int i=0; i<typeparams; i++) {
 					VectorItem e = PopVector(self->TypeArgs);
 					AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
-					AssignVector(cfr->Kind.StaticInvoke.TypeArgs, (cls->GetParameterListType->Length - i), e);
+					AssignVector(cfr->Kind.StaticInvoke.TypeArgs, (cls->TypeParameters->Length - i), e);
 				}
 				//Printi(self->level);
 				//Printfln("[ %s#new ]", GetTypeName(ctor->Parent));
@@ -608,7 +608,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->Tag == TYPE_CLASS_T);
 				Class* cls = tp->Kind.Class;
-				Constructor* ctor = (Constructor*)AtVector(cls->constructor_list, ctorIndex);
+				Constructor* ctor = (Constructor*)AtVector(cls->Constructors, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				Frame* sub = SubFrame(self);
 				sub->Receiver = tp;
@@ -650,8 +650,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				Object* a = AtVector(self->VariableTable, 0);
 				Object* super = CloneObject(a);
-				super->GType = TYPE2CLASS(GENERIC2TYPE(a->GType))->super_class;
-				super->VPtr = TYPE2CLASS(GENERIC2TYPE(TYPE2CLASS(GENERIC2TYPE(a->GType))->super_class))->vt;
+				super->GType = TYPE2CLASS(GENERIC2TYPE(a->GType))->SuperClass;
+				super->VPtr = TYPE2CLASS(GENERIC2TYPE(TYPE2CLASS(GENERIC2TYPE(a->GType))->SuperClass))->VT;
 				PushVector(self->ValueStack, super);
 				break;
 			}
@@ -899,7 +899,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(self->Receiver != NULL) {
 					cl = TYPE2CLASS(self->Receiver);
 				}
-				Method* m = (Method*)AtVector(cl->method_list, index);
+				Method* m = (Method*)AtVector(cl->Methods, index);
 				ExecuteMethod(m, self, env);
 				break;
 			}
@@ -909,10 +909,10 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* o = (Object*)TopVector(self->ValueStack);
 				Class* cl = TYPE2CLASS(o->GType->CoreType);
 				#if defined(DEBUG)
-				char* clname = Ref2Str(cl->namev);
+				char* clname = Ref2Str(cl->Name);
 				#endif
 				CreateOperatorVTClass(cl);
-				OperatorOverload* operator_ov = (OperatorOverload*)AtVector(cl->ovt->Operators, index);
+				OperatorOverload* operator_ov = (OperatorOverload*)AtVector(cl->OVT->Operators, index);
 				ExecuteOperatorOverload(operator_ov, self, env);
 				break;
 			}

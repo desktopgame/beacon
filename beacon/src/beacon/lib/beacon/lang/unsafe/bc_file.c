@@ -107,7 +107,7 @@ static Object* file_new(FILE* fp, bool std) {
 	assert(file->Paint != PAINT_ONEXIT_T);
 	Type* fileType = GetBCFileType();
 	file->GType = fileType->GenericSelf;
-	file->VPtr = TYPE2CLASS(fileType)->vt;
+	file->VPtr = TYPE2CLASS(fileType)->VT;
 	AssignVector(file->NativeSlotVec, 0, fp);
 	return file;
 }

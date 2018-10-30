@@ -15,15 +15,15 @@ bool IsImplementInterfaceMethodValidClass(Class* cls, Method** out) {
 	(*out) = NULL;
 	bool contains = true;
 	#if defined(DEBUG)
-	const char* csupername = Ref2Str(cls->namev);
-	if(cls->namev == InternString("AdditiveOperator")) {
+	const char* csupername = Ref2Str(cls->Name);
+	if(cls->Name == InternString("AdditiveOperator")) {
 		int a = 0;
 	}
 	#endif
 	//全ての実装インターフェイスを取得する
 	Vector* inter_list = GetInterfaceTreeClass(cls);
 	Vector* methods = FlattenMethodInterfaceList(inter_list);
-	if(inter_list->Length == 0 || cls->is_abstract) {
+	if(inter_list->Length == 0 || cls->IsAbstract) {
 		DeleteVector(inter_list, VectorDeleterOfNull);
 		DeleteVector(methods, VectorDeleterOfNull);
 		return true;
@@ -48,7 +48,7 @@ bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
 	(*out) = NULL;
 	//全ての実装インターフェイスを取得する
 	Vector* gimpl_list = GetGenericInterfaceListClass(cls);
-	if(gimpl_list->Length == 0 || cls->is_abstract) {
+	if(gimpl_list->Length == 0 || cls->IsAbstract) {
 		DeleteVector(gimpl_list, VectorDeleterOfNull);
 		return true;
 	}
@@ -87,28 +87,25 @@ bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
 bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
 	(*out) = NULL;
 	//これ自体が抽象クラス
-	if(cls->is_abstract) {
+	if(cls->IsAbstract) {
 		return true;
 	}
 	//Objectクラス
-	GenericType* gsuper = cls->super_class;
+	GenericType* gsuper = cls->SuperClass;
 	if(gsuper == NULL) {
 		return true;
 	}
 	Class* csuper = TYPE2CLASS(GENERIC2TYPE(gsuper));
 	//親が具象クラスならtrue
-	if(!csuper->is_abstract) {
+	if(!csuper->IsAbstract) {
 		return true;
 	}
 	#if defined(DEBUG)
-	const char* csupername = Ref2Str(csuper->namev);
-	if(cls->namev == InternString("Concrete")) {
-		int a = 0;
-	}
+	const char* csupername = Ref2Str(csuper->Name);
 	#endif
 	bool ret = true;
-	for(int i=0; i<csuper->method_list->Length; i++) {
-		Method* me = AtVector(csuper->method_list, i);
+	for(int i=0; i<csuper->Methods->Length; i++) {
+		Method* me = AtVector(csuper->Methods, i);
 		#if defined(DEBUG)
 		const char* mename = Ref2Str(me->Name);
 		#endif
@@ -126,26 +123,26 @@ bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
 }
 
 bool IsValidFieldClass(Class* cls, Field** out) {
-	return IsValidFieldClassImpl(cls->field_list, out) &&
-		   IsValidFieldClassImpl(cls->sfield_list, out);
+	return IsValidFieldClassImpl(cls->Fields, out) &&
+		   IsValidFieldClassImpl(cls->StaticFields, out);
 }
 
 bool IsValidPropertyClass(Class* self, Property** out) {
-	return IsValidPropertyClassImpl(self->prop_list, out) &&
-	       IsValidPropertyClassImpl(self->sprop_list, out);
+	return IsValidPropertyClassImpl(self->Properties, out) &&
+	       IsValidPropertyClassImpl(self->StaticProperties, out);
 }
 
 bool IsMethodParameterValidClass(Class* cls, Method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
-	for(int i=0; i<cls->method_list->Length; i++) {
-		Method* m = (Method*)AtVector(cls->method_list, i);
+	for(int i=0; i<cls->Methods->Length; i++) {
+		Method* m = (Method*)AtVector(cls->Methods, i);
 		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
-	for(int i=0; i<cls->smethod_list->Length; i++) {
-		Method* m = (Method*)AtVector(cls->smethod_list, i);
+	for(int i=0; i<cls->StaticMethods->Length; i++) {
+		Method* m = (Method*)AtVector(cls->StaticMethods, i);
 		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
@@ -155,8 +152,8 @@ bool IsMethodParameterValidClass(Class* cls, Method** out_method, StringView* ou
 }
 
 bool IsConstructorParameterValidClass(Class* self, Constructor** out_ctor, StringView* out_name) {
-	for(int i=0; i<self->constructor_list->Length; i++) {
-		Constructor* ctor = (Constructor*)AtVector(self->constructor_list, i);
+	for(int i=0; i<self->Constructors->Length; i++) {
+		Constructor* ctor = (Constructor*)AtVector(self->Constructors, i);
 		if(IsOverwrappedParameterName(ctor->Parameters, out_name)) {
 			(*out_ctor) = ctor;
 			return false;
@@ -166,20 +163,20 @@ bool IsConstructorParameterValidClass(Class* self, Constructor** out_ctor, Strin
 }
 
 bool IsTypeParameterValidClass(Class* self, StringView* out_name) {
-	return !IsOverwrappedTypeParameterName(self->GetParameterListType, out_name);
+	return !IsOverwrappedTypeParameterName(self->TypeParameters, out_name);
 }
 
 bool IsMethodTypeParameterValidClass(Class* self, Method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
-	for(int i=0; i<self->method_list->Length; i++) {
-		Method* m = (Method*)AtVector(self->method_list, i);
+	for(int i=0; i<self->Methods->Length; i++) {
+		Method* m = (Method*)AtVector(self->Methods, i);
 		if(IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
-	for(int i=0; i<self->smethod_list->Length; i++) {
-		Method* m = (Method*)AtVector(self->smethod_list, i);
+	for(int i=0; i<self->StaticMethods->Length; i++) {
+		Method* m = (Method*)AtVector(self->StaticMethods, i);
 		if(IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;

@@ -90,15 +90,15 @@ static void CLBC_class_impl(ClassLoader * self, ILType * iltype, Type* tp, Names
 	CreateVTableClass(tp->Kind.Class);
 	CreateOperatorVTClass(tp->Kind.Class);
 	CL_ERROR(self);
-	CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->Fields, (TYPE2CLASS(tp))->field_list);
-	CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->StaticFields, (TYPE2CLASS(tp))->sfield_list);
+	CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->Fields, (TYPE2CLASS(tp))->Fields);
+	CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->StaticFields, (TYPE2CLASS(tp))->StaticFields);
 	CL_ERROR(self);
-	CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->Properties, tp->Kind.Class->prop_list, scope);
-	CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->StaticProperties, tp->Kind.Class->sprop_list, scope);
+	CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->Properties, tp->Kind.Class->Properties, scope);
+	CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->StaticProperties, tp->Kind.Class->StaticProperties, scope);
 	CL_ERROR(self);
 
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->Methods, ((TYPE2CLASS(tp))->method_list));
-	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->StaticMethods, ((TYPE2CLASS(tp))->smethod_list));
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->Methods, ((TYPE2CLASS(tp))->Methods));
+	CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->StaticMethods, ((TYPE2CLASS(tp))->StaticMethods));
 	CL_ERROR(self);
 
 	CLBC_ctors_impl(self, iltype, tp);
@@ -163,7 +163,7 @@ static void CLBC_enum_decl(ClassLoader * self, ILType * iltype, Type* tp, Namesp
 	if((tp->Tag == TYPE_ENUM_T ||
 	   tp->Tag == TYPE_CLASS_T) &&
 	   !IsValidFieldClass(tp->Kind.Class, &outField)) {
-		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T, Ref2Str(tp->Kind.Class->namev), Ref2Str(outField->namev));
+		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T, Ref2Str(tp->Kind.Class->Name), Ref2Str(outField->namev));
 	}
 	tp->State = tp->State | TYPE_DECL;
 }
@@ -172,8 +172,8 @@ static void CLBC_enum_impl(ClassLoader * self, ILType * iltype, Type* tp, Namesp
 	if((tp->State & TYPE_IMPL) > 0) {
 		return;
 	}
-	for(int i=0; i<tp->Kind.Class->sfield_list->Length; i++) {
-		Field* f = AtVector(tp->Kind.Class->sfield_list, i);
+	for(int i=0; i<tp->Kind.Class->StaticFields->Length; i++) {
+		Field* f = AtVector(tp->Kind.Class->StaticFields, i);
 		f->static_value = GetIntObject(i);
 	}
 	tp->State = tp->State | TYPE_IMPL;
@@ -267,28 +267,28 @@ static void CLBC_check_class(ClassLoader * self, ILType * iltype, Type* tp, Name
 	Method* outiMethod = NULL;
 	if(tp->Tag == TYPE_CLASS_T &&
 	  !IsImplementInterfaceMethodValidClass(TYPE2CLASS(tp), &outiMethod)) {
-		ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T, Ref2Str(tp->Kind.Class->namev), Ref2Str(outiMethod->Name));
+		ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T, Ref2Str(tp->Kind.Class->Name), Ref2Str(outiMethod->Name));
 		return;
 	}
 	//実装されていないプロパティを確認する
 	Property* outiProperty = NULL;
 	if(tp->Tag == TYPE_CLASS_T &&
 	  !IsImplementInterfacePropertyValidClass(TYPE2CLASS(tp), &outiProperty)) {
-		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->Kind.Class->namev), Ref2Str(outiProperty->Name));
+		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->Kind.Class->Name), Ref2Str(outiProperty->Name));
 		return;
 	}
 	//実装されていない抽象メソッドを確認する
 	Method* outaMethod = NULL;
 	if(tp->Tag == TYPE_CLASS_T &&
 	   !IsImplementAbstractClassValidClass(TYPE2CLASS(tp), &outaMethod)) {
-		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->Kind.Class->namev), Ref2Str(outaMethod->Name));
+		ThrowBCError(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T, Ref2Str(tp->Kind.Class->Name), Ref2Str(outaMethod->Name));
 		return;
 	   }
 	//重複するプロパティを確認する
 	Property* outProp = NULL;
 	if(!IsValidPropertyClass(tp->Kind.Class, &outProp)) {
 		ThrowBCError(BCERROR_OVERWRAP_PROPERTY_NAME_T,
-			Ref2Str(tp->Kind.Class->namev),
+			Ref2Str(tp->Kind.Class->Name),
 			Ref2Str(outProp->Name)
 		);
 		return;
@@ -297,7 +297,7 @@ static void CLBC_check_class(ClassLoader * self, ILType * iltype, Type* tp, Name
 	Field* outField = NULL;
 	if(!IsValidFieldClass(tp->Kind.Class, &outField)) {
 		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T,
-			Ref2Str(tp->Kind.Class->namev),
+			Ref2Str(tp->Kind.Class->Name),
 			Ref2Str(outField->namev)
 		);
 		return;
@@ -347,8 +347,8 @@ static void CLBC_check_class(ClassLoader * self, ILType * iltype, Type* tp, Name
 	//コンストラクタで初期化されていない final フィールドの確認
 	//これはコンストラクタが生成されてからでないといけない
 	Class* cls = TYPE2CLASS(tp);
-	for(int i=0; i<cls->field_list->Length; i++) {
-		Field* fi = AtVector(cls->field_list, i);
+	for(int i=0; i<cls->Fields->Length; i++) {
+		Field* fi = AtVector(cls->Fields, i);
 		//インスタンス定数が
 		//フィールドでもコンストラクタでも初期化されない
 		if(!IsStaticModifier(fi->modifier) &&

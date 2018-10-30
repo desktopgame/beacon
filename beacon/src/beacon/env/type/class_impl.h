@@ -31,31 +31,31 @@ struct OperatorOverload;
  * クラスを表す構造体です.
  */
 typedef struct Class {
-	Type* parent;
-	StringView namev;
-	Namespace* location;
-	struct GenericType* super_class;
-	Vector* impl_list;
-	Vector* field_list;
-	Vector* sfield_list;
-	Vector* prop_list;
-	Vector* sprop_list;
-	Vector* method_list;
-	Vector* smethod_list;
-	Vector* constructor_list;
-	Vector* operator_overload_list;
+	Type* Parent;
+	StringView Name;
+	Namespace* Location;
+	struct GenericType* SuperClass;
+	Vector* Implements;
+	Vector* Fields;
+	Vector* StaticFields;
+	Vector* Properties;
+	Vector* StaticProperties;
+	Vector* Methods;
+	Vector* StaticMethods;
+	Vector* Constructors;
+	Vector* OperatorOverloads;
 	//class_type type;
-	uint32_t ref_count;
-	NumericMap* NativeMethodRef_nmap;
-	Vector* GetParameterListType;
+	uint32_t RefCount;
+	NumericMap* NativeMethodRefMap;
+	Vector* TypeParameters;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
-	Vector* vt_vec;
+	Vector* VTTable;
 	//Vector* static_fieldval_vec;
-	VTable* vt;
-	OperatorVT* ovt;
-	bool is_abstract;
+	VTable* VT;
+	OperatorVT* OVT;
+	bool IsAbstract;
 } Class;
 #include "class_find.h"
 

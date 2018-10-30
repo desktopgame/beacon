@@ -134,7 +134,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->namev), Ref2Str(f->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->namev));
 		return;
 	}
 	set_gtype(self, f->gtype);

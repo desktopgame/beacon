@@ -291,8 +291,8 @@ static int DistanceGenericType_class(int dist, GenericType* self, GenericType* o
 	Class* ptr = other->CoreType->Kind.Class;
 	GenericType* target = other;
 	while (baseline != ptr) {
-		target = ptr->super_class;
-		ptr = ptr->super_class->CoreType->Kind.Class;
+		target = ptr->SuperClass;
+		ptr = ptr->SuperClass->CoreType->Kind.Class;
 	}
 	assert(target != NULL);
 	assert(self->TypeArgs->Length == target->TypeArgs->Length);

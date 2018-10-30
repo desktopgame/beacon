@@ -292,7 +292,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	//インターフェイスでも抽象クラスでもない
 	if(IsAbstractModifier(method->Modifier) &&
 	  (tp->Tag == TYPE_CLASS_T &&
-	  !TYPE2CLASS(tp)->is_abstract)) {
+	  !TYPE2CLASS(tp)->IsAbstract)) {
 		ThrowBCError(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->Name));
 		DeleteMethod(method);
 		DeleteCallContext(cctx);
@@ -507,8 +507,8 @@ void CLBC_ctors_impl(ClassLoader* self, ILType* iltype, Type* tp) {
 	CL_ERROR(self);
 	assert(tp->Tag == TYPE_CLASS_T);
 	Class* classz = tp->Kind.Class;
-	Namespace* scope = classz->location;
-	Vector* constructors = classz->constructor_list;
+	Namespace* scope = classz->Location;
+	Vector* constructors = classz->Constructors;
 	if (iltype->Tag != ILTYPE_CLASS_T) {
 		return;
 	}
@@ -544,7 +544,7 @@ bool CLBC_operator_overload_decl(ClassLoader* self, ILType* iltype, Type* tp, IL
 		PushVector(opov->Parameters, param);
 	}
 	CLBC_parameter_list(self, scope, ilopov->Parameters, opov->Parameters, cctx);
-	PushVector(tp->Kind.Class->operator_overload_list, opov);
+	PushVector(tp->Kind.Class->OperatorOverloads, opov);
 	//オペレータオーバロードの妥当性をテストする
 	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
 		DeleteCallContext(cctx);
@@ -601,7 +601,7 @@ void CLBC_operator_overloads_decl(ClassLoader* self, ILType* iltype, Type* tp, N
 
 void CLBC_operator_overloads_impl(ClassLoader* self, ILType* iltype, Type* tp, Namespace* scope) {
 	CL_ERROR(self);
-	Vector* opov_list = tp->Kind.Class->operator_overload_list;
+	Vector* opov_list = tp->Kind.Class->OperatorOverloads;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
 	for (int i = 0; i < iltype->Kind.Class->OperatorOverloads->Length; i++) {
 		if(!CLBC_operator_overload_impl(self, iltype, tp, AtVector(iltype->Kind.Class->OperatorOverloads, i), AtVector(opov_list, i), scope)) {
@@ -688,13 +688,13 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 static void CLBC_chain(ClassLoader* self, ILType* iltype, Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
 	//親クラスがないなら作成
 	Class* classz = tp->Kind.Class;
-	if (classz->super_class == NULL &&
+	if (classz->SuperClass == NULL &&
 		ilcons->Chain == NULL) {
 		CLBC_chain_root(self, iltype, tp, ilcons, ilchain, env);
 		return;
 	}
 	//親クラスがあるのに連鎖がない
-	if (classz->super_class != NULL &&
+	if (classz->SuperClass != NULL &&
 		ilcons->Chain == NULL) {
 		CLBC_chain_auto(self, iltype, tp, ilcons, ilchain, env);
 		return;
@@ -713,7 +713,7 @@ static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILCon
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->super_class->CoreType->Kind.Class, env, cctx, &emptyTemp);
+	Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->SuperClass->CoreType->Kind.Class, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
@@ -734,7 +734,7 @@ static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILCon
 	ilcons->Chain = ch_empty;
 	//親クラスへ連鎖
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->super_class->CoreType->AbsoluteIndex);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->SuperClass->CoreType->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
@@ -759,9 +759,9 @@ static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILCo
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
-		chainTarget = ILFindConstructorClass(classz->super_class->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
+		chainTarget = ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
-		AddOpcodeBuf(env->Bytecode, classz->super_class->CoreType->AbsoluteIndex);
+		AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
 	}
 	if(chainTarget == NULL) {
 		ThrowBCError(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,

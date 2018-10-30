@@ -121,7 +121,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 	}
 	Class* cls = TYPE2CLASS(ty);
 	#if defined(DEBUG)
-	const char* classname = Ref2Str(cls->namev);
+	const char* classname = Ref2Str(cls->Name);
 	const char* methodname = Ref2Str(self->Name);
 	#endif
 	int temp = -1;
@@ -140,7 +140,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 	//メソッドが見つからない
 	if(temp == -1 || self->Method == NULL) {
 		ThrowBCError(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
-			Ref2Str(cls->namev),
+			Ref2Str(cls->Name),
 			Ref2Str(self->Name)
 		);
 	}
