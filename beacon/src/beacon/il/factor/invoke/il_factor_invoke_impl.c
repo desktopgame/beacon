@@ -155,7 +155,7 @@ static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx)
 		return;
 	}
 	ResolveILTypeArgument(self->type_args, cctx);
-	type* ctype = gtype->CoreType;
+	Type* ctype = gtype->CoreType;
 	#if defined(DEBUG)
 	const char* cname = Ref2Str(GetTypeName(ctype));
 	#endif

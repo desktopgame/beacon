@@ -18,8 +18,8 @@ static void interface_GenericType_list_delete(VectorItem item);
 static void FlattenMethodInterfaceImpl(interface_* self, Vector* dest, int depth);
 static void DeleteInterface_Property(VectorItem item);
 
-type * WrapInterface(interface_ * self) {
-	type* ret = NewType();
+Type* WrapInterface(interface_ * self) {
+	Type* ret = NewType();
 	ret->tag = TYPE_INTERFACE_T;
 	ret->u.interface_ = self;
 	self->parent = ret;
@@ -89,7 +89,7 @@ void CreateVTableInterface(interface_ * self) {
 	} else {
 		for (int i = 0; i < self->impl_list->Length; i++) {
 			GenericType* ginter = (GenericType*)AtVector(self->impl_list, i);
-			type* cinter = GENERIC2TYPE(ginter);
+			Type* cinter = GENERIC2TYPE(ginter);
 			interface_* inter = TYPE2INTERFACE(cinter);
 //			interface_* inter = (interface_*)AtVector(self->impl_list, i);
 			CreateVTableInterface(inter);
@@ -146,7 +146,7 @@ Vector* GetGenericInterfaceTreeInterface(interface_* self) {
 	return GetGenericInterfaceTreeInterfaceImpl(self);
 }
 
-GenericType* FindInterfaceInterface(interface_* self, type* tinter) {
+GenericType* FindInterfaceInterface(interface_* self, Type* tinter) {
 	assert(tinter->tag == TYPE_INTERFACE_T);
 	if (self == TYPE2INTERFACE(tinter)) {
 		return NULL;

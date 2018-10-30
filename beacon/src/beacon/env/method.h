@@ -8,7 +8,7 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
-struct type;
+struct Type;
 struct interface_;
 struct Frame;
 struct Enviroment;
@@ -31,7 +31,7 @@ typedef struct Method {
 	StringView Name;
 	MethodType Type;
 	//struct class_* decleared_type;
-	struct type* Parent;
+	struct Type* Parent;
 	struct GenericType* ReturnGType;
 	Vector* Parameters;
 	Vector* TypeParameters;
@@ -122,6 +122,6 @@ bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct type* CreateIteratorTypeFromMethod(Method* self, struct ClassLoader* cll, Vector* stmt_list);
+struct Type* CreateIteratorTypeFromMethod(Method* self, struct ClassLoader* cll, Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H

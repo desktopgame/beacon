@@ -47,8 +47,8 @@ static void class_GenericType_list_delete(VectorItem item);
 static void DeleteClass_OperatorOverload(VectorItem item);
 static void DeleteClass_Property(VectorItem item);
 
-type * WrapClass(class_ * self) {
-	type* ret = NewType();
+Type* WrapClass(class_ * self) {
+	Type* ret = NewType();
 	ret->tag = TYPE_CLASS_T;
 	ret->u.class_ = self;
 	self->parent = ret;
@@ -88,9 +88,9 @@ class_* NewClassProxy(GenericType* gt, StringView namev) {
 	return ret;
 }
 
-type* NewPreloadClass(StringView namev) {
+Type* NewPreloadClass(StringView namev) {
 	class_* cl = NewClass(namev);
-	type* tp = WrapClass(cl);
+	Type* tp = WrapClass(cl);
 	tp->state = TYPE_PENDING;
 	if (TYPE_OBJECT == NULL) {
 		return tp;

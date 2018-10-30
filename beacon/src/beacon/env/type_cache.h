@@ -35,7 +35,7 @@ typedef enum TypeCacheKind {
 typedef struct TypeCache {
 	struct ClassLoader* Context;
 	ILType* ILType;
-	type* Type;
+	Type* Type;
 	Namespace* Scope;
 	TypeCacheKind Kind;
 	bool IsConsume;
@@ -47,7 +47,7 @@ TypeCache * InitTypeCache(
 	TypeCache* self,
 	struct ClassLoader* context,
 	ILType* iltype,
-	type* tp,
+	Type* tp,
 	Namespace* scope,
 	TypeCacheKind kind
 	);

@@ -128,7 +128,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	}
 	#endif
 	//コンストラクタで生成するオブジェクトの肩を取得
-	type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
+	Type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			Ref2Str(self->FQCNCache->Name)

@@ -85,7 +85,7 @@ static void resolve_non_default(ILInvokeBound * self, Enviroment * env, CallCont
 	if(self->Resolved != NULL) {
 		return;
 	}
-	type* tp = NULL;
+	Type* tp = NULL;
 	GenericType* rgtp  = ILInvokeBound_return_gtype(self, cctx);
 	if(rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		self->Resolved = generic_NewType(NULL);
@@ -112,7 +112,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 		return;
 	}
 	//対応するメソッドを検索
-	type* ctype = GetTypeCContext(cctx);
+	Type* ctype = GetTypeCContext(cctx);
 	int temp = -1;
 	ResolveILTypeArgument(self->TypeArgs, cctx);
 	for(int i=0; i<self->Arguments->Length; i++) {
@@ -261,7 +261,7 @@ static GenericType* ILInvokeBound_return_gtype(ILInvokeBound* self, CallContext*
 }
 
 static GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
-	type* tp = NULL;
+	Type* tp = NULL;
 	//メソッドが見つからない
 	ILInvokeBound_check(self, env, cctx);
 	if(GetLastBCError()) {

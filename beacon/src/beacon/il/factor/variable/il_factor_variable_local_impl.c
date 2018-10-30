@@ -107,7 +107,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 	self->Type = VARIABLE_LOCAL_FIELD_T;
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
-	type* tp = GetTypeCContext(cctx);
+	Type* tp = GetTypeCContext(cctx);
 	if(tp->tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
 		ThrowBCError(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->Name));
 		return;
@@ -142,7 +142,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 
 static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	int temp = -1;
-	type* tp = GetTypeCContext(cctx);
+	Type* tp = GetTypeCContext(cctx);
 	Property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->Name, &temp);
 	if(temp == -1) {
 		p = FindTreeSPropertyClass(TYPE2CLASS(tp), self->Name, &temp);

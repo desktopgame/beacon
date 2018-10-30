@@ -10,8 +10,8 @@
 #include <assert.h>
 #include <string.h>
 
-type * NewType() {
-	type* ret = (type*)MEM_MALLOC(sizeof(type));
+Type* NewType() {
+	Type* ret = (Type*)MEM_MALLOC(sizeof(Type));
 	ret->tag = TYPE_CLASS_T;
 	ret->location = NULL;
 	ret->absolute_index = -1;
@@ -20,7 +20,7 @@ type * NewType() {
 	return ret;
 }
 
-GenericType* InitGenericSelf(type* self, int counts) {
+GenericType* InitGenericSelf(Type* self, int counts) {
 	if (self == NULL) {
 		return NULL;
 	}
@@ -37,7 +37,7 @@ GenericType* InitGenericSelf(type* self, int counts) {
 	return self->generic_self;
 }
 
-StringView GetTypeName(type * self) {
+StringView GetTypeName(Type* self) {
 	if(self == NULL) {
 		return InternString("NULL");
 	}
@@ -49,7 +49,7 @@ StringView GetTypeName(type * self) {
 	return 0;
 }
 
-StringView GetTypeFullName(type* self) {
+StringView GetTypeFullName(Type* self) {
 	if(self == NULL) {
 		return InternString("NULL");
 	}
@@ -61,12 +61,12 @@ StringView GetTypeFullName(type* self) {
 	);
 }
 
-void AddFieldType(type* self, Field* f) {
+void AddFieldType(Type* self, Field* f) {
 	assert(self->tag == TYPE_CLASS_T);
 	AddFieldClass(self->u.class_, f);
 }
 
-void AddPropertyType(type* self, Property* p) {
+void AddPropertyType(Type* self, Property* p) {
 	if(self->tag == TYPE_CLASS_T) {
 		AddPropertyClass(self->u.class_, p);
 	} else if(self->tag == TYPE_INTERFACE_T) {
@@ -74,7 +74,7 @@ void AddPropertyType(type* self, Property* p) {
 	}
 }
 
-void AddMethodType(type* self, Method * m) {
+void AddMethodType(Type* self, Method * m) {
 	if (self->tag == TYPE_CLASS_T) {
 		AddMethodClass(self->u.class_, m);
 	} else if (self->tag == TYPE_INTERFACE_T) {
@@ -82,7 +82,7 @@ void AddMethodType(type* self, Method * m) {
 	}
 }
 
-Method * ILFindMethodType(type * self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+Method * ILFindMethodType(Type* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->tag == TYPE_CLASS_T) {
 		return ILFindMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
@@ -92,12 +92,12 @@ Method * ILFindMethodType(type * self, StringView namev, Vector * args, Envirome
 	return NULL;
 }
 
-Method* ILFindSMethodType(type* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+Method* ILFindSMethodType(Type* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == TYPE_CLASS_T);
 	return ILFindSMethodClass(self->u.class_, namev, args, env, cctx, outIndex);
 }
 
-VTable * GetVTableType(type * self) {
+VTable * GetVTableType(Type* self) {
 	if (self->tag == TYPE_CLASS_T) {
 		CreateVTableClass(self->u.class_);
 		return self->u.class_->vt;
@@ -107,7 +107,7 @@ VTable * GetVTableType(type * self) {
 	return NULL;
 }
 
-int DistanceType(type * super, type * sub) {
+int DistanceType(Type* super, Type* sub) {
 	if (super == sub) {
 		return 0;
 	}
@@ -137,7 +137,7 @@ int DistanceType(type * super, type * sub) {
 	return -1;
 }
 
-void UnlinkType(type * self) {
+void UnlinkType(Type* self) {
 	if (self->tag == TYPE_CLASS_T) {
 		UnlinkClass(self->u.class_);
 	} else if (self->tag == TYPE_INTERFACE_T) {
@@ -145,7 +145,7 @@ void UnlinkType(type * self) {
 	}
 }
 
-int GetGenericIndexType(type * self, StringView namev) {
+int GetGenericIndexType(Type* self, StringView namev) {
 	assert(self->tag != TYPE_ENUM_T);
 	Vector* v = NULL;
 	if (self->tag == TYPE_CLASS_T) v = self->u.class_->GetParameterListType;
@@ -165,7 +165,7 @@ int GetGenericIndexType(type * self, StringView namev) {
 	return ret;
 }
 
-GenericType * FindImplementType(type * self, type * a) {
+GenericType * FindImplementType(Type* self, Type* a) {
 	//selfがクラスなら
 	if (self->tag == TYPE_CLASS_T) {
 
@@ -197,7 +197,7 @@ GenericType * FindImplementType(type * self, type * a) {
 	return NULL;
 }
 
-Vector* GetParameterListType(type* self) {
+Vector* GetParameterListType(Type* self) {
 	assert(self != NULL);
 	if(self->tag == TYPE_CLASS_T) {
 		return self->u.class_->GetParameterListType;
@@ -206,7 +206,7 @@ Vector* GetParameterListType(type* self) {
 	}
 }
 
-Vector* GetImplementList(type* self) {
+Vector* GetImplementList(Type* self) {
 	assert(self != NULL);
 	if(self->tag == TYPE_CLASS_T) {
 		return self->u.class_->impl_list;
@@ -215,7 +215,7 @@ Vector* GetImplementList(type* self) {
 	}
 }
 
-GenericType * TypeParameterAtType(type * self, int index) {
+GenericType * TypeParameterAtType(Type* self, int index) {
 	assert(self->tag != TYPE_ENUM_T);
 	if (self->tag == TYPE_CLASS_T) {
 		return (GenericType*)AtVector(self->u.class_->GetParameterListType, index);
@@ -225,7 +225,7 @@ GenericType * TypeParameterAtType(type * self, int index) {
 	return NULL;
 }
 
-void DeleteType(type * self) {
+void DeleteType(Type* self) {
 	if (self->tag == TYPE_CLASS_T) {
 		DeleteClass(self->u.class_);
 	} else if (self->tag == TYPE_INTERFACE_T) {
@@ -235,17 +235,17 @@ void DeleteType(type * self) {
 	MEM_FREE(self);
 }
 
-class_* CastClassType(type* self) {
+class_* CastClassType(Type* self) {
 	assert(self->tag == TYPE_CLASS_T);
 	return self->u.class_;
 }
 
-interface_* CastInterfaceType(type* self) {
+interface_* CastInterfaceType(Type* self) {
 	assert(self->tag == TYPE_INTERFACE_T);
 	return self->u.interface_;
 }
 
-GenericType* BaselineType(type* abstract, type* concrete) {
+GenericType* BaselineType(Type* abstract, Type* concrete) {
 	if(abstract == concrete) {
 		return abstract->generic_self;
 	}
@@ -253,7 +253,7 @@ GenericType* BaselineType(type* abstract, type* concrete) {
 	const char* abstractname = Ref2Str(GetTypeName(abstract));
 	const char* concretename = Ref2Str(GetTypeName(concrete));
 	#endif
-	type* ptr = concrete;
+	Type* ptr = concrete;
 	do {
 		class_* cls = TYPE2CLASS(ptr);
 		if(cls->super_class != NULL &&
@@ -279,7 +279,7 @@ GenericType* BaselineType(type* abstract, type* concrete) {
 	return NULL;
 }
 
-interface_* IsValidInterface(type* self) {
+interface_* IsValidInterface(Type* self) {
 #if defined(_MSC_VER)
 	//コンパイラが初期化されていないローカル変数として認識してしまうのでその対策
 	Vector* impl_list = NULL;
@@ -302,21 +302,21 @@ interface_* IsValidInterface(type* self) {
 	return NULL;
 }
 
-bool IsAbstractType(type* self) {
+bool IsAbstractType(Type* self) {
 	if(self->tag == TYPE_CLASS_T) {
 		return TYPE2CLASS(self)->is_abstract;
 	}
 	return self->tag == TYPE_INTERFACE_T;
 }
 
-class_* TypeToClass(type* self) {
+class_* TypeToClass(Type* self) {
 	if(self == NULL || self->tag != TYPE_CLASS_T) {
 		return NULL;
 	}
 	return self->u.class_;
 }
 
-interface_* TypeToInterface(type* self) {
+interface_* TypeToInterface(Type* self) {
 	if(self == NULL || self->tag != TYPE_INTERFACE_T) {
 		return NULL;
 	}

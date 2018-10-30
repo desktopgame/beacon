@@ -6,14 +6,14 @@ static void bc_bool_nativeBitAnd(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCBool() {
 	Namespace* lang = GetLangNamespace();
-	type* boolType = NewPreloadClass(InternString("Bool"));
+	Type* boolType = NewPreloadClass(InternString("Bool"));
 	class_* boolClass = TYPE2CLASS(boolType);
 	AddTypeNamespace(lang, boolType);
 	DefineNativeMethodClass(boolClass, "nativeBitOr", bc_bool_nativeBitOr);
 	DefineNativeMethodClass(boolClass, "nativeBitAnd", bc_bool_nativeBitAnd);
 }
 
-type* GetBCBoolType() {
+Type* GetBCBoolType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Bool"));
 }

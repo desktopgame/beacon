@@ -27,7 +27,7 @@ void LoadILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
 
 void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
 	GenericType* gtype = ResolveImportManager(NULL, self->GCache, cctx);
-	type* type = gtype->CoreType;
+	Type* type = gtype->CoreType;
 	GenerateILFactor(self->Source, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	GenerateGenericType(gtype, env);

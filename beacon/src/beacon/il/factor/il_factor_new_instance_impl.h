@@ -7,7 +7,7 @@
 #include "../il_factor_interface.h"
 
 struct Enviroment;
-struct type;
+struct Type;
 struct Constructor;
 /**
  * コンストラクタの呼び出しを表す要素.

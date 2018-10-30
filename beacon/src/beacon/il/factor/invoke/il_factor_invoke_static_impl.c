@@ -111,7 +111,7 @@ static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext*
 }
 
 static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
-	type* ty =GetEvalTypeCContext(cctx, self->FQCN);
+	Type* ty =GetEvalTypeCContext(cctx, self->FQCN);
 	if(ty == NULL) {
 		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
 			Ref2Str(self->FQCN->Name),

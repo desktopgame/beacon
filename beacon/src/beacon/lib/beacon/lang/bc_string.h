@@ -3,7 +3,7 @@
 #define BEACON_LIB_SIGNAL_LANG_STRING_H
 #include "../../../util/string_buffer.h"
 struct Object;
-struct type;
+struct Type;
 /**
  * beacon::lang::Stringクラスを初期化します.
  */
@@ -20,5 +20,5 @@ Buffer* GetRawBCString(struct Object* self);
  * beacon::lang::String型を返します.
  * @return
  */
-struct type* GetBCStringType();
+struct Type* GetBCStringType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_STRING_H

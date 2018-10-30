@@ -22,7 +22,7 @@ static Object* file_new(FILE* fp, bool std);
 
 void InitBCFile() {
 	Namespace* unsafe = GetUnsafeNamespace();
-	type* fileType = NewPreloadClass(InternString("File"));
+	Type* fileType = NewPreloadClass(InternString("File"));
 	class_* fileClass = TYPE2CLASS(fileType);
 	AddTypeNamespace(unsafe, fileType);
 	DefineNativeMethodClass(fileClass, "nativeOpen", bc_file_nativeOpen);
@@ -35,7 +35,7 @@ void InitBCFile() {
 	DefineNativeMethodClass(fileClass, "nativeClose", bc_file_nativeClose);
 }
 
-type* GetBCFileType() {
+Type* GetBCFileType() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("File"));
 }
@@ -105,7 +105,7 @@ static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env) {
 static Object* file_new(FILE* fp, bool std) {
 	Object* file = Object_ref_new();
 	assert(file->Paint != PAINT_ONEXIT_T);
-	type* fileType = GetBCFileType();
+	Type* fileType = GetBCFileType();
 	file->GType = fileType->generic_self;
 	file->VPtr = TYPE2CLASS(fileType)->vt;
 	AssignVector(file->NativeSlotVec, 0, fp);

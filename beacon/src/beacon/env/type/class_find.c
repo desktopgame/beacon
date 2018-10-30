@@ -107,7 +107,7 @@ bool IsAccessibleFieldClass(class_* self, Field* f) {
 	if(f->access == ACCESS_PRIVATE_T) {
 		return self == TYPE2CLASS(f->parent);
 	}
-	type* ty = self->parent;
+	Type* ty = self->parent;
 	class_* fcl = TYPE2CLASS(f->parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
@@ -141,7 +141,7 @@ bool IsAccessiblePropertyClass(class_* self, Property* p) {
 	if(p->Access == ACCESS_PRIVATE_T) {
 		return self == TYPE2CLASS(p->Parent);
 	}
-	type* ty = self->parent;
+	Type* ty = self->parent;
 	class_* fcl = TYPE2CLASS(p->Parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
@@ -165,7 +165,7 @@ bool IsAccessiblePropertyAccessorClass(class_* self, PropertyBody* pb) {
 	if(pb->Access == ACCESS_PRIVATE_T) {
 		return self == TYPE2CLASS(pb->Parent->Parent);
 	}
-	type* ty = self->parent;
+	Type* ty = self->parent;
 	class_* fcl = TYPE2CLASS(pb->Parent->Parent);
 	while(true) {
 		class_* c = TYPE2CLASS(ty);
@@ -393,7 +393,7 @@ Method * GetSMethodClass(class_* self, int index) {
 	return AtVector(self->smethod_list, index);
 }
 
-Method * GetImplMethodClass(class_ * self, type * interType, int interMIndex) {
+Method * GetImplMethodClass(class_ * self, Type* interType, int interMIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->namev);
 	#endif
@@ -576,7 +576,7 @@ Vector* GetInterfaceTreeClass(class_* self) {
 	return ret;
 }
 
-GenericType* FindInterfaceTypeClass(class_* self, type* tinter, GenericType** out_baseline) {
+GenericType* FindInterfaceTypeClass(class_* self, Type* tinter, GenericType** out_baseline) {
 	assert(tinter->tag == TYPE_INTERFACE_T);
 	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す

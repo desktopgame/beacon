@@ -5,14 +5,14 @@
 #include "../util/string_pool.h"
 #include "property_body.h"
 struct GenericType;
-struct type;
+struct Type;
 struct Field;
 struct Object;
 
 typedef struct Property {
 	ModifierType Modifier;
 	StringView Name;
-	struct type* Parent;
+	struct Type* Parent;
 	struct Field* SourceRef;
 	struct GenericType* GType;
 	AccessLevel Access;

@@ -28,19 +28,19 @@ static void generic_DeleteTypercr_self(VectorItem item);
 static void GenericType_recursive_mark(GenericType* a);
 static GenericType* GenericType_get(GenericType* a);
 /*
-GenericType * generic_NewType(type * CoreType) {
+GenericType * generic_NewType(Type* CoreType) {
 
 }
 */
 
-GenericType* RefGenericType(type* CoreType) {
+GenericType* RefGenericType(Type* CoreType) {
 	if(CoreType == NULL) {
 		return generic_NewType(CoreType);
 	}
 	return CoreType->generic_self;
 }
 
-GenericType* MallocGenericType(struct type* CoreType, const char* filename, int lineno) {
+GenericType* MallocGenericType(struct Type* CoreType, const char* filename, int lineno) {
 	GenericType* ret = (GenericType*)mem_malloc(sizeof(GenericType), filename, lineno);
 	ret->CoreType = CoreType;
 	ret->TypeArgs = NewVector();
@@ -78,7 +78,7 @@ void CollectGenericType() {
 	}
 	//全ての型に定義された自身を参照するための generic をマーク
 	for(int i=0; i<ctx->TypeList->Length; i++) {
-		type* e= (type*)AtVector(ctx->TypeList, i);
+		Type* e= (Type*)AtVector(ctx->TypeList, i);
 		GenericType_recursive_mark(e->generic_self);
 	}
 	Vector* alive = NewVector();
@@ -194,7 +194,7 @@ GenericType* RApplyGenericType(GenericType* self, CallContext* cctx, Frame* fr) 
 	return ApplyGenericTypeImpl(self, cctx, fr);
 }
 
-struct type* GenericTypeToType(GenericType* self) {
+struct Type* GenericTypeToType(GenericType* self) {
 	return self->CoreType;
 }
 

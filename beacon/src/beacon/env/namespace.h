@@ -28,7 +28,7 @@ struct ScriptContext;
 #define GENERIC_NULL ((GetNullTypeNamespace()->generic_self))
 #define GENERIC_EXCEPTION ((GetExceptionTypeNamespace()->generic_self))
 
-struct type;
+struct Type;
 struct class_;
 struct interface_;
 /**
@@ -78,7 +78,7 @@ Namespace* AddNamespaceNamespace(Namespace* self, StringView namev);
  * @param self
  * @param type
  */
-struct type* AddTypeNamespace(Namespace* self, struct type* type);
+struct Type* AddTypeNamespace(Namespace* self, struct Type* type);
 
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
@@ -94,7 +94,7 @@ Namespace* FindNamespaceFromNamespace(Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct type* FindTypeFromNamespace(Namespace* self, StringView namev);
+struct Type* FindTypeFromNamespace(Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のクラスを検索します.
@@ -140,55 +140,55 @@ Namespace* GetPlaceholderNamespace();
  * 現在のスクリプトコンテキストで Object タイプを返します.
  * @return
  */
-struct type* GetObjectTypeNamespace();
+struct Type* GetObjectTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで int タイプを返します.
  * @return
  */
-struct type* GetIntTypeNamespace();
+struct Type* GetIntTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで double タイプを返します.
  * @return
  */
-struct type* GetDoubleTypeNamespace();
+struct Type* GetDoubleTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで char タイプを返します.
  * @return
  */
-struct type* GetCharTypeNamespace();
+struct Type* GetCharTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで string タイプを返します.
  * @return
  */
-struct type* GetStringTypeNamespace();
+struct Type* GetStringTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで bool タイプを返します.
  * @return
  */
-struct type* GetBoolTypeNamespace();
+struct Type* GetBoolTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで void タイプを返します.
  * @return
  */
-struct type* GetVoidTypeNamespace();
+struct Type* GetVoidTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで null タイプを返します.
  * @return
  */
-struct type* GetNullTypeNamespace();
+struct Type* GetNullTypeNamespace();
 
 /**
  * beacon::lang::Exception
  * @return
  */
-struct type* GetExceptionTypeNamespace();
+struct Type* GetExceptionTypeNamespace();
 
 /**
  * 指定の名前空間のすべての型で unlink を呼び出します.

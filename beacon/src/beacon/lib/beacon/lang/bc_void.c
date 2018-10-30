@@ -4,12 +4,12 @@
 
 void InitBCVoid() {
 	Namespace* lang = GetLangNamespace();
-	type* voidType = NewPreloadClass(InternString("Void"));
+	Type* voidType = NewPreloadClass(InternString("Void"));
 	class_* voidClass = TYPE2CLASS(voidType);
 	AddTypeNamespace(lang, voidType);
 }
 
-type* GetBCVoidType() {
+Type* GetBCVoidType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Void"));
 }

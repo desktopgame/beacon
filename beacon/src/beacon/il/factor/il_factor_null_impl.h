@@ -4,7 +4,7 @@
 #include "../il_factor_interface.h"
 
 struct Enviroment;
-struct type;
+struct Type;
 
 void GenerateILNull(void* empty, Enviroment* env, CallContext* cctx);
 

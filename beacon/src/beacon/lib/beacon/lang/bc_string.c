@@ -7,7 +7,7 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCString() {
 	Namespace* lang = GetLangNamespace();
-	type* stringType = NewPreloadClass(InternString("String"));
+	Type* stringType = NewPreloadClass(InternString("String"));
 	class_* stringClass = TYPE2CLASS(stringType);
 	AddTypeNamespace(lang, stringType);
 	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
@@ -19,7 +19,7 @@ Buffer * GetRawBCString(Object* self) {
 	return (Buffer*)e;
 }
 
-type* GetBCStringType() {
+Type* GetBCStringType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("String"));
 }

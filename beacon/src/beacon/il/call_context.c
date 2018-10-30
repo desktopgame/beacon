@@ -52,7 +52,7 @@ Method* GetMethodCContext(CallContext* self) {
 	return self->Kind.Method;
 }
 
-type* GetTypeCContext(CallContext* self) {
+Type* GetTypeCContext(CallContext* self) {
 	if(self->Tag == CALL_TOP_T) {
 		return FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	}
@@ -75,8 +75,8 @@ GenericType* GetReceiverCContext(CallContext* self) {
 	return NULL;
 }
 
-type* GetEvalTypeCContext(CallContext* self, FQCNCache* fqcn) {
-	type* tp = GetTypeFQCN(fqcn, self->Scope);
+Type* GetEvalTypeCContext(CallContext* self, FQCNCache* fqcn) {
+	Type* tp = GetTypeFQCN(fqcn, self->Scope);
 	if(tp == NULL) {
 		tp = GetTypeFQCN(fqcn, GetLangNamespace());
 	}

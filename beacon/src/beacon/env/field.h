@@ -5,7 +5,7 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 //#include "virtual_type.h"
-struct type;
+struct Type;
 struct GenericType;
 struct Object;
 struct Enviroment;
@@ -15,7 +15,7 @@ struct ILFactor;
  */
 typedef struct Field {
 	StringView namev;
-	struct type* parent;
+	struct Type* parent;
 	struct GenericType* gtype;
 	struct Object* static_value;
 	AccessLevel access;

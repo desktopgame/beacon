@@ -64,7 +64,7 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 	return child;
 }
 
-struct type* AddTypeNamespace(Namespace* self, type* type) {
+struct Type* AddTypeNamespace(Namespace* self, Type* type) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	type->location = self;
 	PutNumericMap(self->TypeMap, GetTypeName(type), type);
@@ -78,7 +78,7 @@ Namespace * FindNamespaceFromNamespace(Namespace * self, StringView namev) {
 	return GetNumericMapValue(self->NamespaceMap, namev);
 }
 
-type * FindTypeFromNamespace(Namespace * self, StringView namev) {
+Type* FindTypeFromNamespace(Namespace * self, StringView namev) {
 	assert(self != NULL);
 	return GetNumericMapValue(self->TypeMap, namev);
 }
@@ -107,39 +107,39 @@ Namespace* GetPlaceholderNamespace() {
 	return FindNamespaceFromRoot(InternString("$placeholder"));
 }
 
-type * GetObjectTypeNamespace() {
+Type* GetObjectTypeNamespace() {
 	return GetBCObjectType();
 }
 
-type * GetIntTypeNamespace() {
+Type* GetIntTypeNamespace() {
 	return GetBCIntType();
 }
 
-type * GetDoubleTypeNamespace() {
+Type* GetDoubleTypeNamespace() {
 	return GetBCDoubleType();
 }
 
-type * GetCharTypeNamespace() {
+Type* GetCharTypeNamespace() {
 	return GetBCCharType();
 }
 
-type * GetStringTypeNamespace() {
+Type* GetStringTypeNamespace() {
 	return GetBCStringType();
 }
 
-type * GetBoolTypeNamespace() {
+Type* GetBoolTypeNamespace() {
 	return GetBCBoolType();
 }
 
-type * GetVoidTypeNamespace() {
+Type* GetVoidTypeNamespace() {
 	return GetBCVoidType();
 }
 
-type * GetNullTypeNamespace() {
+Type* GetNullTypeNamespace() {
 	return GetBCNullType();
 }
 
-type* GetExceptionTypeNamespace() {
+Type* GetExceptionTypeNamespace() {
 	return GetBCExceptionType();
 }
 
@@ -189,12 +189,12 @@ static void DeleteNamespace_namespace(NumericMapKey key, NumericMapItem item) {
 }
 
 static void UnlinkNamespace_type(NumericMapKey key, NumericMapItem item) {
-	type* e = (type*)item;
+	Type* e = (Type*)item;
 	UnlinkType(e);
 }
 
 static void DeleteNamespace_type(NumericMapKey key, NumericMapItem item) {
-	type* e = (type*)item;
+	Type* e = (Type*)item;
 	DeleteType(e);
 }
 
@@ -232,7 +232,7 @@ static void Namespacedump_class(NumericMap* root, bool isRoot, int depth) {
 		return;
 	}
 	if (!isRoot) {
-		type* e = ((type*)root->Item);
+		Type* e = ((Type*)root->Item);
 		//type_dump(e, depth);
 		assert(false);
 	}

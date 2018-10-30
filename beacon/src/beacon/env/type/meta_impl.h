@@ -9,7 +9,7 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 #include "../../vm/enviroment.h"
-struct type;
+struct Type;
 struct class_;
 struct Constructor;
 /**

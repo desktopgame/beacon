@@ -530,7 +530,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			case OP_ALLOC_FIELD:
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = TYPE2CLASS(tp);
 				Object* obj = (Object*)TopVector(self->ValueStack);
 				//仮想関数テーブル更新
@@ -557,7 +557,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//生成するクラスとコンストラクタを特定
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int constructorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->tag == TYPE_CLASS_T);
 				class_* cls = TYPE2CLASS(tp);
 				#if defined(DEBUG)
@@ -605,7 +605,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int ctorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->tag == TYPE_CLASS_T);
 				class_* cls = tp->u.class_;
 				Constructor* ctor = (Constructor*)AtVector(cls->constructor_list, ctorIndex);
@@ -687,7 +687,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
 				Field* f = GetSFieldClass(cls, fieldIndex);
 				Object* sv = (Object*)PopVector(self->ValueStack);
@@ -699,7 +699,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* cls = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* cls = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				Field* f = GetSFieldClass(cls->u.class_, fieldIndex);
 				PushVector(self->ValueStack, NON_NULL(f->static_value));
 				break;
@@ -749,7 +749,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* sv = (Object*)PopVector(self->ValueStack);
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
@@ -765,7 +765,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Object* sv = (Object*)PopVector(self->ValueStack);
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = (type*)AtVector(ctx->TypeList, absClsIndex);
+				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				class_* cls = tp->u.class_;
 				Property * p = GetSPropertyClass(cls, propIndex);
 				//プロパティを実行
@@ -852,7 +852,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClassIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int methodIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* tp = AtVector(ctx->TypeList, absClassIndex);
+				Type* tp = AtVector(ctx->TypeList, absClassIndex);
 				Object* o = (Object*)TopVector(self->ValueStack);
 				if(throw_npe(self, o)) {
 					break;
@@ -866,7 +866,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClassIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int methodIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				type* cls = (type*)AtVector(ctx->TypeList, absClassIndex);
+				Type* cls = (Type*)AtVector(ctx->TypeList, absClassIndex);
 				Method* m = GetSMethodClass(cls->u.class_, methodIndex);
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(GetTypeName(cls));
@@ -1071,7 +1071,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 						int arg = (int)GetEnviromentSourceAt(env, ++IDX);
 						GenericType* a = NULL;
 						if(code == OP_GENERIC_UNIQUE_TYPE) {
-							a = generic_NewType((type*)AtVector(ctx->TypeList, arg));
+							a = generic_NewType((Type*)AtVector(ctx->TypeList, arg));
 						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							Object* receiver = (Object*)AtVector(self->VariableTable, 0);
 							a = (GenericType*)AtVector(receiver->GType->TypeArgs, arg);
@@ -1245,7 +1245,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 		line = lr->Lineno;
 	}
 	//例外のメッセージを取得
-	type* exceptionT = FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"));
+	Type* exceptionT = FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"));
 	int temp = -1;
 	FindFieldClass(exceptionT->u.class_, InternString("message"), &temp);
 	Object* ex = self->Exception;
@@ -1259,7 +1259,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	AppendsBuffer(sbuf, cstr->Text);
 	AppendBuffer(sbuf, '\n');
 	//スタックトレースの表示
-	type* stackTraceElementT = FindTypeFromNamespace(GetLangNamespace(), InternString("StackTraceElement"));
+	Type* stackTraceElementT = FindTypeFromNamespace(GetLangNamespace(), InternString("StackTraceElement"));
 	//Exception#stackTraceを取得
 	temp = -1;
 	FindFieldClass(exceptionT->u.class_, InternString("stackTrace"), &temp);

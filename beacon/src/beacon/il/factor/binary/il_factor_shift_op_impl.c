@@ -25,8 +25,8 @@ GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx)
 	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
-	type* cint = TYPE_INT;
-	type* cdouble = TYPE_DOUBLE;
+	Type* cint = TYPE_INT;
+	Type* cdouble = TYPE_DOUBLE;
 	if(GENERIC2TYPE(lgtype) == cint &&
 	   GENERIC2TYPE(rgtype) == cint) {
 		return TYPE2GENERIC(cint);

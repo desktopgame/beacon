@@ -26,8 +26,8 @@ GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallCont
 	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
-	type* cint = TYPE_INT;
-	type* cdouble = TYPE_DOUBLE;
+	Type* cint = TYPE_INT;
+	Type* cdouble = TYPE_DOUBLE;
 	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
 		return TYPE2GENERIC(cint);
 	}

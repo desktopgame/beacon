@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 #include "../util/string_pool.h"
 struct Namespace;
-struct type;
+struct Type;
 struct class_;
 struct interface_;
 //struct Enviroment;
@@ -57,7 +57,7 @@ struct Namespace* GetScopeFQCN(FQCNCache* self, struct Namespace* current);
  * @param current
  * @return
  */
-struct type* GetTypeFQCN(FQCNCache* self, struct Namespace* current);
+struct Type* GetTypeFQCN(FQCNCache* self, struct Namespace* current);
 
 /**
  * X::Y の表すタイプを返します.

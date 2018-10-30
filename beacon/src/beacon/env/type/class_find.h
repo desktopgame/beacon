@@ -291,7 +291,7 @@ struct Method* GetSMethodClass(class_* self, int index);
  * @param interIndex
  * @return
  */
-struct Method* GetImplMethodClass(class_* self, type* interType, int interMIndex);
+struct Method* GetImplMethodClass(class_* self, Type* interType, int interMIndex);
 
 
 
@@ -368,5 +368,5 @@ Vector* GetInterfaceTreeClass(class_* self);
  * @parma tinter
  * @return
  */
-struct GenericType* FindInterfaceTypeClass(class_* self, type* tinter, struct GenericType** out_baseline);
+struct GenericType* FindInterfaceTypeClass(class_* self, Type* tinter, struct GenericType** out_baseline);
 #endif

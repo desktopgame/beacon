@@ -15,7 +15,7 @@ static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCArray() {
 	Namespace* lang = GetLangNamespace();
-	type* arrayType = NewPreloadClass(InternString("Array"));
+	Type* arrayType = NewPreloadClass(InternString("Array"));
 	class_* arrayClass = TYPE2CLASS(arrayType);
 	AddTypeNamespace(lang, arrayType);
 	DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
@@ -24,13 +24,13 @@ void InitBCArray() {
 	DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
-type * GetBCArrayType() {
+Type* GetBCArrayType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Array"));
 }
 
 Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
-	type* arrayType = GetBCArrayType();
+	Type* arrayType = GetBCArrayType();
 
 	Vector* args = NewVector();
 	Vector* type_args = NewVector();
@@ -57,7 +57,7 @@ int GetLengthBCArray(Object* arr) {
 }
 //private
 static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	type* tp = parent->Parent;
+	Type* tp = parent->Parent;
 	//Array#lengthを取り出す
 	int temp = 0;
 	Field* lengthField = FindFieldClass(tp->u.class_, InternString("length"), &temp);

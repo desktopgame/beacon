@@ -106,7 +106,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 void EachStaticScriptContext(ScriptContext* self, static_each act) {
 	ScriptContext* ctx = self;
 	for (int i = 0; i < ctx->TypeList->Length; i++) {
-		type* e = (type*)AtVector(ctx->TypeList, i);
+		Type* e = (Type*)AtVector(ctx->TypeList, i);
 		if (e->tag != TYPE_CLASS_T) {
 			continue;
 		}

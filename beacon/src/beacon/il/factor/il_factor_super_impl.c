@@ -26,7 +26,7 @@ void LoadILSuper(ILSuper * self, Enviroment * env, CallContext* cctx) {
 }
 
 GenericType* EvalILSuper(ILSuper * self, Enviroment * env, CallContext* cctx) {
-	type* t = GetTypeCContext(cctx);
+	Type* t = GetTypeCContext(cctx);
 	return t->u.class_->super_class;
 }
 

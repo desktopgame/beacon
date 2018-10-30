@@ -4,7 +4,7 @@
 #include "../util/vector.h"
 #include "enviroment.h"
 struct Object;
-struct type;
+struct Type;
 /**
  * 実行時の情報を格納する構造体.
  */
@@ -48,7 +48,7 @@ typedef struct Frame {
 	struct Object* Coroutine;
 
 	//メソッドを実行中のレシーバ型
-	struct type* Receiver;
+	struct Type* Receiver;
 
 	//VMの階層の深さです.
 	//デバッグ用の情報です。

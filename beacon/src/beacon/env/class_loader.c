@@ -222,7 +222,7 @@ static void Loadclass_loader_toplevel_function(ClassLoader* self) {
 		return;
 	}
 	Vector* funcs = self->ILCode->FunctionList;
-	type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
+	Type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
 	Vector* methods = TYPE2CLASS(worldT)->method_list;
 	if(methods->Length > 0) {

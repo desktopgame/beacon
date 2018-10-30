@@ -3,7 +3,7 @@
 #include "../ast/operator_type.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"
-struct type;
+struct Type;
 struct Enviroment;
 struct GenericType;
 struct Frame;
@@ -11,7 +11,7 @@ struct Frame;
  * 演算子オーバーロードを表す構造体.
  */
 typedef struct OperatorOverload {
-	struct type* Parent;
+	struct Type* Parent;
 	struct GenericType* ReturnGType;
 	OperatorType Type;
 	Vector* Parameters;

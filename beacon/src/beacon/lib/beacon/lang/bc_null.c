@@ -4,11 +4,11 @@
 
 void InitBCNull() {
 	Namespace* lang = GetLangNamespace();
-	type* nullType = NewPreloadClass(InternString("Null"));
+	Type* nullType = NewPreloadClass(InternString("Null"));
 	AddTypeNamespace(lang, nullType);
 }
 
-type* GetBCNullType() {
+Type* GetBCNullType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Null"));
 }

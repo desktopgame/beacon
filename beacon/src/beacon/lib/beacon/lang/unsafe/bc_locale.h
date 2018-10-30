@@ -1,9 +1,9 @@
 #ifndef BEACON_LIB_LANG_UNSAFE_BC_LOCALE_H
 #define BEACON_LIB_LANG_UNSAFE_BC_LOCALE_H
 
-struct type;
+struct Type;
 
 void InitBCLocaleType();
 
-struct type* GetBCLocaleType();
+struct Type* GetBCLocaleType();
 #endif

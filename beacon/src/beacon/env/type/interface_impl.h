@@ -12,12 +12,12 @@ struct Method;
 struct Property;
 struct Enviroment;
 struct GenericType;
-struct type;
+struct Type;
 /**
  * インターフェースを表す構造体.
  */
 typedef struct interface_ {
-	struct type* parent;
+	struct Type* parent;
 	StringView namev;
 	Vector* impl_list;
 	Vector* prop_list;
@@ -32,7 +32,7 @@ typedef struct interface_ {
  * @param self
  * @return
  */
-type* WrapInterface(interface_* self);
+Type* WrapInterface(interface_* self);
 
 /** 
  * インターフェイスを作成します.
@@ -145,5 +145,5 @@ Vector* GetGenericInterfaceTreeInterface(interface_* self);
  * @param out_baseline
  * @return
  */
-struct GenericType* FindInterfaceInterface(interface_* self, type* tinter);
+struct GenericType* FindInterfaceInterface(interface_* self, Type* tinter);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

@@ -22,7 +22,7 @@ static void bc_int_nativeToChar(Method* parent, Frame* fr, Enviroment* env);
 
 void InitBCInt() {
 	Namespace* lang =  GetLangNamespace();
-	type* intType = NewPreloadClass(InternString("Int"));
+	Type* intType = NewPreloadClass(InternString("Int"));
 	class_* intClass = TYPE2CLASS(intType);
 	AddTypeNamespace(lang, intType);
 	DefineNativeMethodClass(intClass, "nativeInit", bc_int_nativeInit);
@@ -44,7 +44,7 @@ void InitBCInt() {
 	DefineNativeMethodClass(intClass, "nativeToChar", bc_int_nativeToChar);
 }
 
-type* GetBCIntType() {
+Type* GetBCIntType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Int"));
 }

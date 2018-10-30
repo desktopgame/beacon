@@ -5,7 +5,7 @@
 #include "../util/vector.h"
 
 struct GenericType;
-struct type;
+struct Type;
 struct class_;
 struct interface_;
 struct Namespace;

@@ -2,7 +2,7 @@
 #ifndef BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 #define BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 struct Frame;
-struct type;
+struct Type;
 struct Object;
 struct GenericType;
 
@@ -15,7 +15,7 @@ void InitBCArray();
  * beacon::lang::Arrayクラスを返します.
  * @return
  */
-struct type* GetBCArrayType();
+struct Type* GetBCArrayType();
 
 /**
  * beacon::lang::Arrayクラスを作成します.

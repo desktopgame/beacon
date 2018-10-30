@@ -9,7 +9,7 @@
 #define GENERIC2TYPE(gtype) (GenericTypeToType(gtype))
 #define TYPE2GENERIC(type) (type->generic_self)
 
-struct type;
+struct Type;
 struct Method;
 struct Enviroment;
 struct virtual_type;
@@ -31,11 +31,11 @@ typedef enum GenericTypeTag {
  * 型変数つきの型宣言.
  */
 typedef struct GenericType {
-	struct type* CoreType;
+	struct Type* CoreType;
 	Vector* TypeArgs;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
-		struct type* Type;
+		struct Type* Type;
 		struct Method* Method;
 	} Kind;
 	//もしこの型が List<T> の Tを表すなら、
@@ -61,7 +61,7 @@ typedef struct GenericType {
  * @param CoreType
  * @return
  */
-GenericType* RefGenericType(struct type* CoreType);
+GenericType* RefGenericType(struct Type* CoreType);
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -69,7 +69,7 @@ GenericType* RefGenericType(struct type* CoreType);
  * @param ctype
  * @return
  */
-GenericType* MallocGenericType(struct type* CoreType, const char* filename, int lineno);
+GenericType* MallocGenericType(struct Type* CoreType, const char* filename, int lineno);
 
 /**
  * ジェネリックタイプを複製します.
@@ -157,5 +157,5 @@ GenericType* RApplyGenericType(GenericType* self, struct CallContext* cctx, stru
  * @param self
  * @return
  */
-struct type* GenericTypeToType(GenericType* self);
+struct Type* GenericTypeToType(GenericType* self);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

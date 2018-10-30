@@ -18,7 +18,7 @@
 #include "binary/il_factor_shift_op_impl.h"
 #include "binary/il_factor_excor_op_impl.h"
 
-static bool type_test(ILBinaryOp* self, Enviroment* env, CallContext* cctx, type* t);
+static bool type_test(ILBinaryOp* self, Enviroment* env, CallContext* cctx, Type* t);
 
 ILFactor * WrapILBinaryOp(ILBinaryOp * self) {
 	ILFactor* ret = ILFactor_new(ILFACTOR_BINARY_OP_T);
@@ -216,7 +216,7 @@ int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, E
 	}
 	//PushVector(args, lgtype);
 	PushVector(args, rgtype);
-	type* lctype = GENERIC2TYPE(lgtype);
+	Type* lctype = GENERIC2TYPE(lgtype);
 	assert(lctype->tag == TYPE_CLASS_T);
 	class_* lclass = TYPE2CLASS(lctype);
 	int temp = 0;
@@ -235,7 +235,7 @@ GenericType* ApplyILBinaryOp(ILBinaryOp* self, GenericType* gtype, Enviroment* e
 }
 
 //private
-static bool type_test(ILBinaryOp* self, Enviroment* env, CallContext* cctx, type* t) {
+static bool type_test(ILBinaryOp* self, Enviroment* env, CallContext* cctx, Type* t) {
 	GenericType* lgtype = EvalILFactor(self->Left, env, cctx);
 	GenericType* rgtype = EvalILFactor(self->Right, env, cctx);
 	return GENERIC2TYPE(lgtype) == t &&

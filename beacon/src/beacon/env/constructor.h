@@ -3,7 +3,7 @@
 #define BEACON_ENV_CONSTRUCTOR_H
 #include "../ast/access_level.h"
 #include "../util/vector.h"
-struct type;
+struct Type;
 struct class_;
 struct Enviroment;
 struct Object;
@@ -12,7 +12,7 @@ struct Frame;
  * コンストラクタを表す構造体.
  */
 typedef struct Constructor {
-	struct type* Parent;
+	struct Type* Parent;
 	struct Enviroment* Env;
 	Vector* Parameters;
 	AccessLevel Access;

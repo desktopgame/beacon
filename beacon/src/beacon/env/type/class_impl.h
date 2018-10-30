@@ -31,7 +31,7 @@ struct OperatorOverload;
  * クラスを表す構造体です.
  */
 typedef struct class_ {
-	type* parent;
+	Type* parent;
 	StringView namev;
 	Namespace* location;
 	struct GenericType* super_class;
@@ -64,7 +64,7 @@ typedef struct class_ {
  * @param self
  * @return
  */
-type* WrapClass(class_* self);
+Type* WrapClass(class_* self);
 
 /**
  * 新しいクラスを作成します.
@@ -86,7 +86,7 @@ class_* NewClassProxy(struct GenericType* gt, StringView namev);
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-type* NewPreloadClass(StringView namev);
+Type* NewPreloadClass(StringView namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す

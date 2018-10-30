@@ -40,7 +40,7 @@ bool IsLoadedImportManager(ImportManager * self, int index) {
 }
 
 GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallContext* cctx) {
-	type* CoreType = GetTypeFQCN(fqcn->FQCN, scope);
+	Type* CoreType = GetTypeFQCN(fqcn->FQCN, scope);
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(GetTypeName(CoreType));
 	const char* it = Ref2Str(fqcn->FQCN->Name);
@@ -79,7 +79,7 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 		parameterized->VirtualTypeIndex = GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
 		parameterized->Kind.Method = mt;
 	}
-	type* ty = GetTypeCContext(cctx);
+	Type* ty = GetTypeCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 &&  ty != NULL) {
 		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->VirtualTypeIndex = GetGenericIndexType(ty, fqcn->FQCN->Name);
@@ -94,7 +94,7 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 }
 
 GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContext* cctx) {
-	type* CoreType = GetTypeFQCN(fqcn, scope);
+	Type* CoreType = GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass
 	if(CoreType != NULL) {
@@ -121,7 +121,7 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 		parameterized->Kind.Method = mt;
 	}
 	//次にクラスの型変数を調べる
-	type* ty = GetTypeCContext(cctx);
+	Type* ty = GetTypeCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && ty != NULL) {
 		#if defined(DEBUG)
 		const char* typename_ = Ref2Str(GetTypeName(ty));

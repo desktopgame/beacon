@@ -24,7 +24,7 @@ void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallConte
 
 void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
 	GenericType* receiver = EvalILFactor(self->Source, env, cctx);
-	type* receiverT = GENERIC2TYPE(receiver);
+	Type* receiverT = GENERIC2TYPE(receiver);
 	int temp = -1;
 	FindTreePropertyClass(TYPE2CLASS(receiverT), self->Property->Name, &temp);
 	self->Index = temp;

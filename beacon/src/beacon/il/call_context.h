@@ -4,7 +4,7 @@
 #include "call_frame.h"
 #include "control_structure.h"
 struct Namespace;
-struct type;
+struct Type;
 struct class_;
 struct Method;
 struct Constructor;
@@ -32,7 +32,7 @@ typedef struct CallContext {
 	ControlStructure Control;
 	CallContextTag Tag;
 	struct Namespace* Scope;
-	struct type* Ty;
+	struct Type* Ty;
 	union {
 		struct Method* Method;
 		struct Constructor* Ctor;
@@ -54,13 +54,13 @@ struct Namespace* GetNamespaceCContext(CallContext* self);
 
 struct Method* GetMethodCContext(CallContext* self);
 
-struct type* GetTypeCContext(CallContext* self);
+struct Type* GetTypeCContext(CallContext* self);
 
 struct class_* GetClassCContext(CallContext* self);
 
 struct GenericType* GetReceiverCContext(CallContext* self);
 
-struct type* GetEvalTypeCContext(CallContext* self, struct FQCNCache* fqcn);
+struct Type* GetEvalTypeCContext(CallContext* self, struct FQCNCache* fqcn);
 
 Vector* GetTypeArgsCContext(CallContext* self);
 

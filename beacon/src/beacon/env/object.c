@@ -79,8 +79,8 @@ Object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	//配列を生成
 	Object* arr = MallocRefObject(filename, lineno);
 	//arr->Tag = OBJECT_ARRAY_T;
-	type* arrType = GetBCArrayType();
-	type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
+	Type* arrType = GetBCArrayType();
+	Type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
 	arr->GType = generic_NewType(arrType);
 	arr->VPtr = GetVTableType(arrType);
 	arr->Tag = OBJECT_ARRAY_T;
@@ -230,7 +230,7 @@ void PaintAllObject(Object* self, ObjectPaint paint) {
 		}
 	}
 	//配列型ならスロットも全てマーク
-	type* arrayType = GetBCArrayType();
+	Type* arrayType = GetBCArrayType();
 	if (self->GType->CoreType == arrayType) {
 		for (int i = 0; i < self->NativeSlotVec->Length; i++) {
 			Object* e = (Object*)AtVector(self->NativeSlotVec, i);
@@ -296,7 +296,7 @@ void DestroyObject(Object* self) {
 	if (self == NULL) {
 		return;
 	}
-	type* tp = self->GType->CoreType;
+	Type* tp = self->GType->CoreType;
 	assert(self->Paint == PAINT_ONEXIT_T);
 	if (self->Tag == OBJECT_REF_T ||
 	   self->Tag == OBJECT_STRING_T ||

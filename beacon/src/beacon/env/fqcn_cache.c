@@ -9,7 +9,7 @@
 #include <string.h>
 
 //proto
-static type * fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current);
+static Type* fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current);
 
 /*
 FQCNCache * FQCNCache_new() {
@@ -73,8 +73,8 @@ Namespace * GetScopeFQCN(FQCNCache * self, Namespace* current) {
 	return top;
 }
 
-type * GetTypeFQCN(FQCNCache * self, Namespace * current) {
-	type* ret = fqcn_TYPE_IMPL(self, current);
+Type* GetTypeFQCN(FQCNCache * self, Namespace * current) {
+	Type* ret = fqcn_TYPE_IMPL(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
 	if (ret == NULL && self->Scope->Length == 0) {
@@ -130,7 +130,7 @@ bool EqualsFQCNCache(FQCNCache* a, FQCNCache* b) {
 	return true;
 }
 //private
-static type * fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current) {
+static Type* fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current) {
 	//Y形式
 	if (self->Scope->Length == 0) {
 		StringView namev = self->Name;

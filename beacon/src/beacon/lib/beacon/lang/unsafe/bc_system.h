@@ -4,10 +4,10 @@
  * created by rbtools/rnative.rb
  * time: 2018-08-17
  */
-struct type;
+struct Type;
 
 void InitBCSystem();
 
-struct type* GetBCSystemType();
+struct Type* GetBCSystemType();
 
 #endif

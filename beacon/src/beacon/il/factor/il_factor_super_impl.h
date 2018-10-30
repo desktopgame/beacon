@@ -4,7 +4,7 @@
 #include "../../env/generic_type.h"
 #include "../call_context.h"
 struct Enviroment;
-struct type;
+struct Type;
 
 /**
  * superを表す要素.

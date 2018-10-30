@@ -11,11 +11,11 @@
 /**
  * 型の種類を表すタグ.
  */
-typedef enum type_tag {
+typedef enum TypeTag {
 	TYPE_CLASS_T,
 	TYPE_INTERFACE_T,
 	TYPE_ENUM_T
-} type_tag;
+} TypeTag;
 
 struct Namespace;
 struct class_;
@@ -27,7 +27,7 @@ struct Enviroment;
 struct VTable;
 struct GenericType;
 
-typedef enum type_state {
+typedef enum TypeState {
 	/**
 	 * 生成直後.
 	 */
@@ -49,28 +49,28 @@ typedef enum type_state {
 	 * ある型のメンバ実装を読み込んだことを示します.
 	 */
 	TYPE_IMPL = 1 << 4
-} type_state;
+} TypeState;
 
 /**
  * 型を表す構造体.
  */
-typedef struct type {
-	type_tag tag;
+typedef struct Type {
+	TypeTag tag;
 	struct Namespace* location;
 	struct GenericType* generic_self;
 	int absolute_index;
-	type_state state;
+	TypeState state;
 	union {
 		struct class_* class_;
 		struct interface_* interface_;
 	} u;
-} type;
+} Type;
 
 /**
  * 型を作成します.
  * @return
  */
-type* NewType();
+Type* NewType();
 
 /**
  * このタイプ自体を表すジェネリック型を初期化します.
@@ -78,42 +78,42 @@ type* NewType();
  * @param count 型変数の個数
  * @return
  */
-struct GenericType* InitGenericSelf(type* self, int counts);
+struct GenericType* InitGenericSelf(Type* self, int counts);
 
 /**
  * この型の名前を返します.
  * @param self
  * @return
  */
-StringView GetTypeName(type* self);
+StringView GetTypeName(Type* self);
 
 /**
  * この型の完全な名前を返します.
  * @param self
  * @return
  */
-StringView GetTypeFullName(type* self);
+StringView GetTypeFullName(Type* self);
 
 /**
  * この型にフィールドを追加します.
  * @param self
  * @param f
  */
-void AddFieldType(type* self, struct Field* f);
+void AddFieldType(Type* self, struct Field* f);
 
 /**
  * この型にプロパティを追加します.
  * @param self
  * @param p
  */
-void AddPropertyType(type* self, struct Property* p);
+void AddPropertyType(Type* self, struct Property* p);
 
 /**
  * この型にメソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodType(type* self, struct Method* m);
+void AddMethodType(Type* self, struct Method* m);
 
 /**
  * この型からメソッドを検索します.
@@ -125,7 +125,7 @@ void AddMethodType(type* self, struct Method* m);
  * @param outIndex
  * @return
  */
-struct Method* ILFindMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct Method* ILFindMethodType(Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -137,14 +137,14 @@ struct Method* ILFindMethodType(type* self, StringView namev, Vector* args, stru
  * @param outIndex
  * @return
  */
-struct Method* ILFindSMethodType(type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct Method* ILFindSMethodType(Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
  * @param self
  * @return
  */
-struct VTable* GetVTableType(type* self);
+struct VTable* GetVTableType(Type* self);
 
 /**
  * 型の距離を返します.
@@ -152,13 +152,13 @@ struct VTable* GetVTableType(type* self);
  * @param sub
  * @return
  */
-int DistanceType(type* super, type* sub);
+int DistanceType(Type* super, Type* sub);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
-void UnlinkType(type* self);
+void UnlinkType(Type* self);
 
 /**
  * 指定の名前の型変数が何番目に表れるかを返します.
@@ -166,7 +166,7 @@ void UnlinkType(type* self);
  * @param namev
  * @return
  */
-int GetGenericIndexType(type* self, StringView namev);
+int GetGenericIndexType(Type* self, StringView namev);
 
 /**
  * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.
@@ -178,21 +178,21 @@ int GetGenericIndexType(type* self, StringView namev);
  * @param a
  * @return
  */
-struct GenericType* FindImplementType(type* self, type* a);
+struct GenericType* FindImplementType(Type* self, Type* a);
 
 /**
  * この型の型引数の一覧を返します.
  * @param self
  * @return
  */
-Vector* GetParameterListType(type* self);
+Vector* GetParameterListType(Type* self);
 
 /**
  * この型の実装インターフェイスの一覧を返します.
  * @param self
  * @return
  */
-Vector* GetImplementList(type* self);
+Vector* GetImplementList(Type* self);
 
 /**
  * この型がクラス/インターフェイスを表すとき、
@@ -201,26 +201,26 @@ Vector* GetImplementList(type* self);
  * @param index
  * @return
  */
-struct GenericType* TypeParameterAtType(type* self, int index);
+struct GenericType* TypeParameterAtType(Type* self, int index);
 
 /**
  * 型を開放します.
  * @param self
  */
-void DeleteType(type* self);
+void DeleteType(Type* self);
 
 /**
  * このタイプをクラスにキャストします.
  * @param self
  * @return
  */
-struct class_* CastClassType(type* self);
+struct class_* CastClassType(Type* self);
 /**
  * このタイプをインターフェイスにキャストします.
  * @param self
  * @return
  */
-struct interface_* CastInterfaceType(type* self);
+struct interface_* CastInterfaceType(Type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.
@@ -229,21 +229,21 @@ struct interface_* CastInterfaceType(type* self);
  * @param concrete
  * @return
  */
-struct GenericType* BaselineType(type* abstract, type* concrete);
+struct GenericType* BaselineType(Type* abstract, Type* concrete);
 
 /**
  * 同じインターフェイスが二回現れるなら NULL 以外.
  * @param self
  * @return
  */
-struct interface_* IsValidInterface(type* self);
+struct interface_* IsValidInterface(Type* self);
 
 /**
  * 抽象クラスかインターフェイスなら true.
  * @param self
  * @return
  */
-bool IsAbstractType(type* self);
+bool IsAbstractType(Type* self);
 
 /**
  * 可能なら self を class へ変換します.
@@ -251,12 +251,12 @@ bool IsAbstractType(type* self);
  * @param self
  * @return
  */
-struct class_* TypeToClass(type* self);
+struct class_* TypeToClass(Type* self);
 /**
  * 可能なら self を interface へ変換します.
  * 失敗したなら NULL
  * @param self
  * @return
  */
-struct interface_* TypeToInterface(type* self);
+struct interface_* TypeToInterface(Type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H
