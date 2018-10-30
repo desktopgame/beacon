@@ -113,7 +113,7 @@ void EachStaticScriptContext(ScriptContext* self, static_each act) {
 		Class* cls = e->Kind.Class;
 		for (int j = 0; j < cls->StaticFields->Length; j++) {
 			Field* f = (Field*)AtVector(cls->StaticFields, j);
-			if(IsStaticModifier(f->modifier)) {
+			if(IsStaticModifier(f->Modifier)) {
 				act(f);
 			}
 		}
@@ -244,7 +244,7 @@ static void ScriptContext_DeleteNamespace(NumericMapKey key, NumericMapItem item
 }
 
 static void ClearScriptContextImpl(Field* item) {
-	item->static_value = GetNullObject();
+	item->StaticValue = GetNullObject();
 }
 
 static void CacheScriptContext_delete(VectorItem item) {

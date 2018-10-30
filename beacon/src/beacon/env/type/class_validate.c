@@ -193,7 +193,7 @@ static bool IsValidFieldClassImpl(Vector* field_vec, Field** out) {
 		for(int j=0; j<field_vec->Length; j++) {
 			Field* fE = (Field*)AtVector(field_vec, j);
 			if(f == fE) { continue; }
-			if(f->namev == fE->namev) {
+			if(f->Name 	== fE->Name) {
 				ret = false;
 				(*out) = fE;
 				break;

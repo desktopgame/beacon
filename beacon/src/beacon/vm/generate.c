@@ -4,9 +4,9 @@
 #include "../env/TYPE_IMPL.h"
 
 void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
-	if(IsStaticModifier(fi->modifier)) {
+	if(IsStaticModifier(fi->Modifier)) {
 		AddOpcodeBuf(buf, OP_GET_STATIC);
-		AddOpcodeBuf(buf, fi->parent->AbsoluteIndex);
+		AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
 		AddOpcodeBuf(buf, index);
 	} else {
 		AddOpcodeBuf(buf, OP_GET_FIELD);
@@ -30,9 +30,9 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 }
 
 void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
-	if(IsStaticModifier(fi->modifier)) {
+	if(IsStaticModifier(fi->Modifier)) {
 		AddOpcodeBuf(buf, OP_PUT_STATIC);
-		AddOpcodeBuf(buf, fi->parent->AbsoluteIndex);
+		AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
 		AddOpcodeBuf(buf, index);
 	} else {
 		AddOpcodeBuf(buf, OP_PUT_FIELD);

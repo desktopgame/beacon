@@ -14,15 +14,15 @@ struct ILFactor;
  * フィールドを表す構造体.
  */
 typedef struct Field {
-	StringView namev;
-	struct Type* parent;
-	struct GenericType* gtype;
-	struct Object* static_value;
-	AccessLevel access;
-	ModifierType modifier;
-	struct ILFactor* initial_value;
-	struct Enviroment* initial_value_env;
-	bool not_initialized_at_ctor;
+	StringView Name;
+	struct Type* Parent;
+	struct GenericType* GType;
+	struct Object* StaticValue;
+	AccessLevel Access;
+	ModifierType Modifier;
+	struct ILFactor* InitialValue;
+	struct Enviroment* InitialValueEnv;
+	bool IsNotInitializedAtCtor;
 } Field;
 
 /**

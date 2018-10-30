@@ -691,7 +691,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Class* cls = tp->Kind.Class;
 				Field* f = GetSFieldClass(cls, fieldIndex);
 				Object* sv = (Object*)PopVector(self->ValueStack);
-				f->static_value = sv;
+				f->StaticValue = sv;
 				break;
 			}
 
@@ -701,7 +701,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Type* cls = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				Field* f = GetSFieldClass(cls->Kind.Class, fieldIndex);
-				PushVector(self->ValueStack, NON_NULL(f->static_value));
+				PushVector(self->ValueStack, NON_NULL(f->StaticValue));
 				break;
 			}
 			case OP_PUT_PROPERTY:

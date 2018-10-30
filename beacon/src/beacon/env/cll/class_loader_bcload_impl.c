@@ -171,12 +171,12 @@ static void CLBC_enum(ClassLoader * self, ILType * iltype, Namespace * parent) {
 	for (int i = 0; i < ilenum->Items->Length; i++) {
 		StringView str = (StringView)AtVector(ilenum->Items, i);
 		Field* f = NewField(str);
-		f->modifier = MODIFIER_STATIC_T;
-		f->access = ACCESS_PUBLIC_T;
-		f->static_value = NULL;
-		f->gtype = TYPE_INT->GenericSelf;
+		f->Modifier = MODIFIER_STATIC_T;
+		f->Access = ACCESS_PUBLIC_T;
+		f->StaticValue = NULL;
+		f->GType = TYPE_INT->GenericSelf;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
-		f->parent = tp;
+		f->Parent = tp;
 		//f->static_value->paint = PAINT_MARKED_T;
 		AddFieldClass(cls, f);
 	}

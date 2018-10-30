@@ -8,7 +8,7 @@ GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc) {
 	if(desc->Tag == SUBSCRIPT_LOCAL_T) {
 		return desc->Kind.Local->GType;
 	} else if(desc->Tag == SUBSCRIPT_FIELD_T) {
-		return desc->Kind.Field->gtype;
+		return desc->Kind.Field->GType;
 	} else if(desc->Tag == SUBSCRIPT_PROPERTY_T) {
 		return desc->Kind.Property->GType;
 	}

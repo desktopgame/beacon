@@ -44,7 +44,7 @@ void LoadILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx) {
 }
 
 void GenerateILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx) {
-	if(!IsStaticModifier(self->Field->modifier)) {
+	if(!IsStaticModifier(self->Field->Modifier)) {
 		GenerateILFactor(self->Source, env, cctx);
 	}
 	GenerateGetField(env->Bytecode, self->Field, self->Index);
@@ -63,12 +63,12 @@ GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx
 	}
 //	XSTREQ(self->name, "charArray");
 	assert(self->Source != NULL);
-	if(self->Field->gtype->Tag == GENERIC_TYPE_TAG_NONE_T) {
-		GenericType* a = self->Field->gtype;
+	if(self->Field->GType->Tag == GENERIC_TYPE_TAG_NONE_T) {
+		GenericType* a = self->Field->GType;
 		return a;
 	}
 	GenericType* a = EvalILFactor(self->Source, env, cctx);
-	return AtVector(a->TypeArgs, self->Field->gtype->VirtualTypeIndex);
+	return AtVector(a->TypeArgs, self->Field->GType->VirtualTypeIndex);
 }
 
 char* ILMemberOpToString(ILMemberOp* self, Enviroment* env) {
@@ -116,7 +116,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 		#endif
 		//フィールドの可視性を確認
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), self->Field)) {
-			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Field->namev));
+			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Field->Name));
 		}
 	}
 }

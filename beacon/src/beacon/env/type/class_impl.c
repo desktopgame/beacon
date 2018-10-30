@@ -108,20 +108,20 @@ void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
 	Heap* he = GetHeap();
 	for (int i = 0; i < self->Fields->Length; i++) {
 		Field* f = (Field*)AtVector(self->Fields, i);
-		Object* a = GetDefaultObject(f->gtype);
+		Object* a = GetDefaultObject(f->GType);
 		//静的フィールドは別の場所に確保
-		if (IsStaticModifier(f->modifier)) {
+		if (IsStaticModifier(f->Modifier)) {
 			continue;
 		}
 		he->CollectBlocking++;
-		if(f->initial_value != NULL) {
+		if(f->InitialValue != NULL) {
 			Frame* sub = SubFrame(fr);
 			for(int i=0; i<fr->TypeArgs->Length; i++) {
 				PushVector(sub->TypeArgs, AtVector(fr->TypeArgs, i));
 			}
 			sub->Receiver = self->Parent;
 			CopyVector(fr->VariableTable, sub->VariableTable);
-			ExecuteVM(sub, f->initial_value_env);
+			ExecuteVM(sub, f->InitialValueEnv);
 			a = PopVector(sub->ValueStack);
 			DeleteFrame(sub);
 		}
@@ -135,7 +135,7 @@ void FreeClassFields(Class* self, Object * o) {
 
 void AddFieldClass(Class* self, Field* f) {
 	assert(f != NULL);
-	if (IsStaticModifier(f->modifier)) {
+	if (IsStaticModifier(f->Modifier)) {
 		PushVector(self->StaticFields, f);
 	} else {
 		PushVector(self->Fields, f);
@@ -155,11 +155,11 @@ void AddPropertyClass(Class* self, Property* p) {
 	#endif
 	if(p->IsShort) {
 		Field* f = NewField(ConcatIntern("$propery.", p->Name));
-		f->access = ACCESS_PRIVATE_T;
-		f->gtype = p->GType;
-		f->modifier = p->Modifier;
-		f->parent = self->Parent;
-		f->static_value = GetNullObject();
+		f->Access = ACCESS_PRIVATE_T;
+		f->GType = p->GType;
+		f->Modifier = p->Modifier;
+		f->Parent = self->Parent;
+		f->StaticValue = GetNullObject();
 		p->SourceRef = f;
 		AddFieldClass(self, f);
 	}
@@ -369,7 +369,7 @@ Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_arg
 void LinkAllClass(Class* self) {
 	for (int i = 0; i < self->Fields->Length; i++) {
 		Field* f = (Field*)AtVector(self->Fields, i);
-		f->parent = self->Parent;
+		f->Parent = self->Parent;
 	}
 	for (int i = 0; i < self->Methods->Length; i++) {
 		Method* m = (Method*)AtVector(self->Methods, i);

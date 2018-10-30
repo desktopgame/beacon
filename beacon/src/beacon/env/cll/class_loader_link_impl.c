@@ -163,7 +163,7 @@ static void CLBC_enum_decl(ClassLoader * self, ILType * iltype, Type* tp, Namesp
 	if((tp->Tag == TYPE_ENUM_T ||
 	   tp->Tag == TYPE_CLASS_T) &&
 	   !IsValidFieldClass(tp->Kind.Class, &outField)) {
-		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T, Ref2Str(tp->Kind.Class->Name), Ref2Str(outField->namev));
+		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T, Ref2Str(tp->Kind.Class->Name), Ref2Str(outField->Name));
 	}
 	tp->State = tp->State | TYPE_DECL;
 }
@@ -174,7 +174,7 @@ static void CLBC_enum_impl(ClassLoader * self, ILType * iltype, Type* tp, Namesp
 	}
 	for(int i=0; i<tp->Kind.Class->StaticFields->Length; i++) {
 		Field* f = AtVector(tp->Kind.Class->StaticFields, i);
-		f->static_value = GetIntObject(i);
+		f->StaticValue = GetIntObject(i);
 	}
 	tp->State = tp->State | TYPE_IMPL;
 }
@@ -298,7 +298,7 @@ static void CLBC_check_class(ClassLoader * self, ILType * iltype, Type* tp, Name
 	if(!IsValidFieldClass(tp->Kind.Class, &outField)) {
 		ThrowBCError(BCERROR_OVERWRAP_FIELD_NAME_T,
 			Ref2Str(tp->Kind.Class->Name),
-			Ref2Str(outField->namev)
+			Ref2Str(outField->Name)
 		);
 		return;
 	}
@@ -351,12 +351,12 @@ static void CLBC_check_class(ClassLoader * self, ILType * iltype, Type* tp, Name
 		Field* fi = AtVector(cls->Fields, i);
 		//インスタンス定数が
 		//フィールドでもコンストラクタでも初期化されない
-		if(!IsStaticModifier(fi->modifier) &&
-			IsFinalModifier(fi->modifier) &&
-			!fi->not_initialized_at_ctor) {
+		if(!IsStaticModifier(fi->Modifier) &&
+			IsFinalModifier(fi->Modifier) &&
+			!fi->IsNotInitializedAtCtor) {
 			ThrowBCError(BCERROR_NOT_INITIAL_FIELD_NOT_INITIALIZED_AT_CTOR_T,
 				Ref2Str(GetTypeName(tp)),
-				Ref2Str(fi->namev)
+				Ref2Str(fi->Name)
 			);
 			return;
 		}

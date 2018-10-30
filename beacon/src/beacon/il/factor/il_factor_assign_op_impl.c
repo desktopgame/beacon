@@ -99,15 +99,15 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
 			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
-				Ref2Str(sf->namev)
+				Ref2Str(sf->Name)
 			);
 			return;
 		}
 		//finalなので書き込めない
-		if(IsFinalModifier(sf->modifier)) {
+		if(IsFinalModifier(sf->Modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
-				Ref2Str(sf->namev)
+				Ref2Str(sf->Name)
 			);
 			return;
 		}
@@ -137,7 +137,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 	if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(GetTypeName(cls->Parent)),
-			Ref2Str(f->namev)
+			Ref2Str(f->Name)
 		);
 	}
 	check_final(receiver, source, namev, env, cctx);
@@ -172,7 +172,7 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 	}
 	//省略記法なら初期化されてるかチェック
 	if(pp->IsShort && !IsStaticModifier(pp->Modifier)) {
-		check_final(prop->Source, self->Right, prop->Property->SourceRef->namev, env, cctx);
+		check_final(prop->Source, self->Right, prop->Property->SourceRef->Name, env, cctx);
 	}
 	BC_ERROR();
 	if(!is_static) {
@@ -255,13 +255,13 @@ static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment
 
 static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	GenericType* gt = EvalILFactor(self->Right, env, cctx);
-	int dist = DistanceGenericType(f->gtype, gt, cctx);
+	int dist = DistanceGenericType(f->GType, gt, cctx);
 	if(dist >= 0) {
 		return true;
 	} else {
 		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T,
-			Ref2Str(GetTypeName(f->parent)),
-			Ref2Str(f->namev)
+			Ref2Str(GetTypeName(f->Parent)),
+			Ref2Str(f->Name)
 		);
 		return false;
 	}
@@ -276,22 +276,22 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->Tag != CALL_CTOR_T) {
 		//finalなので書き込めない
-		if(IsFinalModifier(f->modifier)) {
+		if(IsFinalModifier(f->Modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
-				Ref2Str(f->namev)
+				Ref2Str(f->Name)
 			);
 		}
 	} else {
 		//コンストラクタであっても static final の場合は書き込めない
-		if(IsFinalModifier(f->modifier) &&
-		   IsStaticModifier(f->modifier)) {
+		if(IsFinalModifier(f->Modifier) &&
+		   IsStaticModifier(f->Modifier)) {
 			ThrowBCError(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
-				Ref2Str(f->namev)
+				Ref2Str(f->Name)
 			);
 		}
-		f->not_initialized_at_ctor = true;
+		f->IsNotInitializedAtCtor = true;
 	}
 
 }
@@ -333,15 +333,15 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!IsStaticModifier(f->modifier) &&
+		if(!IsStaticModifier(f->Modifier) &&
 		    IsStaticCContext(cctx)) {
 			ThrowBCError(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				Ref2Str(GetTypeName(f->parent)),
-				Ref2Str(f->namev)
+				Ref2Str(GetTypeName(f->Parent)),
+				Ref2Str(f->Name)
 			);
 			return;
 		}
-		if(!IsStaticModifier(f->modifier)) {
+		if(!IsStaticModifier(f->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateILFactor(self->Right, env, cctx);

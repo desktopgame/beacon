@@ -44,7 +44,7 @@ void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Entry->Index);
 	} else if(self->Type == VARIABLE_LOCAL_FIELD_T) {
 		Field* f = self->Kind.FieldI.Field;
-		if(!IsStaticModifier(f->modifier)) {
+		if(!IsStaticModifier(f->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateGetField(env->Bytecode, f, self->Kind.FieldI.Index);
@@ -134,10 +134,10 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->namev));
+		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->Name));
 		return;
 	}
-	set_gtype(self, f->gtype);
+	set_gtype(self, f->GType);
 }
 
 static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {

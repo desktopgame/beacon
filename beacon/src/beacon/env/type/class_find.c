@@ -19,7 +19,7 @@ Field* FindFieldClass(Class* self, StringView namev, int* outIndex) {
 	for (int i = 0; i < self->Fields->Length; i++) {
 		VectorItem e = AtVector(self->Fields, i);
 		Field* f = (Field*)e;
-		if (namev == f->namev) {
+		if (namev == f->Name) {
 			(*outIndex) = (CountAllFieldClass(self) - self->Fields->Length) + i;
 			return f;
 		}
@@ -48,7 +48,7 @@ Field* FindSFieldClass(Class* self, StringView namev, int * outIndex) {
 	for (int i = 0; i < self->StaticFields->Length; i++) {
 		VectorItem e = AtVector(self->StaticFields, i);
 		Field* f = (Field*)e;
-		if (namev == f->namev) {
+		if (namev == f->Name) {
 			(*outIndex) = (CountAllSFieldClass(self) - self->StaticFields->Length) + i;
 			return f;
 		}
@@ -101,14 +101,14 @@ bool IsContainsSFieldClass(Class* self, Field* f) {
 
 bool IsAccessibleFieldClass(Class* self, Field* f) {
 	assert(f != NULL);
-	if(f->access == ACCESS_PUBLIC_T) {
+	if(f->Access == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(f->access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(f->parent);
+	if(f->Access == ACCESS_PRIVATE_T) {
+		return self == TYPE2CLASS(f->Parent);
 	}
 	Type* ty = self->Parent;
-	Class* fcl = TYPE2CLASS(f->parent);
+	Class* fcl = TYPE2CLASS(f->Parent);
 	while(true) {
 		Class* c = TYPE2CLASS(ty);
 		if(c == fcl) {
@@ -185,9 +185,9 @@ int GetFieldByPropertyClass(Class* self, Property* p) {
 	int temp = -1;
 	assert(p->SourceRef != NULL);
 	if(IsStaticModifier(p->Modifier)) {
-		FindSFieldClass(self, p->SourceRef->namev, &temp);
+		FindSFieldClass(self, p->SourceRef->Name, &temp);
 	} else {
-		FindFieldClass(self, p->SourceRef->namev, &temp);
+		FindFieldClass(self, p->SourceRef->Name, &temp);
 	}
 	return temp;
 }

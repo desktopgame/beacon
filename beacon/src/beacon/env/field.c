@@ -10,15 +10,15 @@
 
 Field * NewField(StringView namev) {
 	Field* ret = (Field*)MEM_MALLOC(sizeof(Field));
-	ret->namev = namev;
-	ret->access = ACCESS_PUBLIC_T;
-	ret->modifier = MODIFIER_NONE_T;
-	ret->parent = NULL;
-	ret->static_value = NULL;
-	ret->gtype = NULL;
-	ret->initial_value = NULL;
-	ret->initial_value_env = NULL;
-	ret->not_initialized_at_ctor = false;
+	ret->Name = namev;
+	ret->Access = ACCESS_PUBLIC_T;
+	ret->Modifier = MODIFIER_NONE_T;
+	ret->Parent = NULL;
+	ret->StaticValue = NULL;
+	ret->GType = NULL;
+	ret->InitialValue = NULL;
+	ret->InitialValueEnv = NULL;
+	ret->IsNotInitializedAtCtor = false;
 	return ret;
 }
 
@@ -26,7 +26,7 @@ void DeleteField(Field * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteILFactor(self->initial_value);
-	DeleteEnviroment(self->initial_value_env);
+	DeleteILFactor(self->InitialValue);
+	DeleteEnviroment(self->InitialValueEnv);
 	MEM_FREE(self);
 }

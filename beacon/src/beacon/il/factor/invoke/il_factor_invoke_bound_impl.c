@@ -147,7 +147,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 	//フィールドとして解決する
 	Field* fi = FindFieldClass(GetClassCContext(cctx), self->Name, &temp);
 	if(receiver_gtype == NULL && fi != NULL) {
-		receiver_gtype = fi->gtype;
+		receiver_gtype = fi->GType;
 		self->Kind.Subscript.Tag = SUBSCRIPT_FIELD_T;
 		self->Kind.Subscript.Kind.Field = fi;
 		self->Kind.Subscript.Index = temp;

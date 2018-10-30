@@ -44,46 +44,46 @@ static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type*
 //
 bool CLBC_field_decl(ClassLoader* self, ILType* iltype, Type* tp, ILField* ilfi, Namespace* scope, CallContext* cctx) {
 	Field* fi = NewField(ilfi->Name);
-	fi->access = ilfi->Access;
-	fi->modifier = ilfi->Modifier;
-	fi->parent = tp;
-	fi->gtype = ResolveImportManager(scope, ilfi->GCache, cctx);
+	fi->Access = ilfi->Access;
+	fi->Modifier = ilfi->Modifier;
+	fi->Parent = tp;
+	fi->GType = ResolveImportManager(scope, ilfi->GCache, cctx);
 	AddFieldType(tp, fi);
 	//フィールドの初期値
-	fi->initial_value = ilfi->InitialValue;
+	fi->InitialValue = ilfi->InitialValue;
 	ilfi->InitialValue = NULL;
 	//フィールドの修飾子に native が使用されている
-	if(IsNativeModifier(fi->modifier)) {
+	if(IsNativeModifier(fi->Modifier)) {
 		ThrowBCError(BCERROR_NATIVE_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(fi->namev)
+			Ref2Str(fi->Name)
 		);
 		return false;
 	}
 	//.. abstractが使用されている
-	if(IsAbstractModifier(fi->modifier)) {
+	if(IsAbstractModifier(fi->Modifier)) {
 		ThrowBCError(BCERROR_ABSTRACT_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(fi->namev)
+			Ref2Str(fi->Name)
 		);
 		return false;
 	}
 	//.. overrideが使用されている
-	if(IsOverrideModifier(fi->modifier)) {
+	if(IsOverrideModifier(fi->Modifier)) {
 		ThrowBCError(BCERROR_OVERRIDE_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(fi->namev)
+			Ref2Str(fi->Name)
 		);
 		return false;
 	}
 	//static finalなのに、
 	//初期値が存在しない
-	if(IsStaticModifier(fi->modifier) &&
-	   IsFinalModifier(fi->modifier) &&
-	   fi->initial_value == NULL) {
+	if(IsStaticModifier(fi->Modifier) &&
+	   IsFinalModifier(fi->Modifier) &&
+	   fi->InitialValue == NULL) {
 		ThrowBCError(BCERROR_NOT_DEFAULT_VALUE_STATIC_FINAL_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
-			Ref2Str(fi->namev)
+			Ref2Str(fi->Name)
 		);
 		return false;
 	}
@@ -91,24 +91,24 @@ bool CLBC_field_decl(ClassLoader* self, ILType* iltype, Type* tp, ILField* ilfi,
 }
 
 bool CLBC_field_impl(ClassLoader* self, Type* tp, Field* fi, Namespace* scope, CallContext* cctx) {
-	fi->static_value = GetDefaultObject(fi->gtype);
-	if(fi->initial_value == NULL) {
+	fi->StaticValue = GetDefaultObject(fi->GType);
+	if(fi->InitialValue == NULL) {
 		return true;
 	}
 	//フィールドの初期値を設定する
 	Enviroment* env = NewEnviroment();
 	env->ContextRef = self;
-	fi->initial_value_env = env;
-	LoadILFactor(fi->initial_value, env, cctx);
-	GenerateILFactor(fi->initial_value, env, cctx);
+	fi->InitialValueEnv = env;
+	LoadILFactor(fi->InitialValue, env, cctx);
+	GenerateILFactor(fi->InitialValue, env, cctx);
 	//フィールドの型と互換性がない
-	GenericType* gf = EvalILFactor(fi->initial_value, env, cctx);
-	if(DistanceGenericType(fi->gtype, gf, cctx) < 0) {
-		PrintGenericType(fi->gtype); Println();
+	GenericType* gf = EvalILFactor(fi->InitialValue, env, cctx);
+	if(DistanceGenericType(fi->GType, gf, cctx) < 0) {
+		PrintGenericType(fi->GType); Println();
 		PrintGenericType(gf); Println();
 		ThrowBCError(BCERROR_FIELD_DEFAULT_VALUE_NOT_COMPATIBLE_TO_FIELD_TYPE_T,
-			Ref2Str(GetTypeName(fi->parent)),
-			Ref2Str(fi->namev)
+			Ref2Str(GetTypeName(fi->Parent)),
+			Ref2Str(fi->Name)
 		);
 		return false;
 	}
@@ -118,11 +118,11 @@ bool CLBC_field_impl(ClassLoader* self, Type* tp, Field* fi, Namespace* scope, C
 	int abtmp = he->AcceptBlocking;
 	he->CollectBlocking++;
 	he->AcceptBlocking = 0;
-	if(IsStaticModifier(fi->modifier)) {
+	if(IsStaticModifier(fi->Modifier)) {
 		Frame* f = NewFrame();
 		SetSGThreadFrameRef(GetMainSGThread(), f);
 		ExecuteVM(f, env);
-		fi->static_value = PopVector(f->ValueStack);
+		fi->StaticValue = PopVector(f->ValueStack);
 		ReleaseSGThreadFrameRef(GetMainSGThread());
 		DeleteFrame(f);
 	}
