@@ -12,6 +12,14 @@
 			"command": "go run script/gen.go"
 		},
 		{
+			"label": "doxy",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "ruby auto/doxy.rb"
+		},
+		{
 			"label": "test",
 			"type": "shell",
 			"options": {
