@@ -7,9 +7,9 @@
 #include "../env/fqcn_cache.h"
 #include "../util/mem.h"
 //proto
-static void DeleteAST_impl(AST* self);
-static ModifierType ASTCastToModifierImpl(AST* self, bool* error);
-static void DeleteAST_self(VectorItem item);
+static void delete_ast_impl(AST* self);
+static ModifierType ast_to_modifier(AST* self, bool* error);
+static void delete_ast_self(VectorItem item);
 
 void CompileEntryAST(AST* self) {
 	Parser* p = GetCurrentParser();
@@ -136,7 +136,7 @@ void DeleteAST(AST* self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteAST_impl(self);
+	delete_ast_impl(self);
 }
 
 bool IsBlankAST(AST* self) {
@@ -187,7 +187,7 @@ AccessLevel ASTCastToAccess(AST* self) {
 ModifierType ASTCastToModifier(AST* self, bool* error) {
 	(*error) = false;
 	if(self->Tag == AST_MOD_Tifier_list) {
-		return ASTCastToModifierImpl(self, error);
+		return ast_to_modifier(self, error);
 	}
 	assert(IsModifierAST(self));
 	return self->Attr.ModifierValue;
@@ -206,14 +206,14 @@ ConstructorChainType ASTCastToChainType(AST* self) {
 }
 
 //private
-static void DeleteAST_impl(AST* self) {
+static void delete_ast_impl(AST* self) {
 	ASTTag tag = self->Tag;
-	DeleteVector(self->Children, DeleteAST_self);
+	DeleteVector(self->Children, delete_ast_self);
 	self->Children = NULL;
 	MEM_FREE(self);
 }
 
-static ModifierType ASTCastToModifierImpl(AST* self, bool* error) {
+static ModifierType ast_to_modifier(AST* self, bool* error) {
 	int ret = -1;
 	for(int i=0; i<self->Children->Length; i++) {
 		if((*error)) {
@@ -235,7 +235,7 @@ static ModifierType ASTCastToModifierImpl(AST* self, bool* error) {
 	return mt;
 }
 
-static void DeleteAST_self(VectorItem item) {
+static void delete_ast_self(VectorItem item) {
 	AST* e = (AST*)item;
 	DeleteAST(e);
 }
