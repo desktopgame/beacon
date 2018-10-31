@@ -18,19 +18,19 @@
 
 /**
  * 名前空間を表す要素を作成します.
- * @param aNamespacepath
+ * @param anamespace_path
  * @param abody
  * @return
  */
-AST* NewASTNamespaceDecl(AST* aNamespacepath, AST* abody);
+AST* NewASTNamespaceDecl(AST* anamespace_path, AST* abody);
 
 /**
  * 名前空間の内側に定義された名前空間を表す要素を作成します.
- * @param aNamespacepath
+ * @param anamespace_path
  * @param abody
  * @return
  */
-AST* NewASTNamespaceNamespaceDecl(AST* aNamespacepath, AST* abody);
+AST* NewASTNamespaceNamespaceDecl(AST* anamespace_path, AST* abody);
 
 /**
  * 名前空間の内側に含めることが出来る定義の一覧を作成します.
@@ -68,15 +68,15 @@ AST* NewASTInterfaceDecl(AST* ainterface_name, AST* asuper_interface_list, AST* 
 
 /**
  * 列挙宣言を表す要素を作成します.
- * @param aenum_namev
+ * @param aenum_name
  * @param aident_list
  * @return
  */
-AST* NewASTEnumDecl(StringView enum_namev, AST* aident_list);
+AST* NewASTEnumDecl(StringView enum_name, AST* aident_list);
 
 /**
  * スーパークラスを表す要素を作成します.
- * @param fqcn
+ * @param afqcn
  * @return
  */
 AST* NewASTSuperclass(AST* afqcn);
@@ -121,7 +121,7 @@ AST* NewASTModifier(ModifierType type);
 
 /**
  * メンバーを表す要素を作成します.
- * @param mem
+ * @param amem
  * @return
  */
 AST* NewASTMemberDecl(AST* amem);
@@ -137,12 +137,12 @@ AST* NewASTMemberDeclList(AST* amember_list, AST* amember);
 /**
  * フィールド宣言を表す要素を作成します.
  * @param amodifier
- * @param aGetTypeName
- * @param field_namev
+ * @param atypename
+ * @param field_name
  * @param afact
  * @return
  */
-AST* NewASTFieldDecl(AST* amodifier, AST* aGetTypeName, StringView field_namev, AST* afact);
+AST* NewASTFieldDecl(AST* amodifier, AST* atypename, StringView field_name, AST* afact);
 
 /**
  * 関数宣言を表す要素を作成します.
@@ -156,36 +156,36 @@ AST* NewASTFunctionDecl(StringView function_namev, AST* atypeparams, AST* aparam
 
 /**
  * 引数のない関数宣言を表す要素を作成します.
- * @param function_namev
+ * @param function_name
  * @param atypeparams
  * @param abody
  * @param areturn_name
  * @return
  */
-AST* NewASTFunctionDeclEmptyParams(StringView function_namev, AST* atypeparams, AST* abody, AST* areturn_type);
+AST* NewASTFunctionDeclEmptyParams(StringView function_name, AST* atypeparams, AST* abody, AST* areturn_type);
 
 /**
  * メソッド宣言を表す要素を作成します.
  * @param amodifier
- * @param func_namev
+ * @param func_name
  * @param atype_parameter
  * @param aparameter_list
  * @param abody
  * @param areturn_GetTypeName
  * @return
  */
-AST* NewASTMethodDecl(AST* amodifier, StringView func_namev, AST* atype_parameter, AST* aparameter_list, AST* abody, AST* areturn_type);
+AST* NewASTMethodDecl(AST* amodifier, StringView func_name, AST* atype_parameter, AST* aparameter_list, AST* abody, AST* areturn_type);
 
 /**
  * 引数のないメソッド宣言を表す要素を作成します.
  * @param amodifier
- * @param func_namev
+ * @param func_name
  * @param atype_parameter
  * @param abody
- * @param areturn_GetTypeName
+ * @param areturn_type
  * @return
  */
-AST* NewASTMethodDeclEmptyParams(AST* amodifier, StringView func_namev, AST* atype_parameter, AST* abody, AST* areturn_type);
+AST* NewASTMethodDeclEmptyParams(AST* amodifier, StringView func_name, AST* atype_parameter, AST* abody, AST* areturn_type);
 
 /**
  * コンストラクタ宣言を表す要素を作成します.
@@ -207,19 +207,19 @@ AST* NewASTConstructorChain(ConstructorChainType chain_type, AST* aargument_list
 /**
  * 仮引数を表す要素を作成します.
  * @param atypename
- * @param parameter_access_namev
+ * @param parameter_access_name
  * @return
  */
-AST* NewASTParameter(AST* atypename, StringView parameter_access_namev);
+AST* NewASTParameter(AST* atypename, StringView parameter_access_name);
 
 /**
  * 仮引数を表す要素を作成します.
  * @param atypename
- * @param parameter_access_namev
+ * @param parameter_access_name
  * @param aparameter_list
  * @return
  */
-AST* NewASTParameterList(AST* atypename, StringView parameter_access_namev, AST* aparameter_list);
+AST* NewASTParameterList(AST* atypename, StringView parameter_access_name, AST* aparameter_list);
 
 /**
  * クラスが実装するインターフェイスの一覧として使用される、
@@ -240,13 +240,13 @@ AST* NewASTTypename(AST* fqcn, AST* atype_args);
 
 /**
  * T や K V などの要素を作成します.
- * @param namev
+ * @param name
  * @param arule_list
  * @return
  */
-AST* NewASTTypeParameter(StringView namev, AST* arule_list);
-AST* NewASTTypeInParameter(StringView namev, AST* arule_list);
-AST* NewASTTypeOutParameter(StringView namev, AST* arule_list);
+AST* NewASTTypeParameter(StringView name, AST* arule_list);
+AST* NewASTTypeInParameter(StringView name, AST* arule_list);
+AST* NewASTTypeOutParameter(StringView name, AST* arule_list);
 
 /** 
  * T や K V の要素のリストを作成します.
@@ -262,7 +262,7 @@ AST* NewASTTypeParameterList(AST* aparam, AST* alist);
  * @param aparams
  * @return
  */
-AST* NewASTParameterizedTypename(StringView namev, AST* aparams);
+AST* NewASTParameterizedTypename(StringView name, AST* aparams);
 
 /**
  * 型制約の一覧を表す要素を作成します.
@@ -304,5 +304,5 @@ AST* NewASTPropGet(AST* aacess, AST* abody);
  * @param aset
  * @param aget
  */
-AST* NewASTPropDecl(AST* amodifier, AST* atypename, StringView namev, AST* aset, AST* aget);
+AST* NewASTPropDecl(AST* amodifier, AST* atypename, StringView name, AST* aset, AST* aget);
 #endif // !SIGNAL_AST_AST_NEW_DECL_H

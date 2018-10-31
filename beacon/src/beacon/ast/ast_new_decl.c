@@ -11,15 +11,15 @@ static AST* NewASTParameter_GetTypeName(StringView GetTypeNamev);
 static AST* NewASTParameter_access_name(StringView parameter_namev);
 static AST* NewASTClassDeclImpl(AST* aclass_name, AST* aextend_list, AST* amember_list, ASTTag tag);
 
-AST* NewASTNamespaceDecl(AST* aNamespacepath, AST* abody) {
+AST* NewASTNamespaceDecl(AST* anamespace_path, AST* abody) {
 	AST* ret = NewAST(AST_NAMESPACE_DECL_T);
-	PushAST(ret, aNamespacepath);
+	PushAST(ret, anamespace_path);
 	PushAST(ret, abody);
 	return ret;
 }
 
-AST* NewASTNamespaceNamespaceDecl(AST* aNamespacepath, AST* abody) {
-	return NewASTNamespaceDecl(aNamespacepath, abody);
+AST* NewASTNamespaceNamespaceDecl(AST* anamespace_path, AST* abody) {
+	return NewASTNamespaceDecl(anamespace_path, abody);
 }
 
 AST* NewASTNamespaceMemberDeclList(AST* aforward, AST* alist) {
@@ -45,9 +45,9 @@ AST* NewASTInterfaceDecl(AST* ainterface_name, AST* asuper_interface_list, AST* 
 	return ret;
 }
 
-AST* NewASTEnumDecl(StringView enum_namev, AST* aident_list) {
+AST* NewASTEnumDecl(StringView enum_name, AST* aident_list) {
 	AST* ret = NewAST(AST_ENUM_DECL_T);
-	ret->Attr.StringVValue = enum_namev;
+	ret->Attr.StringVValue = enum_name;
 	PushAST(ret, aident_list);
 	return ret;
 }
@@ -105,11 +105,11 @@ AST* NewASTMemberDeclList(AST* amember_list, AST* amember) {
 	return ret;
 }
 
-AST* NewASTFieldDecl(AST* amodifier, AST* aGetTypeName, StringView field_namev, AST* afact) {
+AST* NewASTFieldDecl(AST* amodifier, AST* atypename, StringView field_name, AST* afact) {
 	AST* ret = NewAST(AST_FIELD_DECL_T);
 	PushAST(ret, amodifier);
-	PushAST(ret, aGetTypeName);
-	PushAST(ret, NewASTFieldAccess_name(field_namev));
+	PushAST(ret, atypename);
+	PushAST(ret, NewASTFieldAccess_name(field_name));
 	PushAST(ret, afact);
 	return ret;
 }
@@ -124,14 +124,14 @@ AST* NewASTFunctionDecl(StringView function_namev, AST* atypeparams, AST* aparam
 	return ret;
 }
 
-AST* NewASTFunctionDeclEmptyParams(StringView function_namev, AST* atypeparams, AST* abody, AST* areturn_type) {
-	return NewASTFunctionDecl(function_namev, atypeparams, NewASTBlank(), abody, areturn_type);
+AST* NewASTFunctionDeclEmptyParams(StringView function_name, AST* atypeparams, AST* abody, AST* areturn_type) {
+	return NewASTFunctionDecl(function_name, atypeparams, NewASTBlank(), abody, areturn_type);
 }
 
-AST* NewASTMethodDecl(AST* amodifier, StringView func_namev, AST* atype_parameter, AST* aparameter_list, AST* abody, AST* areturn_type) {
+AST* NewASTMethodDecl(AST* amodifier, StringView func_name, AST* atype_parameter, AST* aparameter_list, AST* abody, AST* areturn_type) {
 	AST* ret = NewAST(AST_METHOD_DECL_T);
 	PushAST(ret, amodifier);
-	PushAST(ret, ast_new_method_name(func_namev));
+	PushAST(ret, ast_new_method_name(func_name));
 	PushAST(ret, atype_parameter);
 	PushAST(ret, aparameter_list);
 	PushAST(ret, abody);
@@ -139,8 +139,8 @@ AST* NewASTMethodDecl(AST* amodifier, StringView func_namev, AST* atype_paramete
 	return ret;
 }
 
-AST* NewASTMethodDeclEmptyParams(AST* amodifier, StringView func_namev, AST* atype_parameter, AST* abody, AST* areturn_type) {
-	return NewASTMethodDecl(amodifier, func_namev, atype_parameter, NewASTBlank(), abody, areturn_type);
+AST* NewASTMethodDeclEmptyParams(AST* amodifier, StringView func_name, AST* atype_parameter, AST* abody, AST* areturn_type) {
+	return NewASTMethodDecl(amodifier, func_name, atype_parameter, NewASTBlank(), abody, areturn_type);
 }
 
 AST* NewASTConstructorDecl(AST* aparameter_list, AST* aconstructor_chain, AST* abody) {
@@ -162,17 +162,17 @@ AST* NewASTConstructorChain(ConstructorChainType chain_type, AST* aargument_list
 	return ret;
 }
 
-AST* NewASTParameter(AST* atypename, StringView parameter_access_namev) {
+AST* NewASTParameter(AST* atypename, StringView parameter_access_name) {
 	AST* ret = NewAST(AST_PARAMETER_T);
 	PushAST(ret, atypename);
-	PushAST(ret, NewASTParameter_access_name(parameter_access_namev));
+	PushAST(ret, NewASTParameter_access_name(parameter_access_name));
 	return ret;
 }
 
-AST* NewASTParameterList(AST* atypename, StringView parameter_access_namev, AST* aparameter_list) {
+AST* NewASTParameterList(AST* atypename, StringView parameter_access_name, AST* aparameter_list) {
 	AST* ret = NewAST(AST_PARAMETER_LIST_T);
 	PushAST(ret, aparameter_list);
-	PushAST(ret, NewASTParameter(atypename, parameter_access_namev));
+	PushAST(ret, NewASTParameter(atypename, parameter_access_name));
 	return ret;
 }
 
@@ -190,23 +190,23 @@ AST* NewASTTypename(AST* afqcn, AST* atype_args) {
 	return ret;
 }
 
-AST* NewASTTypeParameter(StringView namev, AST* arule_list) {
+AST* NewASTTypeParameter(StringView name, AST* arule_list) {
 	AST* ret = NewAST(AST_TYPE_PARAMETER_T);
-	ret->Attr.StringVValue = namev;
+	ret->Attr.StringVValue = name;
 	PushAST(ret, arule_list);
 	return ret;
 }
 
-AST* NewASTTypeInParameter(StringView namev, AST* arule_list) {
+AST* NewASTTypeInParameter(StringView name, AST* arule_list) {
 	AST* ret = NewAST(AST_TYPE_IN_PARAMETER_T);
-	ret->Attr.StringVValue = namev;
+	ret->Attr.StringVValue = name;
 	PushAST(ret, arule_list);
 	return ret;
 }
 
-AST* NewASTTypeOutParameter(StringView namev, AST* arule_list) {
+AST* NewASTTypeOutParameter(StringView name, AST* arule_list) {
 	AST* ret = NewAST(AST_TYPE_OUT_PARAMETER_T);
-	ret->Attr.StringVValue = namev;
+	ret->Attr.StringVValue = name;
 	PushAST(ret, arule_list);
 	return ret;
 }
@@ -218,9 +218,9 @@ AST* NewASTTypeParameterList(AST* aparam, AST* alist) {
 	return ret;
 }
 
-AST* NewASTParameterizedTypename(StringView namev, AST* aparams) {
+AST* NewASTParameterizedTypename(StringView name, AST* aparams) {
 	AST* ret = NewAST(AST_PARAMETERIZED_TYPENAME_T);
-	ret->Attr.StringVValue = namev;
+	ret->Attr.StringVValue = name;
 	PushAST(ret, aparams);
 	return ret;
 }
@@ -254,9 +254,9 @@ AST* NewASTPropGet(AST* aacess, AST* abody) {
 	return aret;
 }
 
-AST* NewASTPropDecl(AST* amodifier, AST* atypename, StringView namev, AST* aset, AST* aget) {
+AST* NewASTPropDecl(AST* amodifier, AST* atypename, StringView name, AST* aset, AST* aget) {
 	AST* aprop = NewAST(AST_PROP_DECL_T);
-	aprop->Attr.StringVValue = namev;
+	aprop->Attr.StringVValue = name;
 	PushAST(aprop, amodifier);
 	PushAST(aprop, atypename);
 	PushAST(aprop, aset);
