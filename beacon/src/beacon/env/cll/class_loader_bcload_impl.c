@@ -36,14 +36,14 @@
 #include "../import_info.h"
 #include "../../env/heap.h"
 //proto
-static void CLBC_Namespacetree(ClassLoader* self);
+static void CLBC_namespace_tree(ClassLoader* self);
 /**
  * 名前空間の一覧を読み込みます.
  * @param self
  * @param ilNamespacelist
  * @param parent
  */
-static void CLBC_Namespacelist(ClassLoader* self, Vector* ilNamespacelist, Namespace* parent);
+static void CLBC_namespace_list(ClassLoader* self, Vector* ilNamespacelist, Namespace* parent);
 
 /**
  * 名前空間と含まれるエントリの一覧を読み込みます.
@@ -85,8 +85,8 @@ static void CLBC_class(ClassLoader* self, ILType* iltype, Namespace* parent);
  */
 static void CLBC_interface(ClassLoader* self, ILType* iltype, Namespace* parent);
 
-static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* iltype, Class* classz, ILMethod* ilmethod, Method* me);
-static void CLBC_debug_NativeMethod(Method* parent, Frame* fr, Enviroment* env);
+static void CLBC_attach_native_method(ClassLoader* self, ILType* iltype, Class* classz, ILMethod* ilmethod, Method* me);
+static void CLBC_debug_native_method(Method* parent, Frame* fr, Enviroment* env);
 
 static void CLBC_check_superclass(Class* cls);
 static Type* CLBC_get_or_load_enum(Namespace* parent, ILType* iltype);
@@ -100,7 +100,7 @@ void BCLoadClassLoader(ClassLoader* self) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	ILToplevel* iltop = self->ILCode;
 	CLBC_import(self, self->ILCode->ImportList);
-	CLBC_Namespacetree(self);
+	CLBC_namespace_tree(self);
 }
 
 void SpecialBCLoadClassLoader(ClassLoader* self) {
@@ -108,16 +108,16 @@ void SpecialBCLoadClassLoader(ClassLoader* self) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	ILToplevel* iltop = self->ILCode;
 //	CLBC_import(self, self->ILCode->import_list);
-	CLBC_Namespacetree(self);
+	CLBC_namespace_tree(self);
 }
 
 //private
-static void CLBC_Namespacetree(ClassLoader* self) {
+static void CLBC_namespace_tree(ClassLoader* self) {
 	CL_ERROR(self);
-	CLBC_Namespacelist(self, self->ILCode->NamespaceList, NULL);
+	CLBC_namespace_list(self, self->ILCode->NamespaceList, NULL);
 }
 
-static void CLBC_Namespacelist(ClassLoader* self, Vector* ilNamespacelist, Namespace* parent) {
+static void CLBC_namespace_list(ClassLoader* self, Vector* ilNamespacelist, Namespace* parent) {
 	//self->link = classlink_resume;
 	CL_ERROR(self);
 	for (int i = 0; i < ilNamespacelist->Length; i++) {
@@ -136,7 +136,7 @@ static void CLBC_namespace(ClassLoader* self, ILNamespace* ilnamespace, Namespac
 	} else {
 		current = AddNamespaceNamespace(parent, ilnamespace->Name);
 	}
-	CLBC_Namespacelist(self, ilnamespace->NamespaceList, current);
+	CLBC_namespace_list(self, ilnamespace->NamespaceList, current);
 	CLBC_type_list(self, ilnamespace->TypeList, current);
 }
 
@@ -275,12 +275,12 @@ static void CLBC_interface(ClassLoader * self, ILType * iltype, Namespace * pare
 	tp->State = tp->State | TYPE_REGISTER;
 }
 
-static void CLBC_attach_NativeMethod(ClassLoader* self, ILType* ilclass, Class* classz, ILMethod* ilmethod, Method* me) {
+static void CLBC_attach_native_method(ClassLoader* self, ILType* ilclass, Class* classz, ILMethod* ilmethod, Method* me) {
 //	native_method.h で、実行時にリンクするようにしたので不要
 //	me->u.NativeMethod->ref = NewNativeMethodRef(class_loader_sgload_debug_NativeMethod);
 }
 
-static void CLBC_debug_NativeMethod(Method* parent, Frame*fr, Enviroment* env) {
+static void CLBC_debug_native_method(Method* parent, Frame*fr, Enviroment* env) {
 
 }
 
