@@ -19,7 +19,6 @@
 #include <stdarg.h>
 #include <stdbool.h>
 struct Enviroment;
-struct parser;
 
 /**
  * クラスローダーを表す構造体です.
