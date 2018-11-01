@@ -41,9 +41,9 @@ AST* NewASTVariable(AST* a, AST* atype_args) {
 	return ret;
 }
 
-AST* NewASTVariableFromString(StringView strv, AST* atype_args) {
+AST* NewASTVariableFromString(StringView str, AST* atype_args) {
 	AST* ret = NewAST(AST_VARIABLE_T);
-	ret->Attr.StringVValue = strv;
+	ret->Attr.StringVValue = str;
 	PushAST(ret, atype_args);
 	return ret;
 }
@@ -63,10 +63,10 @@ AST* NewASTSuper() {
 	return NewAST(AST_SUPER_T);
 }
 
-AST* NewASTFieldAccess(AST* afact, StringView namev, AST* atype_args) {
+AST* NewASTFieldAccess(AST* afact, StringView name, AST* atype_args) {
 	AST* ret = NewAST(AST_FIELD_ACCESS_T);
 	AST* aname = NewAST(AST_IDENTIFIER_T);
-	aname->Attr.StringVValue = namev;
+	aname->Attr.StringVValue = name;
 	PushAST(ret, afact);
 	PushAST(ret, aname);
 	PushAST(ret, atype_args);
