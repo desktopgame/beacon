@@ -15,7 +15,7 @@
 /**
  * 実行可能な文を表す要素を作成します.
  */
-#define ast_new_stmt(stmt) (MallocASTStmt(stmt, __FILE__, __LINE__))
+#define NewASTStmt(stmt) (MallocASTStmt(stmt, __FILE__, __LINE__))
 
 /**
  * 実行可能な文を表す要素を作成します.

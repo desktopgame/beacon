@@ -1020,7 +1020,7 @@ primary
 stmt_list
 	: stmt
 	{
-		$$ = ast_new_stmt($1);
+		$$ = NewASTStmt($1);
 	}
 	| stmt_list stmt
 	{

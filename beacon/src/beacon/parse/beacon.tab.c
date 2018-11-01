@@ -3672,7 +3672,7 @@ yyreduce:
   case 200:
 #line 1022 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = ast_new_stmt((yyvsp[0].ast_value));
+		(yyval.ast_value) = NewASTStmt((yyvsp[0].ast_value));
 	}
 #line 3678 "beacon.tab.c" /* yacc.c:1663  */
     break;
