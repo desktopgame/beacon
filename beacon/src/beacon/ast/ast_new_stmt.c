@@ -100,10 +100,10 @@ AST* NewASTTry(AST* abody, AST* acatch_list) {
 	return ret;
 }
 
-AST* NewASTCatch(AST* stypename, StringView snamev, AST* abody) {
+AST* NewASTCatch(AST* stypename, StringView name, AST* abody) {
 	AST* ret = NewAST(AST_STMT_CATCH_T);
 	AST* aname = NewAST(AST_IDENTIFIER_T);
-	aname->Attr.StringVValue = snamev;
+	aname->Attr.StringVValue = name;
 	PushAST(ret, stypename);
 	PushAST(ret, aname);
 	PushAST(ret, abody);
@@ -130,10 +130,10 @@ AST* NewASTArgumentList(AST* afactor, AST* aargument_list) {
 	return ret;
 }
 
-AST* NewASTFQCN(AST* apart_list, StringView class_namev) {
+AST* NewASTFQCN(AST* apart_list, StringView class_name) {
 	AST* ret = NewAST(AST_FQCN_T);
 	AST* a = NewAST(AST_FQCN_CLASS_NAME_T);
-	a->Attr.StringVValue = class_namev;
+	a->Attr.StringVValue = class_name;
 	PushAST(ret, apart_list);
 	PushAST(ret, a);
 	return ret;
@@ -152,29 +152,29 @@ AST* NewASTFQCNPartList(AST* apart, AST* apart_list) {
 	return ret;
 }
 
-AST* NewASTVariableDecl(AST* atype, StringView namev) {
+AST* NewASTVariableDecl(AST* atype, StringView name) {
 	AST* ret = NewAST(AST_STMT_VARIABLE_DECL_T);
 	AST* aname = NewAST(AST_IDENTIFIER_T);
-	aname->Attr.StringVValue = namev;
+	aname->Attr.StringVValue = name;
 	PushAST(ret, atype);
 	PushAST(ret, aname);
 	return ret;
 }
 
-AST* NewASTVariableInit(AST* atype, StringView namev, AST* afact) {
+AST* NewASTVariableInit(AST* atype, StringView name, AST* afact) {
 	AST* ret = NewAST(AST_STMT_VARIABLE_INIT_T);
 	AST* aname = NewAST(AST_IDENTIFIER_T);
-	aname->Attr.StringVValue = namev;
+	aname->Attr.StringVValue = name;
 	PushAST(ret, atype);
 	PushAST(ret, aname);
 	PushAST(ret, afact);
 	return ret;
 }
 
-AST* NewASTInferencedTypeInit(StringView namev, AST* afact) {
+AST* NewASTInferencedTypeInit(StringView name, AST* afact) {
 	AST* ret = NewAST(AST_INFERENCED_TYPE_INIT_T);
 	AST* aname = NewAST(AST_IDENTIFIER_T);
-	aname->Attr.StringVValue = namev;
+	aname->Attr.StringVValue = name;
 	PushAST(ret, aname);
 	PushAST(ret, afact);
 	return ret;
@@ -203,9 +203,9 @@ AST* NewASTYieldBreak() {
 	return NewAST(AST_YIELD_BREAK_T);
 }
 
-AST* NewASTInject(StringView namev, AST* avalue) {
+AST* NewASTInject(StringView name, AST* avalue) {
 	AST* ret = NewAST(AST_INJECT_JNI_VALUE_T);
-	ret->Attr.StringVValue = namev;
+	ret->Attr.StringVValue = name;
 	PushAST(ret, avalue);
 	ret->Lineno = 0;
 	avalue->Lineno = 0;
