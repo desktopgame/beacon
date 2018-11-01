@@ -46,13 +46,13 @@
 #include "heap.h"
 
 //proto
-static void Loadclass_loader_impl(ClassLoader* self);
-static void Linkclass_loader_recursive(ClassLoader* self, LinkType type);
-static void class_loader_cache_delete(VectorItem item);
-static ClassLoader* Loadclass_loader_specialImpl(ClassLoader* self, ClassLoader* cll, char* full_path);
-static void Loadclass_loader_toplevel(ClassLoader* self);
-static void Loadclass_loader_linkall(ClassLoader* self);
-static void Loadclass_loader_toplevel_function(ClassLoader* self);
+static void load_class(ClassLoader* self);
+static void link_recursive(ClassLoader* self, LinkType type);
+static void delete_cache(VectorItem item);
+static ClassLoader* load_special_class(ClassLoader* self, ClassLoader* cll, char* full_path);
+static void load_toplevel(ClassLoader* self);
+static void link_all(ClassLoader* self);
+static void load_toplevel_function(ClassLoader* self);
 static bool check_parser_error(Parser* p);
 
 ClassLoader* NewClassLoader(const char* filename, ContentType type) {
@@ -88,7 +88,7 @@ void LoadPassASTClassLoader(ClassLoader* self, AST* a) {
 	Heap* hee = GetHeap();
 	hee->AcceptBlocking++;
 	self->SourceCode = a;
-	Loadclass_loader_impl(self);
+	load_class(self);
 	hee->AcceptBlocking--;
 }
 
@@ -99,7 +99,7 @@ void SpecialLoadClassLoader(ClassLoader* self, char* relativePath) {
 	ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, fullP);
 	he->AcceptBlocking++;
 	if(cll == NULL) {
-		cll = Loadclass_loader_specialImpl(self, cll, fullP);
+		cll = load_special_class(self, cll, fullP);
 	}
 	he->AcceptBlocking--;
 	MEM_FREE(fullP);
@@ -111,7 +111,7 @@ void DeleteClassLoader(ClassLoader * self) {
 	}
 	DeleteAST(self->SourceCode);
 	DeleteILToplevel(self->ILCode);
-	DeleteVector(self->TypeCaches, class_loader_cache_delete);
+	DeleteVector(self->TypeCaches, delete_cache);
 	DeleteImportManager(self->ImportManager);
 	DeleteEnviroment(self->Env);
 	MEM_FREE(self->FileName);
@@ -120,7 +120,7 @@ void DeleteClassLoader(ClassLoader * self) {
 
 
 //private
-static void Loadclass_loader_impl(ClassLoader* self) {
+static void load_class(ClassLoader* self) {
 	assert(self != NULL);
 	//AST -> IL へ
 	ILLoadClassLoader(self, self->SourceCode);
@@ -129,12 +129,12 @@ static void Loadclass_loader_impl(ClassLoader* self) {
 	BCLoadClassLoader(self);
 	if (GetLastBCError()) { return; }
 	//他のクラスローダーとリンク
-	Loadclass_loader_linkall(self);
-	Loadclass_loader_toplevel_function(self);
-	Loadclass_loader_toplevel(self);
+	link_all(self);
+	load_toplevel_function(self);
+	load_toplevel(self);
 }
 
-static void Linkclass_loader_recursive(ClassLoader* self, LinkType type) {
+static void link_recursive(ClassLoader* self, LinkType type) {
 	if (self->Link == type) {
 		return;
 	}
@@ -148,17 +148,17 @@ static void Linkclass_loader_recursive(ClassLoader* self, LinkType type) {
 		if (info->IsConsume) {
 			continue;
 		}
-		Linkclass_loader_recursive(info->Context, type);
+		link_recursive(info->Context, type);
 	}
 	LinkClassLoader(self, type);
 }
 
-static void class_loader_cache_delete(VectorItem item) {
+static void delete_cache(VectorItem item) {
 	TypeCache* e = (TypeCache*)item;
 	DeleteTypeCache(e);
 }
 
-static ClassLoader* Loadclass_loader_specialImpl(ClassLoader* self, ClassLoader* cll, char* full_path) {
+static ClassLoader* load_special_class(ClassLoader* self, ClassLoader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
 	Parser* p = ParseFile(full_path);
@@ -178,15 +178,15 @@ static ClassLoader* Loadclass_loader_specialImpl(ClassLoader* self, ClassLoader*
 	return cll;
 }
 
-static void Loadclass_loader_linkall(ClassLoader* self) {
+static void link_all(ClassLoader* self) {
 	if(self->Type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
-	Linkclass_loader_recursive(self, LINK_DECL_T);
-	Linkclass_loader_recursive(self, LINK_IMPL_T);
+	link_recursive(self, LINK_DECL_T);
+	link_recursive(self, LINK_IMPL_T);
 }
 
-static void Loadclass_loader_toplevel(ClassLoader* self) {
+static void load_toplevel(ClassLoader* self) {
 	//トップレベルのステートメントを読み込む
 	if(self->Type != CONTENT_ENTRY_POINT_T) {
 		return;
@@ -217,7 +217,7 @@ static void Loadclass_loader_toplevel(ClassLoader* self) {
 	CacheScriptContext();
 }
 
-static void Loadclass_loader_toplevel_function(ClassLoader* self) {
+static void load_toplevel_function(ClassLoader* self) {
 	if(self->Level != 0 || self->Type != CONTENT_ENTRY_POINT_T) {
 		return;
 	}
