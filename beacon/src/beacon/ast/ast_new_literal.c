@@ -19,8 +19,8 @@ AST* NewASTChar(char ch) {
 	return ret;
 }
 
-AST* NewASTString(StringView sv) {
+AST* NewASTString(StringView str) {
 	AST* ret = NewAST(AST_STRING_T);
-	ret->Attr.StringVValue = sv;
+	ret->Attr.StringVValue = str;
 	return ret;
 }
