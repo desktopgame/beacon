@@ -93,7 +93,7 @@ static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallCont
 	}
 	GenericType* rgtp = self->Method->ReturnGType;
 	GenericType* instanced_type = (GenericType*)AtVector(self->TypeArgs, rgtp->VirtualTypeIndex);
-	self->Resolved = generic_NewType(instanced_type->CoreType);
+	self->Resolved = NewGenericType(instanced_type->CoreType);
 	self->Resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
 	self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }

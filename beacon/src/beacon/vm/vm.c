@@ -541,7 +541,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(cls->TypeParameters->Length == 0) {
 					obj->GType = tp->GenericSelf;
 				} else {
-					GenericType* g = generic_NewType(tp);
+					GenericType* g = NewGenericType(tp);
 					for(int i=0; i<cls->TypeParameters->Length; i++) {
 						AddArgsGenericType(g, (GenericType*)AtVector(self->TypeArgs, i));
 					}
@@ -1051,7 +1051,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 						int count = (int)GetEnviromentSourceAt(env, ++IDX);
 						depth++;
 						PushVector(counts, count);
-						//PushVector(stack, generic_NewType(NULL));
+						//PushVector(stack, NewGenericType(NULL));
 					} else if(code == OP_GENERIC_EXIT) {
 						depth--;
 						int count = (int)PopVector(counts);
@@ -1071,7 +1071,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 						int arg = (int)GetEnviromentSourceAt(env, ++IDX);
 						GenericType* a = NULL;
 						if(code == OP_GENERIC_UNIQUE_TYPE) {
-							a = generic_NewType((Type*)AtVector(ctx->TypeList, arg));
+							a = NewGenericType((Type*)AtVector(ctx->TypeList, arg));
 						} else if(code == OP_GENERIC_INSTANCE_TYPE) {
 							Object* receiver = (Object*)AtVector(self->VariableTable, 0);
 							a = (GenericType*)AtVector(receiver->GType->TypeArgs, arg);

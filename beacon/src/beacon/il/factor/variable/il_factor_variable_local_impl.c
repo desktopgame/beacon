@@ -173,11 +173,11 @@ static void set_gtype(ILVariableLocal * self, GenericType* gt) {
 	if(gt->Tag == GENERIC_TYPE_TAG_NONE_T) {
 		self->GType = gt;
 	} else if(gt->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-		self->GType = generic_NewType(NULL);
+		self->GType = NewGenericType(NULL);
 		self->GType->Tag = GENERIC_TYPE_TAG_CLASS_T;
 		self->GType->VirtualTypeIndex = gt->VirtualTypeIndex;
 	} else if(gt->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-		self->GType = generic_NewType(NULL);
+		self->GType = NewGenericType(NULL);
 		self->GType->Tag = GENERIC_TYPE_TAG_METHOD_T;
 		self->GType->VirtualTypeIndex = gt->VirtualTypeIndex;
 	}

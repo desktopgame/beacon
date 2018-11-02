@@ -82,7 +82,7 @@ GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallConte
 	//FQCNCache typename_group
 	if (self->InstanceGType == NULL) {
 		Namespace* scope = NULL;
-		GenericType* a = generic_NewType(self->Constructor->Parent);
+		GenericType* a = NewGenericType(self->Constructor->Parent);
 		for (int i = 0; i < self->TypeArgs->Length; i++) {
 			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 			GenericType* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);

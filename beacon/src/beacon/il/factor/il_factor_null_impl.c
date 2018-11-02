@@ -15,7 +15,7 @@ void LoadILNull(void * empty, Enviroment * env, CallContext* cctx) {
 
 GenericType* EvalILNull(void * empty, Enviroment * env, CallContext* cctx) {
 	if(gSelf == NULL) {
-		gSelf =  generic_NewType(TYPE_NULL);
+		gSelf =  NewGenericType(TYPE_NULL);
 	}
 	return gSelf;
 }

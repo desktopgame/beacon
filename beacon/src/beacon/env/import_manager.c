@@ -57,7 +57,7 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 	if(CoreType != NULL && fqcn->TypeArgs->Length > 0) {
 		//Array, Dictionary などはっきりした型が見つかった
 		//が、型引数があるのでそれを解決する
-		GenericType* normalGType = generic_NewType(CoreType);
+		GenericType* normalGType = NewGenericType(CoreType);
 		assert(CoreType->Tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->TypeArgs->Length; i++) {
 			GenericCache* e = (GenericCache*)AtVector(fqcn->TypeArgs, i);
@@ -71,7 +71,7 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 	if(fqcn->TypeArgs->Length > 0) {
 		return NULL;
 	}
-	GenericType* parameterized = generic_NewType(NULL);
+	GenericType* parameterized = NewGenericType(NULL);
 	//T, Eなど
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
@@ -108,7 +108,7 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 	//例えば Dictionary[K, V] なら
 	//K = class_tag 0
 	//V = class_tag 1
-	GenericType* parameterized = generic_NewType(NULL);
+	GenericType* parameterized = NewGenericType(NULL);
 	//まずはメソッドの型変数を調べる
 	Method* mt = GetMethodCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {

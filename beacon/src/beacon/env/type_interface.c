@@ -25,9 +25,9 @@ GenericType* InitGenericSelf(Type* self, int counts) {
 		return NULL;
 	}
 	if (self->GenericSelf == NULL) {
-		self->GenericSelf = generic_NewType(self);
+		self->GenericSelf = NewGenericType(self);
 		for (int i = 0; i < counts; i++) {
-			GenericType* arg = generic_NewType(NULL);
+			GenericType* arg = NewGenericType(NULL);
 			arg->Tag = GENERIC_TYPE_TAG_CLASS_T;
 			arg->VirtualTypeIndex = i;
 			arg->Kind.Type = self;

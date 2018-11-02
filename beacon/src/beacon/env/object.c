@@ -81,7 +81,7 @@ Object * MallocStringObject(const char * s, const char* filename, int lineno) {
 	//arr->Tag = OBJECT_ARRAY_T;
 	Type* arrType = GetBCArrayType();
 	Type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
-	arr->GType = generic_NewType(arrType);
+	arr->GType = NewGenericType(arrType);
 	arr->VPtr = GetVTableType(arrType);
 	arr->Tag = OBJECT_ARRAY_T;
 	AddArgsGenericType(arr->GType, GENERIC_CHAR);
@@ -148,7 +148,7 @@ Object * GetNullObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->Null == NULL) {
 		ctx->Null = Object_malloc(OBJECT_NULL_T);
-		ctx->Null->GType = generic_NewType(TYPE_NULL);
+		ctx->Null->GType = NewGenericType(TYPE_NULL);
 		ctx->Null->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->Null;
