@@ -232,7 +232,7 @@ static void load_toplevel_function(ClassLoader* self) {
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		Method* m = method_new(ilfunc->Name);
+		Method* m = NewMethod(ilfunc->Name);
 		DupTypeParameterList(ilfunc->TypeParameters, m->TypeParameters);
 		ScriptMethod* sm = NewScriptMethod();
 		Enviroment* env = NewEnviroment();

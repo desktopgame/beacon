@@ -25,8 +25,8 @@
 #endif
 
 //proto
-static void method_DeleteParameter(VectorItem item);
-static void method_DeleteTypeParameter(VectorItem item);
+static void delete_parameter(VectorItem item);
+static void delete_type_parameter(VectorItem item);
 static void method_count(ILStatement* s, int* yeild_ret, int* ret);
 static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cll,int op_len);
 static Method* create_has_next(Method* self, Type* ty,ClassLoader* cll, Vector* stmt_list, int* out_op_len);
@@ -139,8 +139,8 @@ int GetGenericIndexForMethod(Method * self, StringView namev) {
 }
 
 void DeleteMethod(Method * self) {
-	DeleteVector(self->TypeParameters, method_DeleteTypeParameter);
-	DeleteVector(self->Parameters, method_DeleteParameter);
+	DeleteVector(self->TypeParameters, delete_type_parameter);
+	DeleteVector(self->Parameters, delete_parameter);
 	if (self->Type == METHOD_TYPE_SCRIPT_T) {
 		DeleteScriptMethod(self->Kind.Script);
 	} else if (self->Type == METHOD_TYPE_NATIVE_T) {
@@ -249,12 +249,12 @@ Type* CreateIteratorTypeFromMethod(Method* self,  ClassLoader* cll, Vector* stmt
 }
 
 //private
-static void method_DeleteParameter(VectorItem item) {
+static void delete_parameter(VectorItem item) {
 	Parameter* e = (Parameter*)item;
 	DeleteParameter(e);
 }
 
-static void method_DeleteTypeParameter(VectorItem item) {
+static void delete_type_parameter(VectorItem item) {
 	TypeParameter* e = (TypeParameter*)item;
 	DeleteTypeParameter(e);
 }
@@ -374,7 +374,7 @@ static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cl
 }
 
 static Method* create_has_next(Method* self, Type* ty, ClassLoader* cll, Vector* stmt_list, int* out_op_len) {
-	Method* mt = method_new(InternString("moveNext"));
+	Method* mt = NewMethod(InternString("moveNext"));
 	mt->ReturnGType = GENERIC_BOOL;
 	mt->Modifier = MODIFIER_NONE_T;
 	mt->Access = ACCESS_PUBLIC_T;
@@ -425,7 +425,7 @@ static Method* create_has_next(Method* self, Type* ty, ClassLoader* cll, Vector*
 }
 
 static Method* create_next(Method* self, Type* ty, ClassLoader* cll,GenericType* a, Vector* stmt_list, int* out_op_len) {
-	Method* mt = method_new(InternString("current"));
+	Method* mt = NewMethod(InternString("current"));
 	mt->ReturnGType = a;
 	mt->Modifier = MODIFIER_NONE_T;
 	mt->Access = ACCESS_PUBLIC_T;

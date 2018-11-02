@@ -266,7 +266,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilmethod->Parameters;
 	//実行時のメソッド情報を作成する
-	Method* method = method_new(ilmethod->Name);
+	Method* method = NewMethod(ilmethod->Name);
 	Vector* parameter_list = method->Parameters;
 	method->Type = IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
 	method->Access = ilmethod->Access;
