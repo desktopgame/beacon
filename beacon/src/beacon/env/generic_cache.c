@@ -7,7 +7,7 @@
 #include <assert.h>
 
 //proto
-static void GenericCache_tree_delete(VectorItem item);
+static void tree_delete(VectorItem item);
 
 GenericCache * NewGenericCache() {
 	GenericCache* ret = (GenericCache*)MEM_MALLOC(sizeof(GenericCache));
@@ -21,7 +21,7 @@ void PrintGenericCache(GenericCache * self) {
 	if (self->TypeArgs->Length <= 0) {
 		return;
 	}
-	printf("<");
+	printf("[");
 	for (int i = 0; i < self->TypeArgs->Length; i++) {
 		GenericCache* e = (GenericCache*)AtVector(self->TypeArgs, i);
 		PrintGenericCache(e);
@@ -29,7 +29,7 @@ void PrintGenericCache(GenericCache * self) {
 			printf(", ");
 		}
 	}
-	printf(">");
+	printf("]");
 }
 
 void DumpGenericCache(GenericCache * self, int depth) {
@@ -43,11 +43,11 @@ char* GenericCacheToString(GenericCache* self) {
 	//Namespace::Class
 	char* name = FQCNCacheToString(self->FQCN);
 	AppendsBuffer(sb, name);
-	//Namespace::Class<|
+	//Namespace::Class[
 	if(self->TypeArgs->Length > 0) {
-		AppendsBuffer(sb, "<|");
+		AppendsBuffer(sb, "[");
 	}
-	//Namespace::Class<|...
+	//Namespace::Class[...
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		GenericCache* e = (GenericCache*)AtVector(self->TypeArgs, i);
 		char* type = GenericCacheToString(e);
@@ -57,9 +57,9 @@ char* GenericCacheToString(GenericCache* self) {
 		}
 		MEM_FREE(type);
 	}
-	//Namespace::Class<|...|>
+	//Namespace::Class[...]
 	if(self->TypeArgs->Length > 0) {
-		AppendsBuffer(sb, "|>");
+		AppendsBuffer(sb, "]");
 	}
 	MEM_FREE(name);
 	return ReleaseBuffer(sb);
@@ -67,7 +67,7 @@ char* GenericCacheToString(GenericCache* self) {
 
 void DeleteGenericCache(GenericCache * self) {
 	DeleteFQCNCache(self->FQCN);
-	DeleteVector(self->TypeArgs, GenericCache_tree_delete);
+	DeleteVector(self->TypeArgs, tree_delete);
 	MEM_FREE(self);
 }
 
@@ -91,7 +91,7 @@ bool EqualsGenericCache(GenericCache* a, GenericCache* b) {
 	return true;
 }
 //private
-static void GenericCache_tree_delete(VectorItem item) {
+static void tree_delete(VectorItem item) {
 	GenericCache* e = (GenericCache*)item;
 	DeleteGenericCache(e);
 }
