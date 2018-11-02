@@ -15,14 +15,14 @@ void DeleteParameter(Parameter * self) {
 	MEM_FREE(self);
 }
 
-bool IsOverwrappedParameterName(Vector* parameters, StringView* namev) {
+bool IsOverwrappedParameterName(Vector* parameters, StringView* outName) {
 	for(int i=0; i<parameters->Length; i++) {
 		Parameter* e = (Parameter*)AtVector(parameters, i);
 		for(int j=0; j<parameters->Length; j++) {
 			if(i == j) { continue; }
 			Parameter* e2 = (Parameter*)AtVector(parameters, j);
 			if(e->Name == e2->Name) {
-				(*namev) = e->Name;
+				(*outName) = e->Name;
 				return true;
 			}
 		}
