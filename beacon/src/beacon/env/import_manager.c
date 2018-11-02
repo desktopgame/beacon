@@ -16,7 +16,7 @@
 #include "TYPE_IMPL.h"
 
 //proto
-static void DeleteImportManager_import_info(VectorItem item);
+static void delete_import_info(VectorItem item);
 
 ImportManager * NewImportManager() {
 	ImportManager* ret = (ImportManager*)MEM_MALLOC(sizeof(ImportManager));
@@ -44,9 +44,6 @@ GenericType* ResolveImportManager(Namespace* scope, GenericCache* fqcn, CallCont
 	#if defined(DEBUG)
 	const char* ctname = Ref2Str(GetTypeName(CoreType));
 	const char* it = Ref2Str(fqcn->FQCN->Name);
-	if(fqcn->FQCN->Name == InternString("Token")) {
-		int a = 0;
-	}
 	#endif
 	//Int, Double
 	if(CoreType != NULL && fqcn->TypeArgs->Length == 0) {
@@ -136,11 +133,11 @@ GenericType* ResolvefImportManager(Namespace* scope, FQCNCache* fqcn, CallContex
 }
 
 void DeleteImportManager(ImportManager * self) {
-	DeleteVector(self->Items, DeleteImportManager_import_info);
+	DeleteVector(self->Items, delete_import_info);
 	MEM_FREE(self);
 }
 //private
-static void DeleteImportManager_import_info(VectorItem item) {
+static void delete_import_info(VectorItem item) {
 	ImportInfo* e = (ImportInfo*)item;
 	DeleteImportInfo(e);
 }
