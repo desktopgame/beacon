@@ -24,7 +24,7 @@ typedef struct ILProperty {
 	ILPropertyBody* Get;
 } ILProperty;
 
-#define ILProperty_new(namev) (MallocILProperty(namev, __FILE__, __LINE__))
+#define ILNewProperty(namev) (MallocILProperty(namev, __FILE__, __LINE__))
 ILProperty* MallocILProperty(StringView namev, const char* filename, int lineno);
 
 void DeleteILProperty(ILProperty* self);

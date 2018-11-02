@@ -85,7 +85,7 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel le
 	AST* aset = AtAST(aprop, 2);
 	AST* aget = AtAST(aprop, 3);
 	StringView propname = aprop->Attr.StringVValue;
-	ILProperty* ret = ILProperty_new(propname);
+	ILProperty* ret = ILNewProperty(propname);
 	CLILGenericCache(atypename, ret->GCache);
 	if(IsBlankAST(amod)) {
 		ret->Modifier = MODIFIER_NONE_T;

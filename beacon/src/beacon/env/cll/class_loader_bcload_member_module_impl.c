@@ -164,7 +164,7 @@ void CLBC_fields_impl(ClassLoader* self, Namespace* scope, Type* tp,Vector* ilfi
 bool CLBC_Property_decl(ClassLoader* self, ILType* iltype, Type* tp, ILProperty* ilprop, Namespace* scope, CallContext* cctx) {
 	//VectorItem e = AtVector(ilprops, i);
 	//ILProperty* ilprop = e;
-	Property* prop = Property_new(ilprop->Name);
+	Property* prop = NewProperty(ilprop->Name);
 	prop->Access = ilprop->Access;
 	prop->Modifier = ilprop->Modifier;
 	prop->Set->Access = ilprop->Set->Access;
