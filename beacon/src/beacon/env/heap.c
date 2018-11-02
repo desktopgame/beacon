@@ -9,7 +9,7 @@
 #include "../vm/vm.h"
 
 //proto
-static void DeleteHeap_Object(VectorItem item);
+static void delete_object(VectorItem item);
 static void gc_clear(Heap* self);
 static void gc_mark(Heap* self);
 static void gc_sweep(Heap* self);
@@ -59,7 +59,7 @@ void IgnoreHeap(Heap* self, Object* o) {
 }
 
 void DeleteHeap(Heap * self) {
-	DeleteVector(self->Objects,DeleteHeap_Object);
+	DeleteVector(self->Objects,delete_object);
 	MEM_FREE(self);
 }
 
@@ -74,7 +74,7 @@ void DumpHeap(Heap* self) {
 }
 
 //private
-static void DeleteHeap_Object(VectorItem item) {
+static void delete_object(VectorItem item) {
 	Object* e = (Object*)item;
 	DeleteObject(e);
 }
