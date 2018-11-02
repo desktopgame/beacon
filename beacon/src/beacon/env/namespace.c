@@ -12,18 +12,18 @@
 
 //static TreeMap* TreeMap_root = NULL;
 //proto
-static Namespace* Namespacemalloc(StringView namev);
+static Namespace* malloc_namespace(StringView namev);
 
-static void UnlinkNamespace_namespace(NumericMapKey key, NumericMapItem item);
-static void DeleteNamespace_namespace(NumericMapKey key, NumericMapItem item);
+static void unlink_namespace(NumericMapKey key, NumericMapItem item);
+static void delete_namespace(NumericMapKey key, NumericMapItem item);
 
-static void UnlinkNamespace_type(NumericMapKey key, NumericMapItem item);
-static void DeleteNamespace_type(NumericMapKey key, NumericMapItem item);
+static void unlink_type(NumericMapKey key, NumericMapItem item);
+static void delete_type(NumericMapKey key, NumericMapItem item);
 
-static void Namespacedump_root(NumericMap* root, bool callSelf, int depth);
-static void Namespacedump_impl(Namespace* root, int depth);
-static void Namespaceput_indent(int depth);
-static void Namespacedump_class(NumericMap* root, bool isRoot, int depth);
+static void dump_root(NumericMap* root, bool callSelf, int depth);
+static void dump_impl(Namespace* root, int depth);
+static void put_indent(int depth);
+static void dump_class(NumericMap* root, bool isRoot, int depth);
 
 Namespace * CreateNamespaceAtRoot(StringView namev) {
 	ScriptContext* ctx = GetCurrentScriptContext();
@@ -32,7 +32,7 @@ Namespace * CreateNamespaceAtRoot(StringView namev) {
 	}
 	TreeItem item = GetNumericMapValue(ctx->NamespaceMap, namev);
 	if (item == NULL) {
-		Namespace* newNamespace = Namespacemalloc(namev);
+		Namespace* newNamespace = malloc_namespace(namev);
 		PutNumericMap(ctx->NamespaceMap, namev, newNamespace);
 		return newNamespace;
 	} else return (Namespace*)item;
@@ -54,7 +54,7 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 	assert(self != NULL);
 	Namespace* child = FindNamespaceFromNamespace(self, namev);
 	if (child == NULL) {
-		Namespace* newNamespace = Namespacemalloc(namev);
+		Namespace* newNamespace = malloc_namespace(namev);
 		newNamespace->Parent = self;
 		child = newNamespace;
 		PutNumericMap(self->NamespaceMap, namev, child);
@@ -144,8 +144,8 @@ Type* GetExceptionTypeNamespace() {
 }
 
 void UnlinkNamespace(Namespace * self) {
-	EachNumericMap(self->NamespaceMap, UnlinkNamespace_namespace);
-	EachNumericMap(self->TypeMap, UnlinkNamespace_type);
+	EachNumericMap(self->NamespaceMap, unlink_namespace);
+	EachNumericMap(self->TypeMap, unlink_type);
 }
 
 StringView NamespaceToString(Namespace* self) {
@@ -162,13 +162,13 @@ StringView NamespaceToString(Namespace* self) {
 }
 
 void DeleteNamespace(Namespace * self) {
-	DeleteNumericMap(self->NamespaceMap, DeleteNamespace_namespace);
-	DeleteNumericMap(self->TypeMap, DeleteNamespace_type);
+	DeleteNumericMap(self->NamespaceMap, delete_namespace);
+	DeleteNumericMap(self->TypeMap, delete_type);
 	MEM_FREE(self);
 }
 
 //private
-static Namespace* Namespacemalloc(StringView namev) {
+static Namespace* malloc_namespace(StringView namev) {
 	Namespace* ret = (Namespace*)MEM_MALLOC(sizeof(Namespace));
 	ret->NamespaceMap = NewNumericMap();
 	ret->TypeMap = NewNumericMap();
@@ -178,56 +178,56 @@ static Namespace* Namespacemalloc(StringView namev) {
 	return ret;
 }
 
-static void UnlinkNamespace_namespace(NumericMapKey key, NumericMapItem item) {
+static void unlink_namespace(NumericMapKey key, NumericMapItem item) {
 	Namespace* e = (Namespace*)item;
 	UnlinkNamespace(e);
 }
 
-static void DeleteNamespace_namespace(NumericMapKey key, NumericMapItem item) {
+static void delete_namespace(NumericMapKey key, NumericMapItem item) {
 	Namespace* e = (Namespace*)item;
 	DeleteNamespace(e);
 }
 
-static void UnlinkNamespace_type(NumericMapKey key, NumericMapItem item) {
+static void unlink_type(NumericMapKey key, NumericMapItem item) {
 	Type* e = (Type*)item;
 	UnlinkType(e);
 }
 
-static void DeleteNamespace_type(NumericMapKey key, NumericMapItem item) {
+static void delete_type(NumericMapKey key, NumericMapItem item) {
 	Type* e = (Type*)item;
 	DeleteType(e);
 }
 
-static void Namespacedump_root(NumericMap* root, bool callSelf, int depth) {
+static void dump_root(NumericMap* root, bool callSelf, int depth) {
 	if (root == NULL) {
 		return;
 	}
 	if (callSelf) {
-		Namespacedump_impl((Namespace*)root->Item, depth);
+		dump_impl((Namespace*)root->Item, depth);
 	}
 	if (root->Left != NULL) {
-		Namespacedump_root(root->Left, true, depth);
+		dump_root(root->Left, true, depth);
 	}
 	if (root->Right != NULL) {
-		Namespacedump_root(root->Right, true, depth);
+		dump_root(root->Right, true, depth);
 	}
 }
 
-static void Namespacedump_impl(Namespace* root, int depth) {
-	Namespaceput_indent(depth);
+static void dump_impl(Namespace* root, int depth) {
+	put_indent(depth);
 	printf("%s", Ref2Str(root->Name));
 	Println();
-	Namespacedump_class(root->TypeMap, true, depth + 1);
-	Namespacedump_root(root->NamespaceMap, false, depth + 1);
+	dump_class(root->TypeMap, true, depth + 1);
+	dump_root(root->NamespaceMap, false, depth + 1);
 }
 
-static void Namespaceput_indent(int depth) {
+static void put_indent(int depth) {
 	for (int i = 0; i < depth; i++) {
 		printf("    ");
 	}
 }
 
-static void Namespacedump_class(NumericMap* root, bool isRoot, int depth) {
+static void dump_class(NumericMap* root, bool isRoot, int depth) {
 	if (!isRoot && (root == NULL || root->Item == NULL)) {
 		return;
 	}
@@ -236,6 +236,6 @@ static void Namespacedump_class(NumericMap* root, bool isRoot, int depth) {
 		//type_dump(e, depth);
 		assert(false);
 	}
-	Namespacedump_class(root->Left, false, depth);
-	Namespacedump_class(root->Right, false, depth);
+	dump_class(root->Left, false, depth);
+	dump_class(root->Right, false, depth);
 }
