@@ -15,10 +15,10 @@
 #include "../vm/yield_context.h"
 
 //proto
-static Object* Object_mallocImpl(ObjectTag type, const char* filename, int lineno);
-static void DeleteObject_self(VectorItem item);
-static void Object_mark_coroutine(Object* self);
-#define Object_malloc(type) (Object_mallocImpl(type, __FILE__, __LINE__))
+static Object* malloc_impl(ObjectTag type, const char* filename, int lineno);
+static void delete_self(VectorItem item);
+static void mark_coroutine(Object* self);
+#define Object_malloc(type) (malloc_impl(type, __FILE__, __LINE__))
 //static Object* Object_malloc(ObjectTag type);
 //static Object* gObjectTrue = NULL;
 //static Object* gObjectFalse = NULL;
@@ -27,7 +27,7 @@ static int gObjectCount = 0;
 
 
 Object * MallocIntObject(int i, const char* filename, int lineno) {
-	Object* ret = Object_mallocImpl(OBJECT_INT_T, filename, lineno);
+	Object* ret = malloc_impl(OBJECT_INT_T, filename, lineno);
 	ret->u.int_ = i;
 	ret->GType = GENERIC_INT;
 	ret->VPtr = GetVTableType(TYPE_INT);
@@ -46,7 +46,7 @@ Object* GetIntObject(int i) {
 }
 
 Object * MallocDoubleObject(double d, const char* filename, int lineno) {
-	Object* ret = Object_mallocImpl(OBJECT_DOUBLE_T, filename, lineno);
+	Object* ret = malloc_impl(OBJECT_DOUBLE_T, filename, lineno);
 	ret->u.double_ = d;
 	ret->GType = GENERIC_DOUBLE;
 	ret->VPtr = GetVTableType(TYPE_DOUBLE);
@@ -54,7 +54,7 @@ Object * MallocDoubleObject(double d, const char* filename, int lineno) {
 }
 
 Object* MallocLongObject(long l, const char* filename, int lineno) {
-	Object* ret = Object_mallocImpl(OBJECT_LONG_T, filename, lineno);
+	Object* ret = malloc_impl(OBJECT_LONG_T, filename, lineno);
 	ret->u.long_ = l;
 	ret->GType = GENERIC_OBJECT;
 	ret->VPtr = GetVTableType(TYPE_OBJECT);
@@ -62,7 +62,7 @@ Object* MallocLongObject(long l, const char* filename, int lineno) {
 }
 
 Object * MallocCharObject(char c, const char* filename, int lineno) {
-	Object* ret = Object_mallocImpl(OBJECT_CHAR_T, filename, lineno);
+	Object* ret = malloc_impl(OBJECT_CHAR_T, filename, lineno);
 	ret->u.char_ = c;
 	ret->GType = GENERIC_CHAR;
 	ret->VPtr = GetVTableType(TYPE_CHAR);
@@ -70,7 +70,7 @@ Object * MallocCharObject(char c, const char* filename, int lineno) {
 }
 
 Object * MallocStringObject(const char * s, const char* filename, int lineno) {
-	Object* ret = Object_mallocImpl(OBJECT_STRING_T, filename, lineno);
+	Object* ret = malloc_impl(OBJECT_STRING_T, filename, lineno);
 	//ret->u.string_ = s;
 	ret->u.field_vec = NewVector();
 	ret->GType = GENERIC_STRING;
@@ -111,7 +111,7 @@ Object * MallocStringObject(const char * s, const char* filename, int lineno) {
 }
 
 Object * MallocRefObject(const char* filename, int lineno) {
-	Object* ret= Object_mallocImpl(OBJECT_REF_T, filename, lineno);
+	Object* ret= malloc_impl(OBJECT_REF_T, filename, lineno);
 	ret->u.field_vec = MallocVector(filename, lineno);
 	return ret;
 }
@@ -197,7 +197,7 @@ Object* CloneObject(Object* self) {
 	if(self->Tag == OBJECT_REF_T ||
 	   self->Tag == OBJECT_ARRAY_T ||
 	   self->Tag == OBJECT_STRING_T) {
-		ret = Object_mallocImpl(OBJECT_INT_T, __FILE__, __LINE__);
+		ret = malloc_impl(OBJECT_INT_T, __FILE__, __LINE__);
 		ret->Tag = self->Tag;
 		ret->GType = self->GType;
 		ret->VPtr = self->VPtr;
@@ -238,7 +238,7 @@ void PaintAllObject(Object* self, ObjectPaint paint) {
 		}
 	}
 	//コルーチンならその中身をマークする
-	Object_mark_coroutine(self);
+	mark_coroutine(self);
 }
 
 void MarkAllObject(Object * self) {
@@ -301,13 +301,13 @@ void DestroyObject(Object* self) {
 	if (self->Tag == OBJECT_REF_T ||
 	   self->Tag == OBJECT_STRING_T ||
 		self->Tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, DeleteObject_self);
+		DeleteVector(self->u.field_vec, delete_self);
 		self->u.field_vec = NULL;
 	}
 	//String#charArray
 	if (self->Tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, DeleteObject_self);
-		DeleteVector(self->NativeSlotVec, DeleteObject_self);
+		DeleteVector(self->u.field_vec, delete_self);
+		DeleteVector(self->NativeSlotVec, delete_self);
 		self->NativeSlotVec = NULL;
 		self->u.field_vec = NULL;
 	}
@@ -383,7 +383,7 @@ const char* GetObjectName(Object* self) {
 }
 
 //private
-static Object* Object_mallocImpl(ObjectTag type, const char* filename, int lineno) {
+static Object* malloc_impl(ObjectTag type, const char* filename, int lineno) {
 	Object* ret = (Object*)mem_malloc(sizeof(Object), filename, lineno);
 	ret->IsCoroutine = false;
 	ret->GType = NULL;
@@ -403,12 +403,12 @@ static Object* Object_mallocImpl(ObjectTag type, const char* filename, int linen
 	return ret;
 }
 
-static void DeleteObject_self(VectorItem item) {
+static void delete_self(VectorItem item) {
 	Object* e = (Object*)item;
 	DestroyObject(e);
 }
 
-static void Object_mark_coroutine(Object* self) {
+static void mark_coroutine(Object* self) {
 	if(!self->IsCoroutine) {
 		return;
 	}
