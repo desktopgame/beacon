@@ -186,7 +186,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 }
 //private
 static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, AccessLevel level) {
-	ILPropertyBody* ret = ILPropertyBody_new(tag);
+	ILPropertyBody* ret = ILNewPropertyBody(tag);
 	assert(abody->Tag == AST_PROP_SET_T || abody->Tag == AST_PROP_GET_T);
 	AST* aacess = FirstAST(abody);
 	AST* astmt_list = SecondAST(abody);

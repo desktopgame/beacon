@@ -6,8 +6,8 @@ Property* MallocProperty(StringView namev, const char* filename, int lineno) {
 	ret->Name = namev;
 	ret->GType = NULL;
 	ret->Parent = NULL;
-	ret->Set = PropertyBody_new(PROPERTY_SET_T);
-	ret->Get = PropertyBody_new(PROPERTY_GET_T);
+	ret->Set = NewPropertyBody(PROPERTY_SET_T);
+	ret->Get = NewPropertyBody(PROPERTY_GET_T);
 	ret->IsShort = false;
 	ret->SourceRef = NULL;
 	ret->Set->Parent = ret;

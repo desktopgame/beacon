@@ -27,7 +27,7 @@ typedef struct ILPropertyBody {
 	bool IsShort;
 } ILPropertyBody;
 
-#define ILPropertyBody_new(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
+#define ILNewPropertyBody(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
 ILPropertyBody* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno);
 
 void DeleteILPropertyBody(ILPropertyBody* self);
