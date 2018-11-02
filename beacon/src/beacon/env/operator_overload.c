@@ -13,7 +13,7 @@
 #include "generic_type.h"
 #include "parameter.h"
 
-static void DeleteOperatorOverload_param(VectorItem item);
+static void delete_parameter(VectorItem item);
 
 OperatorOverload* NewOperatorOverload(OperatorType type) {
 	OperatorOverload* ret = (OperatorOverload*)MEM_MALLOC(sizeof(OperatorOverload));
@@ -45,11 +45,11 @@ void ExecuteOperatorOverload(OperatorOverload* self, Frame* fr, Enviroment* env)
 
 void DeleteOperatorOverload(OperatorOverload* self) {
 	DeleteEnviroment(self->Env);
-	DeleteVector(self->Parameters, DeleteOperatorOverload_param);
+	DeleteVector(self->Parameters, delete_parameter);
 	MEM_FREE(self);
 }
 //private
-static void DeleteOperatorOverload_param(VectorItem item) {
+static void delete_parameter(VectorItem item) {
 	Parameter* e = (Parameter*)item;
 	DeleteParameter(e);
 }
