@@ -14,15 +14,15 @@
 #include "../thread/thread.h"
 #include "../util/text.h"
 //proto
-static ScriptContext* ScriptContext_malloc(void);
-static void ScriptContext_free(ScriptContext* self);
-static void ScriptContext_DeleteClassLoader(const char* name, TreeItem item);
+static ScriptContext* malloc_script_context(void);
+static void free_script_context(ScriptContext* self);
+static void delete_class_loader(const char* name, TreeItem item);
 
-static void ScriptContext_UnlinkNamespace(NumericMapKey key, NumericMapItem item);
-static void ScriptContext_DeleteNamespace(NumericMapKey key, NumericMapItem item);
-static void ClearScriptContextImpl(Field* item);
-static void CacheScriptContext_delete(VectorItem item);
-static void ScriptContext_mcache_delete(NumericMapKey key, NumericMapItem item);
+static void unlink_namespace(NumericMapKey key, NumericMapItem item);
+static void delete_namespace(NumericMapKey key, NumericMapItem item);
+static void clear_impl(Field* item);
+static void delete_cache(VectorItem item);
+static void delete_mcache(NumericMapKey key, NumericMapItem item);
 
 static Vector* gScriptContextVec = NULL;
 static ScriptContext* gScriptContext = NULL;
@@ -32,7 +32,7 @@ ScriptContext* OpenScriptContext() {
 		gScriptContextVec = NewVector();
 		LaunchSGThread();
 	}
-	ScriptContext* sctx = ScriptContext_malloc();
+	ScriptContext* sctx = malloc_script_context();
 	gScriptContext = sctx;
 	PushVector(gScriptContextVec, sctx);
 	BootstrapScriptContext(sctx);
@@ -46,7 +46,7 @@ ScriptContext * GetCurrentScriptContext() {
 
 void CloseScriptContext() {
 	ScriptContext* sctx = (ScriptContext*)PopVector(gScriptContextVec);
-	ScriptContext_free(sctx);
+	free_script_context(sctx);
 	gScriptContext = NULL;
 	if(gScriptContextVec->Length == 0) {
 		DestroySGThread();
@@ -103,7 +103,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	self->Heap->AcceptBlocking--;
 }
 
-void EachStaticScriptContext(ScriptContext* self, static_each act) {
+void EachStaticScriptContext(ScriptContext* self, StaticEach act) {
 	ScriptContext* ctx = self;
 	for (int i = 0; i < ctx->TypeList->Length; i++) {
 		Type* e = (Type*)AtVector(ctx->TypeList, i);
@@ -121,7 +121,7 @@ void EachStaticScriptContext(ScriptContext* self, static_each act) {
 }
 
 void ClearScriptContext(ScriptContext* self) {
-	EachStaticScriptContext(self, ClearScriptContextImpl);
+	EachStaticScriptContext(self, clear_impl);
 }
 
 Object* IInternScriptContext(ScriptContext* self, int i) {
@@ -164,7 +164,7 @@ void CacheScriptContext() {
 }
 
 //private
-static ScriptContext* ScriptContext_malloc(void) {
+static ScriptContext* malloc_script_context(void) {
 	ScriptContext* ret = (ScriptContext*)MEM_MALLOC(sizeof(ScriptContext));
 	ret->NamespaceMap = NewNumericMap();
 	ret->ClassLoaderMap = NewTreeMap();
@@ -192,7 +192,7 @@ static ScriptContext* ScriptContext_malloc(void) {
 	return ret;
 }
 
-static void ScriptContext_free(ScriptContext* self) {
+static void free_script_context(ScriptContext* self) {
 	int aa = CountActiveObject();
 	assert(self->Heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
@@ -205,9 +205,9 @@ static void ScriptContext_free(ScriptContext* self) {
 		DestroyObject(self->Null);
 	}
 	DeleteHeap(self->Heap);
-	DeleteVector(self->NegativeIntegerCacheList, CacheScriptContext_delete);
-	DeleteVector(self->PositiveIntegerCacheList, CacheScriptContext_delete);
-	DeleteNumericMap(self->IntegerCacheMap, ScriptContext_mcache_delete);
+	DeleteVector(self->NegativeIntegerCacheList, delete_cache);
+	DeleteVector(self->PositiveIntegerCacheList, delete_cache);
+	DeleteNumericMap(self->IntegerCacheMap, delete_mcache);
 	//DeleteObject(self->Null);
 	CollectGenericType();
 	DeleteVector(self->AllGenericList, VectorDeleterOfNull);
@@ -215,42 +215,42 @@ static void ScriptContext_free(ScriptContext* self) {
 
 	DeleteVector(self->TypeList, VectorDeleterOfNull);
 	DeleteVector(self->ThreadList, VectorDeleterOfNull);
-	DeleteTreeMap(self->ClassLoaderMap, ScriptContext_DeleteClassLoader);
+	DeleteTreeMap(self->ClassLoaderMap, delete_class_loader);
 	//ブートストラップクラスローダを意図的に起動していないなら、
 	//ここはまだNULL
 	if(self->NamespaceMap != NULL) {
-		EachNumericMap(self->NamespaceMap, ScriptContext_UnlinkNamespace);
+		EachNumericMap(self->NamespaceMap, unlink_namespace);
 	}
 
 	int a = CountActiveObject();
-	DeleteNumericMap(self->NamespaceMap, ScriptContext_DeleteNamespace);
+	DeleteNumericMap(self->NamespaceMap, delete_namespace);
 	DeleteFiles(self->IncludeList);
 	MEM_FREE(self);
 }
 
-static void ScriptContext_DeleteClassLoader(const char* name, TreeItem item) {
+static void delete_class_loader(const char* name, TreeItem item) {
 	ClassLoader* e = (ClassLoader*)item;
 	DeleteClassLoader(e);
 }
 
-static void ScriptContext_UnlinkNamespace(NumericMapKey key, NumericMapItem item) {
+static void unlink_namespace(NumericMapKey key, NumericMapItem item) {
 	Namespace* e = (Namespace*)item;
 	UnlinkNamespace(e);
 }
 
-static void ScriptContext_DeleteNamespace(NumericMapKey key, NumericMapItem item) {
+static void delete_namespace(NumericMapKey key, NumericMapItem item) {
 	Namespace* e = (Namespace*)item;
 	DeleteNamespace(e);
 }
 
-static void ClearScriptContextImpl(Field* item) {
+static void clear_impl(Field* item) {
 	item->StaticValue = GetNullObject();
 }
 
-static void CacheScriptContext_delete(VectorItem item) {
+static void delete_cache(VectorItem item) {
 	DestroyObject((Object*)item);
 }
 
-static void ScriptContext_mcache_delete(NumericMapKey key, NumericMapItem item) {
+static void delete_mcache(NumericMapKey key, NumericMapItem item) {
 	DestroyObject((Object*)item);
 }
