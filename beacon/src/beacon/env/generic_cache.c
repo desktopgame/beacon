@@ -11,7 +11,7 @@ static void GenericCache_tree_delete(VectorItem item);
 
 GenericCache * NewGenericCache() {
 	GenericCache* ret = (GenericCache*)MEM_MALLOC(sizeof(GenericCache));
-	ret->FQCN = FQCNCache_new();
+	ret->FQCN = NewFQCNCache();
 	ret->TypeArgs = NewVector();
 	return ret;
 }

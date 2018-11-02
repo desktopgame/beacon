@@ -27,7 +27,7 @@ ILFactor * WrapILNewInstance(ILNewInstance * self) {
 
 ILNewInstance * NewILNewInstance() {
 	ILNewInstance* ret = (ILNewInstance*)MEM_MALLOC(sizeof(ILNewInstance));
-	ret->FQCNCache = FQCNCache_new();
+	ret->FQCNCache = NewFQCNCache();
 	ret->TypeArgs = NewVector();
 	ret->Arguments = NewVector();
 	ret->Constructor = NULL;

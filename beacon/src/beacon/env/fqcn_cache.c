@@ -9,10 +9,10 @@
 #include <string.h>
 
 //proto
-static Type* fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current);
+static Type* resolve_type(FQCNCache * self, Namespace* current);
 
 /*
-FQCNCache * FQCNCache_new() {
+FQCNCache * NewFQCNCache() {
 }
 */
 
@@ -74,11 +74,11 @@ Namespace * GetScopeFQCN(FQCNCache * self, Namespace* current) {
 }
 
 Type* GetTypeFQCN(FQCNCache * self, Namespace * current) {
-	Type* ret = fqcn_TYPE_IMPL(self, current);
+	Type* ret = resolve_type(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
 	if (ret == NULL && self->Scope->Length == 0) {
-		ret = fqcn_TYPE_IMPL(self, GetLangNamespace());
+		ret = resolve_type(self, GetLangNamespace());
 	}
 	return ret;
 }
@@ -130,7 +130,7 @@ bool EqualsFQCNCache(FQCNCache* a, FQCNCache* b) {
 	return true;
 }
 //private
-static Type* fqcn_TYPE_IMPL(FQCNCache * self, Namespace* current) {
+static Type* resolve_type(FQCNCache * self, Namespace* current) {
 	//Y形式
 	if (self->Scope->Length == 0) {
 		StringView namev = self->Name;
