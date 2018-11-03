@@ -94,7 +94,7 @@ void EachTreeMap(TreeMap * self, TreeAction act) {
 	each_impl(self, act);
 }
 
-void DeleteTreeMap(TreeMap * self, tree_element_deleter deleter) {
+void DeleteTreeMap(TreeMap * self, TreeElementDeleter deleter) {
 	if(self == NULL) {
 		return;
 	}

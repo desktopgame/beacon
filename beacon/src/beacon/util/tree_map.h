@@ -43,7 +43,7 @@ typedef void(*TreeAction)(const char* name, TreeItem item);
  * ツリーのデリータ関数です.
  * @param item
  */
-typedef void(*tree_element_deleter)(const char* name, TreeItem item);
+typedef void(*TreeElementDeleter)(const char* name, TreeItem item);
 
 /**
  * 新しいツリーマップを作成します.
@@ -95,7 +95,7 @@ void EachTreeMap(TreeMap* self, TreeAction act);
  * @param self
  * @param deleter
  */
-void DeleteTreeMap(TreeMap* self, tree_element_deleter deleter);
+void DeleteTreeMap(TreeMap* self, TreeElementDeleter deleter);
 
 /**
  * freeによって解放するデリータの実装です.
