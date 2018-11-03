@@ -716,11 +716,11 @@ typename_T
 fqcn_part
 	: IDENT
 	{
-		$$ = NewASTFQCN_part($1);
+		$$ = NewASTFQCNPart($1);
 	}
 	| fqcn_part COLO_COLO IDENT
 	{
-		$$ = NewASTFQCNPartList(NewASTFQCN_part($3), $1);
+		$$ = NewASTFQCNPartList(NewASTFQCNPart($3), $1);
 	}
 	;
 

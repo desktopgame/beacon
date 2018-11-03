@@ -3112,7 +3112,7 @@ yyreduce:
   case 123:
 #line 718 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTFQCN_part((yyvsp[0].stringv_value));
+		(yyval.ast_value) = NewASTFQCNPart((yyvsp[0].stringv_value));
 	}
 #line 3118 "beacon.tab.c" /* yacc.c:1663  */
     break;
@@ -3120,7 +3120,7 @@ yyreduce:
   case 124:
 #line 722 "beacon.y" /* yacc.c:1663  */
     {
-		(yyval.ast_value) = NewASTFQCNPartList(NewASTFQCN_part((yyvsp[0].stringv_value)), (yyvsp[-2].ast_value));
+		(yyval.ast_value) = NewASTFQCNPartList(NewASTFQCNPart((yyvsp[0].stringv_value)), (yyvsp[-2].ast_value));
 	}
 #line 3126 "beacon.tab.c" /* yacc.c:1663  */
     break;

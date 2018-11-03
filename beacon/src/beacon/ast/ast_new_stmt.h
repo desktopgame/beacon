@@ -182,7 +182,7 @@ AST* NewASTFQCN(AST* part_list, StringView class_name);
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
  */
-#define NewASTFQCN_part(name) (MallocASTFQCNPart(name, __FILE__, __LINE__))
+#define NewASTFQCNPart(name) (MallocASTFQCNPart(name, __FILE__, __LINE__))
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
