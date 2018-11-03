@@ -3,7 +3,7 @@
 #include "../../util/text.h"
 
 ILStatement* WrapILDefer(ILDefer* self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_DEFER_T);
+	ILStatement* ret = NewILStatement(ILSTMT_DEFER_T);
 	ret->Kind.Defer = self;
 	return ret;
 }

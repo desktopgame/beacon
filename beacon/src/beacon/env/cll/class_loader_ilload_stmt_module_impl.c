@@ -121,7 +121,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_RETURN_EMPTY_T:
 		{
-			ILStatement* ret = ILStatement_new(ILSTMT_RETURN_EMPTY_T);
+			ILStatement* ret = NewILStatement(ILSTMT_RETURN_EMPTY_T);
 			ret->Kind.ReturnEmpty = NULL;
 			return ret;
 		}
@@ -151,7 +151,7 @@ static ILStatement* CLILBodyImpl(ClassLoader* self, AST* asource) {
 		}
 		case AST_YIELD_BREAK_T:
 		{
-			ILStatement* ret = ILStatement_new(ILSTMT_YIELD_BREAK_T);
+			ILStatement* ret = NewILStatement(ILSTMT_YIELD_BREAK_T);
 			ret->Kind.YieldBreak = NULL;
 			return ret;
 		}

@@ -4,7 +4,7 @@
 #include "../../vm/symbol_entry.h"
 
 ILStatement* WrapILInjectJNI(ILInjectJNI* self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_INJECT_JNI_T);
+	ILStatement* ret = NewILStatement(ILSTMT_INJECT_JNI_T);
 	ret->Kind.InjectJNI = self;
 	//JNIに関しては後からソースの先頭に付け加えられるので必ず0
 	ret->Lineno = 0;

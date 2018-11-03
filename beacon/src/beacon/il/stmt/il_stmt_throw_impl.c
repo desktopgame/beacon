@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 ILStatement* WrapILThrow(ILThrow* self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_THROW_T);
+	ILStatement* ret = NewILStatement(ILSTMT_THROW_T);
 	ret->Kind.Throw = self;
 	return ret;
 }

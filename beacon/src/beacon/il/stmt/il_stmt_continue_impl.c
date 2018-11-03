@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 ILStatement * WrapILContinue() {
-	ILStatement* ret = ILStatement_new(ILSTMT_CONTINUE_T);
+	ILStatement* ret = NewILStatement(ILSTMT_CONTINUE_T);
 	return ret;
 }
 

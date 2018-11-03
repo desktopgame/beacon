@@ -79,7 +79,7 @@ typedef struct ILStatement {
 	} Kind;
 } ILStatement;
 
-#define ILStatement_new(type) (MallocILStmt(type, __FILE__, __LINE__))
+#define NewILStatement(type) (MallocILStmt(type, __FILE__, __LINE__))
 ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno);
 
 /**

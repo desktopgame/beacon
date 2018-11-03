@@ -13,7 +13,7 @@ static void DeleteILIf_stmt(VectorItem item);
 static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
 
 ILStatement * WrapILIf(ILIf * self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_IF_T);
+	ILStatement* ret = NewILStatement(ILSTMT_IF_T);
 	ret->Kind.If = self;
 	return ret;
 }

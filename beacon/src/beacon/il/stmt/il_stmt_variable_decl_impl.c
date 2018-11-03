@@ -9,7 +9,7 @@
 #include "../../env/import_manager.h"
 
 ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_VARIABLE_DECL_T);
+	ILStatement* ret = NewILStatement(ILSTMT_VARIABLE_DECL_T);
 	ret->Kind.VariableDecl = self;
 	return ret;
 }

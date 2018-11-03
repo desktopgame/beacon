@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 ILStatement * WrapILBreak() {
-	ILStatement* ret = ILStatement_new(ILSTMT_BREAK_T);
+	ILStatement* ret = NewILStatement(ILSTMT_BREAK_T);
 	return ret;
 }
 

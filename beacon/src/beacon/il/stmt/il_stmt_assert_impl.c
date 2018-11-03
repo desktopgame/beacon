@@ -7,7 +7,7 @@
 #include <assert.h>
 
 ILStatement* WrapILAssert(ILAssert* self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_ASSERT_T);
+	ILStatement* ret = NewILStatement(ILSTMT_ASSERT_T);
 	ret->Kind.Assert = self;
 	self->Parent = ret;
 	return ret;

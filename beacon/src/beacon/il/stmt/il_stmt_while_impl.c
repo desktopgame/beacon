@@ -11,7 +11,7 @@ static void ILWhile_stmt_delete(VectorItem item);
 static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
 
 ILStatement * WrapILWhile(ILWhile * self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_WHILE_T);
+	ILStatement* ret = NewILStatement(ILSTMT_WHILE_T);
 	ret->Kind.While = self;
 	return ret;
 }

@@ -4,7 +4,7 @@
 #include "../../util/mem.h"
 
 ILStatement * WrapILProc(ILProc * self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_PROC_T);
+	ILStatement* ret = NewILStatement(ILSTMT_PROC_T);
 	ret->Kind.Proc = self;
 	return ret;
 }

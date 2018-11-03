@@ -8,7 +8,7 @@
 #include <string.h>
 
 ILStatement * WrapILInferencedTypeInit(ILInferencedTypeInit * self) {
-	ILStatement* ret = ILStatement_new(ILSTMT_INFERENCED_TYPE_INIT_T);
+	ILStatement* ret = NewILStatement(ILSTMT_INFERENCED_TYPE_INIT_T);
 	ret->Kind.InferencedTypeInit = self;
 	return ret;
 }
