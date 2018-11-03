@@ -139,7 +139,8 @@
 			"il_factor_not_op_impl.h": "c",
 			"il_factor_variable_impl.h": "c",
 			"il_stmt_interface.h": "c",
-			"generic_cache.h": "c"
+			"generic_cache.h": "c",
+			"numeric_map.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
