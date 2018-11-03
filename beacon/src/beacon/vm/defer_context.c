@@ -1,5 +1,6 @@
 #include "defer_context.h"
 #include "../util/mem.h"
+
 DeferContext* NewDeferContext() {
 	DeferContext* ret = (DeferContext*)MEM_MALLOC(sizeof(DeferContext));
 	ret->VariableTable = NULL;
