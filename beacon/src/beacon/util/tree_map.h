@@ -37,7 +37,7 @@ typedef struct TreeMap {
  * ツリーのアクション関数です.
  * @param item
  */
-typedef void(*tree_action)(const char* name, TreeItem item);
+typedef void(*TreeAction)(const char* name, TreeItem item);
 
 /**
  * ツリーのデリータ関数です.
@@ -88,7 +88,7 @@ int CompareTreeMap(TreeMap* self, TreeKey key);
  * @param self
  * @param act
  */
-void EachTreeMap(TreeMap* self, tree_action act);
+void EachTreeMap(TreeMap* self, TreeAction act);
 
 /**
  * ツリーと全ての要素を削除します.

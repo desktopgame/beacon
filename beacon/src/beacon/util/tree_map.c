@@ -7,7 +7,7 @@
 #include <assert.h>
 
 //proto
-static void each_impl(TreeMap* self, tree_action act);
+static void each_impl(TreeMap* self, TreeAction act);
 
 TreeMap * NewTreeMap() {
 	TreeMap* ret = (TreeMap*)MEM_MALLOC(sizeof(TreeMap));
@@ -89,7 +89,7 @@ int CompareTreeMap(TreeMap * self, TreeKey key) {
 	return strcmp(self->Key, key);
 }
 
-void EachTreeMap(TreeMap * self, tree_action act) {
+void EachTreeMap(TreeMap * self, TreeAction act) {
 	assert(self != NULL);
 	each_impl(self, act);
 }
@@ -123,7 +123,7 @@ void TreeMapDeleterOfNull(const char* key, TreeItem item) {
 }
 
 //private
-static void each_impl(TreeMap* self, tree_action act) {
+static void each_impl(TreeMap* self, TreeAction act) {
 	if (self->Left != NULL) {
 		each_impl(self->Left, act);
 	}
