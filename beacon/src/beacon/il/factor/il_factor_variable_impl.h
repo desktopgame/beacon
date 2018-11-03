@@ -51,7 +51,7 @@ typedef struct ILVariable {
 
 ILFactor* WrapILVariable(ILVariable* self);
 
-#define ILVariable_new() (MallocILVariable(__FILE__, __LINE__))
+#define NewILVariable() (MallocILVariable(__FILE__, __LINE__))
 ILVariable* MallocILVariable(const char* filename, int lineno);
 
 void GenerateILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
