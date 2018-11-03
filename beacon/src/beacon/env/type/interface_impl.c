@@ -11,12 +11,12 @@
 #include "../type_parameter.h"
 #include <stdio.h>
 //proto
-Vector* GetGenericInterfaceTreeInterfaceImpl(Interface* self);
-static void DeleteInterface_method(VectorItem item);
-static void interface_DeleteTypeParameter(VectorItem item);
-static void interface_GenericType_list_delete(VectorItem item);
-static void FlattenMethodInterfaceImpl(Interface* self, Vector* dest, int depth);
-static void DeleteInterface_Property(VectorItem item);
+Vector* get_generic_interface_tree_impl(Interface* self);
+static void delete_method(VectorItem item);
+static void delete_type_parameter(VectorItem item);
+static void delete_generic_type(VectorItem item);
+static void flatten_method_impl(Interface* self, Vector* dest, int depth);
+static void delete_property(VectorItem item);
 
 Type* WrapInterface(Interface* self) {
 	Type* ret = NewType();
@@ -71,7 +71,7 @@ Vector* FlattenMethodInterfaceList(Vector* inter_list) {
 
 Vector* FlattenMethodInterface(Interface* self) {
 	Vector* ret = NewVector();
-	FlattenMethodInterfaceImpl(self, ret, 0);
+	flatten_method_impl(self, ret, 0);
 	return ret;
 }
 
@@ -102,14 +102,14 @@ void CreateVTableInterface(Interface* self) {
 }
 
 void UnlinkInterface(Interface* self) {
-	DeleteVector(self->Methods, DeleteInterface_method);
-	DeleteVector(self->Properties, DeleteInterface_Property);
+	DeleteVector(self->Methods, delete_method);
+	DeleteVector(self->Properties, delete_property);
 	DeleteVector(self->Implements, VectorDeleterOfNull);
 	DeleteVTable(self->VT);
 }
 
 void DeleteInterface(Interface* self) {
-	DeleteVector(self->TypeParameters, interface_DeleteTypeParameter);
+	DeleteVector(self->TypeParameters, delete_type_parameter);
 	MEM_FREE(self);
 }
 
@@ -143,7 +143,7 @@ Method* GetFunctionInterface(Interface* self) {
 
 
 Vector* GetGenericInterfaceTreeInterface(Interface* self) {
-	return GetGenericInterfaceTreeInterfaceImpl(self);
+	return get_generic_interface_tree_impl(self);
 }
 
 GenericType* FindInterfaceInterface(Interface* self, Type* tinter) {
@@ -161,33 +161,33 @@ GenericType* FindInterfaceInterface(Interface* self, Type* tinter) {
 }
 
 //private
-Vector* GetGenericInterfaceTreeInterfaceImpl(Interface* self) {
+Vector* get_generic_interface_tree_impl(Interface* self) {
 	Vector* ret = NewVector();
 	for(int i=0; i<self->Implements->Length; i++) {
 		GenericType* ginter = AtVector(self->Implements, i);
 		PushVector(ret, ginter);
-		Vector* inner = GetGenericInterfaceTreeInterfaceImpl(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
+		Vector* inner = get_generic_interface_tree_impl(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
 		MergeVector(ret, inner);
 		DeleteVector(inner, VectorDeleterOfNull);
 	}
 	return ret;
 }
-static void DeleteInterface_method(VectorItem item) {
+static void delete_method(VectorItem item) {
 	Method* e = (Method*)item;
 	DeleteMethod(e);
 }
 
-static void interface_DeleteTypeParameter(VectorItem item) {
+static void delete_type_parameter(VectorItem item) {
 	TypeParameter* e = (TypeParameter*)item;
 	DeleteTypeParameter(e);
 }
 
-static void interface_GenericType_list_delete(VectorItem item) {
+static void delete_generic_type(VectorItem item) {
 	//GenericType* e = (GenericType*)item;
 	//generic_DeleteType(e);
 }
 
-static void FlattenMethodInterfaceImpl(Interface* self, Vector* dest, int depth) {
+static void flatten_method_impl(Interface* self, Vector* dest, int depth) {
 	//tekitou
 	#if defined(DEBUG)
 	const char* intername = Ref2Str(self->Name);
@@ -200,11 +200,11 @@ static void FlattenMethodInterfaceImpl(Interface* self, Vector* dest, int depth)
 	for(int i=0; i<self->Implements->Length; i++) {
 		GenericType* e = AtVector(self->Implements, i);
 		Interface* inter = TYPE2INTERFACE(e->CoreType);
-		FlattenMethodInterfaceImpl(inter, dest, depth + 1);
+		flatten_method_impl(inter, dest, depth + 1);
 	}
 }
 
-static void DeleteInterface_Property(VectorItem item) {
+static void delete_property(VectorItem item) {
 	Property* e = (Property*)item;
 	DeleteProperty(e);
 }
