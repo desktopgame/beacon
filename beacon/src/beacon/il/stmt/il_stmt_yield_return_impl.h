@@ -18,7 +18,7 @@ typedef struct ILYieldReturn {
 
 ILStatement* WrapILYieldReturn(ILYieldReturn* self);
 
-#define ILYieldReturn_new() (MallocILYieldReturn(__FILE__, __LINE__))
+#define NewILYieldReturn() (MallocILYieldReturn(__FILE__, __LINE__))
 ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno);
 
 void GenerateILYieldReturn(ILYieldReturn* self, Enviroment* env, CallContext* cctx);
