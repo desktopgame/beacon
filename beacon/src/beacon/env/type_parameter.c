@@ -6,11 +6,11 @@
 #include <assert.h>
 
 //proto
-static void TypeParameter_rule_list_delete(VectorItem item);
+static void delete_rule(VectorItem item);
 
-TypeParameter * NewTypeParameter(StringView namev) {
+TypeParameter * NewTypeParameter(StringView name) {
 	TypeParameter* ret = (TypeParameter*)MEM_MALLOC(sizeof(TypeParameter));
-	ret->Name = namev;
+	ret->Name = name;
 	ret->Kind = TYPE_PARAMETER_KIND_DEFAULT_T;
 	return ret;
 }
@@ -56,7 +56,7 @@ void PrintTypeParameter(Vector* v) {
 	if (v->Length <= 0) {
 		return;
 	}
-	printf("<");
+	printf("[");
 	for (int i = 0; i < v->Length; i++) {
 		TypeParameter* e = (TypeParameter*)AtVector(v, i);
 		if (e->Kind == TYPE_PARAMETER_KIND_IN_T) {
@@ -69,7 +69,7 @@ void PrintTypeParameter(Vector* v) {
 			printf(", ");
 		}
 	}
-	printf(">");
+	printf("]");
 }
 
 void DeleteTypeParameter(TypeParameter * self) {
@@ -95,7 +95,7 @@ bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
 }
 
 //private
-static void TypeParameter_rule_list_delete(VectorItem item) {
+static void delete_rule(VectorItem item) {
 //	TypeParameter_rule* e = (TypeParameter_rule*)item;
 //	TypeParameter_rule_delete(e);
 }

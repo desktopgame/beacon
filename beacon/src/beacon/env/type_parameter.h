@@ -35,7 +35,7 @@ typedef struct TypeParameter {
  * @param name
  * @return
  */
-TypeParameter* NewTypeParameter(StringView namev);
+TypeParameter* NewTypeParameter(StringView name);
 
 /**
  * ILから型変数を生成します.
