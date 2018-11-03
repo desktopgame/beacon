@@ -189,7 +189,7 @@ void DeleteILStmt(ILStatement * self) {
 			DeleteILYieldReturn(self->Kind.YieldReturn);
 			break;
 		case ILSTMT_YIELD_BREAK_T:
-			//ILStatement_yield_break_delete(self->Kind.YieldBreak);
+			//ILStatementYieldBreak_delete(self->Kind.YieldBreak);
 			break;
 		case ILSTMT_INJECT_JNI_T:
 			DeleteILInjectJni(self->Kind.InjectJNI);
