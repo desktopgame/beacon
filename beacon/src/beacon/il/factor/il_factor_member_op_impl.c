@@ -150,7 +150,7 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 	#endif
 	Type* ctype = receiver_type->CoreType;
 	Property* p = FindTreePropertyClass(TYPE2CLASS(ctype), self->Name, &temp);
-	ILPropertyAccess* factp = ILPropertyAccess_new();
+	ILPropertyAccess* factp = NewILPropertyAccess();
 	factp->Source = self->Source;
 	factp->Name = self->Name;
 	factp->Property = p;
@@ -176,7 +176,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, Call
 	int temp = -1;
 	Type* ctype = receiver_type->CoreType;
 	Property* p = FindTreeSPropertyClass(TYPE2CLASS(ctype), self->Name, &temp);
-	ILPropertyAccess* factp = ILPropertyAccess_new();
+	ILPropertyAccess* factp = NewILPropertyAccess();
 	factp->Source = self->Source;
 	factp->Name = self->Name;
 	factp->Property = p;

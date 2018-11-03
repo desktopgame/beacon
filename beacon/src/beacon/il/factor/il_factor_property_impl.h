@@ -22,7 +22,7 @@ typedef struct ILPropertyAccess {
 	Property* Property;
 } ILPropertyAccess;
 
-#define ILPropertyAccess_new() (MallocILPropertyAccess(__FILE__, __LINE__))
+#define NewILPropertyAccess() (MallocILPropertyAccess(__FILE__, __LINE__))
 ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno);
 
 void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
