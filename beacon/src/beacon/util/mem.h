@@ -18,7 +18,6 @@
 #endif
 
 #define mem_malloc(size, file, line) (malloc(size))
-typedef unsigned char muchar_t;
 #if defined(_MSC_VER)
 	#if defined(_DEBUG)
 		#define NON_NULL(m) (m)
