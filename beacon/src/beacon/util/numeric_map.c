@@ -1,7 +1,7 @@
 #include "numeric_map.h"
 #include "mem.h"
 
-static void EachNumericMapImpl(NumericMap* self, NumericMapAction a);
+static void each_impl(NumericMap* self, NumericMapAction a);
 
 NumericMap* NewNumericMap() {
 	NumericMap* ret = (NumericMap*)MEM_MALLOC(sizeof(NumericMap));
@@ -75,7 +75,7 @@ int CompareNumericMap(NumericMap* self, NumericMapKey key) {
 }
 
 void EachNumericMap(NumericMap* self, NumericMapAction a) {
-	EachNumericMapImpl(self, a);
+	each_impl(self, a);
 }
 
 void DeleteNumericMap(NumericMap* self, NumericMapDeleter deleter) {
@@ -105,15 +105,15 @@ void NumericMapDeleterByFree(NumericMapKey name, NumericMapItem item) {
 	MEM_FREE(item);
 }
 //private
-static void EachNumericMapImpl(NumericMap* self, NumericMapAction a) {
+static void each_impl(NumericMap* self, NumericMapAction a) {
 	if (self->Left != NULL) {
-		EachNumericMapImpl(self->Left, a);
+		each_impl(self->Left, a);
 	}
 	//同じならそれはルート要素
 	if (self->Key != 0) {
 		a(self->Key, self->Item);
 	}
 	if (self->Right != NULL) {
-		EachNumericMapImpl(self->Right, a);
+		each_impl(self->Right, a);
 	}
 }
