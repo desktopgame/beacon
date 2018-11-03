@@ -15,11 +15,11 @@
 #include "../env/generic_type.h"
 
 //proto
-static void Enviroment_constant_pool_vec_delete(VectorItem item);
-static void Enviroment_DeleteLineRange(VectorItem item);
-static void Enviroment_add_constant(Enviroment* self, Object* o);
-static void Enviroment_DeleteObject_self(VectorItem item);
-static void Enviroment_DeleteObject(Object* obj);
+static void delete_constant(VectorItem item);
+static void delete_line_range(VectorItem item);
+static void add_constant(Enviroment* self, Object* o);
+static void delete_object_self(VectorItem item);
+static void delete_object(Object* obj);
 
 Enviroment * NewEnviroment() {
 	Enviroment* ret = (Enviroment*)MEM_MALLOC(sizeof(Enviroment));
@@ -86,25 +86,25 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 
 int AddCIntEnviroment(Enviroment * self, int i) {
 	int len = self->ConstantPool->Length;
-	Enviroment_add_constant(self, Object_int_new(i));
+	add_constant(self, Object_int_new(i));
 	return len;
 }
 
 int AddCDoubleEnviroment(Enviroment * self, double d) {
 	int len = self->ConstantPool->Length;
-	Enviroment_add_constant(self, Object_double_new(d));
+	add_constant(self, Object_double_new(d));
 	return len;
 }
 
 int AddCCharEnviroment(Enviroment * self, char c) {
 	int len = self->ConstantPool->Length;
-	Enviroment_add_constant(self, Object_char_new(c));
+	add_constant(self, Object_char_new(c));
 	return len;
 }
 
 int AddCStringEnviroment(Enviroment * self, StringView sv) {
 	int len = self->ConstantPool->Length;
-	Enviroment_add_constant(self, Object_string_new(Ref2Str(sv)));
+	add_constant(self, Object_string_new(Ref2Str(sv)));
 	return len;
 }
 
@@ -144,31 +144,31 @@ void DeleteEnviroment(Enviroment * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->ConstantPool, Enviroment_constant_pool_vec_delete);
-	DeleteVector(self->LineRangeTable, Enviroment_DeleteLineRange);
+	DeleteVector(self->ConstantPool, delete_constant);
+	DeleteVector(self->LineRangeTable, delete_line_range);
 	DeleteOpcodeBuf(self->Bytecode);
 	DeleteSymbolTable(self->Symboles);
 	MEM_FREE(self);
 }
 
 //private
-static void Enviroment_constant_pool_vec_delete(VectorItem item) {
-	Enviroment_DeleteObject((Object*)item);
+static void delete_constant(VectorItem item) {
+	delete_object((Object*)item);
 }
 
-static void Enviroment_DeleteLineRange(VectorItem item) {
+static void delete_line_range(VectorItem item) {
 	LineRange* e = (LineRange*)item;
 	DeleteLineRange(e);
 }
 
-static void Enviroment_add_constant(Enviroment* self, Object* o) {
+static void add_constant(Enviroment* self, Object* o) {
 	PushVector(self->ConstantPool, o);
 	assert(o->Paint == PAINT_ONEXIT_T);
 }
 
-static void Enviroment_DeleteObject_self(VectorItem item) {
+static void delete_object_self(VectorItem item) {
 }
 
-static void Enviroment_DeleteObject(Object* obj) {
+static void delete_object(Object* obj) {
 	DestroyObject(obj);
 }
