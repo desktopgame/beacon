@@ -21,7 +21,7 @@
 #endif
 
 //proto
-static void FileEntryDeleter(VectorItem item);
+static void delete_file_entry(VectorItem item);
 
 void Printi(int depth) {
 	Fprinti(stdout, depth);
@@ -239,7 +239,7 @@ int SortFiles(const void* a, const void* b) {
 }
 
 void DeleteFiles(Vector* files) {
-	DeleteVector(files, FileEntryDeleter);
+	DeleteVector(files, delete_file_entry);
 }
 
 bool IsMatchExtension(const char* filename, const char* ext) {
@@ -273,7 +273,7 @@ char* ConcatPath(const char* a, const char* b) {
 }
 
 //private
-static void FileEntryDeleter(VectorItem item) {
+static void delete_file_entry(VectorItem item) {
 	FileEntry* e = (FileEntry*)item;
 	DeleteFileEntry(e);
 }
