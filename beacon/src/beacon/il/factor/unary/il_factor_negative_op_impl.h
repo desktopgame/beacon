@@ -21,7 +21,7 @@ typedef struct ILNegativeOp {
 	int OperatorIndex;
 } ILNegativeOp;
 
-#define ILNegativeOp_new(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
+#define NewILNegativeOp(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
 ILNegativeOp* MallocILNegativeOp(OperatorType type, const char* filename, int lineno);
 
 struct GenericType* EvalILNegativeOp(ILNegativeOp * self, struct Enviroment * env, CallContext* cctx);
