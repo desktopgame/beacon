@@ -9,7 +9,7 @@
 #include "../../util/text.h"
 
 ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_INSTANCEOF_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_INSTANCEOF_T);
 	ret->Kind.InstanceOf = self;
 	return ret;
 }

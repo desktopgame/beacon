@@ -122,12 +122,12 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 		return WrapILExplicitBinaryOp(CLIL_explicit_binary(self, source, source->Attr.OperatorValue));
 		//this super
 	} else if (source->Tag == AST_THIS_T) {
-		ILFactor* ret = ILFactor_new(ILFACTOR_THIS_T);
+		ILFactor* ret = NewILFactor(ILFACTOR_THIS_T);
 		ILThis* th = NewILThis();
 		ret->Kind.This = th;
 		return ret;
 	} else if (source->Tag == AST_SUPER_T) {
-		ILFactor* ret = ILFactor_new(ILFACTOR_SUPER_T);
+		ILFactor* ret = NewILFactor(ILFACTOR_SUPER_T);
 		ILSuper* sp = NewILSuper();
 		ret->Kind.Super = sp;
 		return ret;
@@ -138,7 +138,7 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 	} else if (source->Tag == AST_FALSE_T) {
 		return WrapILBool(CLIL_false(self, source));
 	} else if (source->Tag == AST_NULL_T) {
-		ILFactor* ret = ILFactor_new(ILFACTOR_NULL_T);
+		ILFactor* ret = NewILFactor(ILFACTOR_NULL_T);
 		ret->Kind.Null = NULL;
 		return ret;
 	} else if (source->Tag == AST_AS_T) {
@@ -150,7 +150,7 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source) {
 	} else if(source->Tag == AST_SUBSCRIPT_ACCESS_T) {
 		return WrapILSubscript(CLIL_subscript(self, source));
 	}
-	ILFactor* fact = ILFactor_new(ILFACTOR_UNARY_OP_T);
+	ILFactor* fact = NewILFactor(ILFACTOR_UNARY_OP_T);
 	return fact;
 }
 

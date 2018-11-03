@@ -12,7 +12,7 @@
 #include "unary/il_factor_not_op_impl.h"
 
 ILFactor * WrapILUnaryOp(ILUnaryOp * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_UNARY_OP_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_UNARY_OP_T);
 	ret->Kind.UnaryOp = self;
 	return ret;
 }

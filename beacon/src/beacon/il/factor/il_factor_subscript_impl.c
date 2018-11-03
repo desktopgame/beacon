@@ -5,7 +5,7 @@
 #include "../../env/operator_overload.h"
 
 ILFactor* WrapILSubscript(ILSubscript* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_SUBSCRIPT_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_SUBSCRIPT_T);
 	ret->Kind.Subscript = self;
 	return ret;
 }

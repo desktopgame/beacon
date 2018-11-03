@@ -19,7 +19,7 @@ static void ILVariable_check_static(ILVariable* self, Enviroment* env, CallConte
 static void DeleteILFactor_typeargs(VectorItem item);
 
 ILFactor * WrapILVariable(ILVariable * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_VARIABLE_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_VARIABLE_T);
 	ret->Kind.Variable = self;
 	return ret;
 }

@@ -23,7 +23,7 @@ static void ILCallOp_argument_delete(VectorItem item);
 static void ILCallOp_type_argument_delete(VectorItem item);
 
 ILFactor* WrapCallOp(ILCallOp* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_CALL_OP_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_CALL_OP_T);
 	ret->Kind.Call = self;
 	self->Parent = ret;
 	return ret;

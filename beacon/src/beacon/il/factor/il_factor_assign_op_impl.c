@@ -23,7 +23,7 @@ static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallC
 static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 
 ILFactor* WrapILAssignOp(ILAssignOp* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_ASSIGN_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_ASSIGN_T);
 	ret->Kind.AssignOp = self;
 	return ret;
 }

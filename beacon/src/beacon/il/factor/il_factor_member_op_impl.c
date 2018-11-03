@@ -21,7 +21,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, Call
 static void ILMemberOp_typearg_delete(VectorItem item);
 
 ILFactor* WrapILMemberOp(ILMemberOp* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_MEMBER_OP_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_MEMBER_OP_T);
 	ret->Kind.MemberOp = self;
 	self->Parent = ret;
 	return ret;

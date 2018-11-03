@@ -8,7 +8,7 @@
 #include "../../util/mem.h"
 
 ILFactor * WrapILChar(ILChar * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_CHAR_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_CHAR_T);
 	ret->Kind.Char = self;
 	return ret;
 }

@@ -9,7 +9,7 @@
 #include <assert.h>
 
 ILFactor * WrapILAs(ILAs * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_AS_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_AS_T);
 	ret->Kind.As = self;
 	return ret;
 }

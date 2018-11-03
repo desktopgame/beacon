@@ -115,7 +115,7 @@ typedef struct ILFactor {
 	} Kind;
 } ILFactor;
 
-#define ILFactor_new(type) (MallocILFactor(type, __FILE__, __LINE__))
+#define NewILFactor(type) (MallocILFactor(type, __FILE__, __LINE__))
 ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
 
 /**

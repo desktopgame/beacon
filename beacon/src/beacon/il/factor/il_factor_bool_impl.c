@@ -6,7 +6,7 @@
 #include "../../env/TYPE_IMPL.h"
 
 ILFactor * WrapILBool(ILBool * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_BOOL_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_BOOL_T);
 	ret->Kind.Bool = self;
 	return ret;
 }

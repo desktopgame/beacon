@@ -9,7 +9,7 @@
 #include "../../util/mem.h"
 
 ILFactor * WrapILString(ILString * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_STRING_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_STRING_T);
 	ret->Kind.String = self;
 	return ret;
 }

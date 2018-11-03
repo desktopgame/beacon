@@ -20,7 +20,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
 ILFactor * WrapILNewInstance(ILNewInstance * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_NEW_INSTANCE_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_NEW_INSTANCE_T);
 	ret->Kind.NewInstance = self;
 	return ret;
 }

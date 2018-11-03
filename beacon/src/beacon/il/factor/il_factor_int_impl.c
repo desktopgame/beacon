@@ -10,7 +10,7 @@
 #pragma warning(disable:4996)
 #endif
 ILFactor * WrapILInt(ILInt * self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_INT_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_INT_T);
 	ret->Kind.Int = self;
 	return ret;
 }

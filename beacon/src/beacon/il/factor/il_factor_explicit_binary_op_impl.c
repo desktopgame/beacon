@@ -9,7 +9,7 @@
 #include <assert.h>
 
 ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_EXPLICIT_BINARY_OP_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_EXPLICIT_BINARY_OP_T);
 	ret->Kind.ExpBinaryOp = self;
 	return ret;
 }

@@ -8,7 +8,7 @@
 #include "../il_factor_impl.h"
 
 ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self) {
-	ILFactor* ret = ILFactor_new(ILFACTOR_EXPLICIT_UNARY_OP_T);
+	ILFactor* ret = NewILFactor(ILFACTOR_EXPLICIT_UNARY_OP_T);
 	ret->Kind.ExpUnaryOp = self;
 	return ret;
 }
