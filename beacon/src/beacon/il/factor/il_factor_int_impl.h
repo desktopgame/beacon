@@ -24,7 +24,7 @@ typedef struct ILInt {
 
 ILFactor* WrapILInt(ILInt* self);
 
-#define ILInt_new(i) (MallocILInt(i, __FILE__, __LINE__))
+#define NewILInt(i) (MallocILInt(i, __FILE__, __LINE__))
 ILInt* MallocILInt(int32_t i, const char* filename, int lineno);
 
 void GenerateILInt(ILInt* self, Enviroment* env, CallContext* cctx);
