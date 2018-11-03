@@ -9,9 +9,9 @@ LineRange * NewLineRange() {
 	return ret;
 }
 
-LineRange * FindLineRange(Vector * LineRangeVec, int pc) {
-	for (int i = 0; i < LineRangeVec->Length; i++) {
-		LineRange* lr = (LineRange*)AtVector(LineRangeVec, i);
+LineRange * FindLineRange(Vector * line_rangeVec, int pc) {
+	for (int i = 0; i < line_rangeVec->Length; i++) {
+		LineRange* lr = (LineRange*)AtVector(line_rangeVec, i);
 		if (i >= lr->StartOffset && i <= lr->EndOffset) {
 			return lr;
 		}
