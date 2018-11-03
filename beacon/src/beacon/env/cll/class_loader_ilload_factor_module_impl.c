@@ -275,7 +275,7 @@ static ILInstanceOf* CLIL_instanceof(ClassLoader* self, AST* source) {
 }
 
 static ILSubscript* CLIL_subscript(ClassLoader* self, AST* source) {
-	ILSubscript* ret = ILSubscript_new();
+	ILSubscript* ret = NewILSubscript();
 	AST* afact = FirstAST(source);
 	AST* apos = SecondAST(source);
 	ret->Receiver = CLILFactor(self, afact);

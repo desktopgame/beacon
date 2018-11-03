@@ -22,7 +22,7 @@ typedef struct ILSubscript {
 
 ILFactor* WrapILSubscript(ILSubscript* self);
 
-#define ILSubscript_new() (MallocILSubscript(__FILE__, __LINE__))
+#define NewILSubscript() (MallocILSubscript(__FILE__, __LINE__))
 ILSubscript* MallocILSubscript(const char* filename, int lineno);
 
 void GenerateILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
