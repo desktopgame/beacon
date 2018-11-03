@@ -5,8 +5,8 @@
 #include "../util/text.h"
 
 //proto
-static void DeleteOpcodeBuf_label(VectorItem item);
-static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst);
+static void delete_label(VectorItem item);
+static void copy_buf(OpcodeBuf* src, OpcodeBuf* dst);
 
 OpcodeBuf * NewOpcodeBuf() {
 	OpcodeBuf* ret = (OpcodeBuf*)MEM_MALLOC(sizeof(OpcodeBuf));
@@ -44,8 +44,8 @@ void DumpOpcodeBuf(OpcodeBuf * self, int depth) {
 
 OpcodeBuf * MergeOpcodeBuf(OpcodeBuf * a, OpcodeBuf * b) {
 	OpcodeBuf* ret = NewOpcodeBuf();
-	OpcodeBuf_copy(a, ret);
-	OpcodeBuf_copy(b, ret);
+	copy_buf(a, ret);
+	copy_buf(b, ret);
 	return ret;
 }
 
@@ -54,18 +54,18 @@ void DeleteOpcodeBuf(OpcodeBuf * self) {
 		return;
 	}
 	DeleteVector(self->Instructions, VectorDeleterOfNull);
-	DeleteVector(self->LabelTable, DeleteOpcodeBuf_label);
+	DeleteVector(self->LabelTable, delete_label);
 	MEM_FREE(self);
 }
 
 
 //private
-static void DeleteOpcodeBuf_label(VectorItem item) {
+static void delete_label(VectorItem item) {
 	Label* l = (Label*)item;
 	DeleteLabel(l);
 }
 
-static void OpcodeBuf_copy(OpcodeBuf* src, OpcodeBuf* dst) {
+static void copy_buf(OpcodeBuf* src, OpcodeBuf* dst) {
 	for (int i = 0; i < src->Instructions->Length; i++) {
 		VectorItem e = AtVector(src->Instructions, i);
 		if (e == OP_GOTO ||
