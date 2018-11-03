@@ -10,8 +10,8 @@
 #include "../env/generic_type.h"
 
 //proto
-static void DeleteSymbolTable_entry(NumericMapKey key, NumericMapItem item);
-static void DumpSymbolTable_entry(NumericMapKey key, NumericMapItem item);
+static void delete_entry(NumericMapKey key, NumericMapItem item);
+static void dump_entry(NumericMapKey key, NumericMapItem item);
 
 SymbolTable * NewSymbolTable() {
 	SymbolTable* ret = (SymbolTable*)MEM_MALLOC(sizeof(SymbolTable));
@@ -45,19 +45,19 @@ bool IsContainsSymbol(SymbolTable* self, StringView namev) {
 }
 
 void DumpSymbolTable(SymbolTable* self) {
-	EachNumericMap(self->VariableMap, DumpSymbolTable_entry);
+	EachNumericMap(self->VariableMap, dump_entry);
 }
 
 void DeleteSymbolTable(SymbolTable * self) {
-	DeleteNumericMap(self->VariableMap, DeleteSymbolTable_entry);
+	DeleteNumericMap(self->VariableMap, delete_entry);
 	MEM_FREE(self);
 }
 
 //private
-static void DeleteSymbolTable_entry(NumericMapKey key, NumericMapItem item) {
+static void delete_entry(NumericMapKey key, NumericMapItem item) {
 	SymbolEntry* e = (SymbolEntry*)item;
 	DeleteSymbolEntry(e);
 }
-static void DumpSymbolTable_entry(NumericMapKey key, NumericMapItem item) {
+static void dump_entry(NumericMapKey key, NumericMapItem item) {
 	printf("[%s] = %d\n", Ref2Str(key), ((SymbolEntry*)item)->Index);
 }
