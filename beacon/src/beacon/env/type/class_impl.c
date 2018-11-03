@@ -32,20 +32,20 @@
 #endif
 
 //private
-static void CreateVTableClass_top(Class* self);
-static void CreateVTableClass_override(Class* self);
-static void CreateVTableClass_interface(Class* self);
+static void create_vtable_top(Class* self);
+static void create_vtable_override(Class* self);
+static void create_vtable_interface(Class* self);
 static void class_impl_delete(VectorItem item);
-static void class_DeleteField(VectorItem item);
-static void class_DeleteMethod(VectorItem item);
+static void delete_field(VectorItem item);
+static void delete_method(VectorItem item);
 static void class_ctor_delete(VectorItem item);
-static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item);
+static void delete_native_method_ref(NumericMapKey key, NumericMapItem item);
 static Method* class_find_impl_method(Class* self, Method* virtualMethod);
-static void class_VTable_vec_delete(VectorItem item);
-static void class_DeleteTypeParameter(VectorItem item);
-static void class_GenericType_list_delete(VectorItem item);
-static void DeleteClass_OperatorOverload(VectorItem item);
-static void DeleteClass_Property(VectorItem item);
+static void delete_vtable(VectorItem item);
+static void delete_type_parameter(VectorItem item);
+static void delete_generic_type(VectorItem item);
+static void delete_operator_overload(VectorItem item);
+static void delete_property(VectorItem item);
 
 Type* WrapClass(Class* self) {
 	Type* ret = NewType();
@@ -225,13 +225,13 @@ void CreateVTableClass(Class* self) {
 	self->VT = NewVTable();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->SuperClass == NULL) {
-		CreateVTableClass_top(self);
+		create_vtable_top(self);
 	//あるクラスを継承する場合には、
 	//重複するメソッドを上書きするように
 	} else {
-		CreateVTableClass_override(self);
+		create_vtable_override(self);
 	}
-	CreateVTableClass_interface(self);
+	create_vtable_interface(self);
 	assert(self->VT->Elements->Length != 0);
 }
 
@@ -387,19 +387,19 @@ void UnlinkClass(Class* self) {
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_DeleteType(self->SuperClass);
-	DeleteNumericMap(self->NativeMethodRefMap, class_DeleteNativeMethodRef);
+	DeleteNumericMap(self->NativeMethodRefMap, delete_native_method_ref);
 	DeleteVector(self->Implements, class_impl_delete);
-	DeleteVector(self->Fields, class_DeleteField);
-	DeleteVector(self->StaticFields, class_DeleteField);
-	DeleteVector(self->Methods, class_DeleteMethod);
-	DeleteVector(self->StaticMethods, class_DeleteMethod);
+	DeleteVector(self->Fields, delete_field);
+	DeleteVector(self->StaticFields, delete_field);
+	DeleteVector(self->Methods, delete_method);
+	DeleteVector(self->StaticMethods, delete_method);
 	DeleteVector(self->Constructors, class_ctor_delete);
-	DeleteVector(self->OperatorOverloads, DeleteClass_OperatorOverload);
-	DeleteVector(self->Properties, DeleteClass_Property);
-	DeleteVector(self->StaticProperties, DeleteClass_Property);
+	DeleteVector(self->OperatorOverloads, delete_operator_overload);
+	DeleteVector(self->Properties, delete_property);
+	DeleteVector(self->StaticProperties, delete_property);
 	DeleteVTable(self->VT);
 	DeleteOperatorVt(self->OVT);
-	DeleteVector(self->VTTable, class_VTable_vec_delete);
+	DeleteVector(self->VTTable, delete_vtable);
 }
 
 void DeleteClass(Class* self) {
@@ -407,12 +407,12 @@ void DeleteClass(Class* self) {
 //	assert(self->RefCount == 0);
 //	MEM_FREE(self->name);
 	//printf("delete %s\n", self->name);
-	DeleteVector(self->TypeParameters, class_DeleteTypeParameter);
+	DeleteVector(self->TypeParameters, delete_type_parameter);
 	MEM_FREE(self);
 }
 
 //private
-static void CreateVTableClass_top(Class* self) {
+static void create_vtable_top(Class* self) {
 	for (int i = 0; i < self->Methods->Length; i++) {
 		Method* m = (Method*)AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
@@ -422,7 +422,7 @@ static void CreateVTableClass_top(Class* self) {
 	}
 }
 
-static void CreateVTableClass_override(Class* self) {
+static void create_vtable_override(Class* self) {
 	#if defined(DEBUG)
 	const char* clname = Ref2Str(self->Name);
 	#endif
@@ -441,7 +441,7 @@ static void CreateVTableClass_override(Class* self) {
 	DeleteCallContext(cctx);
 }
 
-static void CreateVTableClass_interface(Class* self) {
+static void create_vtable_interface(Class* self) {
 	#if defined(DEBUG) || defined(_DEBUG)
 	const char* clname = Ref2Str(GetTypeName(self->Parent));
 	#endif
@@ -488,12 +488,12 @@ static void class_impl_delete(VectorItem item) {
 	//generic_DeleteType(e);
 }
 
-static void class_DeleteField(VectorItem item) {
+static void delete_field(VectorItem item) {
 	Field* e = (Field*)item;
 	DeleteField(e);
 }
 
-static void class_DeleteMethod(VectorItem item) {
+static void delete_method(VectorItem item) {
 	Method* e = (Method*)item;
 	DeleteMethod(e);
 }
@@ -503,7 +503,7 @@ static void class_ctor_delete(VectorItem item) {
 	DeleteConstructor(e);
 }
 
-static void class_DeleteNativeMethodRef(NumericMapKey key, NumericMapItem item) {
+static void delete_native_method_ref(NumericMapKey key, NumericMapItem item) {
 	NativeMethodRef* e = (NativeMethodRef*)item;
 	DeleteNativeMethodRef(e);
 }
@@ -525,27 +525,27 @@ static Method* class_find_impl_method(Class* self, Method* virtualMethod) {
 	return ret;
 }
 
-static void class_VTable_vec_delete(VectorItem item) {
+static void delete_vtable(VectorItem item) {
 	VTable* e = (VTable*)item;
 	DeleteVTable(e);
 }
 
-static void class_DeleteTypeParameter(VectorItem item) {
+static void delete_type_parameter(VectorItem item) {
 	TypeParameter* e = (TypeParameter*)item;
 	DeleteTypeParameter(e);
 }
 
-static void class_GenericType_list_delete(VectorItem item) {
+static void delete_generic_type(VectorItem item) {
 	GenericType* e = (GenericType*)item;
 //	generic_DeleteType(e);
 }
 
-static void DeleteClass_OperatorOverload(VectorItem item) {
+static void delete_operator_overload(VectorItem item) {
 	OperatorOverload* e = (OperatorOverload*)item;
 	DeleteOperatorOverload(e);
 }
 
-static void DeleteClass_Property(VectorItem item) {
+static void delete_property(VectorItem item) {
 	Property* e = (Property*)item;
 	DeleteProperty(e);
 }
