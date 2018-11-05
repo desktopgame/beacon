@@ -13,6 +13,7 @@
 //ネイティブメソッドの初期化を行う実装でインクルード出来ます。
 #include "beacon/lang/bc_object.h"
 #include "beacon/lang/bc_int.h"
+#include "beacon/lang/bc_long.h"
 #include "beacon/lang/bc_double.h"
 #include "beacon/lang/bc_char.h"
 #include "beacon/lang/bc_string.h"

@@ -140,7 +140,10 @@
 			"il_factor_variable_impl.h": "c",
 			"il_stmt_interface.h": "c",
 			"generic_cache.h": "c",
-			"numeric_map.h": "c"
+			"numeric_map.h": "c",
+			"constructor.h": "c",
+			"bc_int.h": "c",
+			"string_pool.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

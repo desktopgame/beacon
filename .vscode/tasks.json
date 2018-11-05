@@ -20,6 +20,18 @@
 			"command": "ruby auto/doxy.rb"
 		},
 		{
+			"label": "make",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "make",
+			"args": [
+				"debug"
+			],
+			"problemMatcher": []
+		},
+		{
 			"label": "test",
 			"type": "shell",
 			"options": {

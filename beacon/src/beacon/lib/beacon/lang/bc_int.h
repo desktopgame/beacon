@@ -10,7 +10,23 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_INT_H
 #define BEACON_LIB_SIGNAL_LANG_INT_H
+#include "../../bc_library_impl.h"
 struct Type;
+/**
+ * 整数型のデータを表すオブジェクトです。
+ */
+typedef struct Integer {
+	Object Super;
+	int Value;
+} Integer;
+
+/**
+ * 新しい整数オブジェクトを生成します。
+ * @param value
+ * @return
+ */
+Integer* NewInteger(int value);
+
 /**
  * beacon::lang::Intクラスを初期化します.
  */

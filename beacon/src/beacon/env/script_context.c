@@ -129,7 +129,7 @@ Object* IInternScriptContext(ScriptContext* self, int i) {
 	NumericMap* cell = GetNumericMapCell(self->IntegerCacheMap, i);
 	he->AcceptBlocking++;
 	if(cell == NULL) {
-		Object* obj = Object_int_new(i);
+		Object* obj = (Object*)NewInteger(i);
 		obj->Paint = PAINT_ONEXIT_T;
 		cell = PutNumericMap(self->IntegerCacheMap, i, obj);
 	}
@@ -150,13 +150,13 @@ void CacheScriptContext() {
 	   }
 	//正の数のキャッシュ
 	for(int i=0; i<100; i++) {
-		Object* a = Object_int_new(i);
+		Object* a = (Object*)NewInteger(i);
 		PushVector(self->PositiveIntegerCacheList, a);
 		a->Paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
-		Object* a = Object_int_new(-i);
+		Object* a = (Object*)NewInteger(-i);
 		PushVector(self->NegativeIntegerCacheList, a);
 		a->Paint = PAINT_ONEXIT_T;
 	}

@@ -1,4 +1,5 @@
 #include "bc_object.h"
+#include "../../bc_library_interface.h"
 #include "../../bc_library_impl.h"
 #include "../../../util/string_buffer.h"
 #include "../../../util/mem.h"
@@ -49,12 +50,12 @@ static void bc_Object_nativeToString(Method* parent, Frame* fr, Enviroment* env)
 	} else if (self->Tag == OBJECT_INT_T) {
 #define BUFF_LEN 256
 		char buff[256];
-		int res = sprintf(buff, "%d", self->u.int_);
+		int res = sprintf(buff, "%d", OBJ2INT(self));
 		AppendsBuffer(sb, buff);
 #undef BUFF_LEN
 	}
 	char* str = ReleaseBuffer(sb);
-	Object* ret = Object_string_new(str);
+	Object* ret = (Object*)NewString(str);
 	PushVector(fr->ValueStack, ret);
 	MEM_FREE(str);
 }

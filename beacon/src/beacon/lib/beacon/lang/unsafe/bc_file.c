@@ -3,6 +3,7 @@
 #include "../../../../env/TYPE_IMPL.h"
 #include "../../../../util/string_buffer.h"
 #include "../../../../util/text.h"
+#include "../../../bc_library_interface.h"
 #include "../../../bc_library_impl.h"
 #include "../bc_string.h"
 #include <assert.h>
@@ -62,7 +63,7 @@ static void bc_file_nativePut(Method* parent, Frame* fr, Enviroment* env) {
 	Object* ch = AtVector(fr->VariableTable, 1);
 	FILE* fp = AtVector(self->NativeSlotVec, 0);
 	assert(fp != NULL);
-	fputc(ch->u.char_, fp);
+	fputc(OBJ2CHAR(ch), fp);
 }
 
 static void bc_file_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
@@ -70,7 +71,7 @@ static void bc_file_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	FILE* fp = AtVector(self->NativeSlotVec, 0);
 	assert(fp != NULL);
 	char ret = fgetc(fp);
-	PushVector(fr->ValueStack, Object_char_new(ret));
+	PushVector(fr->ValueStack, NewChar(ret));
 }
 
 static void bc_file_nativeAvailable(Method* parent, Frame* fr, Enviroment* env) {
@@ -103,7 +104,7 @@ static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env) {
 }
 
 static Object* file_new(FILE* fp, bool std) {
-	Object* file = Object_ref_new();
+	Object* file = NewObject(sizeof(Object));
 	assert(file->Paint != PAINT_ONEXIT_T);
 	Type* fileType = GetBCFileType();
 	file->GType = fileType->GenericSelf;

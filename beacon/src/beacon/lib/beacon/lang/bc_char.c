@@ -5,6 +5,12 @@
 static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env);
 
+Char* NewChar(char value) {
+	Char* ret = ConstructObject(sizeof(Char), GENERIC_CHAR);
+	ret->Value = value;
+	return ret;
+}
+
 void InitBCChar() {
 	Namespace* lang = GetLangNamespace();
 	Type* charType = NewPreloadClass(InternString("Char"));
@@ -20,15 +26,16 @@ Type* GetBCCharType() {
 }
 
 //private
+#define CHAR_VALUE(obj) (((Char*)obj)->Value)
 static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* ch = AtVector(fr->VariableTable, 1);
 
-	self->u.char_ = ch->u.char_;
+	CHAR_VALUE(self) = CHAR_VALUE(ch);
 	self->Tag = OBJECT_CHAR_T;
 }
 
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
-	PushVector(fr->ValueStack, GetIntObject((int)self->u.char_));
+	PushVector(fr->ValueStack, GetIntObject((int)CHAR_VALUE(self)));
 }

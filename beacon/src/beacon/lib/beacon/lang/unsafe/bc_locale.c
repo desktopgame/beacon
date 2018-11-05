@@ -73,42 +73,42 @@ static void bc_locale_nativeSetLocale(Method* parent, Frame* fr, Enviroment* env
 
 static void bc_locale_nativeGetDecimalPoint(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->decimal_point));
+	PushVector(fr->ValueStack, NewString(lc->decimal_point));
 }
 
 static void bc_locale_nativeGetThousandsSep(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->thousands_sep));
+	PushVector(fr->ValueStack, NewString(lc->thousands_sep));
 }
 
 static void bc_locale_nativeGetIntCurrSymbol(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->int_curr_symbol));
+	PushVector(fr->ValueStack, NewString(lc->int_curr_symbol));
 }
 
 static void bc_locale_nativeGetCurrencySymbol(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->currency_symbol));
+	PushVector(fr->ValueStack, NewString(lc->currency_symbol));
 }
 
 static void bc_locale_nativeGetMonDecimalPoint(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->mon_decimal_point));
+	PushVector(fr->ValueStack, NewString(lc->mon_decimal_point));
 }
 
 static void bc_locale_nativeGetMonThousandsSep(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->mon_thousands_sep));
+	PushVector(fr->ValueStack, NewString(lc->mon_thousands_sep));
 }
 
 static void bc_locale_nativeGetPositiveSign(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->positive_sign));
+	PushVector(fr->ValueStack, NewString(lc->positive_sign));
 }
 
 static void bc_locale_nativeGetNegativeSign(Method* parent, Frame* fr, Enviroment* env) {
 	struct lconv* lc = localeconv();
-	PushVector(fr->ValueStack, Object_string_new(lc->negative_sign));
+	PushVector(fr->ValueStack, NewString(lc->negative_sign));
 }
 
 static void bc_locale_nativeGetIntFracDigits(Method* parent, Frame* fr, Enviroment* env) {

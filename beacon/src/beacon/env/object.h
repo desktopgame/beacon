@@ -59,39 +59,83 @@ typedef enum ObjectTag {
 } ObjectTag;
 
 /**
+ * オブジェクトに対して送信することができる命令です。
+ * これを判別することで一つの関数ポインタで処理を分岐させ、
+ * オブジェクトひとつあたりのサイズを削減します。
+ */
+typedef int ObjectMessage;
+
+/**
+ * メッセージの引数です。
+ */
+typedef union ObjectMessageArgument {
+	int Int;
+	void* Any;
+} ObjectMessageArgument;
+
+/**
+ * 全てのオブジェクトがサポートする必要のあるメッセージです。
+ */
+typedef enum StandardObjectMessage {
+	OBJECT_MSG_NONE = 0,
+	OBJECT_MSG_PRINT,
+	OBJECT_MSG_DELETE,
+	OBJECT_MSG_DESTROY,
+	OBJECT_MSG_MARKALL,
+	OBJECT_MSG_CLONE,
+	OBJECT_MSG_GENERIC,
+	OBJECT_MSG_END,
+} StandardObjectMessage;
+
+/**
  * ヒープに関連付けされるオブジェクト.
- * signal で使用される全てのデータはこれ。
+ * beacon で使用される全てのデータはこれ。
  */
 typedef struct Object {
 	struct GenericType* GType;
 	struct VTable* VPtr;
 	ObjectPaint Paint;
 	ObjectTag Tag;
+	Vector* Fields;
 	Vector* NativeSlotVec;
 	bool IsCoroutine;
 	bool IsClone;
-	union {
-		int int_;
-		double double_;
-#if defined(_MSC_VER)
-		__int64 long_;
-#else
-		long long_;
-#endif
-		char char_;
-//		char* string_;
-		bool bool_;
-		Vector* field_vec;
-	} u;
+	void* (*OnMessage)(struct Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
 } Object;
+
+/**
+ * 標準的なメッセージハンドラです。
+ * 拡張メッセージハンドラを実装する場合はこれをラップするのが簡単です。
+ * @param self
+ * @param msg
+ * @param argc
+ * @param argv
+ * @return
+ */
+void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
+
+/**
+ * 指定のサイズのメモリを確保して、ヒープに紐づけます。
+ * @param object_size
+ * @return
+ */
+void* NewObject(size_t object_size);
+
+/**
+ * オブジェクトを生成して型を割り当てます。
+ * @param object_size
+ * @param gtype
+ * @return
+ */
+void* ConstructObject(size_t object_size, struct GenericType* gtype);
 
 /**
  * 整数型のオブジェクトを作成します.
  * @param i
  * @return
  */
-#define Object_int_new(i) (MallocIntObject(i, __FILE__, __LINE__))
-Object* MallocIntObject(int i, const char* filename, int lineno);
+//#define Object_int_new(i) (MallocIntObject(i, __FILE__, __LINE__))
+//Object* MallocIntObject(int i, const char* filename, int lineno);
 
 /**
  * 可能ならキャッシュを返します.
@@ -105,39 +149,39 @@ Object* GetIntObject(int i);
  * @param d
  * @return
  */
-#define Object_double_new(d) (MallocDoubleObject(d, __FILE__, __LINE__))
-Object* MallocDoubleObject(double d, const char* filename, int lineno);
+//#define Object_double_new(d) (MallocDoubleObject(d, __FILE__, __LINE__))
+//Object* MallocDoubleObject(double d, const char* filename, int lineno);
 
 /**
  * long型の値を作成します.
  * @param l
  * @return
  */
-#define Object_long_new(l) (MallocLongObject(l, __FILE__, __LINE__))
-Object* MallocLongObject(long l, const char* filename, int lineno);
+//#define Object_long_new(l) (MallocLongObject(l, __FILE__, __LINE__))
+//Object* MallocLongObject(long l, const char* filename, int lineno);
 
 /**
  * 文字型のオブジェクトを作成します.
  * @param c
  * @return
  */
-#define Object_char_new(c) (MallocCharObject(c, __FILE__, __LINE__))
-Object* MallocCharObject(char c, const char* filename, int lineno);
+//#define Object_char_new(c) (MallocCharObject(c, __FILE__, __LINE__))
+//Object* MallocCharObject(char c, const char* filename, int lineno);
 
 /**
  * 文字列型のオブジェクトを作成します.
  * @param s
  * @return
  */
-#define Object_string_new(s) (MallocStringObject(s, __FILE__, __LINE__))
-Object* MallocStringObject(const char* s, const char* filename, int lineno);
+//#define Object_string_new(s) (MallocStringObject(s, __FILE__, __LINE__))
+//Object* MallocStringObject(const char* s, const char* filename, int lineno);
 
 /**
  * 参照型のオブジェクトを作成します.
  * @return
  */
-#define Object_ref_new() (MallocRefObject(__FILE__, __LINE__))
-Object* MallocRefObject(const char* filename, int lineno);
+//#define Object_ref_new() (MallocRefObject(__FILE__, __LINE__))
+//Object* MallocRefObject(const char* filename, int lineno);
 
 /**
  * 真偽値型の値を参照します.
@@ -163,20 +207,6 @@ Object* GetFalseObject();
  * @return
  */
 Object* GetNullObject();
-
-/**
- * このオブジェクトが数値型なら、
- * 内部の数値を +1 します.
- * @param self
- */
-void IncObject(Object* self);
-
-/**
- * このオブジェクトが数値型なら、
- * 内部の数値を -1 します.
- * @param self
- */
-void DecObject(Object* self);
 
 /**
  * このオブジェクトを複製します.

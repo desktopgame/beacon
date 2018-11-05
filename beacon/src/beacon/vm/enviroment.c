@@ -4,7 +4,7 @@
 #include "../env/TYPE_IMPL.h"
 #include "../env/object.h"
 #include "../env/fqcn_cache.h"
-#include "../lib/beacon/lang/bc_array.h"
+#include "../lib/bc_library_interface.h"
 #include "line_range.h"
 #include <stdlib.h>
 #include <assert.h>
@@ -86,25 +86,25 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 
 int AddCIntEnviroment(Enviroment * self, int i) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, Object_int_new(i));
+	add_constant(self, (Object*)NewInteger(i));
 	return len;
 }
 
 int AddCDoubleEnviroment(Enviroment * self, double d) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, Object_double_new(d));
+	add_constant(self, (Object*)NewDouble(d));
 	return len;
 }
 
 int AddCCharEnviroment(Enviroment * self, char c) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, Object_char_new(c));
+	add_constant(self, (Object*)NewChar(c));
 	return len;
 }
 
 int AddCStringEnviroment(Enviroment * self, StringView sv) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, Object_string_new(Ref2Str(sv)));
+	add_constant(self, (Object*)NewString(Ref2Str(sv)));
 	return len;
 }
 

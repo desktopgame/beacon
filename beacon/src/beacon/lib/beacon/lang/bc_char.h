@@ -10,7 +10,23 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_CHAR_H
 #define BEACON_LIB_SIGNAL_LANG_CHAR_H
+#include "../../bc_library_impl.h"
+/**
+ * 文字を表すデータ型です。
+ */
+typedef struct Char {
+	Object Super;
+	char Value;
+} Char;
 struct Type;
+
+/**
+ * 新しい文字オブジェクトを生成します。
+ * @param value
+ * @return
+ */
+Char* NewChar(char value);
+
 /**
  * beacon::lang::Charクラスを初期化します.
  */

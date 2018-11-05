@@ -22,7 +22,7 @@
 #include "../util/string_buffer.h"
 #include "../util/vector.h"
 #include "../util/text.h"
-#include "../lib/beacon/lang/bc_string.h"
+#include "../lib/bc_library_interface.h"
 #include "line_range.h"
 #include "defer_context.h"
 #include "../env/heap.h"
@@ -317,19 +317,19 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				break;
 				//double & double
 			case OP_DADD:
-				PushVector(self->ValueStack, NON_NULL(Object_double_new(SPD(self) + SPD(self))));
+				PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) + SPD(self))));
 				break;
 			case OP_DSUB:
-				PushVector(self->ValueStack, NON_NULL(Object_double_new(SPD(self) - SPD(self))));
+				PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) - SPD(self))));
 				break;
 			case OP_DMUL:
-				PushVector(self->ValueStack, NON_NULL(Object_double_new(SPD(self) * SPD(self))));
+				PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) * SPD(self))));
 				break;
 			case OP_DDIV:
-				PushVector(self->ValueStack, NON_NULL(Object_double_new(SPD(self) / SPD(self))));
+				PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) / SPD(self))));
 				break;
 			case OP_DMOD:
-				PushVector(self->ValueStack, NON_NULL(Object_double_new((double)((int)SPD(self) % (int)SPD(self)))));
+				PushVector(self->ValueStack, NON_NULL(NewDouble((double)((int)SPD(self) % (int)SPD(self)))));
 				break;
 			case OP_DEQ:
 				PushVector(self->ValueStack, NON_NULL(GetBoolObject(SPD(self) == SPD(self))));
@@ -353,7 +353,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				PushVector(self->ValueStack, NON_NULL(GetIntObject(-SPI(self))));
 				break;
 			case OP_DNEG:
-				PushVector(self->ValueStack, NON_NULL(Object_double_new(-SPD(self))));
+				PushVector(self->ValueStack, NON_NULL(NewDouble(-SPD(self))));
 				break;
 			case OP_BNOT:
 			{
@@ -520,7 +520,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//コンストラクタをさかのぼり、
 				//トップレベルまで到達するとこの処理によって生成が行われます。
 				//FIXME:???
-				Object* o = Object_ref_new();
+				Object* o = NewObject(sizeof(Object));
 				assert(o->Paint != PAINT_ONEXIT_T);
 				PushVector(self->ValueStack, NON_NULL(o));
 				//これを this とする
@@ -665,7 +665,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				}
 				assert(assignTarget->Tag == OBJECT_REF_T);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				AssignVector(assignTarget->u.field_vec, fieldIndex, assignValue);
+				AssignVector(assignTarget->Fields, fieldIndex, assignValue);
 				break;
 			}
 
@@ -678,7 +678,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//assert(sourceObject->Tag == OBJECT_REF_T);
 				//int absClsIndex = (int)GetEnviromentSourceAt(env, ++i);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
-				Object* val = (Object*)AtVector(sourceObject->u.field_vec, fieldIndex);
+				Object* val = (Object*)AtVector(sourceObject->Fields, fieldIndex);
 				PushVector(self->ValueStack, val);
 				break;
 			}
@@ -1171,19 +1171,19 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 static int stack_topi(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_INT_T);
-	return ret->u.int_;
+	return ((Integer*)ret)->Value;
 }
 
 static double stack_topd(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_DOUBLE_T);
-	return ret->u.double_;
+	return ((Double*)ret)->Value;
 }
 
 static char stack_topc(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_CHAR_T);
-	return ret->u.char_;
+	return ((Char*)ret)->Value;
 }
 
 static char* stack_tops(Frame* self) {
@@ -1195,26 +1195,26 @@ static char* stack_tops(Frame* self) {
 static bool stack_topb(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_BOOL_T);
-	return ret->u.bool_;
+	return ((Bool*)ret)->Value;
 }
 
 
 static int stack_popi(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_INT_T);
-	return ret->u.int_;
+	return ((Integer*)ret)->Value;
 }
 
 static double stack_popd(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_DOUBLE_T);
-	return ret->u.double_;
+	return ((Double*)ret)->Value;
 }
 
 static char stack_popc(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_CHAR_T);
-	return ret->u.char_;
+	return ((Char*)ret)->Value;
 }
 
 static char* stack_pops(Frame* self) {
@@ -1226,7 +1226,7 @@ static char* stack_pops(Frame* self) {
 static bool stack_popb(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
 	assert(ret->Tag == OBJECT_BOOL_T);
-	return ret->u.bool_;
+	return ((Bool*)ret)->Value;
 }
 
 static bool throw_npe(Frame* self, Object* o) {
@@ -1249,7 +1249,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	int temp = -1;
 	FindFieldClass(exceptionT->Kind.Class, InternString("message"), &temp);
 	Object* ex = self->Exception;
-	Object* msg = AtVector(ex->u.field_vec, temp);
+	Object* msg = AtVector(ex->Fields, temp);
 	Buffer* cstr = AtVector(msg->NativeSlotVec, 0);
 
 	char block[256] = {0};
@@ -1263,7 +1263,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	//Exception#stackTraceを取得
 	temp = -1;
 	FindFieldClass(exceptionT->Kind.Class, InternString("stackTrace"), &temp);
-	Object* stackTraceObj = AtVector(ex->u.field_vec, temp);
+	Object* stackTraceObj = AtVector(ex->Fields, temp);
 	//StackTraceElement#fileName
 	//StackTraceElement#lineIndex を取得
 	int fileNameptr = -1;
@@ -1273,8 +1273,8 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	int stackLen = GetLengthBCArray(stackTraceObj);
 	for(int i=0; i<stackLen; i++) {
 		Object* e = GetBCArray(stackTraceObj, i);
-		Object* fileNameObj = AtVector(e->u.field_vec, fileNameptr);
-		Object* lineIndexObj = AtVector(e->u.field_vec, lineIndexptr);
+		Object* fileNameObj = AtVector(e->Fields, fileNameptr);
+		Object* lineIndexObj = AtVector(e->Fields, lineIndexptr);
 		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), GetRawBCString(fileNameObj)->Text);
 		AppendsBuffer(sbuf, block);
 	}

@@ -18,6 +18,7 @@
 #include "../env/type/class_impl.h"
 
 #include "../util/string_pool.h"
+#include "../util/mem.h"
 
 #include "../vm/vm.h"
 #include "../vm/enviroment.h"

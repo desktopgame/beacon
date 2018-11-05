@@ -10,7 +10,23 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_DOUBLE_H
 #define BEACON_LIB_SIGNAL_LANG_DOUBLE_H
+#include "../../bc_library_impl.h"
+/**
+ * 実数型を扱うオブジェクトです。
+ */
+typedef struct Double {
+	Object Super;
+	double Value;
+} Double;
 struct Type;
+
+/**
+ * 新しい実数オブジェクトを生成します。
+ * @param value
+ * @return
+ */
+Double* NewDouble(double value);
+
 /**
  * beacon::lang::Doubleクラスを初期化します.
  */

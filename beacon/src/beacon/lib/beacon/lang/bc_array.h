@@ -10,10 +10,27 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
 #define BEACON_LIB_SIGNAL_LANG_SG_ARRAY_H
+#include "../../bc_library_impl.h"
+/**
+ * 配列を表すオブジェクトです。
+ */
+typedef struct Array {
+	Object Super;
+	Vector* Elements;
+} Array;
+
 struct Frame;
 struct Type;
 struct Object;
 struct GenericType;
+
+/**
+ * 新しい配列オブジェクトを生成します。
+ * @param size
+ * @param element_type
+ * @return
+ */
+Array* NewArray(int size, struct GenericType* element_type);
 
 /**
  * beacon::lang::Arrayクラスを初期化します.

@@ -1,9 +1,57 @@
 #include "bc_string.h"
 #include "../../bc_library_impl.h"
+#include "../../bc_library_interface.h"
 #include <assert.h>
+#include <string.h>
 
 //proto
+static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
 static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env);
+
+String* NewString(const char* str) {
+	Object* ret = ConstructObject(sizeof(String), GENERIC_STRING);
+	ret->OnMessage = handle_obj_message;
+	//ret->u.string_ = s;
+	//ret->u.field_vec = NewVector();
+	//ret->GType = GENERIC_STRING;
+	//ret->VPtr = GetVTableType(TYPE_STRING);
+
+	//配列を生成
+	Array* arr = NewArray(strlen(str), GENERIC_CHAR);
+	//arr->Tag = OBJECT_ARRAY_T;
+	Type* arrType = GetBCArrayType();
+	Type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
+	//arr->GType = NewGenericType(arrType);
+	//arr->VPtr = GetVTableType(arrType);
+	//arr->Tag = OBJECT_ARRAY_T;
+	//AddArgsGenericType(arr->GType, GENERIC_CHAR);
+	//ボックス化
+	const char* itr = str;
+	int strindex = 0;
+	Buffer* sb = NewBuffer();
+	while ((*itr) != '\0') {
+		char e = (*itr);
+		//PushVector(arr->NativeSlotVec, MallocCharObject(e, filename, lineno));
+		SetBCArray((Object*)arr, strindex, (Object*)NewChar(e));
+		itr++;
+		AppendBuffer(sb, e);
+	}
+	ShrinkBuffer(sb);
+	//String#charArrayを埋める
+	int temp = 0;
+	FindFieldClass(strType->Kind.Class, InternString("charArray"), &temp);
+	AssignVector(ret->Fields, temp, arr);
+	VectorItem* test = AtVector(ret->Fields, temp);
+	assert(test != NULL);
+	//Array#lengthを埋める
+	temp = 0;
+	FindFieldClass(arrType->Kind.Class, InternString("length"), &temp);
+	AssignVector(arr->Super.Fields, temp, NewInteger(sb->Length));
+	//C形式の文字列でも保存
+	//AssignVector(ret->NativeSlotVec, 0, sb);
+	((String*)ret)->Buffer = sb;
+	return (String*)ret;
+}
 
 void InitBCString() {
 	Namespace* lang = GetLangNamespace();
@@ -14,9 +62,9 @@ void InitBCString() {
 }
 
 Buffer * GetRawBCString(Object* self) {
-	VectorItem e = AtVector(self->NativeSlotVec, 0);
-	assert(self->Tag == OBJECT_STRING_T);
-	return (Buffer*)e;
+	//VectorItem e = AtVector(self->NativeSlotVec, 0);
+	//assert(self->Tag == OBJECT_STRING_T);
+	return ((String*)self)->Buffer;
 }
 
 Type* GetBCStringType() {
@@ -25,6 +73,16 @@ Type* GetBCStringType() {
 }
 
 //private
+static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]) {
+	if(msg == OBJECT_MSG_DELETE) {
+		DeleteBuffer(((String*)self)->Buffer);
+		MEM_FREE(self);
+		return NULL;
+	} else {
+		return HandleObjectMessage(self, msg, argc, argv);
+	}
+}
+
 static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
@@ -37,14 +95,15 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	//String#charArrayを取得
 	int temp = 0;
 	FindFieldClass(TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
-	Object* charArr = AtVector(self->u.field_vec, temp);
+	Array* charArr = (Array*)AtVector(self->Fields, temp);
 	//これを char* へ変換
 	Buffer* sb = NewBuffer();
-	for (int i = 0; i < charArr->NativeSlotVec->Length; i++) {
-		Object* e = (Object*)AtVector(charArr->NativeSlotVec, i);
+	for (int i = 0; i < charArr->Elements->Length; i++) {
+		Object* e = (Object*)AtVector(charArr->Elements, i);
 		assert(e->Tag == OBJECT_CHAR_T);
-		AppendBuffer(sb, e->u.char_);
+		AppendBuffer(sb, ((Char*)e)->Value);
 	}
-	AssignVector(self->NativeSlotVec, 0, sb);
+	//AssignVector(self->NativeSlotVec, 0, sb);
+	((String*)self)->Buffer = sb;
 	self->Tag = OBJECT_STRING_T;
 }

@@ -1,4 +1,5 @@
 #include "bc_exception.h"
+#include "../../bc_library_interface.h"
 #include "../../bc_library_impl.h"
 #include "../../../env/constructor.h"
 #include "../../../env/class_loader.h"
@@ -53,8 +54,8 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		Vector* args = NewVector();
-		PushVector(args, Object_string_new(temp->ContextRef->ContextRef->FileName));
-		PushVector(args, Object_int_new(lineno));
+		PushVector(args, NewString(temp->ContextRef->ContextRef->FileName));
+		PushVector(args, NewInteger(lineno));
 		Object* trace = NewInstanceClass(
 			stackTraceElementClass,
 			//ilctx,
@@ -79,7 +80,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;
 	Field* stackTraceF = FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
-	AssignVector(self->u.field_vec, tempi, arr);
+	AssignVector(self->Fields, tempi, arr);
 	DeleteVector(stackTraceElementVec, VectorDeleterOfNull);
 	h->CollectBlocking--;
 }

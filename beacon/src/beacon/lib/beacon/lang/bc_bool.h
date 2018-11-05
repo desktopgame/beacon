@@ -10,7 +10,23 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_BOOL_H
 #define BEACON_LIB_SIGNAL_LANG_BOOL_H
+#include "../../bc_library_impl.h"
 struct Type;
+
+/**
+ * 真偽値を表すオブジェクトです。
+ */
+typedef struct Bool {
+	Object Super;
+	bool Value;
+} Bool;
+
+/**
+ * 新しい真偽値オブジェクトを生成します。
+ * @param value
+ * @return
+ */
+Bool* NewBool(bool value);
 
 /**
  * beacon::lang::Boolクラスを初期化します.

@@ -1,17 +1,34 @@
 #include "bc_array.h"
+#include "../../bc_library_interface.h"
 #include "../../bc_library_impl.h"
 #include "../../../env/field.h"
 #include "../../../env/constructor.h"
 #include "../../../env/exception.h"
 #include "../../../util/text.h"
+#include "../../../util/mem.h"
 #include "../../../env/generic_type.h"
 #include <assert.h>
 
 //proto
+static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
 static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env);
 static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env);
 static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env);
+static void delete_self(VectorItem item);
+
+Array* NewArray(int size, GenericType* element_type) {
+	//Array[T]を作成する
+	GenericType* array_type = NewGenericType(GetBCArrayType());
+	AddArgsGenericType(array_type, element_type);
+	Array* ret = ConstructObject(sizeof(Array), array_type);
+	ret->Super.OnMessage = handle_obj_message;
+	ret->Elements = NewVector();
+	for(int i=0; i<size; i++) {
+		PushVector(ret->Elements, GetDefaultObject(element_type));
+	}
+	return ret;
+}
 
 void InitBCArray() {
 	Namespace* lang = GetLangNamespace();
@@ -34,7 +51,7 @@ Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
 
 	Vector* args = NewVector();
 	Vector* type_args = NewVector();
-	PushVector(args, Object_int_new(length));
+	PushVector(args, NewInteger(length));
 	PushVector(type_args, gtype);
 	Object* ret = NewInstanceClass(arrayType->Kind.Class, fr, args,type_args);
 	DeleteVector(args, VectorDeleterOfNull);
@@ -43,19 +60,51 @@ Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
 	return ret;
 }
 
+#define ARRAY_VALUE(obj) (((Array*)obj)->Elements)
 void SetBCArray(Object * arr, int index, Object * o) {
-	AssignVector(arr->NativeSlotVec, index, o);
+	AssignVector(ARRAY_VALUE(arr), index, o);
 }
 
 Object * GetBCArray(Object * arr, int index) {
-	return (Object*)AtVector(arr->NativeSlotVec, index);
+	return (Object*)AtVector(ARRAY_VALUE(arr), index);
 }
 
 int GetLengthBCArray(Object* arr) {
 	//assert(arr->tag == OBJECT_ARRAY_T);
-	return arr->NativeSlotVec->Length;
+	return ARRAY_VALUE(arr)->Length;
 }
 //private
+static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]) {
+	if(msg == OBJECT_MSG_MARKALL) {
+		assert(argc == 1);
+		HandleObjectMessage(self, msg, argc, argv);
+		Vector* values = ARRAY_VALUE(self);
+		for(int i=0; i<values->Length; i++) {
+			PaintAllObject((Object*)AtVector(values, i), argv[0].Int);
+		}
+		return NULL;
+	} else if (msg == OBJECT_MSG_DELETE) {
+		DeleteVector(self->Fields, VectorDeleterOfNull);
+		DeleteVector(ARRAY_VALUE(self), VectorDeleterOfNull);
+		MEM_FREE(self);
+		return NULL;
+	} else if(msg == OBJECT_MSG_DESTROY) {
+		DeleteVector(self->Fields, delete_self);
+		DeleteVector(ARRAY_VALUE(self), delete_self);
+		self->Fields = NULL;
+		ARRAY_VALUE(self) = NULL;
+		DeleteObject(self);
+		return NULL;
+	} else if (msg == OBJECT_MSG_PRINT) {
+		printf("Array:%d", ARRAY_VALUE(self)->Length);
+		return NULL;
+	} else if(msg == OBJECT_MSG_CLONE) {
+
+	} else {
+		return HandleObjectMessage(self, msg, argc, argv);
+	}
+}
+
 static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Type* tp = parent->Parent;
 	//Array#lengthを取り出す
@@ -64,15 +113,15 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	Object* self = AtVector(fr->VariableTable, 0);
-	Object* lengthObj = AtVector(self->u.field_vec, temp);
+	Object* lengthObj = AtVector(self->Fields, temp);
 	assert(lengthObj != NULL);
 	GenericType* targ = AtVector(self->GType->TypeArgs, 0);
 	//配列の長さだけ確保
-	int len = lengthObj->u.int_;
+	int len = OBJ2INT(lengthObj);
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
 		Object* oe = GetDefaultObject(targ);
-		PushVector(self->NativeSlotVec, oe);
+		PushVector(ARRAY_VALUE(self), oe);
 	}
 }
 
@@ -81,7 +130,7 @@ static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* idx = AtVector(fr->VariableTable, 1);
 	Object* val = AtVector(fr->VariableTable, 2);
 	assert(idx->Tag == OBJECT_INT_T);
-	AssignVector(self->NativeSlotVec, idx->u.int_, val);
+	AssignVector(ARRAY_VALUE(self), OBJ2INT(idx), val);
 }
 
 static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
@@ -89,7 +138,7 @@ static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* idx = AtVector(fr->VariableTable, 1);
 //	Object* a = AtVector(vm->VariableTable, 2);
 	assert(idx->Tag == OBJECT_INT_T);
-	Object* ret = (Object*)AtVector(self->NativeSlotVec, idx->u.int_);
+	Object* ret = (Object*)AtVector(ARRAY_VALUE(self), OBJ2INT(idx));
 	//Printfln("array get %d", idx->u.int_);
 	PushVector(fr->ValueStack, ret);
 }
@@ -100,26 +149,31 @@ static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env) {
 	Object* dst = AtVector(fr->VariableTable, 3);
 	Object* dstOffset = AtVector(fr->VariableTable, 4);
 	Object* length = AtVector(fr->VariableTable, 5);
-	int srcLen = src->NativeSlotVec->Length;
-	int dstLen = dst->NativeSlotVec->Length;
-	int cpyLen = length->u.int_;
+	int srcLen = ARRAY_VALUE(src)->Length;
+	int dstLen = ARRAY_VALUE(dst)->Length;
+	int cpyLen = OBJ2INT(length);
 	//添え字がマイナス
-	if (srcOffset->u.int_ < 0 ||
-		dstOffset->u.int_ < 0) {
-		NativeThrowVM(fr, NewSimplefException(fr, "index must be positive: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
+	if (OBJ2INT(srcOffset) < 0 ||
+		OBJ2INT(dstOffset) < 0) {
+		NativeThrowVM(fr, NewSimplefException(fr, "index must be positive: %d - %d", OBJ2INT(srcOffset),OBJ2INT(dstOffset)));
 		return;
 	}
 	//添え字がはみ出している
-	if ((srcOffset->u.int_ + cpyLen) > srcLen ||
-		(dstOffset->u.int_ + cpyLen) > dstLen) {
-		NativeThrowVM(fr, NewSimplefException(fr, "index must be less than size of array: %d - %d", srcOffset->u.int_, dstOffset->u.int_));
+	if ((OBJ2INT(srcOffset) + cpyLen) > srcLen ||
+		(OBJ2INT(dstOffset) + cpyLen) > dstLen) {
+		NativeThrowVM(fr, NewSimplefException(fr, "index must be less than size of array: %d - %d", OBJ2INT(srcOffset), OBJ2INT(dstOffset)));
 		return;
 	}
-	for (int i = srcOffset->u.int_;
-			 i < (srcOffset->u.int_ + length->u.int_);
+	for (int i = OBJ2INT(srcOffset);
+			 i < (OBJ2INT(srcOffset) + OBJ2INT(length));
 			 i++) {
-		int a = (i - srcOffset->u.int_) + dstOffset->u.int_;
-		VectorItem e = AtVector(src->NativeSlotVec, i);
-		AssignVector(dst->NativeSlotVec, a, e);
+		int a = (i - OBJ2INT(srcOffset)) + OBJ2INT(dstOffset);
+		VectorItem e = AtVector(ARRAY_VALUE(src), i);
+		AssignVector(ARRAY_VALUE(dst), a, e);
 	}
+}
+
+static void delete_self(VectorItem item) {
+	Object* e = (Object*)item;
+	DestroyObject(e);
 }

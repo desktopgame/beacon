@@ -3,6 +3,7 @@
 #include "namespace.h"
 #include "TYPE_IMPL.h"
 #include <assert.h>
+#include "../lib/bc_library_interface.h"
 #include "../util/text.h"
 #include "../vm/frame.h"
 #if defined(_MSC_VER)
@@ -15,7 +16,7 @@ static Class* exception_class();
 Object * NewSimpleException(Frame* fr, const char* message) {
 	Class* excClass = exception_class();
 	Vector* args = NewVector();
-	PushVector(args, Object_string_new(message));
+	PushVector(args, NewString(message));
 	Object* e = NewInstanceClass(excClass, fr, args, NULL);
 	DeleteVector(args, VectorDeleterOfNull);
 	return e;

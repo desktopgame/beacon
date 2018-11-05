@@ -9,10 +9,10 @@
 #include "script_context.h"
 #include <assert.h>
 #include "TYPE_IMPL.h"
-#include "../lib/beacon/lang/bc_array.h"
 #include "heap.h"
 #include "generic_type.h"
 #include "../vm/yield_context.h"
+#include "../lib/bc_library_interface.h"
 
 //proto
 static Object* malloc_impl(ObjectTag type, const char* filename, int lineno);
@@ -25,13 +25,77 @@ static void mark_coroutine(Object* self);
 //static Object* gObjectNull = NULL;
 static int gObjectCount = 0;
 
+void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]) {
+	switch(msg) {
+		case OBJECT_MSG_NONE:
+			break;
+		case OBJECT_MSG_PRINT:
+			printf("%p", self);
+			break;
+		case OBJECT_MSG_DELETE:
+			DeleteVector(self->Fields, VectorDeleterOfNull);
+			MEM_FREE(self);
+			break;
+		case OBJECT_MSG_DESTROY:
+			DeleteVector(self->Fields, delete_self);
+			self->Fields = NULL;
+			DeleteObject(self);
+			break;
+		case OBJECT_MSG_MARKALL:
+		{
+			assert(argc == 1);
+			ObjectPaint paint = argv[0].Int;
+			for (int i = 0; i < self->Fields->Length; i++) {
+				Object* e = (Object*)AtVector(self->Fields, i);
+				PaintAllObject(e, paint);
+			}
+			break;
+		}
+		case OBJECT_MSG_CLONE:
+		{
+			if(self->Tag != OBJECT_ARRAY_T &&
+				self->Tag != OBJECT_REF_T &&
+	   			self->Tag != OBJECT_STRING_T) {
+		   		return CopyObject(self);
+			}
+			Object* ret = malloc_impl(OBJECT_INT_T, __FILE__, __LINE__);
+			ret->Tag = self->Tag;
+			ret->GType = self->GType;
+			ret->VPtr = self->VPtr;
+			//ret->NativeSlotVec  = self->NativeSlotVec;
+			ret->Fields = self->Fields;
+			//ret->u.field_vec = self->u.field_vec;
+			ret->IsClone = true;
+			return ret;
+		}
+	}
+	return NULL;
+}
 
-Object * MallocIntObject(int i, const char* filename, int lineno) {
-	Object* ret = malloc_impl(OBJECT_INT_T, filename, lineno);
-	ret->u.int_ = i;
-	ret->GType = GENERIC_INT;
-	ret->VPtr = GetVTableType(TYPE_INT);
-	return ret;
+void* NewObject(size_t object_size) {
+	if(object_size < sizeof(Object)) {
+		return NULL;
+	}
+	void* mem = MEM_MALLOC(object_size);
+	Object* ret = mem;
+	ret->NativeSlotVec = NULL;
+	ret->IsCoroutine = false;
+	ret->GType = NULL;
+	ret->Paint = PAINT_UNMARKED_T;
+	ret->VPtr = NULL;
+	ret->IsClone = false;
+	ret->Fields = NewVector();
+	AddHeap(GetHeap(), ret);
+	gObjectCount++;
+	return mem;
+}
+
+void* ConstructObject(size_t object_size, GenericType* gtype) {
+	void* mem = NewObject(object_size);
+	Object* obj = mem;
+	obj->GType = gtype;
+	obj->VPtr = GetVTableType(gtype->CoreType);
+	return mem;
 }
 
 Object* GetIntObject(int i) {
@@ -45,77 +109,6 @@ Object* GetIntObject(int i) {
 	return (Object*)AtVector(ctx->PositiveIntegerCacheList, i);
 }
 
-Object * MallocDoubleObject(double d, const char* filename, int lineno) {
-	Object* ret = malloc_impl(OBJECT_DOUBLE_T, filename, lineno);
-	ret->u.double_ = d;
-	ret->GType = GENERIC_DOUBLE;
-	ret->VPtr = GetVTableType(TYPE_DOUBLE);
-	return ret;
-}
-
-Object* MallocLongObject(long l, const char* filename, int lineno) {
-	Object* ret = malloc_impl(OBJECT_LONG_T, filename, lineno);
-	ret->u.long_ = l;
-	ret->GType = GENERIC_OBJECT;
-	ret->VPtr = GetVTableType(TYPE_OBJECT);
-	return ret;
-}
-
-Object * MallocCharObject(char c, const char* filename, int lineno) {
-	Object* ret = malloc_impl(OBJECT_CHAR_T, filename, lineno);
-	ret->u.char_ = c;
-	ret->GType = GENERIC_CHAR;
-	ret->VPtr = GetVTableType(TYPE_CHAR);
-	return ret;
-}
-
-Object * MallocStringObject(const char * s, const char* filename, int lineno) {
-	Object* ret = malloc_impl(OBJECT_STRING_T, filename, lineno);
-	//ret->u.string_ = s;
-	ret->u.field_vec = NewVector();
-	ret->GType = GENERIC_STRING;
-	ret->VPtr = GetVTableType(TYPE_STRING);
-
-	//配列を生成
-	Object* arr = MallocRefObject(filename, lineno);
-	//arr->Tag = OBJECT_ARRAY_T;
-	Type* arrType = GetBCArrayType();
-	Type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
-	arr->GType = NewGenericType(arrType);
-	arr->VPtr = GetVTableType(arrType);
-	arr->Tag = OBJECT_ARRAY_T;
-	AddArgsGenericType(arr->GType, GENERIC_CHAR);
-	//ボックス化
-	const char* itr = s;
-	Buffer* sb = NewBuffer();
-	while ((*itr) != '\0') {
-		char e = (*itr);
-		PushVector(arr->NativeSlotVec, MallocCharObject(e, filename, lineno));
-		itr++;
-		AppendBuffer(sb, e);
-	}
-	ShrinkBuffer(sb);
-	//String#charArrayを埋める
-	int temp = 0;
-	FindFieldClass(strType->Kind.Class, InternString("charArray"), &temp);
-	AssignVector(ret->u.field_vec, temp, arr);
-	VectorItem* test = AtVector(ret->u.field_vec, temp);
-	assert(test != NULL);
-	//Array#lengthを埋める
-	temp = 0;
-	FindFieldClass(arrType->Kind.Class, InternString("length"), &temp);
-	AssignVector(arr->u.field_vec, temp, Object_int_new(sb->Length));
-	//C形式の文字列でも保存
-	AssignVector(ret->NativeSlotVec, 0, sb);
-	return ret;
-}
-
-Object * MallocRefObject(const char* filename, int lineno) {
-	Object* ret= malloc_impl(OBJECT_REF_T, filename, lineno);
-	ret->u.field_vec = MallocVector(filename, lineno);
-	return ret;
-}
-
 Object * GetBoolObject(bool b) {
 	return (b ? GetTrueObject() : GetFalseObject());
 }
@@ -123,10 +116,7 @@ Object * GetBoolObject(bool b) {
 Object * GetTrueObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->True == NULL) {
-		ctx->True = Object_malloc(OBJECT_BOOL_T);
-		ctx->True->u.bool_ = true;
-		ctx->True->GType = GENERIC_BOOL;
-		ctx->True->VPtr = TYPE2CLASS(TYPE_BOOL)->VT;
+		ctx->True = (Object*)NewBool(true);
 		ctx->True->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->True;
@@ -135,10 +125,7 @@ Object * GetTrueObject() {
 Object * GetFalseObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->False == NULL) {
-		ctx->False = Object_malloc(OBJECT_BOOL_T);
-		ctx->False->u.bool_ = false;
-		ctx->False->GType = GENERIC_BOOL;
-		ctx->False->VPtr = TYPE2CLASS(TYPE_BOOL)->VT;
+		ctx->False = (Object*)NewBool(false);
 		ctx->False->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->False;
@@ -152,22 +139,6 @@ Object * GetNullObject() {
 		ctx->Null->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->Null;
-}
-
-void IncObject(Object * self) {
-	if (self->Tag == OBJECT_INT_T) {
-		self->u.int_++;
-	} else if (self->Tag == OBJECT_DOUBLE_T) {
-		self->u.double_++;
-	} else assert(false);
-}
-
-void DecObject(Object * self) {
-	if (self->Tag == OBJECT_INT_T) {
-		self->u.int_--;
-	} else if (self->Tag == OBJECT_DOUBLE_T) {
-		self->u.double_--;
-	} else  assert(false);
 }
 
 Object* CopyObject(Object * self) {
@@ -188,24 +159,7 @@ Object* CopyObject(Object * self) {
 }
 
 Object* CloneObject(Object* self) {
-	if(self->Tag != OBJECT_ARRAY_T &&
-	   self->Tag != OBJECT_REF_T &&
-	   self->Tag != OBJECT_STRING_T) {
-		   return CopyObject(self);
-	}
-	Object* ret = NULL;
-	if(self->Tag == OBJECT_REF_T ||
-	   self->Tag == OBJECT_ARRAY_T ||
-	   self->Tag == OBJECT_STRING_T) {
-		ret = malloc_impl(OBJECT_INT_T, __FILE__, __LINE__);
-		ret->Tag = self->Tag;
-		ret->GType = self->GType;
-		ret->VPtr = self->VPtr;
-		ret->NativeSlotVec  = self->NativeSlotVec;
-		ret->u.field_vec = self->u.field_vec;
-	}
-	ret->IsClone = true;
-	return ret;
+	return (Object*)self->OnMessage(self, OBJECT_MSG_CLONE, 0, NULL);
 }
 
 void PaintAllObject(Object* self, ObjectPaint paint) {
@@ -220,23 +174,8 @@ void PaintAllObject(Object* self, ObjectPaint paint) {
 	if (self->Paint != PAINT_ONEXIT_T) {
 		self->Paint = paint;
 	}
-	//フィールドを全てマーク
-	if (self->Tag == OBJECT_STRING_T ||
-		self->Tag == OBJECT_REF_T ||
-		self->Tag == OBJECT_ARRAY_T) {
-		for (int i = 0; i < self->u.field_vec->Length; i++) {
-			Object* e = (Object*)AtVector(self->u.field_vec, i);
-			PaintAllObject(e, paint);
-		}
-	}
-	//配列型ならスロットも全てマーク
-	Type* arrayType = GetBCArrayType();
-	if (self->GType->CoreType == arrayType) {
-		for (int i = 0; i < self->NativeSlotVec->Length; i++) {
-			Object* e = (Object*)AtVector(self->NativeSlotVec, i);
-			PaintAllObject(e, paint);
-		}
-	}
+	ObjectMessageArgument argv[] = {paint};
+	self->OnMessage(self, OBJECT_MSG_MARKALL, 1, argv);
 	//コルーチンならその中身をマークする
 	mark_coroutine(self);
 }
@@ -250,6 +189,8 @@ int CountActiveObject() {
 }
 
 void PrintObject(Object * self) {
+	self->OnMessage(self, OBJECT_MSG_PRINT, 0, NULL);
+	/*
 	if (self->Tag == OBJECT_INT_T) {
 		printf("Int: %d", self->u.int_);
 	} else if (self->Tag == OBJECT_DOUBLE_T) {
@@ -265,6 +206,7 @@ void PrintObject(Object * self) {
 		printf("Ref: ");
 		PrintGenericType(self->GType);
 	}
+	*/
 }
 
 void DeleteObject(Object * self) {
@@ -278,74 +220,48 @@ void DeleteObject(Object * self) {
 		RemoveVector(self->NativeSlotVec, 0);
 		DeleteYieldContext(yctx);
 	}
-	if (self->Tag == OBJECT_STRING_T) {
-		Buffer* sb = AtVector(self->NativeSlotVec, 0);
-		RemoveVector(self->NativeSlotVec, 0);
-		DeleteBuffer(sb);
-	}
-	if (self->Tag == OBJECT_STRING_T ||
-		self->Tag == OBJECT_REF_T ||
-		self->Tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, VectorDeleterOfNull);
-	}
-	DeleteVector(self->NativeSlotVec, VectorDeleterOfNull);
-	MEM_FREE(self);
+	self->OnMessage(self, OBJECT_MSG_DELETE, 0, NULL);
 }
 
 void DestroyObject(Object* self) {
 	if (self == NULL) {
 		return;
 	}
-	Type* tp = self->GType->CoreType;
 	assert(self->Paint == PAINT_ONEXIT_T);
-	if (self->Tag == OBJECT_REF_T ||
-	   self->Tag == OBJECT_STRING_T ||
-		self->Tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, delete_self);
-		self->u.field_vec = NULL;
-	}
-	//String#charArray
-	if (self->Tag == OBJECT_ARRAY_T) {
-		DeleteVector(self->u.field_vec, delete_self);
-		DeleteVector(self->NativeSlotVec, delete_self);
-		self->NativeSlotVec = NULL;
-		self->u.field_vec = NULL;
-	}
-	//Printfln("delete Object %s", GetTypeName(obj->type));
-	DeleteObject(self);
+	self->OnMessage(self, OBJECT_MSG_DESTROY, 0, NULL);
 }
 
 int ObjectToInt(Object* self) {
 	assert(self->Tag == OBJECT_INT_T);
-	return self->u.int_;
+	return ((Integer*)self)->Value;
 }
 
 double ObjectToDouble(Object* self) {
 	assert(self->Tag == OBJECT_DOUBLE_T);
-	return self->u.double_;
+	return ((Double*)self)->Value;
 }
 
 bool ObjectToBool(Object* self) {
 	assert(self->Tag == OBJECT_BOOL_T);
-	return self->u.bool_;
+	return ((Bool*)self)->Value;
 }
 
 char ObjectToChar(Object* self) {
 	assert(self->Tag == OBJECT_CHAR_T);
-	return self->u.char_;
+	return ((Char*)self)->Value;
 }
 
 long ObjectToLong(Object* self) {
 	assert(self->Tag == OBJECT_LONG_T);
-	return self->u.long_;
+	return ((Long*)self)->Value;
 }
 
 Object* IntToObject(int i) {
-	return Object_int_new(i);
+	return (Object*)NewInteger(i);
 }
 
 Object* DoubleToObject(double d) {
-	return Object_double_new(d);
+	return (Object*)NewDouble(d);
 }
 
 Object* BoolToObject(bool b) {
@@ -353,11 +269,11 @@ Object* BoolToObject(bool b) {
 }
 
 Object* CharToObject(char c) {
-	return Object_char_new(c);
+	return (Object*)NewChar(c);
 }
 
 Object* LongToObject(long l) {
-	return Object_long_new(l);
+	return (Object*)NewLong(l);
 }
 
 Object* GetDefaultObject(GenericType* gt) {
@@ -365,11 +281,11 @@ Object* GetDefaultObject(GenericType* gt) {
 	if (gt->CoreType == TYPE_INT) {
 		a = GetIntObject(0);
 	} else if (gt->CoreType == TYPE_DOUBLE) {
-		a = Object_double_new(0.0);
+		a = (Object*)NewDouble(0.0);
 	} else if (gt->CoreType == TYPE_BOOL) {
 		a = GetBoolObject(false);
 	} else if (gt->CoreType == TYPE_CHAR) {
-		a = Object_char_new('\0');
+		a = (Object*)NewChar('\0');
 	}
 	return a;
 }
@@ -391,13 +307,6 @@ static Object* malloc_impl(ObjectTag type, const char* filename, int lineno) {
 	ret->Tag = type;
 	ret->VPtr = NULL;
 	ret->IsClone = false;
-	if (type == OBJECT_STRING_T ||
-		type == OBJECT_ARRAY_T ||
-		type == OBJECT_REF_T) {
-		ret->NativeSlotVec = MallocVector(filename, lineno);
-	} else {
-		ret->NativeSlotVec = NULL;
-	}
 	AddHeap(GetHeap(), ret);
 	gObjectCount++;
 	return ret;

@@ -125,7 +125,7 @@ void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
 			a = PopVector(sub->ValueStack);
 			DeleteFrame(sub);
 		}
-		PushVector(o->u.field_vec, a);
+		PushVector(o->Fields, a);
 		he->CollectBlocking--;
 	}
 }
