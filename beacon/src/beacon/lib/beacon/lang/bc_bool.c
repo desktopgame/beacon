@@ -14,6 +14,7 @@ void InitBCBool() {
 	Namespace* lang = GetLangNamespace();
 	Type* boolType = NewPreloadClass(InternString("Bool"));
 	Class* boolClass = TYPE2CLASS(boolType);
+	boolType->AllocSize = sizeof(Bool);
 	AddTypeNamespace(lang, boolType);
 	DefineNativeMethodClass(boolClass, "nativeBitOr", bc_bool_nativeBitOr);
 	DefineNativeMethodClass(boolClass, "nativeBitAnd", bc_bool_nativeBitAnd);

@@ -2,6 +2,7 @@
 #include "namespace.h"
 #include "../util/string_buffer.h"
 #include <stdlib.h>
+#include <string.h>
 #include "vtable.h"
 #include "../util/mem.h"
 #include "../util/text.h"
@@ -15,10 +16,8 @@
 #include "../lib/bc_library_interface.h"
 
 //proto
-static Object* malloc_impl(ObjectTag type, const char* filename, int lineno);
 static void delete_self(VectorItem item);
 static void mark_coroutine(Object* self);
-#define Object_malloc(type) (malloc_impl(type, __FILE__, __LINE__))
 //static Object* Object_malloc(ObjectTag type);
 //static Object* gObjectTrue = NULL;
 //static Object* gObjectFalse = NULL;
@@ -53,13 +52,14 @@ void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessa
 		}
 		case OBJECT_MSG_CLONE:
 		{
+			/*
 			if(self->Tag != OBJECT_ARRAY_T &&
 				self->Tag != OBJECT_REF_T &&
 	   			self->Tag != OBJECT_STRING_T) {
 		   		return CopyObject(self);
 			}
-			Object* ret = malloc_impl(OBJECT_INT_T, __FILE__, __LINE__);
-			ret->Tag = self->Tag;
+			*/
+			Object* ret = NewObject(sizeof(Object));
 			ret->GType = self->GType;
 			ret->VPtr = self->VPtr;
 			//ret->NativeSlotVec  = self->NativeSlotVec;
@@ -77,7 +77,9 @@ void* NewObject(size_t object_size) {
 		return NULL;
 	}
 	void* mem = MEM_MALLOC(object_size);
+	memset(mem, 0, object_size);
 	Object* ret = mem;
+	ret->OnMessage = HandleObjectMessage;
 	ret->NativeSlotVec = NULL;
 	ret->IsCoroutine = false;
 	ret->GType = NULL;
@@ -134,7 +136,7 @@ Object * GetFalseObject() {
 Object * GetNullObject() {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if (ctx->Null == NULL) {
-		ctx->Null = Object_malloc(OBJECT_NULL_T);
+		ctx->Null = NewObject(sizeof(Object));
 		ctx->Null->GType = NewGenericType(TYPE_NULL);
 		ctx->Null->Paint = PAINT_ONEXIT_T;
 	}
@@ -159,7 +161,9 @@ Object* CopyObject(Object * self) {
 }
 
 Object* CloneObject(Object* self) {
-	return (Object*)self->OnMessage(self, OBJECT_MSG_CLONE, 0, NULL);
+	void* ret = self->OnMessage(self, OBJECT_MSG_CLONE, 0, NULL);
+	assert(ret != NULL);
+	return (Object*)ret;
 }
 
 void PaintAllObject(Object* self, ObjectPaint paint) {
@@ -232,27 +236,27 @@ void DestroyObject(Object* self) {
 }
 
 int ObjectToInt(Object* self) {
-	assert(self->Tag == OBJECT_INT_T);
+	assert(IsIntValue(self));
 	return ((Integer*)self)->Value;
 }
 
 double ObjectToDouble(Object* self) {
-	assert(self->Tag == OBJECT_DOUBLE_T);
+	assert(IsDoubleValue(self));
 	return ((Double*)self)->Value;
 }
 
 bool ObjectToBool(Object* self) {
-	assert(self->Tag == OBJECT_BOOL_T);
+	assert(IsBoolValue(self));
 	return ((Bool*)self)->Value;
 }
 
 char ObjectToChar(Object* self) {
-	assert(self->Tag == OBJECT_CHAR_T);
+	assert(IsCharValue(self));
 	return ((Char*)self)->Value;
 }
 
 long ObjectToLong(Object* self) {
-	assert(self->Tag == OBJECT_LONG_T);
+	//assert(self->Tag == OBJECT_LONG_T);
 	return ((Long*)self)->Value;
 }
 
@@ -323,12 +327,11 @@ const char* GetObjectName(Object* self) {
 }
 
 //private
-static Object* malloc_impl(ObjectTag type, const char* filename, int lineno) {
+static Object* malloc_impl(const char* filename, int lineno) {
 	Object* ret = (Object*)mem_malloc(sizeof(Object), filename, lineno);
 	ret->IsCoroutine = false;
 	ret->GType = NULL;
 	ret->Paint = PAINT_UNMARKED_T;
-	ret->Tag = type;
 	ret->VPtr = NULL;
 	ret->IsClone = false;
 	AddHeap(GetHeap(), ret);

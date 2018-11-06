@@ -30,42 +30,26 @@ Type* GetBCConsoleType() {
 
 //private
 static void bc_console_writeLine(Method* parent, Frame* fr, Enviroment* env) {
-	Object* o = AtVector(fr->VariableTable, 1);
-	if (o->Tag == OBJECT_INT_T) {
-		printf("%d\n", OBJ2INT(o));
-	} else if(o->Tag == OBJECT_DOUBLE_T) {
-		printf("%f\n", OBJ2DOUBLE(o));
-	} else if (o->Tag == OBJECT_STRING_T) {
-		printf("%s\n", GetRawBCString(o)->Text);
-	} else if (o->Tag == OBJECT_REF_T) {
-		PrintGenericType(o->GType);
-		printf("\n");
-	} else if (o->Tag == OBJECT_CHAR_T) {
-		printf("%c\n", OBJ2CHAR(o));
-	} else if (o->Tag == OBJECT_BOOL_T) {
-		printf("%s\n", OBJ2BOOL(o) ? "true" : "false");
-	} else if(o->Tag == OBJECT_NULL_T) {
-		printf("null\n");
-	}
+	bc_console_write(parent, fr, env);
+	printf("\n");
 }
 
 static void bc_console_write(Method* parent, Frame* fr, Enviroment* env) {
 	Object* o = AtVector(fr->VariableTable, 1);
-	if (o->Tag == OBJECT_INT_T) {
+	if (IsIntValue(o)) {
 		printf("%d", OBJ2INT(o));
-	}  else if (o->Tag == OBJECT_DOUBLE_T) {
+	}  else if (IsDoubleValue(o)) {
 		printf("%f", OBJ2DOUBLE(o));
-	} else if (o->Tag == OBJECT_STRING_T) {
+	} else if (IsStringValue(o)) {
 		printf("%s", GetRawBCString(o)->Text);
-	} else if (o->Tag == OBJECT_REF_T) {
-		PrintGenericType(o->GType);
-		//printf("\n");
-	} else if (o->Tag == OBJECT_CHAR_T) {
+	} else if (IsCharValue(o)) {
 		printf("%c", OBJ2CHAR(o));
-	} else if (o->Tag == OBJECT_BOOL_T) {
+	} else if (IsBoolValue(o)) {
 		printf("%s", OBJ2BOOL(o) ? "true" : "false");
-	} else if(o->Tag == OBJECT_NULL_T) {
+	} else if(IsNullValue(o)) {
 		printf("null");
+	} else {
+		PrintGenericType(o->GType);
 	}
 }
 

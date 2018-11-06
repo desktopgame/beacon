@@ -29,6 +29,7 @@ Frame* NewFrame() {
 	ret->TypeArgs = NewVector();
 	ret->Receiver = NULL;
 	ret->Coroutine = NULL;
+	ret->ObjectSize = sizeof(Object);
 	return ret;
 }
 

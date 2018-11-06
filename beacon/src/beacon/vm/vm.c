@@ -2,6 +2,7 @@
 #include "frame.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 #include "label.h"
 #include "vm_trace.h"
@@ -520,7 +521,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				//コンストラクタをさかのぼり、
 				//トップレベルまで到達するとこの処理によって生成が行われます。
 				//FIXME:???
-				Object* o = NewObject(sizeof(Object));
+				Object* o = NewObject(self->ObjectSize);
 				assert(o->Paint != PAINT_ONEXIT_T);
 				PushVector(self->ValueStack, NON_NULL(o));
 				//これを this とする
@@ -605,12 +606,17 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				int absClsIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				int ctorIndex = (int)GetEnviromentSourceAt(env, ++IDX);
+				int allocSize = (int)GetEnviromentSourceAt(env, ++IDX);
+				if(allocSize < self->ObjectSize) {
+					allocSize = self->ObjectSize;
+				}
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->Tag == TYPE_CLASS_T);
 				Class* cls = tp->Kind.Class;
 				Constructor* ctor = (Constructor*)AtVector(cls->Constructors, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				Frame* sub = SubFrame(self);
+				sub->ObjectSize = allocSize;
 				sub->Receiver = tp;
 				CallFrame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = NewVector();
@@ -663,7 +669,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, assignTarget)) {
 					break;
 				}
-				assert(assignTarget->Tag == OBJECT_REF_T);
+				//assert(assignTarget->Tag == OBJECT_REF_T);
 				int fieldIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				AssignVector(assignTarget->Fields, fieldIndex, assignValue);
 				break;
@@ -711,7 +717,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				if(throw_npe(self, assignTarget)) {
 					break;
 				}
-				assert(assignTarget->Tag == OBJECT_REF_T);
+				//assert(assignTarget->Tag == OBJECT_REF_T);
 				int propIndex = (int)GetEnviromentSourceAt(env, ++IDX);
 				Property* pro = GetPropertyClass(TYPE2CLASS(GENERIC2TYPE(assignTarget->GType)), propIndex);
 				//プロパティを実行
@@ -1170,67 +1176,67 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 
 static int stack_topi(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_INT_T);
+	assert(IsIntValue(ret));
 	return ((Integer*)ret)->Value;
 }
 
 static double stack_topd(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_DOUBLE_T);
+	assert(IsDoubleValue(ret));
 	return ((Double*)ret)->Value;
 }
 
 static char stack_topc(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_CHAR_T);
+	assert(IsCharValue(ret));
 	return ((Char*)ret)->Value;
 }
 
 static char* stack_tops(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_STRING_T);
+	IsStringValue(ret);
 	return GetRawBCString(ret)->Text;
 }
 
 static bool stack_topb(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_BOOL_T);
+	assert(IsBoolValue(ret));
 	return ((Bool*)ret)->Value;
 }
 
 
 static int stack_popi(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_INT_T);
+	assert(IsIntValue(ret));
 	return ((Integer*)ret)->Value;
 }
 
 static double stack_popd(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_DOUBLE_T);
+	assert(IsDoubleValue(ret));
 	return ((Double*)ret)->Value;
 }
 
 static char stack_popc(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_CHAR_T);
+	assert(IsCharValue(ret));
 	return ((Char*)ret)->Value;
 }
 
 static char* stack_pops(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_STRING_T);
+	assert(IsStringValue(ret));
 	return GetRawBCString(ret)->Text;
 }
 
 static bool stack_popb(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
-	assert(ret->Tag == OBJECT_BOOL_T);
+	assert(IsBoolValue(ret));
 	return ((Bool*)ret)->Value;
 }
 
 static bool throw_npe(Frame* self, Object* o) {
-	if(o->Tag == OBJECT_NULL_T) {
+	if(IsNullValue(o)) {
 		NativeThrowVM(self, NewSimplefException(self, "NullPointerException"));
 		return true;
 	}

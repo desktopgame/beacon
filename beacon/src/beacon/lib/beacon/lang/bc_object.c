@@ -32,28 +32,7 @@ Type* GetBCObjectType() {
 static void bc_Object_nativeToString(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = (Object*)AtVector(fr->VariableTable, 0);
 	Buffer* sb = NewBuffer();
-	//参照型
-	if (self->Tag == OBJECT_REF_T) {
-		//char* name = GetTypeName(self->type);
-		AppendBuffer(sb, '[');
-		AppendsBuffer(sb, "Ref");
-		AppendBuffer(sb, ']');
-		ShrinkBuffer(sb);
-	//真偽型
-	} else if (self->Tag == OBJECT_BOOL_T) {
-		if (self == GetTrueObject()) {
-			AppendsBuffer(sb, "true");
-		} else if (self == GetFalseObject()) {
-			AppendsBuffer(sb, "false");
-		}
-	//整数型
-	} else if (self->Tag == OBJECT_INT_T) {
-#define BUFF_LEN 256
-		char buff[256];
-		int res = sprintf(buff, "%d", OBJ2INT(self));
-		AppendsBuffer(sb, buff);
-#undef BUFF_LEN
-	}
+	AppendfBuffer(sb, "%p", self);
 	char* str = ReleaseBuffer(sb);
 	Object* ret = (Object*)NewString(str);
 	PushVector(fr->ValueStack, ret);

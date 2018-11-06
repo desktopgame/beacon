@@ -24,6 +24,7 @@ void InitBCDouble() {
 	Namespace* lang = GetLangNamespace();
 	Type* doubleType = NewPreloadClass(InternString("Double"));
 	Class* doubleClass = TYPE2CLASS(doubleType);
+	doubleType->AllocSize = sizeof(Double);
 	AddTypeNamespace(lang, doubleType);
 	DefineNativeMethodClass(doubleClass, "nativeInit", bc_double_nativeInit);
 	DefineNativeMethodClass(doubleClass, "nativeEquals", bc_double_nativeEquals);
@@ -49,7 +50,7 @@ static void bc_double_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* d = AtVector(fr->VariableTable, 1);
 
 	DOUBLE_VALUE(self) = DOUBLE_VALUE(d);
-	self->Tag = OBJECT_DOUBLE_T;
+	//self->Tag = OBJECT_DOUBLE_T;
 }
 
 static void bc_double_nativeEquals(Method* parent, Frame* fr, Enviroment* env) {

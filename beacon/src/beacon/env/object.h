@@ -44,21 +44,6 @@ typedef enum ObjectPaint {
 } ObjectPaint ;
 
 /**
- * オブジェクトの種類を表す列挙.
- */
-typedef enum ObjectTag {
-	OBJECT_INT_T,
-	OBJECT_LONG_T, //bc_timeでだけ使ってる
-	OBJECT_DOUBLE_T,
-	OBJECT_CHAR_T,
-	OBJECT_STRING_T,
-	OBJECT_BOOL_T,
-	OBJECT_REF_T,
-	OBJECT_ARRAY_T,
-	OBJECT_NULL_T,
-} ObjectTag;
-
-/**
  * オブジェクトに対して送信することができる命令です。
  * これを判別することで一つの関数ポインタで処理を分岐させ、
  * オブジェクトひとつあたりのサイズを削減します。
@@ -95,7 +80,6 @@ typedef struct Object {
 	struct GenericType* GType;
 	struct VTable* VPtr;
 	ObjectPaint Paint;
-	ObjectTag Tag;
 	Vector* Fields;
 	Vector* NativeSlotVec;
 	bool IsCoroutine;
@@ -130,58 +114,11 @@ void* NewObject(size_t object_size);
 void* ConstructObject(size_t object_size, struct GenericType* gtype);
 
 /**
- * 整数型のオブジェクトを作成します.
- * @param i
- * @return
- */
-//#define Object_int_new(i) (MallocIntObject(i, __FILE__, __LINE__))
-//Object* MallocIntObject(int i, const char* filename, int lineno);
-
-/**
  * 可能ならキャッシュを返します.
  * @param i
  * @return
  */
 Object* GetIntObject(int i);
-
-/**
- * 浮動小数型のオブジェクトを作成します.
- * @param d
- * @return
- */
-//#define Object_double_new(d) (MallocDoubleObject(d, __FILE__, __LINE__))
-//Object* MallocDoubleObject(double d, const char* filename, int lineno);
-
-/**
- * long型の値を作成します.
- * @param l
- * @return
- */
-//#define Object_long_new(l) (MallocLongObject(l, __FILE__, __LINE__))
-//Object* MallocLongObject(long l, const char* filename, int lineno);
-
-/**
- * 文字型のオブジェクトを作成します.
- * @param c
- * @return
- */
-//#define Object_char_new(c) (MallocCharObject(c, __FILE__, __LINE__))
-//Object* MallocCharObject(char c, const char* filename, int lineno);
-
-/**
- * 文字列型のオブジェクトを作成します.
- * @param s
- * @return
- */
-//#define Object_string_new(s) (MallocStringObject(s, __FILE__, __LINE__))
-//Object* MallocStringObject(const char* s, const char* filename, int lineno);
-
-/**
- * 参照型のオブジェクトを作成します.
- * @return
- */
-//#define Object_ref_new() (MallocRefObject(__FILE__, __LINE__))
-//Object* MallocRefObject(const char* filename, int lineno);
 
 /**
  * 真偽値型の値を参照します.

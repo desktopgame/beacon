@@ -11,6 +11,7 @@
 #ifndef BEACON_ENV_TYPE_INTERFACE_H
 #define BEACON_ENV_TYPE_INTERFACE_H
 #include <stdbool.h>
+#include <stdlib.h>
 #include "../util/vector.h"
 #include "../util/string_pool.h"
 #include "../il/call_context.h"
@@ -69,6 +70,7 @@ typedef struct Type {
 	struct GenericType* GenericSelf;
 	int AbsoluteIndex;
 	TypeState State;
+	size_t AllocSize;
 	union {
 		struct Class* Class;
 		struct Interface* Interface;

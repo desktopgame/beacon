@@ -57,6 +57,7 @@ void InitBCString() {
 	Namespace* lang = GetLangNamespace();
 	Type* stringType = NewPreloadClass(InternString("String"));
 	Class* stringClass = TYPE2CLASS(stringType);
+	stringType->AllocSize = sizeof(String);
 	AddTypeNamespace(lang, stringType);
 	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
@@ -100,10 +101,10 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	for (int i = 0; i < charArr->Elements->Length; i++) {
 		Object* e = (Object*)AtVector(charArr->Elements, i);
-		assert(e->Tag == OBJECT_CHAR_T);
+		assert(IsCharValue(e));
 		AppendBuffer(sb, ((Char*)e)->Value);
 	}
 	//AssignVector(self->NativeSlotVec, 0, sb);
 	((String*)self)->Buffer = sb;
-	self->Tag = OBJECT_STRING_T;
+	//self->Tag = OBJECT_STRING_T;
 }

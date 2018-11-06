@@ -15,6 +15,7 @@ void InitBCChar() {
 	Namespace* lang = GetLangNamespace();
 	Type* charType = NewPreloadClass(InternString("Char"));
 	Class* charClass = TYPE2CLASS(charType);
+	charType->AllocSize = sizeof(Char);
 	AddTypeNamespace(lang, charType);
 	DefineNativeMethodClass(charClass, "nativeInit", bc_char_nativeInit);
 	DefineNativeMethodClass(charClass, "nativeToInt", bc_char_nativeToInt);
@@ -32,7 +33,7 @@ static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* ch = AtVector(fr->VariableTable, 1);
 
 	CHAR_VALUE(self) = CHAR_VALUE(ch);
-	self->Tag = OBJECT_CHAR_T;
+	//self->Tag = OBJECT_CHAR_T;
 }
 
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env) {

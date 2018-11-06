@@ -736,6 +736,7 @@ static void CLBC_chain_auto(ClassLoader * self, ILType * iltype, Type* tp, ILCon
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->SuperClass->CoreType->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
@@ -758,10 +759,12 @@ static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILCo
 		chainTarget = ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
+		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
 		chainTarget = ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
 		AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
+		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	}
 	if(chainTarget == NULL) {
 		ThrowBCError(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,

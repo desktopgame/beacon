@@ -1,5 +1,6 @@
 #include "type_interface.h"
 #include "../util/mem.h"
+#include "object.h"
 #include "TYPE_IMPL.h"
 #include "field.h"
 #include "method.h"
@@ -12,6 +13,7 @@
 
 Type* NewType() {
 	Type* ret = (Type*)MEM_MALLOC(sizeof(Type));
+	ret->AllocSize = sizeof(Object);
 	ret->Tag = TYPE_CLASS_T;
 	ret->Location = NULL;
 	ret->AbsoluteIndex = -1;

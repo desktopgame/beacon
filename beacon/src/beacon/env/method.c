@@ -363,6 +363,8 @@ static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cl
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_CHAIN_SUPER);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)sizeof(Object));
+	//ここでsizeof(Coroutine) を渡すように
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)ty->AbsoluteIndex);

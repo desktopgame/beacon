@@ -34,6 +34,7 @@ void InitBCArray() {
 	Namespace* lang = GetLangNamespace();
 	Type* arrayType = NewPreloadClass(InternString("Array"));
 	Class* arrayClass = TYPE2CLASS(arrayType);
+	arrayType->AllocSize = sizeof(Array);
 	AddTypeNamespace(lang, arrayType);
 	DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
 	DefineNativeMethodClass(arrayClass, "nativeSet", bc_array_nativeSet);
@@ -112,10 +113,12 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Field* lengthField = FindFieldClass(tp->Kind.Class, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* lengthObj = AtVector(self->Fields, temp);
+	Array* self = (Array*)AtVector(fr->VariableTable, 0);
+	Object* lengthObj = AtVector(self->Super.Fields, temp);
 	assert(lengthObj != NULL);
-	GenericType* targ = AtVector(self->GType->TypeArgs, 0);
+	assert(self->Elements == NULL);
+	self->Elements = NewVector();
+	GenericType* targ = AtVector(self->Super.GType->TypeArgs, 0);
 	//配列の長さだけ確保
 	int len = OBJ2INT(lengthObj);
 	assert(len >= 0);
@@ -129,7 +132,7 @@ static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* idx = AtVector(fr->VariableTable, 1);
 	Object* val = AtVector(fr->VariableTable, 2);
-	assert(idx->Tag == OBJECT_INT_T);
+	assert(IsIntValue(idx));
 	AssignVector(ARRAY_VALUE(self), OBJ2INT(idx), val);
 }
 
@@ -137,7 +140,7 @@ static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* idx = AtVector(fr->VariableTable, 1);
 //	Object* a = AtVector(vm->VariableTable, 2);
-	assert(idx->Tag == OBJECT_INT_T);
+	assert(IsIntValue(idx));
 	Object* ret = (Object*)AtVector(ARRAY_VALUE(self), OBJ2INT(idx));
 	//Printfln("array get %d", idx->u.int_);
 	PushVector(fr->ValueStack, ret);

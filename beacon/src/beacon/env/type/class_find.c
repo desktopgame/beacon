@@ -372,7 +372,7 @@ Method * GetMethodClass(Object * o, int index) {
 	#if defined(DEBUG)
 	const char* name = GetObjectName(o);
 	#endif
-	if(o->Tag == OBJECT_NULL_T) {
+	if(IsNullValue(o)) {
 		o->VPtr = TYPE2CLASS(TYPE_OBJECT)->VT;
 	}
 	VTable* vx = (o->VPtr);

@@ -9,6 +9,7 @@
 
 #ifndef BEACON_VM_FRAME_H
 #define BEACON_VM_FRAME_H
+#include <stdlib.h>
 #include "../util/stack.h"
 #include "../util/vector.h"
 #include "enviroment.h"
@@ -90,6 +91,9 @@ typedef struct Frame {
 	//あくまで参照しているだけなので、
 	//このVMが開放されてもこの enviroment は開放されません。
 	Enviroment* ContextRef;
+
+	//次の NEWOBJECT 命令で生成するオブジェクトのサイズ
+	size_t ObjectSize;
 
 	//例外がスローされた最も深いVMからルートへ向かって true に切り替えられるフラグ.
 	//例外がスローされた場合、

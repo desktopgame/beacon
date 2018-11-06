@@ -31,6 +31,7 @@ void InitBCInt() {
 	Namespace* lang =  GetLangNamespace();
 	Type* intType = NewPreloadClass(InternString("Int"));
 	Class* intClass = TYPE2CLASS(intType);
+	intType->AllocSize = sizeof(Integer);
 	AddTypeNamespace(lang, intType);
 	DefineNativeMethodClass(intClass, "nativeInit", bc_int_nativeInit);
 	DefineNativeMethodClass(intClass, "nativeEquals", bc_int_nativeEquals);
@@ -62,7 +63,7 @@ static void bc_int_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* i = AtVector(fr->VariableTable, 1);
 
 	INT_VALUE(self) = INT_VALUE(i);
-	self->Tag = OBJECT_INT_T;
+	//self->Tag = OBJECT_INT_T;
 }
 
 static void bc_int_nativeEquals(Method* parent, Frame* fr, Enviroment* env) {

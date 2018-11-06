@@ -104,7 +104,7 @@ Type* NewPreloadClass(StringView namev) {
 }
 
 void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
-	assert(o->Tag == OBJECT_REF_T);
+	//assert(o->Tag == OBJECT_REF_T);
 	Heap* he = GetHeap();
 	for (int i = 0; i < self->Fields->Length; i++) {
 		Field* f = (Field*)AtVector(self->Fields, i);

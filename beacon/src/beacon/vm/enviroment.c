@@ -118,25 +118,25 @@ Object* GetEnviromentConstantAt(Enviroment * self, int index) {
 
 Object* GetEnviromentCIntAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->Tag == OBJECT_INT_T);
+	assert(IsIntValue(e));
 	return e;
 }
 
 Object* GetEnviromentCDoubleAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->Tag == OBJECT_DOUBLE_T);
+	assert(IsDoubleValue(e));
 	return e;
 }
 
 Object* GetEnviromentCCharAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->Tag == OBJECT_CHAR_T);
+	assert(IsCharValue(e));
 	return e;
 }
 
 Object* GetEnviromentCStringAt(Enviroment * self, int index) {
 	Object* e = GetEnviromentConstantAt(self, index);
-	assert(e->Tag == OBJECT_STRING_T);
+	assert(IsStringValue(e));
 	return e;
 }
 
