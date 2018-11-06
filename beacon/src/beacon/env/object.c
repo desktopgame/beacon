@@ -290,6 +290,30 @@ Object* GetDefaultObject(GenericType* gt) {
 	return a;
 }
 
+bool IsCharValue(Object* self) {
+	return self->GType->CoreType == TYPE_CHAR;
+}
+
+bool IsBoolValue(Object* self) {
+	return self->GType->CoreType == TYPE_BOOL;
+}
+
+bool IsIntValue(Object* self) {
+	return self->GType->CoreType == TYPE_INT;
+}
+
+bool IsDoubleValue(Object* self) {
+	return self->GType->CoreType == TYPE_DOUBLE;
+}
+
+bool IsStringValue(Object* self) {
+	return self->GType->CoreType == TYPE_STRING;
+}
+
+bool IsNullValue(Object* self) {
+	return self->GType->CoreType == TYPE_NULL;
+}
+
 const char* GetObjectName(Object* self) {
 	const char* name = "NULL";
 	if(self->GType != NULL && self->GType->CoreType != NULL) {

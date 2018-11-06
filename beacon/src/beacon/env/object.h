@@ -345,4 +345,46 @@ Object* GetDefaultObject(struct GenericType* gt);
  * @return
  */
 const char* GetObjectName(Object* self);
+
+/**
+ * オブジェクトが文字型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool IsCharValue(Object* self);
+
+/**
+ * オブジェクトが真偽値型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool IsBoolValue(Object* self);
+
+/**
+ * オブジェクトが整数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool IsIntValue(Object* self);
+
+/**
+ * オブジェクトが実数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool IsDoubleValue(Object* self);
+
+/**
+ * オブジェクトが文字列型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool IsStringValue(Object* self);
+
+/**
+ * オブジェクトが空なら true.
+ * @param self
+ * @return
+ */
+bool IsNullValue(Object* self);
 #endif // !SIGNAL_ENV_OBJECT_H
