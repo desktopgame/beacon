@@ -759,11 +759,13 @@ static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILCo
 		chainTarget = ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
+	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
 		chainTarget = ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
 		AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
+	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	}
 	if(chainTarget == NULL) {
@@ -775,7 +777,6 @@ static void CLBC_chain_super(ClassLoader * self, ILType * iltype, Type* tp, ILCo
 	DeleteCallContext(cctx);
 	chain->Constructor = chainTarget;
 	chain->ConstructorIndex = temp;
-	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
 	//親クラスへのチェインなら即座にフィールドを確保
 	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
