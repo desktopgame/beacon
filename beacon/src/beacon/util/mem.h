@@ -34,9 +34,11 @@
 	#endif
 #else
 		#define NON_NULL(m) (m)
-		#define MEM_MALLOC(size) (malloc(size))
+		#define MEM_MALLOC(size) (SafeMalloc(size))
 		#define MEM_FREE(size) (free(size))
 		#define MEM_REALLOC(block, size) (realloc(block, size))
 		#define MEM_MARK(block, size) ((void)0)
 #endif
+
+void* SafeMalloc(size_t size);
 #endif // !SIGNAL_ENV_MEM_H

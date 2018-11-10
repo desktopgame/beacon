@@ -1257,7 +1257,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	FindFieldClass(exceptionT->Kind.Class, InternString("message"), &temp);
 	Object* ex = self->Exception;
 	Object* msg = AtVector(ex->Fields, temp);
-	Buffer* cstr = AtVector(msg->NativeSlotVec, 0);
+	Buffer* cstr = ((String*)msg)->Buffer;
 
 	char block[256] = {0};
 	sprintf(block, "file: %s <%d>", env->ContextRef->FileName, line);
