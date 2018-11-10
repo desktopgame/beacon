@@ -548,6 +548,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					}
 					obj->GType = g;
 				}
+				assert(obj->GType != NULL);
 				//フィールドの割り当て
 				AllocFieldsClass(cls, obj, self);
 				assert(obj->GType != NULL);

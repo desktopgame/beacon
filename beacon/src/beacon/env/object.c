@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "vtable.h"
+#include "generic_type.h"
+#include "type_interface.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "type_interface.h"
@@ -25,6 +27,10 @@ static void mark_coroutine(Object* self);
 static int gObjectCount = 0;
 
 void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]) {
+	#if DEBUG
+	assert(self->GType != NULL);
+	const char* name = Ref2Str(GetTypeName(self->GType->CoreType));
+	#endif
 	switch(msg) {
 		case OBJECT_MSG_NONE:
 			break;
@@ -82,9 +88,9 @@ void* NewObject(size_t object_size) {
 	ret->OnMessage = HandleObjectMessage;
 	ret->NativeSlotVec = NULL;
 	ret->IsCoroutine = false;
-	ret->GType = NULL;
+	ret->GType = GENERIC_NULL;
 	ret->Paint = PAINT_UNMARKED_T;
-	ret->VPtr = NULL;
+	ret->VPtr = GENERIC_NULL->CoreType->Kind.Class->VT;
 	ret->IsClone = false;
 	ret->Fields = NewVector();
 	AddHeap(GetHeap(), ret);
@@ -93,6 +99,7 @@ void* NewObject(size_t object_size) {
 }
 
 void* ConstructObject(size_t object_size, GenericType* gtype) {
+	assert(gtype != NULL);
 	void* mem = NewObject(object_size);
 	Object* obj = mem;
 	obj->GType = gtype;
@@ -138,6 +145,7 @@ Object * GetNullObject() {
 	if (ctx->Null == NULL) {
 		ctx->Null = NewObject(sizeof(Object));
 		ctx->Null->GType = NewGenericType(TYPE_NULL);
+		ctx->Null->VPtr = GetVTableType(TYPE_NULL);
 		ctx->Null->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->Null;
@@ -178,6 +186,10 @@ void PaintAllObject(Object* self, ObjectPaint paint) {
 	if (self->Paint != PAINT_ONEXIT_T) {
 		self->Paint = paint;
 	}
+	#if DEBUG
+	//printf("%s\n", Ref2Str(GetTypeName(self->GType->CoreType)));
+	#endif
+	assert(self->OnMessage != NULL);
 	ObjectMessageArgument argv[] = {paint};
 	self->OnMessage(self, OBJECT_MSG_MARKALL, 1, argv);
 	//コルーチンならその中身をマークする
@@ -291,6 +303,7 @@ Object* GetDefaultObject(GenericType* gt) {
 	} else if (gt->CoreType == TYPE_CHAR) {
 		a = (Object*)NewChar('\0');
 	}
+	assert(a->GType != NULL);
 	return a;
 }
 
@@ -327,18 +340,6 @@ const char* GetObjectName(Object* self) {
 }
 
 //private
-static Object* malloc_impl(const char* filename, int lineno) {
-	Object* ret = (Object*)mem_malloc(sizeof(Object), filename, lineno);
-	ret->IsCoroutine = false;
-	ret->GType = NULL;
-	ret->Paint = PAINT_UNMARKED_T;
-	ret->VPtr = NULL;
-	ret->IsClone = false;
-	AddHeap(GetHeap(), ret);
-	gObjectCount++;
-	return ret;
-}
-
 static void delete_self(VectorItem item) {
 	Object* e = (Object*)item;
 	DestroyObject(e);

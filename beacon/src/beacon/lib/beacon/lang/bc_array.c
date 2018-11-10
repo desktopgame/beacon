@@ -99,8 +99,6 @@ static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, Objec
 	} else if (msg == OBJECT_MSG_PRINT) {
 		printf("Array:%d", ARRAY_VALUE(self)->Length);
 		return NULL;
-	} else if(msg == OBJECT_MSG_CLONE) {
-
 	} else {
 		return HandleObjectMessage(self, msg, argc, argv);
 	}
@@ -115,6 +113,7 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	//対応する位置のオブジェクトを取り出す
 	Array* self = (Array*)AtVector(fr->VariableTable, 0);
 	Object* lengthObj = AtVector(self->Super.Fields, temp);
+	self->Super.OnMessage = handle_obj_message;
 	assert(lengthObj != NULL);
 	assert(self->Elements == NULL);
 	self->Elements = NewVector();

@@ -27,14 +27,14 @@ String* NewString(const char* str) {
 	//AddArgsGenericType(arr->GType, GENERIC_CHAR);
 	//ボックス化
 	const char* itr = str;
-	int strindex = 0;
 	Buffer* sb = NewBuffer();
-	while ((*itr) != '\0') {
-		char e = (*itr);
-		//PushVector(arr->NativeSlotVec, MallocCharObject(e, filename, lineno));
-		SetBCArray((Object*)arr, strindex, (Object*)NewChar(e));
-		itr++;
-		AppendBuffer(sb, e);
+	for(int i=0;; i++) {
+		char c = str[i];
+		if(c == '\0') {
+			break;
+		}
+		SetBCArray((Object*)arr, i, (Object*)NewChar(c));
+		AppendBuffer(sb, c);
 	}
 	ShrinkBuffer(sb);
 	//String#charArrayを埋める
@@ -92,7 +92,7 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	//こちらの場合では Object#nativeSlotVec に C形式の文字列を格納します。
 	//これはコンストラクタによって String が作成された場合には
 	//呼び出されないので、その部分の処理をここで行います。
-
+	self->OnMessage = handle_obj_message;
 	//String#charArrayを取得
 	int temp = 0;
 	FindFieldClass(TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
