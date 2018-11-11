@@ -132,7 +132,7 @@ Type* GetBoolTypeNamespace() {
 }
 
 Type* GetVoidTypeNamespace() {
-	return GetBCVoidType();
+	return GetVoidType();
 }
 
 Type* GetNullTypeNamespace() {

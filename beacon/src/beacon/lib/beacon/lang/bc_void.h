@@ -14,11 +14,11 @@ struct Type;
 /**
  * beacon::lang::Voidクラスを初期化します.
  */
-void InitBCVoid();
+void InitVoid();
 
 /**
  * beacon::lang::Void型を返します.
  * @return
  */
-struct Type* GetBCVoidType();
+struct Type* GetVoidType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_VOID_H

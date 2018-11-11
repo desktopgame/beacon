@@ -2,14 +2,14 @@
 #include "../../bc_library_impl.h"
 
 
-void InitBCVoid() {
+void InitVoid() {
 	Namespace* lang = GetLangNamespace();
 	Type* voidType = NewPreloadClass(InternString("Void"));
 	Class* voidClass = TYPE2CLASS(voidType);
 	AddTypeNamespace(lang, voidType);
 }
 
-Type* GetBCVoidType() {
+Type* GetVoidType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Void"));
 }
