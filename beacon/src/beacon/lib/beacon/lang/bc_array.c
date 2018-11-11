@@ -17,9 +17,9 @@ static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env);
 static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env);
 static void delete_self(VectorItem item);
 
-Array* NewArray(int size, GenericType* element_type) {
+Object* NewArray(int size, GenericType* element_type) {
 	//Array[T]を作成する
-	GenericType* array_type = NewGenericType(GetBCArrayType());
+	GenericType* array_type = NewGenericType(GetArrayType());
 	AddArgsGenericType(array_type, element_type);
 	Array* ret = ConstructObject(sizeof(Array), array_type);
 	ret->Super.OnMessage = handle_obj_message;
@@ -27,10 +27,10 @@ Array* NewArray(int size, GenericType* element_type) {
 	for(int i=0; i<size; i++) {
 		PushVector(ret->Elements, GetDefaultObject(element_type));
 	}
-	return ret;
+	return (Object*)ret;
 }
 
-void InitBCArray() {
+void InitArray() {
 	Namespace* lang = GetLangNamespace();
 	Type* arrayType = NewPreloadClass(InternString("Array"));
 	Class* arrayClass = TYPE2CLASS(arrayType);
@@ -42,13 +42,13 @@ void InitBCArray() {
 	DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
-Type* GetBCArrayType() {
+Type* GetArrayType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Array"));
 }
 
-Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
-	Type* arrayType = GetBCArrayType();
+Object * DynamicNewArray(struct GenericType* gtype, int length, Frame* fr) {
+	Type* arrayType = GetArrayType();
 
 	Vector* args = NewVector();
 	Vector* type_args = NewVector();
@@ -62,15 +62,15 @@ Object * NewBCArray(struct GenericType* gtype, int length, Frame* fr) {
 }
 
 #define ARRAY_VALUE(obj) (((Array*)obj)->Elements)
-void SetBCArray(Object * arr, int index, Object * o) {
+void SetElementAt(Object * arr, int index, Object * o) {
 	AssignVector(ARRAY_VALUE(arr), index, o);
 }
 
-Object * GetBCArray(Object * arr, int index) {
+Object * GetElementAt(Object * arr, int index) {
 	return (Object*)AtVector(ARRAY_VALUE(arr), index);
 }
 
-int GetLengthBCArray(Object* arr) {
+int GetArrayLength(Object* arr) {
 	//assert(arr->tag == OBJECT_ARRAY_T);
 	return ARRAY_VALUE(arr)->Length;
 }

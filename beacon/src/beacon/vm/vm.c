@@ -1281,9 +1281,9 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 	int lineIndexptr = -1;
 	FindFieldClass(stackTraceElementT->Kind.Class, InternString("fileName"), &fileNameptr);
 	FindFieldClass(stackTraceElementT->Kind.Class, InternString("lineIndex"), &lineIndexptr);
-	int stackLen = GetLengthBCArray(stackTraceObj);
+	int stackLen = GetArrayLength(stackTraceObj);
 	for(int i=0; i<stackLen; i++) {
-		Object* e = GetBCArray(stackTraceObj, i);
+		Object* e = GetElementAt(stackTraceObj, i);
 		Object* fileNameObj = AtVector(e->Fields, fileNameptr);
 		Object* lineIndexObj = AtVector(e->Fields, lineIndexptr);
 		sprintf(block, "    @%d: %s\n", ObjectToInt(lineIndexObj), GetRawBCString(fileNameObj)->Text);

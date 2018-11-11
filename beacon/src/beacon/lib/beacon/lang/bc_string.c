@@ -19,7 +19,7 @@ String* NewString(const char* str) {
 	//配列を生成
 	Array* arr = NewArray(strlen(str), GENERIC_CHAR);
 	//arr->Tag = OBJECT_ARRAY_T;
-	Type* arrType = GetBCArrayType();
+	Type* arrType = GetArrayType();
 	Type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
 	//arr->GType = NewGenericType(arrType);
 	//arr->VPtr = GetVTableType(arrType);
@@ -33,7 +33,7 @@ String* NewString(const char* str) {
 		if(c == '\0') {
 			break;
 		}
-		SetBCArray((Object*)arr, i, (Object*)NewChar(c));
+		SetElementAt((Object*)arr, i, (Object*)NewChar(c));
 		AppendBuffer(sb, c);
 	}
 	ShrinkBuffer(sb);
