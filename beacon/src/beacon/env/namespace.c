@@ -108,7 +108,7 @@ Namespace* GetPlaceholderNamespace() {
 }
 
 Type* GetObjectTypeNamespace() {
-	return GetBCObjectType();
+	return GetObjectType();
 }
 
 Type* GetIntTypeNamespace() {

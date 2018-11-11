@@ -64,7 +64,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	Namespace* lang = AddNamespaceNamespace(beacon, InternString("lang"));
 	Namespace* unsafe = AddNamespaceNamespace(beacon, InternString("unsafe"));
 	Namespace* placeholder = CreateNamespaceAtRoot(InternString("$placeholder"));
-	InitBCObject();
+	InitObject();
 	InitArray();
 	InitException();
 	InitInt();
