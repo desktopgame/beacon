@@ -43,7 +43,7 @@ void Println();
  * @param filename
  * @return
  */
-void NewFile(const char* filename);
+void CreateFile(const char* filename);
 
 /**
  * 指定のファイルが既に存在するなら true.

@@ -45,7 +45,7 @@ void Println() {
 	printf("\n");
 }
 
-void NewFile(const char * filename) {
+void CreateFile(const char * filename) {
 	assert(!ExistsFile(filename));
 #if defined(_MSC_VER)
 	FILE* fp;

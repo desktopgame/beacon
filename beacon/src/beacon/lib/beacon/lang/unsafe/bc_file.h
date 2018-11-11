@@ -15,20 +15,30 @@ struct Frame;
 struct Type;
 struct Object;
 struct GenericType;
-
+/**
+ * FILE*をラップする構造体。
+ */
 typedef struct File {
 	Object Super;
 	FILE* Pointer;
 } File;
 struct Type;
+
+/**
+ * 指定のファイルポインターでファイルオブジェクトを生成します。
+ * @param fp
+ * @return
+ */
+File* NewFile(FILE* fp);
+
 /**
  * beacon::unsafe::Fileクラスを初期化します.
  */
-void InitBCFile();
+void InitFile();
 
 /**
  * beacon::unsafe::Fileを返します.
  * @return
  */
-struct Type* GetBCFileType();
+struct Type* GetFileType();
 #endif

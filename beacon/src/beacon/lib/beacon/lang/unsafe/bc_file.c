@@ -19,9 +19,15 @@ static void bc_file_nativeGetStdIn(Method* parent, Frame* fr, Enviroment* env);
 static void bc_file_nativeGetStdOut(Method* parent, Frame* fr, Enviroment* env);
 static void bc_file_nativeGetStdErr(Method* parent, Frame* fr, Enviroment* env);
 static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env);
-static File* file_new(FILE* fp, bool std);
 
-void InitBCFile() {
+File* NewFile(FILE* fp) {
+	File* file = ConstructObject(sizeof(File), GetFileType()->GenericSelf);
+	assert(file->Super.Paint != PAINT_ONEXIT_T);
+	file->Pointer = fp;
+	return file;
+}
+
+void InitFile() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	Type* fileType = NewPreloadClass(InternString("File"));
 	Class* fileClass = TYPE2CLASS(fileType);
@@ -37,7 +43,7 @@ void InitBCFile() {
 	DefineNativeMethodClass(fileClass, "nativeClose", bc_file_nativeClose);
 }
 
-Type* GetBCFileType() {
+Type* GetFileType() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("File"));
 }
@@ -55,7 +61,7 @@ static void bc_file_nativeOpen(Method* parent, Frame* fr, Enviroment* env) {
 		PushVector(fr->ValueStack, GetNullObject());
 		return;
 	}
-	Object* file = (Object*)file_new(fp, false);
+	Object* file = (Object*)NewFile(fp);
 	PushVector(fr->ValueStack, file);
 }
 
@@ -84,17 +90,17 @@ static void bc_file_nativeAvailable(Method* parent, Frame* fr, Enviroment* env) 
 }
 
 static void bc_file_nativeGetStdIn(Method* parent, Frame* fr, Enviroment* env) {
-	Object* file = (Object*)file_new(stdin, true);
+	Object* file = (Object*)NewFile(stdin);
 	PushVector(fr->ValueStack, file);
 }
 
 static void bc_file_nativeGetStdOut(Method* parent, Frame* fr, Enviroment* env) {
-	Object* file = (Object*)file_new(stdout, true);
+	Object* file = (Object*)NewFile(stdout);
 	PushVector(fr->ValueStack, file);
 }
 
 static void bc_file_nativeGetStdErr(Method* parent, Frame* fr, Enviroment* env) {
-	Object* file = (Object*)file_new(stderr, true);
+	Object* file = (Object*)NewFile(stderr);
 	PushVector(fr->ValueStack, file);
 }
 
@@ -103,12 +109,4 @@ static void bc_file_nativeClose(Method* parent, Frame* fr, Enviroment* env) {
 	FILE* fp = FP(self);
 	assert(fp != NULL);
 	fclose(fp);
-}
-
-static File* file_new(FILE* fp, bool std) {
-	Type* fileType = GetBCFileType();
-	File* file = ConstructObject(sizeof(File), fileType->GenericSelf);
-	assert(file->Super.Paint != PAINT_ONEXIT_T);
-	file->Pointer = fp;
-	return file;
 }
