@@ -25,7 +25,7 @@ set(JNI_INCLUDE_DIR "" CACHE FILEPATH "Path to jni")
 set(JNI_NATIVE_INCLUDE_DIR "" CACHE FILEPATH "Path to jni native")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
-set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w")
+set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
 enable_testing()
 add_test(
     NAME test
