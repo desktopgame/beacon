@@ -5,13 +5,13 @@
 static void bc_char_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 static void bc_char_nativeToInt(Method* parent, Frame* fr, Enviroment* env);
 
-Char* NewChar(char value) {
+Object* NewChar(char value) {
 	Char* ret = ConstructObject(sizeof(Char), GENERIC_CHAR);
 	ret->Value = value;
-	return ret;
+	return (Object*)ret;
 }
 
-void InitBCChar() {
+void InitChar() {
 	Namespace* lang = GetLangNamespace();
 	Type* charType = NewPreloadClass(InternString("Char"));
 	Class* charClass = TYPE2CLASS(charType);
@@ -21,7 +21,7 @@ void InitBCChar() {
 	DefineNativeMethodClass(charClass, "nativeToInt", bc_char_nativeToInt);
 }
 
-Type* GetBCCharType() {
+Type* GetCharType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Char"));
 }

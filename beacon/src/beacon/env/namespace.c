@@ -120,7 +120,7 @@ Type* GetDoubleTypeNamespace() {
 }
 
 Type* GetCharTypeNamespace() {
-	return GetBCCharType();
+	return GetCharType();
 }
 
 Type* GetStringTypeNamespace() {

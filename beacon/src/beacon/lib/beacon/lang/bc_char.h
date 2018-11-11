@@ -25,16 +25,16 @@ struct Type;
  * @param value
  * @return
  */
-Char* NewChar(char value);
+struct Object* NewChar(char value);
 
 /**
  * beacon::lang::Charクラスを初期化します.
  */
-void InitBCChar();
+void InitChar();
 
 /**
  * beacon::lang::Char型を返します.
  * @return
  */
-struct Type* GetBCCharType();
+struct Type* GetCharType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_CHAR_H
