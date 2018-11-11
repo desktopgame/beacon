@@ -18,27 +18,40 @@
 #endif
 
 #define mem_malloc(size, file, line) (malloc(size))
-#if defined(_MSC_VER)
-	#if defined(_DEBUG)
-		#define NON_NULL(m) (m)
-		#define MEM_MALLOC(size) (_malloc_dbg(size,_NORMAL_BLOCK,__FILE__,__LINE__))
-		#define MEM_FREE(size) (_free_dbg(size, _NORMAL_BLOCK))
-		#define MEM_REALLOC(block, size) (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
-		#define MEM_MARK(block, size) ((void)0)
-	#else
-		#define NON_NULL(m) (m)
-		#define MEM_MALLOC(size) (malloc(size))
-		#define MEM_FREE(size) (free(size))
-		#define MEM_REALLOC(block, size) (realloc(block, size))
-		#define MEM_MARK(block, size) ((void)0)
-	#endif
+#if (defined(_MSC_VER) && defined(_DEBUG))
+	#define NON_NULL(m) (m)
+	#define MEM_MALLOC(size) (_malloc_dbg(size,_NORMAL_BLOCK,__FILE__,__LINE__))
+	#define MEM_FREE(size) (_free_dbg(size, _NORMAL_BLOCK))
+	#define MEM_REALLOC(block, size) (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
+	#define MEM_MARK(block, size) ((void)0)
+#elif defined(DEBUG)
+	#define NON_NULL(m) (m)
+	#define MEM_MALLOC(size) (SafeMalloc(size))
+	#define MEM_FREE(size) (free(size))
+	#define MEM_REALLOC(block, size) (SafeRealloc(block, size))
+	#define MEM_MARK(block, size) ((void)0)
 #else
-		#define NON_NULL(m) (m)
-		#define MEM_MALLOC(size) (SafeMalloc(size))
-		#define MEM_FREE(size) (free(size))
-		#define MEM_REALLOC(block, size) (realloc(block, size))
-		#define MEM_MARK(block, size) ((void)0)
+	#define NON_NULL(m) (m)
+	#define MEM_MALLOC(size) (SafeMalloc(size))
+	#define MEM_FREE(size) (free(size))
+	#define MEM_REALLOC(block, size) (SafeRealloc(block, size))
+	#define MEM_MARK(block, size) ((void)0)
 #endif
 
+/**
+ * メモリを指定のサイズ分確保して返します。
+ * 確保できない場合には abort() します。
+ * @param size
+ * @return
+ */
 void* SafeMalloc(size_t size);
+
+/**
+ * メモリを指定のサイズ分確保して返します。
+ * 確保できない場合には abort() します。
+ * @param block
+ * @paran new_size
+ * @return
+ */
+void* SafeRealloc(void* block, size_t new_size);
 #endif // !SIGNAL_ENV_MEM_H
