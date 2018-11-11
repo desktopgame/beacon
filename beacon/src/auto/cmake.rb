@@ -29,9 +29,9 @@ set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
 enable_testing()
 add_test(
     NAME test
-    COMMAND $<TARGET_FILE:a.out> --test
+    COMMAND ruby auto/test.rb
     #CONFIGURATIONS Debug
-    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    WORKING_DIRECTORY .
 )
 include_directories(${JNI_INCLUDE_DIR} ${JNI_NATIVE_INCLUDE_DIR})
 EOS
