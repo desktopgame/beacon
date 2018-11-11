@@ -20,7 +20,7 @@ static void bc_locale_nativeGetNegativeSign(Method* parent, Frame* fr, Enviromen
 static void bc_locale_nativeGetIntFracDigits(Method* parent, Frame* fr, Enviroment* env);
 static void bc_locale_nativeGetFracDigits(Method* parent, Frame* fr, Enviroment* env);
 
-void InitBCLocaleType() {
+void InitLocaleType() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	Type* localeType = NewPreloadClass(InternString("Locale"));
 	Class* localeClass = TYPE2CLASS(localeType);
@@ -38,7 +38,7 @@ void InitBCLocaleType() {
 	DefineNativeMethodClass(localeClass, "nativeGetFracDigits", bc_locale_nativeGetFracDigits);
 }
 
-Type* GetBCLocaleType() {
+Type* GetLocaleType() {
 	Namespace* unsafe = GetUnsafeNamespace();
 	return FindTypeFromNamespace(unsafe, InternString("Locale"));
 }

@@ -77,7 +77,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitBCNull();
 	InitFile();
 	InitBCSystem();
-	InitBCLocaleType();
+	InitLocaleType();
 	InitBCTime();
 	//ブートストラップクラスローダー
 	self->BootstrapClassLoader = NewClassLoader("bootstrap", CONTENT_LIB_T);
