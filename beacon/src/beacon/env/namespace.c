@@ -116,7 +116,7 @@ Type* GetIntTypeNamespace() {
 }
 
 Type* GetDoubleTypeNamespace() {
-	return GetBCDoubleType();
+	return GetDoubleType();
 }
 
 Type* GetCharTypeNamespace() {

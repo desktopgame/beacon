@@ -25,16 +25,16 @@ struct Type;
  * @param value
  * @return
  */
-Double* NewDouble(double value);
+struct Object* NewDouble(double value);
 
 /**
  * beacon::lang::Doubleクラスを初期化します.
  */
-void InitBCDouble();
+void InitDouble();
 
 /**
  * beacon::lang::Double型を返します.
  * @return
  */
-struct Type* GetBCDoubleType();
+struct Type* GetDoubleType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_DOUBLE_H
