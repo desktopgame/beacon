@@ -112,7 +112,7 @@ Type* GetObjectTypeNamespace() {
 }
 
 Type* GetIntTypeNamespace() {
-	return GetBCIntType();
+	return GetIntType();
 }
 
 Type* GetDoubleTypeNamespace() {

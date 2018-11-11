@@ -25,16 +25,16 @@ typedef struct Integer {
  * @param value
  * @return
  */
-Integer* NewInteger(int value);
+struct Object* NewInteger(int value);
 
 /**
  * beacon::lang::Intクラスを初期化します.
  */
-void InitBCInt();
+void InitInt();
 
 /**
  * beacon::lang::Intを返します.
  * @return
  */
-struct Type* GetBCIntType();
+struct Type* GetIntType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_INT_H
