@@ -4,10 +4,10 @@
 static void bc_bool_nativeBitOr(Method* parent, Frame* fr, Enviroment* env);
 static void bc_bool_nativeBitAnd(Method* parent, Frame* fr, Enviroment* env);
 
-Bool* NewBool(bool value) {
+Object* NewBool(bool value) {
 	Bool* ret = ConstructObject(sizeof(Bool), GENERIC_BOOL);
 	ret->Value = value;
-	return ret;
+	return (Object*)ret;
 }
 
 void InitBool() {

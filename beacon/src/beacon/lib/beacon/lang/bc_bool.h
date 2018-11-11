@@ -26,7 +26,7 @@ typedef struct Bool {
  * @param value
  * @return
  */
-Bool* NewBool(bool value);
+struct Object* NewBool(bool value);
 
 /**
  * beacon::lang::Boolクラスを初期化します.
