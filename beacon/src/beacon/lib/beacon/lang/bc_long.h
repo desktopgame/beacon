@@ -24,5 +24,5 @@ typedef struct Long {
  * @param value
  * @return
  */
-Long* NewLong(long value);
+struct Object* NewLong(long value);
 #endif
