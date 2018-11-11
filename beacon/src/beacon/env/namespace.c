@@ -140,7 +140,7 @@ Type* GetNullTypeNamespace() {
 }
 
 Type* GetExceptionTypeNamespace() {
-	return GetBCExceptionType();
+	return GetExceptionType();
 }
 
 void UnlinkNamespace(Namespace * self) {

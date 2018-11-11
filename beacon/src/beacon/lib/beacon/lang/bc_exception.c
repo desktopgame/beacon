@@ -13,7 +13,7 @@
 //proto
 static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env);
 
-void InitBCException() {
+void InitException() {
 	Namespace* lang = GetLangNamespace();
 	Type* exceptionType = NewPreloadClass(InternString("Exception"));
 	Class* exceptionClass = TYPE2CLASS(exceptionType);
@@ -21,7 +21,7 @@ void InitBCException() {
 	DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
-Type* GetBCExceptionType() {
+Type* GetExceptionType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Exception"));
 }

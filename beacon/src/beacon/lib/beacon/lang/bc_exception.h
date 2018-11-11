@@ -14,10 +14,10 @@ struct Type;
 /**
  * beacon::lang::Exceptionクラスを初期化します.
  */
-void InitBCException();
+void InitException();
 
 /**
  * beacon::lang::Exception型を返します.
  */
-struct Type* GetBCExceptionType();
+struct Type* GetExceptionType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_EXCEPTION_H

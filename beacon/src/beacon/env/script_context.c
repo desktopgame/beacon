@@ -66,7 +66,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	Namespace* placeholder = CreateNamespaceAtRoot(InternString("$placeholder"));
 	InitBCObject();
 	InitArray();
-	InitBCException();
+	InitException();
 	InitBCInt();
 	InitDouble();
 	InitChar();
