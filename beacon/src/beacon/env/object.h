@@ -15,6 +15,14 @@
 
 struct GenericType;
 struct VTable;
+/**
+ * オブジェクトの種類を表すためのフラグ。
+ */
+typedef enum ObjectFlags {
+	OBJECT_FLG_NONE = 1 << 0,
+	OBJECT_FLG_COROUTINE = 1 << 1,
+	OBJECT_FLG_CLONE = 1 << 2,
+} ObjectFlags;
 /** 
  * オブジェクトの着色状態.
  * インクリメンタルGCのためのフラグです。
@@ -22,13 +30,7 @@ struct VTable;
 typedef enum ObjectPaint {
 	PAINT_UNMARKED_T,
 	PAINT_MARKED_T,
-	//コンテキストが終了するまで
-	//GCの対象にならない
-	//ソースコード中に直接記述されたリテラルのためのフラグ。
 	PAINT_ONEXIT_T,
-//	paint_white,
-//	paint_black,
-//	paint_gray
 } ObjectPaint ;
 
 /**
@@ -68,10 +70,8 @@ typedef struct Object {
 	struct GenericType* GType;
 	struct VTable* VPtr;
 	ObjectPaint Paint;
+	ObjectFlags Flags;
 	Vector* Fields;
-	Vector* NativeSlotVec;
-	bool IsCoroutine;
-	bool IsClone;
 	void* (*OnMessage)(struct Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
 } Object;
 

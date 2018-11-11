@@ -18,6 +18,7 @@
 #include "type_parameter.h"
 #include "generic_type.h"
 #include "constructor.h"
+#include "coroutine.h"
 #include <assert.h>
 
 #if defined(_MSC_VER)
@@ -363,7 +364,7 @@ static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cl
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_CHAIN_SUPER);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
-	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)sizeof(Object));
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)sizeof(Coroutine));
 	//ここでsizeof(Coroutine) を渡すように
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_ALLOC_FIELD);

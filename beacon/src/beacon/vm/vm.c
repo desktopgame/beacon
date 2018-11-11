@@ -17,6 +17,7 @@
 #include "../env/script_context.h"
 #include "../env/operator_overload.h"
 #include "../env/property.h"
+#include "../env/coroutine.h"
 #include "../lib/beacon/lang/bc_array.h"
 #include "../thread/thread.h"
 #include "../util/mem.h"
@@ -925,10 +926,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			}
 			case OP_CORO_INIT:
 			{
-				Object* o = (Object*)AtVector(self->VariableTable, 0);
-				if(o->NativeSlotVec == NULL) {
-					o->NativeSlotVec = NewVector();
-				}
+				Object* obj = (Object*)AtVector(self->VariableTable, 0);
 				int param_len = (int)GetEnviromentSourceAt(env, ++IDX);
 				int op_len = (int)GetEnviromentSourceAt(env, ++IDX);
 				YieldContext* yctx = NewYieldContext();
@@ -946,18 +944,20 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					assert(a != NULL);
 					PushVector(yctx->Parameters, a);
 				}
+				Coroutine* cor = (Coroutine*)obj;
 				//暗黙的に生成されるイテレータ実装クラスのコンストラクタは、
 				//必ず最後に iterate() を定義したクラスのオブジェクトを受け取る。
-				PushVector(o->NativeSlotVec, yctx);
-				o->IsCoroutine = true;
+				cor->Context = yctx;
+				obj->Flags = obj->Flags | OBJECT_FLG_COROUTINE;
 				break;
 			}
 			case OP_CORO_NEXT:
 			{
-				Object* o = self->Coroutine;
+				Object* obj = self->Coroutine;
 				Object* ret = (Object*)PopVector(self->ValueStack);
-				assert(o->IsCoroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
+				Coroutine* cor = (Coroutine*)obj;
+				assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
+				YieldContext* yctx = cor->Context;
 				//この実行コードが
 				//前回からの再開によって開始した場合、それを元に戻す
 				if(yctx->VariableTable != NULL) {
@@ -981,9 +981,10 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			}
 			case OP_CORO_EXIT:
 			{
-				Object* o = self->Coroutine;
-				assert(o->IsCoroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
+				Object* obj = self->Coroutine;
+				assert((obj->Flags | OBJECT_FLG_COROUTINE) > 0);
+				Coroutine* cor = (Coroutine*)obj;
+				YieldContext* yctx = cor->Context;
 				IDX = source_len;
 				yctx->YieldOffset = source_len;
 				if(yctx->VariableTable != NULL) {
@@ -995,9 +996,10 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			}
 			case OP_CORO_RESUME:
 			{
-				Object* o = self->Coroutine;
-				assert(o->IsCoroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
+				Object* obj = self->Coroutine;
+				assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
+				Coroutine* cor = (Coroutine*)obj;
+				YieldContext* yctx = cor->Context;
 				//前回の位置が記録されているのでそこから
 				if(yctx->YieldOffset != 0) {
 					IDX = yctx->YieldOffset - 1;
@@ -1010,24 +1012,26 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			}
 			case OP_CORO_CURRENT:
 			{
-				Object* o = self->Coroutine;
-				assert(o->IsCoroutine);
-				YieldContext* yctx = (YieldContext*)AtVector(o->NativeSlotVec, 0);
+				Object* obj = self->Coroutine;
+				Coroutine* cor = (Coroutine*)obj;
+				assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
+				YieldContext* yctx = cor->Context;
 				PushVector(self->ValueStack, yctx->Stock);
 				break;
 			}
 			case OP_CORO_SWAP_SELF:
 			{
 				assert(self->Coroutine == NULL);
-				Object* o = (Object*)AtVector(self->VariableTable, 0);
-				assert(o->IsCoroutine);
-				YieldContext* yctx = AtVector(o->NativeSlotVec, 0);
+				Object* obj = (Object*)AtVector(self->VariableTable, 0);
+				assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
+				Coroutine* cor = (Coroutine*)obj;
+				YieldContext* yctx = cor->Context;
 				if(yctx->IsCached) {
-					self->Coroutine = o;
+					self->Coroutine = obj;
 					break;
 				}
 				#if defined(DEBUG)
-				const char* oname = GetObjectName(o);
+				const char* oname = GetObjectName(obj);
 				const char* yname = GetObjectName(yctx->Source);
 				#endif
 				//[0] = Array
@@ -1039,7 +1043,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					assert(e != NULL);
 					AssignVector(self->VariableTable, i + 1, e);
 				}
-				self->Coroutine = o;
+				self->Coroutine = obj;
 				yctx->IsCached = true;
 				break;
 			}

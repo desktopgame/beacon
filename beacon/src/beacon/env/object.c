@@ -15,6 +15,7 @@
 #include "heap.h"
 #include "generic_type.h"
 #include "../vm/yield_context.h"
+#include "coroutine.h"
 #include "../lib/bc_library_interface.h"
 
 //proto
@@ -71,7 +72,7 @@ void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessa
 			//ret->NativeSlotVec  = self->NativeSlotVec;
 			ret->Fields = self->Fields;
 			//ret->u.field_vec = self->u.field_vec;
-			ret->IsClone = true;
+			ret->Flags = ret->Flags | OBJECT_FLG_CLONE;
 			return ret;
 		}
 	}
@@ -86,13 +87,12 @@ void* NewObject(size_t object_size) {
 	memset(mem, 0, object_size);
 	Object* ret = mem;
 	ret->OnMessage = HandleObjectMessage;
-	ret->NativeSlotVec = NULL;
-	ret->IsCoroutine = false;
+	//ret->NativeSlotVec = NULL;
 	ret->GType = GENERIC_NULL;
 	ret->Paint = PAINT_UNMARKED_T;
 	ret->VPtr = GENERIC_NULL->CoreType->Kind.Class->VT;
-	ret->IsClone = false;
 	ret->Fields = NewVector();
+	ret->Flags = OBJECT_FLG_NONE;
 	AddHeap(GetHeap(), ret);
 	gObjectCount++;
 	return mem;
@@ -227,14 +227,15 @@ void PrintObject(Object * self) {
 
 void DeleteObject(Object * self) {
 	gObjectCount--;
-	if(self->IsClone) {
+	if((self->Flags & OBJECT_FLG_CLONE) > 0) {
 		MEM_FREE(self);
 		return;
 	}
-	if(self->IsCoroutine) {
-		YieldContext* yctx = AtVector(self->NativeSlotVec, 0);
-		RemoveVector(self->NativeSlotVec, 0);
+	if((self->Flags & OBJECT_FLG_COROUTINE) > 0) {
+		Coroutine* cor = (Coroutine*)self;
+		YieldContext* yctx = cor->Context;
 		DeleteYieldContext(yctx);
+		cor->Context = NULL;
 	}
 	self->OnMessage(self, OBJECT_MSG_DELETE, 0, NULL);
 }
@@ -346,11 +347,12 @@ static void delete_self(VectorItem item) {
 }
 
 static void mark_coroutine(Object* self) {
-	if(!self->IsCoroutine) {
+	if(!((self->Flags & OBJECT_FLG_COROUTINE) > 0)) {
 		return;
 	}
 	//コルーチンの現在の値
-	YieldContext* yctx = AtVector(self->NativeSlotVec, 0);
+	Coroutine* cor = (Coroutine*)self;
+	YieldContext* yctx = cor->Context;
 	MarkAllObject(yctx->Stock);
 	MarkAllObject(yctx->Source);
 	//コルーチンに渡された引数
