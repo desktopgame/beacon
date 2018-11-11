@@ -12,7 +12,7 @@ static void bc_console_write(Method* parent, Frame* fr, Enviroment* env);
 static void bc_console_readLine(Method* parent, Frame* fr, Enviroment* env);
 static void bc_console_read(Method* parent, Frame* fr, Enviroment* env);
 
-void InitBCConsole() {
+void InitConsole() {
 	Namespace* lang = GetLangNamespace();
 	Type* consoleType = NewPreloadClass(InternString("Console"));
 	Class* consoleClass = TYPE2CLASS(consoleType);
@@ -23,7 +23,7 @@ void InitBCConsole() {
 	DefineNativeMethodClass(consoleClass, "read", bc_console_read);
 }
 
-Type* GetBCConsoleType() {
+Type* GetConsoleType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Console"));
 }
