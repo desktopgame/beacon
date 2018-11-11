@@ -2,13 +2,13 @@
 #include "../../bc_library_impl.h"
 
 
-void InitBCNull() {
+void InitNull() {
 	Namespace* lang = GetLangNamespace();
 	Type* nullType = NewPreloadClass(InternString("Null"));
 	AddTypeNamespace(lang, nullType);
 }
 
-Type* GetBCNullType() {
+Type* GetNullType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Null"));
 }

@@ -74,7 +74,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitBool();
 	InitBCVoid();
 	InitConsole();
-	InitBCNull();
+	InitNull();
 	InitFile();
 	InitSystem();
 	InitLocaleType();

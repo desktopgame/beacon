@@ -14,11 +14,11 @@ struct Type;
 /**
  * beacon::lang::Nullクラスを初期化します.
  */
-void InitBCNull();
+void InitNull();
 
 /**
  * beacon::lang::Null型を返します.
  * @return
  */
-struct Type* GetBCNullType();
+struct Type* GetNullType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_NULL_H

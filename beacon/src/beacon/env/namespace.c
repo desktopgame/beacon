@@ -136,7 +136,7 @@ Type* GetVoidTypeNamespace() {
 }
 
 Type* GetNullTypeNamespace() {
-	return GetBCNullType();
+	return GetNullType();
 }
 
 Type* GetExceptionTypeNamespace() {
