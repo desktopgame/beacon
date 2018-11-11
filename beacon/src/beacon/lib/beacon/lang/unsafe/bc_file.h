@@ -29,7 +29,14 @@ struct Type;
  * @param fp
  * @return
  */
-File* NewFile(FILE* fp);
+Object* NewFile(FILE* fp);
+
+/**
+ * ファイルポインターを返します。
+ * @param self
+ * @return
+ */
+FILE* GetFilePointer(Object* self);
 
 /**
  * beacon::unsafe::Fileクラスを初期化します.
