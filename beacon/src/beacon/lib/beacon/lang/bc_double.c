@@ -56,7 +56,7 @@ static void bc_double_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 static void bc_double_nativeEquals(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* d = AtVector(fr->VariableTable, 1);
-	PushVector(fr->ValueStack, BOOL2OBJ(ObjectToDouble(self) == ObjectToDouble(d)));
+	PushVector(fr->ValueStack, BoolToObject(ObjectToDouble(self) == ObjectToDouble(d)));
 }
 
 static void bc_double_nativeAdd(Method* parent, Frame* fr, Enviroment* env) {

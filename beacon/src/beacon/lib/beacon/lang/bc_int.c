@@ -69,7 +69,7 @@ static void bc_int_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 static void bc_int_nativeEquals(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* i = AtVector(fr->VariableTable, 1);
-	PushVector(fr->ValueStack, BOOL2OBJ(ObjectToInt(self) == ObjectToInt(i)));
+	PushVector(fr->ValueStack, BoolToObject(ObjectToInt(self) == ObjectToInt(i)));
 }
 
 static void bc_int_nativeAdd(Method* parent, Frame* fr, Enviroment* env) {
