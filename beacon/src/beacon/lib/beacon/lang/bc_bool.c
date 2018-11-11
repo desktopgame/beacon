@@ -10,7 +10,7 @@ Bool* NewBool(bool value) {
 	return ret;
 }
 
-void InitBCBool() {
+void InitBool() {
 	Namespace* lang = GetLangNamespace();
 	Type* boolType = NewPreloadClass(InternString("Bool"));
 	Class* boolClass = TYPE2CLASS(boolType);
@@ -20,7 +20,7 @@ void InitBCBool() {
 	DefineNativeMethodClass(boolClass, "nativeBitAnd", bc_bool_nativeBitAnd);
 }
 
-Type* GetBCBoolType() {
+Type* GetBoolType() {
 	Namespace* lang = GetLangNamespace();
 	return FindTypeFromNamespace(lang, InternString("Bool"));
 }

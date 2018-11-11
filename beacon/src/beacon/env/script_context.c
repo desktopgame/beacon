@@ -71,7 +71,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitBCDouble();
 	InitBCChar();
 	InitBCString();
-	InitBCBool();
+	InitBool();
 	InitBCVoid();
 	InitBCConsole();
 	InitBCNull();

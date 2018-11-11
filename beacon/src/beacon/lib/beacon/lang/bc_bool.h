@@ -31,11 +31,11 @@ Bool* NewBool(bool value);
 /**
  * beacon::lang::Boolクラスを初期化します.
  */
-void InitBCBool();
+void InitBool();
 
 /**
  * beacon::lang::Bool型を返します.
  * @return
  */
-struct Type* GetBCBoolType();
+struct Type* GetBoolType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_BOOL_H
