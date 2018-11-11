@@ -76,7 +76,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitBCConsole();
 	InitBCNull();
 	InitFile();
-	InitBCSystem();
+	InitSystem();
 	InitLocaleType();
 	InitBCTime();
 	//ブートストラップクラスローダー
