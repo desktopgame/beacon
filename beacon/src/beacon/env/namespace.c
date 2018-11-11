@@ -124,7 +124,7 @@ Type* GetCharTypeNamespace() {
 }
 
 Type* GetStringTypeNamespace() {
-	return GetBCStringType();
+	return GetStringType();
 }
 
 Type* GetBoolTypeNamespace() {

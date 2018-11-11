@@ -70,7 +70,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitInt();
 	InitDouble();
 	InitChar();
-	InitBCString();
+	InitString();
 	InitBool();
 	InitBCVoid();
 	InitConsole();

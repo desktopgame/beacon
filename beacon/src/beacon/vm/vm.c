@@ -1200,7 +1200,7 @@ static char stack_topc(Frame* self) {
 static char* stack_tops(Frame* self) {
 	Object* ret = (Object*)TopVector(self->ValueStack);
 	IsStringValue(ret);
-	return GetRawBCString(ret)->Text;
+	return GetRawString(ret)->Text;
 }
 
 static bool stack_topb(Frame* self) {
@@ -1231,7 +1231,7 @@ static char stack_popc(Frame* self) {
 static char* stack_pops(Frame* self) {
 	Object* ret = (Object*)PopVector(self->ValueStack);
 	assert(IsStringValue(ret));
-	return GetRawBCString(ret)->Text;
+	return GetRawString(ret)->Text;
 }
 
 static bool stack_popb(Frame* self) {
@@ -1286,7 +1286,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 		Object* e = GetElementAt(stackTraceObj, i);
 		Object* fileNameObj = AtVector(e->Fields, fileNameptr);
 		Object* lineIndexObj = AtVector(e->Fields, lineIndexptr);
-		sprintf(block, "    @%d: %s\n", ObjectToInt(lineIndexObj), GetRawBCString(fileNameObj)->Text);
+		sprintf(block, "    @%d: %s\n", ObjectToInt(lineIndexObj), GetRawString(fileNameObj)->Text);
 		AppendsBuffer(sbuf, block);
 	}
 	return ReleaseBuffer(sbuf);

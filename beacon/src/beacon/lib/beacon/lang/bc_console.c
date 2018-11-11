@@ -41,7 +41,7 @@ static void bc_console_write(Method* parent, Frame* fr, Enviroment* env) {
 	}  else if (IsDoubleValue(o)) {
 		printf("%f", ObjectToDouble(o));
 	} else if (IsStringValue(o)) {
-		printf("%s", GetRawBCString(o)->Text);
+		printf("%s", GetRawString(o)->Text);
 	} else if (IsCharValue(o)) {
 		printf("%c", ObjectToChar(o));
 	} else if (IsBoolValue(o)) {

@@ -55,8 +55,8 @@ Type* GetFileType() {
 static void bc_file_nativeOpen(Method* parent, Frame* fr, Enviroment* env) {
 	Object* fileObj = AtVector(fr->VariableTable, 1);
 	Object* modeObj = AtVector(fr->VariableTable, 2);
-	Buffer* fileStr = GetRawBCString(fileObj);
-	Buffer* modeStr = GetRawBCString(modeObj);
+	Buffer* fileStr = GetRawString(fileObj);
+	Buffer* modeStr = GetRawString(modeObj);
 	//Printfln("%s : %s", fileStr->text, modeStr->text);
 
 	FILE* fp = fopen(fileStr->Text, modeStr->Text);

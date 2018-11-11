@@ -42,7 +42,7 @@ static void bc_system_nativeAbort(Method* parent, Frame* fr, Enviroment* env) {
 
 static void bc_system_nativeExec(Method* parent, Frame* fr, Enviroment* env) {
 	Object* cmd = AtVector(fr->VariableTable, 1);
-	const char* str = GetRawBCString(cmd)->Text;
+	const char* str = GetRawString(cmd)->Text;
 	int ret = system(str);
 	PushVector(fr->ValueStack, GetIntObject(ret));
 }

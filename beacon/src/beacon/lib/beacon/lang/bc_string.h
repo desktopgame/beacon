@@ -26,23 +26,23 @@ struct Type;
  * @param str
  * @return
  */
-String* NewString(const char* str);
+struct Object* NewString(const char* str);
 
 /**
  * beacon::lang::Stringクラスを初期化します.
  */
-void InitBCString();
+void InitString();
 
 /**
  * beacon::lang::Stringが内部的に保持するバッファーを返します.
  * @param self
  * @return
  */
-Buffer* GetRawBCString(Object* self);
+Buffer* GetRawString(Object* self);
 
 /**
  * beacon::lang::String型を返します.
  * @return
  */
-struct Type* GetBCStringType();
+struct Type* GetStringType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_STRING_H
