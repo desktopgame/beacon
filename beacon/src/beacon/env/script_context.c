@@ -78,7 +78,7 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitFile();
 	InitSystem();
 	InitLocaleType();
-	InitBCTime();
+	InitTime();
 	//ブートストラップクラスローダー
 	self->BootstrapClassLoader = NewClassLoader("bootstrap", CONTENT_LIB_T);
 	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Object.bc");
