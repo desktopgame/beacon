@@ -37,15 +37,15 @@ static void bc_console_writeLine(Method* parent, Frame* fr, Enviroment* env) {
 static void bc_console_write(Method* parent, Frame* fr, Enviroment* env) {
 	Object* o = AtVector(fr->VariableTable, 1);
 	if (IsIntValue(o)) {
-		printf("%d", OBJ2INT(o));
+		printf("%d", ObjectToInt(o));
 	}  else if (IsDoubleValue(o)) {
-		printf("%f", OBJ2DOUBLE(o));
+		printf("%f", ObjectToDouble(o));
 	} else if (IsStringValue(o)) {
 		printf("%s", GetRawBCString(o)->Text);
 	} else if (IsCharValue(o)) {
-		printf("%c", OBJ2CHAR(o));
+		printf("%c", ObjectToChar(o));
 	} else if (IsBoolValue(o)) {
-		printf("%s", OBJ2BOOL(o) ? "true" : "false");
+		printf("%s", ObjectToBool(o) ? "true" : "false");
 	} else if(IsNullValue(o)) {
 		printf("null");
 	} else {

@@ -65,7 +65,7 @@ static void bc_file_nativePut(Method* parent, Frame* fr, Enviroment* env) {
 	Object* ch = AtVector(fr->VariableTable, 1);
 	FILE* fp = FP(self);
 	assert(fp != NULL);
-	fputc(OBJ2CHAR(ch), fp);
+	fputc(ObjectToChar(ch), fp);
 }
 
 static void bc_file_nativeGet(Method* parent, Frame* fr, Enviroment* env) {

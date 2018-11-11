@@ -220,7 +220,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jint)OBJ2INT(bcobj)));
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jint)ObjectToInt(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_DOUBLE) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putDouble", "(Ljava/lang/String;D)V");
@@ -228,7 +228,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)OBJ2DOUBLE(bcobj)));
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)ObjectToDouble(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_CHAR) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putCharacter", "(Ljava/lang/String;C)V");
@@ -236,7 +236,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jchar)OBJ2CHAR(bcobj)));
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jchar)ObjectToChar(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_BOOL) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putBoolean", "(Ljava/lang/String;Z)V");
@@ -244,7 +244,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jboolean)OBJ2BOOL(bcobj)));
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jboolean)ObjectToBool(bcobj)));
 	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_STRING) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putString", "(Ljava/lang/String;Ljava/lang/String;)V");

@@ -13,12 +13,6 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
-#define OBJ2INT(a) (ObjectToInt(a))
-#define OBJ2DOUBLE(a) (ObjectToDouble(a))
-#define OBJ2BOOL(a) (ObjectToBool(a))
-#define OBJ2CHAR(a) (ObjectToChar(a))
-#define OBJ2LONG(a) (ObjectToLong(a))
-
 #define INT2OBJ(a) (IntToObject(a))
 #define DOUBLE2OBJ(a) (DoubleToObject(a))
 #define BOOL2OBJ(a) (BoolToObject(a))

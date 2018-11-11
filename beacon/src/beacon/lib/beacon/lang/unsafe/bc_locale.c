@@ -46,7 +46,7 @@ Type* GetBCLocaleType() {
 static void bc_locale_nativeSetLocale(Method* parent, Frame* fr, Enviroment* env) {
 	Object* categoryObj = AtVector(fr->VariableTable, 1);
 	Object* localeObj = AtVector(fr->VariableTable, 2);
-	int category = OBJ2INT(categoryObj);
+	int category = ObjectToInt(categoryObj);
 	switch(category) {
 		case 0:
 			category = LC_ALL;

@@ -119,7 +119,7 @@ static void bc_array_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	self->Elements = NewVector();
 	GenericType* targ = AtVector(self->Super.GType->TypeArgs, 0);
 	//配列の長さだけ確保
-	int len = OBJ2INT(lengthObj);
+	int len = ObjectToInt(lengthObj);
 	assert(len >= 0);
 	for (int i = 0; i < len; i++) {
 		Object* oe = GetDefaultObject(targ);
@@ -132,7 +132,7 @@ static void bc_array_nativeSet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* idx = AtVector(fr->VariableTable, 1);
 	Object* val = AtVector(fr->VariableTable, 2);
 	assert(IsIntValue(idx));
-	AssignVector(ARRAY_VALUE(self), OBJ2INT(idx), val);
+	AssignVector(ARRAY_VALUE(self), ObjectToInt(idx), val);
 }
 
 static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
@@ -140,7 +140,7 @@ static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 	Object* idx = AtVector(fr->VariableTable, 1);
 //	Object* a = AtVector(vm->VariableTable, 2);
 	assert(IsIntValue(idx));
-	Object* ret = (Object*)AtVector(ARRAY_VALUE(self), OBJ2INT(idx));
+	Object* ret = (Object*)AtVector(ARRAY_VALUE(self), ObjectToInt(idx));
 	//Printfln("array get %d", idx->u.int_);
 	PushVector(fr->ValueStack, ret);
 }
@@ -153,23 +153,23 @@ static void bc_array_nativeCopy(Method* parent, Frame* fr, Enviroment* env) {
 	Object* length = AtVector(fr->VariableTable, 5);
 	int srcLen = ARRAY_VALUE(src)->Length;
 	int dstLen = ARRAY_VALUE(dst)->Length;
-	int cpyLen = OBJ2INT(length);
+	int cpyLen = ObjectToInt(length);
 	//添え字がマイナス
-	if (OBJ2INT(srcOffset) < 0 ||
-		OBJ2INT(dstOffset) < 0) {
-		NativeThrowVM(fr, NewSimplefException(fr, "index must be positive: %d - %d", OBJ2INT(srcOffset),OBJ2INT(dstOffset)));
+	if (ObjectToInt(srcOffset) < 0 ||
+		ObjectToInt(dstOffset) < 0) {
+		NativeThrowVM(fr, NewSimplefException(fr, "index must be positive: %d - %d", ObjectToInt(srcOffset),ObjectToInt(dstOffset)));
 		return;
 	}
 	//添え字がはみ出している
-	if ((OBJ2INT(srcOffset) + cpyLen) > srcLen ||
-		(OBJ2INT(dstOffset) + cpyLen) > dstLen) {
-		NativeThrowVM(fr, NewSimplefException(fr, "index must be less than size of array: %d - %d", OBJ2INT(srcOffset), OBJ2INT(dstOffset)));
+	if ((ObjectToInt(srcOffset) + cpyLen) > srcLen ||
+		(ObjectToInt(dstOffset) + cpyLen) > dstLen) {
+		NativeThrowVM(fr, NewSimplefException(fr, "index must be less than size of array: %d - %d", ObjectToInt(srcOffset), ObjectToInt(dstOffset)));
 		return;
 	}
-	for (int i = OBJ2INT(srcOffset);
-			 i < (OBJ2INT(srcOffset) + OBJ2INT(length));
+	for (int i = ObjectToInt(srcOffset);
+			 i < (ObjectToInt(srcOffset) + ObjectToInt(length));
 			 i++) {
-		int a = (i - OBJ2INT(srcOffset)) + OBJ2INT(dstOffset);
+		int a = (i - ObjectToInt(srcOffset)) + ObjectToInt(dstOffset);
 		VectorItem e = AtVector(ARRAY_VALUE(src), i);
 		AssignVector(ARRAY_VALUE(dst), a, e);
 	}

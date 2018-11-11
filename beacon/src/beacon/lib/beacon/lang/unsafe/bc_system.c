@@ -32,7 +32,7 @@ Type* GetBCSystemType() {
 //private
 static void bc_system_nativeExit(Method* parent, Frame* fr, Enviroment* env) {
 	Object* returnCodeObj = AtVector(fr->VariableTable, 1);
-	int returnCode = OBJ2INT(returnCodeObj);
+	int returnCode = ObjectToInt(returnCodeObj);
 	exit(returnCode);
 }
 

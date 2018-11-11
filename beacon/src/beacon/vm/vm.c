@@ -279,7 +279,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 			{
 				Object* a_ = PopVector(self->ValueStack);
 				Object* b_ = PopVector(self->ValueStack);
-				PushVector(self->ValueStack, NON_NULL(GetBoolObject(OBJ2INT(a_) < OBJ2INT(b_))));
+				PushVector(self->ValueStack, NON_NULL(GetBoolObject(ObjectToInt(a_) < ObjectToInt(b_))));
 				//PushVector(self->ValueStack, GetBoolObject(SPI(self) < SPI(self)));
 				break;
 			}
@@ -1282,7 +1282,7 @@ static char* create_error_message(Frame* self, Enviroment* env, int pc) {
 		Object* e = GetBCArray(stackTraceObj, i);
 		Object* fileNameObj = AtVector(e->Fields, fileNameptr);
 		Object* lineIndexObj = AtVector(e->Fields, lineIndexptr);
-		sprintf(block, "    @%d: %s\n", OBJ2INT(lineIndexObj), GetRawBCString(fileNameObj)->Text);
+		sprintf(block, "    @%d: %s\n", ObjectToInt(lineIndexObj), GetRawBCString(fileNameObj)->Text);
 		AppendsBuffer(sbuf, block);
 	}
 	return ReleaseBuffer(sbuf);

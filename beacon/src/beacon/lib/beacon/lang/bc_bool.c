@@ -28,13 +28,13 @@ Type* GetBCBoolType() {
 static void bc_bool_nativeBitOr(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(OBJ2BOOL(self) | OBJ2BOOL(a));
+	Object* ret = GetBoolObject(ObjectToBool(self) | ObjectToBool(a));
 	PushVector(fr->ValueStack, ret);
 }
 
 static void bc_bool_nativeBitAnd(Method* parent, Frame* fr, Enviroment* env) {
 	Object* self = AtVector(fr->VariableTable, 0);
 	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(OBJ2BOOL(self) & OBJ2BOOL(a));
+	Object* ret = GetBoolObject(ObjectToBool(self) & ObjectToBool(a));
 	PushVector(fr->ValueStack, ret);
 }
