@@ -5,6 +5,15 @@ set(CMAKE_CXX_COMPILER clang)
 set(JNI_INCLUDE_DIR "" CACHE FILEPATH "Path to jni")
 set(JNI_NATIVE_INCLUDE_DIR "" CACHE FILEPATH "Path to jni native")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
+set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
+set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w")
+enable_testing()
+add_test(
+    NAME test
+    COMMAND $<TARGET_FILE:a.out> --test
+    #CONFIGURATIONS Debug
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
 include_directories(${JNI_INCLUDE_DIR} ${JNI_NATIVE_INCLUDE_DIR})
 add_subdirectory("beacon")
 add_executable(a.out "beacon/main.c")

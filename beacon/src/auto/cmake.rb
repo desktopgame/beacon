@@ -9,10 +9,14 @@ export CC=/usr/bin/clang
 export CXX=/usr/bin/clang++
 
 makefile作成の例
+../bin/a.out --test
 cmake -D JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include -D JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin .
+cmake -D CMAKE_BUILD_TYPE=Release -D JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include -D JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin .
+cmake -D CMAKE_BUILD_TYPE=Debug -D JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include -D JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin .
+make test ARGS='-V'
 =end
 
-@template = <<'EOS'
+@exe_template = <<'EOS'
 cmake_minimum_required(VERSION 2.8)
 project(beacon C)
 #あなたのインクルードパスを設定
@@ -20,7 +24,21 @@ set(CMAKE_CXX_COMPILER clang)
 set(JNI_INCLUDE_DIR "" CACHE FILEPATH "Path to jni")
 set(JNI_NATIVE_INCLUDE_DIR "" CACHE FILEPATH "Path to jni native")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
+set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
+set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w")
+enable_testing()
+add_test(
+    NAME test
+    COMMAND $<TARGET_FILE:a.out> --test
+    #CONFIGURATIONS Debug
+    WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+)
 include_directories(${JNI_INCLUDE_DIR} ${JNI_NATIVE_INCLUDE_DIR})
+EOS
+
+@lib_template = <<'EOS'
+set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
+set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
 EOS
 @all = []
 
@@ -31,7 +49,7 @@ end
 
 def create_cmake(cmake_path, dir, files, depth)
     File.open(cmake_path, "w") do |fp|
-        fp.puts(@template) if depth == 0
+        fp.puts(@exe_template) if depth == 0
         files.each do |e|
             if FileTest.directory?(e) then
                 fp.puts(sprintf("add_subdirectory(\"%s\")", File.basename(e)))
@@ -39,6 +57,7 @@ def create_cmake(cmake_path, dir, files, depth)
         end
         #ライブラリをビルド
         if depth > 0 then
+            fp.puts(@lib_template)
             lib = sprintf("add_library(\"%s\" STATIC\n", (path_to_bar(dir)))
             c_files = files.select {|e| e.end_with?(".c") }
             c_files.each {|e| lib << sprintf("    \"%s\"\n", e.gsub(dir + "/", ""))}
@@ -98,7 +117,7 @@ def each_recursive(path, depth)
     #全てのファイルを開く
     Dir.open(path).each do |file|
         next if(file == "." || file == "..")
-        next if(file == "lcov" || file == "auto" || file == "script")
+        next if(file == "lcov" || file == "auto" || file == "script" || file == "Testing")
         file = path + "/" + file
         puts ("  " + file)
         if(FileTest.directory?(file)) then

@@ -20,15 +20,68 @@
 			"command": "ruby auto/doxy.rb"
 		},
 		{
+			"label": "MakeCMake",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "ruby",
+			"args": [
+				"auto/cmake.rb"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake(None)",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "cmake",
+			"args": [
+				"-D", "JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include",
+				"-D", "JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin",
+				"."
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake(Debug)",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "cmake",
+			"args": [
+				"-D", "CMAKE_BUILD_TYPE=Debug",
+				"-D", "JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include",
+				"-D", "JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin",
+				"."
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "CMake(Release)",
+			"type": "shell",
+			"options": {
+				"cwd": "../beacon/beacon/src"
+			},
+			"command": "cmake",
+			"args": [
+				"-D", "CMAKE_BUILD_TYPE=Release",
+				"-D", "JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include",
+				"-D", "JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin",
+				"."
+			],
+			"problemMatcher": []
+		},
+		{
 			"label": "make",
 			"type": "shell",
 			"options": {
 				"cwd": "../beacon/beacon/src"
 			},
 			"command": "make",
-			"args": [
-				"debug"
-			],
 			"problemMatcher": []
 		},
 		{
@@ -39,7 +92,7 @@
 			},
 			"command": "make",
 			"args": [
-				"test"
+				"test", "ARGS='-V'"
 			],
 			"problemMatcher": []
 		},

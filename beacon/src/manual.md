@@ -1,20 +1,23 @@
 # manual
 このプロジェクトで用意しているスクリプト/タスクについてのマニュアル
 
-## makefile
-### make db
-デバッグ情報付きのビルド。  
-カバレッジのための情報も一緒に出力される。
+## CMake
+以前は makefile を使用してビルドしていましたが、  
+windows環境でも同じ設定でビルドできるようにするため、CMakeに変更しました。  
+  
 
-### make rb
-リリース用ビルド。
+### Mac環境
+#### 開発者が行う作業
+````
+cd beacon/src
+cmake -D JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include -D JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin .
+````
 
-### make cov
-`make db` -> `テストの実行` -> `ruby lcov.rb` をまとめて実行する。  
-src/lcovにはカバレッジの結果がhtmlで出力される。
+#### 備考
+CMakeは makefile を生成しますが、  
+makefile はバージョン管理に含まれないようにしています。  
+まだ現在のCMakeはプラットフォームごとの処理の分岐などがありませんが、  
+将来的にはこれはユーザによって生成される makefile の内容が変わるためです。  
 
-### make clean
-objフォルダを綺麗にする。
-
-## task(vscode)
-上述した makefile の機能には vscode の task 機能からもアクセスできます。
+### Windows環境
+あとで
