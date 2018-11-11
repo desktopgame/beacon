@@ -19,6 +19,7 @@ project(beacon C)
 set(CMAKE_CXX_COMPILER clang)
 set(JNI_INCLUDE_DIR "" CACHE FILEPATH "Path to jni")
 set(JNI_NATIVE_INCLUDE_DIR "" CACHE FILEPATH "Path to jni native")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 include_directories(${JNI_INCLUDE_DIR} ${JNI_NATIVE_INCLUDE_DIR})
 EOS
 @all = []
@@ -50,10 +51,10 @@ def create_cmake(cmake_path, dir, files, depth)
         end
         #実行ファイルをビルド
         if depth == 0 then
-            exe = sprintf("add_executable(beacon_exe \"beacon/main.c\")")
+            exe = sprintf("add_executable(a.out \"beacon/main.c\")")
             fp.puts(exe)
             #ライブラリのリンク
-            link = sprintf("target_link_libraries(beacon_exe\n")
+            link = sprintf("target_link_libraries(a.out\n")
             @all.each {|e| link << sprintf("    \"%s\"\n", e)}
             link << ")\n"
             fp.puts(link)

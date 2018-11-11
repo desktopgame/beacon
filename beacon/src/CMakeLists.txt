@@ -4,10 +4,11 @@ project(beacon C)
 set(CMAKE_CXX_COMPILER clang)
 set(JNI_INCLUDE_DIR "" CACHE FILEPATH "Path to jni")
 set(JNI_NATIVE_INCLUDE_DIR "" CACHE FILEPATH "Path to jni native")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 include_directories(${JNI_INCLUDE_DIR} ${JNI_NATIVE_INCLUDE_DIR})
 add_subdirectory("beacon")
-add_executable(beacon_exe "beacon/main.c")
-target_link_libraries(beacon_exe
+add_executable(a.out "beacon/main.c")
+target_link_libraries(a.out
     "lib__beacon_util"
     "lib__beacon_parse"
     "lib__beacon_shared_jni"
