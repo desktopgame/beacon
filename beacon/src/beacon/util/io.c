@@ -45,7 +45,7 @@ void Println() {
 	printf("\n");
 }
 
-void CreateFile(const char * filename) {
+void bc_CreateFile(const char * filename) {
 	assert(!ExistsFile(filename));
 #if defined(_MSC_VER)
 	FILE* fp;
@@ -80,7 +80,7 @@ bool ExistsFile(const char * filename) {
 #endif
 }
 
-bool DeleteFile(const char * filename) {
+bool bc_DeleteFile(const char * filename) {
 	return remove(filename);
 }
 
@@ -187,7 +187,7 @@ char* ResolveScriptPath(const char* target) {
 Vector* GetFiles(const char* dirname) {
 #if defined(_MSC_VER)
 	//ワイルドカード指定ですべてのファイルを取得する
-	string_buffer* buf = NewBuffer();
+	Buffer* buf = NewBuffer();
 	AppendsBuffer(buf, dirname);
 	AppendsBuffer(buf, "/*.*");
 	char* pattern = ReleaseBuffer(buf);
@@ -203,13 +203,13 @@ Vector* GetFiles(const char* dirname) {
 		if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 			continue;
 		}
-		file_entry* e = MEM_MALLOC(sizeof(file_entry));
-		e->filename = ConcatPath(dirname, ffd.cFileName);
-		e->is_file = true;
+		FileEntry* e = MEM_MALLOC(sizeof(FileEntry));
+		e->FileName = ConcatPath(dirname, ffd.cFileName);
+		e->IsFile = true;
 		PushVector(v, e);
 	} while (FindNextFile(h, &ffd));
 	FindClose(h);
-	qsort(v->memory, v->Length, sizeof(void*), GetFiles_sort);
+	qsort(v->Memory, v->Length, sizeof(void*), SortFiles);
 	return v;
 #else
 	Vector* ret = NewVector();

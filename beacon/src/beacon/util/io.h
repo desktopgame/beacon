@@ -43,7 +43,7 @@ void Println();
  * @param filename
  * @return
  */
-void CreateFile(const char* filename);
+void bc_CreateFile(const char* filename);
 
 /**
  * 指定のファイルが既に存在するなら true.
@@ -57,7 +57,7 @@ bool ExistsFile(const char* filename);
  * @param filename
  * @return
  */
-bool DeleteFile(const char* filename);
+bool bc_DeleteFile(const char* filename);
 
 /**
  * 指定のファイルを読み込んで返します.
