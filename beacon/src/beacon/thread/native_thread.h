@@ -120,6 +120,12 @@ void DetachNativeThread(NativeThread** self);
 NativeThread* GetNativeThreadAt(int index);
 
 /**
+ * 最初に起動したスレッドを返します。
+ * @return
+ */
+NativeThread* GetMainThread();
+
+/**
  * 実行中のスレッドの数を返します。
  * @return
  */

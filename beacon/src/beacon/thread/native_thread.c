@@ -6,11 +6,12 @@
 static Vector* gThreads = NULL;
 static void mount_thread(NativeThread* self);
 static void unmount_thread(NativeThread* self);
-static void delete_thread(VectorItem item);
 
 void InitNativeThread() {
 	assert(gThreads == NULL);
 	gThreads = NewVector();
+	NativeThread* main = AllocNativeThread(NULL, NULL);
+	mount_thread(main);
 }
 
 NativeThread* AllocNativeThread(Runnable runnable, ThreadStartArgument arg) {
@@ -23,7 +24,6 @@ NativeThread* AllocNativeThread(Runnable runnable, ThreadStartArgument arg) {
 int StartNativeThread(Runnable runnable, ThreadStartArgument arg, NativeThread** outNativeThread) {
 	assert(gThreads != NULL);
 	NativeThread* nt = AllocNativeThread(runnable, arg);
-	nt->Index = gThreads->Length;
 	(*outNativeThread) = nt;
 	mount_thread(nt);
 
@@ -103,24 +103,28 @@ NativeThread* GetNativeThreadAt(int index) {
 	return (NativeThread*)AtVector(gThreads, index);
 }
 
+NativeThread* GetMainThread() {
+	return GetNativeThreadAt(0);
+}
+
 int GetNativeThreadCount() {
 	return gThreads->Length;
 }
 
 void DestroyNativeThread() {
 	assert(gThreads != NULL);
-	DeleteVector(gThreads, delete_thread);
+	while(gThreads->Length > 0) {
+		NativeThread* nt = (NativeThread*)AtVector(gThreads, 0);
+		DetachNativeThread(&nt);
+	}
+	DeleteVector(gThreads, VectorDeleterOfNull);
 }
 //private
 static void mount_thread(NativeThread* self) {
+	self->Index = gThreads->Length;
 	PushVector(gThreads, self);
 }
 
 static void unmount_thread(NativeThread* self) {
 	RemoveVector(gThreads, FindVector(gThreads, self));
-}
-
-static void delete_thread(VectorItem item) {
-	NativeThread* th = (NativeThread*)item;
-	DetachNativeThread(&th);
 }
