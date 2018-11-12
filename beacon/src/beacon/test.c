@@ -57,16 +57,16 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 	Vector* files = GetFiles(dirname);
 	for (int i = 0; i<files->Length; i++) {
 		//.bc以外は無視する
-		file_entry* e = (file_entry*)AtVector(files, i);
-		if (!IsMatchExtension(e->filename, "bc")) {
+		FileEntry* e = (FileEntry*)AtVector(files, i);
+		if (!IsMatchExtension(e->FileName, "bc")) {
 			continue;
 		}
 		//これから実行するファイルを記録
 		ClearBCError();
-		filename = e->filename;
+		filename = e->FileName;
 		//標準出力を入れ替えて実行
-		fprintf(stdout, "[%s]\n", e->filename);
-		bool result = EvalFile(e->filename);
+		fprintf(stdout, "[%s]\n", e->FileName);
+		bool result = EvalFile(e->FileName);
 		//期待していた結果でないなら終了
 		if (result != require) {
 			fail = true;
