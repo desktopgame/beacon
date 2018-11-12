@@ -69,7 +69,7 @@ int main_cl(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-#if defined(_MSC_VER) && defined(_DEBUG)
+#if defined(_MSC_VER) && defined(DEBUG)
 	_CrtSetDbgFlag(
 		/*
 		_CRTDBG_DELAY_FREE_MEM_DF |
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 	//DumpStringPool(stdout);
 	DestroyStringPool();
 	DestroyNativeThread();
-#if defined(_MSC_VER) && defined(_DEBUG)
+#if defined(_MSC_VER) && defined(DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif
 	return ret;

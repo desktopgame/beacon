@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 int TestCmd(int argc, char* argv[]) {
-#if defined(DEBUG) || (defined(_MSC_VER) && defined(_DEBUG))
+#if defined(DEBUG) || (defined(_MSC_VER) && defined(DEBUG))
 	OpenScriptContext();
 	int ret = RunTest(argc, argv);
 	CloseScriptContext();

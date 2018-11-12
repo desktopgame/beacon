@@ -442,7 +442,7 @@ static void create_vtable_override(Class* self) {
 }
 
 static void create_vtable_interface(Class* self) {
-	#if defined(DEBUG) || defined(_DEBUG)
+	#if defined(DEBUG)
 	const char* clname = Ref2Str(GetTypeName(self->Parent));
 	#endif
 	Vector* tbl = GetInterfaceTreeClass(self);

@@ -84,7 +84,7 @@ static void CLBC_class_impl(ClassLoader * self, ILType * iltype, Type* tp, Names
 	if((tp->State & TYPE_IMPL) > 0) {
 		return;
 	}
-	#if defined(DEBUG) || defined(_DEBUG)
+	#if defined(DEBUG)
 	const char* tyname = Ref2Str(GetTypeName(tp));
 	#endif
 	CreateVTableClass(tp->Kind.Class);

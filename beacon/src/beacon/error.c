@@ -31,7 +31,7 @@ void VthrowBCError(BCErrorID id, va_list ap) {
 	}
 	MEM_FREE(fmt);
 #if defined(_MSC_VER)
-	#if !defined(_DEBUG)
+	#if !defined(DEBUG)
 		check_abort(sctx);
 	#endif
 #else
