@@ -2,20 +2,26 @@
 #include "../util/mem.h"
 #include "../util/vector.h"
 #include <assert.h>
+#include <string.h>
 
 static Vector* gThreads = NULL;
+static NativeMutex gThreadsMTX;
 static void mount_thread(NativeThread* self);
 static void unmount_thread(NativeThread* self);
 
 void InitNativeThread() {
 	assert(gThreads == NULL);
 	gThreads = NewVector();
+	InitNativeMutex(&gThreadsMTX);
+	//最初のスレッドを作成
 	NativeThread* main = AllocNativeThread(NULL, NULL);
+	main->t = pthread_self();
 	mount_thread(main);
 }
 
 NativeThread* AllocNativeThread(Runnable runnable, ThreadStartArgument arg) {
 	NativeThread* ret = (NativeThread*)MEM_MALLOC(sizeof(NativeThread));
+	memset((void*)ret, 0, sizeof(NativeThread));
 	ret->Runnable = runnable;
 	ret->Arg = arg;
 	return ret;
@@ -107,6 +113,20 @@ NativeThread* GetMainThread() {
 	return GetNativeThreadAt(0);
 }
 
+NativeThread* GetActiveThread() {
+	#if defined(USE_PTHREAD)
+	pthread_t self = pthread_self();
+	for(int i=0; i<gThreads->Length; i++) {
+		NativeThread* th = (NativeThread*)AtVector(gThreads, i);
+		pthread_t other = th->t;
+		if(pthread_equal(self, other)) {
+			return th;
+		}
+	}
+	#endif
+	return NULL;
+}
+
 int GetNativeThreadCount() {
 	return gThreads->Length;
 }
@@ -118,13 +138,22 @@ void DestroyNativeThread() {
 		DetachNativeThread(&nt);
 	}
 	DeleteVector(gThreads, VectorDeleterOfNull);
+	DestroyNativeMutex(&gThreadsMTX);
 }
 //private
 static void mount_thread(NativeThread* self) {
-	self->Index = gThreads->Length;
-	PushVector(gThreads, self);
+	NativeMutexEnter(&gThreadsMTX);
+	{
+		self->Index = gThreads->Length;
+		PushVector(gThreads, self);
+	}
+	NativeMutexExit(&gThreadsMTX);
 }
 
 static void unmount_thread(NativeThread* self) {
-	RemoveVector(gThreads, FindVector(gThreads, self));
+	NativeMutexEnter(&gThreadsMTX);
+	{
+		RemoveVector(gThreads, FindVector(gThreads, self));
+	}
+	NativeMutexExit(&gThreadsMTX);
 }

@@ -9,6 +9,7 @@
 
 #ifndef BEACON_THREAD_NATIVE_THREAD_H
 #define BEACON_THREAD_NATIVE_THREAD_H
+#include <setjmp.h>
 
 
 #if __APPLE__
@@ -38,6 +39,7 @@ typedef struct NativeThread {
 	#elif defined(USE_WINTHREAD)
 
 	#endif
+	jmp_buf Context;
 	Runnable Runnable;
 	ThreadStartArgument Arg;
 	int Index;
@@ -124,6 +126,12 @@ NativeThread* GetNativeThreadAt(int index);
  * @return
  */
 NativeThread* GetMainThread();
+
+/**
+ * このメソッドを実行している時のスレッドを返します。
+ * @return
+ */
+NativeThread* GetActiveThread();
 
 /**
  * 実行中のスレッドの数を返します。
