@@ -79,6 +79,7 @@ int main(int argc, char *argv[]) {
 	);
 	//_CrtSetBreakAlloc(36862);
 #endif
+bc_InitMX();
 	InitNativeThread();
 	InitStringPool();
 	HideILPrintLayout(true);
@@ -89,6 +90,7 @@ int main(int argc, char *argv[]) {
 	//DumpStringPool(stdout);
 	DestroyStringPool();
 	DestroyNativeThread();
+bc_DestroyMX();
 #if defined(_MSC_VER) && defined(DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif

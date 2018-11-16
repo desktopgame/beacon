@@ -17,7 +17,8 @@
 #include <crtdbg.h>
 #endif
 
-#define mem_malloc(size, file, line) (malloc(size))
+//#define mem_malloc(size, file, line) (malloc(size))
+
 #if (defined(_MSC_VER) && defined(_DEBUG))
 	#define NON_NULL(m) (m)
 	#define MEM_MALLOC(size) (_malloc_dbg(size,_NORMAL_BLOCK,__FILE__,__LINE__))
@@ -25,18 +26,45 @@
 	#define MEM_REALLOC(block, size) (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
 	#define MEM_MARK(block, size) ((void)0)
 #elif defined(DEBUG)
+	#undef mem_malloc
+	#define mem_malloc(size, file, line) (bc_MXMalloc(size, file, line))
 	#define NON_NULL(m) (m)
-	#define MEM_MALLOC(size) (SafeMalloc(size))
-	#define MEM_FREE(size) (free(size))
-	#define MEM_REALLOC(block, size) (SafeRealloc(block, size))
+	#define MEM_MALLOC(size) (bc_MXMalloc(size, __FILE__, __LINE__))
+	#define MEM_FREE(size) (bc_MXFree(size, __FILE__, __LINE__))
+	#define MEM_REALLOC(block, size) (bc_MXRealloc(block, size, __FILE__, __LINE__))
 	#define MEM_MARK(block, size) ((void)0)
 #else
+	#undef mem_malloc
+	#define mem_malloc(size, file, line) (bc_MXMalloc(size, file, line))
 	#define NON_NULL(m) (m)
 	#define MEM_MALLOC(size) (SafeMalloc(size))
 	#define MEM_FREE(size) (free(size))
 	#define MEM_REALLOC(block, size) (SafeRealloc(block, size))
 	#define MEM_MARK(block, size) ((void)0)
 #endif
+
+typedef struct bc_Slot {
+	size_t Size;
+	void* UserArea;
+	const char* FileName;
+	int Lineno;
+	struct bc_Slot* Next;
+} bc_Slot;
+
+void bc_InitMX();
+
+#define bc_Malloc(size) (bc_MXMalloc(size, __FILE__, __LINE__))
+void* bc_MXMalloc(size_t size, const char* filename, int lineno);
+
+#define bc_Realloc(block, size) (bc_MXRealloc(block, size, __FILE__, __LINE__))
+void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno);
+
+#define bc_Free(block) (bc_MXFree(block, __FILE__, __LINE__))
+void bc_MXFree(void* block, const char* filename, int lineno);
+
+void* bc_MXBind(const void* block,size_t size,  const char* filename, int lineno);
+
+void bc_DestroyMX();
 
 /**
  * メモリを指定のサイズ分確保して返します。

@@ -20,14 +20,7 @@ char * Strdup(const char * source) {
 	if (source == NULL) {
 		return NULL;
 	}
-	char* ret = NULL;
-#if defined(_MSC_VER)
-	ret = _strdup(source);
-#else
-	ret = strdup(source);
-#endif
-	assert(ret != NULL) ;
-	return ret;
+	return bc_MXBind(source, strlen(source) * sizeof(char), __FILE__, __LINE__);
 }
 
 bool IsBlankText(const char * str) {
