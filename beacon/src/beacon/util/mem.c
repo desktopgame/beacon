@@ -154,22 +154,12 @@ static bc_Slot* get_free_slot() {
 	if(iter == NULL) {
 		iter = push_slot();
 		stock /= 2;
-		if(stock > 100) stock = 100;
+		if(stock > 1000) stock = 1000;
 		while(stock--) push_slot();
 	}
 	return iter;
 }
 static bc_Slot* get_owner_slot(void* area) {
-	/*
-	bc_Slot* iter = gMXHead;
-	while(iter != NULL) {
-		if(get_aligned(iter) == area) {
-			break;
-		}
-		iter = iter->Next;
-	}
-	return iter;
-	*/
 	return get_self(area);
 }
 static int delete_slot(bc_Slot* self) {
@@ -197,8 +187,7 @@ static void set_self(bc_Slot* self) {
 	//メモリ自体に自分を含める
 	void* memory = get_layout(self, BORDER_SIZE);
 	uintptr_t* ptr = (uintptr_t*)memory;
-	uintptr_t selfv = (uintptr_t)((void*)self);
-	*ptr = selfv;
+	*ptr = (uintptr_t)self;
 }
 
 static bc_Slot* get_self(void* area) {
