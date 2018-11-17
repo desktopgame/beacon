@@ -57,7 +57,7 @@ void bc_InitMX() {
 
 void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
 	bc_Slot* slot = get_free_slot();
-	void* area = SafeMalloc(REAL_SIZE(size));
+	void* area = bc_SafeMalloc(REAL_SIZE(size));
 	slot->Size = size;
 	slot->UserArea = area;
 	memset(area, INIT, REAL_SIZE(size));
@@ -73,11 +73,11 @@ void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
 void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno) {
 	bc_Slot* c = get_owner_slot(block);
 	if(c == NULL) {
-		return SafeRealloc(block, size);
+		return bc_SafeRealloc(block, size);
 	}
 	size_t old = c->Size;
 	c->Size = size;
-	c->UserArea = SafeRealloc(c->UserArea, REAL_SIZE(size));
+	c->UserArea = bc_SafeRealloc(c->UserArea, REAL_SIZE(size));
 	memset(c->UserArea, BORDER, BORDER_SIZE);
 	memset(get_layout(c, size + BORDER_SIZE+ POINTER_SIZE), BORDER, BORDER_SIZE);
 	set_self(c);
@@ -104,7 +104,7 @@ void bc_MXFree(void* block, const char* filename, int lineno) {
 void* bc_MXBind(const void* block,size_t size,  const char* filename, int lineno) {
 	bc_Slot* slot = get_free_slot();
 	slot->Size = size;
-	slot->UserArea = SafeMalloc(REAL_SIZE(size));
+	slot->UserArea = bc_SafeMalloc(REAL_SIZE(size));
 	memcpy(get_aligned(slot), block, size);
 	set_self(slot);
 	location_slot(slot, filename, lineno);
@@ -124,7 +124,7 @@ void bc_DestroyMX() {
 	destroy_bp();
 }
 
-void* SafeMalloc(size_t size) {
+void* bc_SafeMalloc(size_t size) {
 	void* ret = malloc(size);
 	if(ret == NULL) {
 		abort();
@@ -133,16 +133,21 @@ void* SafeMalloc(size_t size) {
 	return ret;
 }
 
-void* SafeRealloc(void* block, size_t new_size) {
+void* bc_SafeRealloc(void* block, size_t new_size) {
 	void* ret = realloc(block, new_size);
 	if(ret == NULL) {
 		abort();
 	}
 	return ret;
 }
+
+void* bc_NonNull(void* block) {
+	assert(block != NULL);
+	return block;
+}
 //private
 static bc_Slot* new_slot() {
-	bc_Slot* ret = SafeMalloc(sizeof(bc_Slot));
+	bc_Slot* ret = bc_SafeMalloc(sizeof(bc_Slot));
 	memset(ret, 0, sizeof(bc_Slot));
 	ret->Next = NULL;
 	ret->FileName = NULL;
@@ -240,7 +245,7 @@ static bc_Slot* get_self(void* area) {
 
 static void init_bp() {
 	assert(gBreakPoints == NULL);
-	gBreakPoints = SafeMalloc(sizeof(int) * 16);
+	gBreakPoints = bc_SafeMalloc(sizeof(int) * 16);
 	gBreakPointsCapa = 16;
 	gBreakPointsSize = 0;
 }
@@ -254,7 +259,7 @@ static void destroy_bp() {
 static void reserve_bp() {
 	assert(gBreakPoints != NULL);
 	int ns = gBreakPointsCapa + (gBreakPointsCapa / 2);
-	void* p = SafeRealloc(gBreakPoints, sizeof(int) * ns);
+	void* p = bc_SafeRealloc(gBreakPoints, sizeof(int) * ns);
 	gBreakPoints = (int*)p;
 	gBreakPointsCapa = ns;
 }
@@ -338,7 +343,7 @@ static void load_bp() {
 		fread(&count, sizeof(int), 1, fp);
 		fread(&lineno, sizeof(int), 1, fp);
 		fread(&fnlen, sizeof(int), 1, fp);
-		fn = SafeMalloc(sizeof(char) * fnlen);
+		fn = bc_SafeMalloc(sizeof(char) * fnlen);
 		memset(fn, '\0', fnlen);
 		fread(fn, sizeof(char), fnlen, fp);
 		printf("<%d> :%d: %s\n", count, lineno, fn);
