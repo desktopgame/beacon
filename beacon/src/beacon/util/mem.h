@@ -59,6 +59,7 @@ void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno);
 #define bc_Free(block) (bc_MXFree(block, __FILE__, __LINE__))
 void bc_MXFree(void* block, const char* filename, int lineno);
 
+#define bc_Bind(block, size) (bc_MXBind(block, size, __FILE__, __LINE__))
 void* bc_MXBind(const void* block,size_t size,  const char* filename, int lineno);
 
 void bc_DestroyMX();
