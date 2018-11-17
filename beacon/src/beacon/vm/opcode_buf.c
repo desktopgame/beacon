@@ -35,11 +35,11 @@ int AddNOPOpcodeBuf(OpcodeBuf * self) {
 
 void DumpOpcodeBuf(OpcodeBuf * self, int depth) {
 	for (int i = 0; i < self->Instructions->Length; i++) {
-		Printi(depth);
+		bc_Printi(depth);
 		i = PrintOpcode(self->Instructions, i);
-		Println();
+		bc_Println();
 	}
-	Println();
+	bc_Println();
 }
 
 OpcodeBuf * MergeOpcodeBuf(OpcodeBuf * a, OpcodeBuf * b) {

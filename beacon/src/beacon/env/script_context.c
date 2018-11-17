@@ -177,11 +177,11 @@ static ScriptContext* malloc_script_context(void) {
 	ret->False = NULL;
 	ret->Null = NULL;
 #if defined(_MSC_VER)
-	char* path = GetAbsolutePath("script-lib/beacon/lang");
-	ret->IncludeList = GetFiles(path);
+	char* path = bc_GetAbsolutePath("script-lib/beacon/lang");
+	ret->IncludeList = bc_GetFiles(path);
 	MEM_FREE(path);
 #else
-	ret->IncludeList = GetFiles("script-lib/beacon/lang");
+	ret->IncludeList = bc_GetFiles("script-lib/beacon/lang");
 #endif
 	ret->PositiveIntegerCacheList = NewVector();
 	ret->NegativeIntegerCacheList = NewVector();
@@ -224,7 +224,7 @@ static void free_script_context(ScriptContext* self) {
 
 	int a = CountActiveObject();
 	DeleteNumericMap(self->NamespaceMap, delete_namespace);
-	DeleteFiles(self->IncludeList);
+	bc_DeleteFiles(self->IncludeList);
 	MEM_FREE(self);
 }
 

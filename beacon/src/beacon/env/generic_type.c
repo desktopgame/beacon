@@ -342,9 +342,9 @@ static int distance_interface(int dist, GenericType* self, GenericType* other, F
 				break;
 			}
 		}
-		//PrintGenericType(self); Println();
-		//PrintGenericType(other); Println();
-		//Printfln("---");
+		//PrintGenericType(self); bc_Println();
+		//PrintGenericType(other); bc_Println();
+		//bc_Printfln("---");
 		return dist;
 	}
 	return dist;
@@ -382,7 +382,7 @@ static GenericType* receiver_at(CallContext* cctx, Frame* fr, int index) {
 		return instanced;
 	} else {
 		Object* a = AtVector(fr->VariableTable, 0);
-		printf("receiver at: "); PrintGenericType(a->GType); Println();
+		printf("receiver at: "); PrintGenericType(a->GType); bc_Println();
 		return AtVector(a->GType->TypeArgs, index);
 	}
 	return NULL;

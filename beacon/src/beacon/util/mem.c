@@ -49,7 +49,7 @@ void bc_InitMX() {
 		push_slot();
 	}
 	//すでに存在するなら監視
-	if(!ExistsFile(gDBF)) {
+	if(!bc_ExistsFile(gDBF)) {
 		return;
 	}
 	load_bp();
@@ -115,7 +115,7 @@ void* bc_MXBind(const void* block,size_t size,  const char* filename, int lineno
 
 void bc_DestroyMX() {
 	//すでに存在するなら削除
-	if(ExistsFile(gDBF)) {
+	if(bc_ExistsFile(gDBF)) {
 		bc_DeleteFile(gDBF);
 	}
 	save_bp();
@@ -284,7 +284,7 @@ static bool include_bp(int t) {
 static void attach_bp(bc_Slot* self) {
 	self->Count = gAll;
 	if(include_bp(self->Count)) {
-		if(ExistsFile(gDBF)) { bc_DeleteFile(gDBF); }
+		if(bc_ExistsFile(gDBF)) { bc_DeleteFile(gDBF); }
 		abort();
 	}
 	gAll++;

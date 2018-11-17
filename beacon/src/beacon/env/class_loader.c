@@ -93,7 +93,7 @@ void LoadPassASTClassLoader(ClassLoader* self, AST* a) {
 }
 
 void SpecialLoadClassLoader(ClassLoader* self, char* relativePath) {
-	char* fullP = ResolveScriptPath(relativePath);
+	char* fullP = bc_ResolveScriptPath(relativePath);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	Heap* he = GetHeap();
 	ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, fullP);
@@ -250,7 +250,7 @@ static void load_toplevel_function(ClassLoader* self) {
 		//戻り値を指定
 		m->ReturnGType = ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
 	//	PrintGenericType(m->return_gtype);
-	//	Println();
+	//	bc_Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->Parameters->Length; j++) {
 			ILParameter* ilparam = AtVector(ilfunc->Parameters, j);

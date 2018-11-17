@@ -141,7 +141,7 @@ static void bc_array_nativeGet(Method* parent, Frame* fr, Enviroment* env) {
 //	Object* a = AtVector(vm->VariableTable, 2);
 	assert(IsIntValue(idx));
 	Object* ret = (Object*)AtVector(ARRAY_VALUE(self), ObjectToInt(idx));
-	//Printfln("array get %d", idx->u.int_);
+	//bc_Printfln("array get %d", idx->u.int_);
 	PushVector(fr->ValueStack, ret);
 }
 

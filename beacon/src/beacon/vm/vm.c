@@ -500,9 +500,9 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				GenericType* gtype = (GenericType*)PopVector(self->TypeArgs);
 				Object* v = (Object*)PopVector(self->ValueStack);
 				//PrintGenericType(gtype);
-				//Printfln("");
+				//bc_Printfln("");
 				//PrintGenericType(v->GType);
-				//Printfln("");
+				//bc_Printfln("");
 				int dist = DistanceGenericType(gtype, v->GType, GetSGThreadCContext());
 				Object* b = GetBoolObject(dist >= 0);
 				PushVector(self->ValueStack, b);
@@ -587,8 +587,8 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 					AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
 					AssignVector(cfr->Kind.StaticInvoke.TypeArgs, (cls->TypeParameters->Length - i), e);
 				}
-				//Printi(self->level);
-				//Printfln("[ %s#new ]", GetTypeName(ctor->Parent));
+				//bc_Printi(self->level);
+				//bc_Printfln("[ %s#new ]", GetTypeName(ctor->Parent));
 				//DumpEnviromentOp(ctor->env, sub->level);
 				//DumpOpcodeBuf(ctor->env->Bytecode, sub->level);
 				ExecuteVM(sub, ctor->Env);

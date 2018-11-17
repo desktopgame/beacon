@@ -24,19 +24,19 @@ FQCNCache* MallocFQCNCache(const char* filename, int lineno) {
 }
 
 void DumpFQCNCache(FQCNCache * self, int depth) {
-	Printi(depth);
+	bc_Printi(depth);
 	printf("type %s", Ref2Str(self->Name));
-	Println();
+	bc_Println();
 	//X::C.call() のような呼び出しなら
 	if (self->Scope->Length > 0) {
-		Printi(depth);
+		bc_Printi(depth);
 		printf("scope");
-		Println();
+		bc_Println();
 		for (int i = 0; i < self->Scope->Length; i++) {
 			StringView sv = (StringView)AtVector(self->Scope, i);
-			Printi(depth + 1);
+			bc_Printi(depth + 1);
 			printf("%s", Ref2Str(sv));
-			Println();
+			bc_Println();
 		}
 	}
 }

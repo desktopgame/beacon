@@ -216,7 +216,7 @@ static void dump_root(NumericMap* root, bool callSelf, int depth) {
 static void dump_impl(Namespace* root, int depth) {
 	put_indent(depth);
 	printf("%s", Ref2Str(root->Name));
-	Println();
+	bc_Println();
 	dump_class(root->TypeMap, true, depth + 1);
 	dump_root(root->NamespaceMap, false, depth + 1);
 }

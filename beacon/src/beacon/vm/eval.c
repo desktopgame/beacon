@@ -21,7 +21,7 @@ bool EvalAST(const char* filename) {
 	abort();
 	return false;
 	/*
-	if (!ExistsFile(filename)) {
+	if (!bc_ExistsFile(filename)) {
 		fprintf(stderr, "file is not found: %s", filename);
 		abort();
 		return false;
@@ -101,7 +101,7 @@ static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt) {
 	Heap* he = GetHeap();
 	he->AcceptBlocking = 0;
 #if defined(DEBUG)
-	Printfln("start");
+	bc_Printfln("start");
 #endif
 	if(!GetLastBCError()) {
 		ExecuteVM(fr, cll->Env);

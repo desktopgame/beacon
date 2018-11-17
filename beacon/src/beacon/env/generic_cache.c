@@ -33,9 +33,9 @@ void PrintGenericCache(GenericCache * self) {
 }
 
 void DumpGenericCache(GenericCache * self, int depth) {
-	Printi(depth);
+	bc_Printi(depth);
 	PrintGenericCache(self);
-	Println();
+	bc_Println();
 }
 
 char* GenericCacheToString(GenericCache* self) {

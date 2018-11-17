@@ -23,17 +23,17 @@
 //proto
 static void delete_file_entry(VectorItem item);
 
-void Printi(int depth) {
-	Fprinti(stdout, depth);
+void bc_Printi(int depth) {
+	bc_Fprinti(stdout, depth);
 }
 
-void Fprinti(FILE* fp, int depth) {
+void bc_Fprinti(FILE* fp, int depth) {
 	for(int i=0; i<depth; i++) {
 		fprintf(fp, "    ");
 	}
 }
 
-void Printfln(const char* fmt, ...) {
+void bc_Printfln(const char* fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 	int ret = vprintf(fmt, ap);
@@ -41,12 +41,12 @@ void Printfln(const char* fmt, ...) {
 	va_end(ap);
 }
 
-void Println() {
+void bc_Println() {
 	printf("\n");
 }
 
 void bc_CreateFile(const char * filename) {
-	assert(!ExistsFile(filename));
+	assert(!bc_ExistsFile(filename));
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "a");
@@ -62,7 +62,7 @@ void bc_CreateFile(const char * filename) {
 #endif
 }
 
-bool ExistsFile(const char * filename) {
+bool bc_ExistsFile(const char * filename) {
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "r");
@@ -84,8 +84,8 @@ bool bc_DeleteFile(const char * filename) {
 	return remove(filename);
 }
 
-char * ReadText(const char * filename) {
-	assert(ExistsFile(filename));
+char * bc_ReadText(const char * filename) {
+	assert(bc_ExistsFile(filename));
 	Buffer* buff = NewBuffer();
 #if defined(_MSC_VER)
 	FILE* fp;
@@ -112,8 +112,8 @@ char * ReadText(const char * filename) {
 	return ret;
 }
 
-void WriteText(const char * filename, const char * text) {
-	assert(ExistsFile(filename));
+void bc_WriteText(const char * filename, const char * text) {
+	assert(bc_ExistsFile(filename));
 #if defined(_MSC_VER)
 	FILE* fp;
 	errno_t err = fopen_s(&fp, filename, "w");
@@ -135,7 +135,7 @@ void WriteText(const char * filename, const char * text) {
 	fclose(fp);
 }
 
-void GetCurrentPath(char* block, int len) {
+void bc_GetCurrentPath(char* block, int len) {
 	memset(block, '\0', len);
 	getcwd(block, len);
 	for(int i=0; i<len; i++) {
@@ -152,7 +152,7 @@ void GetCurrentPath(char* block, int len) {
 	}
 }
 
-char * GetAbsolutePath(const char * target) {
+char * bc_GetAbsolutePath(const char * target) {
 #if defined(_WIN32)
 	char full[_MAX_PATH];
 	if (_fullpath(full, target, _MAX_PATH) != NULL) {
@@ -169,22 +169,22 @@ char * GetAbsolutePath(const char * target) {
 	return NULL;
 #else
 	char full[256] = {0};
-	GetCurrentPath(full, 256);
+	bc_GetCurrentPath(full, 256);
 	return bc_ConcatString(full, target);
 #endif
 }
 
-char* ResolveScriptPath(const char* target) {
+char* bc_ResolveScriptPath(const char* target) {
 	Buffer* sb = NewBuffer();
 	char full[256] = {0};
-	GetCurrentPath(full, 256);
+	bc_GetCurrentPath(full, 256);
 	AppendsBuffer(sb, full);
 	AppendsBuffer(sb, "script-lib/");
 	AppendsBuffer(sb, target);
 	return ReleaseBuffer(sb);
 }
 
-Vector* GetFiles(const char* dirname) {
+Vector* bc_GetFiles(const char* dirname) {
 #if defined(_MSC_VER)
 	//ワイルドカード指定ですべてのファイルを取得する
 	Buffer* buf = NewBuffer();
@@ -204,12 +204,12 @@ Vector* GetFiles(const char* dirname) {
 			continue;
 		}
 		FileEntry* e = MEM_MALLOC(sizeof(FileEntry));
-		e->FileName = ConcatPath(dirname, ffd.cFileName);
+		e->FileName = bc_ConcatPath(dirname, ffd.cFileName);
 		e->IsFile = true;
 		PushVector(v, e);
 	} while (FindNextFile(h, &ffd));
 	FindClose(h);
-	qsort(v->Memory, v->Length, sizeof(void*), SortFiles);
+	qsort(v->Memory, v->Length, sizeof(void*), bc_SortFiles);
 	return v;
 #else
 	Vector* ret = NewVector();
@@ -219,7 +219,7 @@ Vector* GetFiles(const char* dirname) {
 
 	for (dp = readdir(dir); dp != NULL; dp = readdir(dir)) {
 		if (dp->d_name[0] != '.') {
-			char* path = ConcatPath(dirname, dp->d_name);
+			char* path = bc_ConcatPath(dirname, dp->d_name);
 			FileEntry* entry = RefFileEntry(path);
 			stat(path, &fi);
 			entry->IsFile = !S_ISDIR(fi.st_mode);
@@ -227,22 +227,22 @@ Vector* GetFiles(const char* dirname) {
 		}
 	}
 	closedir(dir);
-	qsort(ret->Memory, ret->Length, sizeof(void*), SortFiles);
+	qsort(ret->Memory, ret->Length, sizeof(void*), bc_SortFiles);
 	return ret;
 #endif
 }
 
-int SortFiles(const void* a, const void* b) {
+int bc_SortFiles(const void* a, const void* b) {
 	FileEntry* aF = *(FileEntry**)a;
 	FileEntry* bF = *(FileEntry**)b;
 	return strcmp(aF->FileName, bF->FileName);
 }
 
-void DeleteFiles(Vector* files) {
+void bc_DeleteFiles(Vector* files) {
 	DeleteVector(files, delete_file_entry);
 }
 
-bool IsMatchExtension(const char* filename, const char* ext) {
+bool bc_IsMatchExtension(const char* filename, const char* ext) {
 	int fn_len = strlen(filename);
 	int ext_len = strlen(ext);
 	int mat_len = 0;
@@ -264,7 +264,7 @@ bool IsMatchExtension(const char* filename, const char* ext) {
 	return mat_len == ext_len;
 }
 
-char* ConcatPath(const char* a, const char* b) {
+char* bc_ConcatPath(const char* a, const char* b) {
 	Buffer* buf = NewBuffer();
 	AppendsBuffer(buf, a);
 	AppendBuffer(buf, '/');

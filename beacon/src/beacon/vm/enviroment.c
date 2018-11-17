@@ -61,7 +61,7 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 	LineRange* lr = NULL;
 	int lrPos = -1;
 	for (int i = 0; i < buf->Instructions->Length; i++) {
-		Printi(depth);
+		bc_Printi(depth);
 		i = PrintOpcode(buf->Instructions, i);
 		if (!IsEmptyVector(self->LineRangeTable)) {
 			if (lr == NULL) {
@@ -79,9 +79,9 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 		if (lr != NULL) {
 			printf("<%d>", lr->Lineno);
 		}
-		Println();
+		bc_Println();
 	}
-	Println();
+	bc_Println();
 }
 
 int AddCIntEnviroment(Enviroment * self, int i) {
