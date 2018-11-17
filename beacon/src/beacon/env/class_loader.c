@@ -66,7 +66,7 @@ ClassLoader* NewClassLoader(const char* filename, ContentType type) {
 	ret->Env = NewEnviroment();
 	ret->Level = 0;
 	ret->TypeCaches = NewVector();
-	ret->FileName = Strdup(filename);
+	ret->FileName = bc_Strdup(filename);
 	ret->Env->ContextRef = ret;
 	return ret;
 }

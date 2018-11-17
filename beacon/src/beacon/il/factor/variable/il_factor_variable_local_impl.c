@@ -71,7 +71,7 @@ GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallC
 }
 
 char* ILVariableLocalToString(ILVariableLocal * self, Enviroment * env) {
-	return Strdup(Ref2Str(self->Name));
+	return bc_Strdup(Ref2Str(self->Name));
 }
 
 void DeleteILVariableLocal(ILVariableLocal* self) {

@@ -345,7 +345,7 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 			break;
 		default:
 			{
-				return Strdup("if shown this message, it compiler bug\n");
+				return bc_Strdup("if shown this message, it compiler bug\n");
 			}
 	}
 	Buffer* sbuf = NewBuffer();

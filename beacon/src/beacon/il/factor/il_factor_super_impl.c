@@ -31,7 +31,7 @@ GenericType* EvalILSuper(ILSuper * self, Enviroment * env, CallContext* cctx) {
 }
 
 char* ILSuperToString(ILSuper* self, Enviroment* env) {
-	return Strdup("super");
+	return bc_Strdup("super");
 }
 
 void DeleteILSuper(ILSuper * self) {

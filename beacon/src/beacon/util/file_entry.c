@@ -3,7 +3,7 @@
 #include "text.h"
 
 FileEntry* NewFileEntry(const char* filename) {
-	return RefFileEntry(Strdup(filename));
+	return RefFileEntry(bc_Strdup(filename));
 }
 
 FileEntry* RefFileEntry(char* filename) {

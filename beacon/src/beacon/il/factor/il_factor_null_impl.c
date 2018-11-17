@@ -21,5 +21,5 @@ GenericType* EvalILNull(void * empty, Enviroment * env, CallContext* cctx) {
 }
 
 char* ILNullToString(void* empty, Enviroment* env) {
-	return Strdup("null");
+	return bc_Strdup("null");
 }

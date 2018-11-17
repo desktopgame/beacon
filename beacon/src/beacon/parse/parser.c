@@ -21,7 +21,7 @@ Parser* ParseString(const char* source) {
 	gParser = parser_new();
 	gParser->InputType = YINPUT_STRING_T;
 	gParser->SourceName = NULL;
-	yy_setstr(Strdup(source));
+	yy_setstr(bc_Strdup(source));
 	if (yyparse()) {
 		yy_clearstr();
 		gParser->Result = PARSE_SYNTAX_ERROR_T;
@@ -42,7 +42,7 @@ Parser* ParseFile(const char* filename) {
 	yyin = fopen(filename, "r");
 	gParser = parser_new();
 	gParser->InputType = YINPUT_FILE_T;
-	gParser->SourceName = Strdup(filename);
+	gParser->SourceName = bc_Strdup(filename);
 	//対象のファイルを開けなかった
 	if(!yyin) {
 		gParser->Result = PARSE_OPEN_ERROR_T;

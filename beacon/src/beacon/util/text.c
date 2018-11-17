@@ -16,7 +16,7 @@ static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
 
-char * Strdup(const char * source) {
+char * bc_Strdup(const char * source) {
 	if (source == NULL) {
 		return NULL;
 	}
@@ -24,7 +24,7 @@ char * Strdup(const char * source) {
 	return bc_Bind(source, (strlen(source) + 1) * sizeof(char));
 }
 
-bool IsBlankText(const char * str) {
+bool bc_IsBlankText(const char * str) {
 	assert(str != NULL);
 	int len = strlen(str);
 	for (int i = 0; i < len; i++) {
@@ -38,7 +38,7 @@ bool IsBlankText(const char * str) {
 	return true;
 }
 
-char * ConcatString(const char * a, const char * b) {
+char * bc_ConcatString(const char * a, const char * b) {
 	#if defined(_MSC_VER)
 	int alen = strlen(a);
 	int blen = strlen(b);
@@ -60,7 +60,7 @@ char * ConcatString(const char * a, const char * b) {
 	#endif
 }
 
-char * GetLineAt(const char * src, int lineno) {
+char * bc_GetLineAt(const char * src, int lineno) {
 	//printf("%s", src);
 	//return NULL;
 	if(src == NULL) {
@@ -90,29 +90,29 @@ char * GetLineAt(const char * src, int lineno) {
 	return ret;
 }
 
-char* JoinString(Vector * v, char * join) {
+char* bc_JoinString(Vector * v, char * join) {
 	if (v == NULL || v->Length == 0) {
 		return NULL;
 	}
 	//FIXME:もうちょっと無駄をなくせるはず
-	char* head = Strdup((char*)AtVector(v, 0));
+	char* head = bc_Strdup((char*)AtVector(v, 0));
 	int ptr = strlen(head);
 	for (int i = 1; i < v->Length; i++) {
 		char* e = (char*)AtVector(v, i);
 		if (i <= (v->Length - 1) && 
 			join != NULL) {
-			char* conn = ConcatString(head, join);
+			char* conn = bc_ConcatString(head, join);
 			MEM_FREE(head);
 			head = conn;
 		}
-		char* ret = ConcatString(head, e);
+		char* ret = bc_ConcatString(head, e);
 		MEM_FREE(head);
 		head = ret;
 	}
 	return head;
 }
 
-bool IsIncluded(const char* source, const char* text) {
+bool bc_IsIncluded(const char* source, const char* text) {
 	int pos = 0;
 	int slen = strlen(source);
 	int tlen = strlen(text);
@@ -134,11 +134,11 @@ bool IsIncluded(const char* source, const char* text) {
 	return false;
 }
 
-char* ReadLine() {
+char* bc_ReadLine() {
 	return read_line_impl(stdin);
 }
 
-char* FreadLine(FILE* fp) {
+char* bc_FreadLine(FILE* fp) {
 	return read_line_impl(fp);
 }
 

@@ -30,7 +30,7 @@ GenericType* EvalILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
 }
 
 char* ILBoolToString(ILBool* self, Enviroment* env) {
-	return Strdup(self->Value ? "true" : "false");
+	return bc_Strdup(self->Value ? "true" : "false");
 }
 
 void DeleteILBool(ILBool * self) {

@@ -30,7 +30,7 @@ GenericType* EvalILThis(ILThis * self, Enviroment * env, CallContext* cctx) {
 }
 
 char* ILThisToString(ILThis* self, Enviroment* env) {
-	return Strdup("this");
+	return bc_Strdup("this");
 }
 
 void DeleteILThis(ILThis * self) {

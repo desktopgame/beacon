@@ -35,7 +35,7 @@ GenericType* EvalILString(ILString * self, Enviroment * env, CallContext* cctx) 
 }
 
 char* ILStringToString(ILString* self, Enviroment* env) {
-	return Strdup(Ref2Str(self->Value));
+	return bc_Strdup(Ref2Str(self->Value));
 }
 
 void DeleteILString(ILString * self) {

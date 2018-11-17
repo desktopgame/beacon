@@ -34,7 +34,7 @@ TreeMap* PutTreeMap(TreeMap* self, TreeKey key, TreeItem item) {
 	} else if (comp < 0) {
 		if (self->Left == NULL) {
 			self->Left = NewTreeMap();
-			self->Left->Key = Strdup(key);
+			self->Left->Key = bc_Strdup(key);
 			self->Left->Parent = self;
 		} else {
 			return PutTreeMap(self->Left, key, item);
@@ -44,7 +44,7 @@ TreeMap* PutTreeMap(TreeMap* self, TreeKey key, TreeItem item) {
 	} else if (comp > 0) {
 		if (self->Right == NULL) {
 			self->Right = NewTreeMap();
-			self->Right->Key = Strdup(key);
+			self->Right->Key = bc_Strdup(key);
 			self->Right->Parent = self;
 		} else {
 			return PutTreeMap(self->Right, key, item);
