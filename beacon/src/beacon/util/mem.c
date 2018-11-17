@@ -6,8 +6,11 @@
 
 static const char* gDBF = "mdb.dat";
 static bc_Slot* gMXHead = NULL;
-static int gBreak = -1;
 static int gAll = 0;
+static int* gBreakPoints = NULL;
+static int gBreakPointsSize = 0;
+static int gBreakPointsCapa = 0;
+static int gStack = 0;
 static bc_Slot* new_slot();
 static void location_slot(bc_Slot* self, const char* filename, int lineno);
 static bc_Slot* get_last();
@@ -20,6 +23,12 @@ static void* get_layout(bc_Slot* self, size_t offset);
 static void* get_aligned(bc_Slot* self);
 static void set_self(bc_Slot* self);
 static bc_Slot* get_self(void* area);
+static void init_bp();
+static void destroy_bp();
+static void reserve_bp();
+static void push_bp(int i);
+static bool include_bp(int t);
+static void attach_bp(bc_Slot* self);
 
 #define INIT (0xCC)
 #define BORDER (0xCD)
@@ -29,7 +38,9 @@ static bc_Slot* get_self(void* area);
 
 void bc_InitMX() {
 	assert(gMXHead == NULL);
+	assert(gBreakPoints == NULL);
 	gMXHead = new_slot();
+	init_bp();
 	for(int i=0; i<1000; i++) {
 		push_slot();
 	}
@@ -53,8 +64,8 @@ void bc_InitMX() {
 		printf("<%d> :%d: %s\n", count, lineno, fn);
 		free(fn);
 		fread(&hasNext, sizeof(bool), 1, fp);
-		bc_MXBreak(count);
 		if(!hasNext) break;
+		push_bp(count);
 	}
 	fclose(fp);
 }
@@ -69,6 +80,8 @@ void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
 	set_self(slot);
 	memset(get_layout(slot, size + BORDER_SIZE + POINTER_SIZE), BORDER, BORDER_SIZE);
 	location_slot(slot, filename, lineno);
+	attach_bp(slot);
+	gStack++;
 	return get_aligned(slot);
 }
 
@@ -90,6 +103,8 @@ void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno) {
 }
 
 void bc_MXFree(void* block, const char* filename, int lineno) {
+	if(block == NULL) { return; }
+	gStack--;
 	bc_Slot* c = get_owner_slot(block);
 	if(c == NULL) {
 		return;
@@ -97,6 +112,7 @@ void bc_MXFree(void* block, const char* filename, int lineno) {
 	c->Size = 0;
 	free(c->UserArea);
 	c->UserArea = NULL;
+	c->Count = -1;
 	location_slot(c, filename, lineno);
 }
 
@@ -107,11 +123,9 @@ void* bc_MXBind(const void* block,size_t size,  const char* filename, int lineno
 	memcpy(get_aligned(slot), block, size);
 	set_self(slot);
 	location_slot(slot, filename, lineno);
+	attach_bp(slot);
+	gStack++;
 	return get_aligned(slot);
-}
-
-void bc_MXBreak(int index) {
-	gBreak = index;
 }
 
 void bc_DestroyMX() {
@@ -126,8 +140,10 @@ void bc_DestroyMX() {
 	} else {
 		printf("detected memory leaks: %d\n", leaks);
 	}
+	printf("malloc/free: %d\n", gStack);
 	fclose(fp);
 	gMXHead = NULL;
+	destroy_bp();
 }
 
 void* SafeMalloc(size_t size) {
@@ -155,11 +171,7 @@ static bc_Slot* new_slot() {
 	ret->Lineno = -1;
 	ret->Size = 0;
 	ret->UserArea = NULL;
-	ret->Count = gAll;
-	if(gAll == gBreak) {
-		abort();
-	}
-	gAll++;
+	ret->Count = -1;
 	return ret;
 }
 static void location_slot(bc_Slot* self, const char* filename, int lineno) {
@@ -255,4 +267,50 @@ static bc_Slot* get_self(void* area) {
 	void* fixed = (area - POINTER_SIZE);
 	uintptr_t ptr = *((uintptr_t*)fixed);
 	return (bc_Slot*)ptr;
+}
+
+static void init_bp() {
+	assert(gBreakPoints == NULL);
+	gBreakPoints = SafeMalloc(sizeof(int) * 16);
+	gBreakPointsCapa = 16;
+	gBreakPointsSize = 0;
+}
+
+static void destroy_bp() {
+	free(gBreakPoints);
+	gBreakPointsCapa = 0;
+	gBreakPointsSize = 0;
+}
+
+static void reserve_bp() {
+	assert(gBreakPoints != NULL);
+	int ns = gBreakPointsCapa + (gBreakPointsCapa / 2);
+	void* p = SafeRealloc(gBreakPoints, sizeof(int) * ns);
+	gBreakPoints = (int*)p;
+	gBreakPointsCapa = ns;
+}
+
+static void push_bp(int i) {
+	if(gBreakPointsSize >= gBreakPointsCapa) {
+		reserve_bp();
+	}
+	gBreakPoints[gBreakPointsSize] = i;
+	gBreakPointsSize++;
+}
+
+static bool include_bp(int t) {
+	for(int i=0; i<gBreakPointsSize; i++) {
+		if(gBreakPoints[i] == t) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static void attach_bp(bc_Slot* self) {
+	self->Count = gAll;
+	if(include_bp(self->Count)) {
+		abort();
+	}
+	gAll++;
 }

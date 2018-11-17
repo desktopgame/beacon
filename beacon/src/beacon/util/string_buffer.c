@@ -110,6 +110,9 @@ Buffer* IndentBuffer(Buffer* self, int lineIndex, int len) {
 }
 
 void DeleteBuffer(Buffer * self) {
+	if(self == NULL) {
+		return;
+	}
 	MEM_FREE(self->Text);
 	MEM_FREE(self);
 }

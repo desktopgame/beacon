@@ -75,10 +75,13 @@ Type* GetStringType() {
 
 //private
 static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]) {
+	String* str = ((String*)self);
 	if(msg == OBJECT_MSG_DELETE) {
-		DeleteBuffer(((String*)self)->Buffer);
-		MEM_FREE(self);
-		return NULL;
+		DeleteBuffer(str->Buffer); str->Buffer = NULL;
+		return HandleObjectMessage(self, msg, argc, argv);
+	} else if(msg == OBJECT_MSG_DESTROY) {
+		DeleteBuffer(str->Buffer); str->Buffer = NULL;
+		return HandleObjectMessage(self, msg, argc, argv);
 	} else {
 		return HandleObjectMessage(self, msg, argc, argv);
 	}
