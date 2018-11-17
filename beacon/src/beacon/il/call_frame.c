@@ -2,7 +2,7 @@
 #include "../util/mem.h"
 
 CallFrame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno) {
-	CallFrame* ret = mem_malloc(sizeof(CallFrame), filename, lineno);
+	CallFrame* ret = bc_MXMalloc(sizeof(CallFrame), filename, lineno);
 	ret->Tag = tag;
 	return ret;
 }

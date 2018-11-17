@@ -1,7 +1,7 @@
 #include "yield_context.h"
 #include "../util/mem.h"
 YieldContext* MallocYieldContext(const char* filename, int lineno) {
-	YieldContext* ret = (YieldContext*)mem_malloc(sizeof(YieldContext), filename, lineno);
+	YieldContext* ret = (YieldContext*)bc_MXMalloc(sizeof(YieldContext), filename, lineno);
 	ret->BackupVariableTable = NULL;
 	ret->BackupValueStack = NULL;
 	ret->VariableTable = NULL;

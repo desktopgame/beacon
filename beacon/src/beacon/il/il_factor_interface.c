@@ -11,7 +11,7 @@
 #include <assert.h>
 
 ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno) {
-	ILFactor* ret = mem_malloc(sizeof(ILFactor), filename, lineno);
+	ILFactor* ret = bc_MXMalloc(sizeof(ILFactor), filename, lineno);
 	ret->Type = type;
 	ret->Lineno = -1;
 	return ret;

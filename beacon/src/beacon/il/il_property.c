@@ -4,7 +4,7 @@
 #include "../util/text.h"
 
 ILProperty* MallocILProperty(StringView namev, const char* filename, int lineno) {
-	ILProperty* ret = mem_malloc(sizeof(ILProperty), filename, lineno);
+	ILProperty* ret = bc_MXMalloc(sizeof(ILProperty), filename, lineno);
 	ret->Name = namev;
 	ret->GCache = NewGenericCache();
 	ret->Set = NULL;

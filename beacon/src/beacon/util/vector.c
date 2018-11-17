@@ -5,10 +5,10 @@
 #define SLOT_SIZE sizeof(void*)
 
 Vector* MallocVector(const char* filename, int lineno) {
-	Vector* ret = (Vector*)mem_malloc(sizeof(Vector), filename, lineno);
+	Vector* ret = (Vector*)bc_MXMalloc(sizeof(Vector), filename, lineno);
 	ret->Length = 0;
 	ret->Capacity = 16;
-	ret->Memory = (VectorItem*)mem_malloc(SLOT_SIZE * 16, filename, lineno);
+	ret->Memory = (VectorItem*)bc_MXMalloc(SLOT_SIZE * 16, filename, lineno);
 	return ret;
 }
 

@@ -16,7 +16,7 @@ ILFactor * WrapILInt(ILInt * self) {
 }
 
 ILInt * MallocILInt(int32_t i, const char* filename, int lineno) {
-	ILInt* ret = (ILInt*)mem_malloc(sizeof(ILInt), filename, lineno);
+	ILInt* ret = (ILInt*)bc_MXMalloc(sizeof(ILInt), filename, lineno);
 	ret->Value = i;
 	ret->Count = 0;
 	return ret;

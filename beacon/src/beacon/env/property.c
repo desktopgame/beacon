@@ -2,7 +2,7 @@
 #include "../util/mem.h"
 
 Property* MallocProperty(StringView namev, const char* filename, int lineno) {
-	Property* ret = mem_malloc(sizeof(Property), filename, lineno);
+	Property* ret = bc_MXMalloc(sizeof(Property), filename, lineno);
 	ret->Name = namev;
 	ret->GType = NULL;
 	ret->Parent = NULL;

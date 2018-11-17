@@ -41,7 +41,7 @@ GenericType* RefGenericType(Type* CoreType) {
 }
 
 GenericType* MallocGenericType(struct Type* CoreType, const char* filename, int lineno) {
-	GenericType* ret = (GenericType*)mem_malloc(sizeof(GenericType), filename, lineno);
+	GenericType* ret = (GenericType*)bc_MXMalloc(sizeof(GenericType), filename, lineno);
 	ret->CoreType = CoreType;
 	ret->TypeArgs = NewVector();
 	ret->VirtualTypeIndex = -1;

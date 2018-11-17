@@ -36,7 +36,7 @@ static Vector* method_vm_args(Method* self, Frame* fr, Frame* a);
 static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a);
 
 Method* MallocMethod(StringView name, const char* filename, int lineno) {
-	Method* ret = (Method*)mem_malloc(sizeof(Method), filename, lineno);
+	Method* ret = (Method*)bc_MXMalloc(sizeof(Method), filename, lineno);
 	ret->Name = name;
 	ret->Parameters = MallocVector(filename, lineno);
 	ret->Type = METHOD_TYPE_SCRIPT_T;

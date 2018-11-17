@@ -8,7 +8,7 @@
 #include "../env/fqcn_cache.h"
 
 CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno) {
-	CallContext* ret = mem_malloc(sizeof(CallContext), filename, lineno);
+	CallContext* ret = bc_MXMalloc(sizeof(CallContext), filename, lineno);
 #if defined(_MSC_VER)
 	ControlStructure cs = { 0 };
 #else

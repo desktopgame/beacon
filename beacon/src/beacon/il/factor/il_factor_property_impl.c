@@ -9,7 +9,7 @@
 
 
 ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno) {
-	ILPropertyAccess* ret = mem_malloc(sizeof(ILPropertyAccess), filename, lineno);
+	ILPropertyAccess* ret = bc_MXMalloc(sizeof(ILPropertyAccess), filename, lineno);
 	ret->Source = NULL;
 	ret->Index = -1;
 	ret->Name = ZERO_VIEW;

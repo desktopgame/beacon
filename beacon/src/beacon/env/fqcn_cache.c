@@ -17,7 +17,7 @@ FQCNCache * NewFQCNCache() {
 */
 
 FQCNCache* MallocFQCNCache(const char* filename, int lineno) {
-	FQCNCache* ret = (FQCNCache*)mem_malloc(sizeof(FQCNCache), filename, lineno);
+	FQCNCache* ret = (FQCNCache*)bc_MXMalloc(sizeof(FQCNCache), filename, lineno);
 	ret->Scope = MallocVector(filename, lineno);
 	ret->Name = 0;
 	return ret;

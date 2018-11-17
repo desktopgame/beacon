@@ -7,7 +7,7 @@
 #include "il_print_layout.h"
 
 ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno) {
-	ILStatement* ret = mem_malloc(sizeof(ILStatement), filename, lineno);
+	ILStatement* ret = bc_MXMalloc(sizeof(ILStatement), filename, lineno);
 	ret->Type = type;
 	ret->Lineno = -1;
 	return ret;

@@ -25,7 +25,7 @@ ILFactor * WrapILVariable(ILVariable * self) {
 }
 
 ILVariable * MallocILVariable(const char* filename, int lineno) {
-	ILVariable* ret = (ILVariable*)mem_malloc(sizeof(ILVariable), filename, lineno);
+	ILVariable* ret = (ILVariable*)bc_MXMalloc(sizeof(ILVariable), filename, lineno);
 	ret->FQCN = MallocFQCNCache(filename, lineno);
 	ret->TypeArgs = MallocVector(filename, lineno);
 	ret->Type = ILVARIABLE_TYPE_UNDEFINED_T;

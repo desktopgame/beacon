@@ -9,10 +9,10 @@
 #endif
 //proto
 Buffer* MallocBuffer(const char* filename, int lineno) {
-	Buffer* ret = mem_malloc(sizeof(Buffer), filename, lineno);
+	Buffer* ret = bc_MXMalloc(sizeof(Buffer), filename, lineno);
 	ret->Length = 0;
 	ret->Capacity = 16;
-	ret->Text = (char*)mem_malloc(sizeof(char) * 16, filename, lineno);
+	ret->Text = (char*)bc_MXMalloc(sizeof(char) * 16, filename, lineno);
 	memset(ret->Text, '\0', 16);
 	return ret;
 }

@@ -17,7 +17,7 @@ void CompileEntryAST(AST* self) {
 }
 
 AST* MallocAST(ASTTag tag, const char* filename, int lineno) {
-	AST* ret = (AST*)mem_malloc(sizeof(AST), filename, lineno);
+	AST* ret = (AST*)bc_MXMalloc(sizeof(AST), filename, lineno);
 	assert(ret != NULL);
 	ret->Tag = tag;
 	ret->Children = NULL;

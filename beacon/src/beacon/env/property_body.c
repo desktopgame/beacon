@@ -3,7 +3,7 @@
 #include "../vm/enviroment.h"
 
 PropertyBody* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno) {
-	PropertyBody* ret = mem_malloc(sizeof(PropertyBody), filename, lineno);
+	PropertyBody* ret = bc_MXMalloc(sizeof(PropertyBody), filename, lineno);
 	ret->Tag = tag;
 	ret->Env = NewEnviroment();
 	ret->Parent = NULL;

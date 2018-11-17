@@ -10,7 +10,7 @@
 #include "../il_factor_unary_op_impl.h"
 
 ILNegativeOp* MallocILNegativeOp(OperatorType type, const char* filename, int lineno) {
-	ILNegativeOp* ret = (ILNegativeOp*)mem_malloc(sizeof(ILNegativeOp), filename, lineno);
+	ILNegativeOp* ret = (ILNegativeOp*)bc_MXMalloc(sizeof(ILNegativeOp), filename, lineno);
 	ret->Type = type;
 	ret->Parent = NULL;
 	ret->OperatorIndex = -1;

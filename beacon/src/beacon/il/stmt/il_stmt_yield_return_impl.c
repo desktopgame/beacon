@@ -18,7 +18,7 @@ ILStatement* WrapILYieldReturn(ILYieldReturn* self) {
 }
 
 ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno) {
-	ILYieldReturn* ret = (ILYieldReturn*)mem_malloc(sizeof(ILYieldReturn), filename, lineno);
+	ILYieldReturn* ret = (ILYieldReturn*)bc_MXMalloc(sizeof(ILYieldReturn), filename, lineno);
 	ret->Value = NULL;
 	return ret;
 }

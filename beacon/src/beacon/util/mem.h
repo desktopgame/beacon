@@ -17,7 +17,7 @@
 #include <crtdbg.h>
 #endif
 
-//#define mem_malloc(size, file, line) (malloc(size))
+//#define bc_MXMalloc(size, file, line) (malloc(size))
 
 #if (defined(_MSC_VER) && defined(_DEBUG))
 	#define NON_NULL(m) (m)
@@ -26,16 +26,12 @@
 	#define MEM_REALLOC(block, size) (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
 	#define MEM_MARK(block, size) ((void)0)
 #elif defined(DEBUG)
-	#undef mem_malloc
-	#define mem_malloc(size, file, line) (bc_MXMalloc(size, file, line))
 	#define NON_NULL(m) (m)
 	#define MEM_MALLOC(size) (bc_MXMalloc(size, __FILE__, __LINE__))
 	#define MEM_FREE(size) (bc_MXFree(size, __FILE__, __LINE__))
 	#define MEM_REALLOC(block, size) (bc_MXRealloc(block, size, __FILE__, __LINE__))
 	#define MEM_MARK(block, size) ((void)0)
 #else
-	#undef mem_malloc
-	#define mem_malloc(size, file, line) (SafeMalloc(size))
 	#define NON_NULL(m) (m)
 	#define MEM_MALLOC(size) (SafeMalloc(size))
 	#define MEM_FREE(size) (free(size))

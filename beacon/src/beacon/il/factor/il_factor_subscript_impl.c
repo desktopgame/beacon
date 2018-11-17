@@ -11,7 +11,7 @@ ILFactor* WrapILSubscript(ILSubscript* self) {
 }
 
 ILSubscript* MallocILSubscript(const char* filename, int lineno) {
-	ILSubscript* ret = mem_malloc(sizeof(ILSubscript), filename, lineno);
+	ILSubscript* ret = bc_MXMalloc(sizeof(ILSubscript), filename, lineno);
 	ret->Receiver = NULL;
 	ret->Position = NULL;
 	ret->OperatorIndex = -1;

@@ -7,7 +7,7 @@
 static void ILPropertyBody_stmt_delete(VectorItem item);
 
 ILPropertyBody* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno) {
-	ILPropertyBody* ret = mem_malloc(sizeof(ILPropertyBody), filename, lineno);
+	ILPropertyBody* ret = bc_MXMalloc(sizeof(ILPropertyBody), filename, lineno);
 	ret->Statements = NewVector();
 	ret->Tag = tag;
 	ret->IsShort = false;
