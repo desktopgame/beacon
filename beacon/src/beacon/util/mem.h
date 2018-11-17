@@ -24,19 +24,16 @@
 	#define MEM_MALLOC(size) (_malloc_dbg(size,_NORMAL_BLOCK,__FILE__,__LINE__))
 	#define MEM_FREE(size) (_free_dbg(size, _NORMAL_BLOCK))
 	#define MEM_REALLOC(block, size) (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
-	#define MEM_MARK(block, size) ((void)0)
 #elif defined(DEBUG)
 	#define NON_NULL(m) (bc_NonNull(m))
 	#define MEM_MALLOC(size) (bc_MXMalloc(size, __FILE__, __LINE__))
 	#define MEM_FREE(size) (bc_MXFree(size, __FILE__, __LINE__))
 	#define MEM_REALLOC(block, size) (bc_MXRealloc(block, size, __FILE__, __LINE__))
-	#define MEM_MARK(block, size) ((void)0)
 #else
 	#define NON_NULL(m) (bc_NonNull(m))
 	#define MEM_MALLOC(size) (bc_SafeMalloc(size))
 	#define MEM_FREE(size) (free(size))
 	#define MEM_REALLOC(block, size) (bc_SafeRealloc(block, size))
-	#define MEM_MARK(block, size) ((void)0)
 #endif
 
 typedef struct bc_Slot {
