@@ -10,6 +10,7 @@ static void location_slot(bc_Slot* self, const char* filename, int lineno);
 static bc_Slot* get_last();
 static bc_Slot* push_slot();
 static bc_Slot* get_free_slot();
+static bc_Slot* get_more_slot(int stock);
 static bc_Slot* get_owner_slot(void* area);
 static int delete_slot(bc_Slot* self);
 static void* get_layout(bc_Slot* self, size_t offset);
@@ -152,13 +153,18 @@ static bc_Slot* get_free_slot() {
 		iter = iter->Next;
 	}
 	if(iter == NULL) {
-		iter = push_slot();
-		stock /= 2;
-		if(stock > 1000) stock = 1000;
-		while(stock--) push_slot();
+		iter = get_more_slot(stock);
 	}
 	return iter;
 }
+static bc_Slot* get_more_slot(int stock) {
+	bc_Slot* iter = push_slot();
+	stock /= 2;
+	if(stock > 1000) stock = 1000;
+	while(stock--) push_slot();
+	return iter;
+}
+
 static bc_Slot* get_owner_slot(void* area) {
 	return get_self(area);
 }
