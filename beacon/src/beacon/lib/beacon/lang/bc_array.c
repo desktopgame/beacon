@@ -25,7 +25,7 @@ Object* NewArray(int size, GenericType* element_type) {
 	ret->Super.OnMessage = handle_obj_message;
 	ret->Elements = NewVector();
 	for(int i=0; i<size; i++) {
-		PushVector(ret->Elements, GetDefaultObject(element_type));
+		PushVector(ret->Elements,GetNullObject());
 	}
 	return (Object*)ret;
 }
