@@ -144,6 +144,7 @@ static int test_semantics() {
 		MEM_FREE(runFN);
 	} else {
 		fprintf(stdout, "[RUN]SUCCEESS!");
+		MEM_FREE(runFN);
 	}
 	fprintf(stdout, "\n");
 	if(errRL) {
@@ -151,6 +152,7 @@ static int test_semantics() {
 		MEM_FREE(errFN);
 	} else {
 		fprintf(stdout, "[ERR]SUCCEESS!");
+		MEM_FREE(errFN);
 	}
 	fprintf(stdout, "\n");
 	return runRL || errRL ? 1 : 0;
