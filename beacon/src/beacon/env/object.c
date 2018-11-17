@@ -67,6 +67,7 @@ void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessa
 			}
 			*/
 			Object* ret = NewObject(sizeof(Object));
+			DeleteVector(ret->Fields, VectorDeleterOfNull);
 			ret->GType = self->GType;
 			ret->VPtr = self->VPtr;
 			//ret->NativeSlotVec  = self->NativeSlotVec;

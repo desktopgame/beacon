@@ -35,7 +35,7 @@
 	#define MEM_MARK(block, size) ((void)0)
 #else
 	#undef mem_malloc
-	#define mem_malloc(size, file, line) (bc_MXMalloc(size, file, line))
+	#define mem_malloc(size, file, line) (SafeMalloc(size))
 	#define NON_NULL(m) (m)
 	#define MEM_MALLOC(size) (SafeMalloc(size))
 	#define MEM_FREE(size) (free(size))

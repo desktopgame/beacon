@@ -18,7 +18,7 @@ static bc_Slot* push_slot();
 static bc_Slot* get_free_slot();
 static bc_Slot* get_more_slot(int stock);
 static bc_Slot* get_owner_slot(void* area);
-static int delete_slot(FILE* fp, bc_Slot* self);
+static int delete_slot(bc_Slot* self);
 static void* get_layout(bc_Slot* self, size_t offset);
 static void* get_aligned(bc_Slot* self);
 static void set_self(bc_Slot* self);
@@ -29,6 +29,10 @@ static void reserve_bp();
 static void push_bp(int i);
 static bool include_bp(int t);
 static void attach_bp(bc_Slot* self);
+static int save_bp();
+static int collect_leaks_bp(bc_Slot* self);
+static void write_bp(FILE* fp, bc_Slot* self);
+static void load_bp();
 
 #define INIT (0xCC)
 #define BORDER (0xCD)
@@ -48,26 +52,7 @@ void bc_InitMX() {
 	if(!ExistsFile(gDBF)) {
 		return;
 	}
-	FILE* fp = fopen(gDBF, "rb");
-	for(;;) {
-		int count;
-		int lineno;
-		int fnlen;
-		char* fn = NULL;
-		bool hasNext = false;
-		fread(&count, sizeof(int), 1, fp);
-		fread(&lineno, sizeof(int), 1, fp);
-		fread(&fnlen, sizeof(int), 1, fp);
-		fn = SafeMalloc(sizeof(char) * fnlen);
-		memset(fn, '\0', fnlen);
-		fread(fn, sizeof(char), fnlen, fp);
-		printf("<%d> :%d: %s\n", count, lineno, fn);
-		free(fn);
-		fread(&hasNext, sizeof(bool), 1, fp);
-		if(!hasNext) break;
-		push_bp(count);
-	}
-	fclose(fp);
+	load_bp();
 }
 
 void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
@@ -133,15 +118,8 @@ void bc_DestroyMX() {
 	if(ExistsFile(gDBF)) {
 		bc_DeleteFile(gDBF);
 	}
-	FILE* fp = fopen(gDBF, "wb");
-	int leaks = delete_slot(fp, gMXHead);
-	if(leaks == 0) {
-		printf("not detected memory leaks\n");
-	} else {
-		printf("detected memory leaks: %d\n", leaks);
-	}
-	printf("malloc/free: %d\n", gStack);
-	fclose(fp);
+	save_bp();
+	delete_slot(gMXHead);
 	gMXHead = NULL;
 	destroy_bp();
 }
@@ -221,22 +199,13 @@ static bc_Slot* get_more_slot(int stock) {
 static bc_Slot* get_owner_slot(void* area) {
 	return get_self(area);
 }
-static int delete_slot(FILE* fp, bc_Slot* self) {
+
+static int delete_slot(bc_Slot* self) {
 	if(self == NULL) { return 0; }
 	int sum = 0;
 	bc_Slot* iter = self;
 	while(iter != NULL) {
 		bc_Slot* temp = iter->Next;
-		if(iter->Size > 0) {
-			bool hasNext = temp != NULL;
-			int fnlen = strlen(iter->FileName) + 1;
-			fwrite(&iter->Count, sizeof(int), 1, fp);
-			fwrite(&iter->Lineno, sizeof(int), 1, fp);
-			fwrite(&fnlen, sizeof(int), 1, fp);
-			fwrite(iter->FileName, sizeof(char), fnlen, fp);
-			fwrite(&hasNext, sizeof(bool), 1, fp);
-			sum++;
-		}
 		free(iter->UserArea);
 		free(iter);
 		iter = temp;
@@ -310,7 +279,71 @@ static bool include_bp(int t) {
 static void attach_bp(bc_Slot* self) {
 	self->Count = gAll;
 	if(include_bp(self->Count)) {
+		if(ExistsFile(gDBF)) { bc_DeleteFile(gDBF); }
 		abort();
 	}
 	gAll++;
+}
+
+static int save_bp() {
+	FILE* fp = fopen(gDBF, "wb");
+	int leaks = collect_leaks_bp(gMXHead);
+	fwrite(&leaks, sizeof(int), 1, fp);
+	write_bp(fp, gMXHead);
+	if(leaks == 0) {
+		printf("not detected memory leaks\n");
+	} else {
+		printf("detected memory leaks: %d\n", leaks);
+	}
+	printf("malloc/free: %d\n", gStack);
+	fclose(fp);
+	return leaks;
+}
+
+static int collect_leaks_bp(bc_Slot* self) {
+	bc_Slot* iter = self;
+	int sum = 0;
+	while(iter != NULL) {
+		sum += (iter->Size == 0 ? 0 : 1);
+		iter = iter->Next;
+	}
+	return sum;
+}
+
+static void write_bp(FILE* fp, bc_Slot* self) {
+	bc_Slot* iter = self;
+	while(iter != NULL) {
+		if(iter->Size == 0) {
+			iter = iter->Next;
+			continue;
+		}
+		int fnlen = strlen(iter->FileName) + 1;
+		fwrite(&iter->Count, sizeof(int), 1, fp);
+		fwrite(&iter->Lineno, sizeof(int), 1, fp);
+		fwrite(&fnlen, sizeof(int), 1, fp);
+		fwrite(iter->FileName, sizeof(char), fnlen, fp);
+		iter = iter->Next;
+	}
+}
+
+static void load_bp() {
+	FILE* fp = fopen(gDBF, "rb");
+	int leaks = 0;
+	fread(&leaks, sizeof(int), 1, fp);
+	for(int i=0; i<leaks; i++) {
+		int count;
+		int lineno;
+		int fnlen;
+		char* fn = NULL;
+		fread(&count, sizeof(int), 1, fp);
+		fread(&lineno, sizeof(int), 1, fp);
+		fread(&fnlen, sizeof(int), 1, fp);
+		fn = SafeMalloc(sizeof(char) * fnlen);
+		memset(fn, '\0', fnlen);
+		fread(fn, sizeof(char), fnlen, fp);
+		printf("<%d> :%d: %s\n", count, lineno, fn);
+		free(fn);
+		push_bp(count);
+	}
+	fclose(fp);
 }
