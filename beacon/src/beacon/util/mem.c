@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 static bc_Slot* gMXHead = NULL;
+static int gBreak = -1;
 static int gAll = 0;
 static bc_Slot* new_slot();
 static void location_slot(bc_Slot* self, const char* filename, int lineno);
@@ -29,7 +30,6 @@ void bc_InitMX() {
 	gMXHead = new_slot();
 	for(int i=0; i<1000; i++) {
 		push_slot();
-		gAll++;
 	}
 }
 
@@ -84,6 +84,10 @@ void* bc_MXBind(const void* block,size_t size,  const char* filename, int lineno
 	return get_aligned(slot);
 }
 
+void bc_MXBreak(int index) {
+	gBreak = index;
+}
+
 void bc_DestroyMX() {
 	int leaks = delete_slot(gMXHead);
 	if(leaks == 0) {
@@ -119,6 +123,11 @@ static bc_Slot* new_slot() {
 	ret->Lineno = -1;
 	ret->Size = 0;
 	ret->UserArea = NULL;
+	ret->Count = gAll;
+	if(gAll == gBreak) {
+		abort();
+	}
+	gAll++;
 	return ret;
 }
 static void location_slot(bc_Slot* self, const char* filename, int lineno) {
@@ -172,7 +181,7 @@ static int delete_slot(bc_Slot* self) {
 	if(self == NULL) { return 0; }
 	int sum = delete_slot(self->Next);
 	if(self->Size > 0) {
-		printf("<%d> :%d: %s\n", (int)self->Size, self->Lineno, self->FileName);
+		printf("<%d> :%d: %s\n", (int)self->Count, self->Lineno, self->FileName);
 		sum++;
 	}
 	free(self->UserArea);
