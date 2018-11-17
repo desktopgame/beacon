@@ -20,7 +20,8 @@ char * Strdup(const char * source) {
 	if (source == NULL) {
 		return NULL;
 	}
-	return bc_MXBind(source, strlen(source) * sizeof(char), __FILE__, __LINE__);
+	//\0を含める
+	return bc_MXBind(source, (strlen(source) + 1) * sizeof(char), __FILE__, __LINE__);
 }
 
 bool IsBlankText(const char * str) {

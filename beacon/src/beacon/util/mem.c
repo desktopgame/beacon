@@ -2,7 +2,9 @@
 #include <string.h>
 #include <assert.h>
 #include <stdint.h>
+#include "io.h"
 
+static const char* gDBF = "mdb.dat";
 static bc_Slot* gMXHead = NULL;
 static int gBreak = -1;
 static int gAll = 0;
@@ -13,7 +15,7 @@ static bc_Slot* push_slot();
 static bc_Slot* get_free_slot();
 static bc_Slot* get_more_slot(int stock);
 static bc_Slot* get_owner_slot(void* area);
-static int delete_slot(bc_Slot* self);
+static int delete_slot(FILE* fp, bc_Slot* self);
 static void* get_layout(bc_Slot* self, size_t offset);
 static void* get_aligned(bc_Slot* self);
 static void set_self(bc_Slot* self);
@@ -31,6 +33,30 @@ void bc_InitMX() {
 	for(int i=0; i<1000; i++) {
 		push_slot();
 	}
+	//すでに存在するなら監視
+	if(!ExistsFile(gDBF)) {
+		return;
+	}
+	FILE* fp = fopen(gDBF, "rb");
+	for(;;) {
+		int count;
+		int lineno;
+		int fnlen;
+		char* fn = NULL;
+		bool hasNext = false;
+		fread(&count, sizeof(int), 1, fp);
+		fread(&lineno, sizeof(int), 1, fp);
+		fread(&fnlen, sizeof(int), 1, fp);
+		fn = SafeMalloc(sizeof(char) * fnlen);
+		memset(fn, '\0', fnlen);
+		fread(fn, sizeof(char), fnlen, fp);
+		printf("<%d> :%d: %s\n", count, lineno, fn);
+		free(fn);
+		fread(&hasNext, sizeof(bool), 1, fp);
+		bc_MXBreak(count);
+		if(!hasNext) break;
+	}
+	fclose(fp);
 }
 
 void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
@@ -89,12 +115,18 @@ void bc_MXBreak(int index) {
 }
 
 void bc_DestroyMX() {
-	int leaks = delete_slot(gMXHead);
+	//すでに存在するなら削除
+	if(ExistsFile(gDBF)) {
+		bc_DeleteFile(gDBF);
+	}
+	FILE* fp = fopen(gDBF, "wb");
+	int leaks = delete_slot(fp, gMXHead);
 	if(leaks == 0) {
 		printf("not detected memory leaks\n");
 	} else {
 		printf("detected memory leaks: %d\n", leaks);
 	}
+	fclose(fp);
 	gMXHead = NULL;
 }
 
@@ -177,15 +209,26 @@ static bc_Slot* get_more_slot(int stock) {
 static bc_Slot* get_owner_slot(void* area) {
 	return get_self(area);
 }
-static int delete_slot(bc_Slot* self) {
+static int delete_slot(FILE* fp, bc_Slot* self) {
 	if(self == NULL) { return 0; }
-	int sum = delete_slot(self->Next);
-	if(self->Size > 0) {
-		printf("<%d> :%d: %s\n", (int)self->Count, self->Lineno, self->FileName);
-		sum++;
+	int sum = 0;
+	bc_Slot* iter = self;
+	while(iter != NULL) {
+		bc_Slot* temp = iter->Next;
+		if(iter->Size > 0) {
+			bool hasNext = temp != NULL;
+			int fnlen = strlen(iter->FileName) + 1;
+			fwrite(&iter->Count, sizeof(int), 1, fp);
+			fwrite(&iter->Lineno, sizeof(int), 1, fp);
+			fwrite(&fnlen, sizeof(int), 1, fp);
+			fwrite(iter->FileName, sizeof(char), fnlen, fp);
+			fwrite(&hasNext, sizeof(bool), 1, fp);
+			sum++;
+		}
+		free(iter->UserArea);
+		free(iter);
+		iter = temp;
 	}
-	free(self->UserArea);
-	free(self);
 	return sum;
 }
 
