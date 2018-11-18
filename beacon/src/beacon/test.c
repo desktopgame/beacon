@@ -66,7 +66,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		filename = e->FileName;
 		//標準出力を入れ替えて実行
 		fprintf(stdout, "[%s]\n", e->FileName);
-		bool result = EvalFile(e->FileName);
+		bool result = bc_EvalFile(e->FileName);
 		//期待していた結果でないなら終了
 		if (result != require) {
 			fail = true;
@@ -101,7 +101,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		filename = e->FileName;
 		//標準出力を入れ替えて実行
 		fprintf(STDOUT, "[%s]\n", e->FileName);
-		bool result = EvalFile(e->FileName);
+		bool result = bc_EvalFile(e->FileName);
 		rewind(out);
 		while(!feof(out)) {
 			char* line = bc_FreadLine(out);

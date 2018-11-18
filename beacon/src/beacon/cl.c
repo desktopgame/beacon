@@ -18,27 +18,27 @@ int TestCmd(int argc, char* argv[]) {
 }
 
 int DumpASTCmd(const char* filename) {
-	int ret = EvalAST(filename);
+	int ret = bc_EvalAST(filename);
 	return ret;
 }
 
 int DumpILCmd(const char* filename){
 	OpenScriptContext();
-	int ret = EvalIL(filename);
+	int ret = bc_EvalIL(filename);
 	CloseScriptContext();
 	return ret;
 }
 
 int DumpOpCodeCmd(const char* filename) {
 	OpenScriptContext();
-	int ret = EvalOp(filename);
+	int ret = bc_EvalOp(filename);
 	CloseScriptContext();
 	return ret;
 }
 
 int RunCmd(const char* filename) {
 	OpenScriptContext();
-	int ret = EvalFile(filename);
+	int ret = bc_EvalFile(filename);
 	CloseScriptContext();
 	return ret;
 }
