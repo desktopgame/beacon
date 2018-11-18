@@ -29,9 +29,9 @@
 static void delete_parameter(VectorItem item);
 static void delete_type_parameter(VectorItem item);
 static void method_count(ILStatement* s, int* yeild_ret, int* ret);
-static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cll,int op_len);
-static Method* create_has_next(Method* self, Type* ty,ClassLoader* cll, Vector* stmt_list, int* out_op_len);
-static Method* create_next(Method* self, Type* ty,ClassLoader* cll, GenericType* a, Vector* stmt_list, int* out_op_len);
+static Constructor* create_delegate_ctor(Method* self, Type* ty, bc_ClassLoader* cll,int op_len);
+static Method* create_has_next(Method* self, Type* ty,bc_ClassLoader* cll, Vector* stmt_list, int* out_op_len);
+static Method* create_next(Method* self, Type* ty,bc_ClassLoader* cll, GenericType* a, Vector* stmt_list, int* out_op_len);
 static Vector* method_vm_args(Method* self, Frame* fr, Frame* a);
 static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a);
 
@@ -227,7 +227,7 @@ bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error) {
 	return yield_ret > 0 ? true : false;
 }
 
-Type* CreateIteratorTypeFromMethod(Method* self,  ClassLoader* cll, Vector* stmt_list) {
+Type* CreateIteratorTypeFromMethod(Method* self,  bc_ClassLoader* cll, Vector* stmt_list) {
 	CallContext* lCctx = NewCallContext(CALL_CTOR_T);
 	CallFrame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->Kind.Resolve.GType = self->ReturnGType;
@@ -333,7 +333,7 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 	}
 }
 
-static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cll,int op_len) {
+static Constructor* create_delegate_ctor(Method* self, Type* ty, bc_ClassLoader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
 	Constructor* iterCons = NewConstructor();
 	Enviroment* envIterCons = NewEnviroment();
@@ -376,7 +376,7 @@ static Constructor* create_delegate_ctor(Method* self, Type* ty, ClassLoader* cl
 	return iterCons;
 }
 
-static Method* create_has_next(Method* self, Type* ty, ClassLoader* cll, Vector* stmt_list, int* out_op_len) {
+static Method* create_has_next(Method* self, Type* ty, bc_ClassLoader* cll, Vector* stmt_list, int* out_op_len) {
 	Method* mt = NewMethod(InternString("moveNext"));
 	mt->ReturnGType = GENERIC_BOOL;
 	mt->Modifier = MODIFIER_NONE_T;
@@ -427,7 +427,7 @@ static Method* create_has_next(Method* self, Type* ty, ClassLoader* cll, Vector*
 	return mt;
 }
 
-static Method* create_next(Method* self, Type* ty, ClassLoader* cll,GenericType* a, Vector* stmt_list, int* out_op_len) {
+static Method* create_next(Method* self, Type* ty, bc_ClassLoader* cll,GenericType* a, Vector* stmt_list, int* out_op_len) {
 	Method* mt = NewMethod(InternString("current"));
 	mt->ReturnGType = a;
 	mt->Modifier = MODIFIER_NONE_T;

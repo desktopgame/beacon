@@ -12,19 +12,19 @@
 #include <assert.h>
 
 //proto
-static void CLBC_import_internal(ClassLoader* self, Vector* ilimports, int i);
+static void CLBC_import_internal(bc_ClassLoader* self, Vector* ilimports, int i);
 
 
-static void CLBC_new_load_internal(ClassLoader * self, char * full_path);
+static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path);
 
-static void CLBC_import_already(ClassLoader* self, ClassLoader* cll);
+static void CLBC_import_already(bc_ClassLoader* self, bc_ClassLoader* cll);
 //static ClassLoader* CLBC_import_new(ClassLoader* self, char* fullPath);
 
-void CLBC_import(ClassLoader* self, Vector* ilimports) {
-	CL_ERROR(self);
+void CLBC_import(bc_ClassLoader* self, Vector* ilimports) {
+	bc_CL_ERROR(self);
 	for (int i = self->ImportManager->Items->Length; i < ilimports->Length; i++) {
 		CLBC_import_internal(self, ilimports, i);
-		CL_ERROR(self);
+		bc_CL_ERROR(self);
 	}
 	//Javaがjava.langをインポートせずに使用できるのと同じように、
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
@@ -39,18 +39,18 @@ void CLBC_import(ClassLoader* self, Vector* ilimports) {
 	}
 }
 
-void CLBC_new_load(ClassLoader * self, char * fullPath) {
-	CL_ERROR(self);
+void CLBC_new_load(bc_ClassLoader * self, char * fullPath) {
+	bc_CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	ctx->Heap->AcceptBlocking++;
 	CLBC_new_load_internal(self, fullPath);
 	ctx->Heap->AcceptBlocking--;
 }
 
-ClassLoader* CLBC_import_new(ClassLoader* self, char* full_path) {
-	CL_ERROR_RET(self, self);
+bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {
+	bc_CL_ERROR_RET(self, self);
 	ScriptContext* ctx = GetCurrentScriptContext();
-	ClassLoader* cll = NewClassLoader(full_path, CONTENT_LIB_T);
+	bc_ClassLoader* cll = bc_NewClassLoader(full_path, CONTENT_LIB_T);
 	cll->Parent = self;
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
@@ -59,8 +59,8 @@ ClassLoader* CLBC_import_new(ClassLoader* self, char* full_path) {
 }
 
 //private
-static void CLBC_import_internal(ClassLoader* self, Vector* ilimports, int i) {
-	CL_ERROR(self);
+static void CLBC_import_internal(bc_ClassLoader* self, Vector* ilimports, int i) {
+	bc_CL_ERROR(self);
 	if (i >= ilimports->Length ||
 	    IsLoadedImportManager(self->ImportManager, i)) {
 		return;
@@ -74,12 +74,12 @@ static void CLBC_import_internal(ClassLoader* self, Vector* ilimports, int i) {
 	MEM_FREE(fullPath);
 }
 
-static void CLBC_new_load_internal(ClassLoader * self, char * full_path) {
-	CL_ERROR(self);
+static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path) {
+	bc_CL_ERROR(self);
 	ScriptContext* ctx = GetCurrentScriptContext();
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
-	ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
+	bc_ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
 	if (cll != NULL) {
 		CLBC_import_already(self, cll);
 		return;
@@ -95,11 +95,11 @@ static void CLBC_new_load_internal(ClassLoader * self, char * full_path) {
 	if (bc_GetLastPanic()) {
 		return;
 	}
-	LoadClassLoader(cll);
+	bc_LoadClassLoader(cll);
 }
 
-static void CLBC_import_already(ClassLoader* self, ClassLoader* cll) {
-	CL_ERROR(self);
+static void CLBC_import_already(bc_ClassLoader* self, bc_ClassLoader* cll) {
+	bc_CL_ERROR(self);
 	//self -> cll への参照を与える
 	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;

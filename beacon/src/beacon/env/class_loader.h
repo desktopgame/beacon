@@ -23,7 +23,7 @@ struct Enviroment;
 /**
  * クラスローダーを表す構造体です.
  */
-typedef struct ClassLoader {
+typedef struct bc_ClassLoader {
 	bc_AST* SourceCode;
 	ILToplevel* ILCode;
 
@@ -33,17 +33,17 @@ typedef struct ClassLoader {
 	LinkType Link;
 	Vector* TypeCaches;
 
-	struct ClassLoader* Parent;
+	struct bc_ClassLoader* Parent;
 	int Level;
 	char* FileName;
 //	bool error;
-} ClassLoader;
+} bc_ClassLoader;
 
 /**
  * 引数のクラスローダの error が true なら return します.
  * @param self
  */
-#define CL_ERROR(self) if(bc_GetLastPanic()) return
+#define bc_CL_ERROR(self) if(bc_GetLastPanic()) return
 
 /**
  * 引数のクラスローダの error が true なら a を return します.
@@ -51,7 +51,7 @@ typedef struct ClassLoader {
  * @param a
  * @return
  */
-#define CL_ERROR_RET(self, a) if(bc_GetLastPanic()) return (a)
+#define bc_CL_ERROR_RET(self, a) if(bc_GetLastPanic()) return (a)
 
 /**
  * クラスローダーを作成します.
@@ -59,14 +59,14 @@ typedef struct ClassLoader {
  * @param type
  * @return
  */
-ClassLoader* NewClassLoader(const char* filename, ContentType type);
+bc_ClassLoader* bc_NewClassLoader(const char* filename, ContentType type);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、
  * 型の解決などその他必要な情報をまとめあげます。
  * @param self
  */
-void LoadClassLoader(ClassLoader* self);
+void bc_LoadClassLoader(bc_ClassLoader* self);
 
 /**
  * ASTの解析をスキップして代わりに引数のASTを解析します.
@@ -75,7 +75,7 @@ void LoadClassLoader(ClassLoader* self);
  * @param self
  * @param a
  */
-void LoadPassASTClassLoader(ClassLoader* self, bc_AST* a);
+void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a);
 
 /**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
@@ -83,11 +83,11 @@ void LoadPassASTClassLoader(ClassLoader* self, bc_AST* a);
  * @param self
  * @param relativePath
  */
-void SpecialLoadClassLoader(ClassLoader* self, char* relativePath);
+void bc_SpecialLoadClassLoader(bc_ClassLoader* self, char* relativePath);
 
 /**
  * このクラスローダーを開放します.
  * @param self
  */
-void DeleteClassLoader(ClassLoader* self);
+void bc_DeleteClassLoader(bc_ClassLoader* self);
 #endif // !SIGNAL_PARSER_CLASS_LOADER_H

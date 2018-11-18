@@ -13,7 +13,7 @@
 #include "../il/il_type_interface.h"
 #include "type_interface.h"
 #include "namespace.h"
-struct ClassLoader;
+struct bc_ClassLoader;
 //#include "class_loader.h"
 
 /**
@@ -42,7 +42,7 @@ typedef enum TypeCacheKind {
  * つまり宣言ロード時に予約された実装の読み込みが必要な情報を表すキャッシュです。
  */
 typedef struct TypeCache {
-	struct ClassLoader* Context;
+	struct bc_ClassLoader* Context;
 	ILType* ILType;
 	Type* Type;
 	Namespace* Scope;
@@ -54,7 +54,7 @@ TypeCache* NewTypeCache();
 
 TypeCache * InitTypeCache(
 	TypeCache* self,
-	struct ClassLoader* context,
+	struct bc_ClassLoader* context,
 	ILType* iltype,
 	Type* tp,
 	Namespace* scope,

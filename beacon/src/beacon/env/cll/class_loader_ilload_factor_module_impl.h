@@ -10,7 +10,7 @@
 #ifndef BEACON_ENV_CLL_CLASS_LOADER_ILLOAD_FACTOR_MODULE_IMPL_H
 #define BEACON_ENV_CLL_CLASS_LOADER_ILLOAD_FACTOR_MODULE_IMPL_H
 
-struct ClassLoader;
+struct bc_ClassLoader;
 struct bc_AST;
 struct ILFactor;
 /**
@@ -19,5 +19,5 @@ struct ILFactor;
  * @param source
  * @return
  */
-struct ILFactor* CLILFactor(struct ClassLoader* self, struct bc_AST* source);
+struct ILFactor* CLILFactor(struct bc_ClassLoader* self, struct bc_AST* source);
 #endif

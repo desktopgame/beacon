@@ -17,7 +17,7 @@
 #include "../util/numeric_map.h"
 struct Heap;
 struct Object;
-struct ClassLoader;
+struct bc_ClassLoader;
 struct Field;
 
 /**
@@ -35,7 +35,7 @@ typedef struct ScriptContext {
 	TreeMap* ClassLoaderMap;
 	Vector* ThreadList;
 	Vector* IncludeList;
-	struct ClassLoader* BootstrapClassLoader;
+	struct bc_ClassLoader* BootstrapClassLoader;
 	//通し番号でクラスを参照するためのベクター
 	Vector* TypeList;
 	Vector* AllGenericList;

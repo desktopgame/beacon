@@ -5,24 +5,24 @@
 #include "class_loader_ilload_type_module_impl.h"
 #include <stdio.h>
 //proto
-static ILFactor* CLILFactorImpl(ClassLoader* self, bc_AST* source);
-static ILBool* CLIL_true(ClassLoader* self, bc_AST* source);
-static ILBool* CLIL_false(ClassLoader* self, bc_AST* source);
-static ILUnaryOp* CLIL_unary(ClassLoader* self, bc_AST* source, bc_OperatorType type);
-static ILBinaryOp* CLIL_binary(ClassLoader* self, bc_AST* source, bc_OperatorType type);
-static ILExplicitUnaryOp* CLIL_explicit_unary(ClassLoader* self, bc_AST* source, bc_OperatorType type);
-static ILExplicitBinaryOp* CLIL_explicit_binary(ClassLoader* self, bc_AST* source, bc_OperatorType type);
-static ILAssignOp* CLIL_assign(ClassLoader* self, bc_AST* source);
-static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, bc_AST* source, bc_OperatorType type);
-static ILVariable* CLIL_variable(ClassLoader* self, bc_AST* source);
-static ILNewInstance* CLIL_new_instance(ClassLoader* self, bc_AST* source);
-static ILAs* CLIL_as(ClassLoader* self, bc_AST* source);
-static ILCallOp* CLIL_call_op(ClassLoader* self, bc_AST* source);
-static ILMemberOp* CLIL_member_op(ClassLoader* self, bc_AST* source);
-static ILInstanceOf* CLIL_instanceof(ClassLoader* self, bc_AST* source);
-static ILSubscript* CLIL_subscript(ClassLoader* self, bc_AST* source);
+static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source);
+static ILBool* CLIL_true(bc_ClassLoader* self, bc_AST* source);
+static ILBool* CLIL_false(bc_ClassLoader* self, bc_AST* source);
+static ILUnaryOp* CLIL_unary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type);
+static ILBinaryOp* CLIL_binary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type);
+static ILExplicitUnaryOp* CLIL_explicit_unary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type);
+static ILExplicitBinaryOp* CLIL_explicit_binary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type);
+static ILAssignOp* CLIL_assign(bc_ClassLoader* self, bc_AST* source);
+static ILAssignOp* CLIL_assign_arithmetic(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type);
+static ILVariable* CLIL_variable(bc_ClassLoader* self, bc_AST* source);
+static ILNewInstance* CLIL_new_instance(bc_ClassLoader* self, bc_AST* source);
+static ILAs* CLIL_as(bc_ClassLoader* self, bc_AST* source);
+static ILCallOp* CLIL_call_op(bc_ClassLoader* self, bc_AST* source);
+static ILMemberOp* CLIL_member_op(bc_ClassLoader* self, bc_AST* source);
+static ILInstanceOf* CLIL_instanceof(bc_ClassLoader* self, bc_AST* source);
+static ILSubscript* CLIL_subscript(bc_ClassLoader* self, bc_AST* source);
 
-ILFactor* CLILFactor(ClassLoader* self, bc_AST* source) {
+ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source) {
 	ILFactor* ret = CLILFactorImpl(self, source);
 	assert(source->Lineno >= 0);
 	ret->Lineno = source->Lineno;
@@ -31,7 +31,7 @@ ILFactor* CLILFactor(ClassLoader* self, bc_AST* source) {
 
 
 //private
-static ILFactor* CLILFactorImpl(ClassLoader* self, bc_AST* source) {
+static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
 	if (source->Tag == AST_INT_T) {
 		return WrapILInt(NewILInt(source->Attr.IntValue));
 	} else if (source->Tag == AST_DOUBLE_T) {
@@ -154,22 +154,22 @@ static ILFactor* CLILFactorImpl(ClassLoader* self, bc_AST* source) {
 	return fact;
 }
 
-static ILBool * CLIL_true(ClassLoader * self, bc_AST* source) {
+static ILBool * CLIL_true(bc_ClassLoader * self, bc_AST* source) {
 	return NewILBool(true);
 }
 
-static ILBool * CLIL_false(ClassLoader * self, bc_AST* source) {
+static ILBool * CLIL_false(bc_ClassLoader * self, bc_AST* source) {
 	return NewILBool(false);
 }
 
-static ILUnaryOp* CLIL_unary(ClassLoader* self, bc_AST* source, bc_OperatorType type) {
+static ILUnaryOp* CLIL_unary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type) {
 	ILUnaryOp* ret = NewILUnaryOp(type);
 	bc_AST* a = bc_FirstAST(source);
 	ret->Arg = CLILFactor(self, a);
 	return ret;
 }
 
-static ILBinaryOp* CLIL_binary(ClassLoader* self, bc_AST* source, bc_OperatorType type) {
+static ILBinaryOp* CLIL_binary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type) {
 	ILBinaryOp* ret = NewILBinaryOp(type);
 	bc_AST* aleft = bc_FirstAST(source);
 	bc_AST* aright = bc_SecondAST(source);
@@ -178,20 +178,20 @@ static ILBinaryOp* CLIL_binary(ClassLoader* self, bc_AST* source, bc_OperatorTyp
 	return ret;
 }
 
-static ILExplicitUnaryOp* CLIL_explicit_unary(ClassLoader* self, bc_AST* source, bc_OperatorType type) {
+static ILExplicitUnaryOp* CLIL_explicit_unary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type) {
 	ILExplicitUnaryOp* ret = NewILExplicitUnaryOp(type);
 	ret->Receiver = CLILFactor(self, bc_FirstAST(source));
 	return ret;
 }
 
-static ILExplicitBinaryOp* CLIL_explicit_binary(ClassLoader* self, bc_AST* source, bc_OperatorType type) {
+static ILExplicitBinaryOp* CLIL_explicit_binary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type) {
 	ILExplicitBinaryOp* ret = NewILExplicitBinaryOp(type);
 	ret->Receiver = CLILFactor(self, bc_FirstAST(source));
 	ret->Arg = CLILFactor(self, bc_SecondAST(source));
 	return ret;
 }
 
-static ILAssignOp* CLIL_assign(ClassLoader* self, bc_AST* source) {
+static ILAssignOp* CLIL_assign(bc_ClassLoader* self, bc_AST* source) {
 	ILAssignOp* ret = NewILAssignOp();
 	bc_AST* aleft = bc_FirstAST(source);
 	bc_AST* aright = bc_SecondAST(source);
@@ -200,7 +200,7 @@ static ILAssignOp* CLIL_assign(ClassLoader* self, bc_AST* source) {
 	return ret;
 }
 
-static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, bc_AST* source, bc_OperatorType type) {
+static ILAssignOp* CLIL_assign_arithmetic(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type) {
 	//a += b
 	ILAssignOp* ret = NewILAssignOp();
 	ILBinaryOp* bin = NewILBinaryOp(type);
@@ -214,7 +214,7 @@ static ILAssignOp* CLIL_assign_arithmetic(ClassLoader* self, bc_AST* source, bc_
 	return ret;
 }
 
-static ILVariable* CLIL_variable(ClassLoader* self, bc_AST* source) {
+static ILVariable* CLIL_variable(bc_ClassLoader* self, bc_AST* source) {
 	bc_AST* afqcn = bc_FirstAST(source);
 	bc_AST* atype_args = bc_SecondAST(source);
 
@@ -224,7 +224,7 @@ static ILVariable* CLIL_variable(ClassLoader* self, bc_AST* source) {
 	return ilvar;
 }
 
-static ILNewInstance* CLIL_new_instance(ClassLoader* self, bc_AST* source) {
+static ILNewInstance* CLIL_new_instance(bc_ClassLoader* self, bc_AST* source) {
 	assert(source->Tag == AST_NEW_INSTANCE_T);
 	bc_AST* afqcn = bc_FirstAST(source);
 	bc_AST* atype_args = bc_SecondAST(source);
@@ -236,14 +236,14 @@ static ILNewInstance* CLIL_new_instance(ClassLoader* self, bc_AST* source) {
 	return ret;
 }
 
-static ILAs* CLIL_as(ClassLoader* self, bc_AST* source) {
+static ILAs* CLIL_as(bc_ClassLoader* self, bc_AST* source) {
 	ILAs* ret = NewILAs();
 	ret->Source = CLILFactor(self, bc_FirstAST(source));
 	CLILGenericCache(bc_SecondAST(source), ret->GCache);
 	return ret;
 }
 
-static ILCallOp* CLIL_call_op(ClassLoader* self, bc_AST* source) {
+static ILCallOp* CLIL_call_op(bc_ClassLoader* self, bc_AST* source) {
 	assert(source->Tag == AST_OP_CALL_T);
 	ILCallOp* ret = NewILCallOp();
 	bc_AST* afact = bc_FirstAST(source);
@@ -253,7 +253,7 @@ static ILCallOp* CLIL_call_op(ClassLoader* self, bc_AST* source) {
 	return ret;
 }
 
-static ILMemberOp* CLIL_member_op(ClassLoader* self, bc_AST* source) {
+static ILMemberOp* CLIL_member_op(bc_ClassLoader* self, bc_AST* source) {
 	assert(source->Tag == AST_FIELD_ACCESS_T);
 	bc_AST* afact = bc_FirstAST(source);
 	bc_AST* aname = bc_SecondAST(source);
@@ -264,7 +264,7 @@ static ILMemberOp* CLIL_member_op(ClassLoader* self, bc_AST* source) {
 	return ret;
 }
 
-static ILInstanceOf* CLIL_instanceof(ClassLoader* self, bc_AST* source) {
+static ILInstanceOf* CLIL_instanceof(bc_ClassLoader* self, bc_AST* source) {
 	assert(source->Tag == AST_INSTANCEOF_T);
 	bc_AST* afact = bc_FirstAST(source);
 	bc_AST* atype = bc_SecondAST(source);
@@ -274,7 +274,7 @@ static ILInstanceOf* CLIL_instanceof(ClassLoader* self, bc_AST* source) {
 	return ret;
 }
 
-static ILSubscript* CLIL_subscript(ClassLoader* self, bc_AST* source) {
+static ILSubscript* CLIL_subscript(bc_ClassLoader* self, bc_AST* source) {
 	ILSubscript* ret = NewILSubscript();
 	bc_AST* afact = bc_FirstAST(source);
 	bc_AST* apos = bc_SecondAST(source);

@@ -19,9 +19,9 @@
 static void CLILFQCNCache_impl(bc_AST* afqcn, FQCNCache* fqcn, int level);
 static void CLILGenericCache_impl(bc_AST* afqcn, GenericCache* dest);
 static void CLILGenericCache_inner(bc_AST* atype_args, GenericCache* dest);
-static void CLILTypeParameter_rule(struct ClassLoader* self, struct bc_AST* asource, Vector* dest);
+static void CLILTypeParameter_rule(struct bc_ClassLoader* self, struct bc_AST* asource, Vector* dest);
 static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest);
-static void CLILArgumentListImpl(ClassLoader* self, Vector* list, bc_AST* asource);
+static void CLILArgumentListImpl(bc_ClassLoader* self, Vector* list, bc_AST* asource);
 
 void CLILFQCNCache(bc_AST* afqcn, FQCNCache* fqcn) {
 	CLILFQCNCache_impl(afqcn, fqcn, 0);
@@ -41,7 +41,7 @@ void CLILGenericCache(bc_AST* afqcn, GenericCache* dest) {
 	}
 }
 
-void CLILTypenameList(ClassLoader * self, Vector * dst, bc_AST* atypename_list) {
+void CLILTypenameList(bc_ClassLoader * self, Vector * dst, bc_AST* atypename_list) {
 	if (bc_IsBlankAST(atypename_list)) {
 		return;
 	}
@@ -58,7 +58,7 @@ void CLILTypenameList(ClassLoader * self, Vector * dst, bc_AST* atypename_list) 
 }
 
 
-void CLILTypeParameter(ClassLoader* self, bc_AST* asource, Vector* dest) {
+void CLILTypeParameter(bc_ClassLoader* self, bc_AST* asource, Vector* dest) {
 	if (bc_IsBlankAST(asource)) {
 		return;
 	}
@@ -81,7 +81,7 @@ void CLILTypeParameter(ClassLoader* self, bc_AST* asource, Vector* dest) {
 	assert(bc_IsBlankAST(arule_list));
 }
 
-void CLILTypeArgument(ClassLoader* self, bc_AST* atype_args, Vector* dest) {
+void CLILTypeArgument(bc_ClassLoader* self, bc_AST* atype_args, Vector* dest) {
 	if(bc_IsBlankAST(atype_args)) {
 		return;
 	}
@@ -97,7 +97,7 @@ void CLILTypeArgument(ClassLoader* self, bc_AST* atype_args, Vector* dest) {
 	} else assert(false);
 }
 
-void CLILParameterList(ClassLoader* self, Vector* list, bc_AST* asource) {
+void CLILParameterList(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_PARAMETER_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
 			CLILParameterList(self, list, bc_AtAST(asource, i));
@@ -111,7 +111,7 @@ void CLILParameterList(ClassLoader* self, Vector* list, bc_AST* asource) {
 	}
 }
 
-void CLILArgumentList(ClassLoader* self, Vector* list, bc_AST* asource) {
+void CLILArgumentList(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
 	CLILArgumentListImpl(self, list, asource);
 }
 //private
@@ -176,7 +176,7 @@ static void CLILGenericCache_inner(bc_AST* atype_args, GenericCache* dest) {
 	}
 }
 
-static void CLILTypeParameter_rule(ClassLoader* self, bc_AST* asource, Vector* dest) {
+static void CLILTypeParameter_rule(bc_ClassLoader* self, bc_AST* asource, Vector* dest) {
 	assert(false);
 	/*
 	if (source->Tag == AST_TYPE_PARAMETER_LIST_T) {
@@ -205,7 +205,7 @@ static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest) {
 	}
 }
 
-static void CLILArgumentListImpl(ClassLoader* self, Vector* list, bc_AST* asource) {
+static void CLILArgumentListImpl(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_ARGUMENT_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
 			CLILArgumentListImpl(self, list, bc_AtAST(asource, i));

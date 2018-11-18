@@ -13,7 +13,7 @@
 #include <string.h>
 
 //proto
-static bool eval_top_from_cll(ClassLoader* cll, bc_AST* aOpt);
+static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt);
 
 
 bool bc_EvalAST(const char* filename) {
@@ -58,18 +58,18 @@ bool bc_EvalIL(const char* filename) {
 }
 
 bool bc_EvalOp(const char* filename) {
-	ClassLoader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
-	LoadClassLoader(cl);
+	bc_ClassLoader* cl = bc_NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	bc_LoadClassLoader(cl);
 
 	if(!bc_GetLastPanic()) {
 		DumpEnviromentOp(cl->Env, 0);
 	}
-	DeleteClassLoader(cl);
+	bc_DeleteClassLoader(cl);
 	return true;
 }
 
 bool bc_EvalFile(const char * filename) {
-	ClassLoader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	bc_ClassLoader* cll = bc_NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	return eval_top_from_cll(cll, NULL);
 }
 
@@ -80,19 +80,19 @@ bool bc_EvalString(const char* source) {
 		DestroyParser(p);
 		return false;
 	}
-	ClassLoader* cll = NewClassLoader("", CONTENT_ENTRY_POINT_T);
+	bc_ClassLoader* cll = bc_NewClassLoader("", CONTENT_ENTRY_POINT_T);
 	bc_AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	return eval_top_from_cll(cll, a);
 }
 
 //private
-static bool eval_top_from_cll(ClassLoader* cll, bc_AST* aOpt) {
+static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if(aOpt == NULL) {
-		LoadClassLoader(cll);
+		bc_LoadClassLoader(cll);
 	} else {
-		LoadPassASTClassLoader(cll, aOpt);
+		bc_LoadPassASTClassLoader(cll, aOpt);
 	}
 	//実行
 	Frame* fr = NewFrame();
@@ -115,6 +115,6 @@ static bool eval_top_from_cll(ClassLoader* cll, bc_AST* aOpt) {
 	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
 
 	bool ret = bc_GetLastPanic();
-	DeleteClassLoader(cll);
+	bc_DeleteClassLoader(cll);
 	return ret;
 }

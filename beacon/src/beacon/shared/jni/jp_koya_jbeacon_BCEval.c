@@ -20,10 +20,10 @@
 #include "../../error.h"
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
-static Frame* bc_eval_allocate(ClassLoader* cll);
+static Frame* bc_eval_allocate(bc_ClassLoader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a);
 static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target);
-static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr);
+static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, Frame* fr);
 static void printClassInfo(JNIEnv* env, jobject Object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
 static jchar jobject2jchar(JNIEnv* env, jobject obj);
@@ -61,10 +61,10 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		bc_DeleteAST(a);
 		return NULL;
 	}
-	ClassLoader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
-	LoadPassASTClassLoader(cll, a);
+	bc_ClassLoader* cll = bc_NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
+	bc_LoadPassASTClassLoader(cll, a);
 	if(bc_GetLastPanic()) {
-		DeleteClassLoader(cll);
+		bc_DeleteClassLoader(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
 		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_GetPanicMessage()));
 		return NULL;
@@ -93,7 +93,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	return symbol_table_obj;
 }
 
-static Frame* bc_eval_allocate(ClassLoader* cll) {
+static Frame* bc_eval_allocate(bc_ClassLoader* cll) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	Frame* fr = NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
@@ -274,7 +274,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	}
 }
 
-static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr) {
+static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, Frame* fr) {
 	if(bc_GetLastPanic()) {
 		Buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
@@ -290,7 +290,7 @@ static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr) {
 	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
 
 	bc_GetLastPanic();
-	DeleteClassLoader(cll);
+	bc_DeleteClassLoader(cll);
 }
 
 //https://stackoverflow.com/questions/12719766/can-i-know-the-name-of-the-class-that-calls-a-jni-c-method

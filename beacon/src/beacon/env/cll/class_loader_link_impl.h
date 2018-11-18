@@ -16,5 +16,5 @@
  * @param self
  * @param type
  */
-void LinkClassLoader(ClassLoader* self, LinkType type);
+void LinkClassLoader(bc_ClassLoader* self, LinkType type);
 #endif

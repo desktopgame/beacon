@@ -17,7 +17,7 @@
 #include <stdbool.h>
 struct Class;
 struct Object;
-struct ClassLoader;
+struct bc_ClassLoader;
 struct FQCNCache;
 /**
  * プログラムの実行環境です.
@@ -26,7 +26,7 @@ struct FQCNCache;
  * 不変なものをここでは Enviroment と呼称します。
  */
 typedef struct Enviroment {
-	struct ClassLoader* ContextRef;
+	struct bc_ClassLoader* ContextRef;
 	OpcodeBuf* Bytecode;
 	SymbolTable* Symboles;
 	Vector* ConstantPool;

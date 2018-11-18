@@ -18,11 +18,11 @@
  * BCは静的に型付けされたクラス階層をそのまま表現します。
  * @param self
  */
-void BCLoadClassLoader(ClassLoader* self);
+void BCLoadClassLoader(bc_ClassLoader* self);
 
 /**
  * beacon/langを仮読み込みするための関数.
  * @param self
  */
-void SpecialBCLoadClassLoader(ClassLoader* self);
+void SpecialBCLoadClassLoader(bc_ClassLoader* self);
 #endif

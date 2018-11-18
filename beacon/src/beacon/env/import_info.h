@@ -11,13 +11,13 @@
 #ifndef BEACON_ENV_IMPORT_INFO_H
 #define BEACON_ENV_IMPORT_INFO_H
 #include <stdbool.h>
-struct ClassLoader;
+struct bc_ClassLoader;
 
 /**
  * インポート先のクラスローダーを格納します。
  */
 typedef struct ImportInfo {
-	struct ClassLoader* Context;
+	struct bc_ClassLoader* Context;
 	bool IsConsume;
 } ImportInfo;
 

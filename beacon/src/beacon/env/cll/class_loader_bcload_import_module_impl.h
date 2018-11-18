@@ -16,13 +16,13 @@
  * @param self
  * @param ilimports
  */
-void CLBC_import(ClassLoader* self, Vector* ilimports);
+void CLBC_import(bc_ClassLoader* self, Vector* ilimports);
 /**
  * selfを親として fullPath のファイルを読み込みます.
  * @param self
  * @param fullPath
  */
-void CLBC_new_load(ClassLoader* self, char* fullPath);
+void CLBC_new_load(bc_ClassLoader* self, char* fullPath);
 
 /**
  * fullPathをロードするためのローダを作成して返します.
@@ -30,5 +30,5 @@ void CLBC_new_load(ClassLoader* self, char* fullPath);
  * @param fullPath
  * @return
  */
-ClassLoader* CLBC_import_new(ClassLoader* self, char* fullPath);
+bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* fullPath);
 #endif

@@ -34,21 +34,21 @@
  * @param self
  * @param source
  */
-static void class_loader_ilload_function(ClassLoader* self, bc_AST* asource);
+static void class_loader_ilload_function(bc_ClassLoader* self, bc_AST* asource);
 
 /**
  * インポートの一覧を IL に変換します.
  * @param self
  * @param source
  */
-static void class_loader_ilload_import_list(ClassLoader* self, bc_AST* asource);
+static void class_loader_ilload_import_list(bc_ClassLoader* self, bc_AST* asource);
 
 /**
  * インポート宣言を IL に変換します.
  * @param self
  * @param import_decl
  */
-static void class_loader_ilload_import(ClassLoader* self, bc_AST* aimport_decl);
+static void class_loader_ilload_import(bc_ClassLoader* self, bc_AST* aimport_decl);
 
 /**
  * 名前空間とその内側のエントリ全てを IL に変換します.
@@ -56,7 +56,7 @@ static void class_loader_ilload_import(ClassLoader* self, bc_AST* aimport_decl);
  * @param parent
  * @param Namespacedecl
  */
-static void class_loader_ilload_namespace(ClassLoader* self, Vector* parent, bc_AST* aNamespacedecl);
+static void class_loader_ilload_namespace(bc_ClassLoader* self, Vector* parent, bc_AST* aNamespacedecl);
 
 /**
  * 名前空間のパス(A.B.C)を解析します.
@@ -65,7 +65,7 @@ static void class_loader_ilload_namespace(ClassLoader* self, Vector* parent, bc_
  * @param Namespacepath
  * @param Namespacebody
  */
-static void class_loader_ilload_Namespacepath_recursive(ClassLoader* self, bc_AST* aNamespacepath, bc_AST* Namespacebody);
+static void class_loader_ilload_Namespacepath_recursive(bc_ClassLoader* self, bc_AST* aNamespacepath, bc_AST* Namespacebody);
 
 /**
  * 名前空間(またはそのリスト)を IL に変換します.
@@ -81,7 +81,7 @@ static ILNamespace* class_loader_ilload_ast_to_namespace(bc_AST* a);
  * @param parent
  * @param Namespacebody
  */
-static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* current, Vector* parent, bc_AST* aNamespacebody);
+static void class_loader_ilload_Namespacebody(bc_ClassLoader* self, ILNamespace* current, Vector* parent, bc_AST* aNamespacebody);
 
 /**
  * クラス宣言を IL に変換します.
@@ -89,11 +89,11 @@ static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* cu
  * @param current
  * @param class_decl
  */
-static void class_loader_ilload_abstract_class(ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl);
-static void class_loader_ilload_class(ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl);
-static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl);
-static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* current, bc_AST* ainterface_decl);
-static void class_loader_ilload_enum(ClassLoader* self, ILNamespace* current, bc_AST* aenum_decl);
+static void class_loader_ilload_abstract_class(bc_ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl);
+static void class_loader_ilload_class(bc_ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl);
+static ILClass* class_loader_ilload_classImpl(bc_ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl);
+static void class_loader_ilload_interface(bc_ClassLoader* self, ILNamespace* current, bc_AST* ainterface_decl);
+static void class_loader_ilload_enum(bc_ClassLoader* self, ILNamespace* current, bc_AST* aenum_decl);
 
 /**
  * 識別子を IL に変換します.
@@ -101,12 +101,12 @@ static void class_loader_ilload_enum(ClassLoader* self, ILNamespace* current, bc
  * @param list
  * @param source
  */
-static void class_loader_ilload_identifier_list(ClassLoader* self, Vector* list, bc_AST* asource);
+static void class_loader_ilload_identifier_list(bc_ClassLoader* self, Vector* list, bc_AST* asource);
 
 //static ILFactor* CLILFactorImpl(ClassLoader* self, AST* source);
 //static ILStatement* class_loader_ilload_bodyImpl(ClassLoader* self, AST* source);
 
-void ILLoadClassLoader(ClassLoader* self, bc_AST* source_code) {
+void ILLoadClassLoader(bc_ClassLoader* self, bc_AST* source_code) {
 	assert(self->ILCode == NULL);
 	self->ILCode = NewILToplevel();
 	for (int i = 0; i < source_code->Children->Length; i++) {
@@ -131,7 +131,7 @@ void ILLoadClassLoader(ClassLoader* self, bc_AST* source_code) {
 }
 
 //private
-static void class_loader_ilload_function(ClassLoader * self, bc_AST* asource) {
+static void class_loader_ilload_function(bc_ClassLoader * self, bc_AST* asource) {
 	assert(asource->Tag == AST_FUNCTION_DECL_T);
 	bc_AST* afunc_name = bc_AtAST(asource, 0);
 	bc_AST* atypeparams = bc_AtAST(asource, 1);
@@ -146,7 +146,7 @@ static void class_loader_ilload_function(ClassLoader * self, bc_AST* asource) {
 	PushVector(self->ILCode->FunctionList, ilfunc);
 }
 
-static void class_loader_ilload_import_list(ClassLoader* self, bc_AST* asource) {
+static void class_loader_ilload_import_list(bc_ClassLoader* self, bc_AST* asource) {
 	if(asource->Tag == AST_IMPORT_DECL_LIST_T) {
 		for(int i=0; i<asource->Children->Length; i++) {
 			class_loader_ilload_import_list(self, bc_AtAST(asource, i));
@@ -157,14 +157,14 @@ static void class_loader_ilload_import_list(ClassLoader* self, bc_AST* asource) 
 	}
 }
 
-static void class_loader_ilload_import(ClassLoader* self, bc_AST* aimport_decl) {
+static void class_loader_ilload_import(bc_ClassLoader* self, bc_AST* aimport_decl) {
 	assert(aimport_decl->Tag == AST_IMPORT_DECL_T);
 	bc_AST* apath = bc_FirstAST(aimport_decl);
 	ILImport* ret = NewILImport(apath->Attr.StringVValue);
 	PushVector(self->ILCode->ImportList, ret);
 }
 
-static void class_loader_ilload_namespace(ClassLoader* self, Vector* parent, bc_AST* aNamespacedecl) {
+static void class_loader_ilload_namespace(bc_ClassLoader* self, Vector* parent, bc_AST* aNamespacedecl) {
 	assert(aNamespacedecl->Tag == AST_NAMESPACE_DECL_T);
 	bc_AST* aNamespacepath = bc_FirstAST(aNamespacedecl);
 	bc_AST* aNamespacebody = bc_SecondAST(aNamespacedecl);
@@ -175,7 +175,7 @@ static void class_loader_ilload_namespace(ClassLoader* self, Vector* parent, bc_
 	class_loader_ilload_Namespacebody(self, iln, iln->NamespaceList, aNamespacebody);
 }
 
-static void class_loader_ilload_Namespacepath_recursive(ClassLoader* self, bc_AST* aNamespacepath, bc_AST* aNamespacebody) {
+static void class_loader_ilload_Namespacepath_recursive(bc_ClassLoader* self, bc_AST* aNamespacepath, bc_AST* aNamespacebody) {
 	assert(aNamespacepath->Tag == AST_NAMESPACE_PATH_T ||
 		   aNamespacepath->Tag == AST_NAMESPACE_PATH_LIST_T);
 	if (aNamespacepath->Tag == AST_NAMESPACE_PATH_T) {
@@ -204,7 +204,7 @@ static ILNamespace* class_loader_ilload_ast_to_namespace(bc_AST* a) {
 	return NULL;
 }
 
-static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* current, Vector* parent, bc_AST* aNamespacebody) {
+static void class_loader_ilload_Namespacebody(bc_ClassLoader* self, ILNamespace* current, Vector* parent, bc_AST* aNamespacebody) {
 	if (bc_IsBlankAST(aNamespacebody)) {
 		return;
 	}
@@ -233,19 +233,19 @@ static void class_loader_ilload_Namespacebody(ClassLoader* self, ILNamespace* cu
 	}
 }
 
-static void class_loader_ilload_abstract_class(ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl) {
+static void class_loader_ilload_abstract_class(bc_ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_ABSTRACT_CLASS_DECL_T);
 	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
 	ilc->IsAbstract = true;
 }
 
-static void class_loader_ilload_class(ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl) {
+static void class_loader_ilload_class(bc_ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_CLASS_DECL_T);
 	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
 	ilc->IsAbstract = false;
 }
 
-static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl) {
+static ILClass* class_loader_ilload_classImpl(bc_ClassLoader* self, ILNamespace* current, bc_AST* aclass_decl) {
 	bc_AST* atypename = bc_FirstAST(aclass_decl);
 	bc_AST* aextend_list = bc_SecondAST(aclass_decl);
 	bc_AST* amember_tree = bc_AtAST(aclass_decl, 2);
@@ -265,7 +265,7 @@ static ILClass* class_loader_ilload_classImpl(ClassLoader* self, ILNamespace* cu
 	return ilclassz;
 }
 
-static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* current, bc_AST* ainterface_decl) {
+static void class_loader_ilload_interface(bc_ClassLoader* self, ILNamespace* current, bc_AST* ainterface_decl) {
 	bc_AST* atypename = bc_FirstAST(ainterface_decl);
 	bc_AST* aextends_list = bc_SecondAST(ainterface_decl);
 	bc_AST* amember_tree = bc_AtAST(ainterface_decl, 2);
@@ -283,7 +283,7 @@ static void class_loader_ilload_interface(ClassLoader* self, ILNamespace* curren
 	PushVector(current->TypeList, iltype);
 }
 
-static void class_loader_ilload_enum(ClassLoader * self, ILNamespace * current, bc_AST* aenum_decl) {
+static void class_loader_ilload_enum(bc_ClassLoader * self, ILNamespace * current, bc_AST* aenum_decl) {
 	assert(aenum_decl->Tag == AST_ENUM_DECL_T);
 	bc_AST* aname_list = bc_FirstAST(aenum_decl);
 	ILEnum* ilenum = NewILEnum(aenum_decl->Attr.StringVValue);
@@ -291,7 +291,7 @@ static void class_loader_ilload_enum(ClassLoader * self, ILNamespace * current, 
 	PushVector(current->TypeList, WrapILEnum(ilenum));
 }
 
-static void class_loader_ilload_identifier_list(ClassLoader * self, Vector * list, bc_AST* asource) {
+static void class_loader_ilload_identifier_list(bc_ClassLoader * self, Vector * list, bc_AST* asource) {
 	if (asource->Tag == AST_IDENTIFIER_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
 			class_loader_ilload_identifier_list(self, list, bc_AtAST(asource, i));

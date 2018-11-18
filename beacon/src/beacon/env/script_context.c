@@ -80,25 +80,25 @@ void BootstrapScriptContext(ScriptContext* self) {
 	InitLocaleType();
 	InitTime();
 	//ブートストラップクラスローダー
-	self->BootstrapClassLoader = NewClassLoader("bootstrap", CONTENT_LIB_T);
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Object.bc");
+	self->BootstrapClassLoader = bc_NewClassLoader("bootstrap", CONTENT_LIB_T);
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Object.bc");
 
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Int.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Double.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Char.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Bool.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Null.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Void.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Int.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Double.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Char.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Bool.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Null.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Void.bc");
 
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Iterable.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Iterator.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Array.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/String.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Console.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Exception.bc");
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/StackTraceElement.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Iterable.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Iterator.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Array.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/String.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Console.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Exception.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/StackTraceElement.bc");
 
-	SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/World.bc");
+	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/World.bc");
 	//退避していたコンテキストを復帰
 	self->Heap->AcceptBlocking--;
 }
@@ -198,7 +198,7 @@ static void free_script_context(ScriptContext* self) {
 	//全ての例外フラグをクリア
 	Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
 	CatchVM(thv);
-	DeleteClassLoader(self->BootstrapClassLoader);
+	bc_DeleteClassLoader(self->BootstrapClassLoader);
 	if(self->Null != NULL) {
 		IgnoreHeap(self->Heap, self->Null);
 		self->Null->Paint = PAINT_ONEXIT_T;
@@ -229,8 +229,8 @@ static void free_script_context(ScriptContext* self) {
 }
 
 static void delete_class_loader(const char* name, TreeItem item) {
-	ClassLoader* e = (ClassLoader*)item;
-	DeleteClassLoader(e);
+	bc_ClassLoader* e = (bc_ClassLoader*)item;
+	bc_DeleteClassLoader(e);
 }
 
 static void unlink_namespace(NumericMapKey key, NumericMapItem item) {
