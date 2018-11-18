@@ -14,29 +14,29 @@
 /**
  * アクセスレベルを定義する列挙型.
  */
-typedef enum AccessLevel {
+typedef enum bc_AccessLevel {
 	ACCESS_PUBLIC_T = 0,
 	ACCESS_PROTECTED_T,
 	ACCESS_PRIVATE_T,
-} AccessLevel;
+} bc_AccessLevel;
 
 /**
  * アクセスレベルを出力します.
  * @param level
  */
-void PrintAccess(AccessLevel level);
+void bc_PrintAccess(bc_AccessLevel level);
 
 /**
  * @param self
  * @param other
  * @return selfがotherよりも堅牢なアクセスレベルならtrue
  */
-bool IsSecureAccess(AccessLevel self, AccessLevel other);
+bool bc_IsSecureAccess(bc_AccessLevel self, bc_AccessLevel other);
 
 /**
  * @param self
  * @param other
  * @return selfがotherよりも脆弱なアクセスレベルならtrue
  */
-bool IsWeakAccess(AccessLevel self, AccessLevel other);
+bool bc_IsWeakAccess(bc_AccessLevel self, bc_AccessLevel other);
 #endif // !SIGNAL_AST_ACCESS_LEVEL_H

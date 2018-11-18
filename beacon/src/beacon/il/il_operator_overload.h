@@ -19,7 +19,7 @@ typedef struct ILOperatorOverload {
 	Vector* Parameters;
 	Vector* Statements;
 	GenericCache* ReturnGCache;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 } ILOperatorOverload;
 
 ILOperatorOverload* NewILOperatorOverload(OperatorType type);

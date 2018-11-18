@@ -24,7 +24,7 @@ typedef struct ILMethod {
 	Vector* Parameters;
 	Vector* Statements;
 	GenericCache* ReturnGCache;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 	ModifierType Modifier;
 	Vector* TypeParameters;
 	bool IsNoStmt;

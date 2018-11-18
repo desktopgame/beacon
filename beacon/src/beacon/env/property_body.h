@@ -20,7 +20,7 @@ typedef enum PropertyBodyTag {
 
 typedef struct PropertyBody {
 	struct Property* Parent;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 	PropertyBodyTag Tag;
 	struct Enviroment* Env;
 } PropertyBody;

@@ -43,7 +43,7 @@ typedef struct Method {
 	struct GenericType* ReturnGType;
 	Vector* Parameters;
 	Vector* TypeParameters;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 	ModifierType Modifier;
 	union {
 		ScriptMethod* Script;

@@ -22,7 +22,7 @@ typedef struct ILConstructor {
 	Vector* Parameters;
 	Vector* Statements;
 	struct ILConstructorChain* Chain;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 } ILConstructor;
 
 /**

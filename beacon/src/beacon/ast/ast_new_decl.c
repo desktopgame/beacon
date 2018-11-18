@@ -65,7 +65,7 @@ AST* NewASTAccessMemberTree(AST* amember_tree, AST* amember_list) {
 	return ret;
 }
 
-AST* NewASTAccessMemberList(AccessLevel level, AST* amember_list) {
+AST* NewASTAccessMemberList(bc_AccessLevel level, AST* amember_list) {
 	AST* ret = NewAST(AST_ACCESS_MEMBER_LIST_T);
 	AST* a = NewASTAccess(level);
 	PushAST(ret, a);
@@ -73,7 +73,7 @@ AST* NewASTAccessMemberList(AccessLevel level, AST* amember_list) {
 	return ret;
 }
 
-AST* NewASTAccess(AccessLevel level) {
+AST* NewASTAccess(bc_AccessLevel level) {
 	AST* ret = NewAST(AST_ACCESS_LEVEL_T);
 	ret->Attr.AccessValue = level;
 	return ret;

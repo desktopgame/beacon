@@ -223,7 +223,7 @@ typedef struct AST {
 		double DoubleValue;
 		char CharValue;
 		StringView StringVValue;
-		AccessLevel AccessValue;
+		bc_AccessLevel AccessValue;
 		ModifierType ModifierValue;
 		OperatorType OperatorValue;
 	} Attr;
@@ -395,7 +395,7 @@ bool IsStmtAST(AST* self);
  * @param self
  * @return
  */
-AccessLevel ASTCastToAccess(AST* self);
+bc_AccessLevel ASTCastToAccess(AST* self);
 
 /**
  * 指定の要素が修飾子を表す要素なら列挙型に変換します.

@@ -181,8 +181,8 @@ bool CLBC_Property_decl(ClassLoader* self, ILType* iltype, Type* tp, ILProperty*
 		   return false;
 	   }
 	//プロパティアクセサの方がプロパティよりも緩いアクセスになっている
-	if(IsWeakAccess(ilprop->Access, ilprop->Set->Access) ||
-	   IsWeakAccess(ilprop->Access, ilprop->Get->Access)) {
+	if(bc_IsWeakAccess(ilprop->Access, ilprop->Set->Access) ||
+	   bc_IsWeakAccess(ilprop->Access, ilprop->Get->Access)) {
 		bc_Panic(BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(ilprop->Name)

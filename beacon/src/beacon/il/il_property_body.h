@@ -21,7 +21,7 @@ typedef enum ILPropertyBodyTag {
 } ILPropertyBodyTag;
 
 typedef struct ILPropertyBody {
-	AccessLevel Access;
+	bc_AccessLevel Access;
 	Vector* Statements;
 	ILPropertyBodyTag Tag;
 	bool IsShort;

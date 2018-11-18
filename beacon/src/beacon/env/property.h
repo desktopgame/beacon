@@ -24,7 +24,7 @@ typedef struct Property {
 	struct Type* Parent;
 	struct Field* SourceRef;
 	struct GenericType* GType;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 	PropertyBody* Set;
 	PropertyBody* Get;
 	bool IsShort;

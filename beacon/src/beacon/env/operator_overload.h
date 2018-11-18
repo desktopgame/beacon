@@ -25,7 +25,7 @@ typedef struct OperatorOverload {
 	OperatorType Type;
 	Vector* Parameters;
 	struct Enviroment* Env;
-	AccessLevel Access;
+	bc_AccessLevel Access;
 } OperatorOverload;
 
 /**

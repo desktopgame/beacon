@@ -1,7 +1,7 @@
 #include "access_level.h"
 #include <stdio.h>
 
-void PrintAccess(AccessLevel level) {
+void bc_PrintAccess(bc_AccessLevel level) {
 	switch (level) {
 		case ACCESS_PUBLIC_T:
 			printf("public");
@@ -20,13 +20,13 @@ void PrintAccess(AccessLevel level) {
 	}
 }
 
-bool IsSecureAccess(AccessLevel self, AccessLevel other) {
+bool bc_IsSecureAccess(bc_AccessLevel self, bc_AccessLevel other) {
 	int oi = (int)other;
 	int si = (int)self;
 	return oi > si;
 }
 
-bool IsWeakAccess(AccessLevel self, AccessLevel other) {
+bool bc_IsWeakAccess(bc_AccessLevel self, bc_AccessLevel other) {
 	int oi = (int)other;
 	int si = (int)self;
 	return oi < si;
