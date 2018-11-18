@@ -76,7 +76,7 @@ static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* c
 	GenericType* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->CoreType != TYPE_BOOL) {
 		char* condstr = ILFactorToString(fact, env);
-		ThrowBCError(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
+		bc_Panic(BCERROR_IF_EXPR_TYPE_OF_NOT_BOOL_T,
 			condstr
 		);
 		MEM_FREE(condstr);

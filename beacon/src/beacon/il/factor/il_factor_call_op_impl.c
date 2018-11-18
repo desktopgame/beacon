@@ -60,7 +60,7 @@ GenericType* EvalILCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	} else if(self->Type == ILCALL_TYPE_INVOKE_BOUND_T) {
 		ret = EvalILInvokeBound(self->Kind.InvokeBound, env, cctx);
 	}
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return ret;
 	}
 	return ret;

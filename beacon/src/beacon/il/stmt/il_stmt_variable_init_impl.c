@@ -34,12 +34,12 @@ void GenerateILVariableInit(ILVariableInit * self, Enviroment * env, CallContext
 	BC_ERROR();
 	if((ga->CoreType != NULL && ga->CoreType == TYPE_VOID) ||
 	   (gb->CoreType != NULL && gb->CoreType == TYPE_VOID)) {
-		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
+		   bc_Panic(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 	int dist = DistanceGenericType(gb, ga, cctx);
 	if (dist < 0) {
-		ThrowBCError(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
+		bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 			Ref2Str(self->Name)
 		);
 	}
@@ -50,13 +50,13 @@ void GenerateILVariableInit(ILVariableInit * self, Enviroment * env, CallContext
 void LoadILVariableInit(ILVariableInit * self, Enviroment * env, CallContext* cctx) {
 	LoadILFactor(self->Value, env, cctx);
 	if(IsContainsSymbol(env->Symboles, self->Name)) {
-		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
+		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->Name)
 		);
 	}
 	GenericType* gt = ResolveImportManager(NULL, self->GCache, cctx);
 	if(gt == NULL) {
-		ThrowBCError(
+		bc_Panic(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
 			Ref2Str(self->GCache->FQCN->Name)
 		);

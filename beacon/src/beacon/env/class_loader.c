@@ -84,7 +84,7 @@ void LoadClassLoader(ClassLoader * self) {
 }
 
 void LoadPassASTClassLoader(ClassLoader* self, AST* a) {
-	ClearBCError();
+	bc_Recover();
 	Heap* hee = GetHeap();
 	hee->AcceptBlocking++;
 	self->SourceCode = a;
@@ -124,10 +124,10 @@ static void load_class(ClassLoader* self) {
 	assert(self != NULL);
 	//AST -> IL へ
 	ILLoadClassLoader(self, self->SourceCode);
-	if (GetLastBCError()) { return; }
+	if (bc_GetLastPanic()) { return; }
 	//IL -> SG へ
 	BCLoadClassLoader(self);
-	if (GetLastBCError()) { return; }
+	if (bc_GetLastPanic()) { return; }
 	//他のクラスローダーとリンク
 	link_all(self);
 	load_toplevel_function(self);
@@ -138,7 +138,7 @@ static void link_recursive(ClassLoader* self, LinkType type) {
 	if (self->Link == type) {
 		return;
 	}
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
 	self->Link = type;
@@ -170,10 +170,10 @@ static ClassLoader* load_special_class(ClassLoader* self, ClassLoader* cll, char
 	DestroyParser(p);
 	//AST -> IL へ
 	ILLoadClassLoader(cll, cll->SourceCode);
-	if (GetLastBCError()) { return cll; }
+	if (bc_GetLastPanic()) { return cll; }
 	//IL -> SG へ
 	SpecialBCLoadClassLoader(cll);
-	if (GetLastBCError()) { return cll; }
+	if (bc_GetLastPanic()) { return cll; }
 	assert(cll->Type == CONTENT_LIB_T);
 	return cll;
 }
@@ -289,11 +289,11 @@ static void load_toplevel_function(ClassLoader* self) {
 
 static bool check_parser_error(Parser* p) {
 	if(p->Result == PARSE_SYNTAX_ERROR_T) {
-		ThrowBCError(BCERROR_PARSE_T, p->ErrorMessage);
+		bc_Panic(BCERROR_PARSE_T, p->ErrorMessage);
 		DestroyParser(p);
 		return true;
 	} else if(p->Result == PARSE_OPEN_ERROR_T) {
-		ThrowBCError(BCERROR_REQUIRE_NOT_FOUND_T, p->SourceName);
+		bc_Panic(BCERROR_REQUIRE_NOT_FOUND_T, p->SourceName);
 		DestroyParser(p);
 		return true;
 	}

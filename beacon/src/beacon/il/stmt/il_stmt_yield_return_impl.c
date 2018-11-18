@@ -45,7 +45,7 @@ static void check_IsYieldMethod_return(ILYieldReturn * self, Enviroment * env, C
 	GenericType* arg = AtVector(m->ReturnGType->TypeArgs, 0);
 	//戻り値の型に互換性がない
 	if(DistanceGenericType(arg, EvalILFactor(self->Value, env, cctx), cctx) < 0) {
-		ThrowBCError(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
+		bc_Panic(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
 			Ref2Str(GetTypeName(m->Parent)),
 			Ref2Str(m->Name)
 		);

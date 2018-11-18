@@ -24,7 +24,7 @@ GenericType* EvalILNotOp(ILNotOp * self, Enviroment * env, CallContext* cctx) {
 void GenerateILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
 	if(self->OperatorIndex == -1) {
 		GenerateILFactor(self->Parent->Arg, env, cctx);
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return;
 		}
 		GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);

@@ -55,7 +55,7 @@ void LoadILInvoke(ILInvoke * self, Enviroment* env, CallContext* cctx) {
 
 GenericType* EvalILInvoke(ILInvoke * self, Enviroment* env, CallContext* cctx) {
 	ILInvoke_check(self, env, cctx);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	GenericType* rgtp = ILInvoke_return_gtype(self);
@@ -142,7 +142,7 @@ static void resolve_default(ILInvoke * self, Enviroment* env, CallContext* cctx)
 static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx) {
 	//レシーバの読み込み
 	LoadILFactor(self->receiver, env, cctx);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
 	if(self->receiver->Type == ILFACTOR_VARIABLE_T) {
@@ -151,7 +151,7 @@ static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx)
 	}
 	//レシーバの型を評価
 	GenericType* gtype = EvalILFactor(self->receiver, env, cctx);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
 	ResolveILTypeArgument(self->type_args, cctx);
@@ -178,7 +178,7 @@ static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx)
 	if(self->args->Length != 1) {
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
-		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
+		bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
 			Ref2Str(GetTypeName(ctype)),
 			Ref2Str(self->namev)
 		);
@@ -188,7 +188,7 @@ static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx)
 	self->u.opov = ArgFindOperatorOverloadClass(TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp == -1) {
-		ThrowBCError(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
+		bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
 			Ref2Str(GetTypeName(ctype)),
 			Ref2Str(self->namev)
 		);

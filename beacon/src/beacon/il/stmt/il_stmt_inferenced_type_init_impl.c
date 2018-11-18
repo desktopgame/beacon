@@ -35,12 +35,12 @@ void LoadILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, Cal
 	//voidは代入できない
 	if(gtp->CoreType != NULL &&
 	   gtp->CoreType == TYPE_VOID) {
-		   ThrowBCError(BCERROR_VOID_ASSIGN_T);
+		   bc_Panic(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
 	//変数を登録
 	if(IsContainsSymbol(env->Symboles, self->Name)) {
-		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
+		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->Name)
 		);
 	}

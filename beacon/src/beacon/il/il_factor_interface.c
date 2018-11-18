@@ -18,11 +18,11 @@ ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno) {
 }
 
 void GenerateILFactor(ILFactor * self, Enviroment* env, CallContext* cctx) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->Lineno);
+	bc_SetPanicFile(env->ContextRef->FileName);
+	bc_SetPanicLine(self->Lineno);
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
 			GenerateILInt(self->Kind.Int, env, cctx);
@@ -95,11 +95,11 @@ void GenerateILFactor(ILFactor * self, Enviroment* env, CallContext* cctx) {
 }
 
 void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->Lineno);
+	bc_SetPanicFile(env->ContextRef->FileName);
+	bc_SetPanicLine(self->Lineno);
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
 			LoadILInt(self->Kind.Int, env, cctx);
@@ -170,11 +170,11 @@ void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 }
 
 GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return NULL;
 	}
-	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->Lineno);
+	bc_SetPanicFile(env->ContextRef->FileName);
+	bc_SetPanicLine(self->Lineno);
 	GenericType* ret = NULL;
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
@@ -249,7 +249,7 @@ GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) 
 }
 
 char* ILFactorToString(ILFactor* self, Enviroment* env) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	switch (self->Type) {

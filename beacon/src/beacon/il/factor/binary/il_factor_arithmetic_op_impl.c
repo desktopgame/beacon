@@ -37,7 +37,7 @@ GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallCont
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
 	if(self->OperatorIndex == -1) {
-		ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
+		bc_Panic(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 			OperatorToString(self->Type)
 		);
 		return NULL;

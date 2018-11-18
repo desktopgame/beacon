@@ -29,7 +29,7 @@ void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) 
 	FindTreePropertyClass(TYPE2CLASS(receiverT), self->Property->Name, &temp);
 	self->Index = temp;
 	if(temp == -1) {
-		ThrowBCError(
+		bc_Panic(
 			BCERROR_UNDEFINED_PROPERTY_T,
 			Ref2Str(GetTypeName(receiverT)),
 			Ref2Str(self->Name)

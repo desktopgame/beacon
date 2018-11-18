@@ -47,10 +47,10 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	//文字列を解析
 	Parser* p = ParseString(source);
 	if (p->Result != PARSE_COMPLETE_T) {
-		ThrowBCError(BCERROR_PARSE_T, p->ErrorMessage);
+		bc_Panic(BCERROR_PARSE_T, p->ErrorMessage);
 		DestroyParser(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(GetBCErrorMessage()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_GetPanicMessage()));
 		return NULL;
 	}
 	AST* a = ReleaseParserAST(p);
@@ -63,10 +63,10 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	}
 	ClassLoader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	LoadPassASTClassLoader(cll, a);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		DeleteClassLoader(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(GetBCErrorMessage()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_GetPanicMessage()));
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -99,11 +99,11 @@ static Frame* bc_eval_allocate(ClassLoader* cll) {
 	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
 	Heap* he = GetHeap();
 	he->AcceptBlocking = 0;
-	if(!GetLastBCError()) {
+	if(!bc_GetLastPanic()) {
 		ExecuteVM(fr, cll->Env);
 	}
 	if(fr->IsTerminate) {
-		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
+		bc_Panic(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	return fr;
 }
@@ -275,7 +275,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 }
 
 static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		Buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
 		AppendsBuffer(sbuf, Ref2Str(GetVMErrorMessage()));
@@ -289,7 +289,7 @@ static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr) {
 	DeleteFrame(fr);
 	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
 
-	GetLastBCError();
+	bc_GetLastPanic();
 	DeleteClassLoader(cll);
 }
 

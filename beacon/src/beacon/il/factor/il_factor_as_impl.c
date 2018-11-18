@@ -66,7 +66,7 @@ void LoadILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 		self->Mode = CAST_DOWN_T;
 	//それ以外
 	} else {
-		ThrowBCError(BCERROR_CAST_NOT_COMPATIBLE_T,
+		bc_Panic(BCERROR_CAST_NOT_COMPATIBLE_T,
 			Ref2Str(GetTypeName(a->CoreType)),
 			Ref2Str(GetTypeName(self->GType->CoreType))
 		);

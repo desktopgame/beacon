@@ -37,7 +37,7 @@ void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* 
 	for(int i=0; i<self->Arguments->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->Arguments, i);
 		GenerateILFactor(e->Factor, env, cctx);
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return;
 		}
 	}
@@ -53,7 +53,7 @@ void LoadILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cct
 GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
 	ILInvokeStatic_check(self, env, cctx);
 	//メソッドを解決できなかった場合
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	GenericType* rgtp = self->Method->ReturnGType;
@@ -113,7 +113,7 @@ static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext*
 static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
 	Type* ty =GetEvalTypeCContext(cctx, self->FQCN);
 	if(ty == NULL) {
-		ThrowBCError(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
+		bc_Panic(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
 			Ref2Str(self->FQCN->Name),
 			Ref2Str(self->Name)
 		);
@@ -139,7 +139,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 	self->Index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->Method == NULL) {
-		ThrowBCError(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
+		bc_Panic(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
 			Ref2Str(cls->Name),
 			Ref2Str(self->Name)
 		);

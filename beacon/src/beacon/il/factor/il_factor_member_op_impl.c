@@ -116,7 +116,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 		#endif
 		//フィールドの可視性を確認
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), self->Field)) {
-			ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Field->Name));
+			bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Field->Name));
 		}
 	}
 }
@@ -160,11 +160,11 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
-		ThrowBCError(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Name));
+		bc_Panic(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(self->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	} else if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	}
@@ -186,7 +186,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, Call
 	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(ctype)), Ref2Str(p->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	}

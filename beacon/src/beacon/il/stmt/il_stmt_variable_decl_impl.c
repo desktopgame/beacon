@@ -27,7 +27,7 @@ void GenerateILVariableDecl(ILVariableDecl * self, Enviroment * env, CallContext
 
 void LoadILVariableDecl(ILVariableDecl * self, Enviroment* env, CallContext* cctx) {
 	if(IsContainsSymbol(env->Symboles, self->Name)) {
-		ThrowBCError(BCERROR_OVERWRAP_VARIABLE_NAME_T,
+		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->Name)
 		);
 	}
@@ -38,7 +38,7 @@ void LoadILVariableDecl(ILVariableDecl * self, Enviroment* env, CallContext* cct
 	);
 	if(e->GType->CoreType != NULL &&
 	   e->GType->CoreType == TYPE_VOID) {
-		   ThrowBCError(BCERROR_VOID_DECL_T);
+		   bc_Panic(BCERROR_VOID_DECL_T);
 	}
 }
 

@@ -39,7 +39,7 @@ void GenerateILCompareOp(ILCompareOp* self, Enviroment* env, CallContext* cctx) 
 		} else if(IsCharCharBinaryOp(self->Parent, env, cctx)) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_copcode(self->Type));
 		} else {
-			ThrowBCError(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
+			bc_Panic(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 				OperatorToString(self->Type)
 			);
 //			assert(false);

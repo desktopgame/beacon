@@ -43,7 +43,7 @@ static void check_method_return(ILReturn * self, Enviroment * env, CallContext* 
 	Method* m = GetMethodCContext(cctx);
 	//戻り値が Void なのに値を返している
 	if(m->ReturnGType->CoreType == TYPE_VOID) {
-		ThrowBCError(BCERROR_RETURN_VALUE_VOID_METHOD_T,
+		bc_Panic(BCERROR_RETURN_VALUE_VOID_METHOD_T,
 			Ref2Str(GetTypeName(m->Parent)),
 			Ref2Str(m->Name)
 		);
@@ -53,7 +53,7 @@ static void check_method_return(ILReturn * self, Enviroment * env, CallContext* 
 	GenericType* retT =EvalILFactor(self->Factor, env, cctx);
 	if(retT->CoreType != TYPE_NULL &&
 	   DistanceGenericType(m->ReturnGType, retT, cctx) < 0) {
-		ThrowBCError(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
+		bc_Panic(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
 			Ref2Str(GetTypeName(m->Parent)),
 			Ref2Str(m->Name)
 		);

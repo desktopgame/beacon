@@ -48,7 +48,7 @@ void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* 
 	for (int i = 0; i < self->Arguments->Length; i++) {
 		ILArgument* ilarg = (ILArgument*)AtVector(self->Arguments, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return;
 		}
 	}
@@ -60,18 +60,18 @@ void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* 
 
 void LoadILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
 	//抽象クラスはインスタンス化できない
 	if(IsAbstractType(self->Constructor->Parent)) {
-		ThrowBCError(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->Constructor->Parent)));
+		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->Constructor->Parent)));
 	}
 }
 
 GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	//型引数がないのでそのまま
@@ -130,7 +130,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	//コンストラクタで生成するオブジェクトの肩を取得
 	Type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
 	if(ty == NULL) {
-		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
+		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			Ref2Str(self->FQCNCache->Name)
 		);
 		return;
@@ -146,7 +146,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	self->ConstructorIndex = temp;
 	PopCallContext(cctx);
 	if(temp == -1) {
-		ThrowBCError(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
+		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
 			Ref2Str(cls->Name)
 		);
 	}

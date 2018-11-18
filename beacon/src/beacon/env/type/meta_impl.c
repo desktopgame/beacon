@@ -28,7 +28,7 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		GenericType* argType = EvalILFactor(arg->Factor, env, cctx);
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return -1;
 		}
 		if (argType->CoreType != TYPE_NULL) {
@@ -67,7 +67,7 @@ int MetaGCalcScore(Vector* params, Vector* gargs) {
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		GenericType* argType = (GenericType*)varg;
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return -1;
 		}
 		if (argType->CoreType != TYPE_NULL) {

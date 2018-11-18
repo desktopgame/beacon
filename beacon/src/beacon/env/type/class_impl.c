@@ -463,7 +463,7 @@ static void create_vtable_interface(Class* self) {
 			Method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->IsAbstract && classVTM == NULL) {
 				PushVector(self->VTTable, newVT);
-				ThrowBCError(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
+				bc_Panic(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
 					Ref2Str(GetTypeName(interVTM->Parent)),
 					Ref2Str(interVTM->Name)
 				);

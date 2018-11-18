@@ -34,7 +34,7 @@ void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext
 	if(self->Type == VARIABLE_LOCAL_SCOPE_T) {
 		//より深くネストされたブロックで定義された変数
 		if(self->Kind.Entry->ScopeDepth > env->Symboles->ScopeDepth) {
-			ThrowBCError(
+			bc_Panic(
 				BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T,
 				Ref2Str(self->Name)
 			);
@@ -109,7 +109,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 	//定義されていない変数とみなせる？
 	Type* tp = GetTypeCContext(cctx);
 	if(tp->Tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
-		ThrowBCError(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->Name));
+		bc_Panic(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->Name));
 		return;
 	}
 	int temp = -1;
@@ -134,7 +134,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->Name));
 		return;
 	}
 	set_gtype(self, f->GType);
@@ -148,7 +148,7 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * en
 		p = FindTreeSPropertyClass(TYPE2CLASS(tp), self->Name, &temp);
 	}
 	if(temp == -1) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(self->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(self->Name));
 		return;
 	}
 #if defined(_MSC_VER)
@@ -162,7 +162,7 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * en
 	self->Kind.PropertyI = pwi;
 	//プロパティにアクセスできない
 	if(!IsAccessiblePropertyClass(TYPE2CLASS(tp), p)) {
-		ThrowBCError(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->Name));
 	}
 	set_gtype(self, p->GType);
 }

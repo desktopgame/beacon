@@ -88,11 +88,11 @@ static void CLBC_new_load_internal(ClassLoader * self, char * full_path) {
 		cll = CLBC_import_new(self, full_path);
 	}
 	//そのローダーが破損しているなら
-	if (GetLastBCError()) {
-		ThrowBCError(BCERROR_CHAIN_T, cll->FileName);
+	if (bc_GetLastPanic()) {
+		bc_Panic(BCERROR_CHAIN_T, cll->FileName);
 	}
 	//パースをキャンセル
-	if (GetLastBCError()) {
+	if (bc_GetLastPanic()) {
 		return;
 	}
 	LoadClassLoader(cll);
@@ -106,8 +106,8 @@ static void CLBC_import_already(ClassLoader* self, ClassLoader* cll) {
 	assert(cll->SourceCode != NULL);
 	assert(cll->ILCode != NULL);
 	//そのローダーが破損しているなら
-	if (GetLastBCError()) {
-		ThrowBCError(BCERROR_CHAIN_T, cll->FileName);
+	if (bc_GetLastPanic()) {
+		bc_Panic(BCERROR_CHAIN_T, cll->FileName);
 		return;
 	}
 }

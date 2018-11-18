@@ -14,11 +14,11 @@ ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno)
 }
 
 void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->Lineno);
+	bc_SetPanicFile(env->ContextRef->FileName);
+	bc_SetPanicLine(self->Lineno);
 	switch (self->Type) {
 		case ILSTMT_IF_T:
 			GenerateILIf(self->Kind.If, env, cctx);
@@ -81,11 +81,11 @@ void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 }
 
 void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return;
 	}
-	SetBCErrorFile(env->ContextRef->FileName);
-	SetBCErrorLine(self->Lineno);
+	bc_SetPanicFile(env->ContextRef->FileName);
+	bc_SetPanicLine(self->Lineno);
 	switch (self->Type) {
 		case ILSTMT_IF_T:
 			LoadILIf(self->Kind.If, env, cctx);

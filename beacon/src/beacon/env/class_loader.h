@@ -43,7 +43,7 @@ typedef struct ClassLoader {
  * 引数のクラスローダの error が true なら return します.
  * @param self
  */
-#define CL_ERROR(self) if(GetLastBCError()) return
+#define CL_ERROR(self) if(bc_GetLastPanic()) return
 
 /**
  * 引数のクラスローダの error が true なら a を return します.
@@ -51,7 +51,7 @@ typedef struct ClassLoader {
  * @param a
  * @return
  */
-#define CL_ERROR_RET(self, a) if(GetLastBCError()) return (a)
+#define CL_ERROR_RET(self, a) if(bc_GetLastPanic()) return (a)
 
 /**
  * クラスローダーを作成します.

@@ -56,7 +56,7 @@ void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel leve
 	AST* afact = AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
 	if(current->Tag == ILTYPE_INTERFACE_T) {
-		ThrowBCError(
+		bc_Panic(
 			BCERROR_INTERFACE_HAS_FIELD_T,
 			Ref2Str(current->Kind.Interface->Name),
 			Ref2Str(aaccess_name->Attr.StringVValue)
@@ -75,7 +75,7 @@ void CLILField(ClassLoader* self, ILType* current, AST* afield, AccessLevel leve
 	}
 	//重複する修飾子を検出
 	if(error) {
-		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
+		bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
 	}
 }
 
@@ -93,7 +93,7 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel le
 		bool err = false;
 		ret->Modifier = ASTCastToModifier(amod, &err);
 		if(err) {
-			ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->Name));
+			bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->Name));
 		}
 	}
 	ret->Access = level;
@@ -101,7 +101,7 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, AccessLevel le
 	ret->Get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
 	AddPropertyILType(current, ret);
 	if(ret->Set->IsShort != ret->Get->IsShort) {
-		ThrowBCError(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->Kind.Class->Name), Ref2Str(propname));
+		bc_Panic(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->Kind.Class->Name), Ref2Str(propname));
 	}
 }
 
@@ -129,7 +129,7 @@ void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, AccessLevel le
 	AddMethodILType(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		ThrowBCError(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
+		bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
 	}
 }
 
@@ -141,7 +141,7 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, Acce
 	ILConstructorChain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
 	if(current->Tag == ILTYPE_INTERFACE_T) {
-		ThrowBCError(
+		bc_Panic(
 			BCERROR_INTERFACE_HAS_CTOR_T,
 			Ref2Str(current->Kind.Interface->Name)
 		);
@@ -170,7 +170,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, Access
 	AST* areturn = AtAST(aopov, 2);
 	//インターフェイスはコンストラクタを持てない
 	if(current->Tag == ILTYPE_INTERFACE_T) {
-		ThrowBCError(
+		bc_Panic(
 			BCERROR_INTERFACE_HAS_OPOV_T,
 			Ref2Str(current->Kind.Interface->Name),
 			OperatorToString(ot)

@@ -30,7 +30,7 @@ GenericType* EvalILExcorOp(ILExcorOp * self, Enviroment* env, CallContext* cctx)
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
 	if(self->OperatorIndex == -1) {
-		ThrowBCError(BCERROR_UNDEFINED_EXCOR_OPERATOR_T,
+		bc_Panic(BCERROR_UNDEFINED_EXCOR_OPERATOR_T,
 			OperatorToString(self->Type)
 		);
 		return NULL;

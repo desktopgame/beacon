@@ -61,7 +61,7 @@ bool bc_EvalOp(const char* filename) {
 	ClassLoader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
 	LoadClassLoader(cl);
 
-	if(!GetLastBCError()) {
+	if(!bc_GetLastPanic()) {
 		DumpEnviromentOp(cl->Env, 0);
 	}
 	DeleteClassLoader(cl);
@@ -76,7 +76,7 @@ bool bc_EvalFile(const char * filename) {
 bool bc_EvalString(const char* source) {
 	Parser* p = ParseString(source);
 	if (p->Result != PARSE_COMPLETE_T) {
-		ThrowBCError(BCERROR_PARSE_T, p->ErrorMessage);
+		bc_Panic(BCERROR_PARSE_T, p->ErrorMessage);
 		DestroyParser(p);
 		return false;
 	}
@@ -103,18 +103,18 @@ static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt) {
 #if defined(DEBUG)
 	bc_Printfln("start");
 #endif
-	if(!GetLastBCError()) {
+	if(!bc_GetLastPanic()) {
 		ExecuteVM(fr, cll->Env);
 	}
 	if(fr->IsTerminate) {
-		ThrowBCError(BCERROR_GENERIC_T, "unexpected terminate");
+		bc_Panic(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	CatchVM(fr);
 	CollectHeap(GetHeap());
 	DeleteFrame(fr);
 	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
 
-	bool ret = GetLastBCError();
+	bool ret = bc_GetLastPanic();
 	DeleteClassLoader(cll);
 	return ret;
 }

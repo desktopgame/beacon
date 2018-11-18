@@ -10,7 +10,7 @@ ILStatement * WrapILContinue() {
 
 void GenerateILContinue(void * empty, Enviroment * env, CallContext* cctx) {
 	if(cctx->Control.WhileStartTable->Length == 0) {
-		ThrowBCError(BCERROR_CONTINUE_AT_NOT_LOOP_T);
+		bc_Panic(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
 	}
 	Label* lab = (Label*)TopVector(cctx->Control.WhileStartTable);

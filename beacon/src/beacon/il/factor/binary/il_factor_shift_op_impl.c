@@ -36,7 +36,7 @@ GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx)
 		return TYPE2GENERIC(cdouble);
 	}
 	if(self->OperatorIndex == -1) {
-		ThrowBCError(
+		bc_Panic(
 			BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
 			OperatorToString(self->Type)
 		);
@@ -53,7 +53,7 @@ void GenerateILShiftOp(ILShiftOp* self, Enviroment* env, CallContext* cctx) {
 		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->Type));
 		} else {
-			ThrowBCError(
+			bc_Panic(
 				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
 				OperatorToString(self->Type)
 			);

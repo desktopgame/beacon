@@ -7,23 +7,23 @@
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
-static BCErrorID gGlobalError = BCERROR_NONE_T;
-static StringView gErrorFile = ZERO_VIEW;
+static BCErrorID gGlobalPanic = BCERROR_NONE_T;
+static StringView gPanicFile = ZERO_VIEW;
 static StringView gLastMessage = ZERO_VIEW;
-static int gErrorLineNo = -1;
-static int gErrorColumn = -1;
+static int gPanicLineNo = -1;
+static int gPanicColumn = -1;
 static void check_abort(ScriptContext* sctx);
 
-void ThrowBCError(BCErrorID id, ...) {
+void bc_Panic(BCErrorID id, ...) {
 	va_list ap;
 	va_start(ap, id);
-	VthrowBCError(id, ap);
+	bc_Vpanic(id, ap);
 	va_end(ap);
 }
 
-void VthrowBCError(BCErrorID id, va_list ap) {
-	char* fmt = VformatBCError(id, ap);
-	gGlobalError = id;
+void bc_Vpanic(BCErrorID id, va_list ap) {
+	char* fmt = bc_Vfpanic(id, ap);
+	gGlobalPanic = id;
 	gLastMessage = InternString(fmt);
 	ScriptContext* sctx = GetCurrentScriptContext();
 	if(sctx->IsPrintError) {
@@ -41,16 +41,16 @@ void VthrowBCError(BCErrorID id, va_list ap) {
 #endif
 }
 
-char* FormatBCError(BCErrorID id, ...) {
+char* bc_Fpanic(BCErrorID id, ...) {
 	va_list ap;
 	va_start(ap, id);
-	char* ret = VformatBCError(id, ap);
+	char* ret = bc_Vfpanic(id, ap);
 	va_end(ap);
 	MEM_FREE(ret);
 	return ret;
 }
 
-char* VformatBCError(BCErrorID id, va_list ap) {
+char* bc_Vfpanic(BCErrorID id, va_list ap) {
 	char* fmt = NULL;
 	//bool aa = cc_test(ccstate_toplevel);
 	switch(id) {
@@ -356,43 +356,43 @@ char* VformatBCError(BCErrorID id, va_list ap) {
 	AppendBuffer(sbuf, '\n');
 	//行番号など出力
 	sprintf(block, "file=%s line=%d column=%d\n",
-		Ref2Str(gErrorFile),
-		gErrorLineNo,
-		gErrorColumn
+		Ref2Str(gPanicFile),
+		gPanicLineNo,
+		gPanicColumn
 	);
 	AppendsBuffer(sbuf, block);
 	return ReleaseBuffer(sbuf);
 }
 
-void ClearBCError() {
-	gGlobalError = BCERROR_NONE_T;
-	gErrorFile = ZERO_VIEW;
-	gErrorLineNo = -1;
-	gErrorColumn = -1;
+void bc_Recover() {
+	gGlobalPanic = BCERROR_NONE_T;
+	gPanicFile = ZERO_VIEW;
+	gPanicLineNo = -1;
+	gPanicColumn = -1;
 	gLastMessage = ZERO_VIEW;
 }
 
-void SetBCErrorFile(const char* filename) {
+void bc_SetPanicFile(const char* filename) {
 	if(filename == NULL) {
 		filename = "NULL";
 	}
-	gErrorFile = InternString(filename);
+	gPanicFile = InternString(filename);
 }
 
-void SetBCErrorLine(int lineno) {
-	gErrorLineNo = lineno;
+void bc_SetPanicLine(int lineno) {
+	gPanicLineNo = lineno;
 }
 
-void SetBCErrorColumn(int column) {
-	gErrorColumn = column;
+void bc_SetPanicColumn(int column) {
+	gPanicColumn = column;
 }
 
-StringView GetBCErrorMessage() {
+StringView bc_GetPanicMessage() {
 	return gLastMessage;
 }
 
-BCErrorID GetLastBCError() {
-	return gGlobalError;
+BCErrorID bc_GetLastPanic() {
+	return gGlobalPanic;
 }
 //private
 static void check_abort(ScriptContext* sctx) {

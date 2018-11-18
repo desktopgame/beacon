@@ -165,13 +165,13 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 		self->Kind.Subscript.Operator = ArgFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
 		self->Index = temp;
 		if(temp == -1) {
-			ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
+			bc_Panic(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
 				Ref2Str(self->Name)
 			);
 		}
 	}
 	if(self->Index == -1) {
-		ThrowBCError(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
+		bc_Panic(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
 			Ref2Str(GetTypeName(ctype)),
 			Ref2Str(self->Name)
 		);
@@ -198,7 +198,7 @@ static void GenerateILInvokeBound_method(ILInvokeBound* self, Enviroment* env, C
 	for(int i=0; i<self->Arguments->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->Arguments, i);
 		GenerateILFactor(e->Factor, env, cctx);
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return;
 		}
 	}
@@ -232,7 +232,7 @@ static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env
 	for(int i=0; i<self->Arguments->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->Arguments, i);
 		GenerateILFactor(e->Factor, env, cctx);
-		if(GetLastBCError()) {
+		if(bc_GetLastPanic()) {
 			return;
 		}
 	}
@@ -264,7 +264,7 @@ static GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env
 	Type* tp = NULL;
 	//メソッドが見つからない
 	ILInvokeBound_check(self, env, cctx);
-	if(GetLastBCError()) {
+	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	CallFrame* cfr = NULL;
