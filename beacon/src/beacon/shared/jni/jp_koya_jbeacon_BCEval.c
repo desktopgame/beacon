@@ -168,7 +168,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 		} else if((*env)->IsInstanceOf(env, valueE, char_cls) == JNI_TRUE) {
 			astmt = NewASTInject(keyv, NewASTChar(jobject2jchar(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, bool_cls) == JNI_TRUE) {
-			astmt = NewASTInject(keyv, NewASTBool(jobject2jboolean(env, valueE)));
+			astmt = NewASTInject(keyv, bc_NewASTBool(jobject2jboolean(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
