@@ -12,8 +12,8 @@
 //proto
 static void delete_parameter(VectorItem item);
 
-Constructor * NewConstructor() {
-	Constructor* ret = (Constructor*)MEM_MALLOC(sizeof(Constructor));
+bc_Constructor * bc_NewConstructor() {
+	bc_Constructor* ret = (bc_Constructor*)MEM_MALLOC(sizeof(bc_Constructor));
 	ret->Parent = NULL;
 	ret->Env = NULL;
 	ret->Parameters = NewVector();
@@ -21,7 +21,7 @@ Constructor * NewConstructor() {
 	return ret;
 }
 
-Object * NewInstanceConstructor(Constructor * self, Vector * args, Frame* parent) {
+Object * bc_NewInstanceConstructor(bc_Constructor * self, Vector * args, Frame* parent) {
 	Frame* sub = SubFrame(parent);
 	for (int i = 0; i < args->Length; i++) {
 		PushVector(sub->ValueStack, AtVector(args, i));
@@ -32,7 +32,7 @@ Object * NewInstanceConstructor(Constructor * self, Vector * args, Frame* parent
 	return ret;
 }
 
-void DeleteConstructor(Constructor * self) {
+void bc_DeleteConstructor(bc_Constructor * self) {
 	DeleteEnviroment(self->Env);
 	DeleteVector(self->Parameters, delete_parameter);
 	MEM_FREE(self);

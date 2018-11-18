@@ -197,7 +197,7 @@ struct Property* FindTreeSPropertyClass(Class* self, StringView namev, int* outI
  * @param outIndex
  * @return 無ければ空
  */
-struct Constructor* RFindConstructorClass(Class* self, Vector* args, Vector* typeargs, Frame* fr, int* outIndex);
+struct bc_Constructor* RFindConstructorClass(Class* self, Vector* args, Vector* typeargs, Frame* fr, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -208,7 +208,7 @@ struct Constructor* RFindConstructorClass(Class* self, Vector* args, Vector* typ
  * @param outIndex
  * @return 無ければ空
  */
-struct Constructor* ILFindConstructorClass(Class* self, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Constructor* ILFindConstructorClass(Class* self, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
@@ -218,7 +218,7 @@ struct Constructor* ILFindConstructorClass(Class* self, Vector* args, Enviroment
  * @param outIndex
  * @return
  */
-struct Constructor* ILFindEmptyConstructorClass(Class* self, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Constructor* ILFindEmptyConstructorClass(Class* self, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.

@@ -17,7 +17,7 @@
 
 struct Enviroment;
 struct Type;
-struct Constructor;
+struct bc_Constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
  */
@@ -27,7 +27,7 @@ typedef struct ILNewInstance {
 	Vector* TypeArgs;
 //	GenericCache* fqcn;
 	GenericType* InstanceGType;
-	struct Constructor* Constructor;
+	struct bc_Constructor* Constructor;
 	int ConstructorIndex;
 } ILNewInstance;
 

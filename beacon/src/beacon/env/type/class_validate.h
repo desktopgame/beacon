@@ -15,7 +15,7 @@ struct Class;
 struct Method;
 struct Property;
 struct Field;
-struct Constructor;
+struct bc_Constructor;
 /**
  * クラスが全てのメソッドを正しく実装しているなら true.
  * インターフェイスを一つも持っていないなら 常にtrue です。
@@ -75,7 +75,7 @@ bool IsMethodParameterValidClass(struct Class* cls, struct Method** out_method, 
  * @param out_name
  * @return
  */
-bool IsConstructorParameterValidClass(struct Class* self, struct Constructor** out_ctor, StringView* out_name);
+bool IsConstructorParameterValidClass(struct Class* self, struct bc_Constructor** out_ctor, StringView* out_name);
 
 /**
  * クラスの型変数に重複する名前がないなら true.

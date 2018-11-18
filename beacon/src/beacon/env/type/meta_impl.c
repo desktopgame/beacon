@@ -197,21 +197,21 @@ Method* MetaScopedGFindMethod(Class* context, Vector* method_vec, StringView nam
 	return ret;
 }
 
-Constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
 	return MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-Constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, Frame* fr, int* outIndex) {
+bc_Constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, Frame* fr, int* outIndex) {
 	return MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-Constructor* MetaScopedILFindConstructor(Class* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* MetaScopedILFindConstructor(Class* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
-	Constructor* ret = NULL;
+	bc_Constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
-		Constructor* ctor = (Constructor*)ve;
+		bc_Constructor* ctor = (bc_Constructor*)ve;
 		if(!IsMetaConstructorAccessValid(ctor, cctx)) {
 			continue;
 		}
@@ -239,13 +239,13 @@ Constructor* MetaScopedILFindConstructor(Class* context, Vector* ctor_vec, Vecto
 	return ret;
 }
 
-Constructor* MetaScopedRFindConstructor(Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, Frame* fr, int* outIndex) {
+bc_Constructor* MetaScopedRFindConstructor(Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, Frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
-	Constructor* ret = NULL;
+	bc_Constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
-		Constructor* ctor = (Constructor*)ve;
+		bc_Constructor* ctor = (bc_Constructor*)ve;
 		Class* cls = TYPE2CLASS(ctor->Parent);
 		//引数の個数が違うので無視
 		if (ctor->Parameters->Length != gargs->Length) {
@@ -305,7 +305,7 @@ bool IsMetaMethodAccessValid(Method* m, CallContext* cctx) {
 	return true;
 }
 
-bool IsMetaConstructorAccessValid(Constructor* ctor, CallContext* cctx) {
+bool IsMetaConstructorAccessValid(bc_Constructor* ctor, CallContext* cctx) {
 	Class* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&

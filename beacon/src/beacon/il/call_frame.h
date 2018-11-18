@@ -12,7 +12,7 @@
 #include "../util/vector.h"
 
 struct Method;
-struct Constructor;
+struct bc_Constructor;
 struct OperatorOverload;
 struct GenericType;
 

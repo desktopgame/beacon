@@ -174,7 +174,7 @@ void AddMethodClass(Class* self, Method * m) {
 	}
 }
 
-void AddConstructorClass(Class* self, Constructor* c) {
+void AddConstructorClass(Class* self, bc_Constructor* c) {
 	PushVector(self->Constructors, c);
 }
 
@@ -342,7 +342,7 @@ int CountAllSMethodClass(Class* self) {
 Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
-	Constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
+	bc_Constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	Frame* sub = SubFrame(fr);
@@ -376,7 +376,7 @@ void LinkAllClass(Class* self) {
 		m->Parent = self->Parent;
 	}
 	for (int i = 0; i < self->Constructors->Length; i++) {
-		Constructor* ctor = (Constructor*)AtVector(self->Constructors, i);
+		bc_Constructor* ctor = (bc_Constructor*)AtVector(self->Constructors, i);
 		ctor->Parent = self->Parent;
 	}
 }
@@ -499,8 +499,8 @@ static void delete_method(VectorItem item) {
 }
 
 static void class_ctor_delete(VectorItem item) {
-	Constructor* e = (Constructor*)item;
-	DeleteConstructor(e);
+	bc_Constructor* e = (bc_Constructor*)item;
+	bc_DeleteConstructor(e);
 }
 
 static void delete_native_method_ref(NumericMapKey key, NumericMapItem item) {

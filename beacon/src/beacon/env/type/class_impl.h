@@ -33,7 +33,7 @@ struct Field;
 struct Property;
 struct PropertyBody;
 struct Method;
-struct Constructor;
+struct bc_Constructor;
 struct GenericType;
 struct OperatorOverload;
 /**
@@ -144,7 +144,7 @@ void AddMethodClass(Class* self, struct Method* m);
  * @param self
  * @param c
  */
-void AddConstructorClass(Class* self, struct Constructor* c);
+void AddConstructorClass(Class* self, struct bc_Constructor* c);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.

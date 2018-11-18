@@ -566,7 +566,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				#if defined(DEBUG)
 				const char* clsname = Ref2Str(cls->Name);
 				#endif
-				Constructor* ctor = (Constructor*)AtVector(cls->Constructors, constructorIndex);
+				bc_Constructor* ctor = (bc_Constructor*)AtVector(cls->Constructors, constructorIndex);
 				//新しいVMでコンストラクタを実行
 				//また、現在のVMから実引数をポップ
 				Frame* sub = SubFrame(self);
@@ -615,7 +615,7 @@ static void vm_run(Frame* self, Enviroment * env, int pos, int deferStart) {
 				Type* tp = (Type*)AtVector(ctx->TypeList, absClsIndex);
 				assert(tp->Tag == TYPE_CLASS_T);
 				Class* cls = tp->Kind.Class;
-				Constructor* ctor = (Constructor*)AtVector(cls->Constructors, ctorIndex);
+				bc_Constructor* ctor = (bc_Constructor*)AtVector(cls->Constructors, ctorIndex);
 				//コンストラクタを実行するためのVMを作成
 				Frame* sub = SubFrame(self);
 				sub->ObjectSize = allocSize;
