@@ -12,28 +12,28 @@
 #include "class_loader_ilload_stmt_module_impl.h"
 #include <assert.h>
 
-static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, bc_AccessLevel level);
+static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, bc_AST* abody, ILPropertyBodyTag tag, bc_AccessLevel level);
 
-void CLILMemberTree(ClassLoader* self, ILType* current, AST* atree) {
+void CLILMemberTree(ClassLoader* self, ILType* current, bc_AST* atree) {
 	if (atree->Tag == AST_ACCESS_MEMBER_TREE_T) {
 		for (int i = 0; i < atree->Children->Length; i++) {
-			CLILMemberTree(self, current, AtAST(atree, i));
+			CLILMemberTree(self, current, bc_AtAST(atree, i));
 		}
 	} else if (atree->Tag == AST_ACCESS_MEMBER_LIST_T) {
-		AST* aaccess = FirstAST(atree);
-		AST* amember_list = SecondAST(atree);
-		bc_AccessLevel level = ASTCastToAccess(aaccess);
+		bc_AST* aaccess = bc_FirstAST(atree);
+		bc_AST* amember_list = bc_SecondAST(atree);
+		bc_AccessLevel level = bc_ASTCastToAccess(aaccess);
 		CLILMemberList(self, current, amember_list, level);
 	}
 }
 
-void CLILMemberList(ClassLoader* self, ILType* current, AST* amember, bc_AccessLevel level) {
+void CLILMemberList(ClassLoader* self, ILType* current, bc_AST* amember, bc_AccessLevel level) {
 	if(amember->Tag == AST_MEMBER_DECL_LIST_T) {
 		for(int i=0; i<amember->Children->Length; i++) {
-			CLILMemberList(self, current, AtAST(amember, i), level);
+			CLILMemberList(self, current, bc_AtAST(amember, i), level);
 		}
 	} else if(amember->Tag == AST_MEMBER_DECL_T) {
-		AST* achild = FirstAST(amember);
+		bc_AST* achild = bc_FirstAST(amember);
 		if (achild->Tag == AST_FIELD_DECL_T) {
 			CLILField(self, current, achild, level);
 		} else if(achild->Tag == AST_PROP_DECL_T) {
@@ -48,12 +48,12 @@ void CLILMemberList(ClassLoader* self, ILType* current, AST* amember, bc_AccessL
 	}
 }
 
-void CLILField(ClassLoader* self, ILType* current, AST* afield, bc_AccessLevel level) {
+void CLILField(ClassLoader* self, ILType* current, bc_AST* afield, bc_AccessLevel level) {
 	//assert(current->Tag == ILTYPE_CLASS_T);
-	AST* amodifier = FirstAST(afield);
-	AST* aGetTypeName = SecondAST(afield);
-	AST* aaccess_name = AtAST(afield, 2);
-	AST* afact = AtAST(afield, 3);
+	bc_AST* amodifier = bc_FirstAST(afield);
+	bc_AST* aGetTypeName = bc_SecondAST(afield);
+	bc_AST* aaccess_name = bc_AtAST(afield, 2);
+	bc_AST* afact = bc_AtAST(afield, 3);
 	//インターフェイスはフィールドを持てない
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		bc_Panic(
@@ -67,10 +67,10 @@ void CLILField(ClassLoader* self, ILType* current, AST* afield, bc_AccessLevel l
 	CLILGenericCache(aGetTypeName, v->GCache);
 	bool error;
 	v->Access = level;
-	v->Modifier = ASTCastToModifier(amodifier, &error);
+	v->Modifier = bc_ASTCastToModifier(amodifier, &error);
 	AddFieldILType(current, v);
 	//設定されているなら初期値も
-	if(!IsBlankAST(afact)) {
+	if(!bc_IsBlankAST(afact)) {
 		v->InitialValue = CLILFactor(self, afact);
 	}
 	//重複する修飾子を検出
@@ -79,19 +79,19 @@ void CLILField(ClassLoader* self, ILType* current, AST* afield, bc_AccessLevel l
 	}
 }
 
-void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, bc_AccessLevel level) {
-	AST* amod = AtAST(aprop, 0);
-	AST* atypename = AtAST(aprop, 1);
-	AST* aset = AtAST(aprop, 2);
-	AST* aget = AtAST(aprop, 3);
+void CLILProperty(ClassLoader* self, ILType* current, bc_AST* aprop, bc_AccessLevel level) {
+	bc_AST* amod = bc_AtAST(aprop, 0);
+	bc_AST* atypename = bc_AtAST(aprop, 1);
+	bc_AST* aset = bc_AtAST(aprop, 2);
+	bc_AST* aget = bc_AtAST(aprop, 3);
 	StringView propname = aprop->Attr.StringVValue;
 	ILProperty* ret = ILNewProperty(propname);
 	CLILGenericCache(atypename, ret->GCache);
-	if(IsBlankAST(amod)) {
+	if(bc_IsBlankAST(amod)) {
 		ret->Modifier = MODIFIER_NONE_T;
 	} else {
 		bool err = false;
-		ret->Modifier = ASTCastToModifier(amod, &err);
+		ret->Modifier = bc_ASTCastToModifier(amod, &err);
 		if(err) {
 			bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->Name));
 		}
@@ -105,25 +105,25 @@ void CLILProperty(ClassLoader* self, ILType* current, AST* aprop, bc_AccessLevel
 	}
 }
 
-void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, bc_AccessLevel level) {
+void CLILMethod(ClassLoader* self, ILType* current, bc_AST* amethod, bc_AccessLevel level) {
 	assert(current->Tag == ILTYPE_CLASS_T || current->Tag == ILTYPE_INTERFACE_T);
-	AST* amodifier = AtAST(amethod, 0);
-	AST* afunc_name = AtAST(amethod, 1);
-	AST* ageneric = AtAST(amethod, 2);
-	AST* aparam_list = AtAST(amethod, 3);
-	AST* afunc_body = AtAST(amethod, 4);
-	AST* aret_name = AtAST(amethod, 5);
+	bc_AST* amodifier = bc_AtAST(amethod, 0);
+	bc_AST* afunc_name = bc_AtAST(amethod, 1);
+	bc_AST* ageneric = bc_AtAST(amethod, 2);
+	bc_AST* aparam_list = bc_AtAST(amethod, 3);
+	bc_AST* afunc_body = bc_AtAST(amethod, 4);
+	bc_AST* aret_name = bc_AtAST(amethod, 5);
 	ILMethod* v = NewILMethod(afunc_name->Attr.StringVValue);
 	CLILTypeParameter(self, ageneric, v->TypeParameters);
 	CLILGenericCache(aret_name, v->ReturnGCache);
 	bool error;
 	v->Access = level;
-	v->Modifier = ASTCastToModifier(amodifier, &error);
+	v->Modifier = bc_ASTCastToModifier(amodifier, &error);
 	CLILParameterList(self, v->Parameters, aparam_list);
 	CLILBody(self, v->Statements, afunc_body);
 	//メソッドの本文が省略されているかどうか
 	//例えばネイティブメソッドや抽象メソッドは省略されているべき
-	if(IsBlankAST(afunc_body)) {
+	if(bc_IsBlankAST(afunc_body)) {
 		v->IsNoStmt = true;
 	}
 	AddMethodILType(current, v);
@@ -133,11 +133,11 @@ void CLILMethod(ClassLoader* self, ILType* current, AST* amethod, bc_AccessLevel
 	}
 }
 
-void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, bc_AccessLevel level) {
+void CLILConstructor(ClassLoader* self, ILType* current, bc_AST* aconstructor, bc_AccessLevel level) {
 	//assert(current->Tag == ILTYPE_CLASS_T);
-	AST* aparams = AtAST(aconstructor, 0);
-	AST* achain = AtAST(aconstructor, 1);
-	AST* abody = AtAST(aconstructor, 2);
+	bc_AST* aparams = bc_AtAST(aconstructor, 0);
+	bc_AST* achain = bc_AtAST(aconstructor, 1);
+	bc_AST* abody = bc_AtAST(aconstructor, 2);
 	ILConstructorChain* ilchain = NULL;
 	//インターフェイスはコンストラクタを持てない
 	if(current->Tag == ILTYPE_INTERFACE_T) {
@@ -147,11 +147,11 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, bc_A
 		);
 		return;
 	}
-	if (!IsBlankAST(achain)) {
-		AST* achain_type = FirstAST(achain);
-		AST* aargs = SecondAST(achain);
+	if (!bc_IsBlankAST(achain)) {
+		bc_AST* achain_type = bc_FirstAST(achain);
+		bc_AST* aargs = bc_SecondAST(achain);
 		ilchain = NewILConstructorChain();
-		ilchain->Type = ASTCastToChainType(achain_type);
+		ilchain->Type = bc_ASTCastToChainType(achain_type);
 		CLILArgumentList(self, ilchain->Arguments, aargs);
 	}
 	ILConstructor* ilcons = NewILConstructor();
@@ -162,12 +162,12 @@ void CLILConstructor(ClassLoader* self, ILType* current, AST* aconstructor, bc_A
 	PushVector(current->Kind.Class->Constructors, ilcons);
 }
 
-void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, bc_AccessLevel level) {
+void CLILOperatorOverload(ClassLoader* self, ILType* current, bc_AST* aopov, bc_AccessLevel level) {
 	//assert(aopov->Tag == AST_OPERATOR_OVERLOAD_T);
 	OperatorType ot = aopov->Attr.OperatorValue;
-	AST* aparam_list = AtAST(aopov, 0);
-	AST* abody = AtAST(aopov, 1);
-	AST* areturn = AtAST(aopov, 2);
+	bc_AST* aparam_list = bc_AtAST(aopov, 0);
+	bc_AST* abody = bc_AtAST(aopov, 1);
+	bc_AST* areturn = bc_AtAST(aopov, 2);
 	//インターフェイスはコンストラクタを持てない
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		bc_Panic(
@@ -185,14 +185,14 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, AST* aopov, bc_Acc
 	PushVector(current->Kind.Class->OperatorOverloads, ilopov);
 }
 //private
-static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, AST* abody, ILPropertyBodyTag tag, bc_AccessLevel level) {
+static ILPropertyBody* CLILProperty_body(ClassLoader* self, ILType* current, bc_AST* abody, ILPropertyBodyTag tag, bc_AccessLevel level) {
 	ILPropertyBody* ret = ILNewPropertyBody(tag);
 	assert(abody->Tag == AST_PROP_SET_T || abody->Tag == AST_PROP_GET_T);
-	AST* aacess = FirstAST(abody);
-	AST* astmt_list = SecondAST(abody);
+	bc_AST* aacess = bc_FirstAST(abody);
+	bc_AST* astmt_list = bc_SecondAST(abody);
 	ret->Access = level;
 	CLILBody(self, ret->Statements, astmt_list);
-	if(!IsBlankAST(aacess)) {
+	if(!bc_IsBlankAST(aacess)) {
 		ret->Access = aacess->Attr.AccessValue;
 	}
 	if(ret->Statements->Length == 0) {

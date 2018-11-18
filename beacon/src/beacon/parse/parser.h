@@ -31,7 +31,7 @@ typedef enum ParseResult {
  * Yacc/Bisonの解析結果を保存する構造体です.
  */
 typedef struct Parser {
-	AST* Root;
+	bc_AST* Root;
 	Buffer* LiteralBuffer;
 	//char* source;
 	char* SourceName;
@@ -91,7 +91,7 @@ void AppendParserBuffer(Parser* self, char ch);
  * @param self
  * @return
  */
-AST* ReduceParserBuffer(Parser* self);
+bc_AST* ReduceParserBuffer(Parser* self);
 
 /**
  * パーサーからASTを取り上げて解放させないようにします.
@@ -99,7 +99,7 @@ AST* ReduceParserBuffer(Parser* self);
  * @param self
  * @return
  */
-AST* ReleaseParserAST(Parser* self);
+bc_AST* ReleaseParserAST(Parser* self);
 
 /**
  * エラー発生位置を設定します.

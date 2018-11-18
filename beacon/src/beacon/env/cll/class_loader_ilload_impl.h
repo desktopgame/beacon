@@ -21,6 +21,6 @@
  * @param self
  * @param source_code
  */
-void ILLoadClassLoader(ClassLoader* self, AST* source_code);
+void ILLoadClassLoader(ClassLoader* self, bc_AST* source_code);
 
 #endif

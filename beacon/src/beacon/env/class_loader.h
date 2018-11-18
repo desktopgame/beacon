@@ -24,7 +24,7 @@ struct Enviroment;
  * クラスローダーを表す構造体です.
  */
 typedef struct ClassLoader {
-	AST* SourceCode;
+	bc_AST* SourceCode;
 	ILToplevel* ILCode;
 
 	struct Enviroment* Env;
@@ -75,7 +75,7 @@ void LoadClassLoader(ClassLoader* self);
  * @param self
  * @param a
  */
-void LoadPassASTClassLoader(ClassLoader* self, AST* a);
+void LoadPassASTClassLoader(ClassLoader* self, bc_AST* a);
 
 /**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.

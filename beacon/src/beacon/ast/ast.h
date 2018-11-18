@@ -21,7 +21,7 @@
 /**
  * AST(AbstractSourceTree) の種類を表すタグです.
  */
-typedef enum ASTTag {
+typedef enum bc_ASTTag {
 	AST_ROOT_T,
 	AST_BLANK_T,
 	AST_INJECT_JNI_VALUE_T,
@@ -212,12 +212,12 @@ typedef enum ASTTag {
 	AST_IF_ELIF_LIST_ELSE_T,
 	AST_ELIF_LIST_T,
 	AST_ELIF_T,
-} ASTTag;
+} bc_ASTTag;
 
 /**
  * ソースコード中の要素を表します.
  */
-typedef struct AST {
+typedef struct bc_AST {
 	union {
 		int IntValue;
 		double DoubleValue;
@@ -227,21 +227,21 @@ typedef struct AST {
 		ModifierType ModifierValue;
 		OperatorType OperatorValue;
 	} Attr;
-	ASTTag Tag;
+	bc_ASTTag Tag;
 	int Lineno;
 	Vector* Children;
-} AST;
+} bc_AST;
 
 /**
  * 現在のコンパイラに AST を追加します.
  * @param self
  */
-void CompileEntryAST(AST* self);
+void bc_CompileEntryAST(bc_AST* self);
 
 /**
  * 指定のタグで子要素を持たない AST を作成します.
  */
-#define NewAST(tag) (MallocAST(tag, __FILE__, __LINE__))
+#define bc_NewAST(tag) (bc_MallocAST(tag, __FILE__, __LINE__))
 
 /**
  * 指定のタグで子要素を持たない AST を作成します.
@@ -249,14 +249,14 @@ void CompileEntryAST(AST* self);
  * @param filename
  * @param lineno
  */
-AST* MallocAST(ASTTag tag, const char* filename, int lineno);
+bc_AST* bc_MallocAST(bc_ASTTag tag, const char* filename, int lineno);
 
 /**
  * 名前空間の一節(. ~~~ .)を表す要素を作成します.
  * @param name
  * @return
  */
-AST* NewASTNamespacePath(StringView name);
+bc_AST* bc_NewASTNamespacePath(StringView name);
 
 /**
  * 二つの名前空間を連結します.
@@ -264,21 +264,21 @@ AST* NewASTNamespacePath(StringView name);
  * @param name
  * @return
  */
-AST* NewASTNamespacePathList(AST* aforward, StringView name);
+bc_AST* bc_NewASTNamespacePathList(bc_AST* aforward, StringView name);
 
 /**
  * インポート先のファイルを表す要素を作成します.
  * @param astr
  * @return
  */
-AST* NewASTImportPath(AST* astr);
+bc_AST* bc_NewASTImportPath(bc_AST* astr);
 
 /**
  * インポート宣言を表す要素を作成します.
  * @param aimport_path
  * @return
  */
-AST* NewASTImportDecl(AST* aimport_path);
+bc_AST* bc_NewASTImportDecl(bc_AST* aimport_path);
 
 /**
  * インポートの一覧を表す要素を作成します.
@@ -286,32 +286,32 @@ AST* NewASTImportDecl(AST* aimport_path);
  * @param aimport_list
  * @return
  */
-AST* NewASTImportDeclList(AST* aimport, AST* aimport_list);
+bc_AST* bc_NewASTImportDeclList(bc_AST* aimport, bc_AST* aimport_list);
 
 /**
  * スコープ({ ... }) を表す要素を作成します.
  * @param astmt_list
  * @return
  */
-AST* NewASTScope(AST* astmt_list);
+bc_AST* bc_NewASTScope(bc_AST* astmt_list);
 
 /**
  * 空のスコープを表す要素を作成します.
  * @return
  */
-AST* NewASTScopeEmpty();
+bc_AST* bc_NewASTScopeEmpty();
 
 /**
  * 空の要素を作成します.
  */
-AST* NewASTBlank();
+bc_AST* bc_NewASTBlank();
 
 /**
  * 識別子を表す要素を作成します.
  * @param str
  * @return
  */
-AST* NewASTIdentifier(StringView str);
+bc_AST* bc_NewASTIdentifier(StringView str);
 
 /**
  * 識別子のリストを表す要素を作成します.
@@ -319,83 +319,83 @@ AST* NewASTIdentifier(StringView str);
  * @param aident_list
  * @return
  */
-AST* NewASTIdentifierList(StringView str, AST* aident_list);
+bc_AST* bc_NewASTIdentifierList(StringView str, bc_AST* aident_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.
  * @param aexpr
  * @return
  */
-AST* NewASTProc(AST* aexpr);
+bc_AST* bc_NewASTProc(bc_AST* aexpr);
 
 /**
  * self に child を子要素として追加します.
  * @param self
  * @param achild
  */
-AST* PushAST(AST* self, AST* achild);
+bc_AST* bc_PushAST(bc_AST* self, bc_AST* achild);
 
 /** 
  * 指定位置の子要素を返します.
  * @param self
  * @param index
  */
-AST* AtAST(AST* self, int index);
+bc_AST* bc_AtAST(bc_AST* self, int index);
 
 /**
  * 最初の子要素を返します.
  * @param self
  * @return
  */
-AST* FirstAST(AST* self);
+bc_AST* bc_FirstAST(bc_AST* self);
 
 /**
  * 二番目の子要素を返します.
  * @param self
  * @return
  */
-AST* SecondAST(AST* self);
+bc_AST* bc_SecondAST(bc_AST* self);
 
 /**
  * 指定の AST とその子要素を全て開放します.
  * @param self
  */
-void DeleteAST(AST* self);
+void bc_DeleteAST(bc_AST* self);
 
 /**
  * 指定の要素が空なら true.
  * @param self
  * @return
  */
-bool IsBlankAST(AST* self);
+bool bc_IsBlankAST(bc_AST* self);
 
 /**
  * 指定の要素がアクセスレベルなら true.
  * @param self
  * @return
  */
-bool IsAccessAST(AST* self);
+bool bc_IsAccessAST(bc_AST* self);
 
 /**
  * 指定の要素が修飾子なら true.
  * @param self
  * @return
  */
-bool IsModifierAST(AST* self);
+bool bc_IsModifierAST(bc_AST* self);
 
 /**
  * 指定の要素がステートメントなら true.
  * @param self
  * @return
  */
-bool IsStmtAST(AST* self);
+bool bc_IsStmtAST(bc_AST* self);
 
 /**
  * 指定の要素がアクセスレベルを表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-bc_AccessLevel ASTCastToAccess(AST* self);
+bc_AccessLevel bc_ASTCastToAccess(bc_AST* self);
 
 /**
  * 指定の要素が修飾子を表す要素なら列挙型に変換します.
@@ -403,12 +403,12 @@ bc_AccessLevel ASTCastToAccess(AST* self);
  * @param error
  * @return
  */
-ModifierType ASTCastToModifier(AST* self, bool* error);
+ModifierType bc_ASTCastToModifier(bc_AST* self, bool* error);
 
 /**
  * 指定の要素が連鎖を表す要素なら列挙型に変換します.
  * @param self
  * @return
  */
-ConstructorChainType ASTCastToChainType(AST* self);
+ConstructorChainType bc_ASTCastToChainType(bc_AST* self);
 #endif // !SIGNAL_AST_AST_H

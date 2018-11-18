@@ -13,7 +13,7 @@
 #include <string.h>
 
 //proto
-static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt);
+static bool eval_top_from_cll(ClassLoader* cll, bc_AST* aOpt);
 
 
 bool bc_EvalAST(const char* filename) {
@@ -81,13 +81,13 @@ bool bc_EvalString(const char* source) {
 		return false;
 	}
 	ClassLoader* cll = NewClassLoader("", CONTENT_ENTRY_POINT_T);
-	AST* a = ReleaseParserAST(p);
+	bc_AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	return eval_top_from_cll(cll, a);
 }
 
 //private
-static bool eval_top_from_cll(ClassLoader* cll, AST* aOpt) {
+static bool eval_top_from_cll(ClassLoader* cll, bc_AST* aOpt) {
 	ScriptContext* ctx = GetCurrentScriptContext();
 	if(aOpt == NULL) {
 		LoadClassLoader(cll);

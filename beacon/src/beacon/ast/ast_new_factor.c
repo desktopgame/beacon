@@ -4,108 +4,108 @@
 #include <assert.h>
 #include "../util/text.h"
 
-AST* NewASTBool(bool b) {
+bc_AST* NewASTBool(bool b) {
 	return b ? NewASTTrue() : NewASTFalse();
 }
 
-AST* NewASTTrue() {
-	return NewAST(AST_TRUE_T);
+bc_AST* NewASTTrue() {
+	return bc_NewAST(AST_TRUE_T);
 }
 
-AST* NewASTFalse() {
-	return NewAST(AST_FALSE_T);
+bc_AST* NewASTFalse() {
+	return bc_NewAST(AST_FALSE_T);
 }
 
-AST* NewASTNull() {
-	return NewAST(AST_NULL_T);
+bc_AST* NewASTNull() {
+	return bc_NewAST(AST_NULL_T);
 }
 
-AST* NewASTAs(AST* afact, AST* atypename) {
-	AST* ret = NewAST(AST_AS_T);
-	PushAST(ret, afact);
-	PushAST(ret, atypename);
+bc_AST* NewASTAs(bc_AST* afact, bc_AST* atypename) {
+	bc_AST* ret = bc_NewAST(AST_AS_T);
+	bc_PushAST(ret, afact);
+	bc_PushAST(ret, atypename);
 	return ret;
 }
 
 
-AST* NewASTNameReference(AST* atypename) {
-	AST* ret = NewAST(AST_NAME_REFERENCE_T);
-	PushAST(ret, atypename);
+bc_AST* NewASTNameReference(bc_AST* atypename) {
+	bc_AST* ret = bc_NewAST(AST_NAME_REFERENCE_T);
+	bc_PushAST(ret, atypename);
 	return ret;
 }
 
-AST* NewASTVariable(AST* a, AST* atype_args) {
-	AST* ret = NewAST(AST_VARIABLE_T);
-	PushAST(ret, a);
-	PushAST(ret, atype_args);
+bc_AST* NewASTVariable(bc_AST* a, bc_AST* atype_args) {
+	bc_AST* ret = bc_NewAST(AST_VARIABLE_T);
+	bc_PushAST(ret, a);
+	bc_PushAST(ret, atype_args);
 	return ret;
 }
 
-AST* NewASTVariableFromString(StringView str, AST* atype_args) {
-	AST* ret = NewAST(AST_VARIABLE_T);
+bc_AST* NewASTVariableFromString(StringView str, bc_AST* atype_args) {
+	bc_AST* ret = bc_NewAST(AST_VARIABLE_T);
 	ret->Attr.StringVValue = str;
-	PushAST(ret, atype_args);
+	bc_PushAST(ret, atype_args);
 	return ret;
 }
 
-AST* NewASTOpCall(AST* areceiver, AST* aargs) {
-	AST* ret = NewAST(AST_OP_CALL_T);
-	PushAST(ret, areceiver);
-	PushAST(ret, aargs);
+bc_AST* NewASTOpCall(bc_AST* areceiver, bc_AST* aargs) {
+	bc_AST* ret = bc_NewAST(AST_OP_CALL_T);
+	bc_PushAST(ret, areceiver);
+	bc_PushAST(ret, aargs);
 	return ret;
 }
 
-AST* NewASTThis() {
-	return NewAST(AST_THIS_T);
+bc_AST* NewASTThis() {
+	return bc_NewAST(AST_THIS_T);
 }
 
-AST* NewASTSuper() {
-	return NewAST(AST_SUPER_T);
+bc_AST* NewASTSuper() {
+	return bc_NewAST(AST_SUPER_T);
 }
 
-AST* NewASTFieldAccess(AST* afact, StringView name, AST* atype_args) {
-	AST* ret = NewAST(AST_FIELD_ACCESS_T);
-	AST* aname = NewAST(AST_IDENTIFIER_T);
+bc_AST* NewASTFieldAccess(bc_AST* afact, StringView name, bc_AST* atype_args) {
+	bc_AST* ret = bc_NewAST(AST_FIELD_ACCESS_T);
+	bc_AST* aname = bc_NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = name;
-	PushAST(ret, afact);
-	PushAST(ret, aname);
-	PushAST(ret, atype_args);
+	bc_PushAST(ret, afact);
+	bc_PushAST(ret, aname);
+	bc_PushAST(ret, atype_args);
 	return ret;
 }
 
-AST* NewASTNewInstance(AST* afqcn, AST* atype_args, AST* argument_list) {
-	AST* ret = NewAST(AST_NEW_INSTANCE_T);
-	PushAST(ret, afqcn);
-	PushAST(ret, atype_args);
-	PushAST(ret, argument_list);
+bc_AST* NewASTNewInstance(bc_AST* afqcn, bc_AST* atype_args, bc_AST* argument_list) {
+	bc_AST* ret = bc_NewAST(AST_NEW_INSTANCE_T);
+	bc_PushAST(ret, afqcn);
+	bc_PushAST(ret, atype_args);
+	bc_PushAST(ret, argument_list);
 	return ret;
 }
 
-AST* NewASTInstanceTof(AST* afact, AST* atype) {
-	AST* ret = NewAST(AST_INSTANCEOF_T);
-	PushAST(ret, afact);
-	PushAST(ret, atype);
+bc_AST* NewASTInstanceTof(bc_AST* afact, bc_AST* atype) {
+	bc_AST* ret = bc_NewAST(AST_INSTANCEOF_T);
+	bc_PushAST(ret, afact);
+	bc_PushAST(ret, atype);
 	return ret;
 }
 
-AST* NewASTExplicitBiOperator(AST* afact, OperatorType type, AST* aarg) {
-	AST* ret = NewAST(AST_EXPLICIT_BIOPERATOR_T);
+bc_AST* NewASTExplicitBiOperator(bc_AST* afact, OperatorType type, bc_AST* aarg) {
+	bc_AST* ret = bc_NewAST(AST_EXPLICIT_BIOPERATOR_T);
 	ret->Attr.OperatorValue = type;
-	PushAST(ret, afact);
-	PushAST(ret, aarg);
+	bc_PushAST(ret, afact);
+	bc_PushAST(ret, aarg);
 	return ret;
 }
 
-AST* NewASTExplicitUOperator(AST* afact, OperatorType type) {
-	AST* ret = NewAST(AST_EXPLICIT_UOPERATOR_T);
+bc_AST* NewASTExplicitUOperator(bc_AST* afact, OperatorType type) {
+	bc_AST* ret = bc_NewAST(AST_EXPLICIT_UOPERATOR_T);
 	ret->Attr.OperatorValue = type;
-	PushAST(ret, afact);
+	bc_PushAST(ret, afact);
 	return ret;
 }
 
-AST* NewASTSubscriptAccess(AST* afact, AST* aindex) {
-	AST* ret = NewAST(AST_SUBSCRIPT_ACCESS_T);
-	PushAST(ret, afact);
-	PushAST(ret, aindex);
+bc_AST* NewASTSubscriptAccess(bc_AST* afact, bc_AST* aindex) {
+	bc_AST* ret = bc_NewAST(AST_SUBSCRIPT_ACCESS_T);
+	bc_PushAST(ret, afact);
+	bc_PushAST(ret, aindex);
 	return ret;
 }

@@ -1,18 +1,18 @@
 #include "ast_new_operator.h"
 #include <stdlib.h>
 //proto
-static AST* ast_new_bop(ASTTag tag, AST* l, AST* r);
-static AST* ast_new_uop(ASTTag tag, AST* a);
+static bc_AST* ast_new_bop(bc_ASTTag tag, bc_AST* l, bc_AST* r);
+static bc_AST* ast_new_uop(bc_ASTTag tag, bc_AST* a);
 
-AST* NewASTUnary(ASTTag tag, AST* a) {
-	AST* ret = NewAST(tag);
-	PushAST(ret, a);
+bc_AST* NewASTUnary(bc_ASTTag tag, bc_AST* a) {
+	bc_AST* ret = bc_NewAST(tag);
+	bc_PushAST(ret, a);
 	return ret;
 }
 
-AST* NewASTBinary(ASTTag tag, AST* aleft, AST* aright) {
-	AST* ret = NewAST(tag);
-	PushAST(ret, aleft);
-	PushAST(ret, aright);
+bc_AST* NewASTBinary(bc_ASTTag tag, bc_AST* aleft, bc_AST* aright) {
+	bc_AST* ret = bc_NewAST(tag);
+	bc_PushAST(ret, aleft);
+	bc_PushAST(ret, aright);
 	return ret;
 }

@@ -24,7 +24,7 @@
  * @param lineno
  * @return
  */
-AST* MallocASTStmt(AST* astmt, const char* filename, int lineno);
+bc_AST* MallocASTStmt(bc_AST* astmt, const char* filename, int lineno);
 
 /**
  * 実行可能な文を表す要素を作成します. 
@@ -32,7 +32,7 @@ AST* MallocASTStmt(AST* astmt, const char* filename, int lineno);
  * @param astmt_list
  * @return
  */
-AST* NewASTStmtList(AST* astmt, AST* astmt_list);
+bc_AST* NewASTStmtList(bc_AST* astmt, bc_AST* astmt_list);
 
 /**
  * ifを表す要素を作成します.
@@ -40,14 +40,14 @@ AST* NewASTStmtList(AST* astmt, AST* astmt_list);
  * @param abody
  * @return
  */
-AST* NewASTIf(AST* acond, AST* abody);
+bc_AST* NewASTIf(bc_AST* acond, bc_AST* abody);
 
 /** 
  * elseを表す要素を作成します.
  * @param abody
  * @return
  */
-AST* NewASTElse(AST* abody);
+bc_AST* NewASTElse(bc_AST* abody);
 
 /**
  * if-elseを表す要素を作成します.
@@ -56,7 +56,7 @@ AST* NewASTElse(AST* abody);
  * @param afalseBody
  * @return
  */
-AST* NewASTIfElse(AST* acond, AST* atrueBody, AST* afalseBody);
+bc_AST* NewASTIfElse(bc_AST* acond, bc_AST* atrueBody, bc_AST* afalseBody);
 
 /**
  * if-elif... を表す要素を作成します.
@@ -65,7 +65,7 @@ AST* NewASTIfElse(AST* acond, AST* atrueBody, AST* afalseBody);
  * @param aelifList
  * @return
  */
-AST* NewASTIfElifList(AST* acond, AST* atrueBody, AST* aelifList);
+bc_AST* NewASTIfElifList(bc_AST* acond, bc_AST* atrueBody, bc_AST* aelifList);
 
 /**
  * if-elif...-elseを表す要素を作成します.
@@ -75,7 +75,7 @@ AST* NewASTIfElifList(AST* acond, AST* atrueBody, AST* aelifList);
  * @param aelseBody
  * @param
  */
-AST* NewASTIfElifListElse(AST* acond, AST* atrueBody, AST* aelifList, AST* aelseBody);
+bc_AST* NewASTIfElifListElse(bc_AST* acond, bc_AST* atrueBody, bc_AST* aelifList, bc_AST* aelseBody);
 
 /**
  * elif...を表す要素を作成します.
@@ -83,7 +83,7 @@ AST* NewASTIfElifListElse(AST* acond, AST* atrueBody, AST* aelifList, AST* aelse
  * @param atail
  * @return
  */
-AST* NewASTElifList(AST* aforward, AST* atail);
+bc_AST* NewASTElifList(bc_AST* aforward, bc_AST* atail);
 
 /**
  * elifを表す要素を作成します.
@@ -91,7 +91,7 @@ AST* NewASTElifList(AST* aforward, AST* atail);
  * @param abody
  * @return
  */
-AST* NewASTElif(AST* acond, AST* abody);
+bc_AST* NewASTElif(bc_AST* acond, bc_AST* abody);
 
 /**
  * whileを表す要素を作成します.
@@ -99,45 +99,45 @@ AST* NewASTElif(AST* acond, AST* abody);
  * @param abody
  * @return
  */
-AST* NewASTWhile(AST* acond, AST* abody);
+bc_AST* NewASTWhile(bc_AST* acond, bc_AST* abody);
 
 /** 
  * ループから抜けるステートメントを作成します.
  * @return
  */
-AST* NewASTBreak();
+bc_AST* NewASTBreak();
 
 /**
  * 次のループまでスキップするステートメントを作成します.
  * @return
  */
-AST* NewASTContinue();
+bc_AST* NewASTContinue();
 
 /**
  * 値を返却するステートメントを作成します.
  * @param afact
  * @return
  */
-AST* NewASTReturn(AST* afact);
+bc_AST* NewASTReturn(bc_AST* afact);
 
 /**
  * @return
  */
-AST* NewASTReturnEmpty();
+bc_AST* NewASTReturnEmpty();
 
 /**
  * 例外をスローするステートメントを作成します.
  * @param afact
  * @return
  */
-AST* NewASTThrow(AST* afact);
+bc_AST* NewASTThrow(bc_AST* afact);
 
 /**
  * 例外が発生するかもしれない処理を囲うステートメント.
  * @param abody
  * @param acatch_list
  */
-AST* NewASTTry(AST* abody, AST* acatch_list);
+bc_AST* NewASTTry(bc_AST* abody, bc_AST* acatch_list);
 
 /**
  * 例外を捕捉するステートメントを作成します.
@@ -146,7 +146,7 @@ AST* NewASTTry(AST* abody, AST* acatch_list);
  * @param abody
  * @return
  */
-AST* NewASTCatch(AST* stypename, StringView name, AST* abody);
+bc_AST* NewASTCatch(bc_AST* stypename, StringView name, bc_AST* abody);
 
 /**
  * キャッチ節の一覧を作成します.
@@ -154,14 +154,14 @@ AST* NewASTCatch(AST* stypename, StringView name, AST* abody);
  * @param acatch_list
  * @return
  */
-AST* NewASTCatchList(AST* acatch, AST* acatch_list);
+bc_AST* NewASTCatchList(bc_AST* acatch, bc_AST* acatch_list);
 
 /**
 * 実引数を表す要素を作成します.
 * @param afactor
 * @return
 */
-AST* NewASTArgument(AST* afactor);
+bc_AST* NewASTArgument(bc_AST* afactor);
 
 /**
 * 実引数を表す要素を作成します.
@@ -169,7 +169,7 @@ AST* NewASTArgument(AST* afactor);
 * @param aargument_list
 * @return
 */
-AST* NewASTArgumentList(AST* factor, AST* argument_list);
+bc_AST* NewASTArgumentList(bc_AST* factor, bc_AST* argument_list);
 
 /**
  * 完全クラス名(XX::YY::Foo)を表す要素を作成します.
@@ -177,7 +177,7 @@ AST* NewASTArgumentList(AST* factor, AST* argument_list);
  * @param class_name
  * @return
  */
-AST* NewASTFQCN(AST* part_list, StringView class_name);
+bc_AST* NewASTFQCN(bc_AST* part_list, StringView class_name);
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
@@ -191,7 +191,7 @@ AST* NewASTFQCN(AST* part_list, StringView class_name);
  * @param lineno
  * @return
  */
-AST* MallocASTFQCNPart(StringView namev, const char* filename, int lineno);
+bc_AST* MallocASTFQCNPart(StringView namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
@@ -199,7 +199,7 @@ AST* MallocASTFQCNPart(StringView namev, const char* filename, int lineno);
  * @param apart_list
  * @return
  */
-AST* NewASTFQCNPartList(AST* part, AST* part_list);
+bc_AST* NewASTFQCNPartList(bc_AST* part, bc_AST* part_list);
 
 /**
  * X::Y y; を表す要素を作成します.
@@ -207,7 +207,7 @@ AST* NewASTFQCNPartList(AST* part, AST* part_list);
  * @param name
  * @return
  */
-AST* NewASTVariableDecl(AST* type, StringView name);
+bc_AST* NewASTVariableDecl(bc_AST* type, StringView name);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
@@ -216,7 +216,7 @@ AST* NewASTVariableDecl(AST* type, StringView name);
  * @param afact
  * @return
  */
-AST* NewASTVariableInit(AST* type, StringView name, AST* fact);
+bc_AST* NewASTVariableInit(bc_AST* type, StringView name, bc_AST* fact);
 
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.
@@ -224,7 +224,7 @@ AST* NewASTVariableInit(AST* type, StringView name, AST* fact);
  * @param afact
  * @return
  */
-AST* NewASTInferencedTypeInit(StringView name, AST* fact);
+bc_AST* NewASTInferencedTypeInit(StringView name, bc_AST* fact);
 
 /**
  * assert 条件 を表す要素を作成します.
@@ -232,27 +232,27 @@ AST* NewASTInferencedTypeInit(StringView name, AST* fact);
  * @param amsg
  * @return
  */
-AST* NewASTAssert(AST* afact, AST* amsg);
+bc_AST* NewASTAssert(bc_AST* afact, bc_AST* amsg);
 
 /**
  * 強制実行を表す要素を作成します.
  * @param astmt
  * @return
  */
-AST* NewASTDefer(AST* astmt);
+bc_AST* NewASTDefer(bc_AST* astmt);
 
 /**
  * コルーチンの区切りを表す要素を作成します.
  * @param afact
  * @return
  */
-AST* NewASTYieldReturn(AST* afact);
+bc_AST* NewASTYieldReturn(bc_AST* afact);
 
 /**
  * コルーチンの終了を表す要素を作成します.
  * @return
  */
-AST* NewASTYieldBreak();
+bc_AST* NewASTYieldBreak();
 
 /**
  * Javaから beacon が実行される時、事前に定義されたテーブルを注入するためのノード.
@@ -260,5 +260,5 @@ AST* NewASTYieldBreak();
  * @param avalue 値
  * @return
  */
-AST* NewASTInject(StringView name, AST* avalue);
+bc_AST* NewASTInject(StringView name, bc_AST* avalue);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

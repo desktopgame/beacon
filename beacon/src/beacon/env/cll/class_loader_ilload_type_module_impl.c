@@ -16,18 +16,18 @@
 #include <assert.h>
 
 //proto
-static void CLILFQCNCache_impl(AST* afqcn, FQCNCache* fqcn, int level);
-static void CLILGenericCache_impl(AST* afqcn, GenericCache* dest);
-static void CLILGenericCache_inner(AST* atype_args, GenericCache* dest);
-static void CLILTypeParameter_rule(struct ClassLoader* self, struct AST* asource, Vector* dest);
-static void ast_fqcn_flatten(AST* afqcn, Vector* dest);
-static void CLILArgumentListImpl(ClassLoader* self, Vector* list, AST* asource);
+static void CLILFQCNCache_impl(bc_AST* afqcn, FQCNCache* fqcn, int level);
+static void CLILGenericCache_impl(bc_AST* afqcn, GenericCache* dest);
+static void CLILGenericCache_inner(bc_AST* atype_args, GenericCache* dest);
+static void CLILTypeParameter_rule(struct ClassLoader* self, struct bc_AST* asource, Vector* dest);
+static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest);
+static void CLILArgumentListImpl(ClassLoader* self, Vector* list, bc_AST* asource);
 
-void CLILFQCNCache(AST* afqcn, FQCNCache* fqcn) {
+void CLILFQCNCache(bc_AST* afqcn, FQCNCache* fqcn) {
 	CLILFQCNCache_impl(afqcn, fqcn, 0);
 }
 
-void CLILGenericCache(AST* afqcn, GenericCache* dest) {
+void CLILGenericCache(bc_AST* afqcn, GenericCache* dest) {
 	if(afqcn->Tag == AST_FQCN_CLASS_NAME_T) {
 		dest->FQCN->Name = afqcn->Attr.StringVValue;
 		return;
@@ -41,8 +41,8 @@ void CLILGenericCache(AST* afqcn, GenericCache* dest) {
 	}
 }
 
-void CLILTypenameList(ClassLoader * self, Vector * dst, AST* atypename_list) {
-	if (IsBlankAST(atypename_list)) {
+void CLILTypenameList(ClassLoader * self, Vector * dst, bc_AST* atypename_list) {
+	if (bc_IsBlankAST(atypename_list)) {
 		return;
 	}
 	if (atypename_list->Tag == AST_TYPENAME_T) {
@@ -52,42 +52,42 @@ void CLILTypenameList(ClassLoader * self, Vector * dst, AST* atypename_list) {
 		PushVector(dst, e);
 	} else if(atypename_list->Tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atypename_list->Children->Length; i++) {
-			CLILTypenameList(self, dst, AtAST(atypename_list, i));
+			CLILTypenameList(self, dst, bc_AtAST(atypename_list, i));
 		}
 	}
 }
 
 
-void CLILTypeParameter(ClassLoader* self, AST* asource, Vector* dest) {
-	if (IsBlankAST(asource)) {
+void CLILTypeParameter(ClassLoader* self, bc_AST* asource, Vector* dest) {
+	if (bc_IsBlankAST(asource)) {
 		return;
 	}
 	if (asource->Tag == AST_TYPE_PARAMETER_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
-			CLILTypeParameter(self, AtAST(asource, i), dest);
+			CLILTypeParameter(self, bc_AtAST(asource, i), dest);
 		}
 		return;
 	}
 	assert(asource->Tag == AST_TYPE_PARAMETER_T ||
 		   asource->Tag == AST_TYPE_IN_PARAMETER_T ||
 		   asource->Tag == AST_TYPE_OUT_PARAMETER_T);
-	AST* arule_list = FirstAST(asource);
+	bc_AST* arule_list = bc_FirstAST(asource);
 	ILTypeParameter* iltypeparam = NewILTypeParameter(asource->Attr.StringVValue);
 	if (asource->Tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_IN_T;
 	if (asource->Tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_OUT_T;
 	PushVector(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで
-	assert(IsBlankAST(arule_list));
+	assert(bc_IsBlankAST(arule_list));
 }
 
-void CLILTypeArgument(ClassLoader* self, AST* atype_args, Vector* dest) {
-	if(IsBlankAST(atype_args)) {
+void CLILTypeArgument(ClassLoader* self, bc_AST* atype_args, Vector* dest) {
+	if(bc_IsBlankAST(atype_args)) {
 		return;
 	}
 	if(atype_args->Tag == AST_TYPENAME_LIST_T) {
 		for(int i=0; i<atype_args->Children->Length; i++) {
-			AST* e = AtAST(atype_args, i);
+			bc_AST* e = bc_AtAST(atype_args, i);
 			CLILTypeArgument(self, e, dest);
 		}
 	} else if(atype_args->Tag == AST_TYPENAME_T) {
@@ -97,25 +97,25 @@ void CLILTypeArgument(ClassLoader* self, AST* atype_args, Vector* dest) {
 	} else assert(false);
 }
 
-void CLILParameterList(ClassLoader* self, Vector* list, AST* asource) {
+void CLILParameterList(ClassLoader* self, Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_PARAMETER_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
-			CLILParameterList(self, list, AtAST(asource, i));
+			CLILParameterList(self, list, bc_AtAST(asource, i));
 		}
 	} else if (asource->Tag == AST_PARAMETER_T) {
-		AST* aGetTypeName = FirstAST(asource);
-		AST* aaccess_name = SecondAST(asource);
+		bc_AST* aGetTypeName = bc_FirstAST(asource);
+		bc_AST* aaccess_name = bc_SecondAST(asource);
 		ILParameter* p = NewILParameter(aaccess_name->Attr.StringVValue);
 		CLILGenericCache(aGetTypeName, p->GCache);
 		PushVector(list, p);
 	}
 }
 
-void CLILArgumentList(ClassLoader* self, Vector* list, AST* asource) {
+void CLILArgumentList(ClassLoader* self, Vector* list, bc_AST* asource) {
 	CLILArgumentListImpl(self, list, asource);
 }
 //private
-static void CLILFQCNCache_impl(AST* afqcn, FQCNCache* fqcn, int level) {
+static void CLILFQCNCache_impl(bc_AST* afqcn, FQCNCache* fqcn, int level) {
 	Vector* v = NewVector();
 	ast_fqcn_flatten(afqcn, v);
 	for(int i=0; i<v->Length; i++) {
@@ -129,17 +129,17 @@ static void CLILFQCNCache_impl(AST* afqcn, FQCNCache* fqcn, int level) {
 	DeleteVector(v, VectorDeleterOfNull);
 }
 
-static void CLILGenericCache_impl(AST* afqcn, GenericCache* dest) {
+static void CLILGenericCache_impl(bc_AST* afqcn, GenericCache* dest) {
 	FQCNCache* body = dest->FQCN;
 	//型引数を解析する
 	if (afqcn->Tag == AST_TYPENAME_T) {
-		AST* atype_args = SecondAST(afqcn);
-		if (!IsBlankAST(atype_args)) {
+		bc_AST* atype_args = bc_SecondAST(afqcn);
+		if (!bc_IsBlankAST(atype_args)) {
 			CLILGenericCache_inner(atype_args, dest);
 		}
 	}
 	if (afqcn->Tag == AST_TYPENAME_T) {
-		CLILGenericCache_impl(FirstAST(afqcn), dest);
+		CLILGenericCache_impl(bc_FirstAST(afqcn), dest);
 		return;
 	}
 	if (afqcn->Tag == AST_FQCN_T ||
@@ -153,7 +153,7 @@ static void CLILGenericCache_impl(AST* afqcn, GenericCache* dest) {
 			return;
 		}
 		for (int i = 0; i < afqcn->Children->Length; i++) {
-			AST* c = AtAST(afqcn, i);
+			bc_AST* c = bc_AtAST(afqcn, i);
 			CLILGenericCache_impl(c, dest);
 		}
 	} else {
@@ -163,10 +163,10 @@ static void CLILGenericCache_impl(AST* afqcn, GenericCache* dest) {
 	}
 }
 
-static void CLILGenericCache_inner(AST* atype_args, GenericCache* dest) {
+static void CLILGenericCache_inner(bc_AST* atype_args, GenericCache* dest) {
 	if (atype_args->Tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atype_args->Children->Length; i++) {
-			AST* e = AtAST(atype_args, i);
+			bc_AST* e = bc_AtAST(atype_args, i);
 			CLILGenericCache_inner(e, dest);
 		}
 	} else {
@@ -176,7 +176,7 @@ static void CLILGenericCache_inner(AST* atype_args, GenericCache* dest) {
 	}
 }
 
-static void CLILTypeParameter_rule(ClassLoader* self, AST* asource, Vector* dest) {
+static void CLILTypeParameter_rule(ClassLoader* self, bc_AST* asource, Vector* dest) {
 	assert(false);
 	/*
 	if (source->Tag == AST_TYPE_PARAMETER_LIST_T) {
@@ -195,23 +195,23 @@ static void CLILTypeParameter_rule(ClassLoader* self, AST* asource, Vector* dest
 	*/
 }
 
-static void ast_fqcn_flatten(AST* afqcn, Vector* dest) {
+static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest) {
 	if(afqcn->Tag == AST_FQCN_PART_T) {
 		PushVector(dest, afqcn->Attr.StringVValue);
 	} else {
 		for(int i=0; i<afqcn->Children->Length; i++) {
-			ast_fqcn_flatten(AtAST(afqcn, i), dest);
+			ast_fqcn_flatten(bc_AtAST(afqcn, i), dest);
 		}
 	}
 }
 
-static void CLILArgumentListImpl(ClassLoader* self, Vector* list, AST* asource) {
+static void CLILArgumentListImpl(ClassLoader* self, Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_ARGUMENT_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
-			CLILArgumentListImpl(self, list, AtAST(asource, i));
+			CLILArgumentListImpl(self, list, bc_AtAST(asource, i));
 		}
 	} else if (asource->Tag == AST_ARGUMENT_T) {
-		AST* aprimary = FirstAST(asource);
+		bc_AST* aprimary = bc_FirstAST(asource);
 		ILArgument* ilarg = NewILArgument();
 		ilarg->Factor = CLILFactor(self, aprimary);
 		PushVector(list, ilarg);

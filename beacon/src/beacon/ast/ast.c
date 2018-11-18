@@ -7,17 +7,17 @@
 #include "../env/fqcn_cache.h"
 #include "../util/mem.h"
 //proto
-static void delete_ast_impl(AST* self);
-static ModifierType ast_to_modifier(AST* self, bool* error);
+static void delete_ast_impl(bc_AST* self);
+static ModifierType ast_to_modifier(bc_AST* self, bool* error);
 static void delete_ast_self(VectorItem item);
 
-void CompileEntryAST(AST* self) {
+void bc_CompileEntryAST(bc_AST* self) {
 	Parser* p = GetCurrentParser();
-	PushAST(p->Root, self);
+	bc_PushAST(p->Root, self);
 }
 
-AST* MallocAST(ASTTag tag, const char* filename, int lineno) {
-	AST* ret = (AST*)bc_MXMalloc(sizeof(AST), filename, lineno);
+bc_AST* bc_MallocAST(bc_ASTTag tag, const char* filename, int lineno) {
+	bc_AST* ret = (bc_AST*)bc_MXMalloc(sizeof(bc_AST), filename, lineno);
 	assert(ret != NULL);
 	ret->Tag = tag;
 	ret->Children = NULL;
@@ -33,74 +33,74 @@ AST* MallocAST(ASTTag tag, const char* filename, int lineno) {
 	return ret;
 }
 
-AST* NewASTNamespacePath(StringView name) {
-	AST* ret = NewAST(AST_NAMESPACE_PATH_T);
+bc_AST* bc_NewASTNamespacePath(StringView name) {
+	bc_AST* ret = bc_NewAST(AST_NAMESPACE_PATH_T);
 	ret->Attr.StringVValue = name;
 	return ret;
 }
 
-AST* NewASTNamespacePathList(AST* aforward, StringView name) {
-	AST* ret = NewAST(AST_NAMESPACE_PATH_LIST_T);
-	PushAST(ret, aforward);
-	PushAST(ret, NewASTNamespacePath(name));
+bc_AST* bc_NewASTNamespacePathList(bc_AST* aforward, StringView name) {
+	bc_AST* ret = bc_NewAST(AST_NAMESPACE_PATH_LIST_T);
+	bc_PushAST(ret, aforward);
+	bc_PushAST(ret, bc_NewASTNamespacePath(name));
 	return ret;
 }
 
-AST* NewASTImportPath(AST* astr) {
-	AST* ret = NewAST(AST_IMPORT_PATH_T);
+bc_AST* bc_NewASTImportPath(bc_AST* astr) {
+	bc_AST* ret = bc_NewAST(AST_IMPORT_PATH_T);
 	ret->Attr.StringVValue = astr->Attr.StringVValue;
 	astr->Attr.StringVValue = 0;
 	MEM_FREE(astr);
 	return ret;
 }
 
-AST* NewASTImportDecl(AST* aimport_path) {
-	AST* ret = NewAST(AST_IMPORT_DECL_T);
-	PushAST(ret, aimport_path);
+bc_AST* bc_NewASTImportDecl(bc_AST* aimport_path) {
+	bc_AST* ret = bc_NewAST(AST_IMPORT_DECL_T);
+	bc_PushAST(ret, aimport_path);
 	return ret;
 }
 
-AST* NewASTImportDeclList(AST* aimport, AST* aimport_list) {
-	AST* ret = NewAST(AST_IMPORT_DECL_LIST_T);
-	PushAST(ret, aimport);
-	PushAST(ret, aimport_list);
+bc_AST* bc_NewASTImportDeclList(bc_AST* aimport, bc_AST* aimport_list) {
+	bc_AST* ret = bc_NewAST(AST_IMPORT_DECL_LIST_T);
+	bc_PushAST(ret, aimport);
+	bc_PushAST(ret, aimport_list);
 	return ret;
 }
 
-AST* NewASTScope(AST* astmt_list) {
-	AST* ret = NewAST(AST_SCOPE_T);
-	PushAST(ret, astmt_list);
+bc_AST* bc_NewASTScope(bc_AST* astmt_list) {
+	bc_AST* ret = bc_NewAST(AST_SCOPE_T);
+	bc_PushAST(ret, astmt_list);
 	return ret;
 }
 
-AST* NewASTScopeEmpty() {
-	return NewASTScope(NewASTBlank());
+bc_AST* bc_NewASTScopeEmpty() {
+	return bc_NewASTScope(bc_NewASTBlank());
 }
 
-AST* NewASTBlank() {
-	return NewAST(AST_BLANK_T);
+bc_AST* bc_NewASTBlank() {
+	return bc_NewAST(AST_BLANK_T);
 }
 
-AST* NewASTIdentifier(StringView str) {
-	AST* ret = NewAST(AST_IDENTIFIER_T);
+bc_AST* bc_NewASTIdentifier(StringView str) {
+	bc_AST* ret = bc_NewAST(AST_IDENTIFIER_T);
 	ret->Attr.StringVValue = str;
 	return ret;
 }
 
-AST* NewASTIdentifierList(StringView str, AST* aident_list) {
-	AST* ret = NewAST(AST_IDENTIFIER_LIST_T);
-	PushAST(ret, aident_list);
-	PushAST(ret, NewASTIdentifier(str));
+bc_AST* bc_NewASTIdentifierList(StringView str, bc_AST* aident_list) {
+	bc_AST* ret = bc_NewAST(AST_IDENTIFIER_LIST_T);
+	bc_PushAST(ret, aident_list);
+	bc_PushAST(ret, bc_NewASTIdentifier(str));
 	return ret;
 }
 
-AST* NewASTProc(AST* aexpr) {
-	AST* ret = NewAST(AST_PROC_T);
-	PushAST(ret, aexpr);
+bc_AST* bc_NewASTProc(bc_AST* aexpr) {
+	bc_AST* ret = bc_NewAST(AST_PROC_T);
+	bc_PushAST(ret, aexpr);
 	return ret;
 }
 
-AST* PushAST(AST* self, AST* achild) {
+bc_AST* bc_PushAST(bc_AST* self, bc_AST* achild) {
 	assert(self != NULL);
 	assert(achild != NULL);
 	if (self->Children == NULL) {
@@ -119,39 +119,39 @@ AST* PushAST(AST* self, AST* achild) {
 	return self;
 }
 
-AST* AtAST(AST* self, int index) {
+bc_AST* bc_AtAST(bc_AST* self, int index) {
 	assert(self != NULL);
-	return (AST*)AtVector(self->Children, index);
+	return (bc_AST*)AtVector(self->Children, index);
 }
 
-AST* FirstAST(AST* self) {
-	return AtAST(self, 0);
+bc_AST* bc_FirstAST(bc_AST* self) {
+	return bc_AtAST(self, 0);
 }
 
-AST* SecondAST(AST* self) {
-	return AtAST(self, 1);
+bc_AST* bc_SecondAST(bc_AST* self) {
+	return bc_AtAST(self, 1);
 }
 
-void DeleteAST(AST* self) {
+void bc_DeleteAST(bc_AST* self) {
 	if (self == NULL) {
 		return;
 	}
 	delete_ast_impl(self);
 }
 
-bool IsBlankAST(AST* self) {
+bool bc_IsBlankAST(bc_AST* self) {
 	return self == NULL || self->Tag == AST_BLANK_T;
 }
 
-bool IsAccessAST(AST* self) {
+bool bc_IsAccessAST(bc_AST* self) {
 	return self->Tag == AST_ACCESS_LEVEL_T;
 }
 
-bool IsModifierAST(AST* self) {
+bool bc_IsModifierAST(bc_AST* self) {
 	return self->Tag == AST_MOD_Tifier;
 }
 
-bool IsStmtAST(AST* self) {
+bool bc_IsStmtAST(bc_AST* self) {
 	switch(self->Tag) {
 		case AST_STMT_T:
 		case AST_STMT_LIST_T:
@@ -179,21 +179,21 @@ bool IsStmtAST(AST* self) {
 	return false;
 }
 
-bc_AccessLevel ASTCastToAccess(AST* self) {
-	assert(IsAccessAST(self));
+bc_AccessLevel bc_ASTCastToAccess(bc_AST* self) {
+	assert(bc_IsAccessAST(self));
 	return self->Attr.AccessValue;
 }
 
-ModifierType ASTCastToModifier(AST* self, bool* error) {
+ModifierType bc_ASTCastToModifier(bc_AST* self, bool* error) {
 	(*error) = false;
 	if(self->Tag == AST_MOD_Tifier_list) {
 		return ast_to_modifier(self, error);
 	}
-	assert(IsModifierAST(self));
+	assert(bc_IsModifierAST(self));
 	return self->Attr.ModifierValue;
 }
 
-ConstructorChainType ASTCastToChainType(AST* self) {
+ConstructorChainType bc_ASTCastToChainType(bc_AST* self) {
 	switch (self->Tag) {
 		case AST_CONSTRUCTOR_CHAIN_THIS_T:
 			return CHAIN_TYPE_THIS_T;
@@ -206,14 +206,14 @@ ConstructorChainType ASTCastToChainType(AST* self) {
 }
 
 //private
-static void delete_ast_impl(AST* self) {
-	ASTTag tag = self->Tag;
+static void delete_ast_impl(bc_AST* self) {
+	bc_ASTTag tag = self->Tag;
 	DeleteVector(self->Children, delete_ast_self);
 	self->Children = NULL;
 	MEM_FREE(self);
 }
 
-static ModifierType ast_to_modifier(AST* self, bool* error) {
+static ModifierType ast_to_modifier(bc_AST* self, bool* error) {
 	int ret = -1;
 	for(int i=0; i<self->Children->Length; i++) {
 		if((*error)) {
@@ -221,10 +221,10 @@ static ModifierType ast_to_modifier(AST* self, bool* error) {
 		}
 		//フラグを合体させる
 		if(ret == -1) {
-			ret = ASTCastToModifier(AtAST(self, i), error);
+			ret = bc_ASTCastToModifier(bc_AtAST(self, i), error);
 		} else {
 			//追加の属性がすでに含まれているかどうか
-			ModifierType add = ASTCastToModifier(AtAST(self, i), error);
+			ModifierType add = bc_ASTCastToModifier(bc_AtAST(self, i), error);
 			if((ret & add) > 0) {
 				(*error) = true;
 			}
@@ -236,6 +236,6 @@ static ModifierType ast_to_modifier(AST* self, bool* error) {
 }
 
 static void delete_ast_self(VectorItem item) {
-	AST* e = (AST*)item;
-	DeleteAST(e);
+	bc_AST* e = (bc_AST*)item;
+	bc_DeleteAST(e);
 }

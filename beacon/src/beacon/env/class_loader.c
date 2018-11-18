@@ -78,12 +78,12 @@ void LoadClassLoader(ClassLoader * self) {
 	if (check_parser_error(p)) {
 		return;
 	}
-	AST* a = ReleaseParserAST(p);
+	bc_AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	LoadPassASTClassLoader(self, a);
 }
 
-void LoadPassASTClassLoader(ClassLoader* self, AST* a) {
+void LoadPassASTClassLoader(ClassLoader* self, bc_AST* a) {
 	bc_Recover();
 	Heap* hee = GetHeap();
 	hee->AcceptBlocking++;
@@ -109,7 +109,7 @@ void DeleteClassLoader(ClassLoader * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteAST(self->SourceCode);
+	bc_DeleteAST(self->SourceCode);
 	DeleteILToplevel(self->ILCode);
 	DeleteVector(self->TypeCaches, delete_cache);
 	DeleteImportManager(self->ImportManager);

@@ -11,7 +11,7 @@
 #define BEACON_ENV_CLL_CLASS_LOADER_ILLOAD_FACTOR_MODULE_IMPL_H
 
 struct ClassLoader;
-struct AST;
+struct bc_AST;
 struct ILFactor;
 /**
  * 因子を IL に変換します.
@@ -19,5 +19,5 @@ struct ILFactor;
  * @param source
  * @return
  */
-struct ILFactor* CLILFactor(struct ClassLoader* self, struct AST* source);
+struct ILFactor* CLILFactor(struct ClassLoader* self, struct bc_AST* source);
 #endif

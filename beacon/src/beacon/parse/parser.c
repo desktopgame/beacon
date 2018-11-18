@@ -64,7 +64,7 @@ Parser* GetCurrentParser() {
 void DestroyParser(Parser* self) {
 	assert(gParser != NULL);
 	if (gParser->Root) {
-		DeleteAST(gParser->Root);
+		bc_DeleteAST(gParser->Root);
 	}
 	DeleteVector(gParser->LinenoTable, VectorDeleterOfNull);
 	MEM_FREE(gParser->LiteralBuffer);
@@ -84,18 +84,18 @@ void AppendParserBuffer(Parser* self, char ch) {
 	AppendBuffer(self->LiteralBuffer, ch);
 }
 
-AST* ReduceParserBuffer(Parser* self) {
+bc_AST* ReduceParserBuffer(Parser* self) {
 	//""のような空文字の場合
 	if (self->LiteralBuffer == NULL) {
 		return NewASTString(InternString(""));
 	}
-	AST* ret = NewASTString(InternString2(self->LiteralBuffer));
+	bc_AST* ret = NewASTString(InternString2(self->LiteralBuffer));
 	self->LiteralBuffer = NULL;
 	return ret;
 }
 
-AST* ReleaseParserAST(Parser* self) {
-	AST* ret = self->Root;
+bc_AST* ReleaseParserAST(Parser* self) {
+	bc_AST* ret = self->Root;
 	self->Root = NULL;
 	return ret;
 }
@@ -120,6 +120,6 @@ static Parser* parser_new() {
 	ret->Lineno = 0;
 	ret->LiteralBuffer = NULL;
 	ret->LinenoTable = NewVector();
-	ret->Root = NewAST(AST_ROOT_T);
+	ret->Root = bc_NewAST(AST_ROOT_T);
 	return ret;
 }

@@ -21,7 +21,7 @@
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
 static Frame* bc_eval_allocate(ClassLoader* cll);
-static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a);
+static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a);
 static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, ClassLoader* cll, Frame* fr);
 static void printClassInfo(JNIEnv* env, jobject Object);
@@ -53,12 +53,12 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_GetPanicMessage()));
 		return NULL;
 	}
-	AST* a = ReleaseParserAST(p);
+	bc_AST* a = ReleaseParserAST(p);
 	DestroyParser(p);
 	//javaから beacon へインジェクションしようとしたが、
 	//参照型をインジェクションしようとした場合
 	if(!bc_read_symbol(env, table, a)) {
-		DeleteAST(a);
+		bc_DeleteAST(a);
 		return NULL;
 	}
 	ClassLoader* cll = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
@@ -108,7 +108,7 @@ static Frame* bc_eval_allocate(ClassLoader* cll) {
 	return fr;
 }
 
-static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a) {
+static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 	if(table == NULL) {
 		return true;
 	}
@@ -160,7 +160,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, AST* a) {
 			(*env)->FatalError(env, "null pointer: get");
 			return false;
 		}
-		AST* astmt = NULL;
+		bc_AST* astmt = NULL;
 		if((*env)->IsInstanceOf(env, valueE, integer_cls) == JNI_TRUE) {
 			astmt = NewASTInject(keyv, NewASTInt(jobject2jint(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, double_cls) == JNI_TRUE) {
