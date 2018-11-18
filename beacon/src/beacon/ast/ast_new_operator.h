@@ -20,7 +20,7 @@
  * @param a
  * @return
  */
-bc_AST* NewASTUnary(bc_ASTTag tag, bc_AST* a);
+bc_AST* bc_NewASTUnary(bc_ASTTag tag, bc_AST* a);
 
 /**
  * 二項演算子を表す要素を作成します.
@@ -29,5 +29,5 @@ bc_AST* NewASTUnary(bc_ASTTag tag, bc_AST* a);
  * @param aright
  * @return
  */
-bc_AST* NewASTBinary(bc_ASTTag tag, bc_AST* aleft, bc_AST* aright);
+bc_AST* bc_NewASTBinary(bc_ASTTag tag, bc_AST* aleft, bc_AST* aright);
 #endif // !SIGNAL_AST_AST_NEW_OPERATOR_H
