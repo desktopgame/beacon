@@ -202,7 +202,7 @@ static void GenerateILInvokeBound_method(ILInvokeBound* self, Enviroment* env, C
 			return;
 		}
 	}
-	if(IsStaticModifier(self->Kind.Method->Modifier)) {
+	if(bc_IsStaticModifier(self->Kind.Method->Modifier)) {
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Method->Parent->AbsoluteIndex);
 		AddOpcodeBuf(env->Bytecode,(VectorItem) self->Index);

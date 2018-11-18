@@ -44,7 +44,7 @@ typedef struct Method {
 	Vector* Parameters;
 	Vector* TypeParameters;
 	bc_AccessLevel Access;
-	ModifierType Modifier;
+	bc_ModifierType Modifier;
 	union {
 		ScriptMethod* Script;
 		NativeMethod* Native;

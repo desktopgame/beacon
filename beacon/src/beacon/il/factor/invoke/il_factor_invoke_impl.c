@@ -227,7 +227,7 @@ static void GenerateILInvoke_method(ILInvoke* self, Enviroment* env, CallContext
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->Parent->AbsoluteIndex);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
 	} else {
-		assert(!IsStaticModifier(self->u.m->Modifier));
+		assert(!bc_IsStaticModifier(self->u.m->Modifier));
 		if(self->u.m->Access == ACCESS_PRIVATE_T) {
 			AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESPECIAL);
 			AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);

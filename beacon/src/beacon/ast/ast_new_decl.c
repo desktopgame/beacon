@@ -86,7 +86,7 @@ bc_AST* bc_NewASTModifierList(bc_AST* amod, bc_AST* amod_list) {
 	return ret;
 }
 
-bc_AST* bc_NewASTModifier(ModifierType type) {
+bc_AST* bc_NewASTModifier(bc_ModifierType type) {
 	bc_AST* ret = bc_NewAST(AST_MOD_Tifier);
 	ret->Attr.ModifierValue = type;
 	return ret;

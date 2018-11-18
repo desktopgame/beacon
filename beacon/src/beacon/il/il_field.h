@@ -23,7 +23,7 @@ typedef struct ILField {
 	struct GenericCache* GCache;
 	StringView Name;
 	bc_AccessLevel Access;
-	ModifierType Modifier;
+	bc_ModifierType Modifier;
 	struct ILFactor* InitialValue;
 } ILField;
 /**

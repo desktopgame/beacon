@@ -19,7 +19,7 @@ struct Field;
 struct Object;
 
 typedef struct Property {
-	ModifierType Modifier;
+	bc_ModifierType Modifier;
 	StringView Name;
 	struct Type* Parent;
 	struct Field* SourceRef;

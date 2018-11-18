@@ -109,7 +109,7 @@ bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
 		#if defined(DEBUG)
 		const char* mename = Ref2Str(me->Name);
 		#endif
-		if(!IsAbstractModifier(me->Modifier)) { continue; }
+		if(!bc_IsAbstractModifier(me->Modifier)) { continue; }
 		Vector* methods = FindTreeMethodClass(cls, me);
 		if(methods->Length == 0 || methods_is_all_abstract(methods)) {
 		   (*out) = me;
@@ -227,7 +227,7 @@ static bool methods_is_all_abstract(Vector* v) {
 		#if defined(DEBUG)
 		const char* tyname = Ref2Str(GetTypeName(e->Parent));
 		#endif
-		if(!IsAbstractModifier(e->Modifier)) {
+		if(!bc_IsAbstractModifier(e->Modifier)) {
 			return false;
 		}
 	}

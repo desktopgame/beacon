@@ -45,7 +45,7 @@ ILClass* NewILClass(StringView namev) {
 }
 
 void AddFieldILClass(ILClass * self, ILField * f) {
-	if (IsStaticModifier(f->Modifier)) {
+	if (bc_IsStaticModifier(f->Modifier)) {
 		PushVector(self->StaticFields, f);
 	} else {
 		PushVector(self->Fields, f);
@@ -53,7 +53,7 @@ void AddFieldILClass(ILClass * self, ILField * f) {
 }
 
 void AddPropertyILClass(ILClass* self, ILProperty* prop) {
-	if(IsStaticModifier(prop->Modifier)) {
+	if(bc_IsStaticModifier(prop->Modifier)) {
 		PushVector(self->StaticProperties, prop);
 	} else {
 		PushVector(self->Properties, prop);
@@ -61,7 +61,7 @@ void AddPropertyILClass(ILClass* self, ILProperty* prop) {
 }
 
 void AddMethodILClass(ILClass * self, ILMethod * m) {
-	if (IsStaticModifier(m->Modifier)) {
+	if (bc_IsStaticModifier(m->Modifier)) {
 		PushVector(self->StaticMethods, m);
 	} else {
 		PushVector(self->Methods, m);

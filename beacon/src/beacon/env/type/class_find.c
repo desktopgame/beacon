@@ -184,7 +184,7 @@ bool IsAccessiblePropertyAccessorClass(Class* self, PropertyBody* pb) {
 int GetFieldByPropertyClass(Class* self, Property* p) {
 	int temp = -1;
 	assert(p->SourceRef != NULL);
-	if(IsStaticModifier(p->Modifier)) {
+	if(bc_IsStaticModifier(p->Modifier)) {
 		FindSFieldClass(self, p->SourceRef->Name, &temp);
 	} else {
 		FindFieldClass(self, p->SourceRef->Name, &temp);
@@ -509,7 +509,7 @@ Vector* FindTreeMethodClass(Class* self, Method* m) {
 }
 
 bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
-	assert(!IsStaticModifier(m->Modifier));
+	assert(!bc_IsStaticModifier(m->Modifier));
 	(*outM) = NULL;
 	bool ret = false;
 	CallContext* cctx = NewCallContext(CALL_DECL_T);

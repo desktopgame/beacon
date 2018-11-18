@@ -44,13 +44,13 @@ void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Entry->Index);
 	} else if(self->Type == VARIABLE_LOCAL_FIELD_T) {
 		Field* f = self->Kind.FieldI.Field;
-		if(!IsStaticModifier(f->Modifier)) {
+		if(!bc_IsStaticModifier(f->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateGetField(env->Bytecode, f, self->Kind.FieldI.Index);
 	} else if(self->Type == VARIABLE_LOCAL_PROPERTY_T) {
 		Property* p = self->Kind.PropertyI.Property;
-		if(!IsStaticModifier(p->Modifier)) {
+		if(!bc_IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateGetProperty(env->Bytecode, p, self->Kind.PropertyI.Index);

@@ -8,7 +8,7 @@
 #include "../util/mem.h"
 //proto
 static void delete_ast_impl(bc_AST* self);
-static ModifierType ast_to_modifier(bc_AST* self, bool* error);
+static bc_ModifierType ast_to_modifier(bc_AST* self, bool* error);
 static void delete_ast_self(VectorItem item);
 
 void bc_CompileEntryAST(bc_AST* self) {
@@ -184,7 +184,7 @@ bc_AccessLevel bc_ASTCastToAccess(bc_AST* self) {
 	return self->Attr.AccessValue;
 }
 
-ModifierType bc_ASTCastToModifier(bc_AST* self, bool* error) {
+bc_ModifierType bc_ASTCastToModifier(bc_AST* self, bool* error) {
 	(*error) = false;
 	if(self->Tag == AST_MOD_Tifier_list) {
 		return ast_to_modifier(self, error);
@@ -213,7 +213,7 @@ static void delete_ast_impl(bc_AST* self) {
 	MEM_FREE(self);
 }
 
-static ModifierType ast_to_modifier(bc_AST* self, bool* error) {
+static bc_ModifierType ast_to_modifier(bc_AST* self, bool* error) {
 	int ret = -1;
 	for(int i=0; i<self->Children->Length; i++) {
 		if((*error)) {
@@ -224,14 +224,14 @@ static ModifierType ast_to_modifier(bc_AST* self, bool* error) {
 			ret = bc_ASTCastToModifier(bc_AtAST(self, i), error);
 		} else {
 			//追加の属性がすでに含まれているかどうか
-			ModifierType add = bc_ASTCastToModifier(bc_AtAST(self, i), error);
+			bc_ModifierType add = bc_ASTCastToModifier(bc_AtAST(self, i), error);
 			if((ret & add) > 0) {
 				(*error) = true;
 			}
 			ret |= add;
 		}
 	}
-	ModifierType mt = (ModifierType)ret;
+	bc_ModifierType mt = (bc_ModifierType)ret;
 	return mt;
 }
 

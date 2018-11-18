@@ -110,7 +110,7 @@ void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
 		Field* f = (Field*)AtVector(self->Fields, i);
 		Object* a = GetDefaultObject(f->GType);
 		//静的フィールドは別の場所に確保
-		if (IsStaticModifier(f->Modifier)) {
+		if (bc_IsStaticModifier(f->Modifier)) {
 			continue;
 		}
 		he->CollectBlocking++;
@@ -135,7 +135,7 @@ void FreeClassFields(Class* self, Object * o) {
 
 void AddFieldClass(Class* self, Field* f) {
 	assert(f != NULL);
-	if (IsStaticModifier(f->Modifier)) {
+	if (bc_IsStaticModifier(f->Modifier)) {
 		PushVector(self->StaticFields, f);
 	} else {
 		PushVector(self->Fields, f);
@@ -143,7 +143,7 @@ void AddFieldClass(Class* self, Field* f) {
 }
 
 void AddPropertyClass(Class* self, Property* p) {
-	if (IsStaticModifier(p->Modifier)) {
+	if (bc_IsStaticModifier(p->Modifier)) {
 		PushVector(self->StaticProperties, p);
 	} else {
 		PushVector(self->Properties, p);
@@ -167,7 +167,7 @@ void AddPropertyClass(Class* self, Property* p) {
 
 void AddMethodClass(Class* self, Method * m) {
 	assert(m != NULL);
-	if (IsStaticModifier(m->Modifier)) {
+	if (bc_IsStaticModifier(m->Modifier)) {
 		PushVector(self->StaticMethods, m);
 	} else {
 		PushVector(self->Methods, m);
@@ -416,7 +416,7 @@ static void create_vtable_top(Class* self) {
 	for (int i = 0; i < self->Methods->Length; i++) {
 		Method* m = (Method*)AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
-		   !IsStaticModifier(m->Modifier)) {
+		   !bc_IsStaticModifier(m->Modifier)) {
 			AddVTable(self->VT, m);
 		}
 	}
@@ -434,7 +434,7 @@ static void create_vtable_override(Class* self) {
 	for (int i = 0; i < self->Methods->Length; i++) {
 		Method* m = (Method*)AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
-		   !IsStaticModifier(m->Modifier)) {
+		   !bc_IsStaticModifier(m->Modifier)) {
 			ReplaceVTable(self->VT, m, cctx);
 		}
 	}

@@ -4,7 +4,7 @@
 #include "../env/TYPE_IMPL.h"
 
 void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
-	if(IsStaticModifier(fi->Modifier)) {
+	if(bc_IsStaticModifier(fi->Modifier)) {
 		AddOpcodeBuf(buf, OP_GET_STATIC);
 		AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
 		AddOpcodeBuf(buf, index);
@@ -18,7 +18,7 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 	if(prop->IsShort) {
 		GenerateGetField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->Kind.Class, prop));
 	} else {
-		if(IsStaticModifier(prop->Modifier)) {
+		if(bc_IsStaticModifier(prop->Modifier)) {
 			AddOpcodeBuf(buf, OP_GET_STATIC_PROPERTY);
 			AddOpcodeBuf(buf, prop->Parent->AbsoluteIndex);
 			AddOpcodeBuf(buf, index);
@@ -30,7 +30,7 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 }
 
 void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
-	if(IsStaticModifier(fi->Modifier)) {
+	if(bc_IsStaticModifier(fi->Modifier)) {
 		AddOpcodeBuf(buf, OP_PUT_STATIC);
 		AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
 		AddOpcodeBuf(buf, index);
@@ -44,7 +44,7 @@ void GeneratePutProperty(OpcodeBuf* buf, Property* prop, int index) {
 	if(prop->IsShort) {
 		GeneratePutField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->Kind.Class, prop));
 	} else {
-		if(IsStaticModifier(prop->Modifier)) {
+		if(bc_IsStaticModifier(prop->Modifier)) {
 			AddOpcodeBuf(buf, OP_PUT_STATIC_PROPERTY);
 			AddOpcodeBuf(buf, prop->Parent->AbsoluteIndex);
 			AddOpcodeBuf(buf, index);

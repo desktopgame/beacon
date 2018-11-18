@@ -14,52 +14,52 @@
 /**
  * アクセス修飾子を表す列挙型.
  */
-typedef enum ModifierType {
+typedef enum bc_ModifierType {
 	MODIFIER_NONE_T		= (1 << 0),
 	MODIFIER_STATIC_T		= (1 << 1),
 	MODIFIER_NATIVE_T		= (1 << 2),
 	MODIFIER_ABSTRACT_T	= (1 << 3),
 	MODIFIER_OVERRIDE_T	= (1 << 4),
 	MODIFIER_FINAL_T		= (1 << 5)
-} ModifierType;
+} bc_ModifierType;
 
 /**
  * 指定の修飾子が static を含むなら true.
  * @param type
  * @return
  */
-bool IsStaticModifier(ModifierType type);
+bool bc_IsStaticModifier(bc_ModifierType type);
 
 /**
  * 指定の修飾子が native を含むなら true.
  * @param type
  * @return
  */
-bool IsNativeModifier(ModifierType type);
+bool bc_IsNativeModifier(bc_ModifierType type);
 
 /**
  * 指定の修飾子が abstract を含むなら true.
  * @param type
  * @return
  */
-bool IsAbstractModifier(ModifierType type);
+bool bc_IsAbstractModifier(bc_ModifierType type);
 
 /**
  * 指定の修飾子が override を含むなら true.
  * @param type
  * @return
  */
-bool IsOverrideModifier(ModifierType type);
+bool bc_IsOverrideModifier(bc_ModifierType type);
 
 /**
  * @param type
  * @return
  */
-bool IsFinalModifier(ModifierType type);
+bool bc_IsFinalModifier(bc_ModifierType type);
 
 /**
  * 修飾子を出力します.
  * @param type
  */
-void PrintModifier(ModifierType type);
+void bc_PrintModifier(bc_ModifierType type);
 #endif // !SIGNAL_AST_MODIFIER_TYPE_H

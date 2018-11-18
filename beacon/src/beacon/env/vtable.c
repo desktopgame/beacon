@@ -18,14 +18,14 @@ void CopyVTable(VTable * src, VTable * dst) {
 }
 
 void AddVTable(VTable * self, Method * m) {
-	if (IsStaticModifier(m->Modifier)) {
+	if (bc_IsStaticModifier(m->Modifier)) {
 		return;
 	}
 	PushVector(self->Elements, m);
 }
 
 void ReplaceVTable(VTable * self, Method * m, CallContext* cctx) {
-	if (IsStaticModifier(m->Modifier)) {
+	if (bc_IsStaticModifier(m->Modifier)) {
 		return;
 	}
 	#if defined(DEBUG)

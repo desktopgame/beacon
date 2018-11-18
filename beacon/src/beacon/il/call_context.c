@@ -99,7 +99,7 @@ Vector* GetTypeArgsCContext(CallContext* self) {
 
 bool IsStaticCContext(CallContext* self) {
 	return self->Tag == CALL_METHOD_T &&
-	       IsStaticModifier(self->Kind.Method->Modifier);
+	       bc_IsStaticModifier(self->Kind.Method->Modifier);
 }
 
 void DeleteCallContext(CallContext* self) {

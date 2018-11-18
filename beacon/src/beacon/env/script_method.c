@@ -26,7 +26,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	sub->Receiver = parent->Parent;
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
-	if (!IsStaticModifier(parent->Modifier)) {
+	if (!bc_IsStaticModifier(parent->Modifier)) {
 		Object* receiver_obj = PopVector(fr->ValueStack);
 		PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);

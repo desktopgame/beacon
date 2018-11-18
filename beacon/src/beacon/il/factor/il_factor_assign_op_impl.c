@@ -104,7 +104,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 			return;
 		}
 		//finalなので書き込めない
-		if(IsFinalModifier(sf->Modifier)) {
+		if(bc_IsFinalModifier(sf->Modifier)) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(sf->Name)
@@ -146,7 +146,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	ILPropertyAccess* prop = self->Left->Kind.PropertyAccess;
 	Property* pp = prop->Property;
-	bool is_static = IsStaticModifier(prop->Property->Modifier);
+	bool is_static = bc_IsStaticModifier(prop->Property->Modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
@@ -171,7 +171,7 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 		return;
 	}
 	//省略記法なら初期化されてるかチェック
-	if(pp->IsShort && !IsStaticModifier(pp->Modifier)) {
+	if(pp->IsShort && !bc_IsStaticModifier(pp->Modifier)) {
 		check_final(prop->Source, self->Right, prop->Property->SourceRef->Name, env, cctx);
 	}
 	BC_ERROR();
@@ -276,7 +276,7 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->Tag != CALL_CTOR_T) {
 		//finalなので書き込めない
-		if(IsFinalModifier(f->Modifier)) {
+		if(bc_IsFinalModifier(f->Modifier)) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(f->Name)
@@ -284,8 +284,8 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 		}
 	} else {
 		//コンストラクタであっても static final の場合は書き込めない
-		if(IsFinalModifier(f->Modifier) &&
-		   IsStaticModifier(f->Modifier)) {
+		if(bc_IsFinalModifier(f->Modifier) &&
+		   bc_IsStaticModifier(f->Modifier)) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				Ref2Str(GetTypeName(cls->Parent)),
 				Ref2Str(f->Name)
@@ -333,7 +333,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!IsStaticModifier(f->Modifier) &&
+		if(!bc_IsStaticModifier(f->Modifier) &&
 		    IsStaticCContext(cctx)) {
 			bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 				Ref2Str(GetTypeName(f->Parent)),
@@ -341,7 +341,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 			);
 			return;
 		}
-		if(!IsStaticModifier(f->Modifier)) {
+		if(!bc_IsStaticModifier(f->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateILFactor(self->Right, env, cctx);
@@ -354,7 +354,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!IsStaticModifier(p->Modifier) &&
+		if(!bc_IsStaticModifier(p->Modifier) &&
 		    IsStaticCContext(cctx)) {
 			bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 				Ref2Str(GetTypeName(p->Parent)),
@@ -362,11 +362,11 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 			);
 			return;
 		}
-		if(!IsStaticModifier(p->Modifier)) {
+		if(!bc_IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutProperty(env->Bytecode, p, temp);
-		assert(!IsStaticModifier(p->Modifier));
+		assert(!bc_IsStaticModifier(p->Modifier));
 	}
 }

@@ -63,7 +63,7 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 		Vector* aArgs = NULL;
 		Vector* aTArgs = NULL;
 		//レシーバも
-		if(!IsStaticModifier(self->Modifier)) {
+		if(!bc_IsStaticModifier(self->Modifier)) {
 			Object* receiver_obj = PopVector(fr->ValueStack);
 			AssignVector(a->VariableTable, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);

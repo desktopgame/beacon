@@ -53,7 +53,7 @@ bool CLBC_field_decl(ClassLoader* self, ILType* iltype, Type* tp, ILField* ilfi,
 	fi->InitialValue = ilfi->InitialValue;
 	ilfi->InitialValue = NULL;
 	//フィールドの修飾子に native が使用されている
-	if(IsNativeModifier(fi->Modifier)) {
+	if(bc_IsNativeModifier(fi->Modifier)) {
 		bc_Panic(BCERROR_NATIVE_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(fi->Name)
@@ -61,7 +61,7 @@ bool CLBC_field_decl(ClassLoader* self, ILType* iltype, Type* tp, ILField* ilfi,
 		return false;
 	}
 	//.. abstractが使用されている
-	if(IsAbstractModifier(fi->Modifier)) {
+	if(bc_IsAbstractModifier(fi->Modifier)) {
 		bc_Panic(BCERROR_ABSTRACT_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(fi->Name)
@@ -69,7 +69,7 @@ bool CLBC_field_decl(ClassLoader* self, ILType* iltype, Type* tp, ILField* ilfi,
 		return false;
 	}
 	//.. overrideが使用されている
-	if(IsOverrideModifier(fi->Modifier)) {
+	if(bc_IsOverrideModifier(fi->Modifier)) {
 		bc_Panic(BCERROR_OVERRIDE_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(fi->Name)
@@ -78,8 +78,8 @@ bool CLBC_field_decl(ClassLoader* self, ILType* iltype, Type* tp, ILField* ilfi,
 	}
 	//static finalなのに、
 	//初期値が存在しない
-	if(IsStaticModifier(fi->Modifier) &&
-	   IsFinalModifier(fi->Modifier) &&
+	if(bc_IsStaticModifier(fi->Modifier) &&
+	   bc_IsFinalModifier(fi->Modifier) &&
 	   fi->InitialValue == NULL) {
 		bc_Panic(BCERROR_NOT_DEFAULT_VALUE_STATIC_FINAL_FIELD_T,
 			Ref2Str(GetTypeName(tp)),
@@ -118,7 +118,7 @@ bool CLBC_field_impl(ClassLoader* self, Type* tp, Field* fi, Namespace* scope, C
 	int abtmp = he->AcceptBlocking;
 	he->CollectBlocking++;
 	he->AcceptBlocking = 0;
-	if(IsStaticModifier(fi->Modifier)) {
+	if(bc_IsStaticModifier(fi->Modifier)) {
 		Frame* f = NewFrame();
 		SetSGThreadFrameRef(GetMainSGThread(), f);
 		ExecuteVM(f, env);
@@ -173,9 +173,9 @@ bool CLBC_Property_decl(ClassLoader* self, ILType* iltype, Type* tp, ILProperty*
 	prop->GType = ResolveImportManager(scope, ilprop->GCache, cctx);
 	prop->IsShort = ilprop->Set->IsShort && ilprop->Get->IsShort;
 	   AddPropertyType(tp, prop);
-	if(IsAbstractModifier(prop->Modifier) ||
-	   IsOverrideModifier(prop->Modifier) ||
-	   IsNativeModifier(prop->Modifier)) {
+	if(bc_IsAbstractModifier(prop->Modifier) ||
+	   bc_IsOverrideModifier(prop->Modifier) ||
+	   bc_IsNativeModifier(prop->Modifier)) {
 		   bc_Panic(BCERROR_NATIVE_FIELD_T, Ref2Str(prop->Name));
 			DeleteCallContext(cctx);
 		   return false;
@@ -214,7 +214,7 @@ bool CLBC_Property_impl(ClassLoader* self, ILType* iltype, Type* tp, ILProperty*
 	get->Env->ContextRef = self;
 	//setterのオペコードを生成
 	SymbolEntry* valueE = EntrySymbolTable(set->Env->Symboles, pr->GType, InternString("value"));
-	if(!IsStaticModifier(pr->Modifier)) {
+	if(!bc_IsStaticModifier(pr->Modifier)) {
 		AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
 		AddOpcodeBuf(set->Env->Bytecode, 0);
 	}
@@ -222,7 +222,7 @@ bool CLBC_Property_impl(ClassLoader* self, ILType* iltype, Type* tp, ILProperty*
 	AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
 	CLBC_body(self, set_stmt_list, set->Env, cctx, scope);
 	//getterのオペコードを生成
-	if(!IsStaticModifier(pr->Modifier)) {
+	if(!bc_IsStaticModifier(pr->Modifier)) {
 		AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
 		AddOpcodeBuf(get->Env->Bytecode, 0);
 	}
@@ -268,7 +268,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	//実行時のメソッド情報を作成する
 	Method* method = NewMethod(ilmethod->Name);
 	Vector* parameter_list = method->Parameters;
-	method->Type = IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
+	method->Type = bc_IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
 	method->Access = ilmethod->Access;
 	method->Modifier = ilmethod->Modifier;
 	DupTypeParameterList(ilmethod->TypeParameters, method->TypeParameters);
@@ -278,11 +278,11 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	cctx->Kind.Method = method;
 	//インターフェースなら空
 	if (tp->Tag == TYPE_INTERFACE_T ||
-	   IsAbstractModifier(method->Modifier)) {
+	   bc_IsAbstractModifier(method->Modifier)) {
 		method->Type = METHOD_TYPE_ABSTRACT_T;
 		method->Kind.Script = NULL;
 	} else {
-		if(IsNativeModifier(method->Modifier)) {
+		if(bc_IsNativeModifier(method->Modifier)) {
 			method->Kind.Native = NewNativeMethod();
 		} else {
 			method->Kind.Script = NewScriptMethod();
@@ -290,7 +290,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	}
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
-	if(IsAbstractModifier(method->Modifier) &&
+	if(bc_IsAbstractModifier(method->Modifier) &&
 	  (tp->Tag == TYPE_CLASS_T &&
 	  !TYPE2CLASS(tp)->IsAbstract)) {
 		bc_Panic(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->Name));
@@ -302,7 +302,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	//ネイティブメソッドでも抽象メソッドでもない
 	if(tp->Tag == TYPE_CLASS_T &&
 	   ilmethod->IsNoStmt &&
-		(!IsAbstractModifier(method->Modifier) && !IsNativeModifier(method->Modifier))
+		(!bc_IsAbstractModifier(method->Modifier) && !bc_IsNativeModifier(method->Modifier))
 	) {
 		bc_Panic(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->Name));
 		DeleteMethod(method);
@@ -312,7 +312,7 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
 	if(tp->Tag == TYPE_CLASS_T &&
 	   !ilmethod->IsNoStmt &&
-		(IsAbstractModifier(method->Modifier) || IsNativeModifier(method->Modifier))
+		(bc_IsAbstractModifier(method->Modifier) || bc_IsNativeModifier(method->Modifier))
 	) {
 		bc_Panic(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->Name));
 		DeleteMethod(method);
@@ -320,8 +320,8 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 		return false;
 	}
 	//メソッドの修飾子が static override
-	if(IsStaticModifier(method->Modifier) &&
-	   IsOverrideModifier(method->Modifier)) {
+	if(bc_IsStaticModifier(method->Modifier) &&
+	   bc_IsOverrideModifier(method->Modifier)) {
 		bc_Panic(BCERROR_STATIC_OVERRIDE_METHOD_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(method->Name)
@@ -331,8 +331,8 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 		return false;
 	}
 	//.. abstract override
-	if(IsAbstractModifier(method->Modifier) &&
-	   IsOverrideModifier(method->Modifier)) {
+	if(bc_IsAbstractModifier(method->Modifier) &&
+	   bc_IsOverrideModifier(method->Modifier)) {
 		bc_Panic(BCERROR_ABSTRACT_OVERRIDE_METHOD_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(method->Name)
@@ -342,8 +342,8 @@ bool CLBC_method_decl(ClassLoader* self, ILType* iltype, Type* tp, ILMethod* ilm
 		return false;
 	}
 	//.. abstract static
-	if(IsAbstractModifier(method->Modifier) &&
-	   IsStaticModifier(method->Modifier)) {
+	if(bc_IsAbstractModifier(method->Modifier) &&
+	   bc_IsStaticModifier(method->Modifier)) {
 		bc_Panic(BCERROR_ABSTRACT_STATIC_METHOD_T,
 			Ref2Str(GetTypeName(tp)),
 			Ref2Str(method->Name)
@@ -402,7 +402,7 @@ bool CLBC_method_impl(ClassLoader* self, Namespace* scope, ILType* iltype, Type*
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
-	if (!IsStaticModifier(me->Modifier)) {
+	if (!bc_IsStaticModifier(me->Modifier)) {
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 	}

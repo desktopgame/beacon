@@ -28,7 +28,7 @@ typedef struct Field {
 	struct GenericType* GType;
 	struct Object* StaticValue;
 	bc_AccessLevel Access;
-	ModifierType Modifier;
+	bc_ModifierType Modifier;
 	struct ILFactor* InitialValue;
 	struct Enviroment* InitialValueEnv;
 	bool IsNotInitializedAtCtor;

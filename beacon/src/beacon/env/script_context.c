@@ -113,7 +113,7 @@ void EachStaticScriptContext(ScriptContext* self, StaticEach act) {
 		Class* cls = e->Kind.Class;
 		for (int j = 0; j < cls->StaticFields->Length; j++) {
 			Field* f = (Field*)AtVector(cls->StaticFields, j);
-			if(IsStaticModifier(f->Modifier)) {
+			if(bc_IsStaticModifier(f->Modifier)) {
 				act(f);
 			}
 		}

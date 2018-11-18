@@ -117,7 +117,7 @@ bc_AST* bc_NewASTModifierList(bc_AST* amod, bc_AST* amod_list);
  * @param type
  * @return
  */
-bc_AST* bc_NewASTModifier(ModifierType type);
+bc_AST* bc_NewASTModifier(bc_ModifierType type);
 
 /**
  * メンバーを表す要素を作成します.

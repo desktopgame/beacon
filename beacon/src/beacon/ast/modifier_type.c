@@ -1,27 +1,27 @@
 #include "modifier_type.h"
 #include <stdio.h>
 
-bool IsStaticModifier(ModifierType type) {
+bool bc_IsStaticModifier(bc_ModifierType type) {
 	return (type & MODIFIER_STATIC_T);
 }
 
-bool IsNativeModifier(ModifierType type) {
+bool bc_IsNativeModifier(bc_ModifierType type) {
 	return (type & MODIFIER_NATIVE_T);
 }
 
-bool IsAbstractModifier(ModifierType type) {
+bool bc_IsAbstractModifier(bc_ModifierType type) {
 	return (type & MODIFIER_ABSTRACT_T);
 }
 
-bool IsFinalModifier(ModifierType type) {
+bool bc_IsFinalModifier(bc_ModifierType type) {
 	return (type & MODIFIER_FINAL_T);
 }
 
-bool IsOverrideModifier(ModifierType type) {
+bool bc_IsOverrideModifier(bc_ModifierType type) {
 	return (type & MODIFIER_OVERRIDE_T);
 }
 
-void PrintModifier(ModifierType type) {
+void bc_PrintModifier(bc_ModifierType type) {
 	if (type == (MODIFIER_STATIC_T | MODIFIER_NATIVE_T)) {
 		printf("static native");
 		return;

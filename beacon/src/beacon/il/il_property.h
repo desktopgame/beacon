@@ -18,7 +18,7 @@ struct GenericCache;
 typedef struct ILProperty {
 	struct GenericCache* GCache;
 	bc_AccessLevel Access;
-	ModifierType Modifier;
+	bc_ModifierType Modifier;
 	StringView Name;
 	ILPropertyBody* Set;
 	ILPropertyBody* Get;
