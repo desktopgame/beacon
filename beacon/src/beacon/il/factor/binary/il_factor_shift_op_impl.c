@@ -9,10 +9,10 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-static Opcode operator_to_iopcode(OperatorType type);
-static Opcode operator_to_dopcode(OperatorType type);
+static Opcode operator_to_iopcode(bc_OperatorType type);
+static Opcode operator_to_dopcode(bc_OperatorType type);
 
-ILShiftOp* NewILShiftOp(OperatorType type) {
+ILShiftOp* NewILShiftOp(bc_OperatorType type) {
 	ILShiftOp* ret = (ILShiftOp*)MEM_MALLOC(sizeof(ILShiftOp));
 	ret->Parent = NULL;
 	ret->Type = type;
@@ -38,7 +38,7 @@ GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx)
 	if(self->OperatorIndex == -1) {
 		bc_Panic(
 			BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
-			OperatorToString(self->Type)
+			bc_OperatorToString(self->Type)
 		);
 		return NULL;
 	}
@@ -55,7 +55,7 @@ void GenerateILShiftOp(ILShiftOp* self, Enviroment* env, CallContext* cctx) {
 		} else {
 			bc_Panic(
 				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,
-				OperatorToString(self->Type)
+				bc_OperatorToString(self->Type)
 			);
 		}
 	} else {
@@ -80,7 +80,7 @@ char* ILShiftOpToString(ILShiftOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->Parent, env);
 }
 //static
-static Opcode operator_to_iopcode(OperatorType type) {
+static Opcode operator_to_iopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_LSHIFT_T: return OP_ILSH;
 		case OPERATOR_RSHIFT_T: return OP_IRSH;
@@ -88,6 +88,6 @@ static Opcode operator_to_iopcode(OperatorType type) {
 	assert(false);
 }
 
-static Opcode operator_to_dopcode(OperatorType type) {
+static Opcode operator_to_dopcode(bc_OperatorType type) {
 	assert(false);
 }

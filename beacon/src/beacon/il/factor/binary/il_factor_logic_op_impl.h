@@ -17,11 +17,11 @@ struct GenericType;
 struct Enviroment;
 typedef struct ILLogicOp {
 	struct ILBinaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILLogicOp;
 
-ILLogicOp* NewILLogicOp(OperatorType type);
+ILLogicOp* NewILLogicOp(bc_OperatorType type);
 
 struct GenericType* EvalILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
 

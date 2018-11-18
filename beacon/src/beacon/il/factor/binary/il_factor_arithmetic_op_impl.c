@@ -10,10 +10,10 @@
 #include "../../../env/TYPE_IMPL.h"
 #include <assert.h>
 
-static Opcode operator_to_iopcode(OperatorType type);
-static Opcode operator_to_dopcode(OperatorType type);
+static Opcode operator_to_iopcode(bc_OperatorType type);
+static Opcode operator_to_dopcode(bc_OperatorType type);
 
-ILArithmeticOp* NewILArithmeticOp(OperatorType type) {
+ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type) {
 	ILArithmeticOp* ret = (ILArithmeticOp*)MEM_MALLOC(sizeof(ILArithmeticOp));
 	ret->Type = type;
 	ret->Parent = NULL;
@@ -38,7 +38,7 @@ GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallCont
 	//演算子オーバーロードもない
 	if(self->OperatorIndex == -1) {
 		bc_Panic(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
-			OperatorToString(self->Type)
+			bc_OperatorToString(self->Type)
 		);
 		return NULL;
 	}
@@ -81,7 +81,7 @@ char* ILArithmeticOpToString(ILArithmeticOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->Parent, env);
 }
 //static
-static Opcode operator_to_iopcode(OperatorType type) {
+static Opcode operator_to_iopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_ADD_T: return OP_IADD;
 		case OPERATOR_SUB_T: return OP_ISUB;
@@ -92,7 +92,7 @@ static Opcode operator_to_iopcode(OperatorType type) {
 	assert(false);
 }
 
-static Opcode operator_to_dopcode(OperatorType type) {
+static Opcode operator_to_dopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_ADD_T: return OP_DADD;
 		case OPERATOR_SUB_T: return OP_DSUB;

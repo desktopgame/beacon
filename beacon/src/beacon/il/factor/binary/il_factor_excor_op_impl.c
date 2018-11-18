@@ -8,7 +8,7 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/operator_overload.h"
 
-ILExcorOp* NewILExcorOp(OperatorType type) {
+ILExcorOp* NewILExcorOp(bc_OperatorType type) {
 	ILExcorOp* ret = (ILExcorOp*)MEM_MALLOC(sizeof(ILExcorOp));
 	ret->Type = type;
 	ret->Parent = NULL;
@@ -31,7 +31,7 @@ GenericType* EvalILExcorOp(ILExcorOp * self, Enviroment* env, CallContext* cctx)
 	//演算子オーバーロードもない
 	if(self->OperatorIndex == -1) {
 		bc_Panic(BCERROR_UNDEFINED_EXCOR_OPERATOR_T,
-			OperatorToString(self->Type)
+			bc_OperatorToString(self->Type)
 		);
 		return NULL;
 	}

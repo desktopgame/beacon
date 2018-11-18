@@ -15,7 +15,7 @@
 /**
  * 演算子のカテゴリを表す列挙.
  */
-typedef enum OperatorCategory {
+typedef enum bc_OperatorCategory {
 	OPERATOR_CARITHMERIC_T,
 	OPERATOR_CLOGIC_T,
 	OPERATOR_CCOMPARE_T,
@@ -24,12 +24,12 @@ typedef enum OperatorCategory {
 	OPERATOR_CNEGATIVE_T,
 	OPERATOR_CNOT_T,
 	OPERATOR_CEXCOR_T,
-} OperatorCategory;
+} bc_OperatorCategory;
 
 /**
  * 演算子の種類を表す列挙.
  */
-typedef enum OperatorType {
+typedef enum bc_OperatorType {
 	OPERATOR_ADD_T,
 	OPERATOR_SUB_T,
 	OPERATOR_MUL_T,
@@ -59,67 +59,67 @@ typedef enum OperatorType {
 
 	OPERATOR_SUB_SCRIPT_SET_T,
 	OPERATOR_SUB_SCRIPT_GET_T,
-} OperatorType;
+} bc_OperatorType;
 /**
  * オペレータを文字列として出力します.
  * @param fp
  * @param self
  */
-void FprintfOperator(FILE* fp, OperatorType self);
+void bc_FprintfOperator(FILE* fp, bc_OperatorType self);
 
 /**
  * オペレータを文字列にして返します.
  * @param self
  * @return
  */
-char* OperatorToString(OperatorType self);
+char* bc_OperatorToString(bc_OperatorType self);
 
 /**
  * オペレータが算術演算子なら true.
  * @param self
  * @return
  */
-bool IsArithmeticOperator(OperatorType self);
+bool bc_IsArithmeticOperator(bc_OperatorType self);
 
 /**
  * オペレータがビット演算子なら true.
  * @param self
  * @return
  */
-bool IsBitOperator(OperatorType self);
+bool bc_IsBitOperator(bc_OperatorType self);
 
 /**
  * オペレータが論理演算子なら true.
  * @param self
  * @return
  */
-bool IsLogicOperator(OperatorType self);
+bool bc_IsLogicOperator(bc_OperatorType self);
 
 /**
  * オペレータが比較演算子なら true.
  * @param self
  * @return
  */
-bool IsCompareOperator(OperatorType self);
+bool bc_IsCompareOperator(bc_OperatorType self);
 
 /**
  * オペレータがシフト演算子なら true.
  * @param self
  * @return
  */
-bool IsShiftOperator(OperatorType self);
+bool bc_IsShiftOperator(bc_OperatorType self);
 
 /**
  * オペレータが二項演算子なら true.
  * @param self
  * @return
  */
-bool Is2ArgOperator(OperatorType self);
+bool bc_Is2ArgOperator(bc_OperatorType self);
 
 /**
  * オペレータが単項演算子なら true.
  * @param self
  * @return
  */
-bool Is1ArgOperator(OperatorType self);
+bool bc_Is1ArgOperator(bc_OperatorType self);
 #endif

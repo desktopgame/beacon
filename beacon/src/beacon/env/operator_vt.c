@@ -17,10 +17,10 @@ void ReplaceOperatorVt(OperatorVT* self, OperatorOverload* opov) {
 		if(e->Type != opov->Type) {
 			continue;
 		}
-		if(Is1ArgOperator(e->Type)) {
+		if(bc_Is1ArgOperator(e->Type)) {
 			AssignVector(self->Operators, i, opov);
 			return;
-		} else if(Is2ArgOperator(e->Type)) {
+		} else if(bc_Is2ArgOperator(e->Type)) {
 			Parameter* param_a = AtVector(e->Parameters, 0);
 			Parameter* param_b = AtVector(opov->Parameters, 0);
 			if(DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {

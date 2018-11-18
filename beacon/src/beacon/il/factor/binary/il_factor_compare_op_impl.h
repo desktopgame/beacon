@@ -16,11 +16,11 @@ struct GenericType;
 struct Enviroment;
 typedef struct ILCompareOp {
 	struct ILBinaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILCompareOp;
 
-ILCompareOp* NewILCompareOp(OperatorType type);
+ILCompareOp* NewILCompareOp(bc_OperatorType type);
 
 struct GenericType* EvalILCompareOp(ILCompareOp * self, struct Enviroment * env, CallContext* cctx);
 

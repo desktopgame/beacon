@@ -9,11 +9,11 @@
 #include "../../../env/TYPE_IMPL.h"
 #include "../../../env/type_interface.h"
 
-static Opcode operator_to_iopcode(OperatorType type);
-static Opcode operator_to_dopcode(OperatorType type);
-static Opcode operator_to_copcode(OperatorType type);
+static Opcode operator_to_iopcode(bc_OperatorType type);
+static Opcode operator_to_dopcode(bc_OperatorType type);
+static Opcode operator_to_copcode(bc_OperatorType type);
 
-ILCompareOp* NewILCompareOp(OperatorType type) {
+ILCompareOp* NewILCompareOp(bc_OperatorType type) {
 	ILCompareOp* ret = (ILCompareOp*)MEM_MALLOC(sizeof(ILCompareOp));
 	ret->Type = type;
 	ret->Parent = NULL;
@@ -40,7 +40,7 @@ void GenerateILCompareOp(ILCompareOp* self, Enviroment* env, CallContext* cctx) 
 			AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_copcode(self->Type));
 		} else {
 			bc_Panic(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
-				OperatorToString(self->Type)
+				bc_OperatorToString(self->Type)
 			);
 //			assert(false);
 		}
@@ -68,7 +68,7 @@ char* ILCompareOpToString(ILCompareOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->Parent, env);
 }
 //static
-static Opcode operator_to_iopcode(OperatorType type) {
+static Opcode operator_to_iopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_GT_T: return OP_IGT;
 		case OPERATOR_GE_T: return OP_IGE;
@@ -80,7 +80,7 @@ static Opcode operator_to_iopcode(OperatorType type) {
 	assert(false);
 }
 
-static Opcode operator_to_dopcode(OperatorType type) {
+static Opcode operator_to_dopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_GT_T: return OP_DGT;
 		case OPERATOR_GE_T: return OP_DGE;
@@ -91,7 +91,7 @@ static Opcode operator_to_dopcode(OperatorType type) {
 	}
 	assert(false);
 }
-static Opcode operator_to_copcode(OperatorType type) {
+static Opcode operator_to_copcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_GT_T: return OP_CGT;
 		case OPERATOR_GE_T: return OP_CGE;

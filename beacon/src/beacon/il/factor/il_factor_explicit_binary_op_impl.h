@@ -18,13 +18,13 @@ struct GenericType;
 typedef struct ILExplicitBinaryOp {
 	struct ILFactor* Receiver;
 	struct ILFactor* Arg;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int Index;
 } ILExplicitBinaryOp;
 
 struct ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self);
 
-ILExplicitBinaryOp* NewILExplicitBinaryOp(OperatorType type);
+ILExplicitBinaryOp* NewILExplicitBinaryOp(bc_OperatorType type);
 
 void GenerateILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
 

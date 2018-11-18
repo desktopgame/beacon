@@ -17,11 +17,11 @@ struct Enviroment;
 
 typedef struct ILExcorOp {
 	struct ILBinaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILExcorOp;
 
-ILExcorOp* NewILExcorOp(OperatorType type);
+ILExcorOp* NewILExcorOp(bc_OperatorType type);
 
 struct GenericType* EvalILExcorOp(ILExcorOp * self, struct Enviroment * env, CallContext* cctx);
 

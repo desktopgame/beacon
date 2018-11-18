@@ -23,8 +23,8 @@ struct ILNotOp;
  * 単項演算子を表す要素.
  */
 typedef struct ILUnaryOp {
-	OperatorType Type;
-	OperatorCategory Category;
+	bc_OperatorType Type;
+	bc_OperatorCategory Category;
 	ILFactor* Arg;
 	union {
 		struct ILChildaOp* ChildaOp;
@@ -35,7 +35,7 @@ typedef struct ILUnaryOp {
 
 ILFactor* WrapILUnaryOp(ILUnaryOp* self);
 
-ILUnaryOp* NewILUnaryOp(OperatorType type);
+ILUnaryOp* NewILUnaryOp(bc_OperatorType type);
 
 void GenerateILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
 
@@ -51,7 +51,7 @@ char* ILUnaryOpToString_simple(ILUnaryOp* self, Enviroment* env);
 
 int GetIndexILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
 
-int GetIndexILUnaryOp2(ILFactor* receiver, OperatorType otype, Enviroment* env, CallContext* cctx);
+int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, Enviroment* env, CallContext* cctx);
 
 GenericType* ApplyILUnaryOp(ILUnaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

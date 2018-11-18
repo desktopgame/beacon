@@ -17,10 +17,10 @@ struct Enviroment;
 typedef struct ILArithmeticOp {
 	struct ILBinaryOp* Parent;
 	int OperatorIndex;
-	OperatorType Type;
+	bc_OperatorType Type;
 } ILArithmeticOp;
 
-ILArithmeticOp* NewILArithmeticOp(OperatorType type);
+ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type);
 
 
 struct GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct Enviroment * env, CallContext* cctx);

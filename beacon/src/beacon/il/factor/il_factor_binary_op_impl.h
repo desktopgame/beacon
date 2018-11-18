@@ -24,8 +24,8 @@ struct ILExcorOp;
  * 二項演算子を表す要素.
  */
 typedef struct ILBinaryOp {
-	OperatorType Type;
-	OperatorCategory Category;
+	bc_OperatorType Type;
+	bc_OperatorCategory Category;
 	ILFactor* Left;
 	ILFactor* Right;
 	bool IsLoaded;
@@ -40,7 +40,7 @@ typedef struct ILBinaryOp {
 
 ILFactor* WrapILBinaryOp(ILBinaryOp* self);
 
-ILBinaryOp* NewILBinaryOp(OperatorType type);
+ILBinaryOp* NewILBinaryOp(bc_OperatorType type);
 
 void GenerateILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
@@ -64,7 +64,7 @@ bool IsCharCharBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
 int GetIndexILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, Enviroment* env, CallContext* cctx);
+int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, bc_OperatorType otype, Enviroment* env, CallContext* cctx);
 
 GenericType* ApplyILBinaryOp(ILBinaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H

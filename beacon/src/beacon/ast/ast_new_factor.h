@@ -122,7 +122,7 @@ bc_AST* bc_NewASTInstanceTof(bc_AST* afact, bc_AST* atype);
  * @param aarg
  * @return
  */
-bc_AST* bc_NewASTExplicitBiOperator(bc_AST* afact, OperatorType type, bc_AST* aarg);
+bc_AST* bc_NewASTExplicitBiOperator(bc_AST* afact, bc_OperatorType type, bc_AST* aarg);
 
 /**
  * 明示的な単項演算の呼び出しを表す要素を作成します.
@@ -130,7 +130,7 @@ bc_AST* bc_NewASTExplicitBiOperator(bc_AST* afact, OperatorType type, bc_AST* aa
  * @param type
  * @return
  */
-bc_AST* bc_NewASTExplicitUOperator(bc_AST* afact, OperatorType type);
+bc_AST* bc_NewASTExplicitUOperator(bc_AST* afact, bc_OperatorType type);
 
 /**
  * @param afact

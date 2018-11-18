@@ -7,7 +7,7 @@
 static void DeleteILOperatorOverload_parameter(VectorItem item);
 static void DeleteILOperatorOverload_stmt(VectorItem item);
 
-ILOperatorOverload* NewILOperatorOverload(OperatorType type) {
+ILOperatorOverload* NewILOperatorOverload(bc_OperatorType type) {
 	ILOperatorOverload* ret = (ILOperatorOverload*)MEM_MALLOC(sizeof(ILOperatorOverload));
 	ret->Type = type;
 	ret->Parameters = NewVector();

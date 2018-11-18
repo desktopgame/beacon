@@ -26,7 +26,7 @@ ILFactor * WrapILBinaryOp(ILBinaryOp * self) {
 	return ret;
 }
 
-ILBinaryOp * NewILBinaryOp(OperatorType type) {
+ILBinaryOp * NewILBinaryOp(bc_OperatorType type) {
 	ILBinaryOp* ret = (ILBinaryOp*)MEM_MALLOC(sizeof(ILBinaryOp));
 	ret->Type = type;
 	ret->Left = NULL;
@@ -65,25 +65,25 @@ void LoadILBinaryOp(ILBinaryOp * self, Enviroment * env, CallContext* cctx) {
 	LoadILFactor(self->Right, env, cctx);
 	BC_ERROR();
 	//カテゴリーわけ
-	if(IsArithmeticOperator(self->Type)) {
+	if(bc_IsArithmeticOperator(self->Type)) {
 		self->Category = OPERATOR_CARITHMERIC_T;
 		ILArithmeticOp* arith = NewILArithmeticOp(self->Type);
 		arith->Parent = self;
 		self->Kind.ArithmeticOp = arith;
 		LoadILArithmeticOp(arith, env, cctx);
-	} else if(IsCompareOperator(self->Type)) {
+	} else if(bc_IsCompareOperator(self->Type)) {
 		self->Category = OPERATOR_CCOMPARE_T;
 		ILCompareOp* comp = NewILCompareOp(self->Type);
 		comp->Parent = self;
 		self->Kind.CompareOp = comp;
 		LoadILCompareOp(comp, env, cctx);
-	} else if(IsBitOperator(self->Type) || IsLogicOperator(self->Type)) {
+	} else if(bc_IsBitOperator(self->Type) || bc_IsLogicOperator(self->Type)) {
 		self->Category = OPERATOR_CLOGIC_T;
 		ILLogicOp* logic = NewILLogicOp(self->Type);
 		logic->Parent = self;
 		self->Kind.LogicOp = logic;
 		LoadILLogicOp(logic, env, cctx);
-	} else if(IsShiftOperator(self->Type)) {
+	} else if(bc_IsShiftOperator(self->Type)) {
 		self->Category = OPERATOR_CSHIFT_T;
 		ILShiftOp* shift = NewILShiftOp(self->Type);
 		shift->Parent = self;
@@ -175,7 +175,7 @@ char* ILBinaryOpToString_simple(ILBinaryOp* self, Enviroment* env) {
 	char* a = ILFactorToString(self->Left, env);
 	char* b = ILFactorToString(self->Right, env);
 	AppendsBuffer(sb, a);
-	AppendfBuffer(sb, " %s ", OperatorToString(self->Type));
+	AppendfBuffer(sb, " %s ", bc_OperatorToString(self->Type));
 	AppendsBuffer(sb, b);
 	MEM_FREE(a);
 	MEM_FREE(b);
@@ -206,7 +206,7 @@ int GetIndexILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx) {
 	return GetIndexILBinaryOp2(self->Left, self->Right, self->Type, env, cctx);
 }
 
-int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, OperatorType otype, Enviroment* env, CallContext* cctx) {
+int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, bc_OperatorType otype, Enviroment* env, CallContext* cctx) {
 	Vector* args = NewVector();
 	GenericType* lgtype = EvalILFactor(receiver, env, cctx);
 	GenericType* rgtype = EvalILFactor(arg, env, cctx);

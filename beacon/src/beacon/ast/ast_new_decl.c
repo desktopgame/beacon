@@ -231,7 +231,7 @@ bc_AST* bc_NewASTTypeParameterRuleList(bc_AST* arule_list) {
 	return ret;
 }
 
-bc_AST* bc_NewASTOperatorOverload(OperatorType type, bc_AST* aparam_list, bc_AST* abody, bc_AST* areturn) {
+bc_AST* bc_NewASTOperatorOverload(bc_OperatorType type, bc_AST* aparam_list, bc_AST* abody, bc_AST* areturn) {
 	bc_AST* ret = bc_NewAST(AST_OPERATOR_OVERLOAD_T);
 	ret->Attr.OperatorValue = type;
 	bc_PushAST(ret, aparam_list);

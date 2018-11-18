@@ -789,15 +789,15 @@ static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type*
 		return true;
 	}
 	//二項演算子であるなら引数は1
-	if(Is2ArgOperator(opov->Type) && opov->Parameters->Length != 1) {
-		bc_Panic(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), OperatorToString(opov->Type));
+	if(bc_Is2ArgOperator(opov->Type) && opov->Parameters->Length != 1) {
+		bc_Panic(BCERROR_ARG_COUNT_NOT2_BIOPERATOR_T, GetTypeName(tp), bc_OperatorToString(opov->Type));
 		return true;
 	}
 	//単項演算子であるなら引数は0
-	if(Is1ArgOperator(opov->Type) && opov->Parameters->Length != 0) {
+	if(bc_Is1ArgOperator(opov->Type) && opov->Parameters->Length != 0) {
 		bc_Panic(BCERROR_ARG_COUNT_NOT1_UOPERATOR_T,
 			GetTypeName(tp),
-			OperatorToString(opov->Type)
+			bc_OperatorToString(opov->Type)
 		);
 		return true;
 	}
@@ -805,7 +805,7 @@ static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type*
 	if(opov->Type == OPERATOR_SUB_SCRIPT_GET_T && opov->Parameters->Length != 1) {
 		bc_Panic(BCERROR_ARG_COUNT_NOT1_SUBSCRIPT_GET_OP_T,
 			GetTypeName(tp),
-			OperatorToString(opov->Type)
+			bc_OperatorToString(opov->Type)
 		);
 		return true;
 	}
@@ -813,15 +813,15 @@ static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type*
 	if(opov->Type == OPERATOR_SUB_SCRIPT_SET_T && opov->Parameters->Length != 2) {
 		bc_Panic(BCERROR_ARG_COUNT_NOT2_SUBSCRIPT_SET_OP_T,
 			GetTypeName(tp),
-			OperatorToString(opov->Type)
+			bc_OperatorToString(opov->Type)
 		);
 		return true;
 	}
 	//== などの比較演算子の戻り値が bool ではない
-	if(IsCompareOperator(opov->Type) && opov->ReturnGType->CoreType != TYPE_BOOL) {
+	if(bc_IsCompareOperator(opov->Type) && opov->ReturnGType->CoreType != TYPE_BOOL) {
 		bc_Panic(BCERROR_RETURN_TYPE_NOT_BOOL_COMPARE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			OperatorToString(opov->Type)
+			bc_OperatorToString(opov->Type)
 		);
 		return true;
 	}
@@ -829,7 +829,7 @@ static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type*
 	if(opov->Type == OPERATOR_NOT_T && opov->ReturnGType->CoreType != TYPE_BOOL) {
 		bc_Panic(BCERROR_RETURN_TYPE_NOT_BOOL_NOT_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			OperatorToString(opov->Type)
+			bc_OperatorToString(opov->Type)
 		);
 		return true;
 	}
@@ -838,7 +838,7 @@ static bool CLBC_test_operator_overlaod(ClassLoader* self, ILType* iltype, Type*
 	if(opov->Type == OPERATOR_NEGATIVE_T && opov->ReturnGType->CoreType != opov->Parent) {
 		bc_Panic(BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T,
 			Ref2Str(GetTypeName(tp)),
-			OperatorToString(opov->Type)
+			bc_OperatorToString(opov->Type)
 		);
 		return true;
 	}

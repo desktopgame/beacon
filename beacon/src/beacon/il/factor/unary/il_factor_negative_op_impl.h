@@ -17,12 +17,12 @@ struct Enviroment;
 
 typedef struct ILNegativeOp {
 	struct ILUnaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILNegativeOp;
 
 #define NewILNegativeOp(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
-ILNegativeOp* MallocILNegativeOp(OperatorType type, const char* filename, int lineno);
+ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno);
 
 struct GenericType* EvalILNegativeOp(ILNegativeOp * self, struct Enviroment * env, CallContext* cctx);
 

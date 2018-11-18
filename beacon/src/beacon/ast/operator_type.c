@@ -1,10 +1,10 @@
 #include "operator_type.h"
 
-void FprintfOperator(FILE* fp, OperatorType self) {
-	fprintf(fp, "%s", OperatorToString(self));
+void bc_FprintfOperator(FILE* fp, bc_OperatorType self) {
+	fprintf(fp, "%s", bc_OperatorToString(self));
 }
 
-char* OperatorToString(OperatorType self) {
+char* bc_OperatorToString(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_ADD_T: return "+";
 		case OPERATOR_SUB_T: return "-";
@@ -39,7 +39,7 @@ char* OperatorToString(OperatorType self) {
 	}
 }
 
-bool IsArithmeticOperator(OperatorType self) {
+bool bc_IsArithmeticOperator(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_ADD_T:
 		case OPERATOR_SUB_T:
@@ -51,7 +51,7 @@ bool IsArithmeticOperator(OperatorType self) {
 	return false;
 }
 
-bool IsBitOperator(OperatorType self) {
+bool bc_IsBitOperator(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_BIT_OR_T:
 		case OPERATOR_BIT_AND_T:
@@ -60,7 +60,7 @@ bool IsBitOperator(OperatorType self) {
 	return false;
 }
 
-bool IsLogicOperator(OperatorType self) {
+bool bc_IsLogicOperator(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_LOGIC_OR_T:
 		case OPERATOR_LOGIC_AND_T:
@@ -69,7 +69,7 @@ bool IsLogicOperator(OperatorType self) {
 	return false;
 }
 
-bool IsCompareOperator(OperatorType self) {
+bool bc_IsCompareOperator(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_EQ_T:
 		case OPERATOR_NOT_EQ_T:
@@ -82,7 +82,7 @@ bool IsCompareOperator(OperatorType self) {
 	return false;
 }
 
-bool IsShiftOperator(OperatorType self) {
+bool bc_IsShiftOperator(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_LSHIFT_T:
 		case OPERATOR_RSHIFT_T:
@@ -91,7 +91,7 @@ bool IsShiftOperator(OperatorType self) {
 	return false;
 }
 
-bool Is2ArgOperator(OperatorType self) {
+bool bc_Is2ArgOperator(bc_OperatorType self) {
 	switch(self) {
 		case OPERATOR_ADD_T:
 		case OPERATOR_SUB_T:
@@ -112,6 +112,6 @@ bool Is2ArgOperator(OperatorType self) {
 	return false;
 }
 
-bool Is1ArgOperator(OperatorType self) {
+bool bc_Is1ArgOperator(bc_OperatorType self) {
 	return false;
 }

@@ -17,11 +17,11 @@ struct Enviroment;
 
 typedef struct ILChildaOp {
 	struct ILUnaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILChildaOp;
 
-ILChildaOp* NewILChildaOp(OperatorType type);
+ILChildaOp* NewILChildaOp(bc_OperatorType type);
 
 struct GenericType* EvalILChildaOp(ILChildaOp * self, struct Enviroment * env, CallContext* cctx);
 

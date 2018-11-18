@@ -164,7 +164,7 @@ void CLILConstructor(ClassLoader* self, ILType* current, bc_AST* aconstructor, b
 
 void CLILOperatorOverload(ClassLoader* self, ILType* current, bc_AST* aopov, bc_AccessLevel level) {
 	//assert(aopov->Tag == AST_OPERATOR_OVERLOAD_T);
-	OperatorType ot = aopov->Attr.OperatorValue;
+	bc_OperatorType ot = aopov->Attr.OperatorValue;
 	bc_AST* aparam_list = bc_AtAST(aopov, 0);
 	bc_AST* abody = bc_AtAST(aopov, 1);
 	bc_AST* areturn = bc_AtAST(aopov, 2);
@@ -173,7 +173,7 @@ void CLILOperatorOverload(ClassLoader* self, ILType* current, bc_AST* aopov, bc_
 		bc_Panic(
 			BCERROR_INTERFACE_HAS_OPOV_T,
 			Ref2Str(current->Kind.Interface->Name),
-			OperatorToString(ot)
+			bc_OperatorToString(ot)
 		);
 		return;
 	}

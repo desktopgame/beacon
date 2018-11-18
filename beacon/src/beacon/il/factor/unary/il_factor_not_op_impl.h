@@ -17,11 +17,11 @@ struct Enviroment;
 
 typedef struct ILNotOp {
 	struct ILUnaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILNotOp;
 
-ILNotOp* NewILNotOp(OperatorType type);
+ILNotOp* NewILNotOp(bc_OperatorType type);
 
 struct GenericType* EvalILNotOp(ILNotOp * self, struct Enviroment * env, CallContext* cctx);
 

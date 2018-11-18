@@ -151,7 +151,7 @@ Constructor* MetaScopedRFindConstructor(struct Class* context, Vector* ctor_vec,
  * @param outIndex
  * @return
  */
-OperatorOverload* MetaGFindOperator(Vector* opov_vec, OperatorType type, Vector* gargs, int* outIndex);
+OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex);
 
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.

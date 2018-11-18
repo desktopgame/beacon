@@ -9,10 +9,10 @@
 #include "../../../env/namespace.h"
 #include "../../../env/TYPE_IMPL.h"
 
-static Opcode operator_to_iopcode(OperatorType type);
-static Opcode operator_to_bopcode(OperatorType type);
+static Opcode operator_to_iopcode(bc_OperatorType type);
+static Opcode operator_to_bopcode(bc_OperatorType type);
 
-ILLogicOp* NewILLogicOp(OperatorType type) {
+ILLogicOp* NewILLogicOp(bc_OperatorType type) {
 	ILLogicOp* ret = (ILLogicOp*)MEM_MALLOC(sizeof(ILLogicOp));
 	ret->Type = type;
 	ret->Parent = NULL;
@@ -32,7 +32,7 @@ GenericType* EvalILLogicOp(ILLogicOp* self, Enviroment* env, CallContext* cctx) 
 		if(self->OperatorIndex == -1) {
 			bc_Panic(
 				BCERROR_UNDEFINED_LOGIC_OPERATOR_T,
-				OperatorToString(self->Type)
+				bc_OperatorToString(self->Type)
 			);
 			return NULL;
 		}
@@ -75,7 +75,7 @@ char* ILLogicOpToString(ILLogicOp* self, Enviroment* env) {
 	return ILBinaryOpToString_simple(self->Parent, env);
 }
 //static
-static Opcode operator_to_iopcode(OperatorType type) {
+static Opcode operator_to_iopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_BIT_OR_T: return OP_IBIT_OR;
 		case OPERATOR_BIT_AND_T: return OP_IBIT_AND;
@@ -85,7 +85,7 @@ static Opcode operator_to_iopcode(OperatorType type) {
 	assert(false);
 }
 
-static Opcode operator_to_bopcode(OperatorType type) {
+static Opcode operator_to_bopcode(bc_OperatorType type) {
 	switch(type) {
 		case OPERATOR_BIT_OR_T: return OP_BBIT_OR;
 		case OPERATOR_BIT_AND_T: return OP_BBIT_AND;

@@ -14,7 +14,7 @@ ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self) {
 	return ret;
 }
 
-ILExplicitBinaryOp* NewILExplicitBinaryOp(OperatorType type) {
+ILExplicitBinaryOp* NewILExplicitBinaryOp(bc_OperatorType type) {
 	ILExplicitBinaryOp* ret = (ILExplicitBinaryOp*)MEM_MALLOC(sizeof(ILExplicitBinaryOp));
 	ret->Type = type;
 	ret->Receiver = NULL;

@@ -17,7 +17,7 @@ ILFactor * WrapILUnaryOp(ILUnaryOp * self) {
 	return ret;
 }
 
-ILUnaryOp * NewILUnaryOp(OperatorType type) {
+ILUnaryOp * NewILUnaryOp(bc_OperatorType type) {
 	ILUnaryOp* ret = (ILUnaryOp*)MEM_MALLOC(sizeof(ILUnaryOp));
 	ret->Type = type;
 	ret->Arg = NULL;
@@ -125,7 +125,7 @@ void DeleteILUnaryOp(ILUnaryOp * self) {
 char* ILUnaryOpToString_simple(ILUnaryOp* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->Arg, env);
-	AppendfBuffer(sb, "%s", OperatorToString(self->Type));
+	AppendfBuffer(sb, "%s", bc_OperatorToString(self->Type));
 	AppendsBuffer(sb, a);
 	MEM_FREE(a);
 	return ReleaseBuffer(sb);
@@ -135,7 +135,7 @@ int GetIndexILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx) {
 	return GetIndexILUnaryOp2(self->Arg, self->Type, env, cctx);
 }
 
-int GetIndexILUnaryOp2(ILFactor* receiver, OperatorType otype, Enviroment* env, CallContext* cctx) {
+int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, Enviroment* env, CallContext* cctx) {
 	Vector* args = NewVector();
 	GenericType* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->VirtualTypeIndex != -1) {

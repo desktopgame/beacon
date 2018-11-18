@@ -225,7 +225,7 @@ typedef struct bc_AST {
 		StringView StringVValue;
 		bc_AccessLevel AccessValue;
 		bc_ModifierType ModifierValue;
-		OperatorType OperatorValue;
+		bc_OperatorType OperatorValue;
 	} Attr;
 	bc_ASTTag Tag;
 	int Lineno;

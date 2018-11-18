@@ -278,7 +278,7 @@ bc_AST* bc_NewASTTypeParameterRuleList(bc_AST* arule_list);
  * @param abody
  * @param areturn
  */
-bc_AST* bc_NewASTOperatorOverload(OperatorType type, bc_AST* aparam_list, bc_AST* abody, bc_AST* areturn);
+bc_AST* bc_NewASTOperatorOverload(bc_OperatorType type, bc_AST* aparam_list, bc_AST* abody, bc_AST* areturn);
 
 /**
  * プロパティの set部分 を表す要素を作成します.

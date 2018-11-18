@@ -16,11 +16,11 @@ struct Enviroment;
 struct ILBinaryOp;
 typedef struct ILShiftOp {
 	struct ILBinaryOp* Parent;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int OperatorIndex;
 } ILShiftOp;
 
-ILShiftOp* NewILShiftOp(OperatorType type);
+ILShiftOp* NewILShiftOp(bc_OperatorType type);
 
 struct GenericType* EvalILShiftOp(ILShiftOp * self, struct Enviroment* env, CallContext* cctx);
 

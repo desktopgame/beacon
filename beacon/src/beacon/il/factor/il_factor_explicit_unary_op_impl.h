@@ -17,13 +17,13 @@ struct GenericType;
 
 typedef struct ILExplicitUnaryOp {
 	struct ILFactor* Receiver;
-	OperatorType Type;
+	bc_OperatorType Type;
 	int Index;
 } ILExplicitUnaryOp;
 
 struct ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self);
 
-ILExplicitUnaryOp* NewILExplicitUnaryOp(OperatorType type);
+ILExplicitUnaryOp* NewILExplicitUnaryOp(bc_OperatorType type);
 
 void GenerateILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
 

@@ -9,7 +9,7 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-ILChildaOp* NewILChildaOp(OperatorType type) {
+ILChildaOp* NewILChildaOp(bc_OperatorType type) {
 	ILChildaOp* ret = (ILChildaOp*)MEM_MALLOC(sizeof(ILChildaOp));
 	ret->Type = type;
 	ret->Parent = NULL;
