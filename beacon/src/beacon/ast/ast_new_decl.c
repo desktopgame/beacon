@@ -151,7 +151,7 @@ bc_AST* bc_NewASTConstructorDecl(bc_AST* aparameter_list, bc_AST* aconstructor_c
 	return ret;
 }
 
-bc_AST* bc_NewASTConstructorChain(ConstructorChainType chain_type, bc_AST* aargument_list) {
+bc_AST* bc_NewASTConstructorChain(bc_ConstructorChainType chain_type, bc_AST* aargument_list) {
 	bc_AST* ret = bc_NewAST(AST_CONSTRUCTOR_CHAIN_T);
 	if (chain_type == CHAIN_TYPE_THIS_T) {
 		bc_PushAST(ret, bc_NewAST(AST_CONSTRUCTOR_CHAIN_THIS_T));

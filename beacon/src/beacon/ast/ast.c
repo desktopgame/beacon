@@ -193,7 +193,7 @@ ModifierType bc_ASTCastToModifier(bc_AST* self, bool* error) {
 	return self->Attr.ModifierValue;
 }
 
-ConstructorChainType bc_ASTCastToChainType(bc_AST* self) {
+bc_ConstructorChainType bc_ASTCastToChainType(bc_AST* self) {
 	switch (self->Tag) {
 		case AST_CONSTRUCTOR_CHAIN_THIS_T:
 			return CHAIN_TYPE_THIS_T;

@@ -17,7 +17,7 @@ struct Constructor;
  * コンストラクタの連鎖を表す要素.
  */
 typedef struct ILConstructorChain {
-	ConstructorChainType Type;
+	bc_ConstructorChainType Type;
 	Vector* Arguments;
 	struct Constructor* Constructor;
 	int ConstructorIndex;

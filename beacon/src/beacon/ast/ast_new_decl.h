@@ -202,7 +202,7 @@ bc_AST* bc_NewASTConstructorDecl(bc_AST* aparameter_list, bc_AST* aconstructor_c
  * @param aargument_list
  * @return
  */
-bc_AST* bc_NewASTConstructorChain(ConstructorChainType chain_type, bc_AST* aargument_list);
+bc_AST* bc_NewASTConstructorChain(bc_ConstructorChainType chain_type, bc_AST* aargument_list);
 
 /**
  * 仮引数を表す要素を作成します.

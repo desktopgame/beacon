@@ -410,5 +410,5 @@ ModifierType bc_ASTCastToModifier(bc_AST* self, bool* error);
  * @param self
  * @return
  */
-ConstructorChainType bc_ASTCastToChainType(bc_AST* self);
+bc_ConstructorChainType bc_ASTCastToChainType(bc_AST* self);
 #endif // !SIGNAL_AST_AST_H

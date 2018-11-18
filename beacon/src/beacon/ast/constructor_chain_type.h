@@ -13,8 +13,8 @@
 /**
  * コンストラクタの連鎖方法.
  */
-typedef enum ConstructorChainType {
+typedef enum bc_ConstructorChainType {
 	CHAIN_TYPE_THIS_T,
 	CHAIN_TYPE_SUPER_T,
-} ConstructorChainType;
+} bc_ConstructorChainType;
 #endif // !SIGNAL_AST_CONSTRUCTOR_CHAIN_TYPE_H
