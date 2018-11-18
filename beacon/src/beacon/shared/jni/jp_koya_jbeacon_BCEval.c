@@ -162,18 +162,18 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 		}
 		bc_AST* astmt = NULL;
 		if((*env)->IsInstanceOf(env, valueE, integer_cls) == JNI_TRUE) {
-			astmt = NewASTInject(keyv, bc_NewASTInt(jobject2jint(env, valueE)));
+			astmt = bc_NewASTInject(keyv, bc_NewASTInt(jobject2jint(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, double_cls) == JNI_TRUE) {
-			astmt = NewASTInject(keyv, bc_NewASTDouble(jobject2jdouble(env, valueE)));
+			astmt = bc_NewASTInject(keyv, bc_NewASTDouble(jobject2jdouble(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, char_cls) == JNI_TRUE) {
-			astmt = NewASTInject(keyv, bc_NewASTChar(jobject2jchar(env, valueE)));
+			astmt = bc_NewASTInject(keyv, bc_NewASTChar(jobject2jchar(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, bool_cls) == JNI_TRUE) {
-			astmt = NewASTInject(keyv, bc_NewASTBool(jobject2jboolean(env, valueE)));
+			astmt = bc_NewASTInject(keyv, bc_NewASTBool(jobject2jboolean(env, valueE)));
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
 			StringView valuev = InternString(valuestr);
-			astmt = NewASTInject(keyv, bc_NewASTString(valuev));
+			astmt = bc_NewASTInject(keyv, bc_NewASTString(valuev));
 		//それ以外はまだ未対応
 		} else {
 			jclass bc_not_supported_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCNotSupportedException");
