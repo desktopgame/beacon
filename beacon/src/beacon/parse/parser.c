@@ -87,9 +87,9 @@ void AppendParserBuffer(Parser* self, char ch) {
 bc_AST* ReduceParserBuffer(Parser* self) {
 	//""のような空文字の場合
 	if (self->LiteralBuffer == NULL) {
-		return NewASTString(InternString(""));
+		return bc_NewASTString(InternString(""));
 	}
-	bc_AST* ret = NewASTString(InternString2(self->LiteralBuffer));
+	bc_AST* ret = bc_NewASTString(InternString2(self->LiteralBuffer));
 	self->LiteralBuffer = NULL;
 	return ret;
 }

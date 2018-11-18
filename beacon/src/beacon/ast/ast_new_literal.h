@@ -16,25 +16,25 @@
  * 整数型の値を保存する要素を作成します.
  * @param i
  */
-bc_AST* NewASTInt(int i);
+bc_AST* bc_NewASTInt(int i);
 
 /**
  * 実数型の値を保存する要素を作成します.
  * @param d
  */
-bc_AST* NewASTDouble(double d);
+bc_AST* bc_NewASTDouble(double d);
 
 /**
  * 文字を保存する要素を作成します.
  * @param ch
  * @return
  */
-bc_AST* NewASTChar(char ch);
+bc_AST* bc_NewASTChar(char ch);
 
 /**
  * 文字を保存する要素を作成します.
  * @param str
  * @return
  */
-bc_AST* NewASTString(StringView str);
+bc_AST* bc_NewASTString(StringView str);
 #endif // !SIGNAL_AST_AST_NEW_LITERAL_H
