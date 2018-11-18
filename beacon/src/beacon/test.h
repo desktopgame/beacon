@@ -12,7 +12,7 @@
 #define BEACON_TEST_H
 #include <stdbool.h>
 
-int RunTest();
+int bc_RunTest();
 
-bool IsTestNow();
+bool bc_IsTestNow();
 #endif // !SIGNAL_TEST_H

@@ -16,33 +16,33 @@
  * @param argv
  * @return
  */
-int TestCmd(int argc, char* argv[]);
+int bc_TestCmd(int argc, char* argv[]);
 
 /**
  * ASTをダンプします.
  * @param filename
  * @return
  */
-int DumpASTCmd(const char* filename);
+int bc_DumpASTCmd(const char* filename);
 
 /**
  * ASTをダンプします.
  * @param filename
  * @return
  */
-int DumpILCmd(const char* filename);
+int bc_DumpILCmd(const char* filename);
 
 /**
  * オペコードをダンプします.
  * @param filename
  * @return
  */
-int DumpOpCodeCmd(const char* filename);
+int bc_DumpOpCodeCmd(const char* filename);
 
 /**
  * 指定のファイルを実行します.
  * @param filename
  * @return
  */
-int RunCmd(const char* filename);
+int bc_RunCmd(const char* filename);
 #endif

@@ -4,10 +4,10 @@
 #include "test.h"
 #include <stdio.h>
 
-int TestCmd(int argc, char* argv[]) {
+int bc_TestCmd(int argc, char* argv[]) {
 #if defined(DEBUG) || (defined(_MSC_VER) && defined(DEBUG))
 	OpenScriptContext();
-	int ret = RunTest(argc, argv);
+	int ret = bc_RunTest(argc, argv);
 	CloseScriptContext();
 	return ret;
 #else
@@ -17,26 +17,26 @@ int TestCmd(int argc, char* argv[]) {
 #endif
 }
 
-int DumpASTCmd(const char* filename) {
+int bc_DumpASTCmd(const char* filename) {
 	int ret = bc_EvalAST(filename);
 	return ret;
 }
 
-int DumpILCmd(const char* filename){
+int bc_DumpILCmd(const char* filename){
 	OpenScriptContext();
 	int ret = bc_EvalIL(filename);
 	CloseScriptContext();
 	return ret;
 }
 
-int DumpOpCodeCmd(const char* filename) {
+int bc_DumpOpCodeCmd(const char* filename) {
 	OpenScriptContext();
 	int ret = bc_EvalOp(filename);
 	CloseScriptContext();
 	return ret;
 }
 
-int RunCmd(const char* filename) {
+int bc_RunCmd(const char* filename) {
 	OpenScriptContext();
 	int ret = bc_EvalFile(filename);
 	CloseScriptContext();
