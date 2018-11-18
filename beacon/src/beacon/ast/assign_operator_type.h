@@ -13,12 +13,12 @@
 /**
  * 代入演算子の種類.
  */
-typedef enum AssignOperatorType {
+typedef enum bc_AssignOperatorType {
 	ASSIGN_OTYPE_DEF_T,
 	ASSIGN_OTYPE_ADD_T,
 	ASSIGN_OTYPE_SUB_T,
 	ASSIGN_OTYPE_MUL_T,
 	ASSIGN_OTYPE_DIV_T,
 	ASSIGN_OTYPE_MOD_T,
-} AssignOperatorType;
+} bc_AssignOperatorType;
 #endif // !SIGNAL_AST_ASSIGN_OPERATOR_TYPE_H
