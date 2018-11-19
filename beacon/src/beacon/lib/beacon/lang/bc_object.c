@@ -16,11 +16,11 @@ static void bc_Object_nativeReferenceEquals(bc_Method* parent, Frame* fr, Enviro
 
 void InitObject() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* ObjectType = NewPreloadClass(InternString("Object"));
-	Class* ObjectClass = BC_TYPE2CLASS(ObjectType);
+	bc_Type* ObjectType = bc_NewPreloadClass(InternString("Object"));
+	bc_Class* ObjectClass = BC_TYPE2CLASS(ObjectType);
 	bc_AddTypeNamespace(lang, ObjectType);
-	DefineNativeMethodClass(ObjectClass, "nativeToString", bc_Object_nativeToString);
-	DefineNativeMethodClass(ObjectClass, "nativeReferenceEquals", bc_Object_nativeReferenceEquals);
+	bc_DefineNativeMethodClass(ObjectClass, "nativeToString", bc_Object_nativeToString);
+	bc_DefineNativeMethodClass(ObjectClass, "nativeReferenceEquals", bc_Object_nativeReferenceEquals);
 }
 
 bc_Type* GetObjectType() {

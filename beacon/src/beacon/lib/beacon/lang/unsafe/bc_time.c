@@ -25,18 +25,18 @@ static void bc_time_nativeGetDayOfYear(bc_Method* parent, Frame* fr, Enviroment*
 
 void InitTime() {
 	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
-	bc_Type* timeType = NewPreloadClass(InternString("Time"));
-	Class* timeClass = BC_TYPE2CLASS(timeType);
+	bc_Type* timeType = bc_NewPreloadClass(InternString("Time"));
+	bc_Class* timeClass = BC_TYPE2CLASS(timeType);
 	bc_AddTypeNamespace(unsafe, timeType);
-	DefineNativeMethodClass(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);
-	DefineNativeMethodClass(timeClass, "nativeToString", bc_time_nativeToString);
-	DefineNativeMethodClass(timeClass, "nativeGetSecond", bc_time_nativeGetSecond);
-	DefineNativeMethodClass(timeClass, "nativeGetMinute", bc_time_nativeGetMinute);
-	DefineNativeMethodClass(timeClass, "nativeGetHour", bc_time_nativeGetHour);
-	DefineNativeMethodClass(timeClass, "nativeGetDay", bc_time_nativeGetDay);
-	DefineNativeMethodClass(timeClass, "nativeGetYear", bc_time_nativeGetYear);
-	DefineNativeMethodClass(timeClass, "nativeGetDayOfWeek", bc_time_nativeGetDayOfWeek);
-	DefineNativeMethodClass(timeClass, "nativeGetDayOfYear", bc_time_nativeGetDayOfYear);
+	bc_DefineNativeMethodClass(timeClass, "nativeRawTime", bc_time_nativeGetRawTime);
+	bc_DefineNativeMethodClass(timeClass, "nativeToString", bc_time_nativeToString);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetSecond", bc_time_nativeGetSecond);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetMinute", bc_time_nativeGetMinute);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetHour", bc_time_nativeGetHour);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetDay", bc_time_nativeGetDay);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetYear", bc_time_nativeGetYear);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetDayOfWeek", bc_time_nativeGetDayOfWeek);
+	bc_DefineNativeMethodClass(timeClass, "nativeGetDayOfYear", bc_time_nativeGetDayOfYear);
 }
 
 bc_Type* GetTimeType() {
@@ -54,7 +54,7 @@ static void bc_time_nativeGetRawTime(bc_Method* parent, Frame* fr, Enviroment* e
 static void bc_time_nativeToString(bc_Method* parent, Frame* fr, Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	int temp;
-	FindFieldClass(BC_TYPE2CLASS(GetTimeType()), InternString("rawTime"), &temp);
+	bc_FindFieldClass(BC_TYPE2CLASS(GetTimeType()), InternString("rawTime"), &temp);
 	bc_Object* rawTime = (bc_Object*)AtVector(self->Fields, temp);
 	PushVector(fr->ValueStack, NewString(ctime(&(((Long*)rawTime)->Value))));
 }

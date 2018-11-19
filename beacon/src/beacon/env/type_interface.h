@@ -28,8 +28,8 @@ typedef enum bc_TypeTag {
 } bc_TypeTag;
 
 struct bc_Namespace;
-struct Class;
-struct Interface;
+struct bc_Class;
+struct bc_Interface;
 struct bc_Field;
 struct bc_Method;
 struct bc_Property;
@@ -72,8 +72,8 @@ typedef struct bc_Type {
 	bc_TypeState State;
 	size_t AllocSize;
 	union {
-		struct Class* Class;
-		struct Interface* Interface;
+		struct bc_Class* Class;
+		struct bc_Interface* Interface;
 	} Kind;
 } bc_Type;
 
@@ -225,13 +225,13 @@ void bc_DeleteType(bc_Type* self);
  * @param self
  * @return
  */
-struct Class* bc_CastClassType(bc_Type* self);
+struct bc_Class* bc_CastClassType(bc_Type* self);
 /**
  * このタイプをインターフェイスにキャストします.
  * @param self
  * @return
  */
-struct Interface* bc_CastInterfaceType(bc_Type* self);
+struct bc_Interface* bc_CastInterfaceType(bc_Type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.
@@ -247,7 +247,7 @@ struct bc_GenericType* bc_BaselineType(bc_Type* abstract, bc_Type* concrete);
  * @param self
  * @return
  */
-struct Interface* bc_IsValidInterface(bc_Type* self);
+struct bc_Interface* bc_IsValidInterface(bc_Type* self);
 
 /**
  * 抽象クラスかインターフェイスなら true.
@@ -262,12 +262,12 @@ bool bc_IsAbstractType(bc_Type* self);
  * @param self
  * @return
  */
-struct Class* bc_TypeToClass(bc_Type* self);
+struct bc_Class* bc_TypeToClass(bc_Type* self);
 /**
  * 可能なら self を interface へ変換します.
  * 失敗したなら NULL
  * @param self
  * @return
  */
-struct Interface* bc_TypeToInterface(bc_Type* self);
+struct bc_Interface* bc_TypeToInterface(bc_Type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

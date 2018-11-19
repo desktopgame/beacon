@@ -4,8 +4,8 @@
 
 void InitVoid() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* voidType = NewPreloadClass(InternString("Void"));
-	Class* voidClass = BC_TYPE2CLASS(voidType);
+	bc_Type* voidType = bc_NewPreloadClass(InternString("Void"));
+	bc_Class* voidClass = BC_TYPE2CLASS(voidType);
 	bc_AddTypeNamespace(lang, voidType);
 }
 

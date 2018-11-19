@@ -32,14 +32,14 @@ bc_Object* NewArray(int size, bc_GenericType* element_type) {
 
 void InitArray() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* arrayType = NewPreloadClass(InternString("Array"));
-	Class* arrayClass = BC_TYPE2CLASS(arrayType);
+	bc_Type* arrayType = bc_NewPreloadClass(InternString("Array"));
+	bc_Class* arrayClass = BC_TYPE2CLASS(arrayType);
 	arrayType->AllocSize = sizeof(Array);
 	bc_AddTypeNamespace(lang, arrayType);
-	DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
-	DefineNativeMethodClass(arrayClass, "nativeSet", bc_array_nativeSet);
-	DefineNativeMethodClass(arrayClass, "nativeGet", bc_array_nativeGet);
-	DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
+	bc_DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
+	bc_DefineNativeMethodClass(arrayClass, "nativeSet", bc_array_nativeSet);
+	bc_DefineNativeMethodClass(arrayClass, "nativeGet", bc_array_nativeGet);
+	bc_DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
 bc_Type* GetArrayType() {
@@ -54,7 +54,7 @@ bc_Object * DynamicNewArray(struct bc_GenericType* gtype, int length, Frame* fr)
 	Vector* type_args = NewVector();
 	PushVector(args, NewInteger(length));
 	PushVector(type_args, gtype);
-	bc_Object* ret = NewInstanceClass(arrayType->Kind.Class, fr, args,type_args);
+	bc_Object* ret = bc_NewInstanceClass(arrayType->Kind.Class, fr, args,type_args);
 	DeleteVector(args, VectorDeleterOfNull);
 	DeleteVector(type_args, VectorDeleterOfNull);
 
@@ -108,7 +108,7 @@ static void bc_array_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
 	bc_Type* tp = parent->Parent;
 	//Array#lengthを取り出す
 	int temp = 0;
-	bc_Field* lengthField = FindFieldClass(tp->Kind.Class, InternString("length"), &temp);
+	bc_Field* lengthField = bc_FindFieldClass(tp->Kind.Class, InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
 	Array* self = (Array*)AtVector(fr->VariableTable, 0);

@@ -18,7 +18,7 @@
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
 struct bc_Type;
-struct Interface;
+struct bc_Interface;
 struct Frame;
 struct Enviroment;
 struct CallContext;

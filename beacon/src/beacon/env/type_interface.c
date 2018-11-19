@@ -65,43 +65,43 @@ StringView bc_GetTypeFullName(bc_Type* self) {
 
 void bc_AddFieldType(bc_Type* self, bc_Field* f) {
 	assert(self->Tag == TYPE_CLASS_T);
-	AddFieldClass(self->Kind.Class, f);
+	bc_AddFieldClass(self->Kind.Class, f);
 }
 
 void bc_AddPropertyType(bc_Type* self, bc_Property* p) {
 	if(self->Tag == TYPE_CLASS_T) {
-		AddPropertyClass(self->Kind.Class, p);
+		bc_AddPropertyClass(self->Kind.Class, p);
 	} else if(self->Tag == TYPE_INTERFACE_T) {
-		AddPropertyInterface(self->Kind.Interface, p);
+		bc_AddPropertyInterface(self->Kind.Interface, p);
 	}
 }
 
 void bc_AddMethodType(bc_Type* self, bc_Method * m) {
 	if (self->Tag == TYPE_CLASS_T) {
-		AddMethodClass(self->Kind.Class, m);
+		bc_AddMethodClass(self->Kind.Class, m);
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		AddMethodInterface(self->Kind.Interface, m);
+		bc_AddMethodInterface(self->Kind.Interface, m);
 	}
 }
 
 bc_Method * bc_ILFindMethodType(bc_Type* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	assert(self != NULL);
 	if (self->Tag == TYPE_CLASS_T) {
-		return ILFindMethodClass(self->Kind.Class, namev, args, env, cctx, outIndex);
+		return bc_ILFindMethodClass(self->Kind.Class, namev, args, env, cctx, outIndex);
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		return ILFindMethodInterface(self->Kind.Interface, namev, args, env, cctx, outIndex);
+		return bc_ILFindMethodInterface(self->Kind.Interface, namev, args, env, cctx, outIndex);
 	}
 	return NULL;
 }
 
 bc_Method* bc_ILFindSMethodType(bc_Type* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->Tag == TYPE_CLASS_T);
-	return ILFindSMethodClass(self->Kind.Class, namev, args, env, cctx, outIndex);
+	return bc_ILFindSMethodClass(self->Kind.Class, namev, args, env, cctx, outIndex);
 }
 
 bc_VTable * bc_GetVTableType(bc_Type* self) {
 	if (self->Tag == TYPE_CLASS_T) {
-		CreateVTableClass(self->Kind.Class);
+		bc_CreateVTableClass(self->Kind.Class);
 		return self->Kind.Class->VT;
 	} else if (self->Tag == TYPE_INTERFACE_T) {
 		return self->Kind.Interface->VT;
@@ -120,7 +120,7 @@ int bc_DistanceType(bc_Type* super, bc_Type* sub) {
 	if (super->Tag == TYPE_INTERFACE_T &&
 		sub->Tag == TYPE_CLASS_T) {
 		bool found = false;
-		Vector* gimpl_list = GetGenericInterfaceListClass(BC_TYPE2CLASS(sub));
+		Vector* gimpl_list = bc_GetGenericInterfaceListClass(BC_TYPE2CLASS(sub));
 		for (int i = 0; i < gimpl_list->Length; i++) {
 			bc_GenericType* e = (bc_GenericType*)AtVector(gimpl_list, i);
 			if (e->CoreType == super) {
@@ -133,7 +133,7 @@ int bc_DistanceType(bc_Type* super, bc_Type* sub) {
 	}
 	if (super->Tag == TYPE_CLASS_T &&
 		sub->Tag == TYPE_CLASS_T) {
-		int dist = DistanceClass(super->Kind.Class, sub->Kind.Class);
+		int dist = bc_DistanceClass(super->Kind.Class, sub->Kind.Class);
 		return dist;
 	}
 	return -1;
@@ -141,9 +141,9 @@ int bc_DistanceType(bc_Type* super, bc_Type* sub) {
 
 void bc_UnlinkType(bc_Type* self) {
 	if (self->Tag == TYPE_CLASS_T) {
-		UnlinkClass(self->Kind.Class);
+		bc_UnlinkClass(self->Kind.Class);
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		UnlinkInterface(self->Kind.Interface);
+		bc_UnlinkInterface(self->Kind.Interface);
 	}
 }
 
@@ -171,7 +171,7 @@ bc_GenericType * bc_FindImplementType(bc_Type* self, bc_Type* a) {
 	//selfがクラスなら
 	if (self->Tag == TYPE_CLASS_T) {
 
-		Class* ptr = self->Kind.Class;
+		bc_Class* ptr = self->Kind.Class;
 		while (ptr != NULL) {
 			if (a->Tag == TYPE_CLASS_T &&
 				ptr == a->Kind.Class) {
@@ -188,7 +188,7 @@ bc_GenericType * bc_FindImplementType(bc_Type* self, bc_Type* a) {
 			ptr = ptr->SuperClass->CoreType->Kind.Class;
 		}
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		Interface* inter = self->Kind.Interface;
+		bc_Interface* inter = self->Kind.Interface;
 		for (int i = 0; i < inter->Implements->Length; i++) {
 			bc_GenericType* e = (bc_GenericType*)AtVector(inter->Implements, i);
 			if (e->CoreType == a) {
@@ -229,20 +229,20 @@ bc_GenericType * bc_TypeParameterAtType(bc_Type* self, int index) {
 
 void bc_DeleteType(bc_Type* self) {
 	if (self->Tag == TYPE_CLASS_T) {
-		DeleteClass(self->Kind.Class);
+		bc_DeleteClass(self->Kind.Class);
 	} else if (self->Tag == TYPE_INTERFACE_T) {
-		DeleteInterface(self->Kind.Interface);
+		bc_DeleteInterface(self->Kind.Interface);
 	}
 	bc_LostownershipGenericType(self->GenericSelf);
 	MEM_FREE(self);
 }
 
-Class* bc_CastClassType(bc_Type* self) {
+bc_Class* bc_CastClassType(bc_Type* self) {
 	assert(self->Tag == TYPE_CLASS_T);
 	return self->Kind.Class;
 }
 
-Interface* bc_CastInterfaceType(bc_Type* self) {
+bc_Interface* bc_CastInterfaceType(bc_Type* self) {
 	assert(self->Tag == TYPE_INTERFACE_T);
 	return self->Kind.Interface;
 }
@@ -257,7 +257,7 @@ bc_GenericType* bc_BaselineType(bc_Type* abstract, bc_Type* concrete) {
 	#endif
 	bc_Type* ptr = concrete;
 	do {
-		Class* cls = BC_TYPE2CLASS(ptr);
+		bc_Class* cls = BC_TYPE2CLASS(ptr);
 		if(cls->SuperClass != NULL &&
 		   cls->SuperClass->CoreType == abstract) {
 			return cls->SuperClass;
@@ -265,7 +265,7 @@ bc_GenericType* bc_BaselineType(bc_Type* abstract, bc_Type* concrete) {
 		if(abstract->Tag == TYPE_INTERFACE_T) {
 			for(int i=0; i<cls->Implements->Length; i++) {
 				bc_GenericType* gE = (bc_GenericType*)AtVector(cls->Implements, i);
-				bc_GenericType* impl = IsContainsTypeInterface(gE, abstract->Kind.Interface);
+				bc_GenericType* impl = bc_IsContainsTypeInterface(gE, abstract->Kind.Interface);
 				if(impl) {
 					return impl;
 				}
@@ -281,7 +281,7 @@ bc_GenericType* bc_BaselineType(bc_Type* abstract, bc_Type* concrete) {
 	return NULL;
 }
 
-Interface* bc_IsValidInterface(bc_Type* self) {
+bc_Interface* bc_IsValidInterface(bc_Type* self) {
 #if defined(_MSC_VER)
 	//コンパイラが初期化されていないローカル変数として認識してしまうのでその対策
 	Vector* impl_list = NULL;
@@ -291,11 +291,11 @@ Interface* bc_IsValidInterface(bc_Type* self) {
 #endif
 	for(int i=0; i<impl_list->Length; i++) {
 		bc_GenericType* gE = AtVector(impl_list, i);
-		Interface* iE = BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gE));
+		bc_Interface* iE = BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gE));
 		for(int j=0; j<impl_list->Length; j++) {
 			if(i == j) { continue; }
 			bc_GenericType* gE2 = AtVector(impl_list, j);
-			Interface* iE2 = BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gE2));
+			bc_Interface* iE2 = BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gE2));
 			if(iE == iE2) {
 				return iE2;
 			}
@@ -311,14 +311,14 @@ bool bc_IsAbstractType(bc_Type* self) {
 	return self->Tag == TYPE_INTERFACE_T;
 }
 
-Class* bc_TypeToClass(bc_Type* self) {
+bc_Class* bc_TypeToClass(bc_Type* self) {
 	if(self == NULL || self->Tag != TYPE_CLASS_T) {
 		return NULL;
 	}
 	return self->Kind.Class;
 }
 
-Interface* bc_TypeToInterface(bc_Type* self) {
+bc_Interface* bc_TypeToInterface(bc_Type* self) {
 	if(self == NULL || self->Tag != TYPE_INTERFACE_T) {
 		return NULL;
 	}

@@ -17,7 +17,7 @@ bc_NativeMethod * bc_NewNativeMethod() {
 
 void bc_ExecuteNativeMethod(bc_NativeMethod * self, bc_Method * parent, Frame* fr, Enviroment* env) {
 	if (self->Ref == NULL) {
-		Class* declared = parent->Parent->Kind.Class;
+		bc_Class* declared = parent->Parent->Kind.Class;
 		self->Ref = GetNumericMapValue(declared->NativeMethodRefMap, parent->Name);
 	}
 	self->Ref->Body(parent, fr, env);

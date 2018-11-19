@@ -69,7 +69,7 @@ bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, 
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->Arguments, 0))->Factor);
 	PushVector(args, value);
-	bc_OperatorOverload* opov = ILFindOperatorOverloadClass(BC_TYPE2CLASS(self->Kind.Subscript.Operator->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(BC_TYPE2CLASS(self->Kind.Subscript.Operator->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -128,7 +128,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 	cfr->Kind.SelfInvoke.Args = self->Arguments;
 	cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
 	self->Tag = BOUND_INVOKE_METHOD_T;
-	self->Kind.Method = ILFindMethodClass(BC_TYPE2CLASS(ctype), self->Name, self->Arguments, env, cctx, &temp);
+	self->Kind.Method = bc_ILFindMethodClass(BC_TYPE2CLASS(ctype), self->Name, self->Arguments, env, cctx, &temp);
 	self->Index = temp;
 	BC_ERROR();
 	if(self->Index != -1) {
@@ -145,7 +145,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 		self->Kind.Subscript.Index = local->Index;
 	}
 	//フィールドとして解決する
-	bc_Field* fi = FindFieldClass(GetClassCContext(cctx), self->Name, &temp);
+	bc_Field* fi = bc_FindFieldClass(GetClassCContext(cctx), self->Name, &temp);
 	if(receiver_gtype == NULL && fi != NULL) {
 		receiver_gtype = fi->GType;
 		self->Kind.Subscript.Tag = SUBSCRIPT_FIELD_T;
@@ -153,7 +153,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 		self->Kind.Subscript.Index = temp;
 	}
 	//プロパティとして解決する
-	bc_Property* prop = FindPropertyClass(GetClassCContext(cctx), self->Name, &temp);
+	bc_Property* prop = bc_FindPropertyClass(GetClassCContext(cctx), self->Name, &temp);
 	if(receiver_gtype == NULL && prop != NULL) {
 		receiver_gtype = prop->GType;
 		self->Kind.Subscript.Tag = SUBSCRIPT_PROPERTY_T;
@@ -162,7 +162,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 	}
 	if(receiver_gtype != NULL) {
 		self->Tag = BOUND_INVOKE_SUBSCRIPT_T;
-		self->Kind.Subscript.Operator = ArgFindOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
+		self->Kind.Subscript.Operator = bc_ArgFindOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
 		self->Index = temp;
 		if(temp == -1) {
 			bc_Panic(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,

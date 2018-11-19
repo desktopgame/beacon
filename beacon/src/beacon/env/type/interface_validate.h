@@ -11,7 +11,7 @@
 #define BEACON_ENV_TYPE_INTERFACE_VALID_H
 #include "../../util/string_pool.h"
 #include <stdbool.h>
-struct Interface;
+struct bc_Interface;
 struct bc_Method;
 /**
  * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -19,7 +19,7 @@ struct bc_Method;
  * @param out
  * @return
  */
-bool IsMethodParameterValidInterface(struct Interface* inter, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodParameterValidInterface(struct bc_Interface* inter, struct bc_Method** out_method, StringView* out_name);
 
 /**
  * インターフェイスの型変数に重複する名前がないなら true.
@@ -27,7 +27,7 @@ bool IsMethodParameterValidInterface(struct Interface* inter, struct bc_Method**
  * @param out_name
  * @return
  */
-bool IsTypeParameterValidInterface(struct Interface* inter, StringView* out_name);
+bool bc_IsTypeParameterValidInterface(struct bc_Interface* inter, StringView* out_name);
 
 /**
  * メソッドの型変数に重複するものがないなら true.
@@ -36,6 +36,6 @@ bool IsTypeParameterValidInterface(struct Interface* inter, StringView* out_name
  * @param out_name
  * @return
  */
-bool IsMethodTypeParameterValidInterface(struct Interface* inter, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodTypeParameterValidInterface(struct bc_Interface* inter, struct bc_Method** out_method, StringView* out_name);
 
 #endif

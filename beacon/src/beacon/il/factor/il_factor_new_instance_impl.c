@@ -136,13 +136,13 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 		return;
 	}
 	//使用するコンストラクタを取得
-	Class* cls = BC_TYPE2CLASS(ty);
+	bc_Class* cls = BC_TYPE2CLASS(ty);
 	int temp = -1;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = cls->Parent->GenericSelf;
 	cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
 	ResolveILTypeArgument(self->TypeArgs, cctx);
-	self->Constructor = ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
+	self->Constructor = bc_ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
 	self->ConstructorIndex = temp;
 	PopCallContext(cctx);
 	if(temp == -1) {

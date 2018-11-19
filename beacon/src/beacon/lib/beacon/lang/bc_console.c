@@ -14,13 +14,13 @@ static void bc_console_read(bc_Method* parent, Frame* fr, Enviroment* env);
 
 void InitConsole() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* consoleType = NewPreloadClass(InternString("Console"));
-	Class* consoleClass = BC_TYPE2CLASS(consoleType);
+	bc_Type* consoleType = bc_NewPreloadClass(InternString("Console"));
+	bc_Class* consoleClass = BC_TYPE2CLASS(consoleType);
 	bc_AddTypeNamespace(lang, consoleType);
-	DefineNativeMethodClass(consoleClass, "writeLine", bc_console_writeLine);
-	DefineNativeMethodClass(consoleClass, "write", bc_console_write);
-	DefineNativeMethodClass(consoleClass, "readLine", bc_console_readLine);
-	DefineNativeMethodClass(consoleClass, "read", bc_console_read);
+	bc_DefineNativeMethodClass(consoleClass, "writeLine", bc_console_writeLine);
+	bc_DefineNativeMethodClass(consoleClass, "write", bc_console_write);
+	bc_DefineNativeMethodClass(consoleClass, "readLine", bc_console_readLine);
+	bc_DefineNativeMethodClass(consoleClass, "read", bc_console_read);
 }
 
 bc_Type* GetConsoleType() {

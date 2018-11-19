@@ -39,7 +39,7 @@ struct bc_OperatorOverload;
 /**
  * クラスを表す構造体です.
  */
-typedef struct Class {
+typedef struct bc_Class {
 	bc_Type* Parent;
 	StringView Name;
 	bc_Namespace* Location;
@@ -65,7 +65,7 @@ typedef struct Class {
 	bc_VTable* VT;
 	bc_OperatorVT* OVT;
 	bool IsAbstract;
-} Class;
+} bc_Class;
 #include "class_find.h"
 
 /**
@@ -73,7 +73,7 @@ typedef struct Class {
  * @param self
  * @return
  */
-bc_Type* WrapClass(Class* self);
+bc_Type* bc_WrapClass(bc_Class* self);
 
 /**
  * 新しいクラスを作成します.
@@ -81,7 +81,7 @@ bc_Type* WrapClass(Class* self);
  * @param namev
  * @return
  */
-Class* NewClass(StringView namev);
+bc_Class* bc_NewClass(StringView namev);
 
 /**
  * 指定のインターフェイスを実装するクラスを作成します.
@@ -89,13 +89,13 @@ Class* NewClass(StringView namev);
  * @param namev
  * @return
  */
-Class* NewClassProxy(struct bc_GenericType* gt, StringView namev);
+bc_Class* bc_NewClassProxy(struct bc_GenericType* gt, StringView namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-bc_Type* NewPreloadClass(StringView namev);
+bc_Type* bc_NewPreloadClass(StringView namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -108,7 +108,7 @@ bc_Type* NewPreloadClass(StringView namev);
  * @param o
  * @param fr
  */
-void AllocFieldsClass(Class* self, struct bc_Object* o, Frame* fr);
+void bc_AllocFieldsClass(bc_Class* self, struct bc_Object* o, Frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
@@ -116,35 +116,35 @@ void AllocFieldsClass(Class* self, struct bc_Object* o, Frame* fr);
  * @param self
  * @param o
  */
-void FreeClassFields(Class* self, struct bc_Object* o);
+void bc_FreeClassFields(bc_Class* self, struct bc_Object* o);
 
 /**
  * このクラスにフィールドを追加します.
  * @param self
  * @param f
  */
-void AddFieldClass(Class* self, struct bc_Field* f);
+void bc_AddFieldClass(bc_Class* self, struct bc_Field* f);
 
 /**
  * このクラスにプロパティを追加します.
  * @param self
  * @param p
  */
-void AddPropertyClass(Class* self, struct bc_Property* p);
+void bc_AddPropertyClass(bc_Class* self, struct bc_Property* p);
 
 /**
  * このクラスにメソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodClass(Class* self, struct bc_Method* m);
+void bc_AddMethodClass(bc_Class* self, struct bc_Method* m);
 
 /**
  * このクラスにコンストラクタを追加します.
  * @param self
  * @param c
  */
-void AddConstructorClass(Class* self, struct bc_Constructor* c);
+void bc_AddConstructorClass(bc_Class* self, struct bc_Constructor* c);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.
@@ -152,7 +152,7 @@ void AddConstructorClass(Class* self, struct bc_Constructor* c);
  * @param name
  * @param impl
  */
-void DefineNativeMethodClass(Class* self, const char* name, bc_NativeImpl impl);
+void bc_DefineNativeMethodClass(bc_Class* self, const char* name, bc_NativeImpl impl);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.
@@ -160,7 +160,7 @@ void DefineNativeMethodClass(Class* self, const char* name, bc_NativeImpl impl);
  * @param namev
  * @param impl
  */
-void DefineNativeMethodByRefClass(Class* self, StringView namev, bc_NativeImpl impl);
+void bc_DefineNativeMethodByRefClass(bc_Class* self, StringView namev, bc_NativeImpl impl);
 
 /**
  * super と sub の距離を返します.
@@ -170,7 +170,7 @@ void DefineNativeMethodByRefClass(Class* self, StringView namev, bc_NativeImpl i
  *         otherがselfのサブクラスなら正の数(階層の深さ)
  *         継承関係が異なるなら -1
  */
-int DistanceClass(Class* super, Class* sub);
+int bc_DistanceClass(bc_Class* super, bc_Class* sub);
 
 /**
  * このクラスの VTable を、現在のメソッド一覧に基づいて作成します.
@@ -178,53 +178,53 @@ int DistanceClass(Class* super, Class* sub);
  * また、この関数は全てのメソッドが登録されてから呼び出してさい。
  * @param self
  */
-void CreateVTableClass(Class* self);
+void bc_CreateVTableClass(bc_Class* self);
 /**
  * このクラスの operator_Vt を、現在のメソッド一覧に基づいて作成します.
  * @param self
  */
-void CreateOperatorVTClass(Class* self);
+void bc_CreateOperatorVTClass(bc_Class* self);
 
 /**
  * このクラスとその親全てに定義されたフィールドの合計を返します.
  * @param self
  * @return
  */
-int CountAllFieldClass(Class* self);
+int bc_CountAllFieldClass(bc_Class* self);
 
 /**
  * このクラスとその親全てに定義された静的フィールドの合計を返します.
  * @param self
  * @return
  */
-int CountAllSFieldClass(Class* self);
+int bc_CountAllSFieldClass(bc_Class* self);
 
 /**
  * このクラスとその親全てに定義されたプロパティの合計を返します.
  * @return
  */
-int CountAllPropertyClass(Class* self);
+int bc_CountAllPropertyClass(bc_Class* self);
 
 /**
  * このクラスとその親全てに定義された静的プロパティの合計を返します.
  * @param self
  * @return
  */
-int CountAllSPropertyClass(Class* self);
+int bc_CountAllSPropertyClass(bc_Class* self);
 
 /**
  * このクラスとその親全てに定義されたメソッドの合計を返します.
  * @param self
  * @return
  */
-int CountAllMethodClass(Class* self);
+int bc_CountAllMethodClass(bc_Class* self);
 
 /**
  * このクラスとその親全てに定義されたメソッドの合計を返します.
  * @param self
  * @return
  */
-int CountAllSMethodClass(Class* self);
+int bc_CountAllSMethodClass(bc_Class* self);
 
 /**
  * @param self
@@ -235,24 +235,24 @@ int CountAllSMethodClass(Class* self);
  * @param type_args
  * @return
  */
-struct bc_Object* NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args);
+struct bc_Object* bc_NewInstanceClass(bc_Class* self, Frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.
  * @param self
  */
-void LinkAllClass(Class* self);
+void bc_LinkAllClass(bc_Class* self);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
-void UnlinkClass(Class* self);
+void bc_UnlinkClass(bc_Class* self);
 
 /**
  * このクラスを開放します.
  * ただし先にこのクラスを参照するサブクラスを開放する必要があります。
  * @param self
  */
-void DeleteClass(Class* self);
+void bc_DeleteClass(bc_Class* self);
 #endif // !SIGNAL_ENV_CLASS_H

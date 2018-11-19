@@ -11,14 +11,14 @@
 #include "../type_parameter.h"
 #include <stdio.h>
 //proto
-Vector* get_generic_interface_tree_impl(Interface* self);
+Vector* get_generic_interface_tree_impl(bc_Interface* self);
 static void delete_method(VectorItem item);
 static void delete_type_parameter(VectorItem item);
 static void delete_generic_type(VectorItem item);
-static void flatten_method_impl(Interface* self, Vector* dest, int depth);
+static void flatten_method_impl(bc_Interface* self, Vector* dest, int depth);
 static void delete_property(VectorItem item);
 
-bc_Type* WrapInterface(Interface* self) {
+bc_Type* bc_WrapInterface(bc_Interface* self) {
 	bc_Type* ret = bc_NewType();
 	ret->Tag = TYPE_INTERFACE_T;
 	ret->Kind.Interface = self;
@@ -26,8 +26,8 @@ bc_Type* WrapInterface(Interface* self) {
 	return ret;
 }
 
-Interface* NewInterface(StringView namev) {
-	Interface* ret = (Interface*)MEM_MALLOC(sizeof(Interface));
+bc_Interface* bc_NewInterface(StringView namev) {
+	bc_Interface* ret = (bc_Interface*)MEM_MALLOC(sizeof(bc_Interface));
 	ret->Name = namev;
 	ret->Implements = NewVector();
 	ret->Location = NULL;
@@ -39,28 +39,28 @@ Interface* NewInterface(StringView namev) {
 	return ret;
 }
 
-void AddMethodInterface(Interface* self, bc_Method * m) {
+void bc_AddMethodInterface(bc_Interface* self, bc_Method * m) {
 	PushVector(self->Methods, m);
 }
 
-void AddPropertyInterface(Interface* self, bc_Property* p) {
+void bc_AddPropertyInterface(bc_Interface* self, bc_Property* p) {
 	PushVector(self->Properties, p);
 }
 
-bc_Method * ILFindMethodInterface(Interface* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
-	return MetaILFindMethod(self->Methods, namev, args, env,cctx, outIndex);
+bc_Method * bc_ILFindMethodInterface(bc_Interface* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+	return bc_MetaILFindMethod(self->Methods, namev, args, env,cctx, outIndex);
 }
 
-bc_Method* GFindMethodInterface(Interface* self, StringView namev, Vector* gargs, int* outIndex) {
-	return MetaGFindMethod(self->Methods, namev, gargs, outIndex);
+bc_Method* bc_GFindMethodInterface(bc_Interface* self, StringView namev, Vector* gargs, int* outIndex) {
+	return bc_MetaGFindMethod(self->Methods, namev, gargs, outIndex);
 }
 
-Vector* FlattenMethodInterfaceList(Vector* inter_list) {
+Vector* bc_FlattenMethodInterfaceList(Vector* inter_list) {
 	Vector* ret = NewVector();
 	for(int i=0; i<inter_list->Length; i++) {
-		Interface* inter = AtVector(inter_list, i);
+		bc_Interface* inter = AtVector(inter_list, i);
 		//インターフェイスのメソッド一覧を挿入
-		Vector* list = FlattenMethodInterface(inter);
+		Vector* list = bc_FlattenMethodInterface(inter);
 		for(int j=0; j<list->Length; j++) {
 			PushVector(ret, AtVector(list, j));
 		}
@@ -69,13 +69,13 @@ Vector* FlattenMethodInterfaceList(Vector* inter_list) {
 	return ret;
 }
 
-Vector* FlattenMethodInterface(Interface* self) {
+Vector* bc_FlattenMethodInterface(bc_Interface* self) {
 	Vector* ret = NewVector();
 	flatten_method_impl(self, ret, 0);
 	return ret;
 }
 
-void CreateVTableInterface(Interface* self) {
+void bc_CreateVTableInterface(bc_Interface* self) {
 	//初期化済み
 	if (self->VT != NULL) {
 		return;
@@ -90,9 +90,9 @@ void CreateVTableInterface(Interface* self) {
 		for (int i = 0; i < self->Implements->Length; i++) {
 			bc_GenericType* ginter = (bc_GenericType*)AtVector(self->Implements, i);
 			bc_Type* cinter = bc_GENERIC2TYPE(ginter);
-			Interface* inter = BC_TYPE2INTERFACE(cinter);
+			bc_Interface* inter = BC_TYPE2INTERFACE(cinter);
 //			Interface* inter = (Interface*)AtVector(self->Implements, i);
-			CreateVTableInterface(inter);
+			bc_CreateVTableInterface(inter);
 			bc_CopyVTable(inter->VT, self->VT);
 		}
 		for (int i = 0; i < self->Methods->Length; i++) {
@@ -101,20 +101,20 @@ void CreateVTableInterface(Interface* self) {
 	}
 }
 
-void UnlinkInterface(Interface* self) {
+void bc_UnlinkInterface(bc_Interface* self) {
 	DeleteVector(self->Methods, delete_method);
 	DeleteVector(self->Properties, delete_property);
 	DeleteVector(self->Implements, VectorDeleterOfNull);
 	bc_DeleteVTable(self->VT);
 }
 
-void DeleteInterface(Interface* self) {
+void bc_DeleteInterface(bc_Interface* self) {
 	DeleteVector(self->TypeParameters, delete_type_parameter);
 	MEM_FREE(self);
 }
 
-bc_GenericType* IsContainsTypeInterface(bc_GenericType* source, Interface* find) {
-	Interface* self = source->CoreType->Kind.Interface;
+bc_GenericType* bc_IsContainsTypeInterface(bc_GenericType* source, bc_Interface* find) {
+	bc_Interface* self = source->CoreType->Kind.Interface;
 	if(self == find) {
 		return source;
 	}
@@ -127,12 +127,12 @@ bc_GenericType* IsContainsTypeInterface(bc_GenericType* source, Interface* find)
 	return NULL;
 }
 
-bool IsFunctionalInterface(Interface* self) {
-	return GetFunctionInterface(self) != NULL;
+bool bc_IsFunctionalInterface(bc_Interface* self) {
+	return bc_GetFunctionInterface(self) != NULL;
 }
 
-bc_Method* GetFunctionInterface(Interface* self) {
-	Vector* v = FlattenMethodInterface(self);
+bc_Method* bc_GetFunctionInterface(bc_Interface* self) {
+	Vector* v = bc_FlattenMethodInterface(self);
 	bc_Method* ret = NULL;
 	if(v->Length == 1) {
 		ret = AtVector(v, 0);
@@ -142,11 +142,11 @@ bc_Method* GetFunctionInterface(Interface* self) {
 }
 
 
-Vector* GetGenericInterfaceTreeInterface(Interface* self) {
+Vector* bc_GetGenericInterfaceTreeInterface(bc_Interface* self) {
 	return get_generic_interface_tree_impl(self);
 }
 
-bc_GenericType* FindInterfaceInterface(Interface* self, bc_Type* tinter) {
+bc_GenericType* bc_FindInterfaceInterface(bc_Interface* self, bc_Type* tinter) {
 	assert(tinter->Tag == TYPE_INTERFACE_T);
 	if (self == BC_TYPE2INTERFACE(tinter)) {
 		return NULL;
@@ -161,7 +161,7 @@ bc_GenericType* FindInterfaceInterface(Interface* self, bc_Type* tinter) {
 }
 
 //private
-Vector* get_generic_interface_tree_impl(Interface* self) {
+Vector* get_generic_interface_tree_impl(bc_Interface* self) {
 	Vector* ret = NewVector();
 	for(int i=0; i<self->Implements->Length; i++) {
 		bc_GenericType* ginter = AtVector(self->Implements, i);
@@ -187,7 +187,7 @@ static void delete_generic_type(VectorItem item) {
 	//generic_DeleteType(e);
 }
 
-static void flatten_method_impl(Interface* self, Vector* dest, int depth) {
+static void flatten_method_impl(bc_Interface* self, Vector* dest, int depth) {
 	//tekitou
 	#if defined(DEBUG)
 	const char* intername = Ref2Str(self->Name);
@@ -199,7 +199,7 @@ static void flatten_method_impl(Interface* self, Vector* dest, int depth) {
 	}
 	for(int i=0; i<self->Implements->Length; i++) {
 		bc_GenericType* e = AtVector(self->Implements, i);
-		Interface* inter = BC_TYPE2INTERFACE(e->CoreType);
+		bc_Interface* inter = BC_TYPE2INTERFACE(e->CoreType);
 		flatten_method_impl(inter, dest, depth + 1);
 	}
 }

@@ -118,12 +118,12 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 #else
 	FieldWithIndex fwi = {};
 #endif
-	bc_Field* f = FindTreeFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
+	bc_Field* f = bc_FindTreeFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	fwi.Field = f;
 	fwi.Index = temp;
 	self->Type = VARIABLE_LOCAL_FIELD_T;
 	if(temp == -1) {
-		f = FindTreeSFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
+		f = bc_FindTreeSFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 		fwi.Field = f;
 		fwi.Index = temp;
 		self->Type = VARIABLE_LOCAL_FIELD_T;
@@ -133,7 +133,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 		LoadILVariableLocal_Property(self, env, cctx);
 		return;
 	//フィールドが見つかったなら可視性を確認する
-	} else if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
+	} else if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->Name));
 		return;
 	}
@@ -143,9 +143,9 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	int temp = -1;
 	bc_Type* tp = GetTypeCContext(cctx);
-	bc_Property* p = FindTreePropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
+	bc_Property* p = bc_FindTreePropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	if(temp == -1) {
-		p = FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
+		p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	}
 	if(temp == -1) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(tp)), Ref2Str(self->Name));
@@ -161,7 +161,7 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * en
 	self->Type = VARIABLE_LOCAL_PROPERTY_T;
 	self->Kind.PropertyI = pwi;
 	//プロパティにアクセスできない
-	if(!IsAccessiblePropertyClass(BC_TYPE2CLASS(tp), p)) {
+	if(!bc_IsAccessiblePropertyClass(BC_TYPE2CLASS(tp), p)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(tp)), Ref2Str(p->Name));
 	}
 	set_gtype(self, p->GType);

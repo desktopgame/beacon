@@ -11,13 +11,13 @@
 #endif
 
 //proto
-static Class* exception_class();
+static bc_Class* exception_class();
 
 bc_Object * bc_NewSimpleException(Frame* fr, const char* message) {
-	Class* excClass = exception_class();
+	bc_Class* excClass = exception_class();
 	Vector* args = NewVector();
 	PushVector(args, NewString(message));
-	bc_Object* e = NewInstanceClass(excClass, fr, args, NULL);
+	bc_Object* e = bc_NewInstanceClass(excClass, fr, args, NULL);
 	DeleteVector(args, VectorDeleterOfNull);
 	return e;
 }
@@ -35,9 +35,9 @@ bc_Object * bc_NewSimplefException(Frame* fr, const char * message, ...) {
 }
 
 //private
-static Class* exception_class() {
+static bc_Class* exception_class() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	Class* excClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
+	bc_Class* excClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
 	assert(excClass != NULL);
 	return excClass;
 }

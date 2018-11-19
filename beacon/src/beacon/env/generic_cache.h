@@ -15,8 +15,8 @@
 
 struct bc_GenericType;
 struct bc_Type;
-struct Class;
-struct Interface;
+struct bc_Class;
+struct bc_Interface;
 struct bc_Namespace;
 
 /**

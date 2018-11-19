@@ -83,11 +83,11 @@ bc_Type* bc_FindTypeFromNamespace(bc_Namespace * self, StringView namev) {
 	return GetNumericMapValue(self->TypeMap, namev);
 }
 
-Class* bc_FindClassFromNamespace(bc_Namespace * self, StringView namev) {
+bc_Class* bc_FindClassFromNamespace(bc_Namespace * self, StringView namev) {
 	return bc_TypeToClass(bc_FindTypeFromNamespace(self, namev));
 }
 
-Interface* bc_FindInterfaceFromNamespace(bc_Namespace * self, StringView namev) {
+bc_Interface* bc_FindInterfaceFromNamespace(bc_Namespace * self, StringView namev) {
 	return bc_TypeToInterface(bc_FindTypeFromNamespace(self, namev));
 }
 

@@ -59,7 +59,7 @@ bc_Type* GetTypeCContext(CallContext* self) {
 	return self->Ty;
 }
 
-Class* GetClassCContext(CallContext* self) {
+bc_Class* GetClassCContext(CallContext* self) {
 	return BC_TYPE2CLASS(GetTypeCContext(self));
 }
 

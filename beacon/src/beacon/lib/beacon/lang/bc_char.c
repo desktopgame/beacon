@@ -13,12 +13,12 @@ bc_Object* NewChar(char value) {
 
 void InitChar() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* charType = NewPreloadClass(InternString("Char"));
-	Class* charClass = BC_TYPE2CLASS(charType);
+	bc_Type* charType = bc_NewPreloadClass(InternString("Char"));
+	bc_Class* charClass = BC_TYPE2CLASS(charType);
 	charType->AllocSize = sizeof(Char);
 	bc_AddTypeNamespace(lang, charType);
-	DefineNativeMethodClass(charClass, "nativeInit", bc_char_nativeInit);
-	DefineNativeMethodClass(charClass, "nativeToInt", bc_char_nativeToInt);
+	bc_DefineNativeMethodClass(charClass, "nativeInit", bc_char_nativeInit);
+	bc_DefineNativeMethodClass(charClass, "nativeToInt", bc_char_nativeToInt);
 }
 
 bc_Type* GetCharType() {

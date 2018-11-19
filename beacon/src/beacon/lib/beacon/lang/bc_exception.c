@@ -15,10 +15,10 @@ static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* en
 
 void InitException() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* exceptionType = NewPreloadClass(InternString("Exception"));
-	Class* exceptionClass = BC_TYPE2CLASS(exceptionType);
+	bc_Type* exceptionType = bc_NewPreloadClass(InternString("Exception"));
+	bc_Class* exceptionClass = BC_TYPE2CLASS(exceptionType);
 	bc_AddTypeNamespace(lang, exceptionType);
-	DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
+	bc_DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
 bc_Type* GetExceptionType() {
@@ -28,8 +28,8 @@ bc_Type* GetExceptionType() {
 //private
 static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	Class* stackTraceElementClass = bc_FindClassFromNamespace(lang, InternString("StackTraceElement"));
-	Class* exceptionClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
+	bc_Class* stackTraceElementClass = bc_FindClassFromNamespace(lang, InternString("StackTraceElement"));
+	bc_Class* exceptionClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
 	bc_Object* self= (bc_Object*)AtVector(fr->VariableTable, 0);
 	//FXIME:???
 	bc_Heap* h = bc_GetHeap();
@@ -56,7 +56,7 @@ static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* en
 		Vector* args = NewVector();
 		PushVector(args, NewString(temp->ContextRef->ContextRef->FileName));
 		PushVector(args, NewInteger(lineno));
-		bc_Object* trace = NewInstanceClass(
+		bc_Object* trace = bc_NewInstanceClass(
 			stackTraceElementClass,
 			//ilctx,
 			fr,
@@ -79,7 +79,7 @@ static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* en
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;
-	bc_Field* stackTraceF = FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
+	bc_Field* stackTraceF = bc_FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
 	AssignVector(self->Fields, tempi, arr);
 	DeleteVector(stackTraceElementVec, VectorDeleterOfNull);
 	h->CollectBlocking--;

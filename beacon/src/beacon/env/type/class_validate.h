@@ -11,7 +11,7 @@
 #define BEACON_ENV_TYPE_CLASS_VALIDATE_H
 #include "../../util/string_pool.h"
 #include <stdbool.h>
-struct Class;
+struct bc_Class;
 struct bc_Method;
 struct bc_Property;
 struct bc_Field;
@@ -23,7 +23,7 @@ struct bc_Constructor;
  * @param out
  * @return
  */
-bool IsImplementInterfaceMethodValidClass(struct Class* cls, struct bc_Method** out);
+bool bc_IsImplementInterfaceMethodValidClass(struct bc_Class* cls, struct bc_Method** out);
 /**
  * クラスが全てのプロパティを正しく実装しているなら true.
  * インターフェイスを一つも持っていないなら 常にtrue です。
@@ -31,7 +31,7 @@ bool IsImplementInterfaceMethodValidClass(struct Class* cls, struct bc_Method** 
  * @param out
  * @return
  */
-bool IsImplementInterfacePropertyValidClass(struct Class* cls, struct bc_Property** out);
+bool bc_IsImplementInterfacePropertyValidClass(struct bc_Class* cls, struct bc_Property** out);
 
 /**
  * クラスが親の抽象メソッドを正しく実装しているなら true.
@@ -40,7 +40,7 @@ bool IsImplementInterfacePropertyValidClass(struct Class* cls, struct bc_Propert
  * @param out
  * @return
  */
-bool IsImplementAbstractClassValidClass(struct Class* cls, struct bc_Method** out);
+bool bc_IsImplementAbstractClassValidClass(struct bc_Class* cls, struct bc_Method** out);
 
 /**
  * クラスのフィールド名のうち重複するものがないなら true.
@@ -49,7 +49,7 @@ bool IsImplementAbstractClassValidClass(struct Class* cls, struct bc_Method** ou
  * @param out
  * @return
  */
-bool IsValidFieldClass(struct Class* cls, struct bc_Field** out);
+bool bc_IsValidFieldClass(struct bc_Class* cls, struct bc_Field** out);
 
 /**
  * クラスのプロパティ名のうち重複するものがないなら true.
@@ -57,7 +57,7 @@ bool IsValidFieldClass(struct Class* cls, struct bc_Field** out);
  * @param out
  * @return
  */
-bool IsValidPropertyClass(struct Class* self, struct bc_Property** out);
+bool bc_IsValidPropertyClass(struct bc_Class* self, struct bc_Property** out);
 
 /**
  * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -66,7 +66,7 @@ bool IsValidPropertyClass(struct Class* self, struct bc_Property** out);
  * @param out_name
  * @return
  */
-bool IsMethodParameterValidClass(struct Class* cls, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodParameterValidClass(struct bc_Class* cls, struct bc_Method** out_method, StringView* out_name);
 
 /**
  * 全てのコンストラクタを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -75,7 +75,7 @@ bool IsMethodParameterValidClass(struct Class* cls, struct bc_Method** out_metho
  * @param out_name
  * @return
  */
-bool IsConstructorParameterValidClass(struct Class* self, struct bc_Constructor** out_ctor, StringView* out_name);
+bool bc_IsConstructorParameterValidClass(struct bc_Class* self, struct bc_Constructor** out_ctor, StringView* out_name);
 
 /**
  * クラスの型変数に重複する名前がないなら true.
@@ -83,7 +83,7 @@ bool IsConstructorParameterValidClass(struct Class* self, struct bc_Constructor*
  * @param out_name
  * @return
  */
-bool IsTypeParameterValidClass(struct Class* self, StringView* out_name);
+bool bc_IsTypeParameterValidClass(struct bc_Class* self, StringView* out_name);
 
 /**
  * メソッドの型変数に重複するものがないなら true.
@@ -92,5 +92,5 @@ bool IsTypeParameterValidClass(struct Class* self, StringView* out_name);
  * @param out_name
  * @return
  */
-bool IsMethodTypeParameterValidClass(struct Class* self, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodTypeParameterValidClass(struct bc_Class* self, struct bc_Method** out_method, StringView* out_name);
 #endif

@@ -105,7 +105,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 	bc_Type* ctype = gtype->CoreType;
 	assert(ctype->Tag == TYPE_CLASS_T);
 	int temp = -1;
-	self->Field = FindTreeFieldClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
+	self->Field = bc_FindTreeFieldClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
 	self->Index = temp;
 	//インスタンスフィールドではない場合プロパティを検索
 	if(temp == -1) {
@@ -115,7 +115,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 		const char* clname = Ref2Str(GetClassCContext(cctx)->Name);
 		#endif
 		//フィールドの可視性を確認
-		if(!IsAccessibleFieldClass(GetClassCContext(cctx), self->Field)) {
+		if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), self->Field)) {
 			bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(self->Field->Name));
 		}
 	}
@@ -136,7 +136,7 @@ static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallConte
 	bc_Type* ccT = receiver_type->CoreType;
 	assert(ccT->Tag == TYPE_CLASS_T);
 	int temp = -1;
-	self->Field = FindTreeSFieldClass(BC_TYPE2CLASS(ccT), self->Name, &temp);
+	self->Field = bc_FindTreeSFieldClass(BC_TYPE2CLASS(ccT), self->Name, &temp);
 	self->Index = temp;
 	if(temp == -1) {
 		ILMemberOp_check_static_prop(self, env, cctx, receiver_type, swap);
@@ -149,7 +149,7 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 	const char* name = Ref2Str(self->Name);
 	#endif
 	bc_Type* ctype = receiver_type->CoreType;
-	bc_Property* p = FindTreePropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
+	bc_Property* p = bc_FindTreePropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
 	ILPropertyAccess* factp = NewILPropertyAccess();
 	factp->Source = self->Source;
 	factp->Name = self->Name;
@@ -163,7 +163,7 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 		bc_Panic(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(self->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
-	} else if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
+	} else if(!bc_IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(p->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
@@ -175,7 +175,7 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	bc_Type* ctype = receiver_type->CoreType;
-	bc_Property* p = FindTreeSPropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
+	bc_Property* p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
 	ILPropertyAccess* factp = NewILPropertyAccess();
 	factp->Source = self->Source;
 	factp->Name = self->Name;
@@ -185,7 +185,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, Call
 	self->Parent->Type = ILFACTOR_PROPERTY_T;
 	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
-	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
+	if(!bc_IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(p->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;

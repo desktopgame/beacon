@@ -97,7 +97,7 @@ bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, Enviroment
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
 	PushVector(args, value);
-	bc_OperatorOverload* opov = ILFindOperatorOverloadClass(BC_TYPE2CLASS(self->u.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+	bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(BC_TYPE2CLASS(self->u.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	DeleteVector(args, VectorDeleterOfNull);
 	return opov;
 }
@@ -185,7 +185,7 @@ static void ILInvoke_check(ILInvoke * self, Enviroment * env, CallContext* cctx)
 		return;
 	}
 	self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
-	self->u.opov = ArgFindOperatorOverloadClass(BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
+	self->u.opov = bc_ArgFindOperatorOverloadClass(BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env, cctx, &temp);
 	self->index = temp;
 	if(temp == -1) {
 		bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,

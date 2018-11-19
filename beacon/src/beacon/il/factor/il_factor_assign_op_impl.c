@@ -89,14 +89,14 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 	ILVariable* ilvar = ilsrc->Kind.Variable;
 	//staticなフィールドへの代入
 	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
-		Class* cls = BC_TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
+		bc_Class* cls = BC_TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
 		int temp = -1;
-		bc_Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
+		bc_Field* sf = bc_FindSFieldClass(cls, ilmem->Name, &temp);
 		assert(temp != -1);
 		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutField(env->Bytecode, sf, temp);
 		//指定の静的フィールドにアクセスできない
-		if(!IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
+		if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
 			bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
 				Ref2Str(bc_GetTypeName(cls->Parent)),
 				Ref2Str(sf->Name)
@@ -122,9 +122,9 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 
 static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	bc_GenericType* gt = EvalILFactor(receiver, env, cctx);
-	Class* cls = BC_TYPE2CLASS(gt->CoreType);
+	bc_Class* cls = BC_TYPE2CLASS(gt->CoreType);
 	int temp = -1;
-	bc_Field* f = FindTreeFieldClass(cls, namev, &temp);
+	bc_Field* f = bc_FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	GenerateILFactor(receiver, env, cctx);
 	GenerateILFactor(source, env, cctx);
@@ -134,7 +134,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 		return;
 	}
 	//指定のインスタンスフィールドにアクセスできない
-	if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
+	if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(bc_GetTypeName(cls->Parent)),
 			Ref2Str(f->Name)
@@ -149,14 +149,14 @@ static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* c
 	bool is_static = bc_IsStaticModifier(prop->Property->Modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
-	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
+	if(!bc_IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(bc_GetTypeName(pp->Parent)),
 			Ref2Str(pp->Name)
 		);
 		return;
 	}
-	if(!IsAccessiblePropertyAccessorClass(GetClassCContext(cctx), pp->Set)) {
+	if(!bc_IsAccessiblePropertyAccessorClass(GetClassCContext(cctx), pp->Set)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
 			Ref2Str(bc_GetTypeName(pp->Parent)),
 			Ref2Str(pp->Name)
@@ -269,9 +269,9 @@ static bool can_assign_to_field(bc_Field* f, ILAssignOp* self, Enviroment* env, 
 
 static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx) {
 	bc_GenericType* gt = EvalILFactor(receiver, env, cctx);
-	Class* cls = BC_TYPE2CLASS(gt->CoreType);
+	bc_Class* cls = BC_TYPE2CLASS(gt->CoreType);
 	int temp = -1;
-	bc_Field* f = FindTreeFieldClass(cls, namev, &temp);
+	bc_Field* f = bc_FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->Tag != CALL_CTOR_T) {
@@ -326,9 +326,9 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 	//src のような名前がフィールドを示す場合
 	} else if(illoc->Type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		bc_Field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
+		bc_Field* f = bc_FindTreeFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
 		if(temp == -1) {
-			f = FindTreeSFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
+			f = bc_FindTreeSFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
 		}
 		assert(temp != -1);
 		//フィールドはstaticでないが
@@ -350,7 +350,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->Type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		bc_Property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->Name, &temp);
+		bc_Property* p = bc_FindTreePropertyClass(GetClassCContext(cctx), illoc->Name, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない

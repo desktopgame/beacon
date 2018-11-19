@@ -287,8 +287,8 @@ static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other, Frame
 
 static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other, Frame* fr, CallContext* cctx) {
 	//otherからselfまで辿る
-	Class* baseline = self->CoreType->Kind.Class;
-	Class* ptr = other->CoreType->Kind.Class;
+	bc_Class* baseline = self->CoreType->Kind.Class;
+	bc_Class* ptr = other->CoreType->Kind.Class;
 	bc_GenericType* target = other;
 	while (baseline != ptr) {
 		target = ptr->SuperClass;
@@ -312,7 +312,7 @@ static int distance_interface(int dist, bc_GenericType* self, bc_GenericType* ot
 	if (other->CoreType->Tag == TYPE_CLASS_T) {
 		//クラスからインターフェイスを探す
 		bc_GenericType* impl_baseline = NULL;
-		bc_GenericType* impl = FindInterfaceTypeClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(other)), (bc_GENERIC2TYPE(self)), &impl_baseline);
+		bc_GenericType* impl = bc_FindInterfaceTypeClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(other)), (bc_GENERIC2TYPE(self)), &impl_baseline);
 		if (impl_baseline == NULL) {
 			impl_baseline = other;
 		}
@@ -329,7 +329,7 @@ static int distance_interface(int dist, bc_GenericType* self, bc_GenericType* ot
 		DeleteVector(gargs, VectorDeleterOfNull);
 		return dist;
 	} else if (other->CoreType->Tag == TYPE_INTERFACE_T) {
-		bc_GenericType* impl = FindInterfaceInterface(BC_TYPE2INTERFACE(bc_GENERIC2TYPE(other)), (bc_GENERIC2TYPE(self)));
+		bc_GenericType* impl = bc_FindInterfaceInterface(BC_TYPE2INTERFACE(bc_GENERIC2TYPE(other)), (bc_GENERIC2TYPE(self)));
 		if (impl == NULL) {
 			impl = other;
 		}

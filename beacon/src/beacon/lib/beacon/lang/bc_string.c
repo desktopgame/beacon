@@ -39,13 +39,13 @@ bc_Object* NewString(const char* str) {
 	ShrinkBuffer(sb);
 	//String#charArrayを埋める
 	int temp = 0;
-	FindFieldClass(strType->Kind.Class, InternString("charArray"), &temp);
+	bc_FindFieldClass(strType->Kind.Class, InternString("charArray"), &temp);
 	AssignVector(ret->Fields, temp, arr);
 	VectorItem* test = AtVector(ret->Fields, temp);
 	assert(test != NULL);
 	//Array#lengthを埋める
 	temp = 0;
-	FindFieldClass(arrType->Kind.Class, InternString("length"), &temp);
+	bc_FindFieldClass(arrType->Kind.Class, InternString("length"), &temp);
 	AssignVector(arr->Fields, temp, NewInteger(sb->Length));
 	//C形式の文字列でも保存
 	//AssignVector(ret->NativeSlotVec, 0, sb);
@@ -55,11 +55,11 @@ bc_Object* NewString(const char* str) {
 
 void InitString() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* stringType = NewPreloadClass(InternString("String"));
-	Class* stringClass = BC_TYPE2CLASS(stringType);
+	bc_Type* stringType = bc_NewPreloadClass(InternString("String"));
+	bc_Class* stringClass = BC_TYPE2CLASS(stringType);
 	stringType->AllocSize = sizeof(String);
 	bc_AddTypeNamespace(lang, stringType);
-	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
+	bc_DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
 Buffer * GetRawString(bc_Object* self) {
@@ -98,7 +98,7 @@ static void bc_string_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) 
 	self->OnMessage = handle_obj_message;
 	//String#charArrayを取得
 	int temp = 0;
-	FindFieldClass(BC_TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
+	bc_FindFieldClass(BC_TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
 	Array* charArr = (Array*)AtVector(self->Fields, temp);
 	//これを char* へ変換
 	Buffer* sb = NewBuffer();

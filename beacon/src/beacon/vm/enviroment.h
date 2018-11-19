@@ -15,7 +15,7 @@
 #include "opcode_buf.h"
 #include "symbol_table.h"
 #include <stdbool.h>
-struct Class;
+struct bc_Class;
 struct bc_Object;
 struct bc_ClassLoader;
 struct bc_FQCNCache;

@@ -22,20 +22,20 @@ static void bc_locale_nativeGetFracDigits(bc_Method* parent, Frame* fr, Envirome
 
 void InitLocaleType() {
 	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
-	bc_Type* localeType = NewPreloadClass(InternString("Locale"));
-	Class* localeClass = BC_TYPE2CLASS(localeType);
+	bc_Type* localeType = bc_NewPreloadClass(InternString("Locale"));
+	bc_Class* localeClass = BC_TYPE2CLASS(localeType);
 	bc_AddTypeNamespace(unsafe, localeType);
-	DefineNativeMethodClass(localeClass, "nativeSetLocale", bc_locale_nativeSetLocale);
-	DefineNativeMethodClass(localeClass, "nativeGetDecimalPoint", bc_locale_nativeGetDecimalPoint);
-	DefineNativeMethodClass(localeClass, "nativeGetThousandsSep", bc_locale_nativeGetThousandsSep);
-	DefineNativeMethodClass(localeClass, "nativeGetIntCurrSymbol", bc_locale_nativeGetIntCurrSymbol);
-	DefineNativeMethodClass(localeClass, "nativeGetCurrencySymbol", bc_locale_nativeGetCurrencySymbol);
-	DefineNativeMethodClass(localeClass, "nativeGetMonDecimalPoint", bc_locale_nativeGetMonDecimalPoint);
-	DefineNativeMethodClass(localeClass, "nativeGetMonThousandsSep", bc_locale_nativeGetMonThousandsSep);
-	DefineNativeMethodClass(localeClass, "nativeGetPositiveSign", bc_locale_nativeGetPositiveSign);
-	DefineNativeMethodClass(localeClass, "nativeGetNegativeSign", bc_locale_nativeGetNegativeSign);
-	DefineNativeMethodClass(localeClass, "nativeGetIntFracDigits", bc_locale_nativeGetIntFracDigits);
-	DefineNativeMethodClass(localeClass, "nativeGetFracDigits", bc_locale_nativeGetFracDigits);
+	bc_DefineNativeMethodClass(localeClass, "nativeSetLocale", bc_locale_nativeSetLocale);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetDecimalPoint", bc_locale_nativeGetDecimalPoint);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetThousandsSep", bc_locale_nativeGetThousandsSep);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetIntCurrSymbol", bc_locale_nativeGetIntCurrSymbol);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetCurrencySymbol", bc_locale_nativeGetCurrencySymbol);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetMonDecimalPoint", bc_locale_nativeGetMonDecimalPoint);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetMonThousandsSep", bc_locale_nativeGetMonThousandsSep);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetPositiveSign", bc_locale_nativeGetPositiveSign);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetNegativeSign", bc_locale_nativeGetNegativeSign);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetIntFracDigits", bc_locale_nativeGetIntFracDigits);
+	bc_DefineNativeMethodClass(localeClass, "nativeGetFracDigits", bc_locale_nativeGetFracDigits);
 }
 
 bc_Type* GetLocaleType() {

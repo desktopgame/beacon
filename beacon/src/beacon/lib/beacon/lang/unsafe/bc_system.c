@@ -16,12 +16,12 @@ static void bc_system_nativeExec(bc_Method* parent, Frame* fr, Enviroment* env);
 
 void InitSystem() {
 	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
-	bc_Type* systemType = NewPreloadClass(InternString("System"));
-	Class* systemClass = BC_TYPE2CLASS(systemType);
+	bc_Type* systemType = bc_NewPreloadClass(InternString("System"));
+	bc_Class* systemClass = BC_TYPE2CLASS(systemType);
 	bc_AddTypeNamespace(unsafe, systemType);
-	DefineNativeMethodClass(systemClass, "nativeExit", bc_system_nativeExit);
-	DefineNativeMethodClass(systemClass, "nativeAbort", bc_system_nativeAbort);
-	DefineNativeMethodClass(systemClass, "nativeExec", bc_system_nativeExec);
+	bc_DefineNativeMethodClass(systemClass, "nativeExit", bc_system_nativeExit);
+	bc_DefineNativeMethodClass(systemClass, "nativeAbort", bc_system_nativeAbort);
+	bc_DefineNativeMethodClass(systemClass, "nativeExec", bc_system_nativeExec);
 }
 
 bc_Type* GetSystemType() {

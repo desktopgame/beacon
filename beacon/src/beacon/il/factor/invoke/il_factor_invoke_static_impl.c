@@ -119,7 +119,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 		);
 		return;
 	}
-	Class* cls = BC_TYPE2CLASS(ty);
+	bc_Class* cls = BC_TYPE2CLASS(ty);
 	#if defined(DEBUG)
 	const char* classname = Ref2Str(cls->Name);
 	const char* methodname = Ref2Str(self->Name);
@@ -135,7 +135,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 	CallFrame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->Kind.StaticInvoke.Args = self->Arguments;
 	cfr->Kind.StaticInvoke.TypeArgs = self->TypeArgs;
-	self->Method = ILFindSMethodClass(cls, self->Name, self->Arguments, env, cctx, &temp);
+	self->Method = bc_ILFindSMethodClass(cls, self->Name, self->Arguments, env, cctx, &temp);
 	self->Index = temp;
 	//メソッドが見つからない
 	if(temp == -1 || self->Method == NULL) {

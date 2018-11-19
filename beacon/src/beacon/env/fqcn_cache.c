@@ -83,11 +83,11 @@ bc_Type* bc_GetTypeFQCN(bc_FQCNCache * self, bc_Namespace * current) {
 	return ret;
 }
 
-Interface* bc_GetInterfaceFQCN(bc_FQCNCache * self, bc_Namespace * current) {
+bc_Interface* bc_GetInterfaceFQCN(bc_FQCNCache * self, bc_Namespace * current) {
 	return bc_TypeToInterface(bc_GetTypeFQCN(self, current));
 }
 
-Class* bc_GetClassFQCN(bc_FQCNCache * self, bc_Namespace * current) {
+bc_Class* bc_GetClassFQCN(bc_FQCNCache * self, bc_Namespace * current) {
 	return bc_TypeToClass(bc_GetTypeFQCN(self, current));
 }
 

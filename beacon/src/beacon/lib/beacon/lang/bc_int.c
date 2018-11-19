@@ -29,27 +29,27 @@ bc_Object* NewInteger(int value) {
 
 void InitInt() {
 	bc_Namespace* lang =  bc_GetLangNamespace();
-	bc_Type* intType = NewPreloadClass(InternString("Int"));
-	Class* intClass = BC_TYPE2CLASS(intType);
+	bc_Type* intType = bc_NewPreloadClass(InternString("Int"));
+	bc_Class* intClass = BC_TYPE2CLASS(intType);
 	intType->AllocSize = sizeof(Integer);
 	bc_AddTypeNamespace(lang, intType);
-	DefineNativeMethodClass(intClass, "nativeInit", bc_int_nativeInit);
-	DefineNativeMethodClass(intClass, "nativeEquals", bc_int_nativeEquals);
-	DefineNativeMethodClass(intClass, "nativeAdd", bc_int_nativeAdd);
-	DefineNativeMethodClass(intClass, "nativeSub", bc_int_nativeSub);
-	DefineNativeMethodClass(intClass, "nativeMul", bc_int_nativeMul);
-	DefineNativeMethodClass(intClass, "nativeDiv", bc_int_nativeDiv);
-	DefineNativeMethodClass(intClass, "nativeMod", bc_int_nativeMod);
-	DefineNativeMethodClass(intClass, "nativeLShift", bc_int_nativeLShift);
-	DefineNativeMethodClass(intClass, "nativeRShift", bc_int_nativeRShift);
-	DefineNativeMethodClass(intClass, "nativeGT", bc_int_nativeGT);
-	DefineNativeMethodClass(intClass, "nativeGE", bc_int_nativeGE);
-	DefineNativeMethodClass(intClass, "nativeLT", bc_int_nativeLT);
-	DefineNativeMethodClass(intClass, "nativeLE", bc_int_nativeLE);
-	DefineNativeMethodClass(intClass, "nativeBitOr", bc_int_nativeBitOr);
-	DefineNativeMethodClass(intClass, "nativeBitAnd", bc_int_nativeBitAnd);
-	DefineNativeMethodClass(intClass, "nativeEQ", bc_int_nativeEQ);
-	DefineNativeMethodClass(intClass, "nativeToChar", bc_int_nativeToChar);
+	bc_DefineNativeMethodClass(intClass, "nativeInit", bc_int_nativeInit);
+	bc_DefineNativeMethodClass(intClass, "nativeEquals", bc_int_nativeEquals);
+	bc_DefineNativeMethodClass(intClass, "nativeAdd", bc_int_nativeAdd);
+	bc_DefineNativeMethodClass(intClass, "nativeSub", bc_int_nativeSub);
+	bc_DefineNativeMethodClass(intClass, "nativeMul", bc_int_nativeMul);
+	bc_DefineNativeMethodClass(intClass, "nativeDiv", bc_int_nativeDiv);
+	bc_DefineNativeMethodClass(intClass, "nativeMod", bc_int_nativeMod);
+	bc_DefineNativeMethodClass(intClass, "nativeLShift", bc_int_nativeLShift);
+	bc_DefineNativeMethodClass(intClass, "nativeRShift", bc_int_nativeRShift);
+	bc_DefineNativeMethodClass(intClass, "nativeGT", bc_int_nativeGT);
+	bc_DefineNativeMethodClass(intClass, "nativeGE", bc_int_nativeGE);
+	bc_DefineNativeMethodClass(intClass, "nativeLT", bc_int_nativeLT);
+	bc_DefineNativeMethodClass(intClass, "nativeLE", bc_int_nativeLE);
+	bc_DefineNativeMethodClass(intClass, "nativeBitOr", bc_int_nativeBitOr);
+	bc_DefineNativeMethodClass(intClass, "nativeBitAnd", bc_int_nativeBitAnd);
+	bc_DefineNativeMethodClass(intClass, "nativeEQ", bc_int_nativeEQ);
+	bc_DefineNativeMethodClass(intClass, "nativeToChar", bc_int_nativeToChar);
 }
 
 bc_Type* GetIntType() {

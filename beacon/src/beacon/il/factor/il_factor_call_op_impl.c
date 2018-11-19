@@ -157,7 +157,7 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Envirom
 		const char* clname = Ref2Str(ilvar->FQCN->Name);
 		#endif
 		bc_Namespace* cur = GetNamespaceCContext(cctx);
-		Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
+		bc_Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
 		if(ctype == NULL) {
 			ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(), ilvar->FQCN->Name);
 		}
@@ -200,9 +200,9 @@ static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx
 	ILCallOp* call_left = receiver->Kind.Call;
 	ILInvoke* iv = NewILInvoke(ZERO_VIEW);
 	bc_GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
-	Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
+	bc_Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
 	int temp;
-	iv->u.opov = ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
+	iv->u.opov = bc_ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
 	iv->index = temp;
 	assert(temp != -1);
 	//入れ替える

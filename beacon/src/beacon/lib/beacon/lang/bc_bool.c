@@ -12,12 +12,12 @@ bc_Object* NewBool(bool value) {
 
 void InitBool() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* boolType = NewPreloadClass(InternString("Bool"));
-	Class* boolClass = BC_TYPE2CLASS(boolType);
+	bc_Type* boolType = bc_NewPreloadClass(InternString("Bool"));
+	bc_Class* boolClass = BC_TYPE2CLASS(boolType);
 	boolType->AllocSize = sizeof(Bool);
 	bc_AddTypeNamespace(lang, boolType);
-	DefineNativeMethodClass(boolClass, "nativeBitOr", bc_bool_nativeBitOr);
-	DefineNativeMethodClass(boolClass, "nativeBitAnd", bc_bool_nativeBitAnd);
+	bc_DefineNativeMethodClass(boolClass, "nativeBitOr", bc_bool_nativeBitOr);
+	bc_DefineNativeMethodClass(boolClass, "nativeBitAnd", bc_bool_nativeBitAnd);
 }
 
 bc_Type* GetBoolType() {

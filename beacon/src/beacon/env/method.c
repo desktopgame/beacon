@@ -235,15 +235,15 @@ bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self,  bc_ClassLoader* cll, 
 	bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
 	bc_GenericType* iterImplGT = bc_ApplyGenericType(self->ReturnGType, lCctx);
-	Class* iterImplC = NewClassProxy(iterImplGT, iterName);
-	bc_Type* iterImplT = WrapClass(iterImplC);
+	bc_Class* iterImplC = bc_NewClassProxy(iterImplGT, iterName);
+	bc_Type* iterImplT = bc_WrapClass(iterImplC);
 	bc_AddTypeNamespace(bc_GetPlaceholderNamespace(), iterImplT);
 	bc_InitGenericSelf(iterImplT, 0);
 	//イテレータのコンストラクタ追加
 	int op_len = 0;
-	AddMethodClass(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
-	AddMethodClass(iterImplC, create_next(self, iterImplT, cll, AtVector(self->ReturnGType->TypeArgs, 0), stmt_list, &op_len));
-	AddConstructorClass(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
+	bc_AddMethodClass(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
+	bc_AddMethodClass(iterImplC, create_next(self, iterImplT, cll, AtVector(self->ReturnGType->TypeArgs, 0), stmt_list, &op_len));
+	bc_AddConstructorClass(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
 	PopCallContext(lCctx);
 	DeleteCallContext(lCctx);
 	return iterImplT;

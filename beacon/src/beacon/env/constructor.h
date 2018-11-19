@@ -13,7 +13,7 @@
 #include "../ast/access_level.h"
 #include "../util/vector.h"
 struct bc_Type;
-struct Class;
+struct bc_Class;
 struct Enviroment;
 struct bc_Object;
 struct Frame;

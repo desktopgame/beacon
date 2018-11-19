@@ -14,7 +14,7 @@
 #include "control_structure.h"
 struct bc_Namespace;
 struct bc_Type;
-struct Class;
+struct bc_Class;
 struct bc_Method;
 struct bc_Constructor;
 struct bc_OperatorOverload;
@@ -65,7 +65,7 @@ struct bc_Method* GetMethodCContext(CallContext* self);
 
 struct bc_Type* GetTypeCContext(CallContext* self);
 
-struct Class* GetClassCContext(CallContext* self);
+struct bc_Class* GetClassCContext(CallContext* self);
 
 struct bc_GenericType* GetReceiverCContext(CallContext* self);
 

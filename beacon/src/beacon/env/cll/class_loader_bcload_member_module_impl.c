@@ -437,7 +437,7 @@ void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype
 bool CLBC_ctor_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, bc_Namespace* scope) {
 	//メソッドから仮引数一覧を取りだす
 	Vector* ilparams = ilcons->Parameters;
-	Class* classz = tp->Kind.Class;
+	bc_Class* classz = tp->Kind.Class;
 	//実行時のメソッド情報を作成する
 	bc_Constructor* cons = bc_NewConstructor();
 	Vector* parameter_list = cons->Parameters;
@@ -457,7 +457,7 @@ bool CLBC_ctor_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 	}
 	CLBC_parameter_list(self, scope, ilcons->Parameters, cons->Parameters, cctx);
 	CLBC_parameter_list_ctor(cons->Parameters);
-	AddConstructorClass(classz, cons);
+	bc_AddConstructorClass(classz, cons);
 	DeleteCallContext(cctx);
 	return true;
 }
@@ -494,7 +494,7 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 
 void CLBC_ctors_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
-	Class* classz = tp->Kind.Class;
+	bc_Class* classz = tp->Kind.Class;
 	Vector* ilcons_list = iltype->Kind.Class->Constructors;
 	for (int i = 0; i < ilcons_list->Length; i++) {
 		if(!CLBC_ctor_decl(self, iltype, tp, AtVector(ilcons_list, i), scope)) {
@@ -506,7 +506,7 @@ void CLBC_ctors_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Names
 void CLBC_ctors_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp) {
 	bc_CL_ERROR(self);
 	assert(tp->Tag == TYPE_CLASS_T);
-	Class* classz = tp->Kind.Class;
+	bc_Class* classz = tp->Kind.Class;
 	bc_Namespace* scope = classz->Location;
 	Vector* constructors = classz->Constructors;
 	if (iltype->Tag != ILTYPE_CLASS_T) {
@@ -687,7 +687,7 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 
 static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
 	//親クラスがないなら作成
-	Class* classz = tp->Kind.Class;
+	bc_Class* classz = tp->Kind.Class;
 	if (classz->SuperClass == NULL &&
 		ilcons->Chain == NULL) {
 		CLBC_chain_root(self, iltype, tp, ilcons, ilchain, env);
@@ -709,11 +709,11 @@ static void CLBC_chain_root(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 }
 
 static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	Class* classz = tp->Kind.Class;
+	bc_Class* classz = tp->Kind.Class;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
-	bc_Constructor* emptyTarget = ILFindEmptyConstructorClass(classz->SuperClass->CoreType->Kind.Class, env, cctx, &emptyTemp);
+	bc_Constructor* emptyTarget = bc_ILFindEmptyConstructorClass(classz->SuperClass->CoreType->Kind.Class, env, cctx, &emptyTemp);
 	DeleteCallContext(cctx);
 	//連鎖を明示的に書いていないのに、
 	//親クラスにも空のコンストラクタが存在しない=エラー
@@ -743,7 +743,7 @@ static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 }
 
 static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	Class* classz = tp->Kind.Class;
+	bc_Class* classz = tp->Kind.Class;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
 	cctx->Ty = tp;
@@ -756,13 +756,13 @@ static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	bc_Constructor* chainTarget = NULL;
 	int temp = 0;
 	if (chain->Type == CHAIN_TYPE_THIS_T) {
-		chainTarget = ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
+		chainTarget = bc_ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
 	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
-		chainTarget = ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
+		chainTarget = bc_ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
 		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
 		AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);

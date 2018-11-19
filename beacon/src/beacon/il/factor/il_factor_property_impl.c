@@ -26,7 +26,7 @@ void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) 
 	bc_GenericType* receiver = EvalILFactor(self->Source, env, cctx);
 	bc_Type* receiverT = bc_GENERIC2TYPE(receiver);
 	int temp = -1;
-	FindTreePropertyClass(BC_TYPE2CLASS(receiverT), self->Property->Name, &temp);
+	bc_FindTreePropertyClass(BC_TYPE2CLASS(receiverT), self->Property->Name, &temp);
 	self->Index = temp;
 	if(temp == -1) {
 		bc_Panic(

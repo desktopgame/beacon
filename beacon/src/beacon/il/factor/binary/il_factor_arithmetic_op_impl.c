@@ -42,7 +42,7 @@ bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallC
 		);
 		return NULL;
 	}
-	bc_OperatorOverload* operator_ov = GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
+	bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
 	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 

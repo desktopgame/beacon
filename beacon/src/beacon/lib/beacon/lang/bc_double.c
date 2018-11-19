@@ -22,21 +22,21 @@ bc_Object* NewDouble(double value) {
 
 void InitDouble() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* doubleType = NewPreloadClass(InternString("Double"));
-	Class* doubleClass = BC_TYPE2CLASS(doubleType);
+	bc_Type* doubleType = bc_NewPreloadClass(InternString("Double"));
+	bc_Class* doubleClass = BC_TYPE2CLASS(doubleType);
 	doubleType->AllocSize = sizeof(Double);
 	bc_AddTypeNamespace(lang, doubleType);
-	DefineNativeMethodClass(doubleClass, "nativeInit", bc_double_nativeInit);
-	DefineNativeMethodClass(doubleClass, "nativeEquals", bc_double_nativeEquals);
-	DefineNativeMethodClass(doubleClass, "nativeAdd", bc_double_nativeAdd);
-	DefineNativeMethodClass(doubleClass, "nativeSub", bc_double_nativeSub);
-	DefineNativeMethodClass(doubleClass, "nativeMul", bc_double_nativeMul);
-	DefineNativeMethodClass(doubleClass, "nativeDiv", bc_double_nativeDiv);
-	DefineNativeMethodClass(doubleClass, "nativeGT", bc_double_nativeGT);
-	DefineNativeMethodClass(doubleClass, "nativeGE", bc_double_nativeGE);
-	DefineNativeMethodClass(doubleClass, "nativeLT", bc_double_nativeLT);
-	DefineNativeMethodClass(doubleClass, "nativeLE", bc_double_nativeLE);
-	DefineNativeMethodClass(doubleClass, "nativeEQ", bc_double_nativeEQ);
+	bc_DefineNativeMethodClass(doubleClass, "nativeInit", bc_double_nativeInit);
+	bc_DefineNativeMethodClass(doubleClass, "nativeEquals", bc_double_nativeEquals);
+	bc_DefineNativeMethodClass(doubleClass, "nativeAdd", bc_double_nativeAdd);
+	bc_DefineNativeMethodClass(doubleClass, "nativeSub", bc_double_nativeSub);
+	bc_DefineNativeMethodClass(doubleClass, "nativeMul", bc_double_nativeMul);
+	bc_DefineNativeMethodClass(doubleClass, "nativeDiv", bc_double_nativeDiv);
+	bc_DefineNativeMethodClass(doubleClass, "nativeGT", bc_double_nativeGT);
+	bc_DefineNativeMethodClass(doubleClass, "nativeGE", bc_double_nativeGE);
+	bc_DefineNativeMethodClass(doubleClass, "nativeLT", bc_double_nativeLT);
+	bc_DefineNativeMethodClass(doubleClass, "nativeLE", bc_double_nativeLE);
+	bc_DefineNativeMethodClass(doubleClass, "nativeEQ", bc_double_nativeEQ);
 }
 
 bc_Type* GetDoubleType() {

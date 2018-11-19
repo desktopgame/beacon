@@ -14,8 +14,8 @@
 #include "../util/string_pool.h"
 struct bc_Namespace;
 struct bc_Type;
-struct Class;
-struct Interface;
+struct bc_Class;
+struct bc_Interface;
 //struct Enviroment;
 /**
  * Full Quality Class Name を表す構造体.
@@ -75,7 +75,7 @@ struct bc_Type* bc_GetTypeFQCN(bc_FQCNCache* self, struct bc_Namespace* current)
  * @param current
  * @return
  */
-struct Interface* bc_GetInterfaceFQCN(bc_FQCNCache* self, struct bc_Namespace* current);
+struct bc_Interface* bc_GetInterfaceFQCN(bc_FQCNCache* self, struct bc_Namespace* current);
 
 /**
  * X::Y の表すタイプを返します.
@@ -84,7 +84,7 @@ struct Interface* bc_GetInterfaceFQCN(bc_FQCNCache* self, struct bc_Namespace* c
  * @param current
  * @return
  */
-struct Class* bc_GetClassFQCN(bc_FQCNCache* self, struct bc_Namespace* current);
+struct bc_Class* bc_GetClassFQCN(bc_FQCNCache* self, struct bc_Namespace* current);
 
 /**
  * 文字列に変換して返します.

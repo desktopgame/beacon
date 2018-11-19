@@ -110,7 +110,7 @@ void bc_EachStaticScriptContext(bc_ScriptContext* self, bc_StaticEach act) {
 		if (e->Tag != TYPE_CLASS_T) {
 			continue;
 		}
-		Class* cls = e->Kind.Class;
+		bc_Class* cls = e->Kind.Class;
 		for (int j = 0; j < cls->StaticFields->Length; j++) {
 			bc_Field* f = (bc_Field*)AtVector(cls->StaticFields, j);
 			if(bc_IsStaticModifier(f->Modifier)) {

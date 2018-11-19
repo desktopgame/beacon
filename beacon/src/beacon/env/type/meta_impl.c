@@ -14,7 +14,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext* cctx) {
+int bc_MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext* cctx) {
 	assert(params->Length == ilargs->Length);
 	int score = 0;
 	bool illegal = false;
@@ -52,7 +52,7 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext
 	return score;
 }
 
-int MetaGCalcScore(Vector* params, Vector* gargs) {
+int bc_MetaGCalcScore(Vector* params, Vector* gargs) {
 	assert(params->Length == gargs->Length);
 	//MetaILCalcScoreからのコピペ
 	int score = 0;
@@ -91,7 +91,7 @@ int MetaGCalcScore(Vector* params, Vector* gargs) {
 	return score;
 }
 
-int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
+int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	assert(params->Length == args->Length);
 	int score = 0;
 	bool illegal = false;
@@ -118,15 +118,15 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	return score;
 }
 
-bc_Method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
-	return MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
+bc_Method * bc_MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+	return bc_MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-bc_Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
-	return MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
+bc_Method* bc_MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
+	return bc_MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-bc_Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	bc_Method* ret = NULL;
@@ -135,7 +135,7 @@ bc_Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView
 	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
 		bc_Method* m = (bc_Method*)ve;
-		if(!IsMetaMethodAccessValid(m, cctx)) {
+		if(!bc_IsMetaMethodAccessValid(m, cctx)) {
 			continue;
 		}
 		//名前か引数の個数が違うので無視
@@ -150,7 +150,7 @@ bc_Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView
 			(*outIndex) = i;
 			return m;
 		}
-		int score = MetaILCalcScore(m->Parameters, ilargs, env, cctx);
+		int score = bc_MetaILCalcScore(m->Parameters, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -163,7 +163,7 @@ bc_Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView
 	return ret;
 }
 
-bc_Method* MetaScopedGFindMethod(Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
+bc_Method* bc_MetaScopedGFindMethod(bc_Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	bc_Method* ret = NULL;
@@ -184,7 +184,7 @@ bc_Method* MetaScopedGFindMethod(Class* context, Vector* method_vec, StringView 
 			(*outIndex) = i;
 			return m;
 		}
-		int score = MetaGCalcScore(m->Parameters, gargs);
+		int score = bc_MetaGCalcScore(m->Parameters, gargs);
 		if(score == -1) {
 			continue;
 		}
@@ -197,22 +197,22 @@ bc_Method* MetaScopedGFindMethod(Class* context, Vector* method_vec, StringView 
 	return ret;
 }
 
-bc_Constructor* MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
-	return MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
+bc_Constructor* bc_MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
+	return bc_MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-bc_Constructor* MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, Frame* fr, int* outIndex) {
-	return MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
+bc_Constructor* bc_MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, Frame* fr, int* outIndex) {
+	return bc_MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* MetaScopedILFindConstructor(Class* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		bc_Constructor* ctor = (bc_Constructor*)ve;
-		if(!IsMetaConstructorAccessValid(ctor, cctx)) {
+		if(!bc_IsMetaConstructorAccessValid(ctor, cctx)) {
 			continue;
 		}
 		//引数の個数が違うので無視
@@ -226,7 +226,7 @@ bc_Constructor* MetaScopedILFindConstructor(Class* context, Vector* ctor_vec, Ve
 			return ctor;
 		}
 		//もっともスコアの高いメソッドを選択する
-		int score = MetaILCalcScore(ctor->Parameters, ilargs, env, cctx);
+		int score = bc_MetaILCalcScore(ctor->Parameters, ilargs, env, cctx);
 		if(score == -1) {
 			continue;
 		}
@@ -239,19 +239,19 @@ bc_Constructor* MetaScopedILFindConstructor(Class* context, Vector* ctor_vec, Ve
 	return ret;
 }
 
-bc_Constructor* MetaScopedRFindConstructor(Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, Frame* fr, int* outIndex) {
+bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, Frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		bc_Constructor* ctor = (bc_Constructor*)ve;
-		Class* cls = BC_TYPE2CLASS(ctor->Parent);
+		bc_Class* cls = BC_TYPE2CLASS(ctor->Parent);
 		//引数の個数が違うので無視
 		if (ctor->Parameters->Length != gargs->Length) {
 			continue;
 		}
-		int score = MetaRCalcScore(ctor->Parameters, gargs, typeargs, fr);
+		int score = bc_MetaRCalcScore(ctor->Parameters, gargs, typeargs, fr);
 		if (score < min) {
 			min = score;
 			ret = ctor;
@@ -261,7 +261,7 @@ bc_Constructor* MetaScopedRFindConstructor(Class* context, Vector* ctor_vec, Vec
 	return ret;
 }
 
-bc_OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex) {
+bc_OperatorOverload* bc_MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
 	bc_OperatorOverload* ret = NULL;
@@ -275,7 +275,7 @@ bc_OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, V
 		if(opov->Parameters->Length != gargs->Length) {
 			continue;
 		}
-		int score = MetaGCalcScore(opov->Parameters, gargs);
+		int score = bc_MetaGCalcScore(opov->Parameters, gargs);
 		if(min == -1) {
 			continue;
 		}
@@ -288,8 +288,8 @@ bc_OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, V
 	return ret;
 }
 
-bool IsMetaMethodAccessValid(bc_Method* m, CallContext* cctx) {
-	Class* context = GetClassCContext(cctx);
+bool bc_IsMetaMethodAccessValid(bc_Method* m, CallContext* cctx) {
+	bc_Class* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		m->Access == ACCESS_PRIVATE_T &&
@@ -299,14 +299,14 @@ bool IsMetaMethodAccessValid(bc_Method* m, CallContext* cctx) {
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
 		m->Access == ACCESS_PROTECTED_T &&
-		DistanceClass(BC_TYPE2CLASS(m->Parent), context) < 0) {
+		bc_DistanceClass(BC_TYPE2CLASS(m->Parent), context) < 0) {
 		return false;
 	}
 	return true;
 }
 
-bool IsMetaConstructorAccessValid(bc_Constructor* ctor, CallContext* cctx) {
-	Class* context = GetClassCContext(cctx);
+bool bc_IsMetaConstructorAccessValid(bc_Constructor* ctor, CallContext* cctx) {
+	bc_Class* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		ctor->Access == ACCESS_PRIVATE_T &&
@@ -316,7 +316,7 @@ bool IsMetaConstructorAccessValid(bc_Constructor* ctor, CallContext* cctx) {
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
 		ctor->Access == ACCESS_PROTECTED_T &&
-		DistanceClass(BC_TYPE2CLASS(ctor->Parent), context) < 0) {
+		bc_DistanceClass(BC_TYPE2CLASS(ctor->Parent), context) < 0) {
 		return false;
 	}
 	return true;

@@ -38,8 +38,8 @@ struct bc_ScriptContext;
 #define BC_GENERIC_EXCEPTION ((bc_GetExceptionTypeNamespace()->GenericSelf))
 
 struct bc_Type;
-struct Class;
-struct Interface;
+struct bc_Class;
+struct bc_Interface;
 /**
  * 名前空間を表す構造体.
  */
@@ -111,7 +111,7 @@ struct bc_Type* bc_FindTypeFromNamespace(bc_Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct Class* bc_FindClassFromNamespace(bc_Namespace* self, StringView namev);
+struct bc_Class* bc_FindClassFromNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.
@@ -119,7 +119,7 @@ struct Class* bc_FindClassFromNamespace(bc_Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self, StringView namev);
+struct bc_Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * beacon 名前空間を返します.
