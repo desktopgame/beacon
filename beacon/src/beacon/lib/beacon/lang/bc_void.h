@@ -10,7 +10,7 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_VOID_H
 #define BEACON_LIB_SIGNAL_LANG_VOID_H
-struct Type;
+struct bc_Type;
 /**
  * beacon::lang::Voidクラスを初期化します.
  */
@@ -20,5 +20,5 @@ void InitVoid();
  * beacon::lang::Void型を返します.
  * @return
  */
-struct Type* GetVoidType();
+struct bc_Type* GetVoidType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_VOID_H

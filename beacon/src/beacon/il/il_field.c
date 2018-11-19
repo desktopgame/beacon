@@ -8,7 +8,7 @@
 
 ILField * NewILField(StringView name) {
 	ILField* ret = (ILField*)MEM_MALLOC(sizeof(ILField));
-	ret->GCache = NewGenericCache();
+	ret->GCache = bc_NewGenericCache();
 	ret->Access = ACCESS_PUBLIC_T;
 	ret->Modifier = MODIFIER_NONE_T;
 	ret->Name = name;
@@ -21,6 +21,6 @@ void DeleteILField(ILField * self) {
 		return;
 	}
 	DeleteILFactor(self->InitialValue);
-	DeleteGenericCache(self->GCache);
+	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

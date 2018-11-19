@@ -14,38 +14,38 @@
 #include "../thread/thread.h"
 #include "../util/text.h"
 //proto
-static ScriptContext* malloc_script_context(void);
-static void free_script_context(ScriptContext* self);
+static bc_ScriptContext* malloc_script_context(void);
+static void free_script_context(bc_ScriptContext* self);
 static void delete_class_loader(const char* name, TreeItem item);
 
 static void unlink_namespace(NumericMapKey key, NumericMapItem item);
 static void delete_namespace(NumericMapKey key, NumericMapItem item);
-static void clear_impl(Field* item);
+static void clear_impl(bc_Field* item);
 static void delete_cache(VectorItem item);
 static void delete_mcache(NumericMapKey key, NumericMapItem item);
 
 static Vector* gScriptContextVec = NULL;
-static ScriptContext* gScriptContext = NULL;
+static bc_ScriptContext* gScriptContext = NULL;
 
-ScriptContext* OpenScriptContext() {
+bc_ScriptContext* bc_OpenScriptContext() {
 	if(gScriptContextVec == NULL) {
 		gScriptContextVec = NewVector();
 		LaunchSGThread();
 	}
-	ScriptContext* sctx = malloc_script_context();
+	bc_ScriptContext* sctx = malloc_script_context();
 	gScriptContext = sctx;
 	PushVector(gScriptContextVec, sctx);
-	BootstrapScriptContext(sctx);
+	bc_BootstrapScriptContext(sctx);
 	return sctx;
 }
 
-ScriptContext * GetCurrentScriptContext() {
+bc_ScriptContext * bc_GetCurrentScriptContext() {
 	assert(gScriptContext != NULL);
 	return gScriptContext;
 }
 
-void CloseScriptContext() {
-	ScriptContext* sctx = (ScriptContext*)PopVector(gScriptContextVec);
+void bc_CloseScriptContext() {
+	bc_ScriptContext* sctx = (bc_ScriptContext*)PopVector(gScriptContextVec);
 	free_script_context(sctx);
 	gScriptContext = NULL;
 	if(gScriptContextVec->Length == 0) {
@@ -53,17 +53,17 @@ void CloseScriptContext() {
 		DeleteVector(gScriptContextVec, VectorDeleterOfNull);
 		gScriptContextVec = NULL;
 	} else {
-		gScriptContext = (ScriptContext*)TopVector(gScriptContextVec);
+		gScriptContext = (bc_ScriptContext*)TopVector(gScriptContextVec);
 	}
 }
 
-void BootstrapScriptContext(ScriptContext* self) {
+void bc_BootstrapScriptContext(bc_ScriptContext* self) {
 	self->Heap->AcceptBlocking++;
 	//プリロード
-	Namespace* beacon = CreateNamespaceAtRoot(InternString("beacon"));
-	Namespace* lang = AddNamespaceNamespace(beacon, InternString("lang"));
-	Namespace* unsafe = AddNamespaceNamespace(beacon, InternString("unsafe"));
-	Namespace* placeholder = CreateNamespaceAtRoot(InternString("$placeholder"));
+	bc_Namespace* beacon = bc_CreateNamespaceAtRoot(InternString("beacon"));
+	bc_Namespace* lang = bc_AddNamespaceNamespace(beacon, InternString("lang"));
+	bc_Namespace* unsafe = bc_AddNamespaceNamespace(beacon, InternString("unsafe"));
+	bc_Namespace* placeholder = bc_CreateNamespaceAtRoot(InternString("$placeholder"));
 	InitObject();
 	InitArray();
 	InitException();
@@ -103,16 +103,16 @@ void BootstrapScriptContext(ScriptContext* self) {
 	self->Heap->AcceptBlocking--;
 }
 
-void EachStaticScriptContext(ScriptContext* self, StaticEach act) {
-	ScriptContext* ctx = self;
+void bc_EachStaticScriptContext(bc_ScriptContext* self, bc_StaticEach act) {
+	bc_ScriptContext* ctx = self;
 	for (int i = 0; i < ctx->TypeList->Length; i++) {
-		Type* e = (Type*)AtVector(ctx->TypeList, i);
+		bc_Type* e = (bc_Type*)AtVector(ctx->TypeList, i);
 		if (e->Tag != TYPE_CLASS_T) {
 			continue;
 		}
 		Class* cls = e->Kind.Class;
 		for (int j = 0; j < cls->StaticFields->Length; j++) {
-			Field* f = (Field*)AtVector(cls->StaticFields, j);
+			bc_Field* f = (bc_Field*)AtVector(cls->StaticFields, j);
 			if(bc_IsStaticModifier(f->Modifier)) {
 				act(f);
 			}
@@ -120,27 +120,27 @@ void EachStaticScriptContext(ScriptContext* self, StaticEach act) {
 	}
 }
 
-void ClearScriptContext(ScriptContext* self) {
-	EachStaticScriptContext(self, clear_impl);
+void bc_ClearScriptContext(bc_ScriptContext* self) {
+	bc_EachStaticScriptContext(self, clear_impl);
 }
 
-Object* IInternScriptContext(ScriptContext* self, int i) {
-	Heap* he = self->Heap;
+bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
+	bc_Heap* he = self->Heap;
 	NumericMap* cell = GetNumericMapCell(self->IntegerCacheMap, i);
 	he->AcceptBlocking++;
 	if(cell == NULL) {
-		Object* obj = (Object*)NewInteger(i);
+		bc_Object* obj = (bc_Object*)NewInteger(i);
 		obj->Paint = PAINT_ONEXIT_T;
 		cell = PutNumericMap(self->IntegerCacheMap, i, obj);
 	}
 	he->AcceptBlocking--;
-	return (Object*)cell->Item;
+	return (bc_Object*)cell->Item;
 }
 
-void CacheScriptContext() {
-	ScriptContext* self = GetCurrentScriptContext();
+void bc_CacheScriptContext() {
+	bc_ScriptContext* self = bc_GetCurrentScriptContext();
 	if(self == NULL) return;
-	Heap* h = GetHeap();
+	bc_Heap* h = bc_GetHeap();
 	if(h != NULL) h->AcceptBlocking++;
 	//すでにキャッシュされている
 	if(self->PositiveIntegerCacheList->Length > 0 ||
@@ -150,13 +150,13 @@ void CacheScriptContext() {
 	   }
 	//正の数のキャッシュ
 	for(int i=0; i<100; i++) {
-		Object* a = (Object*)NewInteger(i);
+		bc_Object* a = (bc_Object*)NewInteger(i);
 		PushVector(self->PositiveIntegerCacheList, a);
 		a->Paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
-		Object* a = (Object*)NewInteger(-i);
+		bc_Object* a = (bc_Object*)NewInteger(-i);
 		PushVector(self->NegativeIntegerCacheList, a);
 		a->Paint = PAINT_ONEXIT_T;
 	}
@@ -164,11 +164,11 @@ void CacheScriptContext() {
 }
 
 //private
-static ScriptContext* malloc_script_context(void) {
-	ScriptContext* ret = (ScriptContext*)MEM_MALLOC(sizeof(ScriptContext));
+static bc_ScriptContext* malloc_script_context(void) {
+	bc_ScriptContext* ret = (bc_ScriptContext*)MEM_MALLOC(sizeof(bc_ScriptContext));
 	ret->NamespaceMap = NewNumericMap();
 	ret->ClassLoaderMap = NewTreeMap();
-	ret->Heap = NewHeap();
+	ret->Heap = bc_NewHeap();
 	ret->TypeList = NewVector();
 	ret->ThreadList = NewVector();
 	ret->BootstrapClassLoader = NULL;
@@ -192,26 +192,26 @@ static ScriptContext* malloc_script_context(void) {
 	return ret;
 }
 
-static void free_script_context(ScriptContext* self) {
-	int aa = CountActiveObject();
+static void free_script_context(bc_ScriptContext* self) {
+	int aa = bc_CountActiveObject();
 	assert(self->Heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
 	Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
 	CatchVM(thv);
 	bc_DeleteClassLoader(self->BootstrapClassLoader);
 	if(self->Null != NULL) {
-		IgnoreHeap(self->Heap, self->Null);
+		bc_IgnoreHeap(self->Heap, self->Null);
 		self->Null->Paint = PAINT_ONEXIT_T;
-		DestroyObject(self->Null);
+		bc_DestroyObject(self->Null);
 	}
-	DeleteHeap(self->Heap);
+	bc_DeleteHeap(self->Heap);
 	DeleteVector(self->NegativeIntegerCacheList, delete_cache);
 	DeleteVector(self->PositiveIntegerCacheList, delete_cache);
 	DeleteNumericMap(self->IntegerCacheMap, delete_mcache);
 	//DeleteObject(self->Null);
-	CollectGenericType();
+	bc_CollectGenericType();
 	DeleteVector(self->AllGenericList, VectorDeleterOfNull);
-	int x = CountActiveObject();
+	int x = bc_CountActiveObject();
 
 	DeleteVector(self->TypeList, VectorDeleterOfNull);
 	DeleteVector(self->ThreadList, VectorDeleterOfNull);
@@ -222,7 +222,7 @@ static void free_script_context(ScriptContext* self) {
 		EachNumericMap(self->NamespaceMap, unlink_namespace);
 	}
 
-	int a = CountActiveObject();
+	int a = bc_CountActiveObject();
 	DeleteNumericMap(self->NamespaceMap, delete_namespace);
 	bc_DeleteFiles(self->IncludeList);
 	MEM_FREE(self);
@@ -234,23 +234,23 @@ static void delete_class_loader(const char* name, TreeItem item) {
 }
 
 static void unlink_namespace(NumericMapKey key, NumericMapItem item) {
-	Namespace* e = (Namespace*)item;
-	UnlinkNamespace(e);
+	bc_Namespace* e = (bc_Namespace*)item;
+	bc_UnlinkNamespace(e);
 }
 
 static void delete_namespace(NumericMapKey key, NumericMapItem item) {
-	Namespace* e = (Namespace*)item;
-	DeleteNamespace(e);
+	bc_Namespace* e = (bc_Namespace*)item;
+	bc_DeleteNamespace(e);
 }
 
-static void clear_impl(Field* item) {
-	item->StaticValue = GetNullObject();
+static void clear_impl(bc_Field* item) {
+	item->StaticValue = bc_GetNullObject();
 }
 
 static void delete_cache(VectorItem item) {
-	DestroyObject((Object*)item);
+	bc_DestroyObject((bc_Object*)item);
 }
 
 static void delete_mcache(NumericMapKey key, NumericMapItem item) {
-	DestroyObject((Object*)item);
+	bc_DestroyObject((bc_Object*)item);
 }

@@ -3,10 +3,10 @@
 #include "../parameter.h"
 #include "../type_parameter.h"
 
-bool IsMethodParameterValidInterface(Interface* inter, Method** out_method, StringView* out_name) {
+bool IsMethodParameterValidInterface(Interface* inter, bc_Method** out_method, StringView* out_name) {
 	for(int i=0; i<inter->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(inter->Methods, i);
-		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
+		bc_Method* m = (bc_Method*)AtVector(inter->Methods, i);
+		if(bc_IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -15,13 +15,13 @@ bool IsMethodParameterValidInterface(Interface* inter, Method** out_method, Stri
 }
 
 bool IsTypeParameterValidInterface(Interface* inter, StringView* out_name) {
-	return !IsOverwrappedTypeParameterName(inter->TypeParameters, out_name);
+	return !bc_IsOverwrappedTypeParameterName(inter->TypeParameters, out_name);
 }
 
-bool IsMethodTypeParameterValidInterface(Interface* inter, Method** out_method, StringView* out_name) {
+bool IsMethodTypeParameterValidInterface(Interface* inter, bc_Method** out_method, StringView* out_name) {
 	for(int i=0; i<inter->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(inter->Methods, i);
-		if(IsOverwrappedParameterName(m->TypeParameters, out_name)) {
+		bc_Method* m = (bc_Method*)AtVector(inter->Methods, i);
+		if(bc_IsOverwrappedParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}

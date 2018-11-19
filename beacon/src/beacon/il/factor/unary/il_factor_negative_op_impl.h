@@ -12,7 +12,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct ILUnaryOp;
-struct GenericType;
+struct bc_GenericType;
 struct Enviroment;
 
 typedef struct ILNegativeOp {
@@ -24,7 +24,7 @@ typedef struct ILNegativeOp {
 #define NewILNegativeOp(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
 ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno);
 
-struct GenericType* EvalILNegativeOp(ILNegativeOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILNegativeOp(ILNegativeOp* self, struct Enviroment* env, CallContext* cctx);
 

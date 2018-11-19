@@ -14,7 +14,7 @@
 #include "../il_factor_interface.h"
 
 struct Enviroment;
-struct Type;
+struct bc_Type;
 /**
  * boolリテラルを表す要素.
  */
@@ -28,7 +28,7 @@ ILBool* NewILBool(bool b);
 
 void GenerateILBool(ILBool* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILBool(ILBool* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILBool(ILBool* self, Enviroment* env, CallContext* cctx);
 
 char* ILBoolToString(ILBool* self, Enviroment* env);
 

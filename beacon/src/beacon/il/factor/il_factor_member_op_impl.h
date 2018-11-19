@@ -16,7 +16,7 @@
 #include "../il_factor_interface.h"
 
 struct Enviroment;
-struct Field;
+struct bc_Field;
 
 /**
  * メンバアクセスを表す要素.
@@ -27,7 +27,7 @@ typedef struct ILMemberOp {
 	StringView Name;
 	Vector* TypeArgs;
 	int Index;
-	struct Field* Field;
+	struct bc_Field* Field;
 } ILMemberOp;
 
 ILFactor* WrapILMemberOp(ILMemberOp* self);
@@ -38,7 +38,7 @@ void LoadILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
 
 void GenerateILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
 
 char* ILMemberOpToString(ILMemberOp* self, Enviroment* env);
 

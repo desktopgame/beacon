@@ -12,10 +12,10 @@
 #include "../../../env/fqcn_cache.h"
 #include "../../il_factor_interface.h"
 struct Enviroment;
-struct GenericType;
+struct bc_GenericType;
 
 typedef struct ILVariableStatic {
-	FQCNCache* FQCN;
+	bc_FQCNCache* FQCN;
 	Vector* TypeArgs;
 } ILVariableStatic;
 
@@ -25,7 +25,7 @@ void GenerateILVariableStatic(ILVariableStatic* self, Enviroment* env, CallConte
 
 void LoadILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx);
 
 char* ILVariableStaticToString(ILVariableStatic * self, Enviroment * env);
 

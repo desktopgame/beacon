@@ -17,7 +17,7 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include <stdbool.h>
-struct Type;
+struct bc_Type;
 struct Interface;
 struct Frame;
 struct Enviroment;
@@ -27,29 +27,29 @@ struct bc_ClassLoader;
 /**
  * メソッドの種類を表す列挙.
  */
-typedef enum MethodType {
+typedef enum bc_MethodType {
 	METHOD_TYPE_SCRIPT_T,
 	METHOD_TYPE_NATIVE_T,
 	METHOD_TYPE_ABSTRACT_T,
-} MethodType;
+} bc_MethodType;
 
 /**
  * メソッドを表す構造体.
  */
-typedef struct Method {
+typedef struct bc_Method {
 	StringView Name;
-	MethodType Type;
-	struct Type* Parent;
-	struct GenericType* ReturnGType;
+	bc_MethodType Type;
+	struct bc_Type* Parent;
+	struct bc_GenericType* ReturnGType;
 	Vector* Parameters;
 	Vector* TypeParameters;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	union {
-		ScriptMethod* Script;
-		NativeMethod* Native;
+		bc_ScriptMethod* Script;
+		bc_NativeMethod* Native;
 	} Kind;
-} Method;
+} bc_Method;
 
 /**
  * メソッドを作成します.
@@ -58,8 +58,8 @@ typedef struct Method {
  * @param lineno
  * @return
  */
-Method* MallocMethod(StringView name, const char* filename, int lineno);
-#define NewMethod(name) (MallocMethod(name, __FILE__, __LINE__))
+bc_Method* bc_MallocMethod(StringView name, const char* filename, int lineno);
+#define bc_NewMethod(name) (bc_MallocMethod(name, __FILE__, __LINE__))
 
 /**
  * メソッドを実行します.
@@ -67,7 +67,7 @@ Method* MallocMethod(StringView name, const char* filename, int lineno);
  * @param frame
  * @param env
  */
-void ExecuteMethod(Method* self, struct Frame* fr, Enviroment* env);
+void bc_ExecuteMethod(bc_Method* self, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドa とb が完全に等価である場合に true を返します.
@@ -78,41 +78,41 @@ void ExecuteMethod(Method* self, struct Frame* fr, Enviroment* env);
  * @param cctx
  * @return
  */
-bool IsOverridedMethod(Method* superM, Method* subM, struct CallContext* cctx);
+bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, struct CallContext* cctx);
 
 /**
  * @param self
  * @param name
  * @return
  */
-int GetGenericIndexForMethod(Method* self, StringView namev);
+int bc_GetGenericIndexForMethod(bc_Method* self, StringView namev);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void DeleteMethod(Method* self);
+void bc_DeleteMethod(bc_Method* self);
 
 /**
  * このメソッドのマングル表現を返します.
  * @param self
  * @return
  */
-StringView MangleMethod(Method* self);
+StringView bc_MangleMethod(bc_Method* self);
 
 /**
  * 型の完全名とマングル表現を連結して返します.
  * @param self
  * @return
  */
-StringView GetMethodUniqueName(Method* self);
+StringView bc_GetMethodUniqueName(bc_Method* self);
 
 /**
  * メソッドがコルーチンとして機能できるなら true.
  * @param self
  * @return
  */
-bool IsCoroutineMethod(Method* self);
+bool bc_IsCoroutineMethod(bc_Method* self);
 
 /**
  * メソッドがイールドパターンで実装されているなら true.
@@ -120,7 +120,7 @@ bool IsCoroutineMethod(Method* self);
  * @param error
  * @return
  */
-bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error);
+bool bc_IsYieldMethod(bc_Method* self, Vector* stmt_list, bool* error);
 
 /**
  * このメソッドのためのユニークなイテレータ型を作成します.
@@ -130,6 +130,6 @@ bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct Type* CreateIteratorTypeFromMethod(Method* self, struct bc_ClassLoader* cll, Vector* stmt_list);
+struct bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, struct bc_ClassLoader* cll, Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H

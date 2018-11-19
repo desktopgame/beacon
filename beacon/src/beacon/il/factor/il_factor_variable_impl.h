@@ -19,8 +19,8 @@
 #include <stdbool.h>
 
 //struct opcode_buf;
-struct GenericType;
-struct Field;
+struct bc_GenericType;
+struct bc_Field;
 
 /**
  * 変数の種類を判別する列挙.
@@ -39,7 +39,7 @@ typedef enum ILVariableType {
  * 変数を表す要素.
  */
 typedef struct ILVariable {
-	FQCNCache* FQCN;
+	bc_FQCNCache* FQCN;
 	Vector* TypeArgs;
 	int Index;
 	ILVariableType Type;
@@ -58,7 +58,7 @@ void GenerateILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
 
 void LoadILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILVariable(ILVariable* self, Enviroment* env, CallContext* cctx);
 
 char* ILVariableToString(ILVariable* self, Enviroment* env);
 

@@ -17,22 +17,22 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 #include "interface_validate.h"
-struct Method;
-struct Property;
+struct bc_Method;
+struct bc_Property;
 struct Enviroment;
-struct GenericType;
-struct Type;
+struct bc_GenericType;
+struct bc_Type;
 /**
  * インターフェースを表す構造体.
  */
 typedef struct Interface {
-	struct Type* Parent;
+	struct bc_Type* Parent;
 	StringView Name;
 	Vector* Implements;
 	Vector* Properties;
 	Vector* Methods;
-	Namespace* Location;
-	VTable* VT;
+	bc_Namespace* Location;
+	bc_VTable* VT;
 	Vector* TypeParameters;
 } Interface;
 
@@ -41,7 +41,7 @@ typedef struct Interface {
  * @param self
  * @return
  */
-Type* WrapInterface(Interface* self);
+bc_Type* WrapInterface(Interface* self);
 
 /** 
  * インターフェイスを作成します.
@@ -55,14 +55,14 @@ Interface* NewInterface(StringView namev);
  * @param self
  * @param m
  */
-void AddMethodInterface(Interface* self, struct Method* m);
+void AddMethodInterface(Interface* self, struct bc_Method* m);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param p
  */
-void AddPropertyInterface(Interface* self, struct Property* p);
+void AddPropertyInterface(Interface* self, struct bc_Property* p);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -74,7 +74,7 @@ void AddPropertyInterface(Interface* self, struct Property* p);
  * @param outIndex
  * @return
  */
-struct Method* ILFindMethodInterface(Interface* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
+struct bc_Method* ILFindMethodInterface(Interface* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -84,7 +84,7 @@ struct Method* ILFindMethodInterface(Interface* self, StringView namev, Vector *
  * @param outIndex
  * @return
  */
-struct Method* GFindMethodInterface(Interface* self, StringView namev, Vector* gargs, int* outIndex);
+struct bc_Method* GFindMethodInterface(Interface* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
@@ -125,7 +125,7 @@ void DeleteInterface(Interface* self);
  * @param find
  * @return
  */
-struct GenericType* IsContainsTypeInterface(struct GenericType* source, Interface* find);
+struct bc_GenericType* IsContainsTypeInterface(struct bc_GenericType* source, Interface* find);
 
 /**
  * 関数型インターフェイスであるならtrue.
@@ -139,7 +139,7 @@ bool IsFunctionalInterface(Interface* self);
  * @param self
  * @return
  */
-struct Method* GetFunctionInterface(Interface* self);
+struct bc_Method* GetFunctionInterface(Interface* self);
 
 /**
  * このインターフェイスを除く継承された全てのインターフェイスを返します.
@@ -154,5 +154,5 @@ Vector* GetGenericInterfaceTreeInterface(Interface* self);
  * @param out_baseline
  * @return
  */
-struct GenericType* FindInterfaceInterface(Interface* self, Type* tinter);
+struct bc_GenericType* FindInterfaceInterface(Interface* self, bc_Type* tinter);
 #endif // !SIGNAL_ENV_TYPE_IINTERFACE_H

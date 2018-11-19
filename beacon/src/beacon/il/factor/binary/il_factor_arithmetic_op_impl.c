@@ -21,18 +21,18 @@ ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type) {
 	return ret;
 }
 
-GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
+bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
+	bc_GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
-	Type* cint = TYPE_INT;
-	Type* cdouble = TYPE_DOUBLE;
+	bc_Type* cint = BC_TYPE_INT;
+	bc_Type* cdouble = BC_TYPE_DOUBLE;
 	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
-		return TYPE2GENERIC(cint);
+		return bc_TYPE2GENERIC(cint);
 	}
 	if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
-		return TYPE2GENERIC(cdouble);
+		return bc_TYPE2GENERIC(cdouble);
 	}
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
@@ -42,7 +42,7 @@ GenericType* EvalILArithmeticOp(ILArithmeticOp * self, Enviroment* env, CallCont
 		);
 		return NULL;
 	}
-	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->OperatorIndex);
+	bc_OperatorOverload* operator_ov = GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
 	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 

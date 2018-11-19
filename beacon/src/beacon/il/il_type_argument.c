@@ -8,7 +8,7 @@
 
 ILTypeArgument* NewILTypeArgument() {
 	ILTypeArgument* ret = (ILTypeArgument*)MEM_MALLOC(sizeof(ILTypeArgument));
-	ret->GCache = NewGenericCache();
+	ret->GCache = bc_NewGenericCache();
 	ret->GType = NULL;
 	return ret;
 }
@@ -20,7 +20,7 @@ void PrintILTypeArgument(Vector* iltype_args) {
 	printf("<");
 	for(int i=0; i<iltype_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(iltype_args, i);
-		PrintGenericCache(e->GCache);
+		bc_PrintGenericCache(e->GCache);
 		if(i != iltype_args->Length - 1) {
 			printf(",");
 		}
@@ -33,13 +33,13 @@ void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(iltype_args, i);
 		if(e->GType == NULL) {
 	//		Namespace* scope = cc_namespace(
-			e->GType = ResolveImportManager(cctx->Scope, e->GCache, cctx);
+			e->GType = bc_ResolveImportManager(cctx->Scope, e->GCache, cctx);
 			//assert(e->gtype->CoreType != NULL || e->gtype->VirtualTypeIndex != -1);
 		}
 	}
 }
 
 void DeleteILTypeArgument(ILTypeArgument* self) {
-	DeleteGenericCache(self->GCache);
+	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

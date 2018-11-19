@@ -25,12 +25,12 @@ void GenerateILThrow(ILThrow* self, Enviroment* env, CallContext* cctx) {
 
 void LoadILThrow(ILThrow* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Factor, env, cctx);
-	GenericType* tgt = EvalILFactor(self->Factor, env, cctx);
-	if(DistanceGenericType(GENERIC_EXCEPTION, tgt, cctx) < 0) {
+	bc_GenericType* tgt = EvalILFactor(self->Factor, env, cctx);
+	if(bc_DistanceGenericType(BC_GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->CoreType != NULL) {
 			bc_Panic(
 				BCERROR_THROWN_NOT_EXCEPTION_TYPE_T,
-				Ref2Str(GetTypeName(tgt->CoreType))
+				Ref2Str(bc_GetTypeName(tgt->CoreType))
 			);
 		}
 	}

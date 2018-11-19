@@ -16,24 +16,24 @@
 #include <assert.h>
 
 //proto
-static void CLILFQCNCache_impl(bc_AST* afqcn, FQCNCache* fqcn, int level);
-static void CLILGenericCache_impl(bc_AST* afqcn, GenericCache* dest);
-static void CLILGenericCache_inner(bc_AST* atype_args, GenericCache* dest);
+static void CLILFQCNCache_impl(bc_AST* afqcn, bc_FQCNCache* fqcn, int level);
+static void CLILGenericCache_impl(bc_AST* afqcn, bc_GenericCache* dest);
+static void CLILGenericCache_inner(bc_AST* atype_args, bc_GenericCache* dest);
 static void CLILTypeParameter_rule(struct bc_ClassLoader* self, struct bc_AST* asource, Vector* dest);
 static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest);
 static void CLILArgumentListImpl(bc_ClassLoader* self, Vector* list, bc_AST* asource);
 
-void CLILFQCNCache(bc_AST* afqcn, FQCNCache* fqcn) {
+void CLILFQCNCache(bc_AST* afqcn, bc_FQCNCache* fqcn) {
 	CLILFQCNCache_impl(afqcn, fqcn, 0);
 }
 
-void CLILGenericCache(bc_AST* afqcn, GenericCache* dest) {
+void CLILGenericCache(bc_AST* afqcn, bc_GenericCache* dest) {
 	if(afqcn->Tag == AST_FQCN_CLASS_NAME_T) {
 		dest->FQCN->Name = afqcn->Attr.StringVValue;
 		return;
 	}
 	CLILGenericCache_impl(afqcn, dest);
-	FQCNCache* body = dest->FQCN;
+	bc_FQCNCache* body = dest->FQCN;
 	//FIXME: Int のような文字パースで失敗してしまうので対策
 	if (body->Name == 0 &&
 		body->Scope->Length > 0) {
@@ -46,7 +46,7 @@ void CLILTypenameList(bc_ClassLoader * self, Vector * dst, bc_AST* atypename_lis
 		return;
 	}
 	if (atypename_list->Tag == AST_TYPENAME_T) {
-		GenericCache* e = NewGenericCache();
+		bc_GenericCache* e = bc_NewGenericCache();
 		//[typename [fqcn]]
 		CLILGenericCache(atypename_list, e);
 		PushVector(dst, e);
@@ -115,7 +115,7 @@ void CLILArgumentList(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
 	CLILArgumentListImpl(self, list, asource);
 }
 //private
-static void CLILFQCNCache_impl(bc_AST* afqcn, FQCNCache* fqcn, int level) {
+static void CLILFQCNCache_impl(bc_AST* afqcn, bc_FQCNCache* fqcn, int level) {
 	Vector* v = NewVector();
 	ast_fqcn_flatten(afqcn, v);
 	for(int i=0; i<v->Length; i++) {
@@ -129,8 +129,8 @@ static void CLILFQCNCache_impl(bc_AST* afqcn, FQCNCache* fqcn, int level) {
 	DeleteVector(v, VectorDeleterOfNull);
 }
 
-static void CLILGenericCache_impl(bc_AST* afqcn, GenericCache* dest) {
-	FQCNCache* body = dest->FQCN;
+static void CLILGenericCache_impl(bc_AST* afqcn, bc_GenericCache* dest) {
+	bc_FQCNCache* body = dest->FQCN;
 	//型引数を解析する
 	if (afqcn->Tag == AST_TYPENAME_T) {
 		bc_AST* atype_args = bc_SecondAST(afqcn);
@@ -163,14 +163,14 @@ static void CLILGenericCache_impl(bc_AST* afqcn, GenericCache* dest) {
 	}
 }
 
-static void CLILGenericCache_inner(bc_AST* atype_args, GenericCache* dest) {
+static void CLILGenericCache_inner(bc_AST* atype_args, bc_GenericCache* dest) {
 	if (atype_args->Tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atype_args->Children->Length; i++) {
 			bc_AST* e = bc_AtAST(atype_args, i);
 			CLILGenericCache_inner(e, dest);
 		}
 	} else {
-		GenericCache* newCache = NewGenericCache();
+		bc_GenericCache* newCache = bc_NewGenericCache();
 		CLILGenericCache(atype_args, newCache);
 		PushVector(dest->TypeArgs, newCache);
 	}

@@ -14,9 +14,9 @@
 #include "subscript_descriptor.h"
 
 struct Enviroment;
-struct GenericType;
-struct OperatorOverload;
-struct Method;
+struct bc_GenericType;
+struct bc_OperatorOverload;
+struct bc_Method;
 //binded? bound?
 
 typedef enum BoundInvokeTag {
@@ -30,11 +30,11 @@ typedef struct ILInvokeBound {
 	Vector* TypeArgs;
 	Vector* Arguments;
 	union {
-		struct Method* Method;
+		struct bc_Method* Method;
 		SubscriptDescriptor Subscript;
 	} Kind;
 	int Index;
-	struct GenericType* Resolved;
+	struct bc_GenericType* Resolved;
 	BoundInvokeTag Tag;
 } ILInvokeBound;
 
@@ -44,11 +44,11 @@ void GenerateILInvokeBound(ILInvokeBound* self, Enviroment* env, CallContext* cc
 
 void LoadILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeBoundToString(ILInvokeBound* self, Enviroment* env);
 
 void DeleteILInvokeBound(ILInvokeBound* self);
 
-struct OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

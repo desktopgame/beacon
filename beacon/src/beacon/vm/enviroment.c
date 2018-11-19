@@ -17,9 +17,9 @@
 //proto
 static void delete_constant(VectorItem item);
 static void delete_line_range(VectorItem item);
-static void add_constant(Enviroment* self, Object* o);
+static void add_constant(Enviroment* self, bc_Object* o);
 static void delete_object_self(VectorItem item);
-static void delete_object(Object* obj);
+static void delete_object(bc_Object* obj);
 
 Enviroment * NewEnviroment() {
 	Enviroment* ret = (Enviroment*)MEM_MALLOC(sizeof(Enviroment));
@@ -86,25 +86,25 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 
 int AddCIntEnviroment(Enviroment * self, int i) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (Object*)NewInteger(i));
+	add_constant(self, (bc_Object*)NewInteger(i));
 	return len;
 }
 
 int AddCDoubleEnviroment(Enviroment * self, double d) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (Object*)NewDouble(d));
+	add_constant(self, (bc_Object*)NewDouble(d));
 	return len;
 }
 
 int AddCCharEnviroment(Enviroment * self, char c) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (Object*)NewChar(c));
+	add_constant(self, (bc_Object*)NewChar(c));
 	return len;
 }
 
 int AddCStringEnviroment(Enviroment * self, StringView sv) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (Object*)NewString(Ref2Str(sv)));
+	add_constant(self, (bc_Object*)NewString(Ref2Str(sv)));
 	return len;
 }
 
@@ -112,31 +112,31 @@ VectorItem GetEnviromentSourceAt(Enviroment * self, int index) {
 	return AtVector(self->Bytecode->Instructions, index);
 }
 
-Object* GetEnviromentConstantAt(Enviroment * self, int index) {
-	return (Object*)AtVector(self->ConstantPool, index);
+bc_Object* GetEnviromentConstantAt(Enviroment * self, int index) {
+	return (bc_Object*)AtVector(self->ConstantPool, index);
 }
 
-Object* GetEnviromentCIntAt(Enviroment * self, int index) {
-	Object* e = GetEnviromentConstantAt(self, index);
-	assert(IsIntValue(e));
+bc_Object* GetEnviromentCIntAt(Enviroment * self, int index) {
+	bc_Object* e = GetEnviromentConstantAt(self, index);
+	assert(bc_IsIntValue(e));
 	return e;
 }
 
-Object* GetEnviromentCDoubleAt(Enviroment * self, int index) {
-	Object* e = GetEnviromentConstantAt(self, index);
-	assert(IsDoubleValue(e));
+bc_Object* GetEnviromentCDoubleAt(Enviroment * self, int index) {
+	bc_Object* e = GetEnviromentConstantAt(self, index);
+	assert(bc_IsDoubleValue(e));
 	return e;
 }
 
-Object* GetEnviromentCCharAt(Enviroment * self, int index) {
-	Object* e = GetEnviromentConstantAt(self, index);
-	assert(IsCharValue(e));
+bc_Object* GetEnviromentCCharAt(Enviroment * self, int index) {
+	bc_Object* e = GetEnviromentConstantAt(self, index);
+	assert(bc_IsCharValue(e));
 	return e;
 }
 
-Object* GetEnviromentCStringAt(Enviroment * self, int index) {
-	Object* e = GetEnviromentConstantAt(self, index);
-	assert(IsStringValue(e));
+bc_Object* GetEnviromentCStringAt(Enviroment * self, int index) {
+	bc_Object* e = GetEnviromentConstantAt(self, index);
+	assert(bc_IsStringValue(e));
 	return e;
 }
 
@@ -153,7 +153,7 @@ void DeleteEnviroment(Enviroment * self) {
 
 //private
 static void delete_constant(VectorItem item) {
-	delete_object((Object*)item);
+	delete_object((bc_Object*)item);
 }
 
 static void delete_line_range(VectorItem item) {
@@ -161,7 +161,7 @@ static void delete_line_range(VectorItem item) {
 	DeleteLineRange(e);
 }
 
-static void add_constant(Enviroment* self, Object* o) {
+static void add_constant(Enviroment* self, bc_Object* o) {
 	PushVector(self->ConstantPool, o);
 	assert(o->Paint == PAINT_ONEXIT_T);
 }
@@ -169,6 +169,6 @@ static void add_constant(Enviroment* self, Object* o) {
 static void delete_object_self(VectorItem item) {
 }
 
-static void delete_object(Object* obj) {
-	DestroyObject(obj);
+static void delete_object(bc_Object* obj) {
+	bc_DestroyObject(obj);
 }

@@ -28,7 +28,7 @@ void GenerateILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
 
 void LoadILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
 
 char* ILDoubleToString(ILDouble* self, Enviroment* env);
 

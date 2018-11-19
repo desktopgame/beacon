@@ -13,7 +13,7 @@
  * created by rbtools/rnative.rb
  * time: 2018-08-17
  */
-struct Type;
+struct bc_Type;
 
 /**
  * beacon::unsafe::Systemクラスを初期化します。
@@ -24,6 +24,6 @@ void InitSystem();
  * beacon::unsafe::Systemクラスを返します。
  * @return
  */
-struct Type* GetSystemType();
+struct bc_Type* GetSystemType();
 
 #endif

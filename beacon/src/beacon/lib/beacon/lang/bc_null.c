@@ -3,12 +3,12 @@
 
 
 void InitNull() {
-	Namespace* lang = GetLangNamespace();
-	Type* nullType = NewPreloadClass(InternString("Null"));
-	AddTypeNamespace(lang, nullType);
+	bc_Namespace* lang = bc_GetLangNamespace();
+	bc_Type* nullType = NewPreloadClass(InternString("Null"));
+	bc_AddTypeNamespace(lang, nullType);
 }
 
-Type* GetNullType() {
-	Namespace* lang = GetLangNamespace();
-	return FindTypeFromNamespace(lang, InternString("Null"));
+bc_Type* GetNullType() {
+	bc_Namespace* lang = bc_GetLangNamespace();
+	return bc_FindTypeFromNamespace(lang, InternString("Null"));
 }

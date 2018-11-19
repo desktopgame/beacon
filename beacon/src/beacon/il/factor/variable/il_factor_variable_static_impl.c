@@ -21,7 +21,7 @@ void LoadILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-GenericType* EvalILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx) {
 	return NULL;
 }
 
@@ -30,7 +30,7 @@ char* ILVariableStaticToString(ILVariableStatic * self, Enviroment * env) {
 }
 
 void DeleteILVariableStatic(ILVariableStatic* self) {
-	DeleteFQCNCache(self->FQCN);
+	bc_DeleteFQCNCache(self->FQCN);
 	DeleteVector(self->TypeArgs, ILFactor_static_delete_typeargs);
 	MEM_FREE(self);
 }

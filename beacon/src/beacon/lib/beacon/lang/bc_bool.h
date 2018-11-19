@@ -11,13 +11,13 @@
 #ifndef BEACON_LIB_SIGNAL_LANG_BOOL_H
 #define BEACON_LIB_SIGNAL_LANG_BOOL_H
 #include "../../bc_library_impl.h"
-struct Type;
+struct bc_Type;
 
 /**
  * 真偽値を表すオブジェクトです。
  */
 typedef struct Bool {
-	Object Super;
+	bc_Object Super;
 	bool Value;
 } Bool;
 
@@ -26,7 +26,7 @@ typedef struct Bool {
  * @param value
  * @return
  */
-struct Object* NewBool(bool value);
+struct bc_Object* NewBool(bool value);
 
 /**
  * beacon::lang::Boolクラスを初期化します.
@@ -37,5 +37,5 @@ void InitBool();
  * beacon::lang::Bool型を返します.
  * @return
  */
-struct Type* GetBoolType();
+struct bc_Type* GetBoolType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_BOOL_H

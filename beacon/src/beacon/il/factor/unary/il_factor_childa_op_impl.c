@@ -17,14 +17,14 @@ ILChildaOp* NewILChildaOp(bc_OperatorType type) {
 	return ret;
 }
 
-GenericType* EvalILChildaOp(ILChildaOp * self, Enviroment * env, CallContext* cctx) {
-	GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
+bc_GenericType* EvalILChildaOp(ILChildaOp * self, Enviroment * env, CallContext* cctx) {
+	bc_GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
 	if(self->OperatorIndex == -1) {
 		//GenerateILFactor(self->Parent->Arg, env);
-		if(GENERIC2TYPE(gtype) == TYPE_INT) {
-			return TYPE2GENERIC(TYPE_INT);
-		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
-			return TYPE2GENERIC(TYPE_BOOL);
+		if(bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
+			return bc_TYPE2GENERIC(BC_TYPE_INT);
+		} else if(bc_GENERIC2TYPE(gtype) == BC_TYPE_BOOL) {
+			return bc_TYPE2GENERIC(BC_TYPE_BOOL);
 		} else {
 			assert(false);
 		}
@@ -32,7 +32,7 @@ GenericType* EvalILChildaOp(ILChildaOp * self, Enviroment * env, CallContext* cc
 		//プリミティブ型同士でないのに
 		//演算子オーバーロードもない
 		assert(self->OperatorIndex != -1);
-		OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gtype)), self->OperatorIndex);
+		bc_OperatorOverload* operator_ov = GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype)), self->OperatorIndex);
 		return ApplyILUnaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 	}
 }
@@ -40,10 +40,10 @@ GenericType* EvalILChildaOp(ILChildaOp * self, Enviroment * env, CallContext* cc
 void GenerateILChildaOp(ILChildaOp* self, Enviroment* env, CallContext* cctx) {
 	if(self->OperatorIndex == -1) {
 		GenerateILFactor(self->Parent->Arg, env, cctx);
-		GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
-		if(GENERIC2TYPE(gtype) == TYPE_INT) {
+		bc_GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
+		if(bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
 			AddOpcodeBuf(env->Bytecode, OP_IFLIP);
-		} else if(GENERIC2TYPE(gtype) == TYPE_BOOL) {
+		} else if(bc_GENERIC2TYPE(gtype) == BC_TYPE_BOOL) {
 			AddOpcodeBuf(env->Bytecode, OP_BFLIP);
 		} else {
 			assert(false);
@@ -56,9 +56,9 @@ void GenerateILChildaOp(ILChildaOp* self, Enviroment* env, CallContext* cctx) {
 }
 
 void LoadILChildaOp(ILChildaOp* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
-	if(GENERIC2TYPE(gtype) != TYPE_INT &&
-	   GENERIC2TYPE(gtype) != TYPE_BOOL) {
+	bc_GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
+	if(bc_GENERIC2TYPE(gtype) != BC_TYPE_INT &&
+	   bc_GENERIC2TYPE(gtype) != BC_TYPE_BOOL) {
 		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }

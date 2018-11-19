@@ -10,7 +10,7 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_NULL_H
 #define BEACON_LIB_SIGNAL_LANG_NULL_H
-struct Type;
+struct bc_Type;
 /**
  * beacon::lang::Nullクラスを初期化します.
  */
@@ -20,5 +20,5 @@ void InitNull();
  * beacon::lang::Null型を返します.
  * @return
  */
-struct Type* GetNullType();
+struct bc_Type* GetNullType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_NULL_H

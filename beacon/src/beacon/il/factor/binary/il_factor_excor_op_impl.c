@@ -16,16 +16,16 @@ ILExcorOp* NewILExcorOp(bc_OperatorType type) {
 	return ret;
 }
 
-GenericType* EvalILExcorOp(ILExcorOp * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
+bc_GenericType* EvalILExcorOp(ILExcorOp * self, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
+	bc_GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
-		return TYPE2GENERIC(TYPE_INT);
+		return bc_TYPE2GENERIC(BC_TYPE_INT);
 	}
 	if(IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
-		return TYPE2GENERIC(TYPE_BOOL);
+		return bc_TYPE2GENERIC(BC_TYPE_BOOL);
 	}
 	//プリミティブ型同士でないのに
 	//演算子オーバーロードもない
@@ -35,7 +35,7 @@ GenericType* EvalILExcorOp(ILExcorOp * self, Enviroment* env, CallContext* cctx)
 		);
 		return NULL;
 	}
-	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->OperatorIndex);
+	bc_OperatorOverload* operator_ov = GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
 	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 

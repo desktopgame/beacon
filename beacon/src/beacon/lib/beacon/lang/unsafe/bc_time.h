@@ -9,7 +9,7 @@
 
 #ifndef BEACON_LIB_BEACON_LANG_UNSAFE_BC_TIME_H
 #define BEACON_LIB_BEACON_LANG_UNSAFE_BC_TIME_H
-struct Type;
+struct bc_Type;
 
 /**
  * beacon::unsafe::Timeクラスを初期化します。
@@ -20,5 +20,5 @@ void InitTime();
  * beacon::unsafe::Timeクラスを返します。
  * @return
  */
-struct Type* GetTimeType();
+struct bc_Type* GetTimeType();
 #endif

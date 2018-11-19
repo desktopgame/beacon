@@ -8,8 +8,8 @@
 #include "../il/il_factor_interface.h"
 #include "generic_type.h"
 
-Field * NewField(StringView namev) {
-	Field* ret = (Field*)MEM_MALLOC(sizeof(Field));
+bc_Field * bc_NewField(StringView namev) {
+	bc_Field* ret = (bc_Field*)MEM_MALLOC(sizeof(bc_Field));
 	ret->Name = namev;
 	ret->Access = ACCESS_PUBLIC_T;
 	ret->Modifier = MODIFIER_NONE_T;
@@ -22,7 +22,7 @@ Field * NewField(StringView namev) {
 	return ret;
 }
 
-void DeleteField(Field * self) {
+void bc_DeleteField(bc_Field * self) {
 	if (self == NULL) {
 		return;
 	}

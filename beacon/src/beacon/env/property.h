@@ -13,25 +13,25 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 #include "property_body.h"
-struct GenericType;
-struct Type;
-struct Field;
-struct Object;
+struct bc_GenericType;
+struct bc_Type;
+struct bc_Field;
+struct bc_Object;
 
-typedef struct Property {
+typedef struct bc_Property {
 	bc_ModifierType Modifier;
 	StringView Name;
-	struct Type* Parent;
-	struct Field* SourceRef;
-	struct GenericType* GType;
+	struct bc_Type* Parent;
+	struct bc_Field* SourceRef;
+	struct bc_GenericType* GType;
 	bc_AccessLevel Access;
-	PropertyBody* Set;
-	PropertyBody* Get;
+	bc_PropertyBody* Set;
+	bc_PropertyBody* Get;
 	bool IsShort;
-} Property;
+} bc_Property;
 
-#define NewProperty(namev) (MallocProperty(namev, __FILE__, __LINE__))
-Property* MallocProperty(StringView namev, const char* filename, int lineno);
+#define bc_NewProperty(namev) (bc_MallocProperty(namev, __FILE__, __LINE__))
+bc_Property* bc_MallocProperty(StringView namev, const char* filename, int lineno);
 
-void DeleteProperty(Property* self);
+void bc_DeleteProperty(bc_Property* self);
 #endif

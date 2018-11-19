@@ -1,8 +1,8 @@
 #include "bc_long.h"
 #include "../../bc_library_interface.h"
 
-Object* NewLong(long value) {
-	Long* ret = ConstructObject(sizeof(Long), GENERIC_OBJECT);
+bc_Object* NewLong(long value) {
+	Long* ret = bc_ConstructObject(sizeof(Long), BC_GENERIC_OBJECT);
 	ret->Value = value;
-	return (Object*)ret;
+	return (bc_Object*)ret;
 }

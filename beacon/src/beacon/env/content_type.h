@@ -13,8 +13,8 @@
 /**
  * クラスローダーによって読み込まれるコンテンツの種類を表す列挙型.
  */
-typedef enum ContentType {
+typedef enum bc_ContentType {
 	CONTENT_ENTRY_POINT_T,
 	CONTENT_LIB_T
-} ContentType;
+} bc_ContentType;
 #endif // !SIGNAL_ENV_CONTEN_TYPE_H

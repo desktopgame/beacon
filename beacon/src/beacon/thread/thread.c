@@ -24,7 +24,7 @@ ScriptThread * NewSGThread() {
 	return ret;
 }
 
-ScriptThread * GetCurrentSGThread(ScriptContext* sctx) {
+ScriptThread * GetCurrentSGThread(bc_ScriptContext* sctx) {
 	//ScriptContext* ctx = GetCurrentScriptContext();
 	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする

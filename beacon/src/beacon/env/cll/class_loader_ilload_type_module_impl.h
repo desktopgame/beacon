@@ -12,13 +12,13 @@
 #include "../../util/vector.h"
 //このファイルは非公開ヘッダーか .c からのみインクルードして下さい。
 struct bc_AST;
-struct FQCNCache;
-struct GenericCache;
+struct bc_FQCNCache;
+struct bc_GenericCache;
 struct bc_ClassLoader;
 
-void CLILFQCNCache(struct bc_AST* afqcn, struct FQCNCache* fqcn);
+void CLILFQCNCache(struct bc_AST* afqcn, struct bc_FQCNCache* fqcn);
 
-void CLILGenericCache(struct bc_AST* afqcn, struct GenericCache* dest);
+void CLILGenericCache(struct bc_AST* afqcn, struct bc_GenericCache* dest);
 
 /**
  * 型名の一覧を dst へ出力します.

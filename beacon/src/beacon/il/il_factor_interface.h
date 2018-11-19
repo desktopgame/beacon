@@ -144,7 +144,7 @@ void LoadILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
  * @param cctx
  * @return
  */
-GenericType* EvalILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
 
 /**
  * ファクターの文字列表現を返します.

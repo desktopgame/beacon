@@ -13,7 +13,7 @@
 #include "../ast/access_level.h"
 #include <stdbool.h>
 
-struct GenericCache;
+struct bc_GenericCache;
 
 typedef enum ILPropertyBodyTag {
 	IL_PROPERTY_SET_T,

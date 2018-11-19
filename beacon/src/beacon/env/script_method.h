@@ -13,21 +13,21 @@
 #include "../util/vector.h"
 #include "../vm/enviroment.h"
 struct Frame;
-struct Method;
+struct bc_Method;
 struct Enviroment;
 
 /**
  * スクリプトで実装されたメソッド.
  */
-typedef struct ScriptMethod {
+typedef struct bc_ScriptMethod {
 	Enviroment* Env;
-} ScriptMethod;
+} bc_ScriptMethod;
 
 /**
  * スクリプトで実装されたメソッドを作成します.
  * @return
  */
-ScriptMethod* NewScriptMethod();
+bc_ScriptMethod* bc_NewScriptMethod();
 
 /**
  * メソッドを実行します.
@@ -36,11 +36,11 @@ ScriptMethod* NewScriptMethod();
  * @param fr
  * @param env
  */
-void ExecuteScriptMethod(ScriptMethod* self, struct Method* parent, struct Frame* fr, Enviroment* env);
+void bc_ExecuteScriptMethod(bc_ScriptMethod* self, struct bc_Method* parent, struct Frame* fr, Enviroment* env);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void DeleteScriptMethod(ScriptMethod* self);
+void bc_DeleteScriptMethod(bc_ScriptMethod* self);
 #endif // !SIGNAL_ENV_SCRIPT_METHOD_H

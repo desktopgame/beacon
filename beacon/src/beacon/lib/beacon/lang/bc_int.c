@@ -3,36 +3,36 @@
 #include "../../bc_library_impl.h"
 
 //proto
-static void bc_int_nativeInit(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeEquals(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeAdd(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeSub(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeMul(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeDiv(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeMod(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeLShift(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeRShift(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeGT(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeGE(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeLT(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeLE(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeBitOr(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeBitAnd(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeEQ(Method* parent, Frame* fr, Enviroment* env);
-static void bc_int_nativeToChar(Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeEquals(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeAdd(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeSub(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeMul(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeDiv(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeMod(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeLShift(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeRShift(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeGT(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeGE(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeLT(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeLE(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeBitOr(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeBitAnd(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeEQ(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_int_nativeToChar(bc_Method* parent, Frame* fr, Enviroment* env);
 
-Object* NewInteger(int value) {
-	Integer* i = ConstructObject(sizeof(Integer), GENERIC_INT);
+bc_Object* NewInteger(int value) {
+	Integer* i = bc_ConstructObject(sizeof(Integer), BC_GENERIC_INT);
 	i->Value = value;
-	return (Object*)i;
+	return (bc_Object*)i;
 }
 
 void InitInt() {
-	Namespace* lang =  GetLangNamespace();
-	Type* intType = NewPreloadClass(InternString("Int"));
-	Class* intClass = TYPE2CLASS(intType);
+	bc_Namespace* lang =  bc_GetLangNamespace();
+	bc_Type* intType = NewPreloadClass(InternString("Int"));
+	Class* intClass = BC_TYPE2CLASS(intType);
 	intType->AllocSize = sizeof(Integer);
-	AddTypeNamespace(lang, intType);
+	bc_AddTypeNamespace(lang, intType);
 	DefineNativeMethodClass(intClass, "nativeInit", bc_int_nativeInit);
 	DefineNativeMethodClass(intClass, "nativeEquals", bc_int_nativeEquals);
 	DefineNativeMethodClass(intClass, "nativeAdd", bc_int_nativeAdd);
@@ -52,125 +52,125 @@ void InitInt() {
 	DefineNativeMethodClass(intClass, "nativeToChar", bc_int_nativeToChar);
 }
 
-Type* GetIntType() {
-	Namespace* lang = GetLangNamespace();
-	return FindTypeFromNamespace(lang, InternString("Int"));
+bc_Type* GetIntType() {
+	bc_Namespace* lang = bc_GetLangNamespace();
+	return bc_FindTypeFromNamespace(lang, InternString("Int"));
 }
 //private
 #define INT_VALUE(obj) (((Integer*)obj)->Value)
-static void bc_int_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* i = AtVector(fr->VariableTable, 1);
+static void bc_int_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* i = AtVector(fr->VariableTable, 1);
 
 	INT_VALUE(self) = INT_VALUE(i);
 	//self->Tag = OBJECT_INT_T;
 }
 
-static void bc_int_nativeEquals(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* i = AtVector(fr->VariableTable, 1);
-	PushVector(fr->ValueStack, BoolToObject(ObjectToInt(self) == ObjectToInt(i)));
+static void bc_int_nativeEquals(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* i = AtVector(fr->VariableTable, 1);
+	PushVector(fr->ValueStack, bc_BoolToObject(bc_ObjectToInt(self) == bc_ObjectToInt(i)));
 }
 
-static void bc_int_nativeAdd(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) + INT_VALUE(a));
+static void bc_int_nativeAdd(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) + INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeSub(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) - INT_VALUE(a));
+static void bc_int_nativeSub(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) - INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeMul(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) * INT_VALUE(a));
+static void bc_int_nativeMul(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) * INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeDiv(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) / INT_VALUE(a));
+static void bc_int_nativeDiv(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) / INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeMod(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) % INT_VALUE(a));
+static void bc_int_nativeMod(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) % INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeLShift(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) << INT_VALUE(a));
+static void bc_int_nativeLShift(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) << INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeRShift(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) >> INT_VALUE(a));
+static void bc_int_nativeRShift(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) >> INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeGT(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(INT_VALUE(self) > INT_VALUE(a));
+static void bc_int_nativeGT(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) > INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeGE(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(INT_VALUE(self) >= INT_VALUE(a));
+static void bc_int_nativeGE(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) >= INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeLT(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(INT_VALUE(self) < INT_VALUE(a));
+static void bc_int_nativeLT(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) < INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeLE(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(INT_VALUE(self) <= INT_VALUE(a));
+static void bc_int_nativeLE(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) <= INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeBitOr(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) | INT_VALUE(a));
+static void bc_int_nativeBitOr(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) | INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeBitAnd(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = (Object*)NewInteger(INT_VALUE(self) & INT_VALUE(a));
+static void bc_int_nativeBitAnd(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) & INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeEQ(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
-	Object* a = AtVector(fr->VariableTable, 1);
-	Object* ret = GetBoolObject(INT_VALUE(self) == INT_VALUE(a));
+static void bc_int_nativeEQ(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
+	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) == INT_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_int_nativeToChar(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
+static void bc_int_nativeToChar(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
 	PushVector(fr->ValueStack, NewChar(INT_VALUE(self)));
 }

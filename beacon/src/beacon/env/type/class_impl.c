@@ -40,15 +40,15 @@ static void delete_field(VectorItem item);
 static void delete_method(VectorItem item);
 static void class_ctor_delete(VectorItem item);
 static void delete_native_method_ref(NumericMapKey key, NumericMapItem item);
-static Method* class_find_impl_method(Class* self, Method* virtualMethod);
+static bc_Method* class_find_impl_method(Class* self, bc_Method* virtualMethod);
 static void delete_vtable(VectorItem item);
 static void delete_type_parameter(VectorItem item);
 static void delete_generic_type(VectorItem item);
 static void delete_operator_overload(VectorItem item);
 static void delete_property(VectorItem item);
 
-Type* WrapClass(Class* self) {
-	Type* ret = NewType();
+bc_Type* WrapClass(Class* self) {
+	bc_Type* ret = bc_NewType();
 	ret->Tag = TYPE_CLASS_T;
 	ret->Kind.Class = self;
 	self->Parent = ret;
@@ -80,35 +80,35 @@ Class* NewClass(StringView namev) {
 	return ret;
 }
 
-Class* NewClassProxy(GenericType* gt, StringView namev) {
+Class* NewClassProxy(bc_GenericType* gt, StringView namev) {
 	assert(gt->CoreType->Tag == TYPE_INTERFACE_T);
 	Class* ret = NewClass(namev);
-	ret->SuperClass = GENERIC_OBJECT;
+	ret->SuperClass = BC_GENERIC_OBJECT;
 	PushVector(ret->Implements, gt);
 	return ret;
 }
 
-Type* NewPreloadClass(StringView namev) {
+bc_Type* NewPreloadClass(StringView namev) {
 	Class* cl = NewClass(namev);
-	Type* tp = WrapClass(cl);
+	bc_Type* tp = WrapClass(cl);
 	tp->State = TYPE_PENDING;
-	if (TYPE_OBJECT == NULL) {
+	if (BC_TYPE_OBJECT == NULL) {
 		return tp;
 	}
-	Class* objCls = TYPE_OBJECT->Kind.Class;
+	Class* objCls = BC_TYPE_OBJECT->Kind.Class;
 	if (cl != objCls) {
-		InitGenericSelf(objCls->Parent, 0);
+		bc_InitGenericSelf(objCls->Parent, 0);
 		cl->SuperClass = objCls->Parent->GenericSelf;
 	}
 	return tp;
 }
 
-void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
+void AllocFieldsClass(Class* self, bc_Object * o, Frame* fr) {
 	//assert(o->Tag == OBJECT_REF_T);
-	Heap* he = GetHeap();
+	bc_Heap* he = bc_GetHeap();
 	for (int i = 0; i < self->Fields->Length; i++) {
-		Field* f = (Field*)AtVector(self->Fields, i);
-		Object* a = GetDefaultObject(f->GType);
+		bc_Field* f = (bc_Field*)AtVector(self->Fields, i);
+		bc_Object* a = bc_GetDefaultObject(f->GType);
 		//静的フィールドは別の場所に確保
 		if (bc_IsStaticModifier(f->Modifier)) {
 			continue;
@@ -130,10 +130,10 @@ void AllocFieldsClass(Class* self, Object * o, Frame* fr) {
 	}
 }
 
-void FreeClassFields(Class* self, Object * o) {
+void FreeClassFields(Class* self, bc_Object * o) {
 }
 
-void AddFieldClass(Class* self, Field* f) {
+void AddFieldClass(Class* self, bc_Field* f) {
 	assert(f != NULL);
 	if (bc_IsStaticModifier(f->Modifier)) {
 		PushVector(self->StaticFields, f);
@@ -142,7 +142,7 @@ void AddFieldClass(Class* self, Field* f) {
 	}
 }
 
-void AddPropertyClass(Class* self, Property* p) {
+void AddPropertyClass(Class* self, bc_Property* p) {
 	if (bc_IsStaticModifier(p->Modifier)) {
 		PushVector(self->StaticProperties, p);
 	} else {
@@ -154,18 +154,18 @@ void AddPropertyClass(Class* self, Property* p) {
 	const char* name = Ref2Str(p->Name);
 	#endif
 	if(p->IsShort) {
-		Field* f = NewField(ConcatIntern("$propery.", p->Name));
+		bc_Field* f = bc_NewField(ConcatIntern("$propery.", p->Name));
 		f->Access = ACCESS_PRIVATE_T;
 		f->GType = p->GType;
 		f->Modifier = p->Modifier;
 		f->Parent = self->Parent;
-		f->StaticValue = GetNullObject();
+		f->StaticValue = bc_GetNullObject();
 		p->SourceRef = f;
 		AddFieldClass(self, f);
 	}
 }
 
-void AddMethodClass(Class* self, Method * m) {
+void AddMethodClass(Class* self, bc_Method * m) {
 	assert(m != NULL);
 	if (bc_IsStaticModifier(m->Modifier)) {
 		PushVector(self->StaticMethods, m);
@@ -178,12 +178,12 @@ void AddConstructorClass(Class* self, bc_Constructor* c) {
 	PushVector(self->Constructors, c);
 }
 
-void DefineNativeMethodClass(Class* self, const char* name, NativeImpl impl) {
+void DefineNativeMethodClass(Class* self, const char* name, bc_NativeImpl impl) {
 	DefineNativeMethodByRefClass(self, InternString(name), impl);
 }
 
-void DefineNativeMethodByRefClass(Class* self, StringView namev, NativeImpl impl) {
-	NativeMethodRef* ref = NewNativeMethodRef(impl);
+void DefineNativeMethodByRefClass(Class* self, StringView namev, bc_NativeImpl impl) {
+	bc_NativeMethodRef* ref = bc_NewNativeMethodRef(impl);
 	PutNumericMap(self->NativeMethodRefMap, namev, ref);
 }
 
@@ -197,7 +197,7 @@ int DistanceClass(Class* super, Class* sub) {
 		if (pointee == super) {
 			return depth;
 		}
-		GenericType* super_gtype = pointee->SuperClass;
+		bc_GenericType* super_gtype = pointee->SuperClass;
 		if(super_gtype == NULL) {
 			depth = -1;
 			break;
@@ -222,7 +222,7 @@ void CreateVTableClass(Class* self) {
 	if (self->VT != NULL) {
 		return;
 	}
-	self->VT = NewVTable();
+	self->VT = bc_NewVTable();
 	//トップレベルではメソッドの一覧を配列に入れるだけ
 	if (self->SuperClass == NULL) {
 		create_vtable_top(self);
@@ -240,23 +240,23 @@ void CreateOperatorVTClass(Class* self) {
 		return;
 	}
 	if(self->SuperClass != NULL) {
-		CreateOperatorVTClass(TYPE2CLASS(GENERIC2TYPE(self->SuperClass)));
+		CreateOperatorVTClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(self->SuperClass)));
 	}
-	self->OVT = NewOperatorVt();
+	self->OVT = bc_NewOperatorVt();
 	if(self->SuperClass == NULL) {
 		for(int i=0; i<self->OperatorOverloads->Length; i++) {
-			OperatorOverload* opov = AtVector(self->OperatorOverloads, i);
+			bc_OperatorOverload* opov = AtVector(self->OperatorOverloads, i);
 			PushVector(self->OVT->Operators, opov);
 		}
 	} else {
-		OperatorVT* super_vt = TYPE2CLASS(GENERIC2TYPE(self->SuperClass))->OVT;
+		bc_OperatorVT* super_vt = BC_TYPE2CLASS(bc_GENERIC2TYPE(self->SuperClass))->OVT;
 		for(int i=0; i<super_vt->Operators->Length; i++) {
-			OperatorOverload* opov = AtVector(super_vt->Operators, i);
+			bc_OperatorOverload* opov = AtVector(super_vt->Operators, i);
 			PushVector(self->OVT->Operators, opov);
 		}
 		for(int i=0; i<self->OperatorOverloads->Length; i++) {
-			OperatorOverload* opov = AtVector(self->OperatorOverloads, i);
-			ReplaceOperatorVt(self->OVT, opov);
+			bc_OperatorOverload* opov = AtVector(self->OperatorOverloads, i);
+			bc_ReplaceOperatorVt(self->OVT, opov);
 		}
 	}
 }
@@ -339,17 +339,17 @@ int CountAllSMethodClass(Class* self) {
 	return sum;
 }
 
-Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args) {
+bc_Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	bc_Constructor* ctor = RFindConstructorClass(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
 	Frame* sub = SubFrame(fr);
-	Heap* h = GetHeap();
+	bc_Heap* h = bc_GetHeap();
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {
-			Object* o = AtVector(args, i);
+			bc_Object* o = AtVector(args, i);
 			PushVector(sub->ValueStack, o);
 		}
 	}
@@ -359,7 +359,7 @@ Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_arg
 		}
 	}
 	ExecuteVM(sub, ctor->Env);
-	Object* inst = PopVector(sub->ValueStack);
+	bc_Object* inst = PopVector(sub->ValueStack);
 	h->CollectBlocking++;
 	DeleteFrame(sub);
 	h->CollectBlocking--;
@@ -368,11 +368,11 @@ Object * NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_arg
 
 void LinkAllClass(Class* self) {
 	for (int i = 0; i < self->Fields->Length; i++) {
-		Field* f = (Field*)AtVector(self->Fields, i);
+		bc_Field* f = (bc_Field*)AtVector(self->Fields, i);
 		f->Parent = self->Parent;
 	}
 	for (int i = 0; i < self->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(self->Methods, i);
+		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
 		m->Parent = self->Parent;
 	}
 	for (int i = 0; i < self->Constructors->Length; i++) {
@@ -397,8 +397,8 @@ void UnlinkClass(Class* self) {
 	DeleteVector(self->OperatorOverloads, delete_operator_overload);
 	DeleteVector(self->Properties, delete_property);
 	DeleteVector(self->StaticProperties, delete_property);
-	DeleteVTable(self->VT);
-	DeleteOperatorVt(self->OVT);
+	bc_DeleteVTable(self->VT);
+	bc_DeleteOperatorVt(self->OVT);
 	DeleteVector(self->VTTable, delete_vtable);
 }
 
@@ -414,10 +414,10 @@ void DeleteClass(Class* self) {
 //private
 static void create_vtable_top(Class* self) {
 	for (int i = 0; i < self->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(self->Methods, i);
+		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
 		   !bc_IsStaticModifier(m->Modifier)) {
-			AddVTable(self->VT, m);
+			bc_AddVTable(self->VT, m);
 		}
 	}
 }
@@ -430,12 +430,12 @@ static void create_vtable_override(Class* self) {
 	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->SuperClass->CoreType;
 	CreateVTableClass(self->SuperClass->CoreType->Kind.Class);
-	CopyVTable(self->SuperClass->CoreType->Kind.Class->VT, self->VT);
+	bc_CopyVTable(self->SuperClass->CoreType->Kind.Class->VT, self->VT);
 	for (int i = 0; i < self->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(self->Methods, i);
+		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
 		   !bc_IsStaticModifier(m->Modifier)) {
-			ReplaceVTable(self->VT, m, cctx);
+			bc_ReplaceVTable(self->VT, m, cctx);
 		}
 	}
 	DeleteCallContext(cctx);
@@ -443,7 +443,7 @@ static void create_vtable_override(Class* self) {
 
 static void create_vtable_interface(Class* self) {
 	#if defined(DEBUG)
-	const char* clname = Ref2Str(GetTypeName(self->Parent));
+	const char* clname = Ref2Str(bc_GetTypeName(self->Parent));
 	#endif
 	Vector* tbl = GetInterfaceTreeClass(self);
 	//もしインターフェースを実装しているなら、
@@ -451,20 +451,20 @@ static void create_vtable_interface(Class* self) {
 	for (int i = 0; i < tbl->Length; i++) {
 		//GenericType* gtp = (GenericType*)AtVector(tbl, i);
 		Interface* inter = (Interface*)AtVector(tbl, i);
-		VTable* interVT = inter->VT;
-		VTable* newVT = NewVTable();
+		bc_VTable* interVT = inter->VT;
+		bc_VTable* newVT = bc_NewVTable();
 		assert(interVT != NULL);
 		//そのインターフェースに定義されたテーブルの一覧
 		//これはスーパーインターフェースも含む。
 		for (int j = 0; j < interVT->Elements->Length; j++) {
 			//実装クラスの中の、
 			//シグネチャが同じメソッドをテーブルへ。
-			Method* interVTM = AtVector(interVT->Elements, j);
-			Method* classVTM = class_find_impl_method(self, interVTM);
+			bc_Method* interVTM = AtVector(interVT->Elements, j);
+			bc_Method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->IsAbstract && classVTM == NULL) {
 				PushVector(self->VTTable, newVT);
 				bc_Panic(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
-					Ref2Str(GetTypeName(interVTM->Parent)),
+					Ref2Str(bc_GetTypeName(interVTM->Parent)),
 					Ref2Str(interVTM->Name)
 				);
 				DeleteVector(tbl, VectorDeleterOfNull);
@@ -476,7 +476,7 @@ static void create_vtable_interface(Class* self) {
 			if(self->IsAbstract && classVTM == NULL) {
 				classVTM = interVTM;
 			}
-			AddVTable(newVT, classVTM);
+			bc_AddVTable(newVT, classVTM);
 		}
 		PushVector(self->VTTable, newVT);
 	}
@@ -484,18 +484,18 @@ static void create_vtable_interface(Class* self) {
 }
 
 static void class_impl_delete(VectorItem item) {
-	GenericType* e = (GenericType*)item;
+	bc_GenericType* e = (bc_GenericType*)item;
 	//generic_DeleteType(e);
 }
 
 static void delete_field(VectorItem item) {
-	Field* e = (Field*)item;
-	DeleteField(e);
+	bc_Field* e = (bc_Field*)item;
+	bc_DeleteField(e);
 }
 
 static void delete_method(VectorItem item) {
-	Method* e = (Method*)item;
-	DeleteMethod(e);
+	bc_Method* e = (bc_Method*)item;
+	bc_DeleteMethod(e);
 }
 
 static void class_ctor_delete(VectorItem item) {
@@ -504,19 +504,19 @@ static void class_ctor_delete(VectorItem item) {
 }
 
 static void delete_native_method_ref(NumericMapKey key, NumericMapItem item) {
-	NativeMethodRef* e = (NativeMethodRef*)item;
-	DeleteNativeMethodRef(e);
+	bc_NativeMethodRef* e = (bc_NativeMethodRef*)item;
+	bc_DeleteNativeMethodRef(e);
 }
 
-static Method* class_find_impl_method(Class* self, Method* virtualMethod) {
+static bc_Method* class_find_impl_method(Class* self, bc_Method* virtualMethod) {
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
-	Method* ret = NULL;
-	VTable* clVT = self->VT;
+	bc_Method* ret = NULL;
+	bc_VTable* clVT = self->VT;
 	for (int i = 0; i < clVT->Elements->Length; i++) {
-		Method* clM = AtVector(clVT->Elements, i);
-		if (IsOverridedMethod(virtualMethod, clM, cctx)) {
+		bc_Method* clM = AtVector(clVT->Elements, i);
+		if (bc_IsOverridedMethod(virtualMethod, clM, cctx)) {
 			ret = clM;
 			break;
 		}
@@ -526,26 +526,26 @@ static Method* class_find_impl_method(Class* self, Method* virtualMethod) {
 }
 
 static void delete_vtable(VectorItem item) {
-	VTable* e = (VTable*)item;
-	DeleteVTable(e);
+	bc_VTable* e = (bc_VTable*)item;
+	bc_DeleteVTable(e);
 }
 
 static void delete_type_parameter(VectorItem item) {
-	TypeParameter* e = (TypeParameter*)item;
-	DeleteTypeParameter(e);
+	bc_TypeParameter* e = (bc_TypeParameter*)item;
+	bc_DeleteTypeParameter(e);
 }
 
 static void delete_generic_type(VectorItem item) {
-	GenericType* e = (GenericType*)item;
+	bc_GenericType* e = (bc_GenericType*)item;
 //	generic_DeleteType(e);
 }
 
 static void delete_operator_overload(VectorItem item) {
-	OperatorOverload* e = (OperatorOverload*)item;
-	DeleteOperatorOverload(e);
+	bc_OperatorOverload* e = (bc_OperatorOverload*)item;
+	bc_DeleteOperatorOverload(e);
 }
 
 static void delete_property(VectorItem item) {
-	Property* e = (Property*)item;
-	DeleteProperty(e);
+	bc_Property* e = (bc_Property*)item;
+	bc_DeleteProperty(e);
 }

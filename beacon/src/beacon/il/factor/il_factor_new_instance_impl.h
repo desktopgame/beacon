@@ -16,17 +16,17 @@
 #include "../il_factor_interface.h"
 
 struct Enviroment;
-struct Type;
+struct bc_Type;
 struct bc_Constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
  */
 typedef struct ILNewInstance {
 	Vector* Arguments;
-	FQCNCache* FQCNCache;
+	bc_FQCNCache* FQCNCache;
 	Vector* TypeArgs;
 //	GenericCache* fqcn;
-	GenericType* InstanceGType;
+	bc_GenericType* InstanceGType;
 	struct bc_Constructor* Constructor;
 	int ConstructorIndex;
 } ILNewInstance;
@@ -39,7 +39,7 @@ void GenerateILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cc
 
 void LoadILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
 
 char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env);
 

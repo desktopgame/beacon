@@ -17,7 +17,7 @@ ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
 ILVariableDecl * NewILVariableDecl(StringView namev) {
 	ILVariableDecl* ret = (ILVariableDecl*)MEM_MALLOC(sizeof(ILVariableDecl));
 	ret->Name = namev;
-	ret->GCache = NewGenericCache();
+	ret->GCache = bc_NewGenericCache();
 	return ret;
 }
 
@@ -33,11 +33,11 @@ void LoadILVariableDecl(ILVariableDecl * self, Enviroment* env, CallContext* cct
 	}
 	SymbolEntry* e = EntrySymbolTable(
 		env->Symboles,
-		ResolveImportManager(NULL, self->GCache, cctx),
+		bc_ResolveImportManager(NULL, self->GCache, cctx),
 		self->Name
 	);
 	if(e->GType->CoreType != NULL &&
-	   e->GType->CoreType == TYPE_VOID) {
+	   e->GType->CoreType == BC_TYPE_VOID) {
 		   bc_Panic(BCERROR_VOID_DECL_T);
 	}
 }

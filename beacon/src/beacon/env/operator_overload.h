@@ -12,28 +12,28 @@
 #include "../ast/operator_type.h"
 #include "../util/vector.h"
 #include "../ast/access_level.h"
-struct Type;
+struct bc_Type;
 struct Enviroment;
-struct GenericType;
+struct bc_GenericType;
 struct Frame;
 /**
  * 演算子オーバーロードを表す構造体.
  */
-typedef struct OperatorOverload {
-	struct Type* Parent;
-	struct GenericType* ReturnGType;
+typedef struct bc_OperatorOverload {
+	struct bc_Type* Parent;
+	struct bc_GenericType* ReturnGType;
 	bc_OperatorType Type;
 	Vector* Parameters;
 	struct Enviroment* Env;
 	bc_AccessLevel Access;
-} OperatorOverload;
+} bc_OperatorOverload;
 
 /**
  * 新しい演算子オーバーロードを生成します.
  * @param type
  * @return
  */
-OperatorOverload* NewOperatorOverload(bc_OperatorType type);
+bc_OperatorOverload* bc_NewOperatorOverload(bc_OperatorType type);
 
 /**
  * 演算子オーバーロードを実行します.
@@ -41,11 +41,11 @@ OperatorOverload* NewOperatorOverload(bc_OperatorType type);
  * @param fr
  * @param env
  */
-void ExecuteOperatorOverload(OperatorOverload* self, struct Frame* fr, struct Enviroment* env);
+void bc_ExecuteOperatorOverload(bc_OperatorOverload* self, struct Frame* fr, struct Enviroment* env);
 
 /**
  * 演算子オーバーロードを解放します.
  * @param self
  */
-void DeleteOperatorOverload(OperatorOverload* self);
+void bc_DeleteOperatorOverload(bc_OperatorOverload* self);
 #endif

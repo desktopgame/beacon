@@ -10,7 +10,7 @@
 #ifndef BEACON_VM_YIELD_CONTEXT_H
 #define BEACON_VM_YIELD_CONTEXT_H
 #include "../util/vector.h"
-struct Object;
+struct bc_Object;
 
 typedef struct YieldContext {
 	Vector* BackupVariableTable;
@@ -18,8 +18,8 @@ typedef struct YieldContext {
 	Vector* VariableTable;
 	Vector* ValueStack;
 	Vector* Parameters;
-	struct Object* Source;
-	struct Object* Stock;
+	struct bc_Object* Source;
+	struct bc_Object* Stock;
 	bool IsCached;
 	int YieldCount;
 	int YieldOffset;

@@ -74,7 +74,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		}
 		//ここで静的領域を解放しないと、
 		//enviromentの削除後も静的フィールドが定数を掴んだまま
-		ClearScriptContext(GetCurrentScriptContext());
+		bc_ClearScriptContext(bc_GetCurrentScriptContext());
 	}
 	(*outFileName) = bc_Strdup(filename);
 	(*outFail) = fail;
@@ -118,7 +118,7 @@ static void test_semanticsImpl(const char* dirname, bool require, char** outFile
 		}
 		//ここで静的領域を解放しないと、
 		//enviromentの削除後も静的フィールドが定数を掴んだまま
-		ClearScriptContext(GetCurrentScriptContext());
+		bc_ClearScriptContext(bc_GetCurrentScriptContext());
 	}
 	(*outFileName) = bc_Strdup(filename);
 	(*outFail) = fail;

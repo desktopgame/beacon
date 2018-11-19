@@ -17,7 +17,7 @@ ILFactor * WrapILAs(ILAs * self) {
 ILAs * NewILAs() {
 	ILAs* ret = (ILAs*)MEM_MALLOC(sizeof(ILAs));
 	ret->Source = NULL;
-	ret->GCache = NewGenericCache();
+	ret->GCache = bc_NewGenericCache();
 	ret->GType = NULL;
 	ret->Mode = CAST_UNKNOWN_T;
 	return ret;
@@ -26,7 +26,7 @@ ILAs * NewILAs() {
 void GenerateILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->Source, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-	GenerateGenericType(self->GType, env);
+	bc_GenerateGenericType(self->GType, env);
 	if(self->Mode == CAST_DOWN_T) {
 		AddOpcodeBuf(env->Bytecode, OP_DOWN_AS);
 	} else {
@@ -39,25 +39,25 @@ void LoadILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 		return;
 	}
 	LoadILFactor(self->Source, env, cctx);
-	self->GType = ResolveImportManager(GetNamespaceCContext(cctx), self->GCache, cctx);
-	GenericType* a = EvalILFactor(self->Source, env, cctx);
+	self->GType = bc_ResolveImportManager(GetNamespaceCContext(cctx), self->GCache, cctx);
+	bc_GenericType* a = EvalILFactor(self->Source, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
-	if(self->GType->CoreType != NULL && GENERIC2TYPE(self->GType)->Tag == TYPE_INTERFACE_T) {
+	if(self->GType->CoreType != NULL && bc_GENERIC2TYPE(self->GType)->Tag == TYPE_INTERFACE_T) {
 		self->Mode = CAST_UP_T;
 		return;
 	}
 	//キャスト先がインターフェイスなら常にアップキャスト
-	if(a->CoreType != NULL && GENERIC2TYPE(a)->Tag == TYPE_INTERFACE_T) {
+	if(a->CoreType != NULL && bc_GENERIC2TYPE(a)->Tag == TYPE_INTERFACE_T) {
 		self->Mode = CAST_DOWN_T;
 		return;
 	}
 	//キャスト先がオブジェクトなら常にアップキャスト
-	if(self->GType->CoreType != NULL && self->GType->CoreType == TYPE_OBJECT) {
+	if(self->GType->CoreType != NULL && self->GType->CoreType == BC_TYPE_OBJECT) {
 		self->Mode = CAST_UP_T;
 		return;
 	}
-	int downTo = DistanceGenericType(self->GType, a, cctx);
-	int upTo = DistanceGenericType(a, self->GType, cctx);
+	int downTo = bc_DistanceGenericType(self->GType, a, cctx);
+	int upTo = bc_DistanceGenericType(a, self->GType, cctx);
 	//ダウンキャスト
 	if(downTo >= 0) {
 		self->Mode = CAST_UP_T;
@@ -67,19 +67,19 @@ void LoadILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 	//それ以外
 	} else {
 		bc_Panic(BCERROR_CAST_NOT_COMPATIBLE_T,
-			Ref2Str(GetTypeName(a->CoreType)),
-			Ref2Str(GetTypeName(self->GType->CoreType))
+			Ref2Str(bc_GetTypeName(a->CoreType)),
+			Ref2Str(bc_GetTypeName(self->GType->CoreType))
 		);
 	}
 }
 
-GenericType* EvalILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 	LoadILAs(self, env, cctx);
 	return self->GType;
 }
 
 void DeleteILAs(ILAs * self) {
-	DeleteGenericCache(self->GCache);
+	bc_DeleteGenericCache(self->GCache);
 	DeleteILFactor(self->Source);
 	MEM_FREE(self);
 }
@@ -87,7 +87,7 @@ void DeleteILAs(ILAs * self) {
 char* ILAsToString(ILAs* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* factstr = ILFactorToString(self->Source, env);
-	char* to = GenericCacheToString(self->GCache);
+	char* to = bc_GenericCacheToString(self->GCache);
 	AppendfBuffer(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);
 	MEM_FREE(to);

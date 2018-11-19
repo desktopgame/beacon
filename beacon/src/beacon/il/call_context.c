@@ -38,32 +38,32 @@ void PopCallContext(CallContext* self) {
 	DeleteCallFrame(fr);
 }
 
-Namespace* GetNamespaceCContext(CallContext* self) {
+bc_Namespace* GetNamespaceCContext(CallContext* self) {
 	if(self->Scope != NULL) {
 		return self->Scope;
 	}
-	return GetLangNamespace();
+	return bc_GetLangNamespace();
 }
 
-Method* GetMethodCContext(CallContext* self) {
+bc_Method* GetMethodCContext(CallContext* self) {
 	if(self->Tag != CALL_METHOD_T) {
 		return NULL;
 	}
 	return self->Kind.Method;
 }
 
-Type* GetTypeCContext(CallContext* self) {
+bc_Type* GetTypeCContext(CallContext* self) {
 	if(self->Tag == CALL_TOP_T) {
-		return FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
+		return bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("World"));
 	}
 	return self->Ty;
 }
 
 Class* GetClassCContext(CallContext* self) {
-	return TYPE2CLASS(GetTypeCContext(self));
+	return BC_TYPE2CLASS(GetTypeCContext(self));
 }
 
-GenericType* GetReceiverCContext(CallContext* self) {
+bc_GenericType* GetReceiverCContext(CallContext* self) {
 	CallFrame* cfr = TopVector(self->CallStack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.Receiver;
@@ -75,10 +75,10 @@ GenericType* GetReceiverCContext(CallContext* self) {
 	return NULL;
 }
 
-Type* GetEvalTypeCContext(CallContext* self, FQCNCache* fqcn) {
-	Type* tp = GetTypeFQCN(fqcn, self->Scope);
+bc_Type* GetEvalTypeCContext(CallContext* self, bc_FQCNCache* fqcn) {
+	bc_Type* tp = bc_GetTypeFQCN(fqcn, self->Scope);
 	if(tp == NULL) {
-		tp = GetTypeFQCN(fqcn, GetLangNamespace());
+		tp = bc_GetTypeFQCN(fqcn, bc_GetLangNamespace());
 	}
 	return tp;
 }

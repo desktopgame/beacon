@@ -28,22 +28,22 @@
 #include <stdarg.h>
 //struct field_list;
 //struct method_list;
-struct Object;
-struct Field;
-struct Property;
-struct PropertyBody;
-struct Method;
+struct bc_Object;
+struct bc_Field;
+struct bc_Property;
+struct bc_PropertyBody;
+struct bc_Method;
 struct bc_Constructor;
-struct GenericType;
-struct OperatorOverload;
+struct bc_GenericType;
+struct bc_OperatorOverload;
 /**
  * クラスを表す構造体です.
  */
 typedef struct Class {
-	Type* Parent;
+	bc_Type* Parent;
 	StringView Name;
-	Namespace* Location;
-	struct GenericType* SuperClass;
+	bc_Namespace* Location;
+	struct bc_GenericType* SuperClass;
 	Vector* Implements;
 	Vector* Fields;
 	Vector* StaticFields;
@@ -62,8 +62,8 @@ typedef struct Class {
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
 	Vector* VTTable;
 	//Vector* static_fieldval_vec;
-	VTable* VT;
-	OperatorVT* OVT;
+	bc_VTable* VT;
+	bc_OperatorVT* OVT;
 	bool IsAbstract;
 } Class;
 #include "class_find.h"
@@ -73,7 +73,7 @@ typedef struct Class {
  * @param self
  * @return
  */
-Type* WrapClass(Class* self);
+bc_Type* WrapClass(Class* self);
 
 /**
  * 新しいクラスを作成します.
@@ -89,13 +89,13 @@ Class* NewClass(StringView namev);
  * @param namev
  * @return
  */
-Class* NewClassProxy(struct GenericType* gt, StringView namev);
+Class* NewClassProxy(struct bc_GenericType* gt, StringView namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-Type* NewPreloadClass(StringView namev);
+bc_Type* NewPreloadClass(StringView namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -108,7 +108,7 @@ Type* NewPreloadClass(StringView namev);
  * @param o
  * @param fr
  */
-void AllocFieldsClass(Class* self, struct Object* o, Frame* fr);
+void AllocFieldsClass(Class* self, struct bc_Object* o, Frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
@@ -116,28 +116,28 @@ void AllocFieldsClass(Class* self, struct Object* o, Frame* fr);
  * @param self
  * @param o
  */
-void FreeClassFields(Class* self, struct Object* o);
+void FreeClassFields(Class* self, struct bc_Object* o);
 
 /**
  * このクラスにフィールドを追加します.
  * @param self
  * @param f
  */
-void AddFieldClass(Class* self, struct Field* f);
+void AddFieldClass(Class* self, struct bc_Field* f);
 
 /**
  * このクラスにプロパティを追加します.
  * @param self
  * @param p
  */
-void AddPropertyClass(Class* self, struct Property* p);
+void AddPropertyClass(Class* self, struct bc_Property* p);
 
 /**
  * このクラスにメソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodClass(Class* self, struct Method* m);
+void AddMethodClass(Class* self, struct bc_Method* m);
 
 /**
  * このクラスにコンストラクタを追加します.
@@ -152,7 +152,7 @@ void AddConstructorClass(Class* self, struct bc_Constructor* c);
  * @param name
  * @param impl
  */
-void DefineNativeMethodClass(Class* self, const char* name, NativeImpl impl);
+void DefineNativeMethodClass(Class* self, const char* name, bc_NativeImpl impl);
 
 /**
  * 指定の名前に対応するネイティブ関数を登録します.
@@ -160,7 +160,7 @@ void DefineNativeMethodClass(Class* self, const char* name, NativeImpl impl);
  * @param namev
  * @param impl
  */
-void DefineNativeMethodByRefClass(Class* self, StringView namev, NativeImpl impl);
+void DefineNativeMethodByRefClass(Class* self, StringView namev, bc_NativeImpl impl);
 
 /**
  * super と sub の距離を返します.
@@ -235,7 +235,7 @@ int CountAllSMethodClass(Class* self);
  * @param type_args
  * @return
  */
-struct Object* NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args);
+struct bc_Object* NewInstanceClass(Class* self, Frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

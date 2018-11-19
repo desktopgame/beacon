@@ -14,9 +14,9 @@
 #include "../../il_factor_interface.h"
 struct SymbolEntry;
 struct Enviroment;
-struct GenericType;
-struct Field;
-struct Property;
+struct bc_GenericType;
+struct bc_Field;
+struct bc_Property;
 
 typedef enum VariableLocalType {
 	VARIABLE_LOCAL_SCOPE_T,
@@ -26,12 +26,12 @@ typedef enum VariableLocalType {
 } VariableLocalType;
 
 typedef struct FieldWithIndex {
-	struct Field* Field;
+	struct bc_Field* Field;
 	int Index;
 } FieldWithIndex;
 
 typedef struct PropertyWithIndex {
-	struct Property* Property;
+	struct bc_Property* Property;
 	int Index;
 } PropertyWithIndex;
 
@@ -41,7 +41,7 @@ typedef struct PropertyWithIndex {
 typedef struct ILVariableLocal {
 	StringView Name;
 	VariableLocalType Type;
-	struct GenericType* GType;
+	struct bc_GenericType* GType;
 	union {
 		struct SymbolEntry* Entry;
 		FieldWithIndex FieldI;
@@ -56,7 +56,7 @@ void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext
 
 void LoadILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
 
 char* ILVariableLocalToString(ILVariableLocal * self, Enviroment * env);
 

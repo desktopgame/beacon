@@ -10,22 +10,22 @@
 #pragma once
 #ifndef BEACON_ENV_NATIVE_METHOD_H
 #define BEACON_ENV_NATIVE_METHOD_H
-struct NativeMethodRef;
+struct bc_NativeMethodRef;
 struct Enviroment;
-struct Method;
+struct bc_Method;
 struct Frame;
 /**
  * Cで実装されたメソッド.
  */
-typedef struct NativeMethod {
-	struct NativeMethodRef* Ref;
-} NativeMethod;
+typedef struct bc_NativeMethod {
+	struct bc_NativeMethodRef* Ref;
+} bc_NativeMethod;
 
 /**
  * ネイティブメソッドを作成します.
  * @return
  */
-NativeMethod* NewNativeMethod();
+bc_NativeMethod* bc_NewNativeMethod();
 
 /**
  * ネイティブメソッドを実行します.
@@ -33,12 +33,12 @@ NativeMethod* NewNativeMethod();
  * @param fr
  * @param env
  */
-void ExecuteNativeMethod(NativeMethod* self, struct Method* parent, struct Frame* fr, struct Enviroment* env);
+void bc_ExecuteNativeMethod(bc_NativeMethod* self, struct bc_Method* parent, struct Frame* fr, struct Enviroment* env);
 
 /**
  * ネイティブメソッドを開放します.
  * @param self
  */
-void DeleteNativeMethod(NativeMethod* self);
+void bc_DeleteNativeMethod(bc_NativeMethod* self);
 
 #endif // !SIGNAL_ENV_NATIVE_METHOD_H

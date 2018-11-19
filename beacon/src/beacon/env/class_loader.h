@@ -28,9 +28,9 @@ typedef struct bc_ClassLoader {
 	ILToplevel* ILCode;
 
 	struct Enviroment* Env;
-	ImportManager* ImportManager;
-	ContentType Type;
-	LinkType Link;
+	bc_ImportManager* ImportManager;
+	bc_ContentType Type;
+	bc_LinkType Link;
 	Vector* TypeCaches;
 
 	struct bc_ClassLoader* Parent;
@@ -59,7 +59,7 @@ typedef struct bc_ClassLoader {
  * @param type
  * @return
  */
-bc_ClassLoader* bc_NewClassLoader(const char* filename, ContentType type);
+bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type);
 
 /**
  * ファイルの内容を解析して必要に応じてインポート先のファイルの読み込み、

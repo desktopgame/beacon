@@ -169,13 +169,13 @@ void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	bc_SetPanicFile(env->ContextRef->FileName);
 	bc_SetPanicLine(self->Lineno);
-	GenericType* ret = NULL;
+	bc_GenericType* ret = NULL;
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
 			ret = EvalILInt(self->Kind.Int, env, cctx);
@@ -325,7 +325,7 @@ void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env) {
 	}
 	for(int i=0; i<type_args->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(type_args, i);
-		char* str = GenericCacheToString(e->GCache);
+		char* str = bc_GenericCacheToString(e->GCache);
 		AppendsBuffer(sb, str);
 		if(i != (type_args->Length - 1)) {
 			AppendsBuffer(sb, ", ");

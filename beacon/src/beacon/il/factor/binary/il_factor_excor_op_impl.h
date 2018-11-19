@@ -12,7 +12,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct ILBinaryOp;
-struct GenericType;
+struct bc_GenericType;
 struct Enviroment;
 
 typedef struct ILExcorOp {
@@ -23,7 +23,7 @@ typedef struct ILExcorOp {
 
 ILExcorOp* NewILExcorOp(bc_OperatorType type);
 
-struct GenericType* EvalILExcorOp(ILExcorOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILExcorOp(ILExcorOp * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILExcorOp(ILExcorOp* self, struct Enviroment* env, CallContext* cctx);
 

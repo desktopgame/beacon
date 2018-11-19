@@ -15,17 +15,17 @@
  * 実数型を扱うオブジェクトです。
  */
 typedef struct Double {
-	Object Super;
+	bc_Object Super;
 	double Value;
 } Double;
-struct Type;
+struct bc_Type;
 
 /**
  * 新しい実数オブジェクトを生成します。
  * @param value
  * @return
  */
-struct Object* NewDouble(double value);
+struct bc_Object* NewDouble(double value);
 
 /**
  * beacon::lang::Doubleクラスを初期化します.
@@ -36,5 +36,5 @@ void InitDouble();
  * beacon::lang::Double型を返します.
  * @return
  */
-struct Type* GetDoubleType();
+struct bc_Type* GetDoubleType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_DOUBLE_H

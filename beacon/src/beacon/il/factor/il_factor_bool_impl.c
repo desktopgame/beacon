@@ -25,8 +25,8 @@ void GenerateILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
-	return GENERIC_BOOL;
+bc_GenericType* EvalILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
+	return BC_GENERIC_BOOL;
 }
 
 char* ILBoolToString(ILBool* self, Enviroment* env) {

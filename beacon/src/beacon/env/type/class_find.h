@@ -19,7 +19,7 @@
  * @param outIndex
  * @return 無ければ NULL
  */
-struct Field* FindFieldClass(Class* self, StringView namev, int* outIndex);
+struct bc_Field* FindFieldClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つフィールドを返します.
@@ -29,7 +29,7 @@ struct Field* FindFieldClass(Class* self, StringView namev, int* outIndex);
  * @param outIndex
  * @return
  */
-struct Field* FindTreeFieldClass(Class* self, StringView namev, int* outIndex);
+struct bc_Field* FindTreeFieldClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -38,7 +38,7 @@ struct Field* FindTreeFieldClass(Class* self, StringView namev, int* outIndex);
  * @param outIndex
  * @return 無ければ NULL
  */
-struct Field* FindSFieldClass(Class* self, StringView namev, int* outIndex);
+struct bc_Field* FindSFieldClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的フィールドを返します.
@@ -48,7 +48,7 @@ struct Field* FindSFieldClass(Class* self, StringView namev, int* outIndex);
  * @param outIndex
  * @return 無ければ NULL
  */
-struct Field* FindTreeSFieldClass(Class* self, StringView namev, int* outIndex);
+struct bc_Field* FindTreeSFieldClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定位置のフィールドを返します.
@@ -58,7 +58,7 @@ struct Field* FindTreeSFieldClass(Class* self, StringView namev, int* outIndex);
  * @param index
  * @return
  */
-struct Field* GetFieldClass(Class* self, int index);
+struct bc_Field* GetFieldClass(Class* self, int index);
 
 /**
  * 指定位置の静的フィールドを返します.
@@ -68,7 +68,7 @@ struct Field* GetFieldClass(Class* self, int index);
  * @param index
  * @return
  */
-struct Field* GetSFieldClass(Class* self, int index);
+struct bc_Field* GetSFieldClass(Class* self, int index);
 
 /**
  * クラスに指定のフィールドが含まれるなら true.
@@ -76,7 +76,7 @@ struct Field* GetSFieldClass(Class* self, int index);
  * @param f
  * @return
  */
-bool IsContainsFieldClass(Class* self, struct Field* f);
+bool IsContainsFieldClass(Class* self, struct bc_Field* f);
 
 /**
  * クラスに指定の静的フィールドが含まれるなら true.
@@ -84,7 +84,7 @@ bool IsContainsFieldClass(Class* self, struct Field* f);
  * @param f
  * @return
  */
-bool IsContainsSFieldClass(Class* self, struct Field* f);
+bool IsContainsSFieldClass(Class* self, struct bc_Field* f);
 
 /**
  * 指定のクラスからフィールドにアクセスできるなら true.
@@ -92,7 +92,7 @@ bool IsContainsSFieldClass(Class* self, struct Field* f);
  * @param f
  * @return
  */
-bool IsAccessibleFieldClass(Class* self, struct Field* f);
+bool IsAccessibleFieldClass(Class* self, struct bc_Field* f);
 
 
 
@@ -103,7 +103,7 @@ bool IsAccessibleFieldClass(Class* self, struct Field* f);
  * @param p
  * @return
  */
-bool IsContainsPropertyClass(Class* self, struct Property* p);
+bool IsContainsPropertyClass(Class* self, struct bc_Property* p);
 
 /**
  * クラスに指定のプロパティが含まれるなら true.
@@ -111,14 +111,14 @@ bool IsContainsPropertyClass(Class* self, struct Property* p);
  * @param p
  * @return
  */
-bool IsContainsSPropertyClass(Class* self, struct Property* p);
+bool IsContainsSPropertyClass(Class* self, struct bc_Property* p);
 
 /**
  * 指定のクラスからプロパティにアクセスできるなら true.
  * @param self
  * @param p
  */
-bool IsAccessiblePropertyClass(Class* self, struct Property* p);
+bool IsAccessiblePropertyClass(Class* self, struct bc_Property* p);
 
 /**
  * 指定のクラスからアクセサにアクセスできるなら true.
@@ -126,7 +126,7 @@ bool IsAccessiblePropertyClass(Class* self, struct Property* p);
  * @param pb
  * @return
  */
-bool IsAccessiblePropertyAccessorClass(Class* self, struct PropertyBody* pb);
+bool IsAccessiblePropertyAccessorClass(Class* self, struct bc_PropertyBody* pb);
 
 /**
  * 指定のプロパティが内部的に使用しているフィールドを返します.
@@ -134,20 +134,20 @@ bool IsAccessiblePropertyAccessorClass(Class* self, struct PropertyBody* pb);
  * @param p
  * @return
  */
-int GetFieldByPropertyClass(Class* self, struct Property* p);
+int GetFieldByPropertyClass(Class* self, struct bc_Property* p);
 
 /**
  * @param self
  * @param index
  * @return
  */
-struct Property* GetPropertyClass(Class* self, int index);
+struct bc_Property* GetPropertyClass(Class* self, int index);
 /**
  * @param self
  * @param index
  * @return
  */
-struct Property* GetSPropertyClass(Class* self, int index);
+struct bc_Property* GetSPropertyClass(Class* self, int index);
 
 /**
  * 指定の名前のプロパティを検索します.
@@ -156,7 +156,7 @@ struct Property* GetSPropertyClass(Class* self, int index);
  * @param outIndex
  * @return
  */
-struct Property* FindPropertyClass(Class* self, StringView namev, int* outIndex);
+struct bc_Property* FindPropertyClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つプロパティを返します.
@@ -166,7 +166,7 @@ struct Property* FindPropertyClass(Class* self, StringView namev, int* outIndex)
  * @param outIndex
  * @return
  */
-struct Property* FindTreePropertyClass(Class* self, StringView namev, int* outIndex);
+struct bc_Property* FindTreePropertyClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前の静的プロパティを検索します.
@@ -175,7 +175,7 @@ struct Property* FindTreePropertyClass(Class* self, StringView namev, int* outIn
  * @param outIndex
  * @return
  */
-struct Property* FindSPropertyClass(Class* self, StringView namev, int* outIndex);
+struct bc_Property* FindSPropertyClass(Class* self, StringView namev, int* outIndex);
 
 /**
  * 指定の名前を持つ静的プロパティを返します.
@@ -185,7 +185,7 @@ struct Property* FindSPropertyClass(Class* self, StringView namev, int* outIndex
  * @param outIndex
  * @return
  */
-struct Property* FindTreeSPropertyClass(Class* self, StringView namev, int* outIndex);
+struct bc_Property* FindTreeSPropertyClass(Class* self, StringView namev, int* outIndex);
 
 
 
@@ -230,7 +230,7 @@ struct bc_Constructor* ILFindEmptyConstructorClass(Class* self, Enviroment* env,
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct Method* ILFindMethodClass(Class* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* ILFindMethodClass(Class* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -240,7 +240,7 @@ struct Method* ILFindMethodClass(Class* self, StringView namev, Vector* args, En
  * @param outIndex
  * @return
  */
-struct Method* GFindMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex);
+struct bc_Method* GFindMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * equalsメソッドを検索します.
@@ -248,7 +248,7 @@ struct Method* GFindMethodClass(Class* self, StringView namev, Vector* gargs, in
  * @param outIndex
  * @return
  */
-struct Method* GFindEqMethodClass(Class* self, int* outIndex);
+struct bc_Method* GFindEqMethodClass(Class* self, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -260,7 +260,7 @@ struct Method* GFindEqMethodClass(Class* self, int* outIndex);
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct Method* ILFindSMethodClass(Class* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* ILFindSMethodClass(Class* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -270,7 +270,7 @@ struct Method* ILFindSMethodClass(Class* self, StringView namev, Vector* args, E
  * @param outIndex
  * @return
  */
-struct Method* GFindSMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex);
+struct bc_Method* GFindSMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.
@@ -280,7 +280,7 @@ struct Method* GFindSMethodClass(Class* self, StringView namev, Vector* gargs, i
  * @param index
  * @return
  */
-struct Method* GetMethodClass(struct Object* o, int index);
+struct bc_Method* GetMethodClass(struct bc_Object* o, int index);
 
 /**
  * 指定位置のメソッドを返します.
@@ -290,7 +290,7 @@ struct Method* GetMethodClass(struct Object* o, int index);
  * @param index
  * @return
  */
-struct Method* GetSMethodClass(Class* self, int index);
+struct bc_Method* GetSMethodClass(Class* self, int index);
 
 /**
  * selfから、 interTypeの仮想関数テーブルの interIndex番目に属するメソッド
@@ -300,7 +300,7 @@ struct Method* GetSMethodClass(Class* self, int index);
  * @param interIndex
  * @return
  */
-struct Method* GetImplMethodClass(Class* self, Type* interType, int interMIndex);
+struct bc_Method* GetImplMethodClass(Class* self, bc_Type* interType, int interMIndex);
 
 
 
@@ -314,18 +314,18 @@ struct Method* GetImplMethodClass(Class* self, Type* interType, int interMIndex)
  * @param outIndex
  * @return
  */
-struct OperatorOverload* GFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* GFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct OperatorOverload* ILFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* ILFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct OperatorOverload* ArgFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* ArgFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * @param self
  * @param index
  * @return
  */
-struct OperatorOverload* GetOperatorOverloadClass(Class* self, int index);
+struct bc_OperatorOverload* GetOperatorOverloadClass(Class* self, int index);
 
 /**
  * 指定のクラスから Object クラスまで階層で m と互換性のあるメソッドを検索して返します.
@@ -334,7 +334,7 @@ struct OperatorOverload* GetOperatorOverloadClass(Class* self, int index);
  * @param outM
  * @return
  */
-Vector* FindTreeMethodClass(Class* self, Method* m);
+Vector* FindTreeMethodClass(Class* self, bc_Method* m);
 
 /**
  * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
@@ -342,7 +342,7 @@ Vector* FindTreeMethodClass(Class* self, Method* m);
  * @param method_list
  * @param m
  */
-bool IsContainsMethod(Vector* method_list, Method* m, Method** outM);
+bool IsContainsMethod(Vector* method_list, bc_Method* m, bc_Method** outM);
 
 /**
  * 実装された全てのジェネリックインターフェイスを返します.
@@ -377,5 +377,5 @@ Vector* GetInterfaceTreeClass(Class* self);
  * @parma tinter
  * @return
  */
-struct GenericType* FindInterfaceTypeClass(Class* self, Type* tinter, struct GenericType** out_baseline);
+struct bc_GenericType* FindInterfaceTypeClass(Class* self, bc_Type* tinter, struct bc_GenericType** out_baseline);
 #endif

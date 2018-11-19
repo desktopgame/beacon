@@ -9,22 +9,22 @@
 //proto
 static void tree_delete(VectorItem item);
 
-GenericCache * NewGenericCache() {
-	GenericCache* ret = (GenericCache*)MEM_MALLOC(sizeof(GenericCache));
-	ret->FQCN = NewFQCNCache();
+bc_GenericCache * bc_NewGenericCache() {
+	bc_GenericCache* ret = (bc_GenericCache*)MEM_MALLOC(sizeof(bc_GenericCache));
+	ret->FQCN = bc_NewFQCNCache();
 	ret->TypeArgs = NewVector();
 	return ret;
 }
 
-void PrintGenericCache(GenericCache * self) {
-	PrintFQCNCache(self->FQCN);
+void bc_PrintGenericCache(bc_GenericCache * self) {
+	bc_PrintFQCNCache(self->FQCN);
 	if (self->TypeArgs->Length <= 0) {
 		return;
 	}
 	printf("[");
 	for (int i = 0; i < self->TypeArgs->Length; i++) {
-		GenericCache* e = (GenericCache*)AtVector(self->TypeArgs, i);
-		PrintGenericCache(e);
+		bc_GenericCache* e = (bc_GenericCache*)AtVector(self->TypeArgs, i);
+		bc_PrintGenericCache(e);
 		if (i != self->TypeArgs->Length - 1) {
 			printf(", ");
 		}
@@ -32,16 +32,16 @@ void PrintGenericCache(GenericCache * self) {
 	printf("]");
 }
 
-void DumpGenericCache(GenericCache * self, int depth) {
+void bc_DumpGenericCache(bc_GenericCache * self, int depth) {
 	bc_Printi(depth);
-	PrintGenericCache(self);
+	bc_PrintGenericCache(self);
 	bc_Println();
 }
 
-char* GenericCacheToString(GenericCache* self) {
+char* bc_GenericCacheToString(bc_GenericCache* self) {
 	Buffer* sb = NewBuffer();
 	//Namespace::Class
-	char* name = FQCNCacheToString(self->FQCN);
+	char* name = bc_FQCNCacheToString(self->FQCN);
 	AppendsBuffer(sb, name);
 	//Namespace::Class[
 	if(self->TypeArgs->Length > 0) {
@@ -49,8 +49,8 @@ char* GenericCacheToString(GenericCache* self) {
 	}
 	//Namespace::Class[...
 	for(int i=0; i<self->TypeArgs->Length; i++) {
-		GenericCache* e = (GenericCache*)AtVector(self->TypeArgs, i);
-		char* type = GenericCacheToString(e);
+		bc_GenericCache* e = (bc_GenericCache*)AtVector(self->TypeArgs, i);
+		char* type = bc_GenericCacheToString(e);
 		AppendsBuffer(sb, type);
 		if(i != (self->TypeArgs->Length - 1)) {
 			AppendsBuffer(sb, ", ");
@@ -65,26 +65,26 @@ char* GenericCacheToString(GenericCache* self) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteGenericCache(GenericCache * self) {
-	DeleteFQCNCache(self->FQCN);
+void bc_DeleteGenericCache(bc_GenericCache * self) {
+	bc_DeleteFQCNCache(self->FQCN);
 	DeleteVector(self->TypeArgs, tree_delete);
 	MEM_FREE(self);
 }
 
-bool EqualsGenericCache(GenericCache* a, GenericCache* b) {
+bool bc_EqualsGenericCache(bc_GenericCache* a, bc_GenericCache* b) {
 	if(a->TypeArgs->Length != b->TypeArgs->Length) {
 		return false;
 	}
-	if(!EqualsFQCNCache(a->FQCN, b->FQCN)) {
+	if(!bc_EqualsFQCNCache(a->FQCN, b->FQCN)) {
 		return false;
 	}
 	if(a == b) {
 		return true;
 	}
 	for(int i=0; i<a->TypeArgs->Length; i++) {
-		GenericCache* ag = AtVector(a->TypeArgs, i);
-		GenericCache* bg = AtVector(b->TypeArgs, i);
-		if(!EqualsGenericCache(ag, bg)) {
+		bc_GenericCache* ag = AtVector(a->TypeArgs, i);
+		bc_GenericCache* bg = AtVector(b->TypeArgs, i);
+		if(!bc_EqualsGenericCache(ag, bg)) {
 			return false;
 		}
 	}
@@ -92,6 +92,6 @@ bool EqualsGenericCache(GenericCache* a, GenericCache* b) {
 }
 //private
 static void tree_delete(VectorItem item) {
-	GenericCache* e = (GenericCache*)item;
-	DeleteGenericCache(e);
+	bc_GenericCache* e = (bc_GenericCache*)item;
+	bc_DeleteGenericCache(e);
 }

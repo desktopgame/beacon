@@ -12,14 +12,14 @@
 #include "../util/vector.h"
 #include "call_frame.h"
 #include "control_structure.h"
-struct Namespace;
-struct Type;
+struct bc_Namespace;
+struct bc_Type;
 struct Class;
-struct Method;
+struct bc_Method;
 struct bc_Constructor;
-struct OperatorOverload;
-struct GenericType;
-struct FQCNCache;
+struct bc_OperatorOverload;
+struct bc_GenericType;
+struct bc_FQCNCache;
 
 typedef enum CallContextTag {
 	//プログラムのトップレベル
@@ -40,12 +40,12 @@ typedef struct CallContext {
 	Vector* CallStack;
 	ControlStructure Control;
 	CallContextTag Tag;
-	struct Namespace* Scope;
-	struct Type* Ty;
+	struct bc_Namespace* Scope;
+	struct bc_Type* Ty;
 	union {
-		struct Method* Method;
+		struct bc_Method* Method;
 		struct bc_Constructor* Ctor;
-		struct OperatorOverload* OpOv;
+		struct bc_OperatorOverload* OpOv;
 	} Kind;
 } CallContext;
 
@@ -59,17 +59,17 @@ CallFrame* TopCallContext(CallContext* self);
 
 void PopCallContext(CallContext* self);
 
-struct Namespace* GetNamespaceCContext(CallContext* self);
+struct bc_Namespace* GetNamespaceCContext(CallContext* self);
 
-struct Method* GetMethodCContext(CallContext* self);
+struct bc_Method* GetMethodCContext(CallContext* self);
 
-struct Type* GetTypeCContext(CallContext* self);
+struct bc_Type* GetTypeCContext(CallContext* self);
 
 struct Class* GetClassCContext(CallContext* self);
 
-struct GenericType* GetReceiverCContext(CallContext* self);
+struct bc_GenericType* GetReceiverCContext(CallContext* self);
 
-struct Type* GetEvalTypeCContext(CallContext* self, struct FQCNCache* fqcn);
+struct bc_Type* GetEvalTypeCContext(CallContext* self, struct bc_FQCNCache* fqcn);
 
 Vector* GetTypeArgsCContext(CallContext* self);
 

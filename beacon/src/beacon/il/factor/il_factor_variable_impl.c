@@ -26,7 +26,7 @@ ILFactor * WrapILVariable(ILVariable * self) {
 
 ILVariable * MallocILVariable(const char* filename, int lineno) {
 	ILVariable* ret = (ILVariable*)bc_MXMalloc(sizeof(ILVariable), filename, lineno);
-	ret->FQCN = MallocFQCNCache(filename, lineno);
+	ret->FQCN = bc_MallocFQCNCache(filename, lineno);
 	ret->TypeArgs = MallocVector(filename, lineno);
 	ret->Type = ILVARIABLE_TYPE_UNDEFINED_T;
 	return ret;
@@ -50,9 +50,9 @@ void LoadILVariable(ILVariable * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILVariable(ILVariable * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILVariable(ILVariable * self, Enviroment * env, CallContext* cctx) {
 	ILVariable_check(self, env, cctx);
-	GenericType* ret = NULL;
+	bc_GenericType* ret = NULL;
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		ret = EvalILVariableLocal(self->Kind.Local, env, cctx);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
@@ -77,7 +77,7 @@ void DeleteILVariable(ILVariable * self) {
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
 		DeleteILVariableStatic(self->Kind.Static);
 	}
-	DeleteFQCNCache(self->FQCN);
+	bc_DeleteFQCNCache(self->FQCN);
 	DeleteVector(self->TypeArgs, DeleteILFactor_typeargs);
 	MEM_FREE(self);
 }
@@ -98,10 +98,10 @@ static void ILVariable_check(ILVariable* self, Enviroment* env, CallContext* cct
 }
 
 static void ILVariable_check_instance(ILVariable* self, Enviroment* env, CallContext* cctx) {
-	Namespace* cur = GetNamespaceCContext(cctx);
-	Class* ctype = FindClassFromNamespace(cur, self->FQCN->Name);
+	bc_Namespace* cur = GetNamespaceCContext(cctx);
+	Class* ctype = bc_FindClassFromNamespace(cur, self->FQCN->Name);
 	if(ctype == NULL) {
-		ctype = FindClassFromNamespace(GetLangNamespace(), self->FQCN->Name);
+		ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(), self->FQCN->Name);
 	}
 	//現在の名前空間から参照できるクラスがある場合
 	if(ctype != NULL) {

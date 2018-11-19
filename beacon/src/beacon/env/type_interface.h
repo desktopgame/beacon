@@ -16,28 +16,28 @@
 #include "../util/string_pool.h"
 #include "../il/call_context.h"
 
-#define TYPE2CLASS(type) (CastClassType(type))
-#define TYPE2INTERFACE(type) (CastInterfaceType(type))
+#define BC_TYPE2CLASS(type) (bc_CastClassType(type))
+#define BC_TYPE2INTERFACE(type) (bc_CastInterfaceType(type))
 /**
  * 型の種類を表すタグ.
  */
-typedef enum TypeTag {
+typedef enum bc_TypeTag {
 	TYPE_CLASS_T,
 	TYPE_INTERFACE_T,
 	TYPE_ENUM_T
-} TypeTag;
+} bc_TypeTag;
 
-struct Namespace;
+struct bc_Namespace;
 struct Class;
 struct Interface;
-struct Field;
-struct Method;
-struct Property;
+struct bc_Field;
+struct bc_Method;
+struct bc_Property;
 struct Enviroment;
-struct VTable;
-struct GenericType;
+struct bc_VTable;
+struct bc_GenericType;
 
-typedef enum TypeState {
+typedef enum bc_TypeState {
 	/**
 	 * 生成直後.
 	 */
@@ -59,29 +59,29 @@ typedef enum TypeState {
 	 * ある型のメンバ実装を読み込んだことを示します.
 	 */
 	TYPE_IMPL = 1 << 4
-} TypeState;
+} bc_TypeState;
 
 /**
  * 型を表す構造体.
  */
-typedef struct Type {
-	TypeTag Tag;
-	struct Namespace* Location;
-	struct GenericType* GenericSelf;
+typedef struct bc_Type {
+	bc_TypeTag Tag;
+	struct bc_Namespace* Location;
+	struct bc_GenericType* GenericSelf;
 	int AbsoluteIndex;
-	TypeState State;
+	bc_TypeState State;
 	size_t AllocSize;
 	union {
 		struct Class* Class;
 		struct Interface* Interface;
 	} Kind;
-} Type;
+} bc_Type;
 
 /**
  * 型を作成します.
  * @return
  */
-Type* NewType();
+bc_Type* bc_NewType();
 
 /**
  * このタイプ自体を表すジェネリック型を初期化します.
@@ -89,42 +89,42 @@ Type* NewType();
  * @param count 型変数の個数
  * @return
  */
-struct GenericType* InitGenericSelf(Type* self, int counts);
+struct bc_GenericType* bc_InitGenericSelf(bc_Type* self, int counts);
 
 /**
  * この型の名前を返します.
  * @param self
  * @return
  */
-StringView GetTypeName(Type* self);
+StringView bc_GetTypeName(bc_Type* self);
 
 /**
  * この型の完全な名前を返します.
  * @param self
  * @return
  */
-StringView GetTypeFullName(Type* self);
+StringView bc_GetTypeFullName(bc_Type* self);
 
 /**
  * この型にフィールドを追加します.
  * @param self
  * @param f
  */
-void AddFieldType(Type* self, struct Field* f);
+void bc_AddFieldType(bc_Type* self, struct bc_Field* f);
 
 /**
  * この型にプロパティを追加します.
  * @param self
  * @param p
  */
-void AddPropertyType(Type* self, struct Property* p);
+void bc_AddPropertyType(bc_Type* self, struct bc_Property* p);
 
 /**
  * この型にメソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodType(Type* self, struct Method* m);
+void bc_AddMethodType(bc_Type* self, struct bc_Method* m);
 
 /**
  * この型からメソッドを検索します.
@@ -136,7 +136,7 @@ void AddMethodType(Type* self, struct Method* m);
  * @param outIndex
  * @return
  */
-struct Method* ILFindMethodType(Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindMethodType(bc_Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -148,14 +148,14 @@ struct Method* ILFindMethodType(Type* self, StringView namev, Vector* args, stru
  * @param outIndex
  * @return
  */
-struct Method* ILFindSMethodType(Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindSMethodType(bc_Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
  * @param self
  * @return
  */
-struct VTable* GetVTableType(Type* self);
+struct bc_VTable* bc_GetVTableType(bc_Type* self);
 
 /**
  * 型の距離を返します.
@@ -163,13 +163,13 @@ struct VTable* GetVTableType(Type* self);
  * @param sub
  * @return
  */
-int DistanceType(Type* super, Type* sub);
+int bc_DistanceType(bc_Type* super, bc_Type* sub);
 
 /**
  * 型情報を残してメソッドやフィールドなどのみを開放します.
  * @param self
  */
-void UnlinkType(Type* self);
+void bc_UnlinkType(bc_Type* self);
 
 /**
  * 指定の名前の型変数が何番目に表れるかを返します.
@@ -177,7 +177,7 @@ void UnlinkType(Type* self);
  * @param namev
  * @return
  */
-int GetGenericIndexType(Type* self, StringView namev);
+int bc_GetGenericIndexType(bc_Type* self, StringView namev);
 
 /**
  * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.
@@ -189,21 +189,21 @@ int GetGenericIndexType(Type* self, StringView namev);
  * @param a
  * @return
  */
-struct GenericType* FindImplementType(Type* self, Type* a);
+struct bc_GenericType* bc_FindImplementType(bc_Type* self, bc_Type* a);
 
 /**
  * この型の型引数の一覧を返します.
  * @param self
  * @return
  */
-Vector* GetParameterListType(Type* self);
+Vector* bc_GetParameterListType(bc_Type* self);
 
 /**
  * この型の実装インターフェイスの一覧を返します.
  * @param self
  * @return
  */
-Vector* GetImplementList(Type* self);
+Vector* bc_GetImplementList(bc_Type* self);
 
 /**
  * この型がクラス/インターフェイスを表すとき、
@@ -212,26 +212,26 @@ Vector* GetImplementList(Type* self);
  * @param index
  * @return
  */
-struct GenericType* TypeParameterAtType(Type* self, int index);
+struct bc_GenericType* bc_TypeParameterAtType(bc_Type* self, int index);
 
 /**
  * 型を開放します.
  * @param self
  */
-void DeleteType(Type* self);
+void bc_DeleteType(bc_Type* self);
 
 /**
  * このタイプをクラスにキャストします.
  * @param self
  * @return
  */
-struct Class* CastClassType(Type* self);
+struct Class* bc_CastClassType(bc_Type* self);
 /**
  * このタイプをインターフェイスにキャストします.
  * @param self
  * @return
  */
-struct Interface* CastInterfaceType(Type* self);
+struct Interface* bc_CastInterfaceType(bc_Type* self);
 
 /**
  * abstractにはクラス/インターフェイスを渡します.
@@ -240,21 +240,21 @@ struct Interface* CastInterfaceType(Type* self);
  * @param concrete
  * @return
  */
-struct GenericType* BaselineType(Type* abstract, Type* concrete);
+struct bc_GenericType* bc_BaselineType(bc_Type* abstract, bc_Type* concrete);
 
 /**
  * 同じインターフェイスが二回現れるなら NULL 以外.
  * @param self
  * @return
  */
-struct Interface* IsValidInterface(Type* self);
+struct Interface* bc_IsValidInterface(bc_Type* self);
 
 /**
  * 抽象クラスかインターフェイスなら true.
  * @param self
  * @return
  */
-bool IsAbstractType(Type* self);
+bool bc_IsAbstractType(bc_Type* self);
 
 /**
  * 可能なら self を class へ変換します.
@@ -262,12 +262,12 @@ bool IsAbstractType(Type* self);
  * @param self
  * @return
  */
-struct Class* TypeToClass(Type* self);
+struct Class* bc_TypeToClass(bc_Type* self);
 /**
  * 可能なら self を interface へ変換します.
  * 失敗したなら NULL
  * @param self
  * @return
  */
-struct Interface* TypeToInterface(Type* self);
+struct Interface* bc_TypeToInterface(bc_Type* self);
 #endif // !SIGNAL_ENV_TYPE_INTERFACE_H

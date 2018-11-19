@@ -15,55 +15,55 @@
 #include "../util/vector.h"
 #include "../util/numeric_map.h"
 #include <stdint.h>
-struct ScriptContext;
-#define TYPE_OBJECT (GetObjectTypeNamespace())
-#define TYPE_INT (GetIntTypeNamespace())
-#define TYPE_DOUBLE (GetDoubleTypeNamespace())
-#define TYPE_CHAR (GetCharTypeNamespace())
-#define TYPE_STRING (GetStringTypeNamespace())
-#define TYPE_BOOL (GetBoolTypeNamespace())
-#define TYPE_VOID (GetVoidTypeNamespace())
-#define TYPE_NULL (GetNullTypeNamespace())
-#define TYPE_EXCEPTION (GetExceptionTypeNamespace())
+struct bc_ScriptContext;
+#define BC_TYPE_OBJECT (bc_GetObjectTypeNamespace())
+#define BC_TYPE_INT (bc_GetIntTypeNamespace())
+#define BC_TYPE_DOUBLE (bc_GetDoubleTypeNamespace())
+#define BC_TYPE_CHAR (bc_GetCharTypeNamespace())
+#define BC_TYPE_STRING (bc_GetStringTypeNamespace())
+#define BC_TYPE_BOOL (bc_GetBoolTypeNamespace())
+#define BC_TYPE_VOID (bc_GetVoidTypeNamespace())
+#define BC_TYPE_NULL (bc_GetNullTypeNamespace())
+#define BC_TYPE_EXCEPTION (bc_GetExceptionTypeNamespace())
 
 
-#define GENERIC_OBJECT ((GetObjectTypeNamespace()->GenericSelf))
-#define GENERIC_INT ((GetIntTypeNamespace()->GenericSelf))
-#define GENERIC_DOUBLE ((GetDoubleTypeNamespace()->GenericSelf))
-#define GENERIC_CHAR ((GetCharTypeNamespace()->GenericSelf))
-#define GENERIC_STRING ((GetStringTypeNamespace()->GenericSelf))
-#define GENERIC_BOOL ((GetBoolTypeNamespace()->GenericSelf))
-#define GENERIC_VOID ((GetVoidTypeNamespace()->GenericSelf))
-#define GENERIC_NULL ((GetNullTypeNamespace()->GenericSelf))
-#define GENERIC_EXCEPTION ((GetExceptionTypeNamespace()->GenericSelf))
+#define BC_GENERIC_OBJECT ((bc_GetObjectTypeNamespace()->GenericSelf))
+#define BC_GENERIC_INT ((bc_GetIntTypeNamespace()->GenericSelf))
+#define BC_GENERIC_DOUBLE ((bc_GetDoubleTypeNamespace()->GenericSelf))
+#define BC_GENERIC_CHAR ((bc_GetCharTypeNamespace()->GenericSelf))
+#define BC_GENERIC_STRING ((bc_GetStringTypeNamespace()->GenericSelf))
+#define BC_GENERIC_BOOL ((bc_GetBoolTypeNamespace()->GenericSelf))
+#define BC_GENERIC_VOID ((bc_GetVoidTypeNamespace()->GenericSelf))
+#define BC_GENERIC_NULL ((bc_GetNullTypeNamespace()->GenericSelf))
+#define BC_GENERIC_EXCEPTION ((bc_GetExceptionTypeNamespace()->GenericSelf))
 
-struct Type;
+struct bc_Type;
 struct Class;
 struct Interface;
 /**
  * 名前空間を表す構造体.
  */
-typedef struct Namespace {
+typedef struct bc_Namespace {
 	StringView Name;
-	struct Namespace* Parent;
+	struct bc_Namespace* Parent;
 	NumericMap* NamespaceMap;
 	NumericMap* TypeMap;
 	uint32_t RefCount;
-} Namespace;
+} bc_Namespace;
 
 /**
  * 指定の名前でトップレベルに新しい名前空間を定義します.
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-Namespace* CreateNamespaceAtRoot(StringView namev);
+bc_Namespace* bc_CreateNamespaceAtRoot(StringView namev);
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.
  * @param namev
  * @return
  */
-Namespace* FindNamespaceFromRoot(StringView namev);
+bc_Namespace* bc_FindNamespaceFromRoot(StringView namev);
 
 /**
  * コンテキストを指定してトップレベルの名前空間を返します.
@@ -71,7 +71,7 @@ Namespace* FindNamespaceFromRoot(StringView namev);
  * @param namev
  * @return
  */
-Namespace* CFindNamespaceFromRoot(struct ScriptContext* sctx, StringView namev);
+bc_Namespace* bc_CFindNamespaceFromRoot(struct bc_ScriptContext* sctx, StringView namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.
@@ -79,7 +79,7 @@ Namespace* CFindNamespaceFromRoot(struct ScriptContext* sctx, StringView namev);
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-Namespace* AddNamespaceNamespace(Namespace* self, StringView namev);
+bc_Namespace* bc_AddNamespaceNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * この名前空間にクラスを含めます.
@@ -87,7 +87,7 @@ Namespace* AddNamespaceNamespace(Namespace* self, StringView namev);
  * @param self
  * @param type
  */
-struct Type* AddTypeNamespace(Namespace* self, struct Type* type);
+struct bc_Type* bc_AddTypeNamespace(bc_Namespace* self, struct bc_Type* type);
 
 /**
  * 指定の名前空間から指定の名前の名前空間を検索します.
@@ -95,7 +95,7 @@ struct Type* AddTypeNamespace(Namespace* self, struct Type* type);
  * @param namev
  * @return 見つからないなら NULL
  */
-Namespace* FindNamespaceFromNamespace(Namespace* self, StringView namev);
+bc_Namespace* bc_FindNamespaceFromNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のタイプを検索します.
@@ -103,7 +103,7 @@ Namespace* FindNamespaceFromNamespace(Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct Type* FindTypeFromNamespace(Namespace* self, StringView namev);
+struct bc_Type* bc_FindTypeFromNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のクラスを検索します.
@@ -111,7 +111,7 @@ struct Type* FindTypeFromNamespace(Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct Class* FindClassFromNamespace(Namespace* self, StringView namev);
+struct Class* bc_FindClassFromNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.
@@ -119,102 +119,102 @@ struct Class* FindClassFromNamespace(Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct Interface* FindInterfaceFromNamespace(Namespace* self, StringView namev);
+struct Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self, StringView namev);
 
 /**
  * beacon 名前空間を返します.
  * @return
  */
-Namespace* GetBeaconNamespace();
+bc_Namespace* bc_GetBeaconNamespace();
 
 /**
  * beacon.lang 名前空間を返します.
  * @return
  */
-Namespace* GetLangNamespace();
+bc_Namespace* bc_GetLangNamespace();
 
 /**
  * beacon.unsafe 名前空間を返します.
  * @return
  */
-Namespace* GetUnsafeNamespace();
+bc_Namespace* bc_GetUnsafeNamespace();
 
 /**
  * $placeholder 名前空間を返します.
  * @return
  */
-Namespace* GetPlaceholderNamespace();
+bc_Namespace* bc_GetPlaceholderNamespace();
 
 /**
  * 現在のスクリプトコンテキストで Object タイプを返します.
  * @return
  */
-struct Type* GetObjectTypeNamespace();
+struct bc_Type* bc_GetObjectTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで int タイプを返します.
  * @return
  */
-struct Type* GetIntTypeNamespace();
+struct bc_Type* bc_GetIntTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで double タイプを返します.
  * @return
  */
-struct Type* GetDoubleTypeNamespace();
+struct bc_Type* bc_GetDoubleTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで char タイプを返します.
  * @return
  */
-struct Type* GetCharTypeNamespace();
+struct bc_Type* bc_GetCharTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで string タイプを返します.
  * @return
  */
-struct Type* GetStringTypeNamespace();
+struct bc_Type* bc_GetStringTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで bool タイプを返します.
  * @return
  */
-struct Type* GetBoolTypeNamespace();
+struct bc_Type* bc_GetBoolTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで void タイプを返します.
  * @return
  */
-struct Type* GetVoidTypeNamespace();
+struct bc_Type* bc_GetVoidTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで null タイプを返します.
  * @return
  */
-struct Type* GetNullTypeNamespace();
+struct bc_Type* bc_GetNullTypeNamespace();
 
 /**
  * beacon::lang::Exception
  * @return
  */
-struct Type* GetExceptionTypeNamespace();
+struct bc_Type* bc_GetExceptionTypeNamespace();
 
 /**
  * 指定の名前空間のすべての型で unlink を呼び出します.
  * @param self
  */
-void UnlinkNamespace(Namespace* self);
+void bc_UnlinkNamespace(bc_Namespace* self);
 
 /**
  * 名前空間を完全な文字列として返します.
  * @param self
  * @return
  */
-StringView NamespaceToString(Namespace* self);
+StringView bc_NamespaceToString(bc_Namespace* self);
 
 /**
  * 名前空間を開放します.
  * @param self
  */
-void DeleteNamespace(Namespace* self);
+void bc_DeleteNamespace(bc_Namespace* self);
 #endif // !SIGNAL_ENV_NAMESPACE_H

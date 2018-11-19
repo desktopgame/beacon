@@ -11,13 +11,13 @@
 #include "object.h"
 #include "generic_type.h"
 
-ScriptMethod * NewScriptMethod() {
-	ScriptMethod* ret = (ScriptMethod*)MEM_MALLOC(sizeof(ScriptMethod));
+bc_ScriptMethod * bc_NewScriptMethod() {
+	bc_ScriptMethod* ret = (bc_ScriptMethod*)MEM_MALLOC(sizeof(bc_ScriptMethod));
 	ret->Env = NULL;
 	return ret;
 }
 
-void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Enviroment* env) {
+void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, Frame* fr, Enviroment* env) {
 #if defined(DEBUG)
 	const char* name = Ref2Str(parent->Name);
 #endif
@@ -27,7 +27,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	Vector* aArgs = NewVector();
 	Vector* aTArgs = NewVector();
 	if (!bc_IsStaticModifier(parent->Modifier)) {
-		Object* receiver_obj = PopVector(fr->ValueStack);
+		bc_Object* receiver_obj = PopVector(fr->ValueStack);
 		PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
@@ -39,7 +39,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
 	for (int i = 0; i < parent->Parameters->Length; i++) {
-		Object* arg = CopyObject(PopVector(fr->ValueStack));
+		bc_Object* arg = bc_CopyObject(PopVector(fr->ValueStack));
 		PushVector(sub->ValueStack, arg);
 		AssignVector(aArgs, (parent->Parameters->Length - i), arg);
 	}
@@ -53,9 +53,9 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
-	if(parent->ReturnGType != TYPE_VOID->GenericSelf &&
+	if(parent->ReturnGType != BC_TYPE_VOID->GenericSelf &&
 	   sub->ValueStack->Length > 0) {
-		Object* o = (Object*)PopVector(sub->ValueStack);
+		bc_Object* o = (bc_Object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, NON_NULL(o));
 	}
 	DeleteVector(aArgs, VectorDeleterOfNull);
@@ -64,7 +64,7 @@ void ExecuteScriptMethod(ScriptMethod * self, Method* parent, Frame* fr, Envirom
 	DeleteFrame(sub);
 }
 
-void DeleteScriptMethod(ScriptMethod * self) {
+void bc_DeleteScriptMethod(bc_ScriptMethod * self) {
 	DeleteEnviroment(self->Env);
 	MEM_FREE(self);
 }

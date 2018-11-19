@@ -18,7 +18,7 @@ struct Enviroment;
  * 型宣言を表す要素.
  */
 typedef struct ILVariableDecl {
-	GenericCache* GCache;
+	bc_GenericCache* GCache;
 	StringView Name;
 } ILVariableDecl;
 /**

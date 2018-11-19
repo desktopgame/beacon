@@ -27,7 +27,7 @@ ILFactor * WrapILNewInstance(ILNewInstance * self) {
 
 ILNewInstance * NewILNewInstance() {
 	ILNewInstance* ret = (ILNewInstance*)MEM_MALLOC(sizeof(ILNewInstance));
-	ret->FQCNCache = NewFQCNCache();
+	ret->FQCNCache = bc_NewFQCNCache();
 	ret->TypeArgs = NewVector();
 	ret->Arguments = NewVector();
 	ret->Constructor = NULL;
@@ -42,7 +42,7 @@ void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* 
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(e->GType, env);
+		bc_GenerateGenericType(e->GType, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->Arguments->Length; i++) {
@@ -64,29 +64,29 @@ void LoadILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx
 		return;
 	}
 	//抽象クラスはインスタンス化できない
-	if(IsAbstractType(self->Constructor->Parent)) {
-		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(GetTypeName(self->Constructor->Parent)));
+	if(bc_IsAbstractType(self->Constructor->Parent)) {
+		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(bc_GetTypeName(self->Constructor->Parent)));
 	}
 }
 
-GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	if(bc_GetLastPanic()) {
 		return NULL;
 	}
 	//型引数がないのでそのまま
 	if (self->TypeArgs->Length == 0) {
-		GenericType* ret = RefGenericType(self->Constructor->Parent);
+		bc_GenericType* ret = bc_RefGenericType(self->Constructor->Parent);
 		return ret;
 	}
 	//FQCNCache typename_group
 	if (self->InstanceGType == NULL) {
-		Namespace* scope = NULL;
-		GenericType* a = NewGenericType(self->Constructor->Parent);
+		bc_Namespace* scope = NULL;
+		bc_GenericType* a = bc_NewGenericType(self->Constructor->Parent);
 		for (int i = 0; i < self->TypeArgs->Length; i++) {
 			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
-			GenericType* arg = ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
-			AddArgsGenericType(a, arg);
+			bc_GenericType* arg = bc_ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
+			bc_AddArgsGenericType(a, arg);
 		}
 		self->InstanceGType = a;
 	}
@@ -96,7 +96,7 @@ GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallConte
 char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
-	char* type = FQCNCacheToString(self->FQCNCache);
+	char* type = bc_FQCNCacheToString(self->FQCNCache);
 	AppendsBuffer(sb, type);
 	ILTypeArgsToString(sb, self->TypeArgs, env);
 	ILArgsToString(sb, self->Arguments, env);
@@ -107,7 +107,7 @@ char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env) {
 void DeleteILNewInstance(ILNewInstance * self) {
 	DeleteVector(self->Arguments, il_Factor_new_instace_delete_arg);
 	DeleteVector(self->TypeArgs, DeleteILNewInstance_typearg);
-	DeleteFQCNCache(self->FQCNCache);
+	bc_DeleteFQCNCache(self->FQCNCache);
 	MEM_FREE(self);
 }
 
@@ -128,7 +128,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 	}
 	#endif
 	//コンストラクタで生成するオブジェクトの肩を取得
-	Type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
+	bc_Type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
 	if(ty == NULL) {
 		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			Ref2Str(self->FQCNCache->Name)
@@ -136,7 +136,7 @@ static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallConte
 		return;
 	}
 	//使用するコンストラクタを取得
-	Class* cls = TYPE2CLASS(ty);
+	Class* cls = BC_TYPE2CLASS(ty);
 	int temp = -1;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = cls->Parent->GenericSelf;

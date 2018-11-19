@@ -17,17 +17,17 @@ ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int
 	return ret;
 }
 
-GenericType* EvalILNegativeOp(ILNegativeOp * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, Enviroment * env, CallContext* cctx) {
 	return EvalILFactor(self->Parent->Arg, env, cctx);
 }
 
 void GenerateILNegativeOp(ILNegativeOp* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
+	bc_GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
 	if(self->OperatorIndex == -1) {
 		GenerateILFactor(self->Parent->Arg, env, cctx);
-		if(GENERIC2TYPE(gt) == TYPE_INT) {
+		if(bc_GENERIC2TYPE(gt) == BC_TYPE_INT) {
 			AddOpcodeBuf(env->Bytecode, OP_INEG);
-		} else if(GENERIC2TYPE(gt) == TYPE_DOUBLE) {
+		} else if(bc_GENERIC2TYPE(gt) == BC_TYPE_DOUBLE) {
 			AddOpcodeBuf(env->Bytecode, OP_DNEG);
 		} else {
 			assert(false);
@@ -40,9 +40,9 @@ void GenerateILNegativeOp(ILNegativeOp* self, Enviroment* env, CallContext* cctx
 }
 
 void LoadILNegativeOp(ILNegativeOp* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
-	if(GENERIC2TYPE(gt) != TYPE_INT &&
-	   GENERIC2TYPE(gt) != TYPE_DOUBLE) {
+	bc_GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
+	if(bc_GENERIC2TYPE(gt) != BC_TYPE_INT &&
+	   bc_GENERIC2TYPE(gt) != BC_TYPE_DOUBLE) {
 		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }

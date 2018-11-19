@@ -21,13 +21,13 @@ bc_Constructor * bc_NewConstructor() {
 	return ret;
 }
 
-Object * bc_NewInstanceConstructor(bc_Constructor * self, Vector * args, Frame* parent) {
+bc_Object * bc_NewInstanceConstructor(bc_Constructor * self, Vector * args, Frame* parent) {
 	Frame* sub = SubFrame(parent);
 	for (int i = 0; i < args->Length; i++) {
 		PushVector(sub->ValueStack, AtVector(args, i));
 	}
 	ExecuteVM(sub, self->Env);
-	Object* ret = PopVector(sub->ValueStack);
+	bc_Object* ret = PopVector(sub->ValueStack);
 	DeleteFrame(sub);
 	return ret;
 }
@@ -40,6 +40,6 @@ void bc_DeleteConstructor(bc_Constructor * self) {
 
 //private
 static void delete_parameter(VectorItem item) {
-	Parameter* e = (Parameter*)item;
-	DeleteParameter(e);
+	bc_Parameter* e = (bc_Parameter*)item;
+	bc_DeleteParameter(e);
 }

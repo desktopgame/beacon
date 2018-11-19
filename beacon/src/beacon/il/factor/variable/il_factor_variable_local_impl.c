@@ -17,7 +17,7 @@ static void DeleteILVariableLocal_typeargs(VectorItem item);
 static void LoadILVariableLocalImpl(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
-static void set_gtype(ILVariableLocal * self, GenericType* gt);
+static void set_gtype(ILVariableLocal * self, bc_GenericType* gt);
 
 ILVariableLocal* NewILVariableLocal(StringView namev) {
 	ILVariableLocal* ret = (ILVariableLocal*)MEM_MALLOC(sizeof(ILVariableLocal));
@@ -43,13 +43,13 @@ void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext
 		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_LOAD);
 		AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Entry->Index);
 	} else if(self->Type == VARIABLE_LOCAL_FIELD_T) {
-		Field* f = self->Kind.FieldI.Field;
+		bc_Field* f = self->Kind.FieldI.Field;
 		if(!bc_IsStaticModifier(f->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		GenerateGetField(env->Bytecode, f, self->Kind.FieldI.Index);
 	} else if(self->Type == VARIABLE_LOCAL_PROPERTY_T) {
-		Property* p = self->Kind.PropertyI.Property;
+		bc_Property* p = self->Kind.PropertyI.Property;
 		if(!bc_IsStaticModifier(p->Modifier)) {
 			AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
@@ -64,7 +64,7 @@ void LoadILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* 
 	LoadILVariableLocalImpl(self, env, cctx);
 }
 
-GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->Type != VARIABLE_LOCAL_UNDEFINED_T);
 	return self->GType;
@@ -107,7 +107,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 	self->Type = VARIABLE_LOCAL_FIELD_T;
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
-	Type* tp = GetTypeCContext(cctx);
+	bc_Type* tp = GetTypeCContext(cctx);
 	if(tp->Tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
 		bc_Panic(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->Name));
 		return;
@@ -118,12 +118,12 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 #else
 	FieldWithIndex fwi = {};
 #endif
-	Field* f = FindTreeFieldClass(TYPE2CLASS(tp), self->Name, &temp);
+	bc_Field* f = FindTreeFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	fwi.Field = f;
 	fwi.Index = temp;
 	self->Type = VARIABLE_LOCAL_FIELD_T;
 	if(temp == -1) {
-		f = FindTreeSFieldClass(TYPE2CLASS(tp), self->Name, &temp);
+		f = FindTreeSFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 		fwi.Field = f;
 		fwi.Index = temp;
 		self->Type = VARIABLE_LOCAL_FIELD_T;
@@ -142,13 +142,13 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, Enviroment * env, 
 
 static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * env, CallContext* cctx) {
 	int temp = -1;
-	Type* tp = GetTypeCContext(cctx);
-	Property* p = FindTreePropertyClass(TYPE2CLASS(tp), self->Name, &temp);
+	bc_Type* tp = GetTypeCContext(cctx);
+	bc_Property* p = FindTreePropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	if(temp == -1) {
-		p = FindTreeSPropertyClass(TYPE2CLASS(tp), self->Name, &temp);
+		p = FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	}
 	if(temp == -1) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(self->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(tp)), Ref2Str(self->Name));
 		return;
 	}
 #if defined(_MSC_VER)
@@ -161,23 +161,23 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, Enviroment * en
 	self->Type = VARIABLE_LOCAL_PROPERTY_T;
 	self->Kind.PropertyI = pwi;
 	//プロパティにアクセスできない
-	if(!IsAccessiblePropertyClass(TYPE2CLASS(tp), p)) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(GetTypeName(tp)), Ref2Str(p->Name));
+	if(!IsAccessiblePropertyClass(BC_TYPE2CLASS(tp), p)) {
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(tp)), Ref2Str(p->Name));
 	}
 	set_gtype(self, p->GType);
 }
 
-static void set_gtype(ILVariableLocal * self, GenericType* gt) {
+static void set_gtype(ILVariableLocal * self, bc_GenericType* gt) {
 	//GenericType* gt = f->GTypeype;
 	//virtual_type vt = f->vtype;
 	if(gt->Tag == GENERIC_TYPE_TAG_NONE_T) {
 		self->GType = gt;
 	} else if(gt->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-		self->GType = NewGenericType(NULL);
+		self->GType = bc_NewGenericType(NULL);
 		self->GType->Tag = GENERIC_TYPE_TAG_CLASS_T;
 		self->GType->VirtualTypeIndex = gt->VirtualTypeIndex;
 	} else if(gt->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-		self->GType = NewGenericType(NULL);
+		self->GType = bc_NewGenericType(NULL);
 		self->GType->Tag = GENERIC_TYPE_TAG_METHOD_T;
 		self->GType->VirtualTypeIndex = gt->VirtualTypeIndex;
 	}

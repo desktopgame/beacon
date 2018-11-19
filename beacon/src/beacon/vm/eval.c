@@ -88,7 +88,7 @@ bool bc_EvalString(const char* source) {
 
 //private
 static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
-	ScriptContext* ctx = GetCurrentScriptContext();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	if(aOpt == NULL) {
 		bc_LoadClassLoader(cll);
 	} else {
@@ -96,9 +96,9 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
 	}
 	//実行
 	Frame* fr = NewFrame();
-	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
+	SetSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()), fr);
 	//エラーによって中断された場合のため、ここで戻す
-	Heap* he = GetHeap();
+	bc_Heap* he = bc_GetHeap();
 	he->AcceptBlocking = 0;
 #if defined(DEBUG)
 	bc_Printfln("start");
@@ -110,9 +110,9 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
 		bc_Panic(BCERROR_GENERIC_T, "unexpected terminate");
 	}
 	CatchVM(fr);
-	CollectHeap(GetHeap());
+	bc_CollectHeap(bc_GetHeap());
 	DeleteFrame(fr);
-	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
+	ReleaseSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()));
 
 	bool ret = bc_GetLastPanic();
 	bc_DeleteClassLoader(cll);

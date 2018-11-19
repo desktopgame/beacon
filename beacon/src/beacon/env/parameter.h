@@ -16,23 +16,23 @@
 /**
  * メソッドの仮引数を表す構造体です.
  */
-typedef struct Parameter {
+typedef struct bc_Parameter {
 	StringView Name;
-	struct GenericType* GType;
-} Parameter;
+	struct bc_GenericType* GType;
+} bc_Parameter;
 
 /**
  * 新しいパラメータを作成します.
  * @param namev
  * @return
  */
-Parameter* NewParameter(StringView namev);
+bc_Parameter* bc_NewParameter(StringView namev);
 
 /**
  * パラメータを開放します.
  * @param self
  */
-void DeleteParameter(Parameter* self);
+void bc_DeleteParameter(bc_Parameter* self);
 
 /**
  * 重複するパラメータ名が存在するなら true.
@@ -40,5 +40,5 @@ void DeleteParameter(Parameter* self);
  * @param outName
  * @return
  */
-bool IsOverwrappedParameterName(Vector* parameters, StringView* outName);
+bool bc_IsOverwrappedParameterName(Vector* parameters, StringView* outName);
 #endif // !SIGNAL_ENV_PARAMETER_H

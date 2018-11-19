@@ -8,7 +8,7 @@
 
 //proto
 static void remove_from_parent(Frame* self);
-static void mark_static(Field* item);
+static void mark_static(bc_Field* item);
 static void mark_recursive(Frame* self);
 static void frame_mark_defer(Frame* self);
 static void delete_defctx(VectorItem e);
@@ -29,7 +29,7 @@ Frame* NewFrame() {
 	ret->TypeArgs = NewVector();
 	ret->Receiver = NULL;
 	ret->Coroutine = NULL;
-	ret->ObjectSize = sizeof(Object);
+	ret->ObjectSize = sizeof(bc_Object);
 	return ret;
 }
 
@@ -44,8 +44,8 @@ Frame* SubFrame(Frame* parent) {
 
 void MarkAllFrame(Frame* self) {
 	//全ての静的フィールドをマークする
-	ScriptContext* ctx = GetCurrentScriptContext();
-	EachStaticScriptContext(ctx, mark_static);
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+	bc_EachStaticScriptContext(ctx, mark_static);
 	//全ての子要素を巡回してマーキング
 	mark_recursive(self);
 }
@@ -54,7 +54,7 @@ void DeleteFrame(Frame* self) {
 	remove_from_parent(self);
 	ClearVector(self->ValueStack);
 	ClearVector(self->VariableTable);
-	CollectHeap(GetHeap());
+	bc_CollectHeap(bc_GetHeap());
 	DeleteVector(self->ValueStack, VectorDeleterOfNull);
 	DeleteVector(self->VariableTable, VectorDeleterOfNull);
 	DeleteVector(self->Children, VectorDeleterOfNull);
@@ -75,12 +75,12 @@ static void remove_from_parent(Frame* self) {
 	}
 }
 
-static void mark_static(Field* item) {
+static void mark_static(bc_Field* item) {
 	//フィールドがintなどならここでマークしない
 	//静的定数フィールドに初期値が割り当てられていない場合
 	if(item->StaticValue != NULL &&
 	   item->StaticValue->Paint != PAINT_ONEXIT_T) {
-		MarkAllObject(item->StaticValue);
+		bc_MarkAllObject(item->StaticValue);
 	}
 }
 
@@ -90,17 +90,17 @@ static void mark_recursive(Frame* self) {
 		mark_recursive(e);
 	}
 	for (int i = 0; i < self->ValueStack->Length; i++) {
-		Object* e = (Object*)AtVector(self->ValueStack, i);
-		MarkAllObject(e);
+		bc_Object* e = (bc_Object*)AtVector(self->ValueStack, i);
+		bc_MarkAllObject(e);
 	}
 	for (int i = 0; i < self->VariableTable->Length; i++) {
-		Object* e = (Object*)AtVector(self->VariableTable, i);
-		MarkAllObject(e);
+		bc_Object* e = (bc_Object*)AtVector(self->VariableTable, i);
+		bc_MarkAllObject(e);
 	}
 	//deferのために一時的に保存された領域
 	frame_mark_defer(self);
 	//例外をマークする
-	MarkAllObject(self->Exception);
+	bc_MarkAllObject(self->Exception);
 }
 
 static void frame_mark_defer(Frame* self) {
@@ -111,8 +111,8 @@ static void frame_mark_defer(Frame* self) {
 		DeferContext* defctx = AtVector(self->DeferList, i);
 		Vector* bind = defctx->VariableTable;
 		for(int j=0; j<bind->Length; j++) {
-			Object* e = AtVector(bind, j);
-			MarkAllObject(e);
+			bc_Object* e = AtVector(bind, j);
+			bc_MarkAllObject(e);
 		}
 	}
 }

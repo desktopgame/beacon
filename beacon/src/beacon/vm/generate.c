@@ -3,7 +3,7 @@
 #include "../env/type_interface.h"
 #include "../env/TYPE_IMPL.h"
 
-void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
+void GenerateGetField(OpcodeBuf* buf, bc_Field* fi, int index) {
 	if(bc_IsStaticModifier(fi->Modifier)) {
 		AddOpcodeBuf(buf, OP_GET_STATIC);
 		AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
@@ -14,7 +14,7 @@ void GenerateGetField(OpcodeBuf* buf, Field* fi, int index) {
 	}
 }
 
-void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
+void GenerateGetProperty(OpcodeBuf* buf, bc_Property* prop, int index) {
 	if(prop->IsShort) {
 		GenerateGetField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->Kind.Class, prop));
 	} else {
@@ -29,7 +29,7 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index) {
 	}
 }
 
-void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
+void GeneratePutField(OpcodeBuf* buf, bc_Field* fi, int index) {
 	if(bc_IsStaticModifier(fi->Modifier)) {
 		AddOpcodeBuf(buf, OP_PUT_STATIC);
 		AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
@@ -40,7 +40,7 @@ void GeneratePutField(OpcodeBuf* buf, Field* fi, int index) {
 	}
 }
 
-void GeneratePutProperty(OpcodeBuf* buf, Property* prop, int index) {
+void GeneratePutProperty(OpcodeBuf* buf, bc_Property* prop, int index) {
 	if(prop->IsShort) {
 		GeneratePutField(buf, prop->SourceRef, GetFieldByPropertyClass(prop->Parent->Kind.Class, prop));
 	} else {

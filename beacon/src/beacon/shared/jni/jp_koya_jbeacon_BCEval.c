@@ -94,10 +94,10 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 }
 
 static Frame* bc_eval_allocate(bc_ClassLoader* cll) {
-	ScriptContext* ctx = GetCurrentScriptContext();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	Frame* fr = NewFrame();
-	SetSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()), fr);
-	Heap* he = GetHeap();
+	SetSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()), fr);
+	bc_Heap* he = bc_GetHeap();
 	he->AcceptBlocking = 0;
 	if(!bc_GetLastPanic()) {
 		ExecuteVM(fr, cll->Env);
@@ -193,7 +193,7 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	NumericMapItem val = nmap->Item;
 	const char* name = Ref2Str(key);
 	SymbolEntry* se = (SymbolEntry*)val;
-	Object* bcobj = AtVector(fr->VariableTable, se->Index);
+	bc_Object* bcobj = AtVector(fr->VariableTable, se->Index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
@@ -213,39 +213,39 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	}
 	//beaconのオブジェクトをjavaのオブジェクトへ
 	jstring keyj= (*env)->NewStringUTF(env, name);
-	if(GENERIC2TYPE(bcobj->GType) == TYPE_INT) {
+	if(bc_GENERIC2TYPE(bcobj->GType) == BC_TYPE_INT) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putInteger", "(Ljava/lang/String;I)V");
 		if(symbol_table_put_id == NULL) {
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jint)ObjectToInt(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_DOUBLE) {
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jint)bc_ObjectToInt(bcobj)));
+	} else if(bc_GENERIC2TYPE(bcobj->GType) == BC_TYPE_DOUBLE) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putDouble", "(Ljava/lang/String;D)V");
 		if(symbol_table_put_id == NULL) {
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)ObjectToDouble(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_CHAR) {
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jdouble)bc_ObjectToDouble(bcobj)));
+	} else if(bc_GENERIC2TYPE(bcobj->GType) == BC_TYPE_CHAR) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putCharacter", "(Ljava/lang/String;C)V");
 		if(symbol_table_put_id == NULL) {
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jchar)ObjectToChar(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_BOOL) {
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jchar)bc_ObjectToChar(bcobj)));
+	} else if(bc_GENERIC2TYPE(bcobj->GType) == BC_TYPE_BOOL) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putBoolean", "(Ljava/lang/String;Z)V");
 		if(symbol_table_put_id == NULL) {
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jboolean)ObjectToBool(bcobj)));
-	} else if(GENERIC2TYPE(bcobj->GType) == TYPE_STRING) {
+		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, ((jboolean)bc_ObjectToBool(bcobj)));
+	} else if(bc_GENERIC2TYPE(bcobj->GType) == BC_TYPE_STRING) {
 		//#putを検索する
 		jmethodID symbol_table_put_id = (*env)->GetMethodID(env, symbol_table_cls, "putString", "(Ljava/lang/String;Ljava/lang/String;)V");
 		if(symbol_table_put_id == NULL) {
@@ -285,9 +285,9 @@ static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, Frame* fr) {
 		MEM_FREE(mes);
 	}
 	CatchVM(fr);
-	CollectHeap(GetHeap());
+	bc_CollectHeap(bc_GetHeap());
 	DeleteFrame(fr);
-	ReleaseSGThreadFrameRef(GetCurrentSGThread(GetCurrentScriptContext()));
+	ReleaseSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()));
 
 	bc_GetLastPanic();
 	bc_DeleteClassLoader(cll);

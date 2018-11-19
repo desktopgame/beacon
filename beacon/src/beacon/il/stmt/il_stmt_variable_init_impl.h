@@ -20,7 +20,7 @@ struct SymbolEntry;
  * 変数の初期化を表す要素.
  */
 typedef struct ILVariableInit {
-	GenericCache* GCache;
+	bc_GenericCache* GCache;
 	StringView Name;
 	ILFactor* Value;
 	struct SymbolEntry* Symbol;

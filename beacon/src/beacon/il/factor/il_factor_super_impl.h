@@ -13,14 +13,14 @@
 #include "../../env/generic_type.h"
 #include "../call_context.h"
 struct Enviroment;
-struct Type;
+struct bc_Type;
 
 /**
  * superを表す要素.
  */
 
 typedef struct ILSuper {
-	GenericType* Resolved;
+	bc_GenericType* Resolved;
 } ILSuper;
 
 ILSuper* NewILSuper();
@@ -29,7 +29,7 @@ void GenerateILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
 
 void LoadILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
 
 char* ILSuperToString(ILSuper* self, struct Enviroment* env);
 

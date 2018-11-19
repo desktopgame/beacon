@@ -32,18 +32,18 @@ void LoadILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
 	}
 	LoadILFactor(self->Receiver, env, cctx);
 	LoadILFactor(self->Position, env, cctx);
-	GenericType* receiver_gtype = EvalILFactor(self->Receiver, env, cctx);
-	GenericType* arg_gtype = EvalILFactor(self->Position, env, cctx);
+	bc_GenericType* receiver_gtype = EvalILFactor(self->Receiver, env, cctx);
+	bc_GenericType* arg_gtype = EvalILFactor(self->Position, env, cctx);
 	Vector* args = NewVector();
 	PushVector(args, arg_gtype);
 	int temp = -1;
-	self->Operator = GFindOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
+	self->Operator = GFindOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
 	self->OperatorIndex = temp;
 	DeleteVector(args, VectorDeleterOfNull);
 }
 
-GenericType* EvalILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
-	return ApplyGenericType(self->Operator->ReturnGType, cctx);
+bc_GenericType* EvalILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx) {
+	return bc_ApplyGenericType(self->Operator->ReturnGType, cctx);
 }
 
 char* ILSubscriptToString(ILSubscript* self, Enviroment* env) {

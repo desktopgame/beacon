@@ -11,28 +11,28 @@
 #include <string.h>
 #include <assert.h>
 //proto
-static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env);
+static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
 
 void InitException() {
-	Namespace* lang = GetLangNamespace();
-	Type* exceptionType = NewPreloadClass(InternString("Exception"));
-	Class* exceptionClass = TYPE2CLASS(exceptionType);
-	AddTypeNamespace(lang, exceptionType);
+	bc_Namespace* lang = bc_GetLangNamespace();
+	bc_Type* exceptionType = NewPreloadClass(InternString("Exception"));
+	Class* exceptionClass = BC_TYPE2CLASS(exceptionType);
+	bc_AddTypeNamespace(lang, exceptionType);
 	DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
-Type* GetExceptionType() {
-	Namespace* lang = GetLangNamespace();
-	return FindTypeFromNamespace(lang, InternString("Exception"));
+bc_Type* GetExceptionType() {
+	bc_Namespace* lang = bc_GetLangNamespace();
+	return bc_FindTypeFromNamespace(lang, InternString("Exception"));
 }
 //private
-static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	Namespace* lang = GetLangNamespace();
-	Class* stackTraceElementClass = FindClassFromNamespace(lang, InternString("StackTraceElement"));
-	Class* exceptionClass = FindClassFromNamespace(lang, InternString("Exception"));
-	Object* self= (Object*)AtVector(fr->VariableTable, 0);
+static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Namespace* lang = bc_GetLangNamespace();
+	Class* stackTraceElementClass = bc_FindClassFromNamespace(lang, InternString("StackTraceElement"));
+	Class* exceptionClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
+	bc_Object* self= (bc_Object*)AtVector(fr->VariableTable, 0);
 	//FXIME:???
-	Heap* h = GetHeap();
+	bc_Heap* h = bc_GetHeap();
 	h->CollectBlocking++;
 	//スタックトレースを作成する
 	Frame* temp = fr;
@@ -56,7 +56,7 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		Vector* args = NewVector();
 		PushVector(args, NewString(temp->ContextRef->ContextRef->FileName));
 		PushVector(args, NewInteger(lineno));
-		Object* trace = NewInstanceClass(
+		bc_Object* trace = NewInstanceClass(
 			stackTraceElementClass,
 			//ilctx,
 			fr,
@@ -73,13 +73,13 @@ static void bc_exception_nativeInit(Method* parent, Frame* fr, Enviroment* env) 
 		}
 	} while (temp != NULL);
 	//配列へ
-	Object* arr = DynamicNewArray(stackTraceElementClass->Parent->GenericSelf, stackTraceElementVec->Length, fr);
+	bc_Object* arr = DynamicNewArray(stackTraceElementClass->Parent->GenericSelf, stackTraceElementVec->Length, fr);
 	for (int i = 0; i < stackTraceElementVec->Length; i++) {
 		SetElementAt(arr, i, AtVector(stackTraceElementVec, i));
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;
-	Field* stackTraceF = FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
+	bc_Field* stackTraceF = FindFieldClass(exceptionClass, InternString("stackTrace"), &tempi);
 	AssignVector(self->Fields, tempi, arr);
 	DeleteVector(stackTraceElementVec, VectorDeleterOfNull);
 	h->CollectBlocking--;

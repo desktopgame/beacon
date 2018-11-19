@@ -12,7 +12,7 @@
 #define BEACON_ENV_EXCEPTION_H
 #include <stdarg.h>
 
-struct Object;
+struct bc_Object;
 struct Frame;
 
 /**
@@ -21,7 +21,7 @@ struct Frame;
  * @param message
  * @return
  */
-struct Object* NewSimpleException(struct Frame* fr, const char* message);
+struct bc_Object* bc_NewSimpleException(struct Frame* fr, const char* message);
 /**
  * signal::lang::Exception 型の例外を作成します.
  * フォーマット付きです.
@@ -30,5 +30,5 @@ struct Object* NewSimpleException(struct Frame* fr, const char* message);
  * @param ...
  * @return
  */
-struct Object* NewSimplefException(struct Frame* fr, const char* message, ...);
+struct bc_Object* bc_NewSimplefException(struct Frame* fr, const char* message, ...);
 #endif // !SIGNAL_ENV_EXCEPTION_H

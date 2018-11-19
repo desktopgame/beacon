@@ -10,13 +10,13 @@
 #ifndef BEACON_IL_IL_FACTOR_INSTANCEOF_IMPL_H
 #define BEACON_IL_IL_FACTOR_INSTANCEOF_IMPL_H
 #include "../il_factor_interface.h"
-struct GenericCache;
-struct GenericType;
-struct FQCNCache;
+struct bc_GenericCache;
+struct bc_GenericType;
+struct bc_FQCNCache;
 
 typedef struct ILInstanceOf {
 	ILFactor* Source;
-	struct GenericCache* GCache;
+	struct bc_GenericCache* GCache;
 } ILInstanceOf;
 
 ILFactor* WrapILInstanceOf(ILInstanceOf* self);
@@ -27,7 +27,7 @@ void LoadILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
 
 void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
 
 char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env);
 

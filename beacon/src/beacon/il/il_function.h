@@ -13,7 +13,7 @@
 #include "../util/vector.h"
 #include "../util/string_pool.h"
 
-struct GenericCache;
+struct bc_GenericCache;
 /**
  * 関数宣言を表す要素.
  */
@@ -22,7 +22,7 @@ typedef struct ILFunction {
 	Vector* TypeParameters;
 	Vector* Parameters;
 	Vector* Statements;
-	struct GenericCache* ReturnGCache;
+	struct bc_GenericCache* ReturnGCache;
 } ILFunction;
 
 /**

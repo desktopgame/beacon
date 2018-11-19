@@ -4,7 +4,7 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
-static GenericType* gSelf = NULL;
+static bc_GenericType* gSelf = NULL;
 
 void GenerateILNull(void * empty, Enviroment * env, CallContext* cctx) {
 	AddOpcodeBuf(env->Bytecode, OP_NULL);
@@ -13,9 +13,9 @@ void GenerateILNull(void * empty, Enviroment * env, CallContext* cctx) {
 void LoadILNull(void * empty, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILNull(void * empty, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILNull(void * empty, Enviroment * env, CallContext* cctx) {
 	if(gSelf == NULL) {
-		gSelf =  NewGenericType(TYPE_NULL);
+		gSelf =  bc_NewGenericType(BC_TYPE_NULL);
 	}
 	return gSelf;
 }

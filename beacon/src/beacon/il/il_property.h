@@ -13,10 +13,10 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 #include "il_property_body.h"
-struct GenericCache;
+struct bc_GenericCache;
 
 typedef struct ILProperty {
-	struct GenericCache* GCache;
+	struct bc_GenericCache* GCache;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	StringView Name;

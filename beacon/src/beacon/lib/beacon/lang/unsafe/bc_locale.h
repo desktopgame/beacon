@@ -10,7 +10,7 @@
 #ifndef BEACON_LIB_LANG_UNSAFE_BC_LOCALE_H
 #define BEACON_LIB_LANG_UNSAFE_BC_LOCALE_H
 
-struct Type;
+struct bc_Type;
 
 /**
  * beacon::unsafe::Localeクラスを初期化します。
@@ -21,5 +21,5 @@ void InitLocaleType();
  * beacon::unsafe::Localeクラスを返します。
  * @return
  */
-struct Type* GetLocaleType();
+struct bc_Type* GetLocaleType();
 #endif

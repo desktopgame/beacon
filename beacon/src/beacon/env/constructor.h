@@ -12,16 +12,16 @@
 #define BEACON_ENV_CONSTRUCTOR_H
 #include "../ast/access_level.h"
 #include "../util/vector.h"
-struct Type;
+struct bc_Type;
 struct Class;
 struct Enviroment;
-struct Object;
+struct bc_Object;
 struct Frame;
 /**
  * コンストラクタを表す構造体.
  */
 typedef struct bc_Constructor {
-	struct Type* Parent;
+	struct bc_Type* Parent;
 	struct Enviroment* Env;
 	Vector* Parameters;
 	bc_AccessLevel Access;
@@ -40,7 +40,7 @@ bc_Constructor* bc_NewConstructor();
  * @param parent
  * @return
  */
-struct Object* bc_NewInstanceConstructor(bc_Constructor* self, Vector* args, struct Frame* parent);
+struct bc_Object* bc_NewInstanceConstructor(bc_Constructor* self, Vector* args, struct Frame* parent);
 
 /**
  * コンストラクタを開放します.

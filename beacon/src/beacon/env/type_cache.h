@@ -19,7 +19,7 @@ struct bc_ClassLoader;
 /**
  * 何を読み込むためのキャッシュかを表す列挙型.
  */
-typedef enum TypeCacheKind {
+typedef enum bc_TypeCacheKind {
 	CACHEKIND_CLASS_DECL_T,
 	CACHEKIND_CLASS_IMPL_T,
 
@@ -28,7 +28,7 @@ typedef enum TypeCacheKind {
 
 	CACHEKIND_ENUM_DECL_T,
 	CACHEKIND_ENUM_IMPL_T,
-} TypeCacheKind;
+} bc_TypeCacheKind;
 
 /**
  * クラスロード時に使用される一時的なキャッシュです.
@@ -41,25 +41,25 @@ typedef enum TypeCacheKind {
  * その実装情報をロードします。
  * つまり宣言ロード時に予約された実装の読み込みが必要な情報を表すキャッシュです。
  */
-typedef struct TypeCache {
+typedef struct bc_TypeCache {
 	struct bc_ClassLoader* Context;
 	ILType* ILType;
-	Type* Type;
-	Namespace* Scope;
-	TypeCacheKind Kind;
+	bc_Type* Type;
+	bc_Namespace* Scope;
+	bc_TypeCacheKind Kind;
 	bool IsConsume;
-} TypeCache;
+} bc_TypeCache;
 
-TypeCache* NewTypeCache();
+bc_TypeCache* bc_NewTypeCache();
 
-TypeCache * InitTypeCache(
-	TypeCache* self,
+bc_TypeCache * bc_InitTypeCache(
+	bc_TypeCache* self,
 	struct bc_ClassLoader* context,
 	ILType* iltype,
-	Type* tp,
-	Namespace* scope,
-	TypeCacheKind kind
+	bc_Type* tp,
+	bc_Namespace* scope,
+	bc_TypeCacheKind kind
 	);
 
-void DeleteTypeCache(TypeCache* self);
+void bc_DeleteTypeCache(bc_TypeCache* self);
 #endif // !SIGNAL_ENV_TYPE_CACHE_H

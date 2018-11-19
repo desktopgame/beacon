@@ -12,7 +12,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../../il/call_context.h"
 struct ILUnaryOp;
-struct GenericType;
+struct bc_GenericType;
 struct Enviroment;
 
 typedef struct ILNotOp {
@@ -23,7 +23,7 @@ typedef struct ILNotOp {
 
 ILNotOp* NewILNotOp(bc_OperatorType type);
 
-struct GenericType* EvalILNotOp(ILNotOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILNotOp(ILNotOp * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILNotOp(ILNotOp* self, struct Enviroment* env, CallContext* cctx);
 

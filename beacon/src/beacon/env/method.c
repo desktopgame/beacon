@@ -29,14 +29,14 @@
 static void delete_parameter(VectorItem item);
 static void delete_type_parameter(VectorItem item);
 static void method_count(ILStatement* s, int* yeild_ret, int* ret);
-static bc_Constructor* create_delegate_ctor(Method* self, Type* ty, bc_ClassLoader* cll,int op_len);
-static Method* create_has_next(Method* self, Type* ty,bc_ClassLoader* cll, Vector* stmt_list, int* out_op_len);
-static Method* create_next(Method* self, Type* ty,bc_ClassLoader* cll, GenericType* a, Vector* stmt_list, int* out_op_len);
-static Vector* method_vm_args(Method* self, Frame* fr, Frame* a);
-static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a);
+static bc_Constructor* create_delegate_ctor(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,int op_len);
+static bc_Method* create_has_next(bc_Method* self, bc_Type* ty,bc_ClassLoader* cll, Vector* stmt_list, int* out_op_len);
+static bc_Method* create_next(bc_Method* self, bc_Type* ty,bc_ClassLoader* cll, bc_GenericType* a, Vector* stmt_list, int* out_op_len);
+static Vector* method_vm_args(bc_Method* self, Frame* fr, Frame* a);
+static Vector* method_vm_typeargs(bc_Method* self, Frame* fr, Frame* a);
 
-Method* MallocMethod(StringView name, const char* filename, int lineno) {
-	Method* ret = (Method*)bc_MXMalloc(sizeof(Method), filename, lineno);
+bc_Method* bc_MallocMethod(StringView name, const char* filename, int lineno) {
+	bc_Method* ret = (bc_Method*)bc_MXMalloc(sizeof(bc_Method), filename, lineno);
 	ret->Name = name;
 	ret->Parameters = MallocVector(filename, lineno);
 	ret->Type = METHOD_TYPE_SCRIPT_T;
@@ -48,7 +48,7 @@ Method* MallocMethod(StringView name, const char* filename, int lineno) {
 	return ret;
 }
 
-void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
+void bc_ExecuteMethod(bc_Method* self, Frame* fr, Enviroment* env) {
 	#if defined(DEBUG)
 	const char* namestr = Ref2Str(self->Name);
 	if(self->Name == InternString("writeLine")) {
@@ -56,7 +56,7 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 	}
 	#endif
 	if (self->Type == METHOD_TYPE_SCRIPT_T) {
-		ExecuteScriptMethod(self->Kind.Script, self, fr, env);
+		bc_ExecuteScriptMethod(self->Kind.Script, self, fr, env);
 	} else if (self->Type == METHOD_TYPE_NATIVE_T) {
 		Frame* a = SubFrame(fr);
 		CallFrame* cfr = NULL;
@@ -64,7 +64,7 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 		Vector* aTArgs = NULL;
 		//レシーバも
 		if(!bc_IsStaticModifier(self->Modifier)) {
-			Object* receiver_obj = PopVector(fr->ValueStack);
+			bc_Object* receiver_obj = PopVector(fr->ValueStack);
 			AssignVector(a->VariableTable, 0, receiver_obj);
 			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
@@ -75,10 +75,10 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 			aArgs = cfr->Kind.StaticInvoke.Args = method_vm_args(self, fr, a);
 			aTArgs = cfr->Kind.StaticInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		}
-		ExecuteNativeMethod(self->Kind.Native, self, a, env);
+		bc_ExecuteNativeMethod(self->Kind.Native, self, a, env);
 		//戻り値を残す
 		//例外によって終了した場合には戻り値がない
-		if(self->ReturnGType != TYPE_VOID->GenericSelf &&
+		if(self->ReturnGType != BC_TYPE_VOID->GenericSelf &&
 	  		 a->ValueStack->Length > 0) {
 			PushVector(fr->ValueStack, PopVector(a->ValueStack));
 		}
@@ -89,48 +89,48 @@ void ExecuteMethod(Method* self, Frame* fr, Enviroment* env) {
 	}
 }
 
-bool IsOverridedMethod(Method* superM, Method* subM, CallContext* cctx) {
+bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, CallContext* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->Name != subM->Name ||
 		superM->Parameters->Length != subM->Parameters->Length) {
 		return false;
 	}
-	GenericType* bl = BaselineType(superM->Parent, subM->Parent);
+	bc_GenericType* bl = bc_BaselineType(superM->Parent, subM->Parent);
 	assert(bl != NULL);
 	//全ての引数を比較
 	for (int i = 0; i < superM->Parameters->Length; i++) {
-		Parameter* superP = ((Parameter*)AtVector(superM->Parameters, i));
-		Parameter* subP = ((Parameter*)AtVector(subM->Parameters, i));
-		GenericType* superGT = superP->GType;
-		GenericType* subGT = subP->GType;
+		bc_Parameter* superP = ((bc_Parameter*)AtVector(superM->Parameters, i));
+		bc_Parameter* subP = ((bc_Parameter*)AtVector(subM->Parameters, i));
+		bc_GenericType* superGT = superP->GType;
+		bc_GenericType* subGT = subP->GType;
 
 		CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 		cfr->Kind.Resolve.GType = bl;
-		GenericType* superGT2 = ApplyGenericType(superGT, cctx);
+		bc_GenericType* superGT2 = bc_ApplyGenericType(superGT, cctx);
 		PopCallContext(cctx);
 //		assert(!GenericType_equals(superGT, superGT2));
 
 //		GenericType_diff(superGT, superGT2);
-		if(DistanceGenericType(superGT2, subGT, cctx) != 0) {
+		if(bc_DistanceGenericType(superGT2, subGT, cctx) != 0) {
 			return false;
 		}
 	}
-	GenericType* superRet = superM->ReturnGType;
-	GenericType* subRet = subM->ReturnGType;
+	bc_GenericType* superRet = superM->ReturnGType;
+	bc_GenericType* subRet = subM->ReturnGType;
 	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = bl;
-	GenericType* superRet2 = ApplyGenericType(superRet, cctx);
+	bc_GenericType* superRet2 = bc_ApplyGenericType(superRet, cctx);
 //	GenericType_diff(superRet, superRet2);
 //	assert(!GenericType_equals(superRet, superRet2));
-	int ret =DistanceGenericType(superRet2, subRet, cctx);
+	int ret =bc_DistanceGenericType(superRet2, subRet, cctx);
 	PopCallContext(cctx);
 	return ret != -1;
 }
 
-int GetGenericIndexForMethod(Method * self, StringView namev) {
+int bc_GetGenericIndexForMethod(bc_Method * self, StringView namev) {
 	int ret = -1;
 	for (int i = 0; i < self->TypeParameters->Length; i++) {
-		TypeParameter* e = (TypeParameter*)AtVector(self->TypeParameters, i);
+		bc_TypeParameter* e = (bc_TypeParameter*)AtVector(self->TypeParameters, i);
 		if (e->Name == namev) {
 			ret = i;
 			break;
@@ -139,18 +139,18 @@ int GetGenericIndexForMethod(Method * self, StringView namev) {
 	return ret;
 }
 
-void DeleteMethod(Method * self) {
+void bc_DeleteMethod(bc_Method * self) {
 	DeleteVector(self->TypeParameters, delete_type_parameter);
 	DeleteVector(self->Parameters, delete_parameter);
 	if (self->Type == METHOD_TYPE_SCRIPT_T) {
-		DeleteScriptMethod(self->Kind.Script);
+		bc_DeleteScriptMethod(self->Kind.Script);
 	} else if (self->Type == METHOD_TYPE_NATIVE_T) {
-		DeleteNativeMethod(self->Kind.Native);
+		bc_DeleteNativeMethod(self->Kind.Native);
 	}
 	MEM_FREE(self);
 }
 
-StringView MangleMethod(Method* self) {
+StringView bc_MangleMethod(bc_Method* self) {
 	Buffer* ret = NewBuffer();
 	AppendsBuffer(ret, Ref2Str(self->Name));
 	//引数が一つもないので終了
@@ -161,8 +161,8 @@ StringView MangleMethod(Method* self) {
 		return sv;
 	}
 	for(int i=0; i<self->Parameters->Length; i++) {
-		Parameter* e = (Parameter*)AtVector(self->Parameters, i);
-		GenericType* gt = e->GType;
+		bc_Parameter* e = (bc_Parameter*)AtVector(self->Parameters, i);
+		bc_GenericType* gt = e->GType;
 		AppendBuffer(ret, '_');
 		if(gt->CoreType == NULL) {
 			//ジェネリックの場合は methodname_c0 のように
@@ -180,7 +180,7 @@ StringView MangleMethod(Method* self) {
 			sprintf(buff, "%d", gt->VirtualTypeIndex);
 			AppendsBuffer(ret, buff);
 		} else {
-			AppendsBuffer(ret, Ref2Str(GetTypeFullName(gt->CoreType)));
+			AppendsBuffer(ret, Ref2Str(bc_GetTypeFullName(gt->CoreType)));
 		}
 	}
 	char* raw = ReleaseBuffer(ret);
@@ -189,24 +189,24 @@ StringView MangleMethod(Method* self) {
 	return sv;
 }
 
-StringView GetMethodUniqueName(Method* self) {
+StringView bc_GetMethodUniqueName(bc_Method* self) {
 	Buffer* ret = NewBuffer();
-	AppendsBuffer(ret, Ref2Str(GetTypeFullName(self->Parent)));
-	AppendsBuffer(ret, Ref2Str(MangleMethod(self)));
+	AppendsBuffer(ret, Ref2Str(bc_GetTypeFullName(self->Parent)));
+	AppendsBuffer(ret, Ref2Str(bc_MangleMethod(self)));
 	char* raw = ReleaseBuffer(ret);
 	StringView sv = InternString(raw);
 	MEM_FREE(raw);
 	return sv;
 }
 
-bool IsCoroutineMethod(Method* self) {
-	Type* iteratorT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
+bool bc_IsCoroutineMethod(bc_Method* self) {
+	bc_Type* iteratorT = bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Iterator"));
 	return (iteratorT && self->ReturnGType->CoreType == iteratorT);
 }
 
-bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error) {
+bool bc_IsYieldMethod(bc_Method* self, Vector* stmt_list, bool* error) {
 	(*error) = false;
-	if(self->Type != METHOD_TYPE_SCRIPT_T || !IsCoroutineMethod(self)) {
+	if(self->Type != METHOD_TYPE_SCRIPT_T || !bc_IsCoroutineMethod(self)) {
 		return false;
 	}
 	int yield_ret = 0;
@@ -227,18 +227,18 @@ bool IsYieldMethod(Method* self, Vector* stmt_list, bool* error) {
 	return yield_ret > 0 ? true : false;
 }
 
-Type* CreateIteratorTypeFromMethod(Method* self,  bc_ClassLoader* cll, Vector* stmt_list) {
+bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self,  bc_ClassLoader* cll, Vector* stmt_list) {
 	CallContext* lCctx = NewCallContext(CALL_CTOR_T);
 	CallFrame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->Kind.Resolve.GType = self->ReturnGType;
-	StringView iterName = GetMethodUniqueName(self);
-	Type* iterT = FindTypeFromNamespace(GetLangNamespace(), InternString("Iterator"));
+	StringView iterName = bc_GetMethodUniqueName(self);
+	bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Iterator"));
 	//イテレータの実装クラスを登録
-	GenericType* iterImplGT = ApplyGenericType(self->ReturnGType, lCctx);
+	bc_GenericType* iterImplGT = bc_ApplyGenericType(self->ReturnGType, lCctx);
 	Class* iterImplC = NewClassProxy(iterImplGT, iterName);
-	Type* iterImplT = WrapClass(iterImplC);
-	AddTypeNamespace(GetPlaceholderNamespace(), iterImplT);
-	InitGenericSelf(iterImplT, 0);
+	bc_Type* iterImplT = WrapClass(iterImplC);
+	bc_AddTypeNamespace(bc_GetPlaceholderNamespace(), iterImplT);
+	bc_InitGenericSelf(iterImplT, 0);
 	//イテレータのコンストラクタ追加
 	int op_len = 0;
 	AddMethodClass(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
@@ -251,13 +251,13 @@ Type* CreateIteratorTypeFromMethod(Method* self,  bc_ClassLoader* cll, Vector* s
 
 //private
 static void delete_parameter(VectorItem item) {
-	Parameter* e = (Parameter*)item;
-	DeleteParameter(e);
+	bc_Parameter* e = (bc_Parameter*)item;
+	bc_DeleteParameter(e);
 }
 
 static void delete_type_parameter(VectorItem item) {
-	TypeParameter* e = (TypeParameter*)item;
-	DeleteTypeParameter(e);
+	bc_TypeParameter* e = (bc_TypeParameter*)item;
+	bc_DeleteTypeParameter(e);
 }
 
 static void method_count(ILStatement* s, int* yield_ret, int* ret) {
@@ -333,23 +333,23 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 	}
 }
 
-static bc_Constructor* create_delegate_ctor(Method* self, Type* ty, bc_ClassLoader* cll,int op_len) {
+static bc_Constructor* create_delegate_ctor(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,int op_len) {
 	//イテレータのコンストラクタを作成
 	bc_Constructor* iterCons = bc_NewConstructor();
 	Enviroment* envIterCons = NewEnviroment();
 	//コルーチンを生成したオブジェクトを受け取るパラメータ追加
-	Parameter* coroOwnerParam = NewParameter(InternString("owner"));
+	bc_Parameter* coroOwnerParam = bc_NewParameter(InternString("owner"));
 	PushVector(iterCons->Parameters, coroOwnerParam);
 	envIterCons->ContextRef = cll;
 	//コルーチンに渡された引数を引き継ぐパラメータ追加
 	for(int i=0; i<self->Parameters->Length; i++) {
-		Parameter* methP = (Parameter*)AtVector(self->Parameters, i);
-		Parameter* consP = NewParameter(methP->Name);
+		bc_Parameter* methP = (bc_Parameter*)AtVector(self->Parameters, i);
+		bc_Parameter* consP = bc_NewParameter(methP->Name);
 		consP->GType = methP->GType;
 		PushVector(iterCons->Parameters, consP);
 	}
 	for (int i = 0; i < iterCons->Parameters->Length; i++) {
-		Parameter* e = (Parameter*)AtVector(iterCons->Parameters, i);
+		bc_Parameter* e = (bc_Parameter*)AtVector(iterCons->Parameters, i);
 		EntrySymbolTable(
 			envIterCons->Symboles,
 			e->GType,
@@ -364,7 +364,7 @@ static bc_Constructor* create_delegate_ctor(Method* self, Type* ty, bc_ClassLoad
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_CHAIN_SUPER);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)0);
-	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)sizeof(Coroutine));
+	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)sizeof(bc_Coroutine));
 	//ここでsizeof(Coroutine) を渡すように
 	//このクラスのフィールドを確保
 	AddOpcodeBuf(envIterCons->Bytecode, (VectorItem)OP_ALLOC_FIELD);
@@ -376,13 +376,13 @@ static bc_Constructor* create_delegate_ctor(Method* self, Type* ty, bc_ClassLoad
 	return iterCons;
 }
 
-static Method* create_has_next(Method* self, Type* ty, bc_ClassLoader* cll, Vector* stmt_list, int* out_op_len) {
-	Method* mt = NewMethod(InternString("moveNext"));
-	mt->ReturnGType = GENERIC_BOOL;
+static bc_Method* create_has_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll, Vector* stmt_list, int* out_op_len) {
+	bc_Method* mt = bc_NewMethod(InternString("moveNext"));
+	mt->ReturnGType = BC_GENERIC_BOOL;
 	mt->Modifier = MODIFIER_NONE_T;
 	mt->Access = ACCESS_PUBLIC_T;
 	mt->Type = METHOD_TYPE_SCRIPT_T;
-	ScriptMethod* smt = NewScriptMethod();
+	bc_ScriptMethod* smt = bc_NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = self->Parent->Location;
@@ -392,7 +392,7 @@ static Method* create_has_next(Method* self, Type* ty, bc_ClassLoader* cll, Vect
 
 	//iterate(int,int)のint,intを受け取る
 	for(int i=0; i<self->Parameters->Length; i++) {
-		Parameter* e = AtVector(self->Parameters, i);
+		bc_Parameter* e = AtVector(self->Parameters, i);
 		EntrySymbolTable(
 			envSmt->Symboles,
 			e->GType,
@@ -416,7 +416,7 @@ static Method* create_has_next(Method* self, Type* ty, bc_ClassLoader* cll, Vect
 		GenerateILStmt(e, envSmt, cctx);
 	}
 	AddOpcodeBuf(envSmt->Bytecode, OP_CORO_EXIT);
-	if(GetTypeName(self->Parent) == InternString("Base")) {
+	if(bc_GetTypeName(self->Parent) == InternString("Base")) {
 	//	DumpEnviromentOp(envSmt, 0);
 	}
 	(*out_op_len) = envSmt->Bytecode->Instructions->Length;
@@ -427,13 +427,13 @@ static Method* create_has_next(Method* self, Type* ty, bc_ClassLoader* cll, Vect
 	return mt;
 }
 
-static Method* create_next(Method* self, Type* ty, bc_ClassLoader* cll,GenericType* a, Vector* stmt_list, int* out_op_len) {
-	Method* mt = NewMethod(InternString("current"));
+static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,bc_GenericType* a, Vector* stmt_list, int* out_op_len) {
+	bc_Method* mt = bc_NewMethod(InternString("current"));
 	mt->ReturnGType = a;
 	mt->Modifier = MODIFIER_NONE_T;
 	mt->Access = ACCESS_PUBLIC_T;
 	mt->Type = METHOD_TYPE_SCRIPT_T;
-	ScriptMethod* smt = NewScriptMethod();
+	bc_ScriptMethod* smt = bc_NewScriptMethod();
 	Enviroment* envSmt = NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = self->Parent->Location;
@@ -457,12 +457,12 @@ static Method* create_next(Method* self, Type* ty, bc_ClassLoader* cll,GenericTy
 	return mt;
 }
 
-static Vector* method_vm_args(Method* self, Frame* fr, Frame* a) {
+static Vector* method_vm_args(bc_Method* self, Frame* fr, Frame* a) {
 	Vector* args = NewVector();
 	//引数を引き継ぐ
 	int len = self->Parameters->Length;
 	for(int i=0; i<len; i++) {
-		Object* ARG = PopVector(fr->ValueStack);
+		bc_Object* ARG = PopVector(fr->ValueStack);
 		assert(ARG != NULL);
 		AssignVector(a->VariableTable, (len - i), ARG);
 		AssignVector(args, (len - i), ARG->GType);
@@ -470,7 +470,7 @@ static Vector* method_vm_args(Method* self, Frame* fr, Frame* a) {
 	return args;
 }
 
-static Vector* method_vm_typeargs(Method* self, Frame* fr, Frame* a) {
+static Vector* method_vm_typeargs(bc_Method* self, Frame* fr, Frame* a) {
 	//メソッドに渡された型引数を引き継ぐ
 	Vector* typeargs = NewVector();
 	int typeparams = self->TypeParameters->Length;

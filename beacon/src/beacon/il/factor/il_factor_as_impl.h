@@ -25,14 +25,14 @@ typedef enum CastMode {
  */
 typedef struct ILAs {
 	ILFactor* Source;
-	GenericCache* GCache;
-	GenericType* GType;
+	bc_GenericCache* GCache;
+	bc_GenericType* GType;
 	CastMode Mode;
 } ILAs;
 
 struct Enviroment;
-struct Type;
-struct Field;
+struct bc_Type;
+struct bc_Field;
 
 ILFactor* WrapILAs(ILAs* self);
 
@@ -42,7 +42,7 @@ void GenerateILAs(ILAs* self, Enviroment* env, CallContext* cctx);
 
 void LoadILAs(ILAs* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILAs(ILAs* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILAs(ILAs* self, Enviroment* env, CallContext* cctx);
 
 void DeleteILAs(ILAs* self);
 

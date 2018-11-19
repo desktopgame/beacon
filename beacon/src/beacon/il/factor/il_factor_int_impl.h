@@ -31,7 +31,7 @@ void GenerateILInt(ILInt* self, Enviroment* env, CallContext* cctx);
 
 void LoadILInt(ILInt* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILInt(ILInt* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILInt(ILInt* self, Enviroment* env, CallContext* cctx);
 
 char* ILIntToString(ILInt* self, Enviroment* env);
 

@@ -16,17 +16,17 @@
  * 文字列を表すオブジェクトです。
  */
 typedef struct String {
-	Object Super;
+	bc_Object Super;
 	Buffer* Buffer;
 } String;
-struct Type;
+struct bc_Type;
 
 /**
  * 新しい文字列オブジェクトを生成します。
  * @param str
  * @return
  */
-struct Object* NewString(const char* str);
+struct bc_Object* NewString(const char* str);
 
 /**
  * beacon::lang::Stringクラスを初期化します.
@@ -38,11 +38,11 @@ void InitString();
  * @param self
  * @return
  */
-Buffer* GetRawString(Object* self);
+Buffer* GetRawString(bc_Object* self);
 
 /**
  * beacon::lang::String型を返します.
  * @return
  */
-struct Type* GetStringType();
+struct bc_Type* GetStringType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_STRING_H

@@ -13,8 +13,8 @@
 #include "../util/stack.h"
 #include "../util/vector.h"
 #include "enviroment.h"
-struct Object;
-struct Type;
+struct bc_Object;
+struct bc_Type;
 /**
  * 実行時の情報を格納する構造体.
  */
@@ -52,13 +52,13 @@ typedef struct Frame {
 	struct Frame* Parent;
 
 	//最後にスローされた例外です.
-	struct Object* Exception;
+	struct bc_Object* Exception;
 
 	//コルーチンの実装クラスオブジェクトです.
-	struct Object* Coroutine;
+	struct bc_Object* Coroutine;
 
 	//メソッドを実行中のレシーバ型
-	struct Type* Receiver;
+	struct bc_Type* Receiver;
 
 	//VMの階層の深さです.
 	//デバッグ用の情報です。

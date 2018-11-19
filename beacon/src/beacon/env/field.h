@@ -14,36 +14,36 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 //#include "virtual_type.h"
-struct Type;
-struct GenericType;
-struct Object;
+struct bc_Type;
+struct bc_GenericType;
+struct bc_Object;
 struct Enviroment;
 struct ILFactor;
 /**
  * フィールドを表す構造体.
  */
-typedef struct Field {
+typedef struct bc_Field {
 	StringView Name;
-	struct Type* Parent;
-	struct GenericType* GType;
-	struct Object* StaticValue;
+	struct bc_Type* Parent;
+	struct bc_GenericType* GType;
+	struct bc_Object* StaticValue;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	struct ILFactor* InitialValue;
 	struct Enviroment* InitialValueEnv;
 	bool IsNotInitializedAtCtor;
-} Field;
+} bc_Field;
 
 /**
  * 新しいフィールドを作成します.
  * @param namev
  * @return
  */
-Field* NewField(StringView namev);
+bc_Field* bc_NewField(StringView namev);
 
 /**
  * フィールドを開放します.
  * @param self
  */
-void DeleteField(Field* self);
+void bc_DeleteField(bc_Field* self);
 #endif // !SIGNAL_ENV_FIELD_H

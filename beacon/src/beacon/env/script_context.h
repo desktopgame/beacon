@@ -15,22 +15,22 @@
 #include "../util/tree_map.h"
 #include "../util/vector.h"
 #include "../util/numeric_map.h"
-struct Heap;
-struct Object;
+struct bc_Heap;
+struct bc_Object;
 struct bc_ClassLoader;
-struct Field;
+struct bc_Field;
 
 /**
  * 静的フィールドを訪問するための関数ポインタ.
  * @param item
  */
-typedef void(*StaticEach)(struct Field* item);
+typedef void(*bc_StaticEach)(struct bc_Field* item);
 
 /**
  * beacon言語のあらゆるオブジェクトのトップレベル.
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
-typedef struct ScriptContext {
+typedef struct bc_ScriptContext {
 	NumericMap* NamespaceMap;
 	TreeMap* ClassLoaderMap;
 	Vector* ThreadList;
@@ -45,11 +45,11 @@ typedef struct ScriptContext {
 	NumericMap* IntegerCacheMap;
 	bool IsPrintError;
 	bool IsAbortOnError;
-	struct Heap* Heap;
-	struct Object* True;
-	struct Object* False;
-	struct Object* Null;
-} ScriptContext;
+	struct bc_Heap* Heap;
+	struct bc_Object* True;
+	struct bc_Object* False;
+	struct bc_Object* Null;
+} bc_ScriptContext;
 
 /**
  * スクリプトコンテキストを登録するためのスクリプトコンテキストを作成します.
@@ -57,33 +57,33 @@ typedef struct ScriptContext {
  * 既に作成されている場合は何もしません。
  * @return
  */
-ScriptContext* OpenScriptContext();
+bc_ScriptContext* bc_OpenScriptContext();
 
 /**
  * 現在のスクリプトコンテキストを返します.
  * この呼び出しは同期される必要があります。
  * @return
  */
-ScriptContext* GetCurrentScriptContext();
+bc_ScriptContext* bc_GetCurrentScriptContext();
 
 /**
  * スクリプトコンテキストを登録するためのスクリプトコンテキストと、
  * そこから参照可能な全てのスクリプトコンテキストを開放します.
  */
-void CloseScriptContext();
+void bc_CloseScriptContext();
 
 /**
  * まだブートストラップクラスローダが起動していないなら起動します.
  * @param self
  */
-void BootstrapScriptContext(ScriptContext* self);
+void bc_BootstrapScriptContext(bc_ScriptContext* self);
 
 /**
  * 全ての静的フィールドを訪問します.
  * @param self
  * @param act
  */
-void EachStaticScriptContext(ScriptContext* self, StaticEach act);
+void bc_EachStaticScriptContext(bc_ScriptContext* self, bc_StaticEach act);
 
 /**
  * 全ての静的フィールドをクリアします.
@@ -97,7 +97,7 @@ void EachStaticScriptContext(ScriptContext* self, StaticEach act);
  * なので、複数回実行する場合にはこれを使用して静的フィールドをクリアします。
  * @param self
  */
-void ClearScriptContext(ScriptContext* self);
+void bc_ClearScriptContext(bc_ScriptContext* self);
 
 /**
  * 指定の整数をキャッシュします.
@@ -105,10 +105,10 @@ void ClearScriptContext(ScriptContext* self);
  * @param i
  * @return
  */
-struct Object* IInternScriptContext(ScriptContext* self, int i);
+struct bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i);
 
 /**
  * 現在のコンテキストでリテラルをキャッシュします.
  */
-void CacheScriptContext();
+void bc_CacheScriptContext();
 #endif // !SIGNAL_ENV_SCRIPT_CONTEXT_H

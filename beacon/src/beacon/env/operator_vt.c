@@ -5,15 +5,15 @@
 #include "../env/parameter.h"
 #include "../env/generic_type.h"
 
-OperatorVT* NewOperatorVt() {
-	OperatorVT* ret = (OperatorVT*)MEM_MALLOC(sizeof(OperatorVT));
+bc_OperatorVT* bc_NewOperatorVt() {
+	bc_OperatorVT* ret = (bc_OperatorVT*)MEM_MALLOC(sizeof(bc_OperatorVT));
 	ret->Operators = NewVector();
 	return ret;
 }
 
-void ReplaceOperatorVt(OperatorVT* self, OperatorOverload* opov) {
+void bc_ReplaceOperatorVt(bc_OperatorVT* self, bc_OperatorOverload* opov) {
 	for(int i=0; i<self->Operators->Length; i++) {
-		OperatorOverload* e = AtVector(self->Operators, i);
+		bc_OperatorOverload* e = AtVector(self->Operators, i);
 		if(e->Type != opov->Type) {
 			continue;
 		}
@@ -21,9 +21,9 @@ void ReplaceOperatorVt(OperatorVT* self, OperatorOverload* opov) {
 			AssignVector(self->Operators, i, opov);
 			return;
 		} else if(bc_Is2ArgOperator(e->Type)) {
-			Parameter* param_a = AtVector(e->Parameters, 0);
-			Parameter* param_b = AtVector(opov->Parameters, 0);
-			if(DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {
+			bc_Parameter* param_a = AtVector(e->Parameters, 0);
+			bc_Parameter* param_b = AtVector(opov->Parameters, 0);
+			if(bc_DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {
 				AssignVector(self->Operators, i, opov);
 				return;
 			}
@@ -34,7 +34,7 @@ void ReplaceOperatorVt(OperatorVT* self, OperatorOverload* opov) {
 	PushVector(self->Operators, opov);
 }
 
-void DeleteOperatorVt(OperatorVT* self) {
+void bc_DeleteOperatorVt(bc_OperatorVT* self) {
 	if(self == NULL) {
 		return;
 	}

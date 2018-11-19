@@ -20,7 +20,7 @@
  * @param fi
  * @param index
  */
-void GenerateGetField(OpcodeBuf* buf, Field* fi, int index);
+void GenerateGetField(OpcodeBuf* buf, bc_Field* fi, int index);
 
 /**
  * プロパティを取得するオペコードを生成します.
@@ -28,7 +28,7 @@ void GenerateGetField(OpcodeBuf* buf, Field* fi, int index);
  * @param prop
  * @param index
  */
-void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index);
+void GenerateGetProperty(OpcodeBuf* buf, bc_Property* prop, int index);
 
 /**
  * フィールドに代入するオペコードを生成します.
@@ -36,12 +36,12 @@ void GenerateGetProperty(OpcodeBuf* buf, Property* prop, int index);
  * @param fi
  * @param index
  */
-void GeneratePutField(OpcodeBuf* buf, Field* fi, int index);
+void GeneratePutField(OpcodeBuf* buf, bc_Field* fi, int index);
 /**
  * プロパティに代入するオペコードを生成します.
  * @param buf
  * @param fi
  * @param index
  */
-void GeneratePutProperty(OpcodeBuf* buf, Property* prop, int index);
+void GeneratePutProperty(OpcodeBuf* buf, bc_Property* prop, int index);
 #endif

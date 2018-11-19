@@ -12,7 +12,7 @@
 
 //static TreeMap* TreeMap_root = NULL;
 //proto
-static Namespace* malloc_namespace(StringView namev);
+static bc_Namespace* malloc_namespace(StringView namev);
 
 static void unlink_namespace(NumericMapKey key, NumericMapItem item);
 static void delete_namespace(NumericMapKey key, NumericMapItem item);
@@ -21,40 +21,40 @@ static void unlink_type(NumericMapKey key, NumericMapItem item);
 static void delete_type(NumericMapKey key, NumericMapItem item);
 
 static void dump_root(NumericMap* root, bool callSelf, int depth);
-static void dump_impl(Namespace* root, int depth);
+static void dump_impl(bc_Namespace* root, int depth);
 static void put_indent(int depth);
 static void dump_class(NumericMap* root, bool isRoot, int depth);
 
-Namespace * CreateNamespaceAtRoot(StringView namev) {
-	ScriptContext* ctx = GetCurrentScriptContext();
+bc_Namespace * bc_CreateNamespaceAtRoot(StringView namev) {
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	if (ctx->NamespaceMap == NULL) {
 		ctx->NamespaceMap = NewNumericMap();
 	}
 	TreeItem item = GetNumericMapValue(ctx->NamespaceMap, namev);
 	if (item == NULL) {
-		Namespace* newNamespace = malloc_namespace(namev);
+		bc_Namespace* newNamespace = malloc_namespace(namev);
 		PutNumericMap(ctx->NamespaceMap, namev, newNamespace);
 		return newNamespace;
-	} else return (Namespace*)item;
+	} else return (bc_Namespace*)item;
 }
 
-Namespace * FindNamespaceFromRoot(StringView namev) {
-	ScriptContext* ctx = GetCurrentScriptContext();
-	return CFindNamespaceFromRoot(ctx, namev);
+bc_Namespace * bc_FindNamespaceFromRoot(StringView namev) {
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+	return bc_CFindNamespaceFromRoot(ctx, namev);
 }
 
-Namespace* CFindNamespaceFromRoot(ScriptContext* sctx, StringView namev) {
+bc_Namespace* bc_CFindNamespaceFromRoot(bc_ScriptContext* sctx, StringView namev) {
 	if (sctx->NamespaceMap == NULL) {
 		return NULL;
 	}
-	return (Namespace*)GetNumericMapValue(sctx->NamespaceMap, namev);
+	return (bc_Namespace*)GetNumericMapValue(sctx->NamespaceMap, namev);
 }
 
-Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
+bc_Namespace * bc_AddNamespaceNamespace(bc_Namespace * self, StringView namev) {
 	assert(self != NULL);
-	Namespace* child = FindNamespaceFromNamespace(self, namev);
+	bc_Namespace* child = bc_FindNamespaceFromNamespace(self, namev);
 	if (child == NULL) {
-		Namespace* newNamespace = malloc_namespace(namev);
+		bc_Namespace* newNamespace = malloc_namespace(namev);
 		newNamespace->Parent = self;
 		child = newNamespace;
 		PutNumericMap(self->NamespaceMap, namev, child);
@@ -64,112 +64,112 @@ Namespace * AddNamespaceNamespace(Namespace * self, StringView namev) {
 	return child;
 }
 
-struct Type* AddTypeNamespace(Namespace* self, Type* type) {
-	ScriptContext* ctx = GetCurrentScriptContext();
+struct bc_Type* bc_AddTypeNamespace(bc_Namespace* self, bc_Type* type) {
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	type->Location = self;
-	PutNumericMap(self->TypeMap, GetTypeName(type), type);
+	PutNumericMap(self->TypeMap, bc_GetTypeName(type), type);
 	type->AbsoluteIndex = ctx->TypeList->Length;
 	PushVector(ctx->TypeList, type);
 	return type;
 }
 
-Namespace * FindNamespaceFromNamespace(Namespace * self, StringView namev) {
+bc_Namespace * bc_FindNamespaceFromNamespace(bc_Namespace * self, StringView namev) {
 	assert(self != NULL);
 	return GetNumericMapValue(self->NamespaceMap, namev);
 }
 
-Type* FindTypeFromNamespace(Namespace * self, StringView namev) {
+bc_Type* bc_FindTypeFromNamespace(bc_Namespace * self, StringView namev) {
 	assert(self != NULL);
 	return GetNumericMapValue(self->TypeMap, namev);
 }
 
-Class* FindClassFromNamespace(Namespace * self, StringView namev) {
-	return TypeToClass(FindTypeFromNamespace(self, namev));
+Class* bc_FindClassFromNamespace(bc_Namespace * self, StringView namev) {
+	return bc_TypeToClass(bc_FindTypeFromNamespace(self, namev));
 }
 
-Interface* FindInterfaceFromNamespace(Namespace * self, StringView namev) {
-	return TypeToInterface(FindTypeFromNamespace(self, namev));
+Interface* bc_FindInterfaceFromNamespace(bc_Namespace * self, StringView namev) {
+	return bc_TypeToInterface(bc_FindTypeFromNamespace(self, namev));
 }
 
-Namespace * GetBeaconNamespace() {
-	return FindNamespaceFromRoot(InternString("beacon"));
+bc_Namespace * bc_GetBeaconNamespace() {
+	return bc_FindNamespaceFromRoot(InternString("beacon"));
 }
 
-Namespace * GetLangNamespace() {
-	return FindNamespaceFromNamespace(GetBeaconNamespace(), InternString("lang"));
+bc_Namespace * bc_GetLangNamespace() {
+	return bc_FindNamespaceFromNamespace(bc_GetBeaconNamespace(), InternString("lang"));
 }
 
-Namespace* GetUnsafeNamespace() {
-	return FindNamespaceFromNamespace(GetBeaconNamespace(), InternString("unsafe"));
+bc_Namespace* bc_GetUnsafeNamespace() {
+	return bc_FindNamespaceFromNamespace(bc_GetBeaconNamespace(), InternString("unsafe"));
 }
 
-Namespace* GetPlaceholderNamespace() {
-	return FindNamespaceFromRoot(InternString("$placeholder"));
+bc_Namespace* bc_GetPlaceholderNamespace() {
+	return bc_FindNamespaceFromRoot(InternString("$placeholder"));
 }
 
-Type* GetObjectTypeNamespace() {
+bc_Type* bc_GetObjectTypeNamespace() {
 	return GetObjectType();
 }
 
-Type* GetIntTypeNamespace() {
+bc_Type* bc_GetIntTypeNamespace() {
 	return GetIntType();
 }
 
-Type* GetDoubleTypeNamespace() {
+bc_Type* bc_GetDoubleTypeNamespace() {
 	return GetDoubleType();
 }
 
-Type* GetCharTypeNamespace() {
+bc_Type* bc_GetCharTypeNamespace() {
 	return GetCharType();
 }
 
-Type* GetStringTypeNamespace() {
+bc_Type* bc_GetStringTypeNamespace() {
 	return GetStringType();
 }
 
-Type* GetBoolTypeNamespace() {
+bc_Type* bc_GetBoolTypeNamespace() {
 	return GetBoolType();
 }
 
-Type* GetVoidTypeNamespace() {
+bc_Type* bc_GetVoidTypeNamespace() {
 	return GetVoidType();
 }
 
-Type* GetNullTypeNamespace() {
+bc_Type* bc_GetNullTypeNamespace() {
 	return GetNullType();
 }
 
-Type* GetExceptionTypeNamespace() {
+bc_Type* bc_GetExceptionTypeNamespace() {
 	return GetExceptionType();
 }
 
-void UnlinkNamespace(Namespace * self) {
+void bc_UnlinkNamespace(bc_Namespace * self) {
 	EachNumericMap(self->NamespaceMap, unlink_namespace);
 	EachNumericMap(self->TypeMap, unlink_type);
 }
 
-StringView NamespaceToString(Namespace* self) {
+StringView bc_NamespaceToString(bc_Namespace* self) {
 	if(self->Parent == NULL) {
 		return self->Name;
 	}
 	return ConcatIntern(
 		Ref2Str(ConcatIntern(
-			Ref2Str(NamespaceToString(self->Parent)),
+			Ref2Str(bc_NamespaceToString(self->Parent)),
 			InternString("::")
 		)),
 		self->Name
 	);
 }
 
-void DeleteNamespace(Namespace * self) {
+void bc_DeleteNamespace(bc_Namespace * self) {
 	DeleteNumericMap(self->NamespaceMap, delete_namespace);
 	DeleteNumericMap(self->TypeMap, delete_type);
 	MEM_FREE(self);
 }
 
 //private
-static Namespace* malloc_namespace(StringView namev) {
-	Namespace* ret = (Namespace*)MEM_MALLOC(sizeof(Namespace));
+static bc_Namespace* malloc_namespace(StringView namev) {
+	bc_Namespace* ret = (bc_Namespace*)MEM_MALLOC(sizeof(bc_Namespace));
 	ret->NamespaceMap = NewNumericMap();
 	ret->TypeMap = NewNumericMap();
 	ret->Parent = NULL;
@@ -179,23 +179,23 @@ static Namespace* malloc_namespace(StringView namev) {
 }
 
 static void unlink_namespace(NumericMapKey key, NumericMapItem item) {
-	Namespace* e = (Namespace*)item;
-	UnlinkNamespace(e);
+	bc_Namespace* e = (bc_Namespace*)item;
+	bc_UnlinkNamespace(e);
 }
 
 static void delete_namespace(NumericMapKey key, NumericMapItem item) {
-	Namespace* e = (Namespace*)item;
-	DeleteNamespace(e);
+	bc_Namespace* e = (bc_Namespace*)item;
+	bc_DeleteNamespace(e);
 }
 
 static void unlink_type(NumericMapKey key, NumericMapItem item) {
-	Type* e = (Type*)item;
-	UnlinkType(e);
+	bc_Type* e = (bc_Type*)item;
+	bc_UnlinkType(e);
 }
 
 static void delete_type(NumericMapKey key, NumericMapItem item) {
-	Type* e = (Type*)item;
-	DeleteType(e);
+	bc_Type* e = (bc_Type*)item;
+	bc_DeleteType(e);
 }
 
 static void dump_root(NumericMap* root, bool callSelf, int depth) {
@@ -203,7 +203,7 @@ static void dump_root(NumericMap* root, bool callSelf, int depth) {
 		return;
 	}
 	if (callSelf) {
-		dump_impl((Namespace*)root->Item, depth);
+		dump_impl((bc_Namespace*)root->Item, depth);
 	}
 	if (root->Left != NULL) {
 		dump_root(root->Left, true, depth);
@@ -213,7 +213,7 @@ static void dump_root(NumericMap* root, bool callSelf, int depth) {
 	}
 }
 
-static void dump_impl(Namespace* root, int depth) {
+static void dump_impl(bc_Namespace* root, int depth) {
 	put_indent(depth);
 	printf("%s", Ref2Str(root->Name));
 	bc_Println();
@@ -232,7 +232,7 @@ static void dump_class(NumericMap* root, bool isRoot, int depth) {
 		return;
 	}
 	if (!isRoot) {
-		Type* e = ((Type*)root->Item);
+		bc_Type* e = ((bc_Type*)root->Item);
 		//type_dump(e, depth);
 		assert(false);
 	}

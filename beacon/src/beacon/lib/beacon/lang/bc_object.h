@@ -10,7 +10,7 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_H
 #define BEACON_LIB_SIGNAL_LANG_H
-struct Type;
+struct bc_Type;
 /**
  * beacon::lang::Objectクラスを初期化します.
  */
@@ -19,5 +19,5 @@ void InitObject();
 /**
  * beacon::lang::Object型を返します.
  */
-struct Type* GetObjectType();
+struct bc_Type* GetObjectType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_H

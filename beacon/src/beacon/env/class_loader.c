@@ -47,7 +47,7 @@
 
 //proto
 static void load_class(bc_ClassLoader* self);
-static void link_recursive(bc_ClassLoader* self, LinkType type);
+static void link_recursive(bc_ClassLoader* self, bc_LinkType type);
 static void delete_cache(VectorItem item);
 static bc_ClassLoader* load_special_class(bc_ClassLoader* self, bc_ClassLoader* cll, char* full_path);
 static void load_toplevel(bc_ClassLoader* self);
@@ -55,14 +55,14 @@ static void link_all(bc_ClassLoader* self);
 static void load_toplevel_function(bc_ClassLoader* self);
 static bool check_parser_error(Parser* p);
 
-bc_ClassLoader* bc_NewClassLoader(const char* filename, ContentType type) {
+bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type) {
 	bc_ClassLoader* ret = (bc_ClassLoader*)MEM_MALLOC(sizeof(bc_ClassLoader));
 	ret->SourceCode = NULL;
 	ret->ILCode = NULL;
 	ret->Parent = NULL;
 	ret->Type = type;
 	ret->Link = LINK_NONE_T;
-	ret->ImportManager = NewImportManager();
+	ret->ImportManager = bc_NewImportManager();
 	ret->Env = NewEnviroment();
 	ret->Level = 0;
 	ret->TypeCaches = NewVector();
@@ -85,7 +85,7 @@ void bc_LoadClassLoader(bc_ClassLoader * self) {
 
 void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a) {
 	bc_Recover();
-	Heap* hee = GetHeap();
+	bc_Heap* hee = bc_GetHeap();
 	hee->AcceptBlocking++;
 	self->SourceCode = a;
 	load_class(self);
@@ -94,8 +94,8 @@ void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a) {
 
 void bc_SpecialLoadClassLoader(bc_ClassLoader* self, char* relativePath) {
 	char* fullP = bc_ResolveScriptPath(relativePath);
-	ScriptContext* ctx = GetCurrentScriptContext();
-	Heap* he = GetHeap();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+	bc_Heap* he = bc_GetHeap();
 	bc_ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, fullP);
 	he->AcceptBlocking++;
 	if(cll == NULL) {
@@ -112,7 +112,7 @@ void bc_DeleteClassLoader(bc_ClassLoader * self) {
 	bc_DeleteAST(self->SourceCode);
 	DeleteILToplevel(self->ILCode);
 	DeleteVector(self->TypeCaches, delete_cache);
-	DeleteImportManager(self->ImportManager);
+	bc_DeleteImportManager(self->ImportManager);
 	DeleteEnviroment(self->Env);
 	MEM_FREE(self->FileName);
 	MEM_FREE(self);
@@ -134,7 +134,7 @@ static void load_class(bc_ClassLoader* self) {
 	load_toplevel(self);
 }
 
-static void link_recursive(bc_ClassLoader* self, LinkType type) {
+static void link_recursive(bc_ClassLoader* self, bc_LinkType type) {
 	if (self->Link == type) {
 		return;
 	}
@@ -142,9 +142,9 @@ static void link_recursive(bc_ClassLoader* self, LinkType type) {
 		return;
 	}
 	self->Link = type;
-	ImportManager* importMgr = self->ImportManager;
+	bc_ImportManager* importMgr = self->ImportManager;
 	for (int i = 0; i < importMgr->Items->Length; i++) {
-		ImportInfo* info = (ImportInfo*)AtVector(importMgr->Items, i);
+		bc_ImportInfo* info = (bc_ImportInfo*)AtVector(importMgr->Items, i);
 		if (info->IsConsume) {
 			continue;
 		}
@@ -154,8 +154,8 @@ static void link_recursive(bc_ClassLoader* self, LinkType type) {
 }
 
 static void delete_cache(VectorItem item) {
-	TypeCache* e = (TypeCache*)item;
-	DeleteTypeCache(e);
+	bc_TypeCache* e = (bc_TypeCache*)item;
+	bc_DeleteTypeCache(e);
 }
 
 static bc_ClassLoader* load_special_class(bc_ClassLoader* self, bc_ClassLoader* cll, char* full_path) {
@@ -202,7 +202,7 @@ static void load_toplevel(bc_ClassLoader* self) {
 	createWorldStmt->Value->Lineno = 0;
 	//worldをselfにする
 	CallContext* cctx = NewCallContext(CALL_TOP_T);
-	cctx->Ty = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
+	cctx->Ty = bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("World"));
 	LoadILStmt(body, self->Env, cctx);
 	GenerateILStmt(body, self->Env, cctx);
 	//$worldをthisにする
@@ -214,7 +214,7 @@ static void load_toplevel(bc_ClassLoader* self) {
 	CLBC_body(self, self->ILCode->StatementList, self->Env, cctx, NULL);
 	DeleteILStmt(body);
 	DeleteCallContext(cctx);
-	CacheScriptContext();
+	bc_CacheScriptContext();
 }
 
 static void load_toplevel_function(bc_ClassLoader* self) {
@@ -222,44 +222,44 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 		return;
 	}
 	Vector* funcs = self->ILCode->FunctionList;
-	Type* worldT = FindTypeFromNamespace(GetLangNamespace(), InternString("World"));
+	bc_Type* worldT = bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("World"));
 	//前回の実行で作成されたメソッドを解放
-	Vector* methods = TYPE2CLASS(worldT)->Methods;
+	Vector* methods = BC_TYPE2CLASS(worldT)->Methods;
 	if(methods->Length > 0) {
-		DeleteVector(methods, DeleteMethod);
-		TYPE2CLASS(worldT)->Methods = NewVector();
+		DeleteVector(methods, bc_DeleteMethod);
+		BC_TYPE2CLASS(worldT)->Methods = NewVector();
 	}
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		Method* m = NewMethod(ilfunc->Name);
-		DupTypeParameterList(ilfunc->TypeParameters, m->TypeParameters);
-		ScriptMethod* sm = NewScriptMethod();
+		bc_Method* m = bc_NewMethod(ilfunc->Name);
+		bc_DupTypeParameterList(ilfunc->TypeParameters, m->TypeParameters);
+		bc_ScriptMethod* sm = bc_NewScriptMethod();
 		Enviroment* env = NewEnviroment();
 		//CallContextの設定
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
-		cctx->Scope = GetLangNamespace();
+		cctx->Scope = bc_GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
-		Namespace* loc = GetNamespaceCContext(cctx);
+		bc_Namespace* loc = GetNamespaceCContext(cctx);
 		env->ContextRef = self;
 		sm->Env = env;
 		m->Access = ACCESS_PRIVATE_T;
 		m->Kind.Script = sm;
 		m->Parent = worldT;
 		//戻り値を指定
-		m->ReturnGType = ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
+		m->ReturnGType = bc_ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
 	//	PrintGenericType(m->return_gtype);
 	//	bc_Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->Parameters->Length; j++) {
 			ILParameter* ilparam = AtVector(ilfunc->Parameters, j);
-			Parameter* param = NewParameter(ilparam->Name);
+			bc_Parameter* param = bc_NewParameter(ilparam->Name);
 			PushVector(m->Parameters, param);
-			param->GType = ResolveImportManager(loc, ilparam->GCache, cctx);
+			param->GType = bc_ResolveImportManager(loc, ilparam->GCache, cctx);
 			EntrySymbolTable(
 				env->Symboles,
-				ResolveImportManager(loc, ilparam->GCache, cctx),
+				bc_ResolveImportManager(loc, ilparam->GCache, cctx),
 				ilparam->Name
 			);
 			//実引数を保存
@@ -276,13 +276,13 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 	//実装のロード
 	for(int i=0; i<funcs->Length; i++) {
 		ILFunction* ilfunc = AtVector(funcs, i);
-		Method* m = AtVector(TYPE2CLASS(worldT)->Methods, i);
-		ScriptMethod* sm = m->Kind.Script;
+		bc_Method* m = AtVector(BC_TYPE2CLASS(worldT)->Methods, i);
+		bc_ScriptMethod* sm = m->Kind.Script;
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
-		cctx->Scope = GetLangNamespace();
+		cctx->Scope = bc_GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
-		CLBC_corutine(self, m, sm->Env, ilfunc->Parameters, ilfunc->Statements, cctx, GetLangNamespace());
+		CLBC_corutine(self, m, sm->Env, ilfunc->Parameters, ilfunc->Statements, cctx, bc_GetLangNamespace());
 		DeleteCallContext(cctx);
 	}
 }

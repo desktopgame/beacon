@@ -12,14 +12,14 @@ ILOperatorOverload* NewILOperatorOverload(bc_OperatorType type) {
 	ret->Type = type;
 	ret->Parameters = NewVector();
 	ret->Statements = NewVector();
-	ret->ReturnGCache = NewGenericCache();
+	ret->ReturnGCache = bc_NewGenericCache();
 	return ret;
 }
 
 void DeleteILOperatorOverload(ILOperatorOverload* self) {
 	DeleteVector(self->Parameters, DeleteILOperatorOverload_parameter);
 	DeleteVector(self->Statements, DeleteILOperatorOverload_stmt);
-	DeleteGenericCache(self->ReturnGCache);
+	bc_DeleteGenericCache(self->ReturnGCache);
 	MEM_FREE(self);
 }
 //private

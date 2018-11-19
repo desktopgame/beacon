@@ -11,10 +11,10 @@
 #define BEACON_IL_CALL_FRAME_H
 #include "../util/vector.h"
 
-struct Method;
+struct bc_Method;
 struct bc_Constructor;
-struct OperatorOverload;
-struct GenericType;
+struct bc_OperatorOverload;
+struct bc_GenericType;
 
 typedef enum CallFrameTag {
 	FRAME_RESOLVE_T,
@@ -24,7 +24,7 @@ typedef enum CallFrameTag {
 } CallFrameTag;
 
 typedef struct CallResolve {
-	struct GenericType* GType;
+	struct bc_GenericType* GType;
 	Vector* TypeArgs;
 } CallResolve;
 
@@ -39,7 +39,7 @@ typedef struct CallStaticInvoke {
 } CallStaticInvoke;
 
 typedef struct CallInstanceInvoke {
-	struct GenericType* Receiver;
+	struct bc_GenericType* Receiver;
 	Vector* Args;
 	Vector* TypeArgs;
 } CallInstanceInvoke;

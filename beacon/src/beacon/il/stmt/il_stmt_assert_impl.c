@@ -30,7 +30,7 @@ void GenerateILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
 
 	GenerateILFactor(self->Message, env, cctx);
 	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->Bytecode, FindTypeFromNamespace(GetLangNamespace(), InternString("Exception"))->AbsoluteIndex);
+	AddOpcodeBuf(env->Bytecode, bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Exception"))->AbsoluteIndex);
 	AddOpcodeBuf(env->Bytecode, 0);
 	AddOpcodeBuf(env->Bytecode, OP_THROW);
 	gt->Cursor = AddNOPOpcodeBuf(env->Bytecode);

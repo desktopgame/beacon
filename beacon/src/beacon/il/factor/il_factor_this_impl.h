@@ -13,12 +13,12 @@
 #include "../../env/generic_type.h"
 #include "../call_context.h"
 struct Enviroment;
-struct Type;
+struct bc_Type;
 /**
  * thisを表す要素.
  */
 typedef struct ILThis {
-	GenericType* Resolved;
+	bc_GenericType* Resolved;
 } ILThis;
 
 ILThis* NewILThis();
@@ -27,7 +27,7 @@ void GenerateILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
 
 void LoadILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
 
 char* ILThisToString(ILThis* self, struct Enviroment* env);
 

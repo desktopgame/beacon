@@ -30,11 +30,11 @@ void GenerateILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env,
 void LoadILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, CallContext* cctx) {
 	//代入するオブジェクトを計算
 	LoadILFactor(self->Value, env, cctx);
-	GenericType* gtp = EvalILFactor(self->Value, env, cctx);
+	bc_GenericType* gtp = EvalILFactor(self->Value, env, cctx);
 	BC_ERROR();
 	//voidは代入できない
 	if(gtp->CoreType != NULL &&
-	   gtp->CoreType == TYPE_VOID) {
+	   gtp->CoreType == BC_TYPE_VOID) {
 		   bc_Panic(BCERROR_VOID_ASSIGN_T);
 		return;
 	}

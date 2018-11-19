@@ -23,21 +23,21 @@ void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallConte
 }
 
 void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
-	GenericType* receiver = EvalILFactor(self->Source, env, cctx);
-	Type* receiverT = GENERIC2TYPE(receiver);
+	bc_GenericType* receiver = EvalILFactor(self->Source, env, cctx);
+	bc_Type* receiverT = bc_GENERIC2TYPE(receiver);
 	int temp = -1;
-	FindTreePropertyClass(TYPE2CLASS(receiverT), self->Property->Name, &temp);
+	FindTreePropertyClass(BC_TYPE2CLASS(receiverT), self->Property->Name, &temp);
 	self->Index = temp;
 	if(temp == -1) {
 		bc_Panic(
 			BCERROR_UNDEFINED_PROPERTY_T,
-			Ref2Str(GetTypeName(receiverT)),
+			Ref2Str(bc_GetTypeName(receiverT)),
 			Ref2Str(self->Name)
 		);
 	}
 }
 
-GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx) {
 	return self->Property->GType;
 }
 

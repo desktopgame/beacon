@@ -16,9 +16,9 @@
 #include "symbol_table.h"
 #include <stdbool.h>
 struct Class;
-struct Object;
+struct bc_Object;
 struct bc_ClassLoader;
-struct FQCNCache;
+struct bc_FQCNCache;
 /**
  * プログラムの実行環境です.
  * スタックや変数は実行時に変化しますが、
@@ -96,7 +96,7 @@ VectorItem GetEnviromentSourceAt(Enviroment* self, int index);
  * @param index
  * @return
  */
-struct Object* GetEnviromentConstantAt(Enviroment* self, int index);
+struct bc_Object* GetEnviromentConstantAt(Enviroment* self, int index);
 
 /**
  * 指定位置の整数型の定数を返します.
@@ -104,7 +104,7 @@ struct Object* GetEnviromentConstantAt(Enviroment* self, int index);
  * @param index
  * @return
  */
-struct Object* GetEnviromentCIntAt(Enviroment* self, int index);
+struct bc_Object* GetEnviromentCIntAt(Enviroment* self, int index);
 
 /**
  * 指定位置の浮動小数型の定数を返します.
@@ -112,7 +112,7 @@ struct Object* GetEnviromentCIntAt(Enviroment* self, int index);
  * @param index
  * @return
  */
-struct Object* GetEnviromentCDoubleAt(Enviroment* self, int index);
+struct bc_Object* GetEnviromentCDoubleAt(Enviroment* self, int index);
 
 /**
  * 指定位置の文字型の定数を返します.
@@ -120,7 +120,7 @@ struct Object* GetEnviromentCDoubleAt(Enviroment* self, int index);
  * @param index
  * @return
  */
-struct Object* GetEnviromentCCharAt(Enviroment* self, int index);
+struct bc_Object* GetEnviromentCCharAt(Enviroment* self, int index);
 
 /**
  * 指定位置の文字列型の定数を返します.
@@ -128,7 +128,7 @@ struct Object* GetEnviromentCCharAt(Enviroment* self, int index);
  * @param index
  * @return
  */
-struct Object* GetEnviromentCStringAt(Enviroment* self, int index);
+struct bc_Object* GetEnviromentCStringAt(Enviroment* self, int index);
 
 /**
  * 環境を開放します.

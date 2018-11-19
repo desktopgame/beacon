@@ -11,31 +11,31 @@
 #ifndef BEACON_ENV_VTABLE_H
 #define BEACON_ENV_VTABLE_H
 #include "../util/vector.h"
-struct Method;
+struct bc_Method;
 struct CallContext;
 /**
  * メソッドの一覧をフラットに格納する配列です.
  * 同じシグネチャのメソッドが複数現れる場合には、
  * 親クラスで現れた時点の添え字をサブクラスの実装で上書きします。
  */
-typedef struct VTable {
+typedef struct bc_VTable {
 	//恐らくアップキャストのときに必要
-	struct VTable* Parent;
+	struct bc_VTable* Parent;
 	Vector* Elements;
-} VTable;
+} bc_VTable;
 
 /**
  * VTableを作成します.
  * @return
  */
-VTable* NewVTable();
+bc_VTable* bc_NewVTable();
 
 /**
  * src の中身を dst へ複製します.
  * @param src
  * @param dst
  */
-void CopyVTable(VTable* src, VTable* dst);
+void bc_CopyVTable(bc_VTable* src, bc_VTable* dst);
 
 /**
  * メソッド一覧に m を追加します.
@@ -44,7 +44,7 @@ void CopyVTable(VTable* src, VTable* dst);
  * @param self
  * @param m
  */
-void AddVTable(VTable* self, struct Method* m);
+void bc_AddVTable(bc_VTable* self, struct bc_Method* m);
 
 /**
  * メソッド一覧に m を追加します.
@@ -54,11 +54,11 @@ void AddVTable(VTable* self, struct Method* m);
  * @param m
  * @param cctx
  */
-void ReplaceVTable(VTable* self, struct Method* m, struct CallContext* cctx);
+void bc_ReplaceVTable(bc_VTable* self, struct bc_Method* m, struct CallContext* cctx);
 
 /**
  * VTableを開放します.
  * @param self
  */
-void DeleteVTable(VTable* self);
+void bc_DeleteVTable(bc_VTable* self);
 #endif // !SIGNAL_ENV_VTABLE_H

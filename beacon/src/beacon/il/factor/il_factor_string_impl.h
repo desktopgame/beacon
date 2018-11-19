@@ -29,7 +29,7 @@ void GenerateILString(ILString* self, Enviroment* env, CallContext* cctx);
 
 void LoadILString(ILString* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILString(ILString* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILString(ILString* self, Enviroment* env, CallContext* cctx);
 
 char* ILStringToString(ILString* self, Enviroment* env);
 

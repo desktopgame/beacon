@@ -15,14 +15,14 @@
  * 配列を表すオブジェクトです。
  */
 typedef struct Array {
-	Object Super;
+	bc_Object Super;
 	Vector* Elements;
 } Array;
 
 struct Frame;
-struct Type;
-struct Object;
-struct GenericType;
+struct bc_Type;
+struct bc_Object;
+struct bc_GenericType;
 
 /**
  * 新しい配列オブジェクトを生成します。
@@ -30,7 +30,7 @@ struct GenericType;
  * @param element_type
  * @return
  */
-struct Object* NewArray(int size, struct GenericType* element_type);
+struct bc_Object* NewArray(int size, struct bc_GenericType* element_type);
 
 /**
  * beacon::lang::Arrayクラスを初期化します.
@@ -41,7 +41,7 @@ void InitArray();
  * beacon::lang::Arrayクラスを返します.
  * @return
  */
-struct Type* GetArrayType();
+struct bc_Type* GetArrayType();
 
 /**
  * beacon::lang::Arrayクラスを作成します.
@@ -50,7 +50,7 @@ struct Type* GetArrayType();
  * @param fr
  * @return
  */
-struct Object* DynamicNewArray(struct GenericType* gtype, int length, struct Frame* fr);
+struct bc_Object* DynamicNewArray(struct bc_GenericType* gtype, int length, struct Frame* fr);
 
 /**
  * @param arr
@@ -58,18 +58,18 @@ struct Object* DynamicNewArray(struct GenericType* gtype, int length, struct Fra
  * @param o
  * @return
  */
-void SetElementAt(struct Object* arr, int index, struct Object* o);
+void SetElementAt(struct bc_Object* arr, int index, struct bc_Object* o);
 
 /**
  * @param arr
  * @param index
  * @return
  */
-struct Object* GetElementAt(struct Object* arr, int index);
+struct bc_Object* GetElementAt(struct bc_Object* arr, int index);
 
 /**
  * @param arr
  * @return
  */
-int GetArrayLength(struct Object* arr);
+int GetArrayLength(struct bc_Object* arr);
 #endif // !SIGNAL_LIB_SIGNAL_LANG_SG_ARRAY_H

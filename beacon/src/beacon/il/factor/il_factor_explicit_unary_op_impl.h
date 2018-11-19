@@ -13,7 +13,7 @@
 #include "../call_context.h"
 struct ILFactor;
 struct Enviroment;
-struct GenericType;
+struct bc_GenericType;
 
 typedef struct ILExplicitUnaryOp {
 	struct ILFactor* Receiver;
@@ -29,7 +29,7 @@ void GenerateILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, 
 
 void LoadILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILExplicitUnaryOp(ILExplicitUnaryOp* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILExplicitUnaryOp(ILExplicitUnaryOp* self);
 #endif

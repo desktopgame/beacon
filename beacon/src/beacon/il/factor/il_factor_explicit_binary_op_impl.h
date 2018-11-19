@@ -13,7 +13,7 @@
 #include "../call_context.h"
 struct ILFactor;
 struct Enviroment;
-struct GenericType;
+struct bc_GenericType;
 
 typedef struct ILExplicitBinaryOp {
 	struct ILFactor* Receiver;
@@ -30,7 +30,7 @@ void GenerateILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env
 
 void LoadILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
 
 void DeleteILExplicitBinaryOp(ILExplicitBinaryOp* self);
 #endif

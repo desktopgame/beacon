@@ -22,7 +22,7 @@ typedef struct ILTry {
 } ILTry;
 
 typedef struct ILCatch {
-	GenericCache* GCache;
+	bc_GenericCache* GCache;
 	StringView Name;
 	Vector* Statements;
 } ILCatch;

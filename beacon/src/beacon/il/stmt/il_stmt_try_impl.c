@@ -31,7 +31,7 @@ ILTry* NewILTry() {
 ILCatch* NewILCatch(StringView namev) {
 	ILCatch* ret = (ILCatch*)MEM_MALLOC(sizeof(ILCatch));
 	ret->Name = namev;
-	ret->GCache = NewGenericCache();
+	ret->GCache = bc_NewGenericCache();
 	ret->Statements = NewVector();
 	return ret;
 }
@@ -61,7 +61,7 @@ void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 	for (int i = 0; i < self->Catches->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		ILCatch* ilcatch = (ILCatch*)AtVector(self->Catches, i);
-		GenericType* exgType = ResolveImportManager(NULL, ilcatch->GCache, cctx);
+		bc_GenericType* exgType = bc_ResolveImportManager(NULL, ilcatch->GCache, cctx);
 		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->Name)->Index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
@@ -72,7 +72,7 @@ void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 		//現在の例外と catch節 の型に互換性があるなら続行
 		AddOpcodeBuf(env->Bytecode, OP_HEXCEPTION);;
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(exgType, env);
+		bc_GenerateGenericType(exgType, env);
 		AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 		//互換性がないので次のケースへ
 		AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
@@ -117,7 +117,7 @@ void LoadILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 }
 
 void LoadILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
-	GenericType* exgType = ResolveImportManager(NULL, self->GCache, cctx);
+	bc_GenericType* exgType = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	EntrySymbolTable(env->Symboles, exgType, self->Name);
 	for(int i=0; i<self->Statements->Length; i++) {
 		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
@@ -126,7 +126,7 @@ void LoadILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
 }
 
 void DeleteILCatch(ILCatch* self) {
-	DeleteGenericCache(self->GCache);
+	bc_DeleteGenericCache(self->GCache);
 	DeleteVector(self->Statements, ILCatch_stmt_delete);
 	MEM_FREE(self);
 }

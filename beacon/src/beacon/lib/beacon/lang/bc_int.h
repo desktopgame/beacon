@@ -11,12 +11,12 @@
 #ifndef BEACON_LIB_SIGNAL_LANG_INT_H
 #define BEACON_LIB_SIGNAL_LANG_INT_H
 #include "../../bc_library_impl.h"
-struct Type;
+struct bc_Type;
 /**
  * 整数型のデータを表すオブジェクトです。
  */
 typedef struct Integer {
-	Object Super;
+	bc_Object Super;
 	int Value;
 } Integer;
 
@@ -25,7 +25,7 @@ typedef struct Integer {
  * @param value
  * @return
  */
-struct Object* NewInteger(int value);
+struct bc_Object* NewInteger(int value);
 
 /**
  * beacon::lang::Intクラスを初期化します.
@@ -36,5 +36,5 @@ void InitInt();
  * beacon::lang::Intを返します.
  * @return
  */
-struct Type* GetIntType();
+struct bc_Type* GetIntType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_INT_H

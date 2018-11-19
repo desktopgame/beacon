@@ -5,11 +5,11 @@
 #include <string.h>
 
 //proto
-static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
-static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env);
+static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
+static void bc_string_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
 
-Object* NewString(const char* str) {
-	Object* ret = ConstructObject(sizeof(String), GENERIC_STRING);
+bc_Object* NewString(const char* str) {
+	bc_Object* ret = bc_ConstructObject(sizeof(String), BC_GENERIC_STRING);
 	ret->OnMessage = handle_obj_message;
 	//ret->u.string_ = s;
 	//ret->u.field_vec = NewVector();
@@ -17,10 +17,10 @@ Object* NewString(const char* str) {
 	//ret->VPtr = GetVTableType(TYPE_STRING);
 
 	//配列を生成
-	Object* arr = NewArray(strlen(str), GENERIC_CHAR);
+	bc_Object* arr = NewArray(strlen(str), BC_GENERIC_CHAR);
 	//arr->Tag = OBJECT_ARRAY_T;
-	Type* arrType = GetArrayType();
-	Type* strType = FindTypeFromNamespace(GetLangNamespace(), InternString("String"));
+	bc_Type* arrType = GetArrayType();
+	bc_Type* strType = bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("String"));
 	//arr->GType = NewGenericType(arrType);
 	//arr->VPtr = GetVTableType(arrType);
 	//arr->Tag = OBJECT_ARRAY_T;
@@ -33,7 +33,7 @@ Object* NewString(const char* str) {
 		if(c == '\0') {
 			break;
 		}
-		SetElementAt((Object*)arr, i, (Object*)NewChar(c));
+		SetElementAt((bc_Object*)arr, i, (bc_Object*)NewChar(c));
 		AppendBuffer(sb, c);
 	}
 	ShrinkBuffer(sb);
@@ -50,45 +50,45 @@ Object* NewString(const char* str) {
 	//C形式の文字列でも保存
 	//AssignVector(ret->NativeSlotVec, 0, sb);
 	((String*)ret)->Buffer = sb;
-	return (Object*)ret;
+	return (bc_Object*)ret;
 }
 
 void InitString() {
-	Namespace* lang = GetLangNamespace();
-	Type* stringType = NewPreloadClass(InternString("String"));
-	Class* stringClass = TYPE2CLASS(stringType);
+	bc_Namespace* lang = bc_GetLangNamespace();
+	bc_Type* stringType = NewPreloadClass(InternString("String"));
+	Class* stringClass = BC_TYPE2CLASS(stringType);
 	stringType->AllocSize = sizeof(String);
-	AddTypeNamespace(lang, stringType);
+	bc_AddTypeNamespace(lang, stringType);
 	DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
-Buffer * GetRawString(Object* self) {
+Buffer * GetRawString(bc_Object* self) {
 	//VectorItem e = AtVector(self->NativeSlotVec, 0);
 	//assert(self->Tag == OBJECT_STRING_T);
 	return ((String*)self)->Buffer;
 }
 
-Type* GetStringType() {
-	Namespace* lang = GetLangNamespace();
-	return FindTypeFromNamespace(lang, InternString("String"));
+bc_Type* GetStringType() {
+	bc_Namespace* lang = bc_GetLangNamespace();
+	return bc_FindTypeFromNamespace(lang, InternString("String"));
 }
 
 //private
-static void* handle_obj_message(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]) {
+static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]) {
 	String* str = ((String*)self);
 	if(msg == OBJECT_MSG_DELETE) {
 		DeleteBuffer(str->Buffer); str->Buffer = NULL;
-		return HandleObjectMessage(self, msg, argc, argv);
+		return bc_HandleObjectMessage(self, msg, argc, argv);
 	} else if(msg == OBJECT_MSG_DESTROY) {
 		DeleteBuffer(str->Buffer); str->Buffer = NULL;
-		return HandleObjectMessage(self, msg, argc, argv);
+		return bc_HandleObjectMessage(self, msg, argc, argv);
 	} else {
-		return HandleObjectMessage(self, msg, argc, argv);
+		return bc_HandleObjectMessage(self, msg, argc, argv);
 	}
 }
 
-static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
-	Object* self = AtVector(fr->VariableTable, 0);
+static void bc_string_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* self = AtVector(fr->VariableTable, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
 	//文字列が作成された場合には Object_string_new() 
 	//によって生成されます。
@@ -98,13 +98,13 @@ static void bc_string_nativeInit(Method* parent, Frame* fr, Enviroment* env) {
 	self->OnMessage = handle_obj_message;
 	//String#charArrayを取得
 	int temp = 0;
-	FindFieldClass(TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
+	FindFieldClass(BC_TYPE_STRING->Kind.Class, InternString("charArray"), &temp);
 	Array* charArr = (Array*)AtVector(self->Fields, temp);
 	//これを char* へ変換
 	Buffer* sb = NewBuffer();
 	for (int i = 0; i < charArr->Elements->Length; i++) {
-		Object* e = (Object*)AtVector(charArr->Elements, i);
-		assert(IsCharValue(e));
+		bc_Object* e = (bc_Object*)AtVector(charArr->Elements, i);
+		assert(bc_IsCharValue(e));
 		AppendBuffer(sb, ((Char*)e)->Value);
 	}
 	//AssignVector(self->NativeSlotVec, 0, sb);

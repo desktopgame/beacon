@@ -13,9 +13,9 @@
 #include "../../../util/string_pool.h"
 #include "subscript_descriptor.h"
 struct Enviroment;
-struct GenericType;
-struct OperatorOverload;
-struct Method;
+struct bc_GenericType;
+struct bc_OperatorOverload;
+struct bc_Method;
 
 typedef enum InstanceInvokeTag {
 	INSTANCE_INVOKE_METHOD_T,
@@ -30,10 +30,10 @@ typedef struct ILInvoke {
 	StringView namev;
 	int index;
 	union {
-		struct Method* m;
-		struct OperatorOverload* opov;
+		struct bc_Method* m;
+		struct bc_OperatorOverload* opov;
 	} u;
-	struct GenericType* resolved;
+	struct bc_GenericType* resolved;
 	InstanceInvokeTag tag;
 } ILInvoke;
 
@@ -43,11 +43,11 @@ void GenerateILInvoke(ILInvoke* self, Enviroment* env, CallContext* cctx);
 
 void LoadILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
 
-struct GenericType* EvalILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
 
 char* ILInvokeToString(ILInvoke* self, Enviroment* env);
 
 void DeleteILInvoke(ILInvoke* self);
 
-struct OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

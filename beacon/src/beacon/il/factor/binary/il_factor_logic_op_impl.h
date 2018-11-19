@@ -13,7 +13,7 @@
 #include "../../call_context.h"
 
 struct ILBinaryOp;
-struct GenericType;
+struct bc_GenericType;
 struct Enviroment;
 typedef struct ILLogicOp {
 	struct ILBinaryOp* Parent;
@@ -23,7 +23,7 @@ typedef struct ILLogicOp {
 
 ILLogicOp* NewILLogicOp(bc_OperatorType type);
 
-struct GenericType* EvalILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
 
 void GenerateILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
 

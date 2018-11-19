@@ -15,7 +15,7 @@
  * 64bit整数を扱うオブジェクトです。
  */
 typedef struct Long {
-	Object Super;
+	bc_Object Super;
 	long Value;
 } Long;
 
@@ -24,5 +24,5 @@ typedef struct Long {
  * @param value
  * @return
  */
-struct Object* NewLong(long value);
+struct bc_Object* NewLong(long value);
 #endif

@@ -21,7 +21,7 @@ SymbolTable * NewSymbolTable() {
 	return ret;
 }
 
-SymbolEntry* EntrySymbolTable(SymbolTable* self, GenericType* gtp, StringView namev) {
+SymbolEntry* EntrySymbolTable(SymbolTable* self, bc_GenericType* gtp, StringView namev) {
 	NumericMap* data = GetNumericMapCell(self->VariableMap, namev);
 	if (data) {
 		return ((SymbolEntry*)data->Item);

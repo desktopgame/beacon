@@ -50,9 +50,9 @@ void LoadCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILCallOp(ILCallOp* self, Enviroment* env, CallContext* cctx) {
 	ILCallOp_check(self, env, cctx);
-	GenericType* ret = NULL;
+	bc_GenericType* ret = NULL;
 	if(self->Type == ILCALL_TYPE_INVOKE_T) {
 		ret = EvalILInvoke(self->Kind.Invoke, env, cctx);
 	} else if(self->Type == ILCALL_TYPE_INVOKE_STATIC_T) {
@@ -156,10 +156,10 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, Envirom
 		#if defined(DEBUG)
 		const char* clname = Ref2Str(ilvar->FQCN->Name);
 		#endif
-		Namespace* cur = GetNamespaceCContext(cctx);
-		Class* ctype = FindClassFromNamespace(cur, ilvar->FQCN->Name);
+		bc_Namespace* cur = GetNamespaceCContext(cctx);
+		Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
 		if(ctype == NULL) {
-			ctype = FindClassFromNamespace(GetLangNamespace(), ilvar->FQCN->Name);
+			ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(), ilvar->FQCN->Name);
 		}
 		if(ctype != NULL) {
 			ILMemberOp_check_static(self, ilmem, ilvar, env, cctx);
@@ -199,8 +199,8 @@ static void ILSubscript_check(ILCallOp* self, Enviroment* env, CallContext* cctx
 	ILFactor* receiver = self->Receiver;
 	ILCallOp* call_left = receiver->Kind.Call;
 	ILInvoke* iv = NewILInvoke(ZERO_VIEW);
-	GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
-	Class* receiver_cl = TYPE2CLASS(GENERIC2TYPE(receiver_gtype));
+	bc_GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
+	Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
 	int temp;
 	iv->u.opov = ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
 	iv->index = temp;

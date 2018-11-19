@@ -32,7 +32,7 @@ void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* 
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
 		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
-		GenerateGenericType(e->GType, env);
+		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->Arguments->Length; i++) {
 		ILArgument* e = (ILArgument*)AtVector(self->Arguments, i);
@@ -50,13 +50,13 @@ void LoadILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cct
 	ILInvokeStatic_check(self, env, cctx);
 }
 
-GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
 	ILInvokeStatic_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(bc_GetLastPanic()) {
 		return NULL;
 	}
-	GenericType* rgtp = self->Method->ReturnGType;
+	bc_GenericType* rgtp = self->Method->ReturnGType;
 	if(rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
 		resolve_non_default(self, env, cctx);
 		return self->Resolved;
@@ -69,7 +69,7 @@ GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallCont
 
 char* ILInvokeStaticToString(ILInvokeStatic* self, Enviroment* env) {
 	Buffer* sb = NewBuffer();
-	char* name = FQCNCacheToString(self->FQCN);
+	char* name = bc_FQCNCacheToString(self->FQCN);
 	AppendsBuffer(sb, name);
 	AppendBuffer(sb, '.');
 	AppendsBuffer(sb, Ref2Str(self->Name));
@@ -82,7 +82,7 @@ char* ILInvokeStaticToString(ILInvokeStatic* self, Enviroment* env) {
 void DeleteILInvokeStatic(ILInvokeStatic* self) {
 	DeleteVector(self->Arguments, ILInvokeStatic_args_delete);
 	DeleteVector(self->TypeArgs, ILInvokeStatic_typeargs_delete);
-	DeleteFQCNCache(self->FQCN);
+	bc_DeleteFQCNCache(self->FQCN);
 	MEM_FREE(self);
 }
 //private
@@ -91,9 +91,9 @@ static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallCont
 	if(self->Resolved != NULL) {
 		return;
 	}
-	GenericType* rgtp = self->Method->ReturnGType;
-	GenericType* instanced_type = (GenericType*)AtVector(self->TypeArgs, rgtp->VirtualTypeIndex);
-	self->Resolved = NewGenericType(instanced_type->CoreType);
+	bc_GenericType* rgtp = self->Method->ReturnGType;
+	bc_GenericType* instanced_type = (bc_GenericType*)AtVector(self->TypeArgs, rgtp->VirtualTypeIndex);
+	self->Resolved = bc_NewGenericType(instanced_type->CoreType);
 	self->Resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
 	self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
@@ -105,13 +105,13 @@ static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext*
 	CallFrame* cfr = PushCallContext(cctx, FRAME_STATIC_INVOKE_T);
 	cfr->Kind.StaticInvoke.Args = self->Arguments;
 	cfr->Kind.StaticInvoke.TypeArgs = self->TypeArgs;
-	GenericType* rgtp = self->Method->ReturnGType;
-	self->Resolved = ApplyGenericType(rgtp, cctx);
+	bc_GenericType* rgtp = self->Method->ReturnGType;
+	self->Resolved = bc_ApplyGenericType(rgtp, cctx);
 	PopCallContext(cctx);
 }
 
 static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
-	Type* ty =GetEvalTypeCContext(cctx, self->FQCN);
+	bc_Type* ty =GetEvalTypeCContext(cctx, self->FQCN);
 	if(ty == NULL) {
 		bc_Panic(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
 			Ref2Str(self->FQCN->Name),
@@ -119,7 +119,7 @@ static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallCon
 		);
 		return;
 	}
-	Class* cls = TYPE2CLASS(ty);
+	Class* cls = BC_TYPE2CLASS(ty);
 	#if defined(DEBUG)
 	const char* classname = Ref2Str(cls->Name);
 	const char* methodname = Ref2Str(self->Name);

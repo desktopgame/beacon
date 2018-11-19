@@ -28,7 +28,7 @@ void CLBC_import(bc_ClassLoader* self, Vector* ilimports) {
 	}
 	//Javaがjava.langをインポートせずに使用できるのと同じように、
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
-	ScriptContext* ctx = GetCurrentScriptContext();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	for(int i=0; i<ctx->IncludeList->Length; i++) {
 		FileEntry* entry = AtVector(ctx->IncludeList, i);
 		if(entry->IsFile && bc_IsMatchExtension(entry->FileName, "bc")) {
@@ -41,7 +41,7 @@ void CLBC_import(bc_ClassLoader* self, Vector* ilimports) {
 
 void CLBC_new_load(bc_ClassLoader * self, char * fullPath) {
 	bc_CL_ERROR(self);
-	ScriptContext* ctx = GetCurrentScriptContext();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	ctx->Heap->AcceptBlocking++;
 	CLBC_new_load_internal(self, fullPath);
 	ctx->Heap->AcceptBlocking--;
@@ -49,10 +49,10 @@ void CLBC_new_load(bc_ClassLoader * self, char * fullPath) {
 
 bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {
 	bc_CL_ERROR_RET(self, self);
-	ScriptContext* ctx = GetCurrentScriptContext();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	bc_ClassLoader* cll = bc_NewClassLoader(full_path, CONTENT_LIB_T);
 	cll->Parent = self;
-	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
+	bc_ImportInfo* info = bc_ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
 	PutTreeMap(ctx->ClassLoaderMap, full_path, cll);
 	return cll;
@@ -62,7 +62,7 @@ bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {
 static void CLBC_import_internal(bc_ClassLoader* self, Vector* ilimports, int i) {
 	bc_CL_ERROR(self);
 	if (i >= ilimports->Length ||
-	    IsLoadedImportManager(self->ImportManager, i)) {
+	    bc_IsLoadedImportManager(self->ImportManager, i)) {
 		return;
 	}
 	VectorItem e = AtVector(ilimports, i);
@@ -76,7 +76,7 @@ static void CLBC_import_internal(bc_ClassLoader* self, Vector* ilimports, int i)
 
 static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path) {
 	bc_CL_ERROR(self);
-	ScriptContext* ctx = GetCurrentScriptContext();
+	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
 	bc_ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
@@ -101,7 +101,7 @@ static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path) {
 static void CLBC_import_already(bc_ClassLoader* self, bc_ClassLoader* cll) {
 	bc_CL_ERROR(self);
 	//self -> cll への参照を与える
-	ImportInfo* info = ImportImportManager(self->ImportManager, cll);
+	bc_ImportInfo* info = bc_ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
 	assert(cll->SourceCode != NULL);
 	assert(cll->ILCode != NULL);

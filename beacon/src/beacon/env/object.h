@@ -13,45 +13,45 @@
 #include "../util/vector.h"
 #include <stdbool.h>
 
-struct GenericType;
-struct VTable;
+struct bc_GenericType;
+struct bc_VTable;
 /**
  * オブジェクトの種類を表すためのフラグ。
  */
-typedef enum ObjectFlags {
+typedef enum bc_ObjectFlags {
 	OBJECT_FLG_NONE = 1 << 0,
 	OBJECT_FLG_COROUTINE = 1 << 1,
 	OBJECT_FLG_CLONE = 1 << 2,
-} ObjectFlags;
+} bc_ObjectFlags;
 /** 
  * オブジェクトの着色状態.
  * インクリメンタルGCのためのフラグです。
  */
-typedef enum ObjectPaint {
+typedef enum bc_ObjectPaint {
 	PAINT_UNMARKED_T,
 	PAINT_MARKED_T,
 	PAINT_ONEXIT_T,
-} ObjectPaint ;
+} bc_ObjectPaint ;
 
 /**
  * オブジェクトに対して送信することができる命令です。
  * これを判別することで一つの関数ポインタで処理を分岐させ、
  * オブジェクトひとつあたりのサイズを削減します。
  */
-typedef int ObjectMessage;
+typedef int bc_ObjectMessage;
 
 /**
  * メッセージの引数です。
  */
-typedef union ObjectMessageArgument {
+typedef union bc_ObjectMessageArgument {
 	int Int;
 	void* Any;
-} ObjectMessageArgument;
+} bc_ObjectMessageArgument;
 
 /**
  * 全てのオブジェクトがサポートする必要のあるメッセージです。
  */
-typedef enum StandardObjectMessage {
+typedef enum bc_StandardObjectMessage {
 	OBJECT_MSG_NONE = 0,
 	OBJECT_MSG_PRINT,
 	OBJECT_MSG_DELETE,
@@ -60,20 +60,20 @@ typedef enum StandardObjectMessage {
 	OBJECT_MSG_CLONE,
 	OBJECT_MSG_GENERIC,
 	OBJECT_MSG_END,
-} StandardObjectMessage;
+} bc_StandardObjectMessage;
 
 /**
  * ヒープに関連付けされるオブジェクト.
  * beacon で使用される全てのデータはこれ。
  */
-typedef struct Object {
-	struct GenericType* GType;
-	struct VTable* VPtr;
-	ObjectPaint Paint;
-	ObjectFlags Flags;
+typedef struct bc_Object {
+	struct bc_GenericType* GType;
+	struct bc_VTable* VPtr;
+	bc_ObjectPaint Paint;
+	bc_ObjectFlags Flags;
 	Vector* Fields;
-	void* (*OnMessage)(struct Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
-} Object;
+	void* (*OnMessage)(struct bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
+} bc_Object;
 
 /**
  * 標準的なメッセージハンドラです。
@@ -84,14 +84,14 @@ typedef struct Object {
  * @param argv
  * @return
  */
-void* HandleObjectMessage(Object* self, ObjectMessage msg, int argc, ObjectMessageArgument argv[]);
+void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
 
 /**
  * 指定のサイズのメモリを確保して、ヒープに紐づけます。
  * @param object_size
  * @return
  */
-void* NewObject(size_t object_size);
+void* bc_NewObject(size_t object_size);
 
 /**
  * オブジェクトを生成して型を割り当てます。
@@ -99,39 +99,39 @@ void* NewObject(size_t object_size);
  * @param gtype
  * @return
  */
-void* ConstructObject(size_t object_size, struct GenericType* gtype);
+void* bc_ConstructObject(size_t object_size, struct bc_GenericType* gtype);
 
 /**
  * 可能ならキャッシュを返します.
  * @param i
  * @return
  */
-Object* GetIntObject(int i);
+bc_Object* bc_GetIntObject(int i);
 
 /**
  * 真偽値型の値を参照します.
  * @param b
  * @return
  */
-Object* GetBoolObject(bool b);
+bc_Object* bc_GetBoolObject(bool b);
 
 /**
  * trueを参照します.
  * @return
  */
-Object* GetTrueObject();
+bc_Object* bc_GetTrueObject();
 
 /**
  * falseを参照します.
  * @return
  */
-Object* GetFalseObject();
+bc_Object* bc_GetFalseObject();
 
 /**
  * nullを参照します.
  * @return
  */
-Object* GetNullObject();
+bc_Object* bc_GetNullObject();
 
 /**
  * このオブジェクトを複製します.
@@ -139,14 +139,14 @@ Object* GetNullObject();
  * @param self
  * @return
  */
-Object* CopyObject(Object* self);
+bc_Object* bc_CopyObject(bc_Object* self);
 
 /**
  * 参照としてオブジェクトを複製します.
  * @param self
  * @return
  */
-Object* CloneObject(Object* self);
+bc_Object* bc_CloneObject(bc_Object* self);
 
 /**
  * このオブジェクトと
@@ -154,162 +154,162 @@ Object* CloneObject(Object* self);
  * @param self
  * @param paint
  */
-void PaintAllObject(Object* self, ObjectPaint paint);
+void bc_PaintAllObject(bc_Object* self, bc_ObjectPaint paint);
 
 /**
  * このオブジェクトと
  * このオブジェクトから参照可能なオブジェクトを全てマークします.
  * @param self
  */
-void MarkAllObject(Object* self);
+void bc_MarkAllObject(bc_Object* self);
 
 /**
  * まだ開放されていないオブジェクトの数を返します.
  * @return
  */
-int CountActiveObject();
+int bc_CountActiveObject();
 
 /**
  * オブジェクトの詳細を出力します.
  * @param self
  */
-void PrintObject(Object* self);
+void bc_PrintObject(bc_Object* self);
 
 /**
  * オブジェクトを開放します.
  * @param self
  */
-void DeleteObject(Object* self);
+void bc_DeleteObject(bc_Object* self);
 
 /**
  * 定数などを解放するための関数.
  * @param self
  */
-void DestroyObject(Object* self);
+void bc_DestroyObject(bc_Object* self);
 
 /**
  * beaconからCの int へ変換します.
  * @param self
  * @return
  */
-int ObjectToInt(Object* self);
+int bc_ObjectToInt(bc_Object* self);
 
 /**
  * beaconからCの double へ変換します.
  * @param self
  * @return
  */
-double ObjectToDouble(Object* self);
+double bc_ObjectToDouble(bc_Object* self);
 
 /**
  * beaconからCの bool へ変換します.
  * @param self
  * @return
  */
-bool ObjectToBool(Object* self);
+bool bc_ObjectToBool(bc_Object* self);
 
 /**
  * beaconからCの char へ変換します.
  * @param self
  * @return
  */
-char ObjectToChar(Object* self);
+char bc_ObjectToChar(bc_Object* self);
 
 /**
  * beaconからCの long へ変換します.
  * @param self
  * @return
  */
-long ObjectToLong(Object* self);
+long bc_ObjectToLong(bc_Object* self);
 
 /**
  * Cからbeaconの Int へ変換します.
  * @param i
  * @return
  */
-Object* IntToObject(int i);
+bc_Object* bc_IntToObject(int i);
 
 /**
  * Cからbeaconの Double へ変換します.
  * @param d
  * @return
  */
-Object* DoubleToObject(double d);
+bc_Object* bc_DoubleToObject(double d);
 
 /**
  * Cからbeaconの bool へ変換します.
  * @param b
  * @return
  */
-Object* BoolToObject(bool b);
+bc_Object* bc_BoolToObject(bool b);
 
 /**
  * Cからbeaconの char へ変換します.
  * @param c
  * @return
  */
-Object* CharToObject(char c);
+bc_Object* bc_CharToObject(char c);
 
 /**
  * Cからbeacon
  * @param l
  * @return
  */
-Object* LongToObject(long l);
+bc_Object* bc_LongToObject(long l);
 
 /**
  * 指定の型のデフォルト値を返します.
  * @param gt
  * @return
  */
-Object* GetDefaultObject(struct GenericType* gt);
+bc_Object* bc_GetDefaultObject(struct bc_GenericType* gt);
 
 /**
  * このオブジェクトのデバッグ表現を返します.
  * @param self
  * @return
  */
-const char* GetObjectName(Object* self);
+const char* bc_GetObjectName(bc_Object* self);
 
 /**
  * オブジェクトが文字型の値を持つなら true.
  * @param self
  * @return
  */
-bool IsCharValue(Object* self);
+bool bc_IsCharValue(bc_Object* self);
 
 /**
  * オブジェクトが真偽値型の値を持つなら true.
  * @param self
  * @return
  */
-bool IsBoolValue(Object* self);
+bool bc_IsBoolValue(bc_Object* self);
 
 /**
  * オブジェクトが整数型の値を持つなら true.
  * @param self
  * @return
  */
-bool IsIntValue(Object* self);
+bool bc_IsIntValue(bc_Object* self);
 
 /**
  * オブジェクトが実数型の値を持つなら true.
  * @param self
  * @return
  */
-bool IsDoubleValue(Object* self);
+bool bc_IsDoubleValue(bc_Object* self);
 
 /**
  * オブジェクトが文字列型の値を持つなら true.
  * @param self
  * @return
  */
-bool IsStringValue(Object* self);
+bool bc_IsStringValue(bc_Object* self);
 
 /**
  * オブジェクトが空なら true.
  * @param self
  * @return
  */
-bool IsNullValue(Object* self);
+bool bc_IsNullValue(bc_Object* self);
 #endif // !SIGNAL_ENV_OBJECT_H

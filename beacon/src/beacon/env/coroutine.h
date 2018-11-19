@@ -3,8 +3,8 @@
 #include "object.h"
 #include "../vm/yield_context.h"
 
-typedef struct Coroutine {
-	Object Super;
+typedef struct bc_Coroutine {
+	bc_Object Super;
 	YieldContext* Context;
-} Coroutine;
+} bc_Coroutine;
 #endif

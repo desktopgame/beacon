@@ -25,7 +25,7 @@ void LoadILThis(ILThis * self, Enviroment * env, CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-GenericType* EvalILThis(ILThis * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILThis(ILThis * self, Enviroment * env, CallContext* cctx) {
 	return GetTypeCContext(cctx)->GenericSelf;
 }
 
@@ -41,10 +41,10 @@ static void check_context(ILThis * self, Enviroment * env, CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
-	Method* met = GetMethodCContext(cctx);
+	bc_Method* met = GetMethodCContext(cctx);
 	if(bc_IsStaticModifier(met->Modifier)) {
 		bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-			Ref2Str(GetTypeName(met->Parent)),
+			Ref2Str(bc_GetTypeName(met->Parent)),
 			Ref2Str(met->Name)
 		);
 	}

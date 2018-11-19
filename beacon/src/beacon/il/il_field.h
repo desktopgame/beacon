@@ -14,13 +14,13 @@
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 //#include "../env/fqcn_cache.h"
-struct GenericCache;
+struct bc_GenericCache;
 struct ILFactor;
 /**
  * フィールドを表す要素.
  */
 typedef struct ILField {
-	struct GenericCache* GCache;
+	struct bc_GenericCache* GCache;
 	StringView Name;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;

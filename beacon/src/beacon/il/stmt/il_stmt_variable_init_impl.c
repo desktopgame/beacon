@@ -20,24 +20,24 @@ ILVariableInit * NewILVariableInit(StringView namev) {
 	ILVariableInit* ret = (ILVariableInit*)MEM_MALLOC(sizeof(ILVariableInit));
 	ret->Name = namev;
 	ret->Value = NULL;
-	ret->GCache = NewGenericCache();
+	ret->GCache = bc_NewGenericCache();
 	return ret;
 }
 
 void GenerateILVariableInit(ILVariableInit * self, Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->Value, env, cctx);
 	//宣言型と代入型が異なる場合
-	GenericType* ga = EvalILFactor(self->Value, env, cctx);
-	GenericType* gb = ResolveImportManager(NULL, self->GCache, cctx);
+	bc_GenericType* ga = EvalILFactor(self->Value, env, cctx);
+	bc_GenericType* gb = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
 	BC_ERROR();
-	if((ga->CoreType != NULL && ga->CoreType == TYPE_VOID) ||
-	   (gb->CoreType != NULL && gb->CoreType == TYPE_VOID)) {
+	if((ga->CoreType != NULL && ga->CoreType == BC_TYPE_VOID) ||
+	   (gb->CoreType != NULL && gb->CoreType == BC_TYPE_VOID)) {
 		   bc_Panic(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
-	int dist = DistanceGenericType(gb, ga, cctx);
+	int dist = bc_DistanceGenericType(gb, ga, cctx);
 	if (dist < 0) {
 		bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 			Ref2Str(self->Name)
@@ -54,7 +54,7 @@ void LoadILVariableInit(ILVariableInit * self, Enviroment * env, CallContext* cc
 			Ref2Str(self->Name)
 		);
 	}
-	GenericType* gt = ResolveImportManager(NULL, self->GCache, cctx);
+	bc_GenericType* gt = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	if(gt == NULL) {
 		bc_Panic(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
@@ -73,6 +73,6 @@ void LoadILVariableInit(ILVariableInit * self, Enviroment * env, CallContext* cc
 
 void DeleteILVariableInit(ILVariableInit * self) {
 	DeleteILFactor(self->Value);
-	DeleteGenericCache(self->GCache);
+	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

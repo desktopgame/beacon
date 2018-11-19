@@ -37,9 +37,9 @@ void LoadILExplicitBinaryOp(ILExplicitBinaryOp* self, Enviroment* env, CallConte
 	assert(self->Index != -1);
 }
 
-GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(self->Receiver, env, cctx);
-	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(gt)), self->Index);
+bc_GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* gt = EvalILFactor(self->Receiver, env, cctx);
+	bc_OperatorOverload* operator_ov = GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(gt)), self->Index);
 	return operator_ov->ReturnGType;
 }
 

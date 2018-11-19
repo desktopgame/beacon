@@ -70,9 +70,9 @@ void LoadILUnaryOp(ILUnaryOp * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILUnaryOp(ILUnaryOp * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILUnaryOp(ILUnaryOp * self, Enviroment * env, CallContext* cctx) {
 	LoadILUnaryOp(self, env, cctx);
-	GenericType* ret = NULL;
+	bc_GenericType* ret = NULL;
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
 			ret = EvalILNotOp(self->Kind.NotOp, env, cctx);
@@ -137,22 +137,22 @@ int GetIndexILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx) {
 
 int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, Enviroment* env, CallContext* cctx) {
 	Vector* args = NewVector();
-	GenericType* gtype = EvalILFactor(receiver, env, cctx);
+	bc_GenericType* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->VirtualTypeIndex != -1) {
 		assert(false);
 	}
-	Class* lclass = TYPE2CLASS(GENERIC2TYPE(gtype));
+	Class* lclass = BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype));
 	int temp = 0;
 	GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
 	DeleteVector(args, VectorDeleterOfNull);
 	return temp;
 }
 
-GenericType* ApplyILUnaryOp(ILUnaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->Arg, env, cctx);
+bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* lgtype = EvalILFactor(self->Arg, env, cctx);
 	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;
-	GenericType* ret = ApplyGenericType(gtype,cctx);
+	bc_GenericType* ret = bc_ApplyGenericType(gtype,cctx);
 	PopCallContext(cctx);
 	return ret;
 }

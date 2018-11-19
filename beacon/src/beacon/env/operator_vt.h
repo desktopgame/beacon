@@ -10,18 +10,18 @@
 #ifndef BEACON_ENV_OPERATOR_VT_H
 #define BEACON_ENV_OPERATOR_VT_H
 #include "../util/vector.h"
-struct OperatorOverload;
+struct bc_OperatorOverload;
 
 /**
  * オペレータの仮想関数テーブル.
  */
-typedef struct OperatorVT {
+typedef struct bc_OperatorVT {
 	Vector* Operators;
-} OperatorVT;
+} bc_OperatorVT;
 
-OperatorVT* NewOperatorVt();
+bc_OperatorVT* bc_NewOperatorVt();
 
-void ReplaceOperatorVt(OperatorVT* self, struct OperatorOverload* opov);
+void bc_ReplaceOperatorVt(bc_OperatorVT* self, struct bc_OperatorOverload* opov);
 
-void DeleteOperatorVt(OperatorVT* self);
+void bc_DeleteOperatorVt(bc_OperatorVT* self);
 #endif

@@ -18,7 +18,7 @@ static void assign_by_call(ILAssignOp* self, Enviroment* env, CallContext* cctx)
 static void assign_by_invoke(ILInvoke* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
 static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment* env, CallContext* cctx);
 static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx);
-static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx);
+static bool can_assign_to_field(bc_Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void generate_assign_to_variable(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env, CallContext* cctx);
 
@@ -39,10 +39,10 @@ void LoadILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Left, env, cctx);
 	LoadILFactor(self->Right, env, cctx);
 	//voidは代入できない
-	GenericType* gret = EvalILFactor(self->Right, env, cctx);
+	bc_GenericType* gret = EvalILFactor(self->Right, env, cctx);
 	BC_ERROR();
 	if(gret->CoreType != NULL &&
-	   gret->CoreType == TYPE_VOID) {
+	   gret->CoreType == BC_TYPE_VOID) {
 		   bc_Panic(BCERROR_VOID_ASSIGN_T);
 		return;
 	}
@@ -73,7 +73,7 @@ void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-GenericType* EvalILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	return EvalILFactor(self->Right, env, cctx);
 }
 
@@ -89,16 +89,16 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 	ILVariable* ilvar = ilsrc->Kind.Variable;
 	//staticなフィールドへの代入
 	if(ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
-		Class* cls = TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
+		Class* cls = BC_TYPE2CLASS(GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
 		int temp = -1;
-		Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
+		bc_Field* sf = FindSFieldClass(cls, ilmem->Name, &temp);
 		assert(temp != -1);
 		GenerateILFactor(self->Right, env, cctx);
 		GeneratePutField(env->Bytecode, sf, temp);
 		//指定の静的フィールドにアクセスできない
 		if(!IsAccessibleFieldClass(GetClassCContext(cctx), sf)) {
 			bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
-				Ref2Str(GetTypeName(cls->Parent)),
+				Ref2Str(bc_GetTypeName(cls->Parent)),
 				Ref2Str(sf->Name)
 			);
 			return;
@@ -106,7 +106,7 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 		//finalなので書き込めない
 		if(bc_IsFinalModifier(sf->Modifier)) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(GetTypeName(cls->Parent)),
+				Ref2Str(bc_GetTypeName(cls->Parent)),
 				Ref2Str(sf->Name)
 			);
 			return;
@@ -121,10 +121,10 @@ static void assign_by_namebase(ILAssignOp* self, Enviroment* env, CallContext* c
 }
 
 static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(receiver, env, cctx);
-	Class* cls = TYPE2CLASS(gt->CoreType);
+	bc_GenericType* gt = EvalILFactor(receiver, env, cctx);
+	Class* cls = BC_TYPE2CLASS(gt->CoreType);
 	int temp = -1;
-	Field* f = FindTreeFieldClass(cls, namev, &temp);
+	bc_Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	GenerateILFactor(receiver, env, cctx);
 	GenerateILFactor(source, env, cctx);
@@ -136,7 +136,7 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 	//指定のインスタンスフィールドにアクセスできない
 	if(!IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(GetTypeName(cls->Parent)),
+			Ref2Str(bc_GetTypeName(cls->Parent)),
 			Ref2Str(f->Name)
 		);
 	}
@@ -145,27 +145,27 @@ static void assign_to_field(ILAssignOp* self, ILFactor* receiver, ILFactor* sour
 
 static void assign_to_Property(ILAssignOp* self, Enviroment* env, CallContext* cctx) {
 	ILPropertyAccess* prop = self->Left->Kind.PropertyAccess;
-	Property* pp = prop->Property;
+	bc_Property* pp = prop->Property;
 	bool is_static = bc_IsStaticModifier(prop->Property->Modifier);
 	BC_ERROR();
 	//プロパティへアクセスできない
 	if(!IsAccessiblePropertyClass(GetClassCContext(cctx), pp)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(GetTypeName(pp->Parent)),
+			Ref2Str(bc_GetTypeName(pp->Parent)),
 			Ref2Str(pp->Name)
 		);
 		return;
 	}
 	if(!IsAccessiblePropertyAccessorClass(GetClassCContext(cctx), pp->Set)) {
 		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
-			Ref2Str(GetTypeName(pp->Parent)),
+			Ref2Str(bc_GetTypeName(pp->Parent)),
 			Ref2Str(pp->Name)
 		);
 		return;
 	}
-	if(DistanceGenericType(prop->Property->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
+	if(bc_DistanceGenericType(prop->Property->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
 		bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
-			Ref2Str(GetTypeName(prop->Property->Parent)),
+			Ref2Str(bc_GetTypeName(prop->Property->Parent)),
 			Ref2Str(prop->Property->Name)
 		);
 		return;
@@ -253,14 +253,14 @@ static void assign_by_invoke_bound(ILInvokeBound* lhs, ILFactor* rhs, Enviroment
 	AddOpcodeBuf(env->Bytecode, temp);
 }
 
-static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(self->Right, env, cctx);
-	int dist = DistanceGenericType(f->GType, gt, cctx);
+static bool can_assign_to_field(bc_Field* f, ILAssignOp* self, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* gt = EvalILFactor(self->Right, env, cctx);
+	int dist = bc_DistanceGenericType(f->GType, gt, cctx);
 	if(dist >= 0) {
 		return true;
 	} else {
 		bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T,
-			Ref2Str(GetTypeName(f->Parent)),
+			Ref2Str(bc_GetTypeName(f->Parent)),
 			Ref2Str(f->Name)
 		);
 		return false;
@@ -268,17 +268,17 @@ static bool can_assign_to_field(Field* f, ILAssignOp* self, Enviroment* env, Cal
 }
 
 static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, Enviroment* env, CallContext* cctx) {
-	GenericType* gt = EvalILFactor(receiver, env, cctx);
-	Class* cls = TYPE2CLASS(gt->CoreType);
+	bc_GenericType* gt = EvalILFactor(receiver, env, cctx);
+	Class* cls = BC_TYPE2CLASS(gt->CoreType);
 	int temp = -1;
-	Field* f = FindTreeFieldClass(cls, namev, &temp);
+	bc_Field* f = FindTreeFieldClass(cls, namev, &temp);
 	assert(temp != -1);
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->Tag != CALL_CTOR_T) {
 		//finalなので書き込めない
 		if(bc_IsFinalModifier(f->Modifier)) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(GetTypeName(cls->Parent)),
+				Ref2Str(bc_GetTypeName(cls->Parent)),
 				Ref2Str(f->Name)
 			);
 		}
@@ -287,7 +287,7 @@ static void check_final(ILFactor* receiver, ILFactor* source, StringView namev, 
 		if(bc_IsFinalModifier(f->Modifier) &&
 		   bc_IsStaticModifier(f->Modifier)) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
-				Ref2Str(GetTypeName(cls->Parent)),
+				Ref2Str(bc_GetTypeName(cls->Parent)),
 				Ref2Str(f->Name)
 			);
 		}
@@ -317,7 +317,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		GenerateILFactor(self->Right, env, cctx);
 		AddOpcodeBuf(env->Bytecode, OP_STORE);
 		AddOpcodeBuf(env->Bytecode, e->Index);
-		if(DistanceGenericType(e->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
+		if(bc_DistanceGenericType(e->GType, EvalILFactor(self->Right, env, cctx), cctx) < 0) {
 			bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
 				Ref2Str(ilvar->FQCN->Name)
 			);
@@ -326,7 +326,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 	//src のような名前がフィールドを示す場合
 	} else if(illoc->Type == VARIABLE_LOCAL_FIELD_T) {
 		int temp = -1;
-		Field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
+		bc_Field* f = FindTreeFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
 		if(temp == -1) {
 			f = FindTreeSFieldClass(GetClassCContext(cctx), illoc->Name, &temp);
 		}
@@ -336,7 +336,7 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 		if(!bc_IsStaticModifier(f->Modifier) &&
 		    IsStaticCContext(cctx)) {
 			bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				Ref2Str(GetTypeName(f->Parent)),
+				Ref2Str(bc_GetTypeName(f->Parent)),
 				Ref2Str(f->Name)
 			);
 			return;
@@ -350,14 +350,14 @@ static void generate_assign_to_variable_local(ILAssignOp* self, Enviroment* env,
 	//src のような名前がプロパティを示す場合
 	} else if(illoc->Type == VARIABLE_LOCAL_PROPERTY_T) {
 		int temp = -1;
-		Property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->Name, &temp);
+		bc_Property* p = FindTreePropertyClass(GetClassCContext(cctx), illoc->Name, &temp);
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
 		if(!bc_IsStaticModifier(p->Modifier) &&
 		    IsStaticCContext(cctx)) {
 			bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				Ref2Str(GetTypeName(p->Parent)),
+				Ref2Str(bc_GetTypeName(p->Parent)),
 				Ref2Str(p->Name)
 			);
 			return;

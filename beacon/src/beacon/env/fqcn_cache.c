@@ -9,21 +9,21 @@
 #include <string.h>
 
 //proto
-static Type* resolve_type(FQCNCache * self, Namespace* current);
+static bc_Type* resolve_type(bc_FQCNCache * self, bc_Namespace* current);
 
 /*
 FQCNCache * NewFQCNCache() {
 }
 */
 
-FQCNCache* MallocFQCNCache(const char* filename, int lineno) {
-	FQCNCache* ret = (FQCNCache*)bc_MXMalloc(sizeof(FQCNCache), filename, lineno);
+bc_FQCNCache* bc_MallocFQCNCache(const char* filename, int lineno) {
+	bc_FQCNCache* ret = (bc_FQCNCache*)bc_MXMalloc(sizeof(bc_FQCNCache), filename, lineno);
 	ret->Scope = MallocVector(filename, lineno);
 	ret->Name = 0;
 	return ret;
 }
 
-void DumpFQCNCache(FQCNCache * self, int depth) {
+void bc_DumpFQCNCache(bc_FQCNCache * self, int depth) {
 	bc_Printi(depth);
 	printf("type %s", Ref2Str(self->Name));
 	bc_Println();
@@ -41,7 +41,7 @@ void DumpFQCNCache(FQCNCache * self, int depth) {
 	}
 }
 
-void PrintFQCNCache(FQCNCache * self) {
+void bc_PrintFQCNCache(bc_FQCNCache * self) {
 	if(self == NULL) {
 		printf("NULL");
 		return;
@@ -57,41 +57,41 @@ void PrintFQCNCache(FQCNCache * self) {
 	}
 }
 
-Namespace * GetScopeFQCN(FQCNCache * self, Namespace* current) {
+bc_Namespace * bc_GetScopeFQCN(bc_FQCNCache * self, bc_Namespace* current) {
 	if (self->Scope->Length == 0) {
 		return current;
 	}
-	Namespace* top = NULL;
+	bc_Namespace* top = NULL;
 	for (int i = 0; i < self->Scope->Length; i++) {
 		StringView ev = (StringView)AtVector(self->Scope, i);
 		if (top == NULL) {
-			top = FindNamespaceFromRoot(ev);
+			top = bc_FindNamespaceFromRoot(ev);
 		} else {
-			top = FindNamespaceFromNamespace(top, ev);
+			top = bc_FindNamespaceFromNamespace(top, ev);
 		}
 	}
 	return top;
 }
 
-Type* GetTypeFQCN(FQCNCache * self, Namespace * current) {
-	Type* ret = resolve_type(self, current);
+bc_Type* bc_GetTypeFQCN(bc_FQCNCache * self, bc_Namespace * current) {
+	bc_Type* ret = resolve_type(self, current);
 	//Console(X::Yを含まない)のような指定なら
 	//signal::lang空間も探索する
 	if (ret == NULL && self->Scope->Length == 0) {
-		ret = resolve_type(self, GetLangNamespace());
+		ret = resolve_type(self, bc_GetLangNamespace());
 	}
 	return ret;
 }
 
-Interface* GetInterfaceFQCN(FQCNCache * self, Namespace * current) {
-	return TypeToInterface(GetTypeFQCN(self, current));
+Interface* bc_GetInterfaceFQCN(bc_FQCNCache * self, bc_Namespace * current) {
+	return bc_TypeToInterface(bc_GetTypeFQCN(self, current));
 }
 
-Class* GetClassFQCN(FQCNCache * self, Namespace * current) {
-	return TypeToClass(GetTypeFQCN(self, current));
+Class* bc_GetClassFQCN(bc_FQCNCache * self, bc_Namespace * current) {
+	return bc_TypeToClass(bc_GetTypeFQCN(self, current));
 }
 
-char* FQCNCacheToString(FQCNCache* self) {
+char* bc_FQCNCacheToString(bc_FQCNCache* self) {
 	Buffer* sb = NewBuffer();
 	for(int i=0; i<self->Scope->Length; i++) {
 		StringView ev = (StringView)AtVector(self->Scope, i);
@@ -105,7 +105,7 @@ char* FQCNCacheToString(FQCNCache* self) {
 	return ReleaseBuffer(sb);
 }
 
-void DeleteFQCNCache(FQCNCache * self) {
+void bc_DeleteFQCNCache(bc_FQCNCache * self) {
 	if(self == NULL) {
 		return;
 	}
@@ -113,7 +113,7 @@ void DeleteFQCNCache(FQCNCache * self) {
 	MEM_FREE(self);
 }
 
-bool EqualsFQCNCache(FQCNCache* a, FQCNCache* b) {
+bool bc_EqualsFQCNCache(bc_FQCNCache* a, bc_FQCNCache* b) {
 	if(a->Name != b->Name || a->Scope->Length != b->Scope->Length) {
 		return false;
 	}
@@ -130,35 +130,35 @@ bool EqualsFQCNCache(FQCNCache* a, FQCNCache* b) {
 	return true;
 }
 //private
-static Type* resolve_type(FQCNCache * self, Namespace* current) {
+static bc_Type* resolve_type(bc_FQCNCache * self, bc_Namespace* current) {
 	//Y形式
 	if (self->Scope->Length == 0) {
 		StringView namev = self->Name;
 		//プリミティブ型はどこからでも参照できる
 		if (namev == InternString("Object")) {
-			return TYPE_OBJECT;
+			return BC_TYPE_OBJECT;
 		} else if (namev == InternString("Int")) {
-			return TYPE_INT;
+			return BC_TYPE_INT;
 		} else if (namev == InternString("Double")) {
-			return TYPE_DOUBLE;
+			return BC_TYPE_DOUBLE;
 		} else if (namev == InternString("Char")) {
-			return TYPE_CHAR;
+			return BC_TYPE_CHAR;
 		} else if (namev == InternString("String")) {
-			return TYPE_STRING;
+			return BC_TYPE_STRING;
 		} else if (namev == InternString("Bool")) {
-			return TYPE_BOOL;
+			return BC_TYPE_BOOL;
 		} else if (namev == InternString("Void")) {
-			return TYPE_VOID;
+			return BC_TYPE_VOID;
 		}
 		if (current == NULL) {
 			return NULL;
 		}
-		return FindTypeFromNamespace(current, self->Name);
+		return bc_FindTypeFromNamespace(current, self->Name);
 	}
 	//X::Yのような形式
-	Namespace* c = GetScopeFQCN(self, current);
+	bc_Namespace* c = bc_GetScopeFQCN(self, current);
 	if (c == NULL) {
 		return NULL;
 	}
-	return FindTypeFromNamespace(c, self->Name);
+	return bc_FindTypeFromNamespace(c, self->Name);
 }

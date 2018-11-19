@@ -11,14 +11,14 @@
 #include "../../il/il_factor_impl.h"
 #include "../../util/vector.h"
 
-static bool IsContainsFieldClassImpl(Vector* fields, Field* f);
-static bool IsContainsPropertyClassImpl(Vector* props, Property* p);
+static bool IsContainsFieldClassImpl(Vector* fields, bc_Field* f);
+static bool IsContainsPropertyClassImpl(Vector* props, bc_Property* p);
 
-Field* FindFieldClass(Class* self, StringView namev, int* outIndex) {
+bc_Field* FindFieldClass(Class* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->Fields->Length; i++) {
 		VectorItem e = AtVector(self->Fields, i);
-		Field* f = (Field*)e;
+		bc_Field* f = (bc_Field*)e;
 		if (namev == f->Name) {
 			(*outIndex) = (CountAllFieldClass(self) - self->Fields->Length) + i;
 			return f;
@@ -27,14 +27,14 @@ Field* FindFieldClass(Class* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-Field* FindTreeFieldClass(Class* self, StringView namev, int * outIndex) {
+bc_Field* FindTreeFieldClass(Class* self, StringView namev, int * outIndex) {
 	Class* pointee = self;
 	do {
-		Field* f = FindFieldClass(pointee, namev, outIndex);
+		bc_Field* f = FindFieldClass(pointee, namev, outIndex);
 		if (f != NULL) {
 			return f;
 		}
-		GenericType* supergtype = pointee->SuperClass;
+		bc_GenericType* supergtype = pointee->SuperClass;
 		if(supergtype == NULL) {
 			break;
 		}
@@ -43,11 +43,11 @@ Field* FindTreeFieldClass(Class* self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-Field* FindSFieldClass(Class* self, StringView namev, int * outIndex) {
+bc_Field* FindSFieldClass(Class* self, StringView namev, int * outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->StaticFields->Length; i++) {
 		VectorItem e = AtVector(self->StaticFields, i);
-		Field* f = (Field*)e;
+		bc_Field* f = (bc_Field*)e;
 		if (namev == f->Name) {
 			(*outIndex) = (CountAllSFieldClass(self) - self->StaticFields->Length) + i;
 			return f;
@@ -56,10 +56,10 @@ Field* FindSFieldClass(Class* self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-Field* FindTreeSFieldClass(Class* self, StringView namev, int * outIndex) {
+bc_Field* FindTreeSFieldClass(Class* self, StringView namev, int * outIndex) {
 	Class* pointee = self;
 	do {
-		Field* f = FindSFieldClass(pointee, namev, outIndex);
+		bc_Field* f = FindSFieldClass(pointee, namev, outIndex);
 		if (f != NULL) {
 			return f;
 		}
@@ -71,7 +71,7 @@ Field* FindTreeSFieldClass(Class* self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-Field* GetFieldClass(Class* self, int index) {
+bc_Field* GetFieldClass(Class* self, int index) {
 	assert(index >= 0);
 	int all = CountAllFieldClass(self);
 	if (index >= (all - self->Fields->Length) &&
@@ -81,7 +81,7 @@ Field* GetFieldClass(Class* self, int index) {
 	return GetFieldClass(self->SuperClass->CoreType->Kind.Class, index);
 }
 
-Field* GetSFieldClass(Class* self, int index) {
+bc_Field* GetSFieldClass(Class* self, int index) {
 	assert(index >= 0);
 	int all = CountAllSFieldClass(self);
 	if (index >= (all - self->StaticFields->Length) &&
@@ -91,26 +91,26 @@ Field* GetSFieldClass(Class* self, int index) {
 	return GetSFieldClass(self->SuperClass->CoreType->Kind.Class, index);
 }
 
-bool IsContainsFieldClass(Class* self, Field* f) {
+bool IsContainsFieldClass(Class* self, bc_Field* f) {
 	return IsContainsFieldClassImpl(self->Fields, f);
 }
 
-bool IsContainsSFieldClass(Class* self, Field* f) {
+bool IsContainsSFieldClass(Class* self, bc_Field* f) {
 	return IsContainsFieldClassImpl(self->StaticFields, f);
 }
 
-bool IsAccessibleFieldClass(Class* self, Field* f) {
+bool IsAccessibleFieldClass(Class* self, bc_Field* f) {
 	assert(f != NULL);
 	if(f->Access == ACCESS_PUBLIC_T) {
 		return true;
 	}
 	if(f->Access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(f->Parent);
+		return self == BC_TYPE2CLASS(f->Parent);
 	}
-	Type* ty = self->Parent;
-	Class* fcl = TYPE2CLASS(f->Parent);
+	bc_Type* ty = self->Parent;
+	Class* fcl = BC_TYPE2CLASS(f->Parent);
 	while(true) {
-		Class* c = TYPE2CLASS(ty);
+		Class* c = BC_TYPE2CLASS(ty);
 		if(c == fcl) {
 			return true;
 		}
@@ -125,26 +125,26 @@ bool IsAccessibleFieldClass(Class* self, Field* f) {
 
 
 
-bool IsContainsPropertyClass(Class* self, Property* p) {
+bool IsContainsPropertyClass(Class* self, bc_Property* p) {
 	return IsContainsPropertyClassImpl(self->Properties, p);
 }
 
-bool IsContainsSPropertyClass(Class* self, Property* p) {
+bool IsContainsSPropertyClass(Class* self, bc_Property* p) {
 	return IsContainsPropertyClassImpl(self->StaticProperties, p);
 }
 
-bool IsAccessiblePropertyClass(Class* self, Property* p) {
+bool IsAccessiblePropertyClass(Class* self, bc_Property* p) {
 	assert(p != NULL);
 	if(p->Access == ACCESS_PUBLIC_T) {
 		return true;
 	}
 	if(p->Access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(p->Parent);
+		return self == BC_TYPE2CLASS(p->Parent);
 	}
-	Type* ty = self->Parent;
-	Class* fcl = TYPE2CLASS(p->Parent);
+	bc_Type* ty = self->Parent;
+	Class* fcl = BC_TYPE2CLASS(p->Parent);
 	while(true) {
-		Class* c = TYPE2CLASS(ty);
+		Class* c = BC_TYPE2CLASS(ty);
 		if(c == fcl) {
 			return true;
 		}
@@ -157,18 +157,18 @@ bool IsAccessiblePropertyClass(Class* self, Property* p) {
 	return false;
 }
 
-bool IsAccessiblePropertyAccessorClass(Class* self, PropertyBody* pb) {
+bool IsAccessiblePropertyAccessorClass(Class* self, bc_PropertyBody* pb) {
 	assert(pb != NULL);
 	if(pb->Access == ACCESS_PUBLIC_T) {
 		return true;
 	}
 	if(pb->Access == ACCESS_PRIVATE_T) {
-		return self == TYPE2CLASS(pb->Parent->Parent);
+		return self == BC_TYPE2CLASS(pb->Parent->Parent);
 	}
-	Type* ty = self->Parent;
-	Class* fcl = TYPE2CLASS(pb->Parent->Parent);
+	bc_Type* ty = self->Parent;
+	Class* fcl = BC_TYPE2CLASS(pb->Parent->Parent);
 	while(true) {
-		Class* c = TYPE2CLASS(ty);
+		Class* c = BC_TYPE2CLASS(ty);
 		if(c == fcl) {
 			return true;
 		}
@@ -181,7 +181,7 @@ bool IsAccessiblePropertyAccessorClass(Class* self, PropertyBody* pb) {
 	return false;
 }
 
-int GetFieldByPropertyClass(Class* self, Property* p) {
+int GetFieldByPropertyClass(Class* self, bc_Property* p) {
 	int temp = -1;
 	assert(p->SourceRef != NULL);
 	if(bc_IsStaticModifier(p->Modifier)) {
@@ -192,7 +192,7 @@ int GetFieldByPropertyClass(Class* self, Property* p) {
 	return temp;
 }
 
-Property* GetPropertyClass(Class* self, int index) {
+bc_Property* GetPropertyClass(Class* self, int index) {
 	assert(index >= 0);
 	int all = CountAllPropertyClass(self);
 	if (index >= (all - self->Properties->Length) &&
@@ -202,7 +202,7 @@ Property* GetPropertyClass(Class* self, int index) {
 	return GetPropertyClass(self->SuperClass->CoreType->Kind.Class, index);
 }
 
-Property* GetSPropertyClass(Class* self, int index) {
+bc_Property* GetSPropertyClass(Class* self, int index) {
 	assert(index >= 0);
 	int all = CountAllSPropertyClass(self);
 	if (index >= (all - self->StaticProperties->Length) &&
@@ -212,11 +212,11 @@ Property* GetSPropertyClass(Class* self, int index) {
 	return GetPropertyClass(self->SuperClass->CoreType->Kind.Class, index);
 }
 
-Property* FindPropertyClass(Class* self, StringView namev, int* outIndex) {
+bc_Property* FindPropertyClass(Class* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->Properties->Length; i++) {
 		VectorItem e = AtVector(self->Properties, i);
-		Property* p = (Property*)e;
+		bc_Property* p = (bc_Property*)e;
 		if (namev == p->Name) {
 			(*outIndex) = (CountAllPropertyClass(self) - self->Properties->Length) + i;
 			return p;
@@ -225,14 +225,14 @@ Property* FindPropertyClass(Class* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-Property* FindTreePropertyClass(Class* self, StringView namev, int* outIndex) {
+bc_Property* FindTreePropertyClass(Class* self, StringView namev, int* outIndex) {
 	Class* pointee = self;
 	do {
-		Property* p = FindPropertyClass(pointee, namev, outIndex);
+		bc_Property* p = FindPropertyClass(pointee, namev, outIndex);
 		if (p != NULL) {
 			return p;
 		}
-		GenericType* supergtype = pointee->SuperClass;
+		bc_GenericType* supergtype = pointee->SuperClass;
 		if(supergtype == NULL) {
 			break;
 		}
@@ -241,11 +241,11 @@ Property* FindTreePropertyClass(Class* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-Property* FindSPropertyClass(Class* self, StringView namev, int* outIndex) {
+bc_Property* FindSPropertyClass(Class* self, StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->StaticProperties->Length; i++) {
 		VectorItem e = AtVector(self->StaticProperties, i);
-		Property* p = (Property*)e;
+		bc_Property* p = (bc_Property*)e;
 		if (namev == p->Name) {
 			(*outIndex) = (CountAllSPropertyClass(self) - self->StaticProperties->Length) + i;
 			return p;
@@ -254,14 +254,14 @@ Property* FindSPropertyClass(Class* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-Property* FindTreeSPropertyClass(Class* self, StringView namev, int* outIndex) {
+bc_Property* FindTreeSPropertyClass(Class* self, StringView namev, int* outIndex) {
 	Class* pointee = self;
 	do {
-		Property* p = FindSPropertyClass(pointee, namev, outIndex);
+		bc_Property* p = FindSPropertyClass(pointee, namev, outIndex);
 		if (p != NULL) {
 			return p;
 		}
-		GenericType* supergtype = pointee->SuperClass;
+		bc_GenericType* supergtype = pointee->SuperClass;
 		if(supergtype == NULL) {
 			break;
 		}
@@ -293,14 +293,14 @@ bc_Constructor * ILFindEmptyConstructorClass(Class* self, Enviroment * env, Call
 
 
 
-Method * ILFindMethodClass(Class* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * ILFindMethodClass(Class* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->Name);
 	#endif
 	//assert(self->vt->elements->Length > 0);
-	Method* ret = NULL;
+	bc_Method* ret = NULL;
 	if((ret = MetaScopedILFindMethod(self, self->VT->Elements, namev, args, env, cctx, outIndex))
 	   != NULL) {
 		   return ret;
@@ -316,11 +316,11 @@ Method * ILFindMethodClass(Class* self, StringView namev, Vector * args, Envirom
 	return NULL;
 }
 
-Method* GFindMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex) {
+bc_Method* GFindMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	//assert(self->vt->elements->Length > 0);
-	Method* ret = NULL;
+	bc_Method* ret = NULL;
 	if((ret = MetaScopedGFindMethod(self, self->VT->Elements, namev, gargs, outIndex))
 	   != NULL) {
 		   return ret;
@@ -336,50 +336,50 @@ Method* GFindMethodClass(Class* self, StringView namev, Vector* gargs, int* outI
 	return NULL;
 }
 
-Method* GFindEqMethodClass(Class* self, int* outIndex) {
+bc_Method* GFindEqMethodClass(Class* self, int* outIndex) {
 	Vector* gargs = NewVector();
-	PushVector(gargs, TYPE_OBJECT->GenericSelf);
-	Method* ret = GFindMethodClass(self, InternString("equals"), gargs, outIndex);
+	PushVector(gargs, BC_TYPE_OBJECT->GenericSelf);
+	bc_Method* ret = GFindMethodClass(self, InternString("equals"), gargs, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-Method * ILFindSMethodClass(Class* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * ILFindSMethodClass(Class* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(namev);
 	#endif
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;
-	Method* ret = MetaILFindMethod(self->StaticMethods, namev, args, env, cctx, &temp);
+	bc_Method* ret = MetaILFindMethod(self->StaticMethods, namev, args, env, cctx, &temp);
 //	temp += (CountAllSMethodClass(self) - self->StaticMethods->Length);
 	(*outIndex) = temp;
 	return ret;
 }
 
-Method* GFindSMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex) {
+bc_Method* GFindSMethodClass(Class* self, StringView namev, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	CreateVTableClass(self);
 	int temp = 0;
-	Method* ret = MetaGFindMethod(self->StaticMethods, namev, gargs, &temp);
+	bc_Method* ret = MetaGFindMethod(self->StaticMethods, namev, gargs, &temp);
 //	temp += (CountAllSMethodClass(self) - self->StaticMethods->Length);
 	(*outIndex) = temp;
 	return ret;
 }
 
-Method * GetMethodClass(Object * o, int index) {
+bc_Method * GetMethodClass(bc_Object * o, int index) {
 	assert(index >= 0);
 	#if defined(DEBUG)
-	const char* name = GetObjectName(o);
+	const char* name = bc_GetObjectName(o);
 	#endif
-	if(IsNullValue(o)) {
-		o->VPtr = TYPE2CLASS(TYPE_OBJECT)->VT;
+	if(bc_IsNullValue(o)) {
+		o->VPtr = BC_TYPE2CLASS(BC_TYPE_OBJECT)->VT;
 	}
-	VTable* vx = (o->VPtr);
-	return (Method*)AtVector(vx->Elements, index);
+	bc_VTable* vx = (o->VPtr);
+	return (bc_Method*)AtVector(vx->Elements, index);
 }
 
-Method * GetSMethodClass(Class* self, int index) {
+bc_Method * GetSMethodClass(Class* self, int index) {
 	assert(index >= 0);
 	/*
 	//Class* self = o->classz;
@@ -393,7 +393,7 @@ Method * GetSMethodClass(Class* self, int index) {
 	return AtVector(self->StaticMethods, index);
 }
 
-Method * GetImplMethodClass(Class* self, Type* interType, int interMIndex) {
+bc_Method * GetImplMethodClass(Class* self, bc_Type* interType, int interMIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(self->Name);
 	#endif
@@ -403,7 +403,7 @@ Method * GetImplMethodClass(Class* self, Type* interType, int interMIndex) {
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
 	for (int i = 0; i < tbl->Length; i++) {
-		GenericType* e = AtVector(tbl, i);
+		bc_GenericType* e = AtVector(tbl, i);
 		Interface* inter = e->CoreType->Kind.Interface;
 		if (inter == interType->Kind.Interface) {
 			declIndex = i;
@@ -413,19 +413,19 @@ Method * GetImplMethodClass(Class* self, Type* interType, int interMIndex) {
 	//仮想関数テーブルの一覧から引く
 	assert(declIndex != -1);
 	DeleteVector(tbl, VectorDeleterOfNull);
-	VTable* vtAt = AtVector(self->VTTable, declIndex);
+	bc_VTable* vtAt = AtVector(self->VTTable, declIndex);
 	return AtVector(vtAt->Elements, interMIndex);
 }
 
 
 
 
-OperatorOverload* GFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* GFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	(*outIndex) = -1;
-	OperatorOverload* ret = NULL;
+	bc_OperatorOverload* ret = NULL;
 	CreateOperatorVTClass(self);
 	for(int i=0; i<self->OVT->Operators->Length; i++) {
-		OperatorOverload* operator_ov = AtVector(self->OVT->Operators, i);
+		bc_OperatorOverload* operator_ov = AtVector(self->OVT->Operators, i);
 		if(operator_ov->Type != type) {
 			continue;
 		}
@@ -434,9 +434,9 @@ OperatorOverload* GFindOperatorOverloadClass(Class* self, bc_OperatorType type, 
 		int sum = 0;
 		Vector* params = operator_ov->Parameters;
 		for(int j=0; j<params->Length; j++) {
-			Parameter* param = AtVector(params, j);
-			GenericType* arg = AtVector(args, j);
-			int dist = DistanceGenericType(param->GType, arg, cctx);
+			bc_Parameter* param = AtVector(params, j);
+			bc_GenericType* arg = AtVector(args, j);
+			int dist = bc_DistanceGenericType(param->GType, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
 				break;
@@ -455,37 +455,37 @@ OperatorOverload* GFindOperatorOverloadClass(Class* self, bc_OperatorType type, 
 	return ret;
 }
 
-OperatorOverload* ILFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* ILFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		ILFactor* ilfact = (ILFactor*)AtVector(args,i);
-		GenericType* g = EvalILFactor(ilfact, env, cctx);
+		bc_GenericType* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
-	OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
+	bc_OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-OperatorOverload* ArgFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* ArgFindOperatorOverloadClass(Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//ILFactor* ilfact = (ILFactor*)AtVector(args,i);
 		ILArgument* ilarg = (ILArgument*)AtVector(args, i);
 		ILFactor* ilfact = ilarg->Factor;
-		GenericType* g = EvalILFactor(ilfact, env, cctx);
+		bc_GenericType* g = EvalILFactor(ilfact, env, cctx);
 		PushVector(gargs, g);
 	}
-	OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
+	bc_OperatorOverload* ret = GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
 	DeleteVector(gargs, VectorDeleterOfNull);
 	return ret;
 }
 
-OperatorOverload* GetOperatorOverloadClass(Class* self, int index) {
+bc_OperatorOverload* GetOperatorOverloadClass(Class* self, int index) {
 	return AtVector(self->OVT->Operators, index);
 }
 
-Vector* FindTreeMethodClass(Class* self, Method* m) {
+Vector* FindTreeMethodClass(Class* self, bc_Method* m) {
 	assert(self != NULL);
 	assert(m != NULL);
 	Class* ptr = self;
@@ -494,7 +494,7 @@ Vector* FindTreeMethodClass(Class* self, Method* m) {
 	const char* ptrname = Ref2Str(ptr->Name);
 	#endif
 	do {
-		Method* tmp = NULL;
+		bc_Method* tmp = NULL;
 		if(IsContainsMethod(ptr->Methods, m, &tmp)) {
 			PushVector(ret, tmp);
 		}
@@ -508,7 +508,7 @@ Vector* FindTreeMethodClass(Class* self, Method* m) {
 	return ret;
 }
 
-bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
+bool IsContainsMethod(Vector* method_list, bc_Method* m, bc_Method** outM) {
 	assert(!bc_IsStaticModifier(m->Modifier));
 	(*outM) = NULL;
 	bool ret = false;
@@ -516,8 +516,8 @@ bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
 	cctx->Scope = m->Parent->Location;
 	cctx->Ty = m->Parent;
 	for(int i=0; i<method_list->Length; i++) {
-		Method* mE = AtVector(method_list, i);
-		if(IsOverridedMethod(m, mE, cctx)) {
+		bc_Method* mE = AtVector(method_list, i);
+		if(bc_IsOverridedMethod(m, mE, cctx)) {
 			(*outM) = mE;
 			ret = true;
 			break;
@@ -530,8 +530,8 @@ bool IsContainsMethod(Vector* method_list, Method* m, Method** outM) {
 Vector* GetGenericInterfaceListClass(Class* self) {
 	Vector* ret = NewVector();
 	for(int i=0; i<self->Implements->Length; i++) {
-		GenericType* ginter = AtVector(self->Implements, i);
-		Vector* inner = GetGenericInterfaceTreeInterface(TYPE2INTERFACE(GENERIC2TYPE(ginter)));
+		bc_GenericType* ginter = AtVector(self->Implements, i);
+		Vector* inner = GetGenericInterfaceTreeInterface(BC_TYPE2INTERFACE(bc_GENERIC2TYPE(ginter)));
 		MergeVector(ret, inner);
 		PushVector(ret, ginter);
 		DeleteVector(inner, VectorDeleterOfNull);
@@ -549,7 +549,7 @@ Vector* GetGenericInterfaceTreeClass(Class* self) {
 		if(ptr->SuperClass == NULL) {
 			break;
 		}
-		ptr = TYPE2CLASS(GENERIC2TYPE(ptr->SuperClass));
+		ptr = BC_TYPE2CLASS(bc_GENERIC2TYPE(ptr->SuperClass));
 	} while(ptr != NULL);
 	return ret;
 }
@@ -558,8 +558,8 @@ Vector* GetInterfaceListClass(Class* self) {
 	Vector* ret = NewVector();
 	Vector* c = GetGenericInterfaceListClass(self);
 	for(int i=0; i<c->Length; i++) {
-		GenericType* gt = AtVector(c, i);
-		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
+		bc_GenericType* gt = AtVector(c, i);
+		PushVector(ret, BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gt)));
 	}
 	DeleteVector(c, VectorDeleterOfNull);
 	return ret;
@@ -569,19 +569,19 @@ Vector* GetInterfaceTreeClass(Class* self) {
 	Vector* ret = NewVector();
 	Vector* c = GetGenericInterfaceTreeClass(self);
 	for(int i=0; i<c->Length; i++) {
-		GenericType* gt = AtVector(c, i);
-		PushVector(ret, TYPE2INTERFACE(GENERIC2TYPE(gt)));
+		bc_GenericType* gt = AtVector(c, i);
+		PushVector(ret, BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gt)));
 	}
 	DeleteVector(c, VectorDeleterOfNull);
 	return ret;
 }
 
-GenericType* FindInterfaceTypeClass(Class* self, Type* tinter, GenericType** out_baseline) {
+bc_GenericType* FindInterfaceTypeClass(Class* self, bc_Type* tinter, bc_GenericType** out_baseline) {
 	assert(tinter->Tag == TYPE_INTERFACE_T);
 	(*out_baseline) = NULL;
 	//実装インターフェイス一覧から同じのを探す
-	GenericType* ret = NULL;
-	GenericType* out = NULL;
+	bc_GenericType* ret = NULL;
+	bc_GenericType* out = NULL;
 	Class* ptr = self;
 	do {
 		if (ptr->SuperClass == NULL) {
@@ -591,7 +591,7 @@ GenericType* FindInterfaceTypeClass(Class* self, Type* tinter, GenericType** out
 		//Vector* gimpl_list = GetGenericInterfaceListClass(ptr);
 		Vector* gimpl_list = ptr->Implements;
 		for (int i = 0; i < gimpl_list->Length; i++) {
-			GenericType* gimpl = AtVector(gimpl_list, i);
+			bc_GenericType* gimpl = AtVector(gimpl_list, i);
 			if (gimpl->CoreType == tinter) {
 				found = true;
 				ret = gimpl;
@@ -604,15 +604,15 @@ GenericType* FindInterfaceTypeClass(Class* self, Type* tinter, GenericType** out
 			break;
 		}
 		out = ptr->SuperClass;
-		ptr = TYPE2CLASS(GENERIC2TYPE(ptr->SuperClass));
+		ptr = BC_TYPE2CLASS(bc_GENERIC2TYPE(ptr->SuperClass));
 	} while (ptr != NULL);
 	return ret;
 }
 
 //private
-static bool IsContainsFieldClassImpl(Vector* fields, Field* f) {
+static bool IsContainsFieldClassImpl(Vector* fields, bc_Field* f) {
 	for(int i=0; i<fields->Length; i++) {
-		Field* e = (Field*)AtVector(fields, i);
+		bc_Field* e = (bc_Field*)AtVector(fields, i);
 		if(e == f) {
 			return true;
 		}
@@ -620,9 +620,9 @@ static bool IsContainsFieldClassImpl(Vector* fields, Field* f) {
 	return false;
 }
 
-static bool IsContainsPropertyClassImpl(Vector* props, Property* p) {
+static bool IsContainsPropertyClassImpl(Vector* props, bc_Property* p) {
 	for(int i=0; i<props->Length; i++) {
-		Property* e = (Property*)AtVector(props, i);
+		bc_Property* e = (bc_Property*)AtVector(props, i);
 		if(e == p) {
 			return true;
 		}

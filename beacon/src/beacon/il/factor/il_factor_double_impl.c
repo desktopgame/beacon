@@ -31,8 +31,8 @@ void GenerateILDouble(ILDouble * self, Enviroment* env, CallContext* cctx) {
 void LoadILDouble(ILDouble * self, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILDouble(ILDouble * self, Enviroment * env, CallContext* cctx) {
-	return GENERIC_DOUBLE;
+bc_GenericType* EvalILDouble(ILDouble * self, Enviroment * env, CallContext* cctx) {
+	return BC_GENERIC_DOUBLE;
 }
 
 char* ILDoubleToString(ILDouble* self, Enviroment* env) {

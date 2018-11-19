@@ -13,13 +13,13 @@
 #include "../../env/property.h"
 
 struct Enviroment;
-struct GenericType;
+struct bc_GenericType;
 
 typedef struct ILPropertyAccess {
 	ILFactor* Source;
 	StringView Name;
 	int Index;
-	Property* Property;
+	bc_Property* Property;
 } ILPropertyAccess;
 
 #define NewILPropertyAccess() (MallocILPropertyAccess(__FILE__, __LINE__))
@@ -29,7 +29,7 @@ void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallConte
 
 void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
 
-struct GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
 
 char* ILPropertyToString(ILPropertyAccess* self, Enviroment* env);
 

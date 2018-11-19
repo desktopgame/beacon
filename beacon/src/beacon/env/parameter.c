@@ -4,23 +4,23 @@
 #include "../util/mem.h"
 #include "../env/generic_type.h"
 
-Parameter * NewParameter(StringView namev) {
-	Parameter* ret = (Parameter*)MEM_MALLOC(sizeof(Parameter));
+bc_Parameter * bc_NewParameter(StringView namev) {
+	bc_Parameter* ret = (bc_Parameter*)MEM_MALLOC(sizeof(bc_Parameter));
 	ret->Name = namev;
 	ret->GType = NULL;
 	return ret;
 }
 
-void DeleteParameter(Parameter * self) {
+void bc_DeleteParameter(bc_Parameter * self) {
 	MEM_FREE(self);
 }
 
-bool IsOverwrappedParameterName(Vector* parameters, StringView* outName) {
+bool bc_IsOverwrappedParameterName(Vector* parameters, StringView* outName) {
 	for(int i=0; i<parameters->Length; i++) {
-		Parameter* e = (Parameter*)AtVector(parameters, i);
+		bc_Parameter* e = (bc_Parameter*)AtVector(parameters, i);
 		for(int j=0; j<parameters->Length; j++) {
 			if(i == j) { continue; }
-			Parameter* e2 = (Parameter*)AtVector(parameters, j);
+			bc_Parameter* e2 = (bc_Parameter*)AtVector(parameters, j);
 			if(e->Name == e2->Name) {
 				(*outName) = e->Name;
 				return true;

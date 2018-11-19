@@ -18,7 +18,7 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 #include "../../vm/enviroment.h"
-struct Type;
+struct bc_Type;
 struct Class;
 struct bc_Constructor;
 /**
@@ -63,7 +63,7 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct Frame*
  * @param outIndex
  * @return
  */
-Method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
+bc_Method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -73,7 +73,7 @@ Method* MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, 
  * @param outIndex
  * @return
  */
-Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex);
+bc_Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex);
 
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
@@ -86,7 +86,7 @@ Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, in
  * @param outIndex
  * @return
  */
-Method* MetaScopedILFindMethod(struct Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
+bc_Method* MetaScopedILFindMethod(struct Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -96,7 +96,7 @@ Method* MetaScopedILFindMethod(struct Class* context, Vector* method_vec, String
  * @param outIndex
  * @return
  */
-Method* MetaScopedGFindMethod(struct Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
+bc_Method* MetaScopedGFindMethod(struct Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -151,7 +151,7 @@ bc_Constructor* MetaScopedRFindConstructor(struct Class* context, Vector* ctor_v
  * @param outIndex
  * @return
  */
-OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex);
+bc_OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex);
 
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
@@ -159,7 +159,7 @@ OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vect
  * @param cctx
  * @return
  */
-bool IsMetaMethodAccessValid(struct Method* m, CallContext* cctx);
+bool IsMetaMethodAccessValid(struct bc_Method* m, CallContext* cctx);
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.
  * @param m

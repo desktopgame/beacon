@@ -16,7 +16,7 @@ ILMethod * NewILMethod(StringView name) {
 	ILMethod* ret = (ILMethod*)MEM_MALLOC(sizeof(ILMethod));
 	ret->Name = name;
 	ret->Parameters = NewVector();
-	ret->ReturnGCache = NewGenericCache();
+	ret->ReturnGCache = bc_NewGenericCache();
 	ret->Access = ACCESS_PUBLIC_T;
 	ret->Modifier = MODIFIER_NONE_T;
 	ret->Statements = NewVector();
@@ -29,7 +29,7 @@ void DeleteILMethod(ILMethod * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteGenericCache(self->ReturnGCache);
+	bc_DeleteGenericCache(self->ReturnGCache);
 	DeleteVector(self->Parameters, ILMethod_DeleteParameter);
 	DeleteVector(self->Statements, ILMethod_stmt_delete);
 	DeleteVector(self->TypeParameters, ILMethod_DeleteTypeParameter);

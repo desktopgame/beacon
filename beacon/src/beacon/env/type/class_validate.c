@@ -7,11 +7,11 @@
 #include "../type_parameter.h"
 #include "../field.h"
 #include "class_impl.h"
-static bool IsValidFieldClassImpl(Vector* field_vec, Field** out);
-static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out);
+static bool IsValidFieldClassImpl(Vector* field_vec, bc_Field** out);
+static bool IsValidPropertyClassImpl(Vector* prop_vec, bc_Property** out);
 static bool methods_is_all_abstract(Vector* v);
 
-bool IsImplementInterfaceMethodValidClass(Class* cls, Method** out) {
+bool IsImplementInterfaceMethodValidClass(Class* cls, bc_Method** out) {
 	(*out) = NULL;
 	bool contains = true;
 	#if defined(DEBUG)
@@ -29,7 +29,7 @@ bool IsImplementInterfaceMethodValidClass(Class* cls, Method** out) {
 		return true;
 	}
 	for(int i=0; i<methods->Length; i++) {
-		Method* m = AtVector(methods, i);
+		bc_Method* m = AtVector(methods, i);
 		Vector* methods = FindTreeMethodClass(cls, m);
 		if(methods->Length == 0 || methods_is_all_abstract(methods)) {
 			(*out) = m;
@@ -44,7 +44,7 @@ bool IsImplementInterfaceMethodValidClass(Class* cls, Method** out) {
 	return contains;
 }
 
-bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
+bool IsImplementInterfacePropertyValidClass(Class* cls, bc_Property** out) {
 	(*out) = NULL;
 	//全ての実装インターフェイスを取得する
 	Vector* gimpl_list = GetGenericInterfaceListClass(cls);
@@ -54,19 +54,19 @@ bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
 	}
 	//全てのインターフェイスに
 	for(int i=0;i<gimpl_list->Length; i++) {
-		GenericType* e = AtVector(gimpl_list, i);
-		Interface* inter = TYPE2INTERFACE(GENERIC2TYPE(e));
+		bc_GenericType* e = AtVector(gimpl_list, i);
+		Interface* inter = BC_TYPE2INTERFACE(bc_GENERIC2TYPE(e));
 		bool valid = true;
 		for(int j=0; j<inter->Properties->Length; j++) {
 			int temp = 0;
-			Property* decl = AtVector(inter->Properties, j);
-			Property* impl = FindPropertyClass(cls, decl->Name, &temp);
+			bc_Property* decl = AtVector(inter->Properties, j);
+			bc_Property* impl = FindPropertyClass(cls, decl->Name, &temp);
 			if(temp == -1) {
 				(*out) = decl;
 				DeleteVector(gimpl_list, VectorDeleterOfNull);
 				return false;
 			} else {
-				if(DistanceGenericType(decl->GType, impl->GType, NULL) != 0) {
+				if(bc_DistanceGenericType(decl->GType, impl->GType, NULL) != 0) {
 					(*out) = decl;
 					DeleteVector(gimpl_list, VectorDeleterOfNull);
 					return false;
@@ -84,18 +84,18 @@ bool IsImplementInterfacePropertyValidClass(Class* cls, Property** out) {
 	return true;
 }
 
-bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
+bool IsImplementAbstractClassValidClass(Class* cls, bc_Method** out) {
 	(*out) = NULL;
 	//これ自体が抽象クラス
 	if(cls->IsAbstract) {
 		return true;
 	}
 	//Objectクラス
-	GenericType* gsuper = cls->SuperClass;
+	bc_GenericType* gsuper = cls->SuperClass;
 	if(gsuper == NULL) {
 		return true;
 	}
-	Class* csuper = TYPE2CLASS(GENERIC2TYPE(gsuper));
+	Class* csuper = BC_TYPE2CLASS(bc_GENERIC2TYPE(gsuper));
 	//親が具象クラスならtrue
 	if(!csuper->IsAbstract) {
 		return true;
@@ -105,7 +105,7 @@ bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
 	#endif
 	bool ret = true;
 	for(int i=0; i<csuper->Methods->Length; i++) {
-		Method* me = AtVector(csuper->Methods, i);
+		bc_Method* me = AtVector(csuper->Methods, i);
 		#if defined(DEBUG)
 		const char* mename = Ref2Str(me->Name);
 		#endif
@@ -122,28 +122,28 @@ bool IsImplementAbstractClassValidClass(Class* cls, Method** out) {
 	return ret;
 }
 
-bool IsValidFieldClass(Class* cls, Field** out) {
+bool IsValidFieldClass(Class* cls, bc_Field** out) {
 	return IsValidFieldClassImpl(cls->Fields, out) &&
 		   IsValidFieldClassImpl(cls->StaticFields, out);
 }
 
-bool IsValidPropertyClass(Class* self, Property** out) {
+bool IsValidPropertyClass(Class* self, bc_Property** out) {
 	return IsValidPropertyClassImpl(self->Properties, out) &&
 	       IsValidPropertyClassImpl(self->StaticProperties, out);
 }
 
-bool IsMethodParameterValidClass(Class* cls, Method** out_method, StringView* out_name) {
+bool IsMethodParameterValidClass(Class* cls, bc_Method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<cls->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(cls->Methods, i);
-		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
+		bc_Method* m = (bc_Method*)AtVector(cls->Methods, i);
+		if(bc_IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<cls->StaticMethods->Length; i++) {
-		Method* m = (Method*)AtVector(cls->StaticMethods, i);
-		if(IsOverwrappedParameterName(m->Parameters, out_name)) {
+		bc_Method* m = (bc_Method*)AtVector(cls->StaticMethods, i);
+		if(bc_IsOverwrappedParameterName(m->Parameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -154,7 +154,7 @@ bool IsMethodParameterValidClass(Class* cls, Method** out_method, StringView* ou
 bool IsConstructorParameterValidClass(Class* self, bc_Constructor** out_ctor, StringView* out_name) {
 	for(int i=0; i<self->Constructors->Length; i++) {
 		bc_Constructor* ctor = (bc_Constructor*)AtVector(self->Constructors, i);
-		if(IsOverwrappedParameterName(ctor->Parameters, out_name)) {
+		if(bc_IsOverwrappedParameterName(ctor->Parameters, out_name)) {
 			(*out_ctor) = ctor;
 			return false;
 		}
@@ -163,21 +163,21 @@ bool IsConstructorParameterValidClass(Class* self, bc_Constructor** out_ctor, St
 }
 
 bool IsTypeParameterValidClass(Class* self, StringView* out_name) {
-	return !IsOverwrappedTypeParameterName(self->TypeParameters, out_name);
+	return !bc_IsOverwrappedTypeParameterName(self->TypeParameters, out_name);
 }
 
-bool IsMethodTypeParameterValidClass(Class* self, Method** out_method, StringView* out_name) {
+bool IsMethodTypeParameterValidClass(Class* self, bc_Method** out_method, StringView* out_name) {
 	(*out_name) = ZERO_VIEW;
 	for(int i=0; i<self->Methods->Length; i++) {
-		Method* m = (Method*)AtVector(self->Methods, i);
-		if(IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
+		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
+		if(bc_IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
 	}
 	for(int i=0; i<self->StaticMethods->Length; i++) {
-		Method* m = (Method*)AtVector(self->StaticMethods, i);
-		if(IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
+		bc_Method* m = (bc_Method*)AtVector(self->StaticMethods, i);
+		if(bc_IsOverwrappedTypeParameterName(m->TypeParameters, out_name)) {
 			(*out_method) = m;
 			return false;
 		}
@@ -185,13 +185,13 @@ bool IsMethodTypeParameterValidClass(Class* self, Method** out_method, StringVie
 	return true;
 }
 //private
-static bool IsValidFieldClassImpl(Vector* field_vec, Field** out) {
+static bool IsValidFieldClassImpl(Vector* field_vec, bc_Field** out) {
 	(*out) = NULL;
 	bool ret = true;
 	for(int i=0; i<field_vec->Length; i++) {
-		Field* f = (Field*)AtVector(field_vec, i);
+		bc_Field* f = (bc_Field*)AtVector(field_vec, i);
 		for(int j=0; j<field_vec->Length; j++) {
-			Field* fE = (Field*)AtVector(field_vec, j);
+			bc_Field* fE = (bc_Field*)AtVector(field_vec, j);
 			if(f == fE) { continue; }
 			if(f->Name 	== fE->Name) {
 				ret = false;
@@ -203,13 +203,13 @@ static bool IsValidFieldClassImpl(Vector* field_vec, Field** out) {
 	return ret;
 }
 
-static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out) {
+static bool IsValidPropertyClassImpl(Vector* prop_vec, bc_Property** out) {
 	(*out) = NULL;
 	bool ret = true;
 	for(int i=0; i<prop_vec->Length; i++) {
-		Property* p = (Property*)AtVector(prop_vec, i);
+		bc_Property* p = (bc_Property*)AtVector(prop_vec, i);
 		for(int j=0; j<prop_vec->Length; j++) {
-			Property* pE = (Property*)AtVector(prop_vec, j);
+			bc_Property* pE = (bc_Property*)AtVector(prop_vec, j);
 			if(i == j) { continue; }
 			if(p->Name == pE->Name) {
 				ret = false;
@@ -223,9 +223,9 @@ static bool IsValidPropertyClassImpl(Vector* prop_vec, Property** out) {
 
 static bool methods_is_all_abstract(Vector* v) {
 	for(int i=0; i<v->Length; i++) {
-		Method* e = AtVector(v, i);
+		bc_Method* e = AtVector(v, i);
 		#if defined(DEBUG)
-		const char* tyname = Ref2Str(GetTypeName(e->Parent));
+		const char* tyname = Ref2Str(bc_GetTypeName(e->Parent));
 		#endif
 		if(!bc_IsAbstractModifier(e->Modifier)) {
 			return false;

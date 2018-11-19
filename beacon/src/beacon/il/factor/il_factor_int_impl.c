@@ -33,8 +33,8 @@ void GenerateILInt(ILInt * self, Enviroment* env, CallContext* cctx) {
 void LoadILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
-	return GENERIC_INT;
+bc_GenericType* EvalILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
+	return BC_GENERIC_INT;
 }
 
 char* ILIntToString(ILInt* self, Enviroment* env) {

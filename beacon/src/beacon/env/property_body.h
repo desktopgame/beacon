@@ -11,22 +11,22 @@
 #define BEACON_ENV_PROPERTY_BODY_H
 #include "../ast/access_level.h"
 struct Enviroment;
-struct Property;
+struct bc_Property;
 
-typedef enum PropertyBodyTag {
+typedef enum bc_PropertyBodyTag {
 	PROPERTY_SET_T,
 	PROPERTY_GET_T
-} PropertyBodyTag;
+} bc_PropertyBodyTag;
 
-typedef struct PropertyBody {
-	struct Property* Parent;
+typedef struct bc_PropertyBody {
+	struct bc_Property* Parent;
 	bc_AccessLevel Access;
-	PropertyBodyTag Tag;
+	bc_PropertyBodyTag Tag;
 	struct Enviroment* Env;
-} PropertyBody;
+} bc_PropertyBody;
 
-#define NewPropertyBody(tag) (MallocPropertyBody(tag, __FILE__, __LINE__))
-PropertyBody* MallocPropertyBody(PropertyBodyTag tag, const char* filename, int lineno);
+#define bc_NewPropertyBody(tag) (bc_MallocPropertyBody(tag, __FILE__, __LINE__))
+bc_PropertyBody* bc_MallocPropertyBody(bc_PropertyBodyTag tag, const char* filename, int lineno);
 
-void DeletePropertyBody(PropertyBody* self);
+void bc_DeletePropertyBody(bc_PropertyBody* self);
 #endif

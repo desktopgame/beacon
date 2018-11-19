@@ -20,20 +20,20 @@ ILShiftOp* NewILShiftOp(bc_OperatorType type) {
 	return ret;
 }
 
-GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx) {
-	GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
-	GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
+bc_GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
+	bc_GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
-	Type* cint = TYPE_INT;
-	Type* cdouble = TYPE_DOUBLE;
-	if(GENERIC2TYPE(lgtype) == cint &&
-	   GENERIC2TYPE(rgtype) == cint) {
-		return TYPE2GENERIC(cint);
+	bc_Type* cint = BC_TYPE_INT;
+	bc_Type* cdouble = BC_TYPE_DOUBLE;
+	if(bc_GENERIC2TYPE(lgtype) == cint &&
+	   bc_GENERIC2TYPE(rgtype) == cint) {
+		return bc_TYPE2GENERIC(cint);
 	}
-	if(GENERIC2TYPE(lgtype) == cint &&
-	   GENERIC2TYPE(rgtype) == cint) {
-		return TYPE2GENERIC(cdouble);
+	if(bc_GENERIC2TYPE(lgtype) == cint &&
+	   bc_GENERIC2TYPE(rgtype) == cint) {
+		return bc_TYPE2GENERIC(cdouble);
 	}
 	if(self->OperatorIndex == -1) {
 		bc_Panic(
@@ -42,7 +42,7 @@ GenericType* EvalILShiftOp(ILShiftOp * self, Enviroment* env, CallContext* cctx)
 		);
 		return NULL;
 	}
-	OperatorOverload* operator_ov = GetOperatorOverloadClass(TYPE2CLASS(GENERIC2TYPE(lgtype)), self->OperatorIndex);
+	bc_OperatorOverload* operator_ov = GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
 	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 

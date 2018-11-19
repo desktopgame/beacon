@@ -12,7 +12,7 @@ static StringView gPanicFile = ZERO_VIEW;
 static StringView gLastMessage = ZERO_VIEW;
 static int gPanicLineNo = -1;
 static int gPanicColumn = -1;
-static void check_abort(ScriptContext* sctx);
+static void check_abort(bc_ScriptContext* sctx);
 
 void bc_Panic(BCErrorID id, ...) {
 	va_list ap;
@@ -25,7 +25,7 @@ void bc_Vpanic(BCErrorID id, va_list ap) {
 	char* fmt = bc_Vfpanic(id, ap);
 	gGlobalPanic = id;
 	gLastMessage = InternString(fmt);
-	ScriptContext* sctx = GetCurrentScriptContext();
+	bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
 	if(sctx->IsPrintError) {
 		fprintf(stderr, "%s", fmt);
 	}
@@ -395,7 +395,7 @@ BCErrorID bc_GetLastPanic() {
 	return gGlobalPanic;
 }
 //private
-static void check_abort(ScriptContext* sctx) {
+static void check_abort(bc_ScriptContext* sctx) {
 	if(sctx->IsAbortOnError) {
 		abort();
 	}

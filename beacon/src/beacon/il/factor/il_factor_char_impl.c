@@ -28,8 +28,8 @@ void GenerateILChar(ILChar * self, Enviroment * env, CallContext* cctx) {
 void LoadILChar(ILChar * self, Enviroment * env, CallContext* cctx) {
 }
 
-GenericType* EvalILChar(ILChar * self, Enviroment * env, CallContext* cctx) {
-	return GENERIC_CHAR;
+bc_GenericType* EvalILChar(ILChar * self, Enviroment * env, CallContext* cctx) {
+	return BC_GENERIC_CHAR;
 }
 
 char* ILCharToString(ILChar* self, Enviroment* env) {

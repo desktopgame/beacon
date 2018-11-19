@@ -23,7 +23,7 @@ typedef struct ILMethod {
 	StringView Name;
 	Vector* Parameters;
 	Vector* Statements;
-	GenericCache* ReturnGCache;
+	bc_GenericCache* ReturnGCache;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	Vector* TypeParameters;

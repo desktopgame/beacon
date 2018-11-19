@@ -36,14 +36,14 @@ void ResumeVM(Frame* self, Enviroment* env, int pos);
  * @param self
  * @param exc
  */
-void NativeThrowVM(Frame* self, struct Object* exc);
+void NativeThrowVM(Frame* self, struct bc_Object* exc);
 
 /**
  * selfより上の全てのフレームに例外を伝播します.
  * @param self
  * @param exc
  */
-void ThrowVM(Frame* self, struct Object* exc);
+void ThrowVM(Frame* self, struct bc_Object* exc);
 
 /**
  * selfを起点としてたどれるVM全ての例外フラグをクリアします.

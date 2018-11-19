@@ -21,8 +21,8 @@ ILCompareOp* NewILCompareOp(bc_OperatorType type) {
 	return ret;
 }
 
-GenericType* EvalILCompareOp(ILCompareOp * self, Enviroment* env, CallContext* cctx) {
-	GenericType* ret = TYPE2GENERIC(TYPE_BOOL);
+bc_GenericType* EvalILCompareOp(ILCompareOp * self, Enviroment* env, CallContext* cctx) {
+	bc_GenericType* ret = bc_TYPE2GENERIC(BC_TYPE_BOOL);
 	assert(ret != NULL);
 	return ret;
 }

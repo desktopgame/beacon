@@ -24,17 +24,17 @@ int MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext
 		VectorItem varg = AtVector(ilargs, i);
 		VectorItem vparam = AtVector(params, i);
 		ILArgument* arg = (ILArgument*)varg;
-		Parameter* param = (Parameter*)vparam;
+		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		GenericType* argType = EvalILFactor(arg->Factor, env, cctx);
+		bc_GenericType* argType = EvalILFactor(arg->Factor, env, cctx);
 		if(bc_GetLastPanic()) {
 			return -1;
 		}
-		if (argType->CoreType != TYPE_NULL) {
-			GenericType* a = ApplyGenericType(param->GType, cctx);
+		if (argType->CoreType != BC_TYPE_NULL) {
+			bc_GenericType* a = bc_ApplyGenericType(param->GType, cctx);
 			//PrintGenericType2(param->gtype, a);
-			dist = DistanceGenericType(
+			dist = bc_DistanceGenericType(
 				a,
 			//	ApplyGenericType(argType, ilctx),
 			//	param->gtype,
@@ -63,16 +63,16 @@ int MetaGCalcScore(Vector* params, Vector* gargs) {
 		VectorItem varg = AtVector(gargs, i);
 		VectorItem vparam = AtVector(params, i);
 		//il_argument* arg = (il_argument*)varg;
-		Parameter* param = (Parameter*)vparam;
+		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		GenericType* argType = (GenericType*)varg;
+		bc_GenericType* argType = (bc_GenericType*)varg;
 		if(bc_GetLastPanic()) {
 			return -1;
 		}
-		if (argType->CoreType != TYPE_NULL) {
-			GenericType* a = ApplyGenericType(param->GType, NULL);
-			dist = DistanceGenericType(
+		if (argType->CoreType != BC_TYPE_NULL) {
+			bc_GenericType* a = bc_ApplyGenericType(param->GType, NULL);
+			dist = bc_DistanceGenericType(
 				a,
 			//	ApplyGenericType(argType, ilctx),
 			//	param->gtype,
@@ -98,15 +98,15 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	for (int i = 0; i < params->Length; i++) {
 		VectorItem varg = AtVector(args, i);
 		VectorItem vparam = AtVector(params, i);
-		Object* arg = (Object*)varg;
-		Parameter* param = (Parameter*)vparam;
+		bc_Object* arg = (bc_Object*)varg;
+		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
 		//GenericType* argType = EvalILFactor(arg->factor, env, ilctx);
-		GenericType* argType = arg->GType;
-		if (argType->CoreType != TYPE_NULL) {
-			GenericType* a = RApplyGenericType(param->GType, NULL,fr);
-			dist = RDistanceGenericType(a, argType, fr);
+		bc_GenericType* argType = arg->GType;
+		if (argType->CoreType != BC_TYPE_NULL) {
+			bc_GenericType* a = bc_RApplyGenericType(param->GType, NULL,fr);
+			dist = bc_RDistanceGenericType(a, argType, fr);
 		}
 		score += dist;
 		//継承関係のないパラメータ
@@ -118,23 +118,23 @@ int MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
 	return score;
 }
 
-Method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
 	return MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
+bc_Method* MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
 	return MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
-	Method* ret = NULL;
+	bc_Method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
-		Method* m = (Method*)ve;
+		bc_Method* m = (bc_Method*)ve;
 		if(!IsMetaMethodAccessValid(m, cctx)) {
 			continue;
 		}
@@ -163,15 +163,15 @@ Method* MetaScopedILFindMethod(Class* context, Vector* method_vec, StringView na
 	return ret;
 }
 
-Method* MetaScopedGFindMethod(Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
+bc_Method* MetaScopedGFindMethod(Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
-	Method* ret = NULL;
+	bc_Method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->Length; i++) {
 		VectorItem ve = AtVector(method_vec, i);
-		Method* m = (Method*)ve;
+		bc_Method* m = (bc_Method*)ve;
 		//名前か引数の個数が違うので無視
 		if (m->Name != namev ||
 			m->Parameters->Length != gargs->Length
@@ -246,7 +246,7 @@ bc_Constructor* MetaScopedRFindConstructor(Class* context, Vector* ctor_vec, Vec
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		VectorItem ve = AtVector(ctor_vec, i);
 		bc_Constructor* ctor = (bc_Constructor*)ve;
-		Class* cls = TYPE2CLASS(ctor->Parent);
+		Class* cls = BC_TYPE2CLASS(ctor->Parent);
 		//引数の個数が違うので無視
 		if (ctor->Parameters->Length != gargs->Length) {
 			continue;
@@ -261,12 +261,12 @@ bc_Constructor* MetaScopedRFindConstructor(Class* context, Vector* ctor_vec, Vec
 	return ret;
 }
 
-OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex) {
+bc_OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
-	OperatorOverload* ret = NULL;
+	bc_OperatorOverload* ret = NULL;
 	for(int i=0; i<opov_vec->Length; i++) {
-		OperatorOverload* opov = AtVector(opov_vec, i);
+		bc_OperatorOverload* opov = AtVector(opov_vec, i);
 		//オペレータの種類が違うので無視
 		if(opov->Type != type) {
 			continue;
@@ -288,18 +288,18 @@ OperatorOverload* MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vect
 	return ret;
 }
 
-bool IsMetaMethodAccessValid(Method* m, CallContext* cctx) {
+bool IsMetaMethodAccessValid(bc_Method* m, CallContext* cctx) {
 	Class* context = GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		m->Access == ACCESS_PRIVATE_T &&
-		TYPE2CLASS(m->Parent) != context) {
+		BC_TYPE2CLASS(m->Parent) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
 		m->Access == ACCESS_PROTECTED_T &&
-		DistanceClass(TYPE2CLASS(m->Parent), context) < 0) {
+		DistanceClass(BC_TYPE2CLASS(m->Parent), context) < 0) {
 		return false;
 	}
 	return true;
@@ -310,13 +310,13 @@ bool IsMetaConstructorAccessValid(bc_Constructor* ctor, CallContext* cctx) {
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		ctor->Access == ACCESS_PRIVATE_T &&
-		TYPE2CLASS(ctor->Parent) != context) {
+		BC_TYPE2CLASS(ctor->Parent) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
 		ctor->Access == ACCESS_PROTECTED_T &&
-		DistanceClass(TYPE2CLASS(ctor->Parent), context) < 0) {
+		DistanceClass(BC_TYPE2CLASS(ctor->Parent), context) < 0) {
 		return false;
 	}
 	return true;

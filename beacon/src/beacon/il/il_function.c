@@ -18,7 +18,7 @@ ILFunction * NewILFunction(StringView name) {
 	ret->TypeParameters = NewVector();
 	ret->Parameters = NewVector();
 	ret->Statements = NewVector();
-	ret->ReturnGCache = NewGenericCache();
+	ret->ReturnGCache = bc_NewGenericCache();
 	return ret;
 }
 
@@ -26,7 +26,7 @@ void DeleteILFunction(ILFunction * self) {
 	DeleteVector(self->TypeParameters, ILFunction_DeleteTypeParameter);
 	DeleteVector(self->Parameters, ILFunction_DeleteParameter);
 	DeleteVector(self->Statements, ILFunction_stmt_delete);
-	DeleteGenericCache(self->ReturnGCache);
+	bc_DeleteGenericCache(self->ReturnGCache);
 	MEM_FREE(self);
 }
 

@@ -17,7 +17,7 @@
 /**
  * オブジェクトの一覧を格納します.
  */
-typedef struct Heap {
+typedef struct bc_Heap {
 	Vector* Objects;
 	//この値が 1以上 なら、新しく確保されたオブジェクトは
 	//ヒープに関連づけられません。
@@ -27,19 +27,19 @@ typedef struct Heap {
 	//この値が 1以上 なら、新しくオブジェクトを確保した時に
 	//オブジェクトの総数が閾値を上回っていてもGCを施工しません。
 	int CollectBlocking;
-} Heap;
+} bc_Heap;
 
 /**
  * ヒープを作成します.
  * @return
  */
-Heap* NewHeap();
+bc_Heap* bc_NewHeap();
 
 /**
  * 現在のスクリプトコンテキストでヒープを返します.
  * @return
  */
-Heap* GetHeap();
+bc_Heap* bc_GetHeap();
 
 /**
  * ヒープにオブジェクトを追加します.
@@ -48,30 +48,30 @@ Heap* GetHeap();
  * @param self
  * @param obj
  */
-void AddHeap(Heap* self, Object* obj);
+void bc_AddHeap(bc_Heap* self, bc_Object* obj);
 
 /**
  * GCを実行します.
  * @param self
  */
-void CollectHeap(Heap* self);
+void bc_CollectHeap(bc_Heap* self);
 
 /**
  * 指定のオブジェクトをヒープから取り除きます.
  * @param self
  * @param o
  */
-void IgnoreHeap(Heap* self, Object* o);
+void bc_IgnoreHeap(bc_Heap* self, bc_Object* o);
 
 /**
  * ヒープを開放します.
  * @param self
  */
-void DeleteHeap(Heap* self);
+void bc_DeleteHeap(bc_Heap* self);
 
 /**
  * ヒープの中身をダンプします.
  * @param self
  */
-void DumpHeap(Heap* self);
+void bc_DumpHeap(bc_Heap* self);
 #endif // !SIGNAL_ENV_HEAP_H

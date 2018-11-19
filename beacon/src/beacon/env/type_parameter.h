@@ -17,51 +17,51 @@ struct ILTypeParameter;
 /**
  * 型変数の種類を表す列挙.
  */
-typedef enum TypeParameterKind {
+typedef enum bc_TypeParameterKind {
 	TYPE_PARAMETER_KIND_DEFAULT_T,
 	TYPE_PARAMETER_KIND_IN_T,
 	TYPE_PARAMETER_KIND_OUT_T,
-} TypeParameterKind;
+} bc_TypeParameterKind;
 
 /**
  * 型変数を表す構造体.
  */
-typedef struct TypeParameter {
+typedef struct bc_TypeParameter {
 	StringView Name;
-	TypeParameterKind Kind;
-} TypeParameter;
+	bc_TypeParameterKind Kind;
+} bc_TypeParameter;
 /**
  * 新しい型変数を生成します.
  * @param name
  * @return
  */
-TypeParameter* NewTypeParameter(StringView name);
+bc_TypeParameter* bc_NewTypeParameter(StringView name);
 
 /**
  * ILから型変数を生成します.
  * @param src
  * @param return
  */
-TypeParameter* DupTypeParameter(struct ILTypeParameter* src);
+bc_TypeParameter* bc_DupTypeParameter(struct ILTypeParameter* src);
 
 /**
  * ILから型変数を生成します.
  * @param ilSource
  * @param sgDest
  */
-void DupTypeParameterList(Vector* ilSource, Vector* sgDest);
+void bc_DupTypeParameterList(Vector* ilSource, Vector* sgDest);
 
 /**
  * 型変数の一覧を出力します.
  * @param v
  */
-void PrintTypeParameter(Vector* v);
+void bc_PrintTypeParameter(Vector* v);
 
 /**
  * 型変数を解放します.
  * @param self
  */
-void DeleteTypeParameter(TypeParameter* self);
+void bc_DeleteTypeParameter(bc_TypeParameter* self);
 
 /**
  * 重複するパラメータ名が存在するなら true.
@@ -69,5 +69,5 @@ void DeleteTypeParameter(TypeParameter* self);
  * @param namev
  * @return
  */
-bool IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev);
+bool bc_IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_H

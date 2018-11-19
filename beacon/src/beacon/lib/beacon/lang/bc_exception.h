@@ -10,7 +10,7 @@
 #pragma once
 #ifndef BEACON_LIB_SIGNAL_LANG_EXCEPTION_H
 #define BEACON_LIB_SIGNAL_LANG_EXCEPTION_H
-struct Type;
+struct bc_Type;
 /**
  * beacon::lang::Exceptionクラスを初期化します.
  */
@@ -19,5 +19,5 @@ void InitException();
 /**
  * beacon::lang::Exception型を返します.
  */
-struct Type* GetExceptionType();
+struct bc_Type* GetExceptionType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_EXCEPTION_H

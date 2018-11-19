@@ -17,25 +17,25 @@
 /**
  * ネイティブメソッドの実装.
  */
-typedef void(*NativeImpl)(Method* parent, Frame* vm, Enviroment* env);
+typedef void(*bc_NativeImpl)(bc_Method* parent, Frame* vm, Enviroment* env);
 
 /**
  * ネイティブメソッドを表す関数ポインタをラップする構造体.
  */
-typedef struct NativeMethodRef {
-	NativeImpl Body;
-} NativeMethodRef;
+typedef struct bc_NativeMethodRef {
+	bc_NativeImpl Body;
+} bc_NativeMethodRef;
 
 /**
  * ラッパーを作成します.
  * @param impl
  * @return
  */
-NativeMethodRef* NewNativeMethodRef(NativeImpl impl);
+bc_NativeMethodRef* bc_NewNativeMethodRef(bc_NativeImpl impl);
 
 /**
  * ラッパーを開放します.
  * @param self
  */
-void DeleteNativeMethodRef(NativeMethodRef* self);
+void bc_DeleteNativeMethodRef(bc_NativeMethodRef* self);
 #endif // !SIGNAL_ENV_NATIVE_METHOD_REF_H

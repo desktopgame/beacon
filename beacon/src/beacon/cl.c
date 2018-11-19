@@ -6,9 +6,9 @@
 
 int bc_TestCmd(int argc, char* argv[]) {
 #if defined(DEBUG) || (defined(_MSC_VER) && defined(DEBUG))
-	OpenScriptContext();
+	bc_OpenScriptContext();
 	int ret = bc_RunTest(argc, argv);
-	CloseScriptContext();
+	bc_CloseScriptContext();
 	return ret;
 #else
 	fprintf(stderr, "not supported operation\n");
@@ -23,22 +23,22 @@ int bc_DumpASTCmd(const char* filename) {
 }
 
 int bc_DumpILCmd(const char* filename){
-	OpenScriptContext();
+	bc_OpenScriptContext();
 	int ret = bc_EvalIL(filename);
-	CloseScriptContext();
+	bc_CloseScriptContext();
 	return ret;
 }
 
 int bc_DumpOpCodeCmd(const char* filename) {
-	OpenScriptContext();
+	bc_OpenScriptContext();
 	int ret = bc_EvalOp(filename);
-	CloseScriptContext();
+	bc_CloseScriptContext();
 	return ret;
 }
 
 int bc_RunCmd(const char* filename) {
-	OpenScriptContext();
+	bc_OpenScriptContext();
 	int ret = bc_EvalFile(filename);
-	CloseScriptContext();
+	bc_CloseScriptContext();
 	return ret;
 }

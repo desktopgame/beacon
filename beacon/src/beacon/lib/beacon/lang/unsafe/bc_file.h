@@ -12,31 +12,31 @@
 #include "../../../bc_library_impl.h"
 #include <stdio.h>
 struct Frame;
-struct Type;
-struct Object;
-struct GenericType;
+struct bc_Type;
+struct bc_Object;
+struct bc_GenericType;
 /**
  * FILE*をラップする構造体。
  */
 typedef struct File {
-	Object Super;
+	bc_Object Super;
 	FILE* Pointer;
 } File;
-struct Type;
+struct bc_Type;
 
 /**
  * 指定のファイルポインターでファイルオブジェクトを生成します。
  * @param fp
  * @return
  */
-Object* NewFile(FILE* fp);
+bc_Object* NewFile(FILE* fp);
 
 /**
  * ファイルポインターを返します。
  * @param self
  * @return
  */
-FILE* GetFilePointer(Object* self);
+FILE* GetFilePointer(bc_Object* self);
 
 /**
  * beacon::unsafe::Fileクラスを初期化します.
@@ -47,5 +47,5 @@ void InitFile();
  * beacon::unsafe::Fileを返します.
  * @return
  */
-struct Type* GetFileType();
+struct bc_Type* GetFileType();
 #endif

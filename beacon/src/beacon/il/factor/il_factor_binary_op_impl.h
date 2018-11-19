@@ -46,7 +46,7 @@ void GenerateILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
 void LoadILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
-GenericType* EvalILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
 char* ILBinaryOpToString(ILBinaryOp* self, Enviroment* env);
 
@@ -66,5 +66,5 @@ int GetIndexILBinaryOp(ILBinaryOp* self, Enviroment* env, CallContext* cctx);
 
 int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, bc_OperatorType otype, Enviroment* env, CallContext* cctx);
 
-GenericType* ApplyILBinaryOp(ILBinaryOp* self, GenericType* gtype, Enviroment* env, CallContext* cctx);
+bc_GenericType* ApplyILBinaryOp(ILBinaryOp* self, bc_GenericType* gtype, Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_BINARY_OP_H

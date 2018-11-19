@@ -3,8 +3,8 @@
 #include "cll/class_loader_bcload_impl.h"
 #include "class_loader.h"
 
-TypeCache * NewTypeCache() {
-	TypeCache* ret = (TypeCache*)MEM_MALLOC(sizeof(TypeCache));
+bc_TypeCache * bc_NewTypeCache() {
+	bc_TypeCache* ret = (bc_TypeCache*)MEM_MALLOC(sizeof(bc_TypeCache));
 	ret->Context = NULL;
 	ret->ILType = NULL;
 	ret->Type = NULL;
@@ -13,7 +13,7 @@ TypeCache * NewTypeCache() {
 	return ret;
 }
 
-TypeCache * InitTypeCache(TypeCache * self, bc_ClassLoader * context, ILType * iltype, Type* tp, Namespace * scope, TypeCacheKind kind) {
+bc_TypeCache * bc_InitTypeCache(bc_TypeCache * self, bc_ClassLoader * context, ILType * iltype, bc_Type* tp, bc_Namespace * scope, bc_TypeCacheKind kind) {
 	self->Context = context;
 	self->ILType = iltype;
 	self->Type = tp;
@@ -22,6 +22,6 @@ TypeCache * InitTypeCache(TypeCache * self, bc_ClassLoader * context, ILType * i
 	return self;
 }
 
-void DeleteTypeCache(TypeCache * self) {
+void bc_DeleteTypeCache(bc_TypeCache * self) {
 	MEM_FREE(self);
 }

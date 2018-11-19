@@ -12,14 +12,14 @@
 #include "../../util/string_pool.h"
 #include <stdbool.h>
 struct Interface;
-struct Method;
+struct bc_Method;
 /**
  * 全てのメソッドを巡回して、全てにおいてパラメータ名の重複がないなら true.
  * @param inter
  * @param out
  * @return
  */
-bool IsMethodParameterValidInterface(struct Interface* inter, struct Method** out_method, StringView* out_name);
+bool IsMethodParameterValidInterface(struct Interface* inter, struct bc_Method** out_method, StringView* out_name);
 
 /**
  * インターフェイスの型変数に重複する名前がないなら true.
@@ -36,6 +36,6 @@ bool IsTypeParameterValidInterface(struct Interface* inter, StringView* out_name
  * @param out_name
  * @return
  */
-bool IsMethodTypeParameterValidInterface(struct Interface* inter, struct Method** out_method, StringView* out_name);
+bool IsMethodTypeParameterValidInterface(struct Interface* inter, struct bc_Method** out_method, StringView* out_name);
 
 #endif

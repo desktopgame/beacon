@@ -13,26 +13,26 @@
 #include "../util/vector.h"
 //#include "virtual_type.h"
 //#include "fqcn_cache.h"
-struct GenericCache;
-struct GenericType;
-struct FQCNCache;
-struct Namespace;
+struct bc_GenericCache;
+struct bc_GenericType;
+struct bc_FQCNCache;
+struct bc_Namespace;
 struct bc_ClassLoader;
-struct ImportInfo;
+struct bc_ImportInfo;
 struct CallContext;
 
 /**
  * あるファイルが参照しているファイルの一覧を管理します.
  */
-typedef struct ImportManager {
+typedef struct bc_ImportManager {
 	Vector* Items;
-} ImportManager;
+} bc_ImportManager;
 
 /**
  * インポートマネージャを作成します.
  * @return
  */
-ImportManager* NewImportManager();
+bc_ImportManager* bc_NewImportManager();
 
 /**
  * 指定のクラスローダをインポートの一覧に含めます.
@@ -40,7 +40,7 @@ ImportManager* NewImportManager();
  * @param target
  * @return
  */
-struct ImportInfo* ImportImportManager(ImportManager* self, struct bc_ClassLoader* target);
+struct bc_ImportInfo* bc_ImportImportManager(bc_ImportManager* self, struct bc_ClassLoader* target);
 
 /**
  * 既に読み込まれたなら true.
@@ -48,7 +48,7 @@ struct ImportInfo* ImportImportManager(ImportManager* self, struct bc_ClassLoade
  * @param index
  * @return
  */
-bool IsLoadedImportManager(ImportManager* self, int index);
+bool bc_IsLoadedImportManager(bc_ImportManager* self, int index);
 
 /**
  * 指定の名前から型を解決します.
@@ -58,7 +58,7 @@ bool IsLoadedImportManager(ImportManager* self, int index);
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct GenericType* ResolveImportManager(struct Namespace* scope, struct GenericCache* fqcn, struct CallContext* cctx);
+struct bc_GenericType* bc_ResolveImportManager(struct bc_Namespace* scope, struct bc_GenericCache* fqcn, struct CallContext* cctx);
 
 /**
  * 指定の名前から型を解決します.
@@ -68,11 +68,11 @@ struct GenericType* ResolveImportManager(struct Namespace* scope, struct Generic
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct GenericType* ResolvefImportManager(struct Namespace* scope, struct FQCNCache* fqcn, struct CallContext* cctx);
+struct bc_GenericType* bc_ResolvefImportManager(struct bc_Namespace* scope, struct bc_FQCNCache* fqcn, struct CallContext* cctx);
 
 /**
  * インポートマネージャを開放します.
  * @param self
  */
-void DeleteImportManager(ImportManager* self);
+void bc_DeleteImportManager(bc_ImportManager* self);
 #endif // !SIGNAL_ENV_IMPORT_MANAGER_H

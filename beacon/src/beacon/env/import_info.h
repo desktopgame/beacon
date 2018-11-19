@@ -16,20 +16,20 @@ struct bc_ClassLoader;
 /**
  * インポート先のクラスローダーを格納します。
  */
-typedef struct ImportInfo {
+typedef struct bc_ImportInfo {
 	struct bc_ClassLoader* Context;
 	bool IsConsume;
-} ImportInfo;
+} bc_ImportInfo;
 
 /**
  * 新しいインポートインフォを生成します。
  * @return
  */
-ImportInfo* NewImportInfo();
+bc_ImportInfo* bc_NewImportInfo();
 
 /**
  * インポートインフォを解放します。
  * @param self
  */
-void DeleteImportInfo(ImportInfo* self);
+void bc_DeleteImportInfo(bc_ImportInfo* self);
 #endif // !SIGNAL_ENV_IMPORT_INFO_H

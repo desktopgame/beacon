@@ -12,7 +12,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct ILUnaryOp;
-struct GenericType;
+struct bc_GenericType;
 struct Enviroment;
 
 typedef struct ILChildaOp {
@@ -23,7 +23,7 @@ typedef struct ILChildaOp {
 
 ILChildaOp* NewILChildaOp(bc_OperatorType type);
 
-struct GenericType* EvalILChildaOp(ILChildaOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILChildaOp(ILChildaOp * self, struct Enviroment * env, CallContext* cctx);
 
 void GenerateILChildaOp(ILChildaOp* self, struct Enviroment* env, CallContext* cctx);
 

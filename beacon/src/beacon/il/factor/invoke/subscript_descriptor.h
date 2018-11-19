@@ -10,10 +10,10 @@
 #ifndef BEACON_IL_FACTOR_INVOKE_SUBSCRIPT_DESCRIPTOR_H
 #define BEACON_IL_FACTOR_INVOKE_SUBSCRIPT_DESCRIPTOR_H
 
-struct OperatorOverload;
+struct bc_OperatorOverload;
 struct SymbolEntry;
-struct Field;
-struct Property;
+struct bc_Field;
+struct bc_Property;
 
 typedef enum SubscriptTag {
 	SUBSCRIPT_LOCAL_T,
@@ -24,14 +24,14 @@ typedef enum SubscriptTag {
 
 typedef struct SubscriptDescriptor {
 	SubscriptTag Tag;
-	struct OperatorOverload* Operator;
+	struct bc_OperatorOverload* Operator;
 	int Index;
 	union {
 		struct SymbolEntry* Local;
-		struct Field* Field;
-		struct Property* Property;
+		struct bc_Field* Field;
+		struct bc_Property* Property;
 	} Kind;
 } SubscriptDescriptor;
 
-struct GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc);
+struct bc_GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc);
 #endif

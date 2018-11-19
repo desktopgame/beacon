@@ -15,11 +15,11 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#define GENERIC2TYPE(gtype) (GenericTypeToType(gtype))
-#define TYPE2GENERIC(type) (type->GenericSelf)
+#define bc_GENERIC2TYPE(gtype) (bc_GenericTypeToType(gtype))
+#define bc_TYPE2GENERIC(type) (type->GenericSelf)
 
-struct Type;
-struct Method;
+struct bc_Type;
+struct bc_Method;
 struct Enviroment;
 struct virtual_type;
 struct Frame;
@@ -28,32 +28,32 @@ struct CallContext;
  * 型変数つきの型宣言の型引数では GenericType 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
  */
-typedef enum GenericTypeTag {
+typedef enum bc_GenericTypeTag {
 	GENERIC_TYPE_TAG_NONE_T,
 	//クラスの型変数
 	GENERIC_TYPE_TAG_CLASS_T,
 	//メソッドの型変数
 	GENERIC_TYPE_TAG_METHOD_T,
-} GenericTypeTag;
+} bc_GenericTypeTag;
 
 /**
  * 型変数つきの型宣言.
  */
-typedef struct GenericType {
-	struct Type* CoreType;
+typedef struct bc_GenericType {
+	struct bc_Type* CoreType;
 	Vector* TypeArgs;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
-		struct Type* Type;
-		struct Method* Method;
+		struct bc_Type* Type;
+		struct bc_Method* Method;
 	} Kind;
 	//もしこの型が List<T> の Tを表すなら、
 	//外側のクラスの何番目の型変数かを格納する。
 	int VirtualTypeIndex;
-	GenericTypeTag Tag;
+	bc_GenericTypeTag Tag;
 	bool IsMark;
 	bool IsCtor;
-} GenericType;
+} bc_GenericType;
 
 //#define GenericType_validate(self) assert((self)->CoreType != NULL || self->VirtualTypeIndex != -1)
 
@@ -62,7 +62,7 @@ typedef struct GenericType {
  * @param ctype
  * @return
  */
-#define NewGenericType(ctype) (MallocGenericType(ctype, __FILE__, __LINE__))
+#define bc_NewGenericType(ctype) (bc_MallocGenericType(ctype, __FILE__, __LINE__))
 
 /**
  * CoreTypeがNULL以外なら GenericSelfを参照し、
@@ -70,7 +70,7 @@ typedef struct GenericType {
  * @param CoreType
  * @return
  */
-GenericType* RefGenericType(struct Type* CoreType);
+bc_GenericType* bc_RefGenericType(struct bc_Type* CoreType);
 
 /**
  * 新しい型変数つきの型宣言を作成します.
@@ -78,34 +78,34 @@ GenericType* RefGenericType(struct Type* CoreType);
  * @param ctype
  * @return
  */
-GenericType* MallocGenericType(struct Type* CoreType, const char* filename, int lineno);
+bc_GenericType* bc_MallocGenericType(struct bc_Type* CoreType, const char* filename, int lineno);
 
 /**
  * ジェネリックタイプを複製します.
  * @param self
  * @return
  */
-GenericType* CloneGenericType(GenericType* self);
+bc_GenericType* bc_CloneGenericType(bc_GenericType* self);
 
 /**
  * 現在のスクリプトコンテキストでどこからも参照されていない
  * GenericType の一覧を解放します。
  */
-void CollectGenericType();
+void bc_CollectGenericType();
 
 /**
  * type#GenericSelf を解放する時に使います.
  * CollectGenericType より後に呼び出してください。
  * @param a
  */
-void LostownershipGenericType(GenericType* a);
+void bc_LostownershipGenericType(bc_GenericType* a);
 
 /**
  * self の子要素として a を追加します.
  * @param self
  * @param a
  */
-void AddArgsGenericType(GenericType* self, GenericType* a);
+void bc_AddArgsGenericType(bc_GenericType* self, bc_GenericType* a);
 
 /**
  * a と b の距離を返します.
@@ -117,7 +117,7 @@ void AddArgsGenericType(GenericType* self, GenericType* a);
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int DistanceGenericType(GenericType* self, GenericType* other, struct CallContext* cctx);
+int bc_DistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct CallContext* cctx);
 /**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
@@ -128,13 +128,13 @@ int DistanceGenericType(GenericType* self, GenericType* other, struct CallContex
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int RDistanceGenericType(GenericType* self, GenericType* other, struct Frame* fr);
+int bc_RDistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct Frame* fr);
 
 /**
  * 型変数と型を出力します.
  * @param self
  */
-void PrintGenericType(GenericType* self);
+void bc_PrintGenericType(bc_GenericType* self);
 
 /**
  * ジェネリックタイプをオペコードとして出力します.
@@ -142,7 +142,7 @@ void PrintGenericType(GenericType* self);
  * @param env
  * @param ilctx
  */
-void GenerateGenericType(GenericType* self, struct Enviroment* env);
+void bc_GenerateGenericType(bc_GenericType* self, struct Enviroment* env);
 
 /**
  * 現在のコンテキストで self の型変数を解決します.
@@ -151,7 +151,7 @@ void GenerateGenericType(GenericType* self, struct Enviroment* env);
  * @param cctx
  * @return
  */
-GenericType* ApplyGenericType(GenericType* self, struct CallContext* cctx);
+bc_GenericType* bc_ApplyGenericType(bc_GenericType* self, struct CallContext* cctx);
 /**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
@@ -159,12 +159,12 @@ GenericType* ApplyGenericType(GenericType* self, struct CallContext* cctx);
  * @param fr
  * @return
  */
-GenericType* RApplyGenericType(GenericType* self, struct CallContext* cctx, struct Frame* fr);
+bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct CallContext* cctx, struct Frame* fr);
 
 /**
  * GenericType を type へ変換します.
  * @param self
  * @return
  */
-struct Type* GenericTypeToType(GenericType* self);
+struct bc_Type* bc_GenericTypeToType(bc_GenericType* self);
 #endif // !SIGNAL_ENV_GENERIC_TYPE_H

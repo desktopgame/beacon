@@ -17,8 +17,8 @@ ILNotOp* NewILNotOp(bc_OperatorType type) {
 	return ret;
 }
 
-GenericType* EvalILNotOp(ILNotOp * self, Enviroment * env, CallContext* cctx) {
-	return TYPE2GENERIC(TYPE_BOOL);
+bc_GenericType* EvalILNotOp(ILNotOp * self, Enviroment * env, CallContext* cctx) {
+	return bc_TYPE2GENERIC(BC_TYPE_BOOL);
 }
 
 void GenerateILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
@@ -27,8 +27,8 @@ void GenerateILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
 		if(bc_GetLastPanic()) {
 			return;
 		}
-		GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
-		if(GENERIC2TYPE(gt) == TYPE_BOOL) {
+		bc_GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
+		if(bc_GENERIC2TYPE(gt) == BC_TYPE_BOOL) {
 			AddOpcodeBuf(env->Bytecode, OP_BNOT);
 		} else {
 			assert(false);
@@ -42,8 +42,8 @@ void GenerateILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
 
 void LoadILNotOp(ILNotOp* self, Enviroment* env, CallContext* cctx) {
 	 LoadILFactor(self->Parent->Arg, env, cctx);
-	GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
-	if(GENERIC2TYPE(gt) != TYPE_BOOL) {
+	bc_GenericType* gt = EvalILFactor(self->Parent->Arg, env, cctx);
+	if(bc_GENERIC2TYPE(gt) != BC_TYPE_BOOL) {
 		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }

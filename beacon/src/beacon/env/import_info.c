@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include "../util/mem.h"
 
-ImportInfo * NewImportInfo() {
-	ImportInfo* ret = (ImportInfo*)MEM_MALLOC(sizeof(ImportInfo));
+bc_ImportInfo * bc_NewImportInfo() {
+	bc_ImportInfo* ret = (bc_ImportInfo*)MEM_MALLOC(sizeof(bc_ImportInfo));
 	ret->IsConsume = false;
 	ret->Context = NULL;
 	return ret;
 }
 
-void DeleteImportInfo(ImportInfo* self) {
+void bc_DeleteImportInfo(bc_ImportInfo* self) {
 	MEM_FREE(self);
 }

@@ -15,17 +15,17 @@
  * 文字を表すデータ型です。
  */
 typedef struct Char {
-	Object Super;
+	bc_Object Super;
 	char Value;
 } Char;
-struct Type;
+struct bc_Type;
 
 /**
  * 新しい文字オブジェクトを生成します。
  * @param value
  * @return
  */
-struct Object* NewChar(char value);
+struct bc_Object* NewChar(char value);
 
 /**
  * beacon::lang::Charクラスを初期化します.
@@ -36,5 +36,5 @@ void InitChar();
  * beacon::lang::Char型を返します.
  * @return
  */
-struct Type* GetCharType();
+struct bc_Type* GetCharType();
 #endif // !SIGNAL_LIB_SIGNAL_LANG_CHAR_H

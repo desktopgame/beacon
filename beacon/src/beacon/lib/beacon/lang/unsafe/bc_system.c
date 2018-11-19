@@ -10,39 +10,39 @@
  * created by rbtools/rnative.rb
  * time: 2018-08-17
  */
-static void bc_system_nativeExit(Method* parent, Frame* fr, Enviroment* env);
-static void bc_system_nativeAbort(Method* parent, Frame* fr, Enviroment* env);
-static void bc_system_nativeExec(Method* parent, Frame* fr, Enviroment* env);
+static void bc_system_nativeExit(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_system_nativeAbort(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_system_nativeExec(bc_Method* parent, Frame* fr, Enviroment* env);
 
 void InitSystem() {
-	Namespace* unsafe = GetUnsafeNamespace();
-	Type* systemType = NewPreloadClass(InternString("System"));
-	Class* systemClass = TYPE2CLASS(systemType);
-	AddTypeNamespace(unsafe, systemType);
+	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+	bc_Type* systemType = NewPreloadClass(InternString("System"));
+	Class* systemClass = BC_TYPE2CLASS(systemType);
+	bc_AddTypeNamespace(unsafe, systemType);
 	DefineNativeMethodClass(systemClass, "nativeExit", bc_system_nativeExit);
 	DefineNativeMethodClass(systemClass, "nativeAbort", bc_system_nativeAbort);
 	DefineNativeMethodClass(systemClass, "nativeExec", bc_system_nativeExec);
 }
 
-Type* GetSystemType() {
-	Namespace* unsafe = GetUnsafeNamespace();
-	return FindTypeFromNamespace(unsafe, InternString("System"));
+bc_Type* GetSystemType() {
+	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+	return bc_FindTypeFromNamespace(unsafe, InternString("System"));
 }
 
 //private
-static void bc_system_nativeExit(Method* parent, Frame* fr, Enviroment* env) {
-	Object* returnCodeObj = AtVector(fr->VariableTable, 1);
-	int returnCode = ObjectToInt(returnCodeObj);
+static void bc_system_nativeExit(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* returnCodeObj = AtVector(fr->VariableTable, 1);
+	int returnCode = bc_ObjectToInt(returnCodeObj);
 	exit(returnCode);
 }
 
-static void bc_system_nativeAbort(Method* parent, Frame* fr, Enviroment* env) {
+static void bc_system_nativeAbort(bc_Method* parent, Frame* fr, Enviroment* env) {
 	abort();
 }
 
-static void bc_system_nativeExec(Method* parent, Frame* fr, Enviroment* env) {
-	Object* cmd = AtVector(fr->VariableTable, 1);
+static void bc_system_nativeExec(bc_Method* parent, Frame* fr, Enviroment* env) {
+	bc_Object* cmd = AtVector(fr->VariableTable, 1);
 	const char* str = GetRawString(cmd)->Text;
 	int ret = system(str);
-	PushVector(fr->ValueStack, GetIntObject(ret));
+	PushVector(fr->ValueStack, bc_GetIntObject(ret));
 }
