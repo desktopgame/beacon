@@ -13,7 +13,7 @@
 //proto
 static bc_Class* exception_class();
 
-bc_Object * bc_NewSimpleException(Frame* fr, const char* message) {
+bc_Object * bc_NewSimpleException(bc_Frame* fr, const char* message) {
 	bc_Class* excClass = exception_class();
 	Vector* args = NewVector();
 	PushVector(args, NewString(message));
@@ -22,7 +22,7 @@ bc_Object * bc_NewSimpleException(Frame* fr, const char* message) {
 	return e;
 }
 
-bc_Object * bc_NewSimplefException(Frame* fr, const char * message, ...) {
+bc_Object * bc_NewSimplefException(bc_Frame* fr, const char * message, ...) {
 	va_list ap;
 	va_start(ap, message);
 #define LEN 256

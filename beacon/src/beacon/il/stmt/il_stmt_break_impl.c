@@ -8,17 +8,17 @@ ILStatement * WrapILBreak() {
 	return ret;
 }
 
-void GenerateILBreak(void * empty, Enviroment * env, CallContext* cctx) {
+void GenerateILBreak(void * empty, bc_Enviroment * env, CallContext* cctx) {
 	if(cctx->Control.WhileStartTable->Length == 0) {
 		bc_Panic(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}
-	Label* lab = (Label*)TopVector(cctx->Control.WhileEndTable);
-	AddOpcodeBuf(env->Bytecode, OP_GOTO);
-	AddOpcodeBuf(env->Bytecode, lab);
+	bc_Label* lab = (bc_Label*)TopVector(cctx->Control.WhileEndTable);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO);
+	bc_AddOpcodeBuf(env->Bytecode, lab);
 }
 
-void LoadILBreak(void * empty, Enviroment * env, CallContext* cctx) {
+void LoadILBreak(void * empty, bc_Enviroment * env, CallContext* cctx) {
 }
 
 void DeleteILBreak(void * empty) {

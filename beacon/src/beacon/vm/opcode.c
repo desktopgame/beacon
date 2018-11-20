@@ -3,13 +3,13 @@
 #include <stdio.h>
 #include "../util/text.h"
 
-int PrintOpcode(Vector* source, int index) {
-	return FprintOpcode(stdout, source, index);
+int bc_PrintOpcode(Vector* source, int index) {
+	return bc_FprintOpcode(stdout, source, index);
 }
 
-int FprintOpcode(FILE* fp, Vector* source, int index) {
+int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 	VectorItem e = AtVector(source, index);
-	Opcode code = (Opcode)e;
+	bc_Opcode code = (bc_Opcode)e;
 	fprintf(fp,"%d: ", index);
 	switch (code) {
 		//int & int
@@ -455,7 +455,7 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_DEFER_REGISTER:
 		{
-			Label* l = (Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)AtVector(source, ++index);
 			fprintf(fp, "defer enter(%d)", l->Cursor);
 			break;
 		}
@@ -482,19 +482,19 @@ int FprintOpcode(FILE* fp, Vector* source, int index) {
 		//goto
 		case OP_GOTO:
 		{
-			Label* l = (Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)AtVector(source, ++index);
 			fprintf(fp,"goto(%d)", l->Cursor);
 			break;
 		}
 		case OP_GOTO_IF_TRUE:
 		{
-			Label* l = (Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)AtVector(source, ++index);
 			fprintf(fp,"goto if true(%d)", l->Cursor);
 			break;
 		}
 		case OP_GOTO_IF_FALSE:
 		{
-			Label* l = (Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)AtVector(source, ++index);
 			fprintf(fp,"goto if false(%d)", l->Cursor);
 			break;
 		}

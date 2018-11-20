@@ -17,7 +17,7 @@ ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILFactor(ILFactor * self, Enviroment* env, CallContext* cctx) {
+void GenerateILFactor(ILFactor * self, bc_Enviroment* env, CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return;
 	}
@@ -91,10 +91,10 @@ void GenerateILFactor(ILFactor * self, Enviroment* env, CallContext* cctx) {
 			break;
 	}
 	assert(self->Lineno >= 0);
-	AddRangeEnviroment(env, self->Lineno);
+	bc_AddRangeEnviroment(env, self->Lineno);
 }
 
-void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
+void LoadILFactor(ILFactor * self, bc_Enviroment * env, CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return;
 	}
@@ -169,7 +169,7 @@ void LoadILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-bc_GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILFactor(ILFactor * self, bc_Enviroment * env, CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return NULL;
 	}
@@ -248,7 +248,7 @@ bc_GenericType* EvalILFactor(ILFactor * self, Enviroment * env, CallContext* cct
 	return ret;
 }
 
-char* ILFactorToString(ILFactor* self, Enviroment* env) {
+char* ILFactorToString(ILFactor* self, bc_Enviroment* env) {
 	if(bc_GetLastPanic()) {
 		return NULL;
 	}
@@ -301,7 +301,7 @@ char* ILFactorToString(ILFactor* self, Enviroment* env) {
 	}
 }
 
-void ILArgsToString(Buffer* sb, Vector* args, Enviroment* env) {
+void ILArgsToString(Buffer* sb, Vector* args, bc_Enviroment* env) {
 	if(args->Length > 0) {
 		AppendBuffer(sb, '(');
 	}
@@ -319,7 +319,7 @@ void ILArgsToString(Buffer* sb, Vector* args, Enviroment* env) {
 	}
 }
 
-void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env) {
+void ILTypeArgsToString(Buffer* sb, Vector* type_args, bc_Enviroment* env) {
 	if(type_args->Length > 0) {
 		AppendsBuffer(sb, "<|");
 	}

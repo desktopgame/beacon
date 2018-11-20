@@ -24,13 +24,13 @@ ILFactor* WrapILDouble(ILDouble* self);
 
 ILDouble* NewILDouble(double d);
 
-void GenerateILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
+void GenerateILDouble(ILDouble* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
+void LoadILDouble(ILDouble* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILDouble(ILDouble* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILDouble(ILDouble* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILDoubleToString(ILDouble* self, Enviroment* env);
+char* ILDoubleToString(ILDouble* self, bc_Enviroment* env);
 
 void DeleteILDouble(ILDouble* self);
 

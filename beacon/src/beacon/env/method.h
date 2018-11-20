@@ -19,8 +19,8 @@
 #include <stdbool.h>
 struct bc_Type;
 struct bc_Interface;
-struct Frame;
-struct Enviroment;
+struct bc_Frame;
+struct bc_Enviroment;
 struct CallContext;
 struct bc_ClassLoader;
 
@@ -67,7 +67,7 @@ bc_Method* bc_MallocMethod(StringView name, const char* filename, int lineno);
  * @param frame
  * @param env
  */
-void bc_ExecuteMethod(bc_Method* self, struct Frame* fr, Enviroment* env);
+void bc_ExecuteMethod(bc_Method* self, struct bc_Frame* fr, bc_Enviroment* env);
 
 /**
  * メソッドa とb が完全に等価である場合に true を返します.

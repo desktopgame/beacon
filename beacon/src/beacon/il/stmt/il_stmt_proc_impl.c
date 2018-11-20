@@ -15,11 +15,11 @@ ILProc * NewILProc() {
 	return ret;
 }
 
-void GenerateILProc(ILProc * self, Enviroment * env, CallContext* cctx) {
+void GenerateILProc(ILProc * self, bc_Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->Factor, env, cctx);
 }
 
-void LoadILProc(ILProc * self, Enviroment* env, CallContext* cctx) {
+void LoadILProc(ILProc * self, bc_Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Factor, env, cctx);
 }
 

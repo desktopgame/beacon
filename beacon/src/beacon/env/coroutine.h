@@ -5,6 +5,6 @@
 
 typedef struct bc_Coroutine {
 	bc_Object Super;
-	YieldContext* Context;
+	bc_YieldContext* Context;
 } bc_Coroutine;
 #endif

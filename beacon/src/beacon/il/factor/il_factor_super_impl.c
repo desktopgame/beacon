@@ -9,7 +9,7 @@
 #include "../call_context.h"
 #include "../../error.h"
 
-static void check_context(ILSuper * self, Enviroment * env, CallContext* cctx);
+static void check_context(ILSuper * self, bc_Enviroment * env, CallContext* cctx);
 
 ILSuper* NewILSuper() {
 	ILSuper* ret = (ILSuper*)MEM_MALLOC(sizeof(ILSuper));
@@ -17,20 +17,20 @@ ILSuper* NewILSuper() {
 	return ret;
 }
 
-void GenerateILSuper(ILSuper * self, Enviroment * env, CallContext* cctx) {
-	AddOpcodeBuf(env->Bytecode, OP_SUPER);
+void GenerateILSuper(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
+	bc_AddOpcodeBuf(env->Bytecode, OP_SUPER);
 }
 
-void LoadILSuper(ILSuper * self, Enviroment * env, CallContext* cctx) {
+void LoadILSuper(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-bc_GenericType* EvalILSuper(ILSuper * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILSuper(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
 	bc_Type* t = GetTypeCContext(cctx);
 	return t->Kind.Class->SuperClass;
 }
 
-char* ILSuperToString(ILSuper* self, Enviroment* env) {
+char* ILSuperToString(ILSuper* self, bc_Enviroment* env) {
 	return bc_Strdup("super");
 }
 
@@ -39,7 +39,7 @@ void DeleteILSuper(ILSuper * self) {
 }
 
 //private
-static void check_context(ILSuper * self, Enviroment * env, CallContext* cctx) {
+static void check_context(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}

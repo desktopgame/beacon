@@ -103,7 +103,7 @@ bc_Type* bc_NewPreloadClass(StringView namev) {
 	return tp;
 }
 
-void bc_AllocFieldsClass(bc_Class* self, bc_Object * o, Frame* fr) {
+void bc_AllocFieldsClass(bc_Class* self, bc_Object * o, bc_Frame* fr) {
 	//assert(o->Tag == OBJECT_REF_T);
 	bc_Heap* he = bc_GetHeap();
 	for (int i = 0; i < self->Fields->Length; i++) {
@@ -115,15 +115,15 @@ void bc_AllocFieldsClass(bc_Class* self, bc_Object * o, Frame* fr) {
 		}
 		he->CollectBlocking++;
 		if(f->InitialValue != NULL) {
-			Frame* sub = SubFrame(fr);
+			bc_Frame* sub = bc_SubFrame(fr);
 			for(int i=0; i<fr->TypeArgs->Length; i++) {
 				PushVector(sub->TypeArgs, AtVector(fr->TypeArgs, i));
 			}
 			sub->Receiver = self->Parent;
 			CopyVector(fr->VariableTable, sub->VariableTable);
-			ExecuteVM(sub, f->InitialValueEnv);
+			bc_ExecuteVM(sub, f->InitialValueEnv);
 			a = PopVector(sub->ValueStack);
-			DeleteFrame(sub);
+			bc_DeleteFrame(sub);
 		}
 		PushVector(o->Fields, a);
 		he->CollectBlocking--;
@@ -339,13 +339,13 @@ int bc_CountAllSMethodClass(bc_Class* self) {
 	return sum;
 }
 
-bc_Object * bc_NewInstanceClass(bc_Class* self, Frame* fr, Vector* args, Vector* type_args) {
+bc_Object * bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, Vector* args, Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	bc_Constructor* ctor = bc_RFindConstructorClass(self, args, NULL, fr, &temp);
 	assert(temp != -1);
 	//コンストラクタを実行
-	Frame* sub = SubFrame(fr);
+	bc_Frame* sub = bc_SubFrame(fr);
 	bc_Heap* h = bc_GetHeap();
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {
@@ -358,10 +358,10 @@ bc_Object * bc_NewInstanceClass(bc_Class* self, Frame* fr, Vector* args, Vector*
 			PushVector(sub->TypeArgs, AtVector(type_args, i));
 		}
 	}
-	ExecuteVM(sub, ctor->Env);
+	bc_ExecuteVM(sub, ctor->Env);
 	bc_Object* inst = PopVector(sub->ValueStack);
 	h->CollectBlocking++;
-	DeleteFrame(sub);
+	bc_DeleteFrame(sub);
 	h->CollectBlocking--;
 	return inst;
 }

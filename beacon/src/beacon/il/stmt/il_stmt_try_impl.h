@@ -14,7 +14,7 @@
 #include "../../env/generic_cache.h"
 #include "../il_stmt_interface.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILTry {
 	Vector* Statements;
@@ -33,13 +33,13 @@ ILTry* NewILTry();
 
 ILCatch* NewILCatch(StringView namev);
 
-void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx);
+void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILCatch(ILCatch* self, Enviroment* env, CallContext* cctx);
+void GenerateILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILTry(ILTry* self, Enviroment* env, CallContext* cctx);
+void LoadILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILCatch(ILCatch* self, Enviroment* env, CallContext* cctx);
+void LoadILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILCatch(ILCatch* self);
 

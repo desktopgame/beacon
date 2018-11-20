@@ -12,7 +12,7 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 struct ILBinaryOp;
 typedef struct ILShiftOp {
 	struct ILBinaryOp* Parent;
@@ -22,13 +22,13 @@ typedef struct ILShiftOp {
 
 ILShiftOp* NewILShiftOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILShiftOp(ILShiftOp * self, struct Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILShiftOp(ILShiftOp * self, struct bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILShiftOp(ILShiftOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILShiftOp(ILShiftOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILShiftOp(ILShiftOp* self);
 
-char* ILShiftOpToString(ILShiftOp* self, struct Enviroment* env);
+char* ILShiftOpToString(ILShiftOp* self, struct bc_Enviroment* env);
 #endif

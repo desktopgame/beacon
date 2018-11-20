@@ -34,8 +34,8 @@ ScriptThread * GetCurrentSGThread(bc_ScriptContext* sctx) {
 
 void ClearSGThread(ScriptThread* self) {
 	while (!IsEmptyStack(self->TraceStack)) {
-		VMTrace* trace = (VMTrace*)PopVector(self->TraceStack);
-		DeleteVMTrace(trace);
+		bc_VMTrace* trace = (bc_VMTrace*)PopVector(self->TraceStack);
+		bc_DeleteVMTrace(trace);
 	}
 }
 
@@ -44,7 +44,7 @@ void DeleteSGThread(ScriptThread * self) {
 	MEM_FREE(self);
 }
 
-void SetSGThreadFrameRef(ScriptThread * self, Frame* frame_ref) {
+void SetSGThreadFrameRef(ScriptThread * self, bc_Frame* frame_ref) {
 	//TODO:ここで同期をとる
 	assert(frame_ref != NULL);
 	assert(self->CCtx == NULL);
@@ -54,7 +54,7 @@ void SetSGThreadFrameRef(ScriptThread * self, Frame* frame_ref) {
 	self->CCtx = NewCallContext(CALL_TOP_T);
 }
 
-Frame* GetSGThreadFrameRef(ScriptThread * self) {
+bc_Frame* GetSGThreadFrameRef(ScriptThread * self) {
 	//TODO:ここで同期をとる
 	return self->FrameRef;
 }
@@ -80,6 +80,6 @@ void DestroySGThread() {
 }
 //private
 static void ScriptThread_trace_delete(VectorItem item) {
-	VMTrace* e = (VMTrace*)item;
-	DeleteVMTrace(e);
+	bc_VMTrace* e = (bc_VMTrace*)item;
+	bc_DeleteVMTrace(e);
 }

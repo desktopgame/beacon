@@ -27,13 +27,13 @@ ILFactor* WrapILInt(ILInt* self);
 #define NewILInt(i) (MallocILInt(i, __FILE__, __LINE__))
 ILInt* MallocILInt(int32_t i, const char* filename, int lineno);
 
-void GenerateILInt(ILInt* self, Enviroment* env, CallContext* cctx);
+void GenerateILInt(ILInt* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILInt(ILInt* self, Enviroment* env, CallContext* cctx);
+void LoadILInt(ILInt* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILInt(ILInt* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILInt(ILInt* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILIntToString(ILInt* self, Enviroment* env);
+char* ILIntToString(ILInt* self, bc_Enviroment* env);
 
 void DeleteILInt(ILInt* self);
 

@@ -86,7 +86,7 @@ static void CLBC_class(bc_ClassLoader* self, ILType* iltype, bc_Namespace* paren
 static void CLBC_interface(bc_ClassLoader* self, ILType* iltype, bc_Namespace* parent);
 
 static void CLBC_attach_native_method(bc_ClassLoader* self, ILType* iltype, bc_Class* classz, ILMethod* ilmethod, bc_Method* me);
-static void CLBC_debug_native_method(bc_Method* parent, Frame* fr, Enviroment* env);
+static void CLBC_debug_native_method(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 static void CLBC_check_superclass(bc_Class* cls);
 static bc_Type* CLBC_get_or_load_enum(bc_Namespace* parent, ILType* iltype);
@@ -280,7 +280,7 @@ static void CLBC_attach_native_method(bc_ClassLoader* self, ILType* ilclass, bc_
 //	me->u.NativeMethod->ref = NewNativeMethodRef(class_loader_sgload_debug_NativeMethod);
 }
 
-static void CLBC_debug_native_method(bc_Method* parent, Frame*fr, Enviroment* env) {
+static void CLBC_debug_native_method(bc_Method* parent, bc_Frame*fr, bc_Enviroment* env) {
 
 }
 

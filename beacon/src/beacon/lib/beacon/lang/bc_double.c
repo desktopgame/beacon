@@ -2,17 +2,17 @@
 #include "../../bc_library_impl.h"
 
 //proto
-static void bc_double_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeEquals(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeAdd(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeSub(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeMul(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeDiv(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeGT(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeGE(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeLT(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeLE(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_double_nativeEQ(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_double_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeAdd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeSub(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeMul(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeDiv(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeGT(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeGE(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeLT(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeLE(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_double_nativeEQ(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 bc_Object* NewDouble(double value) {
 	Double* ret = bc_ConstructObject(sizeof(Double), BC_GENERIC_DOUBLE);
@@ -45,7 +45,7 @@ bc_Type* GetDoubleType() {
 }
 //private
 #define DOUBLE_VALUE(obj) (((Double*)obj)->Value)
-static void bc_double_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* d = AtVector(fr->VariableTable, 1);
 
@@ -53,69 +53,69 @@ static void bc_double_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) 
 	//self->Tag = OBJECT_DOUBLE_T;
 }
 
-static void bc_double_nativeEquals(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* d = AtVector(fr->VariableTable, 1);
 	PushVector(fr->ValueStack, bc_BoolToObject(bc_ObjectToDouble(self) == bc_ObjectToDouble(d)));
 }
 
-static void bc_double_nativeAdd(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeAdd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewDouble(DOUBLE_VALUE(self) + DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeSub(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeSub(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewDouble(DOUBLE_VALUE(self) - DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeMul(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeMul(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewDouble(DOUBLE_VALUE(self) * DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeDiv(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeDiv(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewDouble(DOUBLE_VALUE(self) / DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeGT(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeGT(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(DOUBLE_VALUE(self) > DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeGE(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeGE(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(DOUBLE_VALUE(self) >= DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeLT(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeLT(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(DOUBLE_VALUE(self) < DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeLE(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeLE(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(DOUBLE_VALUE(self) <= DOUBLE_VALUE(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_double_nativeEQ(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_double_nativeEQ(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(DOUBLE_VALUE(self) == DOUBLE_VALUE(a));

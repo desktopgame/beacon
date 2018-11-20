@@ -16,7 +16,7 @@
 /**
  * 命令の一覧です.
  */
-typedef enum Opcode {
+typedef enum bc_Opcode {
 	OP_IADD = 1,
 	OP_ISUB,
 	OP_IMUL,
@@ -143,14 +143,14 @@ typedef enum Opcode {
 	OP_GOTO_IF_TRUE,
 	OP_GOTO_IF_FALSE,
 	OP_SIZE,
-} Opcode;
+} bc_Opcode;
 
 /**
  * オペコードを出力します.
  * @param source
  * @param index
  */
-int PrintOpcode(Vector* source, int index);
+int bc_PrintOpcode(Vector* source, int index);
 
 /**
  * オペコードを出力します.
@@ -158,5 +158,5 @@ int PrintOpcode(Vector* source, int index);
  * @param source
  * @param index
  */
-int FprintOpcode(FILE* fp, Vector* source, int index);
+int bc_FprintOpcode(FILE* fp, Vector* source, int index);
 #endif // !SIGNAL_VM_OPCODE_H

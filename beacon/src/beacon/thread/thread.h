@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #include "../util/vector.h"
 struct bc_ScriptContext;
-struct Frame;
+struct bc_Frame;
 struct CallContext;
 /**
  * 並列実行のための構造体です.
@@ -24,7 +24,7 @@ typedef struct ScriptThread {
 	Vector* TraceStack;
 	bool IsVMCrushByException;
 	bool IsVMDump;
-	struct Frame* FrameRef;
+	struct bc_Frame* FrameRef;
 	struct CallContext* CCtx;
 } ScriptThread;
 
@@ -66,14 +66,14 @@ void DeleteSGThread(ScriptThread* self);
  * @param self
  * @param frame_ref 呼び出し側で開放してください.
  */
-void SetSGThreadFrameRef(ScriptThread* self, struct Frame* frame_ref);
+void SetSGThreadFrameRef(ScriptThread* self, struct bc_Frame* frame_ref);
 
 /**
  * このスレッドが "実行中のVMのルート" を返します.
  * @param self
  * @return
  */
-struct Frame* GetSGThreadFrameRef(ScriptThread* self);
+struct bc_Frame* GetSGThreadFrameRef(ScriptThread* self);
 
 /**
  * このスレッドからVMを参照出来ないようにします.

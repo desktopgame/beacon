@@ -272,11 +272,11 @@ bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, StringView namev, int* ou
 
 
 
-bc_Constructor* bc_RFindConstructorClass(bc_Class* self, Vector * args, Vector* typeargs, Frame* fr, int* outIndex) {
+bc_Constructor* bc_RFindConstructorClass(bc_Class* self, Vector * args, Vector* typeargs, bc_Frame* fr, int* outIndex) {
 	return bc_MetaScopedRFindConstructor(self, self->Constructors, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector * args, Enviroment * env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector * args, bc_Enviroment * env, CallContext* cctx, int* outIndex) {
 	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
@@ -284,7 +284,7 @@ bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector * args, Envirom
 	return ctor;
 }
 
-bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	Vector* emptyArgs = NewVector();
 	bc_Constructor* ret = bc_ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
 	DeleteVector(emptyArgs, VectorDeleterOfNull);
@@ -293,7 +293,7 @@ bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, Enviroment * env
 
 
 
-bc_Method * bc_ILFindMethodClass(bc_Class* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindMethodClass(bc_Class* self, StringView namev, Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	bc_CreateVTableClass(self);
 	#if defined(DEBUG)
@@ -344,7 +344,7 @@ bc_Method* bc_GFindEqMethodClass(bc_Class* self, int* outIndex) {
 	return ret;
 }
 
-bc_Method * bc_ILFindSMethodClass(bc_Class* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindSMethodClass(bc_Class* self, StringView namev, Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = Ref2Str(namev);
 	#endif
@@ -420,7 +420,7 @@ bc_Method * bc_GetImplMethodClass(bc_Class* self, bc_Type* interType, int interM
 
 
 
-bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	bc_OperatorOverload* ret = NULL;
 	bc_CreateOperatorVTClass(self);
@@ -455,7 +455,7 @@ bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorTy
 	return ret;
 }
 
-bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		ILFactor* ilfact = (ILFactor*)AtVector(args,i);
@@ -467,7 +467,7 @@ bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorT
 	return ret;
 }
 
-bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	Vector* gargs =NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//ILFactor* ilfact = (ILFactor*)AtVector(args,i);

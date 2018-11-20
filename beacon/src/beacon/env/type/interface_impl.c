@@ -47,7 +47,7 @@ void bc_AddPropertyInterface(bc_Interface* self, bc_Property* p) {
 	PushVector(self->Properties, p);
 }
 
-bc_Method * bc_ILFindMethodInterface(bc_Interface* self, StringView namev, Vector * args, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindMethodInterface(bc_Interface* self, StringView namev, Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	return bc_MetaILFindMethod(self->Methods, namev, args, env,cctx, outIndex);
 }
 

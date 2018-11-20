@@ -13,7 +13,7 @@
 #include "../../call_context.h"
 struct ILUnaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILChildaOp {
 	struct ILUnaryOp* Parent;
@@ -23,13 +23,13 @@ typedef struct ILChildaOp {
 
 ILChildaOp* NewILChildaOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILChildaOp(ILChildaOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILChildaOp(ILChildaOp * self, struct bc_Enviroment * env, CallContext* cctx);
 
-void GenerateILChildaOp(ILChildaOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILChildaOp(ILChildaOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILChildaOp(ILChildaOp* self);
 
-char* ILChildaOpToString(ILChildaOp* self, struct Enviroment* env);
+char* ILChildaOpToString(ILChildaOp* self, struct bc_Enviroment* env);
 #endif

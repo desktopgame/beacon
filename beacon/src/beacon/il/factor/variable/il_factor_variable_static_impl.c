@@ -13,19 +13,19 @@ ILVariableStatic* NewILVariableStatic() {
 	return ret;
 }
 
-void GenerateILVariableStatic(ILVariableStatic* self, Enviroment* env, CallContext* cctx) {
+void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, CallContext* cctx) {
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
-void LoadILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx) {
+void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx) {
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx) {
 	return NULL;
 }
 
-char* ILVariableStaticToString(ILVariableStatic * self, Enviroment * env) {
+char* ILVariableStaticToString(ILVariableStatic * self, bc_Enviroment * env) {
 	return NULL;
 }
 

@@ -88,7 +88,7 @@ ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno)
  * @param env
  * @param cctx
  */
-void GenerateILStmt(ILStatement* self, Enviroment* env, CallContext* cctx);
+void GenerateILStmt(ILStatement* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
@@ -96,7 +96,7 @@ void GenerateILStmt(ILStatement* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx);
+void LoadILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 文を開放します.

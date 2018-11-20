@@ -12,13 +12,13 @@
 #define BEACON_IL_IL_STMT_BREAK_H
 #include "../il_stmt_interface.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 
 ILStatement* WrapILBreak();
 
-void GenerateILBreak(void* empty, Enviroment* env, CallContext* cctx);
+void GenerateILBreak(void* empty, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILBreak(void* empty, Enviroment* env, CallContext* cctx);
+void LoadILBreak(void* empty, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILBreak(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_BREAK_H

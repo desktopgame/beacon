@@ -17,22 +17,22 @@
 #include <stdbool.h>
 //#include "../env/class.h"
 struct bc_GenericType;
-struct SymbolEntry;
+struct bc_SymbolEntry;
 /**
  * 変数名とインデックスの変換テーブルです.
  * オペコードの中では、添え字で変数アクセスを行います。
  */
-typedef struct SymbolTable {
+typedef struct bc_SymbolTable {
 	NumericMap* VariableMap;
 	int Count;
 	int ScopeDepth;
-} SymbolTable;
+} bc_SymbolTable;
 
 /**
  * シンボルテーブルを作成します.
  * @return
  */
-SymbolTable* NewSymbolTable();
+bc_SymbolTable* bc_NewSymbolTable();
 
 /**
  * 指定の名前に対応するインデックスを返します.
@@ -42,7 +42,7 @@ SymbolTable* NewSymbolTable();
  * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct SymbolEntry* EntrySymbolTable(SymbolTable* self, struct bc_GenericType* gtp, StringView namev);
+struct bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, struct bc_GenericType* gtp, StringView namev);
 
 /**
  * 既に指定の名前が含まれるなら true.
@@ -50,17 +50,17 @@ struct SymbolEntry* EntrySymbolTable(SymbolTable* self, struct bc_GenericType* g
  * @param namev
  * @return
  */
-bool IsContainsSymbol(SymbolTable* self, StringView namev);
+bool bc_IsContainsSymbol(bc_SymbolTable* self, StringView namev);
 
 /**
  * シンボルテーブルをダンプします.
  * @param self
  */
-void DumpSymbolTable(SymbolTable* self);
+void bc_DumpSymbolTable(bc_SymbolTable* self);
 
 /**
  * シンボルテーブルを開放します.
  * @param self
  */
-void DeleteSymbolTable(SymbolTable* self);
+void bc_DeleteSymbolTable(bc_SymbolTable* self);
 #endif // !SIGNAL_VM_SYMBOL_TABLE_H

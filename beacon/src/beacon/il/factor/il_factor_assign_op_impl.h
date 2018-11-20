@@ -20,11 +20,11 @@ ILFactor* WrapILAssignOp(ILAssignOp* self);
 
 ILAssignOp* NewILAssignOp();
 
-void LoadILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx);
+void LoadILAssignOp(ILAssignOp* self, bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx);
+void GenerateILAssignOp(ILAssignOp* self, bc_Enviroment* env, CallContext* cctx);
 
-struct bc_GenericType* EvalILAssignOp(ILAssignOp* self, Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILAssignOp(ILAssignOp* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILAssignOp(ILAssignOp* self);
 #endif

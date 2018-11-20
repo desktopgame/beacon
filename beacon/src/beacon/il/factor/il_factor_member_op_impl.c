@@ -14,10 +14,10 @@
 #include "../../il/il_factor_impl.h"
 
 //proto
-static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cctx, bool* swap);
-static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type, bool* swap);
-static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
-static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
+static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bool* swap);
+static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type, bool* swap);
+static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
+static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
 static void ILMemberOp_typearg_delete(VectorItem item);
 
 ILFactor* WrapILMemberOp(ILMemberOp* self) {
@@ -37,20 +37,20 @@ ILMemberOp* NewILMemberOp(StringView namev) {
 	return ret;
 }
 
-void LoadILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx) {
+void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx) {
 	bool swap;
 	LoadILFactor(self->Source, env, cctx);
 	ILMemberOp_check(self, env, cctx, &swap);
 }
 
-void GenerateILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx) {
+void GenerateILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx) {
 	if(!bc_IsStaticModifier(self->Field->Modifier)) {
 		GenerateILFactor(self->Source, env, cctx);
 	}
-	GenerateGetField(env->Bytecode, self->Field, self->Index);
+	bc_GenerateGetField(env->Bytecode, self->Field, self->Index);
 }
 
-bc_GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx) {
 	//ILMemberOp_checkは、
 	//フィールドアクセスとプロパティアクセスを区別して、
 	//プロパティなら木構造を入れ替える
@@ -71,7 +71,7 @@ bc_GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* c
 	return AtVector(a->TypeArgs, self->Field->GType->VirtualTypeIndex);
 }
 
-char* ILMemberOpToString(ILMemberOp* self, Enviroment* env) {
+char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = ILFactorToString(self->Source, env);
 	AppendsBuffer(sb, name);
@@ -87,7 +87,7 @@ void DeleteILMemberOp(ILMemberOp* self) {
 	MEM_FREE(self);
 }
 //private
-static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cctx, bool* swap) {
+static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bool* swap) {
 	(*swap) = false;
 	if(self->Index != -1) {
 		return;
@@ -121,7 +121,7 @@ static void ILMemberOp_check(ILMemberOp* self, Enviroment* env, CallContext* cct
 	}
 }
 
-static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type, bool* swap) {
+static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type, bool* swap) {
 	ILFactor* fact = self->Source;
 	ILVariable* ilvar = fact->Kind.Variable;
 	#if defined(DEBUG)
@@ -143,7 +143,7 @@ static void ILMemberOp_check_static(ILMemberOp* self, Enviroment* env, CallConte
 	}
 }
 
-static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
+static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
 	const char* name = Ref2Str(self->Name);
@@ -172,7 +172,7 @@ static void ILMemberOp_check_prop(ILMemberOp* self, Enviroment* env, CallContext
 	(*swap) = true;
 }
 
-static void ILMemberOp_check_static_prop(ILMemberOp* self, Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
+static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	bc_Type* ctype = receiver_type->CoreType;
 	bc_Property* p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);

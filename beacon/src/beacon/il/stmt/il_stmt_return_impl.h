@@ -12,7 +12,7 @@
 #define BEACON_IL_IL_STMT_RETURN_H
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
-struct Enviroment;
+struct bc_Enviroment;
 /**
  * 値の返却を表す要素.
  */
@@ -39,7 +39,7 @@ ILReturn* NewILReturn();
  * @param env
  * @param cctx
  */
-void GenerateILReturn(ILReturn* self, Enviroment* env, CallContext* cctx);
+void GenerateILReturn(ILReturn* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 式を返却する文を読み込みます.
@@ -47,7 +47,7 @@ void GenerateILReturn(ILReturn* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILReturn(ILReturn* self, Enviroment* env, CallContext* cctx);
+void LoadILReturn(ILReturn* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 式を返却する文を開放します.

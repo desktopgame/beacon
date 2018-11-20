@@ -16,7 +16,7 @@
 
 //proto
 static void DeleteILNewInstance_typearg(VectorItem item);
-static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallContext* cctx);
+static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx);
 static void il_Factor_new_instace_delete_arg(VectorItem item);
 
 ILFactor * WrapILNewInstance(ILNewInstance * self) {
@@ -36,12 +36,12 @@ ILNewInstance * NewILNewInstance() {
 	return ret;
 }
 
-void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
+void GenerateILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
-		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	//実引数を全てスタックへ
@@ -53,12 +53,12 @@ void GenerateILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* 
 		}
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
-	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->Bytecode, self->Constructor->Parent->AbsoluteIndex);
-	AddOpcodeBuf(env->Bytecode, self->ConstructorIndex);
+	bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
+	bc_AddOpcodeBuf(env->Bytecode, self->Constructor->Parent->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, self->ConstructorIndex);
 }
 
-void LoadILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
+void LoadILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	if(bc_GetLastPanic()) {
 		return;
@@ -69,7 +69,7 @@ void LoadILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx
 	}
 }
 
-bc_GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	if(bc_GetLastPanic()) {
 		return NULL;
@@ -93,7 +93,7 @@ bc_GenericType* EvalILNewInstance(ILNewInstance * self, Enviroment * env, CallCo
 	return self->InstanceGType;
 }
 
-char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env) {
+char* ILNewInstanceToString(ILNewInstance* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, "new ");
 	char* type = bc_FQCNCacheToString(self->FQCNCache);
@@ -117,7 +117,7 @@ static void DeleteILNewInstance_typearg(VectorItem item) {
 	DeleteILTypeArgument(e);
 }
 
-static void ILNewInstance_find(ILNewInstance * self, Enviroment * env, CallContext* cctx) {
+static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
 	if(self->ConstructorIndex != -1) {
 		return;
 	}

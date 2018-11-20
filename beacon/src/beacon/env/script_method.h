@@ -12,15 +12,15 @@
 #define BEACON_ENV_SCRIPT_METHOD_H
 #include "../util/vector.h"
 #include "../vm/enviroment.h"
-struct Frame;
+struct bc_Frame;
 struct bc_Method;
-struct Enviroment;
+struct bc_Enviroment;
 
 /**
  * スクリプトで実装されたメソッド.
  */
 typedef struct bc_ScriptMethod {
-	Enviroment* Env;
+	bc_Enviroment* Env;
 } bc_ScriptMethod;
 
 /**
@@ -36,7 +36,7 @@ bc_ScriptMethod* bc_NewScriptMethod();
  * @param fr
  * @param env
  */
-void bc_ExecuteScriptMethod(bc_ScriptMethod* self, struct bc_Method* parent, struct Frame* fr, Enviroment* env);
+void bc_ExecuteScriptMethod(bc_ScriptMethod* self, struct bc_Method* parent, struct bc_Frame* fr, bc_Enviroment* env);
 
 /**
  * メソッドを開放します.

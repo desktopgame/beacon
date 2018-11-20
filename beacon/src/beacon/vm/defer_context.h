@@ -15,20 +15,20 @@
  * deferステートメントが実行された時、
  * その時点でのpcと名前束縛を記録しておく構造体です.
  */
-typedef struct DeferContext {
-	Label* Offset;
+typedef struct bc_DeferContext {
+	bc_Label* Offset;
 	Vector* VariableTable;
-} DeferContext;
+} bc_DeferContext;
 
 /**
  * 新しい DeferContext を作成します.
  * @return
  */
-DeferContext* NewDeferContext();
+bc_DeferContext* bc_NewDeferContext();
 
 /**
  * DeferContext を解放します.
  * @param self
  */
-void DeleteDeferContext(DeferContext* self);
+void bc_DeleteDeferContext(bc_DeferContext* self);
 #endif

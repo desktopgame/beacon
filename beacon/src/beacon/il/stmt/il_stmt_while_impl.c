@@ -8,7 +8,7 @@
 
 //proto
 static void ILWhile_stmt_delete(VectorItem item);
-static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx);
+static void check_condition_type(ILFactor* fact, bc_Enviroment* env, CallContext* cctx);
 
 ILStatement * WrapILWhile(ILWhile * self) {
 	ILStatement* ret = NewILStatement(ILSTMT_WHILE_T);
@@ -23,28 +23,28 @@ ILWhile * NewILWhile() {
 	return ret;
 }
 
-void GenerateILWhile(ILWhile * self, Enviroment * env, CallContext* cctx) {
+void GenerateILWhile(ILWhile * self, bc_Enviroment * env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
-	int prev = AddNOPOpcodeBuf(env->Bytecode);
-	Label* prevLab = AddLabelOpcodeBuf(env->Bytecode, prev);
-	Label* nextLab = AddLabelOpcodeBuf(env->Bytecode, -1);
+	int prev = bc_AddNOPOpcodeBuf(env->Bytecode);
+	bc_Label* prevLab = bc_AddLabelOpcodeBuf(env->Bytecode, prev);
+	bc_Label* nextLab = bc_AddLabelOpcodeBuf(env->Bytecode, -1);
 	PushVector(cctx->Control.WhileStartTable, prevLab);
 	PushVector(cctx->Control.WhileEndTable, nextLab);
 	//条件を満たさないなら nextLab へ
 	GenerateILFactor(self->Condition, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
-	AddOpcodeBuf(env->Bytecode, nextLab);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
+	bc_AddOpcodeBuf(env->Bytecode, nextLab);
 	//全てのステートメントを実行
 	for (int i = 0; i < self->Statements->Length; i++) {
 		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		GenerateILStmt(e, env, cctx);
 	}
 	//prevLab へ行って再判定
-	AddOpcodeBuf(env->Bytecode, OP_GOTO);
-	AddOpcodeBuf(env->Bytecode, prevLab);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO);
+	bc_AddOpcodeBuf(env->Bytecode, prevLab);
 	PopVector(cctx->Control.WhileStartTable);
 	PopVector(cctx->Control.WhileEndTable);
-	int next = AddNOPOpcodeBuf(env->Bytecode);
+	int next = bc_AddNOPOpcodeBuf(env->Bytecode);
 	nextLab->Cursor = next;
 	env->Symboles->ScopeDepth--;
 }
@@ -55,7 +55,7 @@ void DeleteILWhile(ILWhile * self) {
 	MEM_FREE(self);
 }
 
-void LoadILWhile(ILWhile* self, Enviroment* env, CallContext* cctx) {
+void LoadILWhile(ILWhile* self, bc_Enviroment* env, CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	LoadILFactor(self->Condition, env, cctx);
 	for(int i=0; i<self->Statements->Length; i++) {
@@ -72,7 +72,7 @@ static void ILWhile_stmt_delete(VectorItem item) {
 	DeleteILStmt(e);
 }
 
-static void check_condition_type(ILFactor* fact, Enviroment* env, CallContext* cctx) {
+static void check_condition_type(ILFactor* fact, bc_Enviroment* env, CallContext* cctx) {
 	bc_GenericType* cond_T = EvalILFactor(fact, env, cctx);
 	if(cond_T->CoreType != BC_TYPE_BOOL) {
 		char* condstr = ILFactorToString(fact, env);

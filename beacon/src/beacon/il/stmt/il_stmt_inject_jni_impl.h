@@ -12,21 +12,21 @@
 #include "../../util/string_pool.h"
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
-struct SymbolEntry;
+struct bc_SymbolEntry;
 
 typedef struct ILInjectJNI {
 	StringView Name;
 	ILFactor* Value;
-	struct SymbolEntry* Symbol;
+	struct bc_SymbolEntry* Symbol;
 } ILInjectJNI;
 
 ILStatement* WrapILInjectJNI(ILInjectJNI* self);
 
 ILInjectJNI* NewILInjectJNI(StringView namev);
 
-void GenerateILInjectJNI(ILInjectJNI* self, Enviroment* env, CallContext* cctx);
+void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILInjectJNI(ILInjectJNI * self, Enviroment* env, CallContext* cctx);
+void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILInjectJni(ILInjectJNI* self);
 #endif

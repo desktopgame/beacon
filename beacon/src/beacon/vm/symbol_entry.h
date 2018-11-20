@@ -16,21 +16,21 @@ struct bc_GenericType;
 /**
  * シンボルを表す構造体.
  */
-typedef struct SymbolEntry {
+typedef struct bc_SymbolEntry {
 	int Index;
 	int ScopeDepth;
 	struct bc_GenericType* GType;
-} SymbolEntry;
+} bc_SymbolEntry;
 
 /**
  * エントリを作成します.
  * @return
  */
-SymbolEntry* NewSymbolEntry();
+bc_SymbolEntry* bc_NewSymbolEntry();
 
 /**
  * エントリを開放します.
  * @param self
  */
-void DeleteSymbolEntry(SymbolEntry* self);
+void bc_DeleteSymbolEntry(bc_SymbolEntry* self);
 #endif // !SIGNAL_VM_SYMBOL_ENTRY_H

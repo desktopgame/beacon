@@ -22,20 +22,20 @@ ILDouble * NewILDouble(double d) {
 	return ret;
 }
 
-void GenerateILDouble(ILDouble * self, Enviroment* env, CallContext* cctx) {
-	int index = AddCDoubleEnviroment(env, self->Value);
-	AddOpcodeBuf(env->Bytecode, OP_DCONST);
-	AddOpcodeBuf(env->Bytecode, index);
+void GenerateILDouble(ILDouble * self, bc_Enviroment* env, CallContext* cctx) {
+	int index = bc_AddCDoubleEnviroment(env, self->Value);
+	bc_AddOpcodeBuf(env->Bytecode, OP_DCONST);
+	bc_AddOpcodeBuf(env->Bytecode, index);
 }
 
-void LoadILDouble(ILDouble * self, Enviroment * env, CallContext* cctx) {
+void LoadILDouble(ILDouble * self, bc_Enviroment * env, CallContext* cctx) {
 }
 
-bc_GenericType* EvalILDouble(ILDouble * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILDouble(ILDouble * self, bc_Enviroment * env, CallContext* cctx) {
 	return BC_GENERIC_DOUBLE;
 }
 
-char* ILDoubleToString(ILDouble* self, Enviroment* env) {
+char* ILDoubleToString(ILDouble* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char block[32] = {0};
 	int res = sprintf(block, "%lf", self->Value);

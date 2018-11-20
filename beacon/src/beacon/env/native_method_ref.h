@@ -17,7 +17,7 @@
 /**
  * ネイティブメソッドの実装.
  */
-typedef void(*bc_NativeImpl)(bc_Method* parent, Frame* vm, Enviroment* env);
+typedef void(*bc_NativeImpl)(bc_Method* parent, bc_Frame* vm, bc_Enviroment* env);
 
 /**
  * ネイティブメソッドを表す関数ポインタをラップする構造体.

@@ -11,14 +11,14 @@
 #pragma warning(disable:4996)
 #endif
 
-static void bc_file_nativeOpen(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativePut(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativeGet(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativeAvailable(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativeGetStdIn(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativeGetStdOut(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativeGetStdErr(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_file_nativeClose(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_file_nativeOpen(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativePut(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativeGet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativeAvailable(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativeGetStdIn(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativeGetStdOut(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativeGetStdErr(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_file_nativeClose(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 bc_Object* NewFile(FILE* fp) {
 	File* file = bc_ConstructObject(sizeof(File), GetFileType()->GenericSelf);
@@ -52,7 +52,7 @@ bc_Type* GetFileType() {
 	return bc_FindTypeFromNamespace(unsafe, InternString("File"));
 }
 //private
-static void bc_file_nativeOpen(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeOpen(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* fileObj = AtVector(fr->VariableTable, 1);
 	bc_Object* modeObj = AtVector(fr->VariableTable, 2);
 	Buffer* fileStr = GetRawString(fileObj);
@@ -69,7 +69,7 @@ static void bc_file_nativeOpen(bc_Method* parent, Frame* fr, Enviroment* env) {
 	PushVector(fr->ValueStack, file);
 }
 
-static void bc_file_nativePut(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativePut(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* ch = AtVector(fr->VariableTable, 1);
 	FILE* fp = GetFilePointer(self);
@@ -77,7 +77,7 @@ static void bc_file_nativePut(bc_Method* parent, Frame* fr, Enviroment* env) {
 	fputc(bc_ObjectToChar(ch), fp);
 }
 
-static void bc_file_nativeGet(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeGet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	FILE* fp = GetFilePointer(self);
 	assert(fp != NULL);
@@ -85,29 +85,29 @@ static void bc_file_nativeGet(bc_Method* parent, Frame* fr, Enviroment* env) {
 	PushVector(fr->ValueStack, NewChar(ret));
 }
 
-static void bc_file_nativeAvailable(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeAvailable(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	FILE* fp = GetFilePointer(self);
 	assert(fp != NULL);
 	PushVector(fr->ValueStack, bc_GetBoolObject(!feof(fp)));
 }
 
-static void bc_file_nativeGetStdIn(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeGetStdIn(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* file = NewFile(stdin);
 	PushVector(fr->ValueStack, file);
 }
 
-static void bc_file_nativeGetStdOut(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeGetStdOut(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* file = NewFile(stdout);
 	PushVector(fr->ValueStack, file);
 }
 
-static void bc_file_nativeGetStdErr(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeGetStdErr(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* file = NewFile(stderr);
 	PushVector(fr->ValueStack, file);
 }
 
-static void bc_file_nativeClose(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_file_nativeClose(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	FILE* fp = GetFilePointer(self);
 	assert(fp != NULL);

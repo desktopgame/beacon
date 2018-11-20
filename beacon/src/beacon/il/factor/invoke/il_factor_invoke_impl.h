@@ -12,7 +12,7 @@
 #include "../../il_factor_interface.h"
 #include "../../../util/string_pool.h"
 #include "subscript_descriptor.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 struct bc_OperatorOverload;
 struct bc_Method;
@@ -39,15 +39,15 @@ typedef struct ILInvoke {
 
 ILInvoke* NewILInvoke(StringView namev);
 
-void GenerateILInvoke(ILInvoke* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
+void LoadILInvoke(ILInvoke * self, bc_Enviroment * env, CallContext* cctx);
 
-struct bc_GenericType* EvalILInvoke(ILInvoke * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment * env, CallContext* cctx);
 
-char* ILInvokeToString(ILInvoke* self, Enviroment* env);
+char* ILInvokeToString(ILInvoke* self, bc_Enviroment* env);
 
 void DeleteILInvoke(ILInvoke* self);
 
-struct bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

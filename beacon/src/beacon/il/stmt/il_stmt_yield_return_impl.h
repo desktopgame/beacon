@@ -21,9 +21,9 @@ ILStatement* WrapILYieldReturn(ILYieldReturn* self);
 #define NewILYieldReturn() (MallocILYieldReturn(__FILE__, __LINE__))
 ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno);
 
-void GenerateILYieldReturn(ILYieldReturn* self, Enviroment* env, CallContext* cctx);
+void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILYieldReturn(ILYieldReturn * self, Enviroment* env, CallContext* cctx);
+void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILYieldReturn(ILYieldReturn* self);
 #endif

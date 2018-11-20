@@ -1,7 +1,7 @@
 #include "yield_context.h"
 #include "../util/mem.h"
-YieldContext* MallocYieldContext(const char* filename, int lineno) {
-	YieldContext* ret = (YieldContext*)bc_MXMalloc(sizeof(YieldContext), filename, lineno);
+bc_YieldContext* bc_MallocYieldContext(const char* filename, int lineno) {
+	bc_YieldContext* ret = (bc_YieldContext*)bc_MXMalloc(sizeof(bc_YieldContext), filename, lineno);
 	ret->BackupVariableTable = NULL;
 	ret->BackupValueStack = NULL;
 	ret->VariableTable = NULL;
@@ -15,14 +15,14 @@ YieldContext* MallocYieldContext(const char* filename, int lineno) {
 	return ret;
 }
 
-void ClearBackupYieldContext(YieldContext* self) {
+void bc_ClearBackupYieldContext(bc_YieldContext* self) {
 	DeleteVector(self->BackupVariableTable, VectorDeleterOfNull);
 	DeleteVector(self->BackupValueStack, VectorDeleterOfNull);
 	self->BackupVariableTable = NULL;
 	self->BackupValueStack = NULL;
 }
 
-void DeleteYieldContext(YieldContext* self) {
+void bc_DeleteYieldContext(bc_YieldContext* self) {
 	DeleteVector(self->BackupVariableTable, VectorDeleterOfNull);
 	DeleteVector(self->BackupValueStack, VectorDeleterOfNull);
 	DeleteVector(self->Parameters, VectorDeleterOfNull);

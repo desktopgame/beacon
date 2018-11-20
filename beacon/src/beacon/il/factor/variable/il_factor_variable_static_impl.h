@@ -11,7 +11,7 @@
 #define BEACON_IL_IL_FACTOR_VARIABLE_STATIC_H
 #include "../../../env/fqcn_cache.h"
 #include "../../il_factor_interface.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 
 typedef struct ILVariableStatic {
@@ -21,13 +21,13 @@ typedef struct ILVariableStatic {
 
 ILVariableStatic* NewILVariableStatic();
 
-void GenerateILVariableStatic(ILVariableStatic* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx);
+void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx);
 
-struct bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx);
 
-char* ILVariableStaticToString(ILVariableStatic * self, Enviroment * env);
+char* ILVariableStaticToString(ILVariableStatic * self, bc_Enviroment * env);
 
 void DeleteILVariableStatic(ILVariableStatic* self);
 #endif

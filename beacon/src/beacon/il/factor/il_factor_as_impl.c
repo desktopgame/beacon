@@ -23,18 +23,18 @@ ILAs * NewILAs() {
 	return ret;
 }
 
-void GenerateILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
+void GenerateILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
 	GenerateILFactor(self->Source, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	bc_GenerateGenericType(self->GType, env);
 	if(self->Mode == CAST_DOWN_T) {
-		AddOpcodeBuf(env->Bytecode, OP_DOWN_AS);
+		bc_AddOpcodeBuf(env->Bytecode, OP_DOWN_AS);
 	} else {
-		AddOpcodeBuf(env->Bytecode, OP_UP_AS);
+		bc_AddOpcodeBuf(env->Bytecode, OP_UP_AS);
 	}
 }
 
-void LoadILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
+void LoadILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
 	if(self->GType != NULL) {
 		return;
 	}
@@ -73,7 +73,7 @@ void LoadILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
 	}
 }
 
-bc_GenericType* EvalILAs(ILAs * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
 	LoadILAs(self, env, cctx);
 	return self->GType;
 }
@@ -84,7 +84,7 @@ void DeleteILAs(ILAs * self) {
 	MEM_FREE(self);
 }
 
-char* ILAsToString(ILAs* self, Enviroment* env) {
+char* ILAsToString(ILAs* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* factstr = ILFactorToString(self->Source, env);
 	char* to = bc_GenericCacheToString(self->GCache);

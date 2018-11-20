@@ -13,7 +13,7 @@
 #include "../../call_context.h"
 struct ILUnaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILNegativeOp {
 	struct ILUnaryOp* Parent;
@@ -24,13 +24,13 @@ typedef struct ILNegativeOp {
 #define NewILNegativeOp(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
 ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno);
 
-struct bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, struct bc_Enviroment * env, CallContext* cctx);
 
-void GenerateILNegativeOp(ILNegativeOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILNegativeOp(ILNegativeOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILNegativeOp(ILNegativeOp* self);
 
-char* ILNegativeOpToString(ILNegativeOp* self, struct Enviroment* env);
+char* ILNegativeOpToString(ILNegativeOp* self, struct bc_Enviroment* env);
 #endif

@@ -7,14 +7,14 @@
 #include "defer_context.h"
 
 //proto
-static void remove_from_parent(Frame* self);
+static void remove_from_parent(bc_Frame* self);
 static void mark_static(bc_Field* item);
-static void mark_recursive(Frame* self);
-static void frame_mark_defer(Frame* self);
+static void mark_recursive(bc_Frame* self);
+static void frame_mark_defer(bc_Frame* self);
 static void delete_defctx(VectorItem e);
 
-Frame* NewFrame() {
-	Frame* ret = (Frame*)MEM_MALLOC(sizeof(Frame));
+bc_Frame* bc_NewFrame() {
+	bc_Frame* ret = (bc_Frame*)MEM_MALLOC(sizeof(bc_Frame));
 	ret->ValueStack = NewVector();
 	ret->VariableTable = NewVector();
 	ret->Parent = NULL;
@@ -33,8 +33,8 @@ Frame* NewFrame() {
 	return ret;
 }
 
-Frame* SubFrame(Frame* parent) {
-	Frame* ret = NewFrame();
+bc_Frame* bc_SubFrame(bc_Frame* parent) {
+	bc_Frame* ret = bc_NewFrame();
 	ret->Parent = parent;
 	ret->Level = parent->Level + 1;
 	ret->ContextRef = parent->ContextRef;
@@ -42,7 +42,7 @@ Frame* SubFrame(Frame* parent) {
 	return ret;
 }
 
-void MarkAllFrame(Frame* self) {
+void bc_MarkAllFrame(bc_Frame* self) {
 	//全ての静的フィールドをマークする
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	bc_EachStaticScriptContext(ctx, mark_static);
@@ -50,7 +50,7 @@ void MarkAllFrame(Frame* self) {
 	mark_recursive(self);
 }
 
-void DeleteFrame(Frame* self) {
+void bc_DeleteFrame(bc_Frame* self) {
 	remove_from_parent(self);
 	ClearVector(self->ValueStack);
 	ClearVector(self->VariableTable);
@@ -63,12 +63,12 @@ void DeleteFrame(Frame* self) {
 	MEM_FREE(self);
 }
 
-Frame* GetRootFrame(Frame* self) {
-	return self->Parent != NULL ? GetRootFrame(self->Parent) : self->Parent;
+bc_Frame* bc_GetRootFrame(bc_Frame* self) {
+	return self->Parent != NULL ? bc_GetRootFrame(self->Parent) : self->Parent;
 }
 
 //private
-static void remove_from_parent(Frame* self) {
+static void remove_from_parent(bc_Frame* self) {
 	if (self->Parent != NULL) {
 		int idx = FindVector(self->Parent->Children, self);
 		RemoveVector(self->Parent->Children, idx);
@@ -84,9 +84,9 @@ static void mark_static(bc_Field* item) {
 	}
 }
 
-static void mark_recursive(Frame* self) {
+static void mark_recursive(bc_Frame* self) {
 	for (int i = 0; i < self->Children->Length; i++) {
-		Frame* e = (Frame*)AtVector(self->Children, i);
+		bc_Frame* e = (bc_Frame*)AtVector(self->Children, i);
 		mark_recursive(e);
 	}
 	for (int i = 0; i < self->ValueStack->Length; i++) {
@@ -103,12 +103,12 @@ static void mark_recursive(Frame* self) {
 	bc_MarkAllObject(self->Exception);
 }
 
-static void frame_mark_defer(Frame* self) {
+static void frame_mark_defer(bc_Frame* self) {
 	if(self->DeferList == NULL) {
 		return;
 	}
 	for(int i=0; i<self->DeferList->Length; i++) {
-		DeferContext* defctx = AtVector(self->DeferList, i);
+		bc_DeferContext* defctx = AtVector(self->DeferList, i);
 		Vector* bind = defctx->VariableTable;
 		for(int j=0; j<bind->Length; j++) {
 			bc_Object* e = AtVector(bind, j);
@@ -117,6 +117,6 @@ static void frame_mark_defer(Frame* self) {
 	}
 }
 static void delete_defctx(VectorItem e) {
-	DeferContext* defctx = (DeferContext*)e;
-	DeleteDeferContext(defctx);
+	bc_DeferContext* defctx = (bc_DeferContext*)e;
+	bc_DeleteDeferContext(defctx);
 }

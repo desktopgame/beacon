@@ -25,13 +25,13 @@ ILFactor* WrapILString(ILString* self);
 
 ILString* NewILString(StringView valuev);
 
-void GenerateILString(ILString* self, Enviroment* env, CallContext* cctx);
+void GenerateILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILString(ILString* self, Enviroment* env, CallContext* cctx);
+void LoadILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILString(ILString* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILStringToString(ILString* self, Enviroment* env);
+char* ILStringToString(ILString* self, bc_Enviroment* env);
 
 void DeleteILString(ILString* self);
 

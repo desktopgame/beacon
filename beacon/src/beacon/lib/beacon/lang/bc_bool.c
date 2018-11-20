@@ -1,8 +1,8 @@
 #include "bc_bool.h"
 #include "../../bc_library_impl.h"
 
-static void bc_bool_nativeBitOr(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_bool_nativeBitAnd(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_bool_nativeBitOr(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_bool_nativeBitAnd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 bc_Object* NewBool(bool value) {
 	Bool* ret = bc_ConstructObject(sizeof(Bool), BC_GENERIC_BOOL);
@@ -25,14 +25,14 @@ bc_Type* GetBoolType() {
 	return bc_FindTypeFromNamespace(lang, InternString("Bool"));
 }
 //private
-static void bc_bool_nativeBitOr(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_bool_nativeBitOr(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(bc_ObjectToBool(self) | bc_ObjectToBool(a));
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_bool_nativeBitAnd(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_bool_nativeBitAnd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* a = AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(bc_ObjectToBool(self) & bc_ObjectToBool(a));

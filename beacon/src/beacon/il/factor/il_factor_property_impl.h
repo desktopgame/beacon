@@ -12,7 +12,7 @@
 #include "../il_factor_interface.h"
 #include "../../env/property.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 
 typedef struct ILPropertyAccess {
@@ -25,13 +25,13 @@ typedef struct ILPropertyAccess {
 #define NewILPropertyAccess() (MallocILPropertyAccess(__FILE__, __LINE__))
 ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno);
 
-void GenerateILPropertyAccess(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
+void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
+void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx);
 
-struct bc_GenericType* EvalILProperty(ILPropertyAccess* self, Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILPropertyToString(ILPropertyAccess* self, Enviroment* env);
+char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env);
 
 void DeleteILPropertyAccess(ILPropertyAccess* self);
 #endif

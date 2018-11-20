@@ -11,7 +11,7 @@
 #include <string.h>
 #include <assert.h>
 //proto
-static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 void InitException() {
 	bc_Namespace* lang = bc_GetLangNamespace();
@@ -26,7 +26,7 @@ bc_Type* GetExceptionType() {
 	return bc_FindTypeFromNamespace(lang, InternString("Exception"));
 }
 //private
-static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	bc_Class* stackTraceElementClass = bc_FindClassFromNamespace(lang, InternString("StackTraceElement"));
 	bc_Class* exceptionClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
@@ -35,13 +35,13 @@ static void bc_exception_nativeInit(bc_Method* parent, Frame* fr, Enviroment* en
 	bc_Heap* h = bc_GetHeap();
 	h->CollectBlocking++;
 	//スタックトレースを作成する
-	Frame* temp = fr;
+	bc_Frame* temp = fr;
 	Vector* stackTraceElementVec = NewVector();
 	char* lfilename = NULL;
 	int llineno = -1;
 	do {
 		//実行中のインストラクションの行番号を取得
-		LineRange* lr = FindLineRange(temp->ContextRef->LineRangeTable, temp->PC);
+		bc_LineRange* lr = bc_FindLineRange(temp->ContextRef->LineRangeTable, temp->PC);
 		int lineno = lr == NULL ? -1 : lr->Lineno;
 		//assert(lineno != -1);
 		//直前の表示と同じ

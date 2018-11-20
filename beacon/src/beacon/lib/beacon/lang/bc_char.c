@@ -2,8 +2,8 @@
 #include "../../bc_library_impl.h"
 
 //proto
-static void bc_char_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_char_nativeToInt(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_char_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_char_nativeToInt(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 bc_Object* NewChar(char value) {
 	Char* ret = bc_ConstructObject(sizeof(Char), BC_GENERIC_CHAR);
@@ -28,7 +28,7 @@ bc_Type* GetCharType() {
 
 //private
 #define CHAR_VALUE(obj) (((Char*)obj)->Value)
-static void bc_char_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_char_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* ch = AtVector(fr->VariableTable, 1);
 
@@ -36,7 +36,7 @@ static void bc_char_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
 	//self->Tag = OBJECT_CHAR_T;
 }
 
-static void bc_char_nativeToInt(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_char_nativeToInt(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	PushVector(fr->ValueStack, bc_GetIntObject((int)CHAR_VALUE(self)));
 }

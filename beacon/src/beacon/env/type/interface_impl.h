@@ -19,7 +19,7 @@
 #include "interface_validate.h"
 struct bc_Method;
 struct bc_Property;
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 struct bc_Type;
 /**
@@ -74,7 +74,7 @@ void bc_AddPropertyInterface(bc_Interface* self, struct bc_Property* p);
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, StringView namev, Vector * args, struct Enviroment * env, CallContext* cctx, int * outIndex);
+struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, StringView namev, Vector * args, struct bc_Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.

@@ -1,17 +1,17 @@
 #include "line_range.h"
 #include "../util/mem.h"
 
-LineRange * NewLineRange() {
-	LineRange* ret = (LineRange*)MEM_MALLOC(sizeof(LineRange));
+bc_LineRange * bc_NewLineRange() {
+	bc_LineRange* ret = (bc_LineRange*)MEM_MALLOC(sizeof(bc_LineRange));
 	ret->StartOffset = -1;
 	ret->EndOffset = -1;
 	ret->Lineno = -1;
 	return ret;
 }
 
-LineRange * FindLineRange(Vector * line_rangeVec, int pc) {
+bc_LineRange * bc_FindLineRange(Vector * line_rangeVec, int pc) {
 	for (int i = 0; i < line_rangeVec->Length; i++) {
-		LineRange* lr = (LineRange*)AtVector(line_rangeVec, i);
+		bc_LineRange* lr = (bc_LineRange*)AtVector(line_rangeVec, i);
 		if (i >= lr->StartOffset && i <= lr->EndOffset) {
 			return lr;
 		}
@@ -19,6 +19,6 @@ LineRange * FindLineRange(Vector * line_rangeVec, int pc) {
 	return NULL;
 }
 
-void DeleteLineRange(LineRange * self) {
+void bc_DeleteLineRange(bc_LineRange * self) {
 	MEM_FREE(self);
 }

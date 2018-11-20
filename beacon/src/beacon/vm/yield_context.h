@@ -12,7 +12,7 @@
 #include "../util/vector.h"
 struct bc_Object;
 
-typedef struct YieldContext {
+typedef struct bc_YieldContext {
 	Vector* BackupVariableTable;
 	Vector* BackupValueStack;
 	Vector* VariableTable;
@@ -24,12 +24,12 @@ typedef struct YieldContext {
 	int YieldCount;
 	int YieldOffset;
 	int Length;
-} YieldContext;
+} bc_YieldContext;
 
-#define NewYieldContext() (MallocYieldContext(__FILE__, __LINE__))
-YieldContext* MallocYieldContext(const char* filename, int lineno);
+#define bc_NewYieldContext() (bc_MallocYieldContext(__FILE__, __LINE__))
+bc_YieldContext* bc_MallocYieldContext(const char* filename, int lineno);
 
-void ClearBackupYieldContext(YieldContext* self);
+void bc_ClearBackupYieldContext(bc_YieldContext* self);
 
-void DeleteYieldContext(YieldContext* self);
+void bc_DeleteYieldContext(bc_YieldContext* self);
 #endif

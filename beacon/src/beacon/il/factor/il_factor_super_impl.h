@@ -12,7 +12,7 @@
 #define BEACON_IL_IL_FACTOR_SUPER_H
 #include "../../env/generic_type.h"
 #include "../call_context.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Type;
 
 /**
@@ -25,13 +25,13 @@ typedef struct ILSuper {
 
 ILSuper* NewILSuper();
 
-void GenerateILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILSuper(ILSuper* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
+void LoadILSuper(ILSuper* self, struct bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILSuper(ILSuper* self, struct Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILSuper(ILSuper* self, struct bc_Enviroment* env, CallContext* cctx);
 
-char* ILSuperToString(ILSuper* self, struct Enviroment* env);
+char* ILSuperToString(ILSuper* self, struct bc_Enviroment* env);
 
 void DeleteILSuper(ILSuper* self);
 #endif // !SIGNAL_IL_IL_FACTOR_SUPER_H

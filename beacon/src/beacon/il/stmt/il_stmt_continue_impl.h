@@ -14,9 +14,9 @@
 
 ILStatement* WrapILContinue();
 
-void GenerateILContinue(void* empty, Enviroment* env, CallContext* cctx);
+void GenerateILContinue(void* empty, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILContinue(void* empty, Enviroment* env, CallContext* cctx);
+void LoadILContinue(void* empty, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILContinue(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_CONTINUE_H

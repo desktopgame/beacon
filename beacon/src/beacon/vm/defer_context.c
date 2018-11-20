@@ -1,14 +1,14 @@
 #include "defer_context.h"
 #include "../util/mem.h"
 
-DeferContext* NewDeferContext() {
-	DeferContext* ret = (DeferContext*)MEM_MALLOC(sizeof(DeferContext));
+bc_DeferContext* bc_NewDeferContext() {
+	bc_DeferContext* ret = (bc_DeferContext*)MEM_MALLOC(sizeof(bc_DeferContext));
 	ret->VariableTable = NULL;
 	ret->Offset = NULL;
 	return ret;
 }
 
-void DeleteDeferContext(DeferContext* self) {
+void bc_DeleteDeferContext(bc_DeferContext* self) {
 	DeleteVector(self->VariableTable, VectorDeleterOfNull);
 	MEM_FREE(self);
 }

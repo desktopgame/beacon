@@ -13,7 +13,7 @@
 #include "../../call_context.h"
 struct ILBinaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 typedef struct ILArithmeticOp {
 	struct ILBinaryOp* Parent;
 	int OperatorIndex;
@@ -23,13 +23,13 @@ typedef struct ILArithmeticOp {
 ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type);
 
 
-struct bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct bc_Enviroment * env, CallContext* cctx);
 
-void GenerateILArithmeticOp(ILArithmeticOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILArithmeticOp(ILArithmeticOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILArithmeticOp(ILArithmeticOp* self);
 
-char* ILArithmeticOpToString(ILArithmeticOp* self, struct Enviroment* env);
+char* ILArithmeticOpToString(ILArithmeticOp* self, struct bc_Enviroment* env);
 #endif

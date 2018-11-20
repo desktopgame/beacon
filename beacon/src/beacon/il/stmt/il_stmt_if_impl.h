@@ -83,7 +83,7 @@ void PushILElifList(Vector* self, ILElif* child);
  * @param env
  * @param cctx
  */
-void GenerateILIf(ILIf* self, Enviroment* env, CallContext* cctx);
+void GenerateILIf(ILIf* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * if とその子要素を読み込みます.
@@ -91,7 +91,7 @@ void GenerateILIf(ILIf* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILIf(ILIf* self, Enviroment* env, CallContext* cctx);
+void LoadILIf(ILIf* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * if を表す要素を開放します.

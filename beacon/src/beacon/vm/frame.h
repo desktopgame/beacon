@@ -18,7 +18,7 @@ struct bc_Type;
 /**
  * 実行時の情報を格納する構造体.
  */
-typedef struct Frame {
+typedef struct bc_Frame {
 	//演算子や引数を記憶しておくためのスタックです
 	Vector* ValueStack;
 
@@ -49,7 +49,7 @@ typedef struct Frame {
 	//実行中のVMを開放したのち、
 	//親のVMの childrenVec からも削除される必要があるため
 	//ここで親VMへの参照を持っています。
-	struct Frame* Parent;
+	struct bc_Frame* Parent;
 
 	//最後にスローされた例外です.
 	struct bc_Object* Exception;
@@ -90,7 +90,7 @@ typedef struct Frame {
 	//定数プールを提供している enviroment への参照です。
 	//あくまで参照しているだけなので、
 	//このVMが開放されてもこの enviroment は開放されません。
-	Enviroment* ContextRef;
+	bc_Enviroment* ContextRef;
 
 	//次の NEWOBJECT 命令で生成するオブジェクトのサイズ
 	size_t ObjectSize;
@@ -112,37 +112,37 @@ typedef struct Frame {
 	//誰もそれをキャッチしようとしていないなら
 	//即座に全てのVMを終了します。
 	bool IsTerminate;
-} Frame;
+} bc_Frame;
 
 /**
  * 新しいフレームを作成します.
  * @return
  */
-Frame* NewFrame();
+bc_Frame* bc_NewFrame();
 
 /**
  * 親を指定してフレームを作成します.
  * @param parent
  * @return
  */
-Frame* SubFrame(Frame* parent);
+bc_Frame* bc_SubFrame(bc_Frame* parent);
 
 /**
  * このVMの変数を全てマークします.
  * @param self
  */
-void MarkAllFrame(Frame* self);
+void bc_MarkAllFrame(bc_Frame* self);
 
 /**
  * 仮想マシンを開放します.
  * @param self
  */
-void DeleteFrame(Frame* self);
+void bc_DeleteFrame(bc_Frame* self);
 
 /**
  * フレームのルートを返します.
  * @param self
  * @return
  */
-Frame* GetRootFrame(Frame* self);
+bc_Frame* bc_GetRootFrame(bc_Frame* self);
 #endif

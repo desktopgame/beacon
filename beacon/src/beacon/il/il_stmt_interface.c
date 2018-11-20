@@ -13,7 +13,7 @@ ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno)
 	return ret;
 }
 
-void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
+void GenerateILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return;
 	}
@@ -77,10 +77,10 @@ void GenerateILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
 			//ERROR("ステートメントを開放出来ませんでした。");
 			break;
 	}
-	AddRangeEnviroment(env, self->Lineno);
+	bc_AddRangeEnviroment(env, self->Lineno);
 }
 
-void LoadILStmt(ILStatement * self, Enviroment* env, CallContext* cctx) {
+void LoadILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return;
 	}

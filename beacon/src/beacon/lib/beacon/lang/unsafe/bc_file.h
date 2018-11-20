@@ -11,7 +11,7 @@
 #define BEACON_LIB_BEACON_LANG_BC_FILE_H
 #include "../../../bc_library_impl.h"
 #include <stdio.h>
-struct Frame;
+struct bc_Frame;
 struct bc_Type;
 struct bc_Object;
 struct bc_GenericType;

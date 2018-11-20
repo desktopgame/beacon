@@ -6,7 +6,7 @@
 
 //proto
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
-static void bc_string_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 bc_Object* NewString(const char* str) {
 	bc_Object* ret = bc_ConstructObject(sizeof(String), BC_GENERIC_STRING);
@@ -87,7 +87,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
 	}
 }
 
-static void bc_string_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	//プログラムの中で ダブルクォート("HelloWorld") によって
 	//文字列が作成された場合には Object_string_new() 

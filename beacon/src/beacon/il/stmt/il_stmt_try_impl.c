@@ -36,51 +36,51 @@ ILCatch* NewILCatch(StringView namev) {
 	return ret;
 }
 
-void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
-	Label* try_end = AddLabelOpcodeBuf(env->Bytecode, -1);
-	Label* catch_start = AddLabelOpcodeBuf(env->Bytecode, -1);
-	AddOpcodeBuf(env->Bytecode, OP_TRY_ENTER);
+void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
+	bc_Label* try_end = bc_AddLabelOpcodeBuf(env->Bytecode, -1);
+	bc_Label* catch_start = bc_AddLabelOpcodeBuf(env->Bytecode, -1);
+	bc_AddOpcodeBuf(env->Bytecode, OP_TRY_ENTER);
 	//ここでcatchの開始に飛ばしますが、
 	//OP_TRY_ENTERからはこの部分はスキップされます。
-	AddOpcodeBuf(env->Bytecode, OP_GOTO);
-	AddOpcodeBuf(env->Bytecode, catch_start);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO);
+	bc_AddOpcodeBuf(env->Bytecode, catch_start);
 	//例外が発生するかもしれない
 	//ステートメントの一覧
 	for (int i = 0; i < self->Statements->Length; i++) {
 		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		GenerateILStmt(e, env, cctx);
 	}
-	AddOpcodeBuf(env->Bytecode, OP_TRY_EXIT);
+	bc_AddOpcodeBuf(env->Bytecode, OP_TRY_EXIT);
 	//例外が発生しなかったならcatchをスキップ
-	AddOpcodeBuf(env->Bytecode, OP_GOTO);
-	AddOpcodeBuf(env->Bytecode, try_end);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO);
+	bc_AddOpcodeBuf(env->Bytecode, try_end);
 	//例外を捕捉したらここに飛ぶように
-	catch_start->Cursor = AddNOPOpcodeBuf(env->Bytecode);
+	catch_start->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
 	//全てのcatch節に対して
-	Label* nextCause = NULL;
+	bc_Label* nextCause = NULL;
 	for (int i = 0; i < self->Catches->Length; i++) {
 		//例外を指定の名前でアクセス出来るように
 		ILCatch* ilcatch = (ILCatch*)AtVector(self->Catches, i);
 		bc_GenericType* exgType = bc_ResolveImportManager(NULL, ilcatch->GCache, cctx);
-		int exIndex = EntrySymbolTable(env->Symboles, exgType, ilcatch->Name)->Index;
+		int exIndex = bc_EntrySymbolTable(env->Symboles, exgType, ilcatch->Name)->Index;
 		//直前のケースのジャンプ先をここに
 		if (nextCause != NULL) {
-			int head = AddNOPOpcodeBuf(env->Bytecode);
+			int head = bc_AddNOPOpcodeBuf(env->Bytecode);
 			nextCause->Cursor = head;
 		}
-		nextCause = AddLabelOpcodeBuf(env->Bytecode, -1);
+		nextCause = bc_AddLabelOpcodeBuf(env->Bytecode, -1);
 		//現在の例外と catch節 の型に互換性があるなら続行
-		AddOpcodeBuf(env->Bytecode, OP_HEXCEPTION);;
-		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+		bc_AddOpcodeBuf(env->Bytecode, OP_HEXCEPTION);;
+		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(exgType, env);
-		AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
+		bc_AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 		//互換性がないので次のケースへ
-		AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
-		AddOpcodeBuf(env->Bytecode, nextCause);
+		bc_AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_FALSE);
+		bc_AddOpcodeBuf(env->Bytecode, nextCause);
 		//指定の名前で例外を宣言
-		AddOpcodeBuf(env->Bytecode, OP_HEXCEPTION);
-		AddOpcodeBuf(env->Bytecode, OP_STORE);
-		AddOpcodeBuf(env->Bytecode, exIndex);
+		bc_AddOpcodeBuf(env->Bytecode, OP_HEXCEPTION);
+		bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, exIndex);
 		//catchの内側のステートメントを生成
 		for (int j = 0; j < ilcatch->Statements->Length; j++) {
 			ILStatement* e = (ILStatement*)AtVector(ilcatch->Statements, j);
@@ -88,24 +88,24 @@ void GenerateILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 		}
 		//catchされたので、
 		//例外フラグをクリアする
-		AddOpcodeBuf(env->Bytecode, OP_TRY_CLEAR);
+		bc_AddOpcodeBuf(env->Bytecode, OP_TRY_CLEAR);
 		//最後のcatchの後ろへ
-		AddOpcodeBuf(env->Bytecode, OP_GOTO);
-		AddOpcodeBuf(env->Bytecode, try_end);
+		bc_AddOpcodeBuf(env->Bytecode, OP_GOTO);
+		bc_AddOpcodeBuf(env->Bytecode, try_end);
 	}
 	//try-catchの最後
-	nextCause->Cursor = AddNOPOpcodeBuf(env->Bytecode);
+	nextCause->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
 	//どのcatchにも引っかからなかった
-	AddOpcodeBuf(env->Bytecode, OP_TRY_EXIT);
+	bc_AddOpcodeBuf(env->Bytecode, OP_TRY_EXIT);
 	//catchを処理したらここに
-	try_end->Cursor = AddNOPOpcodeBuf(env->Bytecode);
+	try_end->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void GenerateILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
+void GenerateILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx) {
 
 }
 
-void LoadILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
+void LoadILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->Statements->Length; i++) {
 		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		LoadILStmt(e, env, cctx);
@@ -116,9 +116,9 @@ void LoadILTry(ILTry* self, Enviroment* env, CallContext* cctx) {
 	}
 }
 
-void LoadILCatch(ILCatch* self, Enviroment* env, CallContext* cctx) {
+void LoadILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx) {
 	bc_GenericType* exgType = bc_ResolveImportManager(NULL, self->GCache, cctx);
-	EntrySymbolTable(env->Symboles, exgType, self->Name);
+	bc_EntrySymbolTable(env->Symboles, exgType, self->Name);
 	for(int i=0; i<self->Statements->Length; i++) {
 		ILStatement* e = (ILStatement*)AtVector(self->Statements, i);
 		LoadILStmt(e, env, cctx);

@@ -12,7 +12,7 @@
 #define BEACON_IL_IL_FACTOR_THIS_H
 #include "../../env/generic_type.h"
 #include "../call_context.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Type;
 /**
  * thisを表す要素.
@@ -23,13 +23,13 @@ typedef struct ILThis {
 
 ILThis* NewILThis();
 
-void GenerateILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILThis(ILThis* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
+void LoadILThis(ILThis* self, struct bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILThis(ILThis* self, struct Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILThis(ILThis* self, struct bc_Enviroment* env, CallContext* cctx);
 
-char* ILThisToString(ILThis* self, struct Enviroment* env);
+char* ILThisToString(ILThis* self, struct bc_Enviroment* env);
 
 void DeleteILThis(ILThis* self);
 #endif // !SIGNAL_IL_IL_FACTOR_THIS_H

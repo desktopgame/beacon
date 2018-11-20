@@ -11,7 +11,7 @@
 #define BEACON_IL_IL_STMT_ASSERT_H
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct ILStatement;
 
 typedef struct ILAssert {
@@ -24,9 +24,9 @@ ILStatement* WrapILAssert(ILAssert* self);
 
 ILAssert* NewILAssert();
 
-void GenerateILAssert(ILAssert* self, Enviroment* env, CallContext* cctx);
+void GenerateILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILAssert(ILAssert* self, Enviroment* env, CallContext* cctx);
+void LoadILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILAssert(ILAssert* self);
 #endif

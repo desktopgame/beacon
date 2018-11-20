@@ -11,8 +11,8 @@
 #endif
 
 //proto
-static void bc_Object_nativeToString(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_Object_nativeReferenceEquals(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_Object_nativeToString(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_Object_nativeReferenceEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 void InitObject() {
 	bc_Namespace* lang = bc_GetLangNamespace();
@@ -29,7 +29,7 @@ bc_Type* GetObjectType() {
 }
 
 //private
-static void bc_Object_nativeToString(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_Object_nativeToString(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = (bc_Object*)AtVector(fr->VariableTable, 0);
 	Buffer* sb = NewBuffer();
 	AppendfBuffer(sb, "%p", self);
@@ -39,7 +39,7 @@ static void bc_Object_nativeToString(bc_Method* parent, Frame* fr, Enviroment* e
 	MEM_FREE(str);
 }
 
-static void bc_Object_nativeReferenceEquals(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_Object_nativeReferenceEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* a = (bc_Object*)AtVector(fr->VariableTable, 1);
 	bc_Object* b = (bc_Object*)AtVector(fr->VariableTable, 2);
 	PushVector(fr->ValueStack, bc_GetBoolObject(a == b));

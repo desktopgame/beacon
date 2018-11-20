@@ -19,9 +19,9 @@ ILStatement* WrapILDefer(ILDefer* self);
 
 ILDefer* NewILDefer();
 
-void LoadILDefer(ILDefer* self, Enviroment* env, CallContext* cctx);
+void LoadILDefer(ILDefer* self, bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILDefer(ILDefer* self, Enviroment* env, CallContext* cctx);
+void GenerateILDefer(ILDefer* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILDefer(ILDefer* self);
 #endif

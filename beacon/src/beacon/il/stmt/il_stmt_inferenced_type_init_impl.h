@@ -13,8 +13,8 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 #include "../../util/string_pool.h"
-struct Enviroment;
-struct SymbolEntry;
+struct bc_Enviroment;
+struct bc_SymbolEntry;
 /**
  * 推論された型の初期化を表す要素.
  * var y = new X::Y();
@@ -22,7 +22,7 @@ struct SymbolEntry;
 typedef struct ILInferencedTypeInit {
 	StringView Name;
 	ILFactor* Value;
-	struct SymbolEntry* Symbol;
+	struct bc_SymbolEntry* Symbol;
 } ILInferencedTypeInit;
 
 /**
@@ -45,7 +45,7 @@ ILInferencedTypeInit* NewILInferencedTypeInit(StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, Enviroment* env, CallContext* cctx);
+void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
@@ -53,7 +53,7 @@ void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, Enviroment* env, C
  * @param env
  * @param cctx
  */
-void LoadILInferencedTypeInit(ILInferencedTypeInit* self, Enviroment* env, CallContext* cctx);
+void LoadILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.

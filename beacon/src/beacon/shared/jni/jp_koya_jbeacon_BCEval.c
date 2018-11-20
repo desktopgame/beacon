@@ -20,10 +20,10 @@
 #include "../../error.h"
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
-static Frame* bc_eval_allocate(bc_ClassLoader* cll);
+static bc_Frame* bc_eval_allocate(bc_ClassLoader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a);
-static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target);
-static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, Frame* fr);
+static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, bc_Frame* fr, jobject target);
+static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, bc_Frame* fr);
 static void printClassInfo(JNIEnv* env, jobject Object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
 static jchar jobject2jchar(JNIEnv* env, jobject obj);
@@ -84,7 +84,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	//インスタンスを生成
 	jobject symbol_table_obj = (*env)->NewObject(env, symbol_table_cls, symbol_table_ctor_id);
 	//スクリプトを実行
-	Frame* fr =  bc_eval_allocate(cll);
+	bc_Frame* fr =  bc_eval_allocate(cll);
 	bc_write_symbol(env, cll->Env->Symboles->VariableMap->Left, fr, symbol_table_obj);
 	bc_write_symbol(env, cll->Env->Symboles->VariableMap->Right, fr, symbol_table_obj);
 	bc_eval_release(env, cll, fr);
@@ -93,14 +93,14 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	return symbol_table_obj;
 }
 
-static Frame* bc_eval_allocate(bc_ClassLoader* cll) {
+static bc_Frame* bc_eval_allocate(bc_ClassLoader* cll) {
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-	Frame* fr = NewFrame();
+	bc_Frame* fr = bc_NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()), fr);
 	bc_Heap* he = bc_GetHeap();
 	he->AcceptBlocking = 0;
 	if(!bc_GetLastPanic()) {
-		ExecuteVM(fr, cll->Env);
+		bc_ExecuteVM(fr, cll->Env);
 	}
 	if(fr->IsTerminate) {
 		bc_Panic(BCERROR_GENERIC_T, "unexpected terminate");
@@ -185,14 +185,14 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 	return true;
 }
 
-static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject target) {
+static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, bc_Frame* fr, jobject target) {
 	if(nmap == NULL) {
 		return;
 	}
 	NumericMapKey key = nmap->Key;
 	NumericMapItem val = nmap->Item;
 	const char* name = Ref2Str(key);
-	SymbolEntry* se = (SymbolEntry*)val;
+	bc_SymbolEntry* se = (bc_SymbolEntry*)val;
 	bc_Object* bcobj = AtVector(fr->VariableTable, se->Index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
@@ -274,19 +274,19 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, Frame* fr, jobject ta
 	}
 }
 
-static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, Frame* fr) {
+static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, bc_Frame* fr) {
 	if(bc_GetLastPanic()) {
 		Buffer* sbuf = NewBuffer();
 		AppendsBuffer(sbuf, "\n");
-		AppendsBuffer(sbuf, Ref2Str(GetVMErrorMessage()));
+		AppendsBuffer(sbuf, Ref2Str(bc_GetVMErrorMessage()));
 		char* mes = ReleaseBuffer(sbuf);
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
 		(*env)->ThrowNew(env, bc_runtime_exc_cls, mes);
 		MEM_FREE(mes);
 	}
-	CatchVM(fr);
+	bc_CatchVM(fr);
 	bc_CollectHeap(bc_GetHeap());
-	DeleteFrame(fr);
+	bc_DeleteFrame(fr);
 	ReleaseSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()));
 
 	bc_GetLastPanic();

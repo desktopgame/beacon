@@ -11,26 +11,26 @@
 #ifndef BEACON_VM_TRACE_H
 #define BEACON_VM_TRACE_H
 #include <stdint.h>
-struct Frame;
+struct bc_Frame;
 /**
  * 実行中のVMの実行位置を保存する構造体.
  */
-typedef struct VMTrace {
-	struct Frame* SnapShot;
+typedef struct bc_VMTrace {
+	struct bc_Frame* SnapShot;
 	int PC;
 	int JumpLevel;
-} VMTrace;
+} bc_VMTrace;
 
 /**
  * 指定のVMでトレースを作成します.
  * @param v
  * @return
  */
-VMTrace* NewVMTrace(struct Frame* snapShot);
+bc_VMTrace* bc_NewVMTrace(struct bc_Frame* snapShot);
 
 /**
  * トレースを解放します.
  * @param self
  */
-void DeleteVMTrace(VMTrace* self);
+void bc_DeleteVMTrace(bc_VMTrace* self);
 #endif // !SIGNAL_VM_TRACE_H

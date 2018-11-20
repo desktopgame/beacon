@@ -12,8 +12,8 @@
 #include "../../../util/vector.h"
 #include "../../../util/string_pool.h"
 #include "../../il_factor_interface.h"
-struct SymbolEntry;
-struct Enviroment;
+struct bc_SymbolEntry;
+struct bc_Enviroment;
 struct bc_GenericType;
 struct bc_Field;
 struct bc_Property;
@@ -43,7 +43,7 @@ typedef struct ILVariableLocal {
 	VariableLocalType Type;
 	struct bc_GenericType* GType;
 	union {
-		struct SymbolEntry* Entry;
+		struct bc_SymbolEntry* Entry;
 		FieldWithIndex FieldI;
 		PropertyWithIndex PropertyI;
 	} Kind;
@@ -52,13 +52,13 @@ typedef struct ILVariableLocal {
 
 ILVariableLocal* NewILVariableLocal(StringView namev);
 
-void GenerateILVariableLocal(ILVariableLocal* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
+void LoadILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
 
-struct bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
 
-char* ILVariableLocalToString(ILVariableLocal * self, Enviroment * env);
+char* ILVariableLocalToString(ILVariableLocal * self, bc_Enviroment * env);
 
 void DeleteILVariableLocal(ILVariableLocal* self);
 #endif

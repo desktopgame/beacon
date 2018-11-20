@@ -10,9 +10,9 @@
  * created by rbtools/rnative.rb
  * time: 2018-08-17
  */
-static void bc_system_nativeExit(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_system_nativeAbort(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_system_nativeExec(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_system_nativeExit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_system_nativeAbort(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_system_nativeExec(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 void InitSystem() {
 	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
@@ -30,17 +30,17 @@ bc_Type* GetSystemType() {
 }
 
 //private
-static void bc_system_nativeExit(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_system_nativeExit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* returnCodeObj = AtVector(fr->VariableTable, 1);
 	int returnCode = bc_ObjectToInt(returnCodeObj);
 	exit(returnCode);
 }
 
-static void bc_system_nativeAbort(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_system_nativeAbort(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	abort();
 }
 
-static void bc_system_nativeExec(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_system_nativeExec(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* cmd = AtVector(fr->VariableTable, 1);
 	const char* str = GetRawString(cmd)->Text;
 	int ret = system(str);

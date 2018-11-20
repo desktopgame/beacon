@@ -13,7 +13,7 @@
 #include "../../../util/string_pool.h"
 #include "subscript_descriptor.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 struct bc_OperatorOverload;
 struct bc_Method;
@@ -40,15 +40,15 @@ typedef struct ILInvokeBound {
 
 ILInvokeBound* NewILInvokeBound(StringView namev);
 
-void GenerateILInvokeBound(ILInvokeBound* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvokeBound(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
+void LoadILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
 
-struct bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
 
-char* ILInvokeBoundToString(ILInvokeBound* self, Enviroment* env);
+char* ILInvokeBoundToString(ILInvokeBound* self, bc_Enviroment* env);
 
 void DeleteILInvokeBound(ILInvokeBound* self);
 
-struct bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 #endif

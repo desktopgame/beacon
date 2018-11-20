@@ -17,25 +17,25 @@
 //proto
 static void delete_constant(VectorItem item);
 static void delete_line_range(VectorItem item);
-static void add_constant(Enviroment* self, bc_Object* o);
+static void add_constant(bc_Enviroment* self, bc_Object* o);
 static void delete_object_self(VectorItem item);
 static void delete_object(bc_Object* obj);
 
-Enviroment * NewEnviroment() {
-	Enviroment* ret = (Enviroment*)MEM_MALLOC(sizeof(Enviroment));
-	ret->Bytecode = NewOpcodeBuf();
+bc_Enviroment * bc_NewEnviroment() {
+	bc_Enviroment* ret = (bc_Enviroment*)MEM_MALLOC(sizeof(bc_Enviroment));
+	ret->Bytecode = bc_NewOpcodeBuf();
 	ret->ConstantPool = NewVector();
-	ret->Symboles = NewSymbolTable();
+	ret->Symboles = bc_NewSymbolTable();
 	ret->ContextRef = NULL;
 	ret->LineRangeTable = NewVector();
 	return ret;
 }
 
-void AddRangeEnviroment(Enviroment* self, int lineno) {
+void bc_AddRangeEnviroment(bc_Enviroment* self, int lineno) {
 	assert(lineno >= 0);
 	//空なので追加
 	if (IsEmptyVector(self->LineRangeTable)) {
-		LineRange* lr = NewLineRange();
+		bc_LineRange* lr = bc_NewLineRange();
 		lr->StartOffset = 0;
 		lr->EndOffset = 0;
 		lr->Lineno = lineno;
@@ -44,11 +44,11 @@ void AddRangeEnviroment(Enviroment* self, int lineno) {
 	}
 	//空ではないなら、
 	//最後についかしたレンジを伸ばすか新たに追加する
-	LineRange* lrt = (LineRange*)TopVector(self->LineRangeTable);
+	bc_LineRange* lrt = (bc_LineRange*)TopVector(self->LineRangeTable);
 	if (lrt->Lineno == lineno) {
 		lrt->EndOffset = self->Bytecode->Instructions->Length;
 	} else {
-		LineRange* lr = NewLineRange();
+		bc_LineRange* lr = bc_NewLineRange();
 		lr->StartOffset = self->Bytecode->Instructions->Length;
 		lr->EndOffset = self->Bytecode->Instructions->Length;
 		lr->Lineno = lineno;
@@ -56,13 +56,13 @@ void AddRangeEnviroment(Enviroment* self, int lineno) {
 	}
 }
 
-void DumpEnviromentOp(Enviroment * self, int depth) {
-	OpcodeBuf* buf = self->Bytecode;
-	LineRange* lr = NULL;
+void bc_DumpEnviromentOp(bc_Enviroment * self, int depth) {
+	bc_OpcodeBuf* buf = self->Bytecode;
+	bc_LineRange* lr = NULL;
 	int lrPos = -1;
 	for (int i = 0; i < buf->Instructions->Length; i++) {
 		bc_Printi(depth);
-		i = PrintOpcode(buf->Instructions, i);
+		i = bc_PrintOpcode(buf->Instructions, i);
 		if (!IsEmptyVector(self->LineRangeTable)) {
 			if (lr == NULL) {
 				lr = AtVector(self->LineRangeTable, 0);
@@ -84,70 +84,70 @@ void DumpEnviromentOp(Enviroment * self, int depth) {
 	bc_Println();
 }
 
-int AddCIntEnviroment(Enviroment * self, int i) {
+int bc_AddCIntEnviroment(bc_Enviroment * self, int i) {
 	int len = self->ConstantPool->Length;
 	add_constant(self, (bc_Object*)NewInteger(i));
 	return len;
 }
 
-int AddCDoubleEnviroment(Enviroment * self, double d) {
+int bc_AddCDoubleEnviroment(bc_Enviroment * self, double d) {
 	int len = self->ConstantPool->Length;
 	add_constant(self, (bc_Object*)NewDouble(d));
 	return len;
 }
 
-int AddCCharEnviroment(Enviroment * self, char c) {
+int bc_AddCCharEnviroment(bc_Enviroment * self, char c) {
 	int len = self->ConstantPool->Length;
 	add_constant(self, (bc_Object*)NewChar(c));
 	return len;
 }
 
-int AddCStringEnviroment(Enviroment * self, StringView sv) {
+int bc_AddCStringEnviroment(bc_Enviroment * self, StringView sv) {
 	int len = self->ConstantPool->Length;
 	add_constant(self, (bc_Object*)NewString(Ref2Str(sv)));
 	return len;
 }
 
-VectorItem GetEnviromentSourceAt(Enviroment * self, int index) {
+VectorItem bc_GetEnviromentSourceAt(bc_Enviroment * self, int index) {
 	return AtVector(self->Bytecode->Instructions, index);
 }
 
-bc_Object* GetEnviromentConstantAt(Enviroment * self, int index) {
+bc_Object* bc_GetEnviromentConstantAt(bc_Enviroment * self, int index) {
 	return (bc_Object*)AtVector(self->ConstantPool, index);
 }
 
-bc_Object* GetEnviromentCIntAt(Enviroment * self, int index) {
-	bc_Object* e = GetEnviromentConstantAt(self, index);
+bc_Object* bc_GetEnviromentCIntAt(bc_Enviroment * self, int index) {
+	bc_Object* e = bc_GetEnviromentConstantAt(self, index);
 	assert(bc_IsIntValue(e));
 	return e;
 }
 
-bc_Object* GetEnviromentCDoubleAt(Enviroment * self, int index) {
-	bc_Object* e = GetEnviromentConstantAt(self, index);
+bc_Object* bc_GetEnviromentCDoubleAt(bc_Enviroment * self, int index) {
+	bc_Object* e = bc_GetEnviromentConstantAt(self, index);
 	assert(bc_IsDoubleValue(e));
 	return e;
 }
 
-bc_Object* GetEnviromentCCharAt(Enviroment * self, int index) {
-	bc_Object* e = GetEnviromentConstantAt(self, index);
+bc_Object* bc_GetEnviromentCCharAt(bc_Enviroment * self, int index) {
+	bc_Object* e = bc_GetEnviromentConstantAt(self, index);
 	assert(bc_IsCharValue(e));
 	return e;
 }
 
-bc_Object* GetEnviromentCStringAt(Enviroment * self, int index) {
-	bc_Object* e = GetEnviromentConstantAt(self, index);
+bc_Object* bc_GetEnviromentCStringAt(bc_Enviroment * self, int index) {
+	bc_Object* e = bc_GetEnviromentConstantAt(self, index);
 	assert(bc_IsStringValue(e));
 	return e;
 }
 
-void DeleteEnviroment(Enviroment * self) {
+void bc_DeleteEnviroment(bc_Enviroment * self) {
 	if(self == NULL) {
 		return;
 	}
 	DeleteVector(self->ConstantPool, delete_constant);
 	DeleteVector(self->LineRangeTable, delete_line_range);
-	DeleteOpcodeBuf(self->Bytecode);
-	DeleteSymbolTable(self->Symboles);
+	bc_DeleteOpcodeBuf(self->Bytecode);
+	bc_DeleteSymbolTable(self->Symboles);
 	MEM_FREE(self);
 }
 
@@ -157,11 +157,11 @@ static void delete_constant(VectorItem item) {
 }
 
 static void delete_line_range(VectorItem item) {
-	LineRange* e = (LineRange*)item;
-	DeleteLineRange(e);
+	bc_LineRange* e = (bc_LineRange*)item;
+	bc_DeleteLineRange(e);
 }
 
-static void add_constant(Enviroment* self, bc_Object* o) {
+static void add_constant(bc_Enviroment* self, bc_Object* o) {
 	PushVector(self->ConstantPool, o);
 	assert(o->Paint == PAINT_ONEXIT_T);
 }

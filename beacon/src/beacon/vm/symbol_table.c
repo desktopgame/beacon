@@ -13,25 +13,25 @@
 static void delete_entry(NumericMapKey key, NumericMapItem item);
 static void dump_entry(NumericMapKey key, NumericMapItem item);
 
-SymbolTable * NewSymbolTable() {
-	SymbolTable* ret = (SymbolTable*)MEM_MALLOC(sizeof(SymbolTable));
+bc_SymbolTable * bc_NewSymbolTable() {
+	bc_SymbolTable* ret = (bc_SymbolTable*)MEM_MALLOC(sizeof(bc_SymbolTable));
 	ret->Count = 1;
 	ret->VariableMap = NewNumericMap();
 	ret->ScopeDepth = 0;
 	return ret;
 }
 
-SymbolEntry* EntrySymbolTable(SymbolTable* self, bc_GenericType* gtp, StringView namev) {
+bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, bc_GenericType* gtp, StringView namev) {
 	NumericMap* data = GetNumericMapCell(self->VariableMap, namev);
 	if (data) {
-		return ((SymbolEntry*)data->Item);
+		return ((bc_SymbolEntry*)data->Item);
 	}
 	//フィールドアクセスのために追加
 	if (gtp == NULL) {
 		return NULL;
 	}
 	int ret = self->Count;
-	SymbolEntry* e = NewSymbolEntry();
+	bc_SymbolEntry* e = bc_NewSymbolEntry();
 	e->Index = self->Count;
 	e->GType = gtp;
 	e->ScopeDepth = self->ScopeDepth;
@@ -40,24 +40,24 @@ SymbolEntry* EntrySymbolTable(SymbolTable* self, bc_GenericType* gtp, StringView
 	return e;
 }
 
-bool IsContainsSymbol(SymbolTable* self, StringView namev) {
+bool bc_IsContainsSymbol(bc_SymbolTable* self, StringView namev) {
 	return GetNumericMapCell(self->VariableMap, namev) != NULL;
 }
 
-void DumpSymbolTable(SymbolTable* self) {
+void bc_DumpSymbolTable(bc_SymbolTable* self) {
 	EachNumericMap(self->VariableMap, dump_entry);
 }
 
-void DeleteSymbolTable(SymbolTable * self) {
+void bc_DeleteSymbolTable(bc_SymbolTable * self) {
 	DeleteNumericMap(self->VariableMap, delete_entry);
 	MEM_FREE(self);
 }
 
 //private
 static void delete_entry(NumericMapKey key, NumericMapItem item) {
-	SymbolEntry* e = (SymbolEntry*)item;
-	DeleteSymbolEntry(e);
+	bc_SymbolEntry* e = (bc_SymbolEntry*)item;
+	bc_DeleteSymbolEntry(e);
 }
 static void dump_entry(NumericMapKey key, NumericMapItem item) {
-	printf("[%s] = %d\n", Ref2Str(key), ((SymbolEntry*)item)->Index);
+	printf("[%s] = %d\n", Ref2Str(key), ((bc_SymbolEntry*)item)->Index);
 }

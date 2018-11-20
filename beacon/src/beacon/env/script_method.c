@@ -17,11 +17,11 @@ bc_ScriptMethod * bc_NewScriptMethod() {
 	return ret;
 }
 
-void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, Frame* fr, Enviroment* env) {
+void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 #if defined(DEBUG)
 	const char* name = Ref2Str(parent->Name);
 #endif
-	Frame* sub = SubFrame(fr);
+	bc_Frame* sub = bc_SubFrame(fr);
 	CallFrame* cfr = NULL;
 	sub->Receiver = parent->Parent;
 	Vector* aArgs = NewVector();
@@ -50,7 +50,7 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, Frame* fr
 		AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
 		AssignVector(aTArgs, (typeparams - i) - 1, e);
 	}
-	ExecuteVM(sub, self->Env);
+	bc_ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->ReturnGType != BC_TYPE_VOID->GenericSelf &&
@@ -61,10 +61,10 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, Frame* fr
 	DeleteVector(aArgs, VectorDeleterOfNull);
 	DeleteVector(aTArgs, VectorDeleterOfNull);
 	PopCallContext(GetSGThreadCContext());
-	DeleteFrame(sub);
+	bc_DeleteFrame(sub);
 }
 
 void bc_DeleteScriptMethod(bc_ScriptMethod * self) {
-	DeleteEnviroment(self->Env);
+	bc_DeleteEnviroment(self->Env);
 	MEM_FREE(self);
 }

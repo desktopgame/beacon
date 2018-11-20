@@ -234,8 +234,8 @@ void bc_DeleteObject(bc_Object * self) {
 	}
 	if((self->Flags & OBJECT_FLG_COROUTINE) > 0) {
 		bc_Coroutine* cor = (bc_Coroutine*)self;
-		YieldContext* yctx = cor->Context;
-		DeleteYieldContext(yctx);
+		bc_YieldContext* yctx = cor->Context;
+		bc_DeleteYieldContext(yctx);
 		cor->Context = NULL;
 	}
 	self->OnMessage(self, OBJECT_MSG_DELETE, 0, NULL);
@@ -353,7 +353,7 @@ static void mark_coroutine(bc_Object* self) {
 	}
 	//コルーチンの現在の値
 	bc_Coroutine* cor = (bc_Coroutine*)self;
-	YieldContext* yctx = cor->Context;
+	bc_YieldContext* yctx = cor->Context;
 	bc_MarkAllObject(yctx->Stock);
 	bc_MarkAllObject(yctx->Source);
 	//コルーチンに渡された引数

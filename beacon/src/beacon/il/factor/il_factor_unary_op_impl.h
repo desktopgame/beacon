@@ -37,21 +37,21 @@ ILFactor* WrapILUnaryOp(ILUnaryOp* self);
 
 ILUnaryOp* NewILUnaryOp(bc_OperatorType type);
 
-void GenerateILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
+void GenerateILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
+void LoadILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILUnaryOpToString(ILUnaryOp* self, Enviroment* env);
+char* ILUnaryOpToString(ILUnaryOp* self, bc_Enviroment* env);
 
 void DeleteILUnaryOp(ILUnaryOp* self);
 
-char* ILUnaryOpToString_simple(ILUnaryOp* self, Enviroment* env);
+char* ILUnaryOpToString_simple(ILUnaryOp* self, bc_Enviroment* env);
 
-int GetIndexILUnaryOp(ILUnaryOp* self, Enviroment* env, CallContext* cctx);
+int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx);
 
-int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, Enviroment* env, CallContext* cctx);
+int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, Enviroment* env, CallContext* cctx);
+bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

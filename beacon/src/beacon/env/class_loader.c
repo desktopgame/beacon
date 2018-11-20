@@ -63,7 +63,7 @@ bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type) {
 	ret->Type = type;
 	ret->Link = LINK_NONE_T;
 	ret->ImportManager = bc_NewImportManager();
-	ret->Env = NewEnviroment();
+	ret->Env = bc_NewEnviroment();
 	ret->Level = 0;
 	ret->TypeCaches = NewVector();
 	ret->FileName = bc_Strdup(filename);
@@ -113,7 +113,7 @@ void bc_DeleteClassLoader(bc_ClassLoader * self) {
 	DeleteILToplevel(self->ILCode);
 	DeleteVector(self->TypeCaches, delete_cache);
 	bc_DeleteImportManager(self->ImportManager);
-	DeleteEnviroment(self->Env);
+	bc_DeleteEnviroment(self->Env);
 	MEM_FREE(self->FileName);
 	MEM_FREE(self);
 }
@@ -206,10 +206,10 @@ static void load_toplevel(bc_ClassLoader* self) {
 	LoadILStmt(body, self->Env, cctx);
 	GenerateILStmt(body, self->Env, cctx);
 	//$worldをthisにする
-	AddOpcodeBuf(self->Env->Bytecode, OP_LOAD);
-	AddOpcodeBuf(self->Env->Bytecode, 1);
-	AddOpcodeBuf(self->Env->Bytecode, OP_STORE);
-	AddOpcodeBuf(self->Env->Bytecode, 0);
+	bc_AddOpcodeBuf(self->Env->Bytecode, OP_LOAD);
+	bc_AddOpcodeBuf(self->Env->Bytecode, 1);
+	bc_AddOpcodeBuf(self->Env->Bytecode, OP_STORE);
+	bc_AddOpcodeBuf(self->Env->Bytecode, 0);
 	//以下読み込み
 	CLBC_body(self, self->ILCode->StatementList, self->Env, cctx, NULL);
 	DeleteILStmt(body);
@@ -235,7 +235,7 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 		bc_Method* m = bc_NewMethod(ilfunc->Name);
 		bc_DupTypeParameterList(ilfunc->TypeParameters, m->TypeParameters);
 		bc_ScriptMethod* sm = bc_NewScriptMethod();
-		Enviroment* env = NewEnviroment();
+		bc_Enviroment* env = bc_NewEnviroment();
 		//CallContextの設定
 		CallContext* cctx = NewCallContext(CALL_METHOD_T);
 		cctx->Scope = bc_GetLangNamespace();
@@ -257,18 +257,18 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 			bc_Parameter* param = bc_NewParameter(ilparam->Name);
 			PushVector(m->Parameters, param);
 			param->GType = bc_ResolveImportManager(loc, ilparam->GCache, cctx);
-			EntrySymbolTable(
+			bc_EntrySymbolTable(
 				env->Symboles,
 				bc_ResolveImportManager(loc, ilparam->GCache, cctx),
 				ilparam->Name
 			);
 			//実引数を保存
 			//0番目は this のために開けておく
-			AddOpcodeBuf(env->Bytecode, OP_STORE);
-			AddOpcodeBuf(env->Bytecode, (j + 1));
+			bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
+			bc_AddOpcodeBuf(env->Bytecode, (j + 1));
 		}
-		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 		PushVector(worldT->Kind.Class->Methods, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
 		DeleteCallContext(cctx);

@@ -14,15 +14,15 @@
 #include "../util/vector.h"
 struct bc_Type;
 struct bc_Class;
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Object;
-struct Frame;
+struct bc_Frame;
 /**
  * コンストラクタを表す構造体.
  */
 typedef struct bc_Constructor {
 	struct bc_Type* Parent;
-	struct Enviroment* Env;
+	struct bc_Enviroment* Env;
 	Vector* Parameters;
 	bc_AccessLevel Access;
 } bc_Constructor;
@@ -40,7 +40,7 @@ bc_Constructor* bc_NewConstructor();
  * @param parent
  * @return
  */
-struct bc_Object* bc_NewInstanceConstructor(bc_Constructor* self, Vector* args, struct Frame* parent);
+struct bc_Object* bc_NewInstanceConstructor(bc_Constructor* self, Vector* args, struct bc_Frame* parent);
 
 /**
  * コンストラクタを開放します.

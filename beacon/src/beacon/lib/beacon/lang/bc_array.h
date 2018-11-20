@@ -19,7 +19,7 @@ typedef struct Array {
 	Vector* Elements;
 } Array;
 
-struct Frame;
+struct bc_Frame;
 struct bc_Type;
 struct bc_Object;
 struct bc_GenericType;
@@ -50,7 +50,7 @@ struct bc_Type* GetArrayType();
  * @param fr
  * @return
  */
-struct bc_Object* DynamicNewArray(struct bc_GenericType* gtype, int length, struct Frame* fr);
+struct bc_Object* DynamicNewArray(struct bc_GenericType* gtype, int length, struct bc_Frame* fr);
 
 /**
  * @param arr

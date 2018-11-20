@@ -13,7 +13,7 @@
 #include "../../call_context.h"
 struct ILBinaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 typedef struct ILCompareOp {
 	struct ILBinaryOp* Parent;
 	bc_OperatorType Type;
@@ -22,13 +22,13 @@ typedef struct ILCompareOp {
 
 ILCompareOp* NewILCompareOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILCompareOp(ILCompareOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILCompareOp(ILCompareOp * self, struct bc_Enviroment * env, CallContext* cctx);
 
-void GenerateILCompareOp(ILCompareOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILCompareOp(ILCompareOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILCompareOp(ILCompareOp* self);
 
-char* ILCompareOpToString(ILCompareOp* self, struct Enviroment* env);
+char* ILCompareOpToString(ILCompareOp* self, struct bc_Enviroment* env);
 #endif

@@ -83,7 +83,7 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 void CLBC_operator_overloads_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
 void CLBC_operator_overloads_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
 
-bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, bc_Namespace* range);
+bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, bc_Namespace* range);
 
-void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, bc_Namespace* range);
+void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, bc_Enviroment* dest, CallContext* cctx, bc_Namespace* range);
 #endif

@@ -12,7 +12,7 @@
 #include "../../il_factor_interface.h"
 #include "../../../env/fqcn_cache.h"
 #include "../../../util/string_pool.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 struct bc_Method;
 
@@ -28,13 +28,13 @@ typedef struct ILInvokeStatic {
 
 ILInvokeStatic* NewILInvokeStatic(StringView namev);
 
-void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* cctx);
+void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILInvokeStatic(ILInvokeStatic * self, Enviroment * env, CallContext* cctx);
+void LoadILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, CallContext* cctx);
 
-struct bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, CallContext* cctx);
 
-char* ILInvokeStaticToString(ILInvokeStatic* self, Enviroment* env);
+char* ILInvokeStaticToString(ILInvokeStatic* self, bc_Enviroment* env);
 
 void DeleteILInvokeStatic(ILInvokeStatic* self);
 #endif

@@ -15,7 +15,7 @@
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Field;
 
 /**
@@ -34,13 +34,13 @@ ILFactor* WrapILMemberOp(ILMemberOp* self);
 
 ILMemberOp* NewILMemberOp(StringView namev);
 
-void LoadILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
+void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
+void GenerateILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILMemberOp(ILMemberOp* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILMemberOpToString(ILMemberOp* self, Enviroment* env);
+char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env);
 
 void DeleteILMemberOp(ILMemberOp* self);
 

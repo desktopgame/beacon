@@ -196,8 +196,8 @@ static void free_script_context(bc_ScriptContext* self) {
 	int aa = bc_CountActiveObject();
 	assert(self->Heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
-	Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
-	CatchVM(thv);
+	bc_Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
+	bc_CatchVM(thv);
 	bc_DeleteClassLoader(self->BootstrapClassLoader);
 	if(self->Null != NULL) {
 		bc_IgnoreHeap(self->Heap, self->Null);

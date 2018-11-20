@@ -30,7 +30,7 @@ typedef struct ILAs {
 	CastMode Mode;
 } ILAs;
 
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Type;
 struct bc_Field;
 
@@ -38,13 +38,13 @@ ILFactor* WrapILAs(ILAs* self);
 
 ILAs* NewILAs();
 
-void GenerateILAs(ILAs* self, Enviroment* env, CallContext* cctx);
+void GenerateILAs(ILAs* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILAs(ILAs* self, Enviroment* env, CallContext* cctx);
+void LoadILAs(ILAs* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILAs(ILAs* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILAs(ILAs* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILAs(ILAs* self);
 
-char* ILAsToString(ILAs* self, Enviroment* env);
+char* ILAsToString(ILAs* self, bc_Enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

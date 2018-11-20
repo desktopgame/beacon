@@ -17,19 +17,19 @@ ILBool * NewILBool(bool b) {
 	return ret;
 }
 
-void GenerateILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
+void GenerateILBool(ILBool * self, bc_Enviroment * env, CallContext* cctx) {
 	if (self->Value) {
-		AddOpcodeBuf(env->Bytecode, OP_TRUE);
+		bc_AddOpcodeBuf(env->Bytecode, OP_TRUE);
 	} else {
-		AddOpcodeBuf(env->Bytecode, OP_FALSE);
+		bc_AddOpcodeBuf(env->Bytecode, OP_FALSE);
 	}
 }
 
-bc_GenericType* EvalILBool(ILBool * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILBool(ILBool * self, bc_Enviroment * env, CallContext* cctx) {
 	return BC_GENERIC_BOOL;
 }
 
-char* ILBoolToString(ILBool* self, Enviroment* env) {
+char* ILBoolToString(ILBool* self, bc_Enviroment* env) {
 	return bc_Strdup(self->Value ? "true" : "false");
 }
 

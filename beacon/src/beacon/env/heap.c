@@ -92,9 +92,9 @@ static void gc_mark(bc_Heap* self) {
 	//今はまだマルチスレッドに対応していないので、
 	//とりあえず実行中のスレッドのみを対象とする
 	ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
-	Frame* top = GetSGThreadFrameRef(th);
+	bc_Frame* top = GetSGThreadFrameRef(th);
 	assert(top != NULL);
-	MarkAllFrame(top);
+	bc_MarkAllFrame(top);
 
 	//true/false/nullは常にマーク
 	bc_GetTrueObject()->Paint = PAINT_MARKED_T;

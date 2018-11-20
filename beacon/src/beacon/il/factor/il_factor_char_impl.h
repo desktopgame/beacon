@@ -24,13 +24,13 @@ ILFactor* WrapILChar(ILChar* self);
 
 ILChar* NewILChar(char c);
 
-void GenerateILChar(ILChar* self, Enviroment* env, CallContext* cctx);
+void GenerateILChar(ILChar* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILChar(ILChar* self, Enviroment* env, CallContext* cctx);
+void LoadILChar(ILChar* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILChar(ILChar* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILChar(ILChar* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILCharToString(ILChar* self, Enviroment* env);
+char* ILCharToString(ILChar* self, bc_Enviroment* env);
 
 void DeleteILChar(ILChar* self);
 

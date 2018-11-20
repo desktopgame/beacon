@@ -10,7 +10,7 @@
 #ifndef BEACON_ENV_PROPERTY_BODY_H
 #define BEACON_ENV_PROPERTY_BODY_H
 #include "../ast/access_level.h"
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Property;
 
 typedef enum bc_PropertyBodyTag {
@@ -22,7 +22,7 @@ typedef struct bc_PropertyBody {
 	struct bc_Property* Parent;
 	bc_AccessLevel Access;
 	bc_PropertyBodyTag Tag;
-	struct Enviroment* Env;
+	struct bc_Enviroment* Env;
 } bc_PropertyBody;
 
 #define bc_NewPropertyBody(tag) (bc_MallocPropertyBody(tag, __FILE__, __LINE__))

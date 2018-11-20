@@ -13,7 +13,7 @@
 #include "../../../il/call_context.h"
 struct ILUnaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILNotOp {
 	struct ILUnaryOp* Parent;
@@ -23,13 +23,13 @@ typedef struct ILNotOp {
 
 ILNotOp* NewILNotOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILNotOp(ILNotOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILNotOp(ILNotOp * self, struct bc_Enviroment * env, CallContext* cctx);
 
-void GenerateILNotOp(ILNotOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILNotOp(ILNotOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILNotOp(ILNotOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILNotOp(ILNotOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILNotOp(ILNotOp* self);
 
-char* ILNotOpToString(ILNotOp* self, struct Enviroment* env);
+char* ILNotOpToString(ILNotOp* self, struct bc_Enviroment* env);
 #endif

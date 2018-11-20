@@ -20,9 +20,9 @@
 
 struct bc_Type;
 struct bc_Method;
-struct Enviroment;
+struct bc_Enviroment;
 struct virtual_type;
-struct Frame;
+struct bc_Frame;
 struct CallContext;
 /**
  * 型変数つきの型宣言の型引数では GenericType 自身が使われますが、
@@ -128,7 +128,7 @@ int bc_DistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct C
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int bc_RDistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct Frame* fr);
+int bc_RDistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct bc_Frame* fr);
 
 /**
  * 型変数と型を出力します.
@@ -142,7 +142,7 @@ void bc_PrintGenericType(bc_GenericType* self);
  * @param env
  * @param ilctx
  */
-void bc_GenerateGenericType(bc_GenericType* self, struct Enviroment* env);
+void bc_GenerateGenericType(bc_GenericType* self, struct bc_Enviroment* env);
 
 /**
  * 現在のコンテキストで self の型変数を解決します.
@@ -159,7 +159,7 @@ bc_GenericType* bc_ApplyGenericType(bc_GenericType* self, struct CallContext* cc
  * @param fr
  * @return
  */
-bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct CallContext* cctx, struct Frame* fr);
+bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct CallContext* cctx, struct bc_Frame* fr);
 
 /**
  * GenericType を type へ変換します.

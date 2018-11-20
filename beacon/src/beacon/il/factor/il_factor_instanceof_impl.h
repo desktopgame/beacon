@@ -23,13 +23,13 @@ ILFactor* WrapILInstanceOf(ILInstanceOf* self);
 
 ILInstanceOf* NewILInstanceOf();
 
-void LoadILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
+void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
+void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx);
 
-struct bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env);
+char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env);
 
 void DeleteILInstanceOf(ILInstanceOf* self);
 #endif

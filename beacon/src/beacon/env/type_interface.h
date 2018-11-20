@@ -33,7 +33,7 @@ struct bc_Interface;
 struct bc_Field;
 struct bc_Method;
 struct bc_Property;
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_VTable;
 struct bc_GenericType;
 
@@ -136,7 +136,7 @@ void bc_AddMethodType(bc_Type* self, struct bc_Method* m);
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindMethodType(bc_Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindMethodType(bc_Type* self, StringView namev, Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -148,7 +148,7 @@ struct bc_Method* bc_ILFindMethodType(bc_Type* self, StringView namev, Vector* a
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindSMethodType(bc_Type* self, StringView namev, Vector* args, struct Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindSMethodType(bc_Type* self, StringView namev, Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

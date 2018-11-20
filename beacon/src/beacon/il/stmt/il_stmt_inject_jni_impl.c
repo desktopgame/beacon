@@ -19,20 +19,20 @@ ILInjectJNI* NewILInjectJNI(StringView namev) {
 	return ret;
 }
 
-void GenerateILInjectJNI(ILInjectJNI* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, CallContext* cctx) {
 	GenerateILFactor(self->Value, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
+	bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
+	bc_AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
-void LoadILInjectJNI(ILInjectJNI * self, Enviroment* env, CallContext* cctx) {
+void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, CallContext* cctx) {
 	if(self->Symbol != NULL) {
 		return;
 	}
 	self->Value->Lineno = 0;
 	LoadILFactor(self->Value, env, cctx);
 	bc_GenericType* gtype = EvalILFactor(self->Value, env, cctx);
-	self->Symbol = EntrySymbolTable(env->Symboles, gtype, self->Name);
+	self->Symbol = bc_EntrySymbolTable(env->Symboles, gtype, self->Name);
 }
 
 void DeleteILInjectJni(ILInjectJNI* self) {

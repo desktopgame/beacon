@@ -11,10 +11,10 @@
 
 //proto
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
-static void bc_array_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_array_nativeSet(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_array_nativeGet(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_array_nativeCopy(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_array_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_array_nativeSet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_array_nativeGet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_array_nativeCopy(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 static void delete_self(VectorItem item);
 
 bc_Object* NewArray(int size, bc_GenericType* element_type) {
@@ -47,7 +47,7 @@ bc_Type* GetArrayType() {
 	return bc_FindTypeFromNamespace(lang, InternString("Array"));
 }
 
-bc_Object * DynamicNewArray(struct bc_GenericType* gtype, int length, Frame* fr) {
+bc_Object * DynamicNewArray(struct bc_GenericType* gtype, int length, bc_Frame* fr) {
 	bc_Type* arrayType = GetArrayType();
 
 	Vector* args = NewVector();
@@ -104,7 +104,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
 	}
 }
 
-static void bc_array_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Type* tp = parent->Parent;
 	//Array#lengthを取り出す
 	int temp = 0;
@@ -127,7 +127,7 @@ static void bc_array_nativeInit(bc_Method* parent, Frame* fr, Enviroment* env) {
 	}
 }
 
-static void bc_array_nativeSet(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeSet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* idx = AtVector(fr->VariableTable, 1);
 	bc_Object* val = AtVector(fr->VariableTable, 2);
@@ -135,7 +135,7 @@ static void bc_array_nativeSet(bc_Method* parent, Frame* fr, Enviroment* env) {
 	AssignVector(ARRAY_VALUE(self), bc_ObjectToInt(idx), val);
 }
 
-static void bc_array_nativeGet(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeGet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* self = AtVector(fr->VariableTable, 0);
 	bc_Object* idx = AtVector(fr->VariableTable, 1);
 //	Object* a = AtVector(vm->VariableTable, 2);
@@ -145,7 +145,7 @@ static void bc_array_nativeGet(bc_Method* parent, Frame* fr, Enviroment* env) {
 	PushVector(fr->ValueStack, ret);
 }
 
-static void bc_array_nativeCopy(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_array_nativeCopy(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* src = AtVector(fr->VariableTable, 1);
 	bc_Object* srcOffset = AtVector(fr->VariableTable, 2);
 	bc_Object* dst = AtVector(fr->VariableTable, 3);
@@ -157,13 +157,13 @@ static void bc_array_nativeCopy(bc_Method* parent, Frame* fr, Enviroment* env) {
 	//添え字がマイナス
 	if (bc_ObjectToInt(srcOffset) < 0 ||
 		bc_ObjectToInt(dstOffset) < 0) {
-		NativeThrowVM(fr, bc_NewSimplefException(fr, "index must be positive: %d - %d", bc_ObjectToInt(srcOffset),bc_ObjectToInt(dstOffset)));
+		bc_NativeThrowVM(fr, bc_NewSimplefException(fr, "index must be positive: %d - %d", bc_ObjectToInt(srcOffset),bc_ObjectToInt(dstOffset)));
 		return;
 	}
 	//添え字がはみ出している
 	if ((bc_ObjectToInt(srcOffset) + cpyLen) > srcLen ||
 		(bc_ObjectToInt(dstOffset) + cpyLen) > dstLen) {
-		NativeThrowVM(fr, bc_NewSimplefException(fr, "index must be less than size of array: %d - %d", bc_ObjectToInt(srcOffset), bc_ObjectToInt(dstOffset)));
+		bc_NativeThrowVM(fr, bc_NewSimplefException(fr, "index must be less than size of array: %d - %d", bc_ObjectToInt(srcOffset), bc_ObjectToInt(dstOffset)));
 		return;
 	}
 	for (int i = bc_ObjectToInt(srcOffset);

@@ -21,22 +21,22 @@ ILAssert* NewILAssert() {
 	return ret;
 }
 
-void GenerateILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
+void GenerateILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx) {
 	//https://code.i-harness.com/ja/q/2a1650
-	Label* gt = AddLabelOpcodeBuf(env->Bytecode, 0);
+	bc_Label* gt = bc_AddLabelOpcodeBuf(env->Bytecode, 0);
 	GenerateILFactor(self->Condition, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_TRUE);
-	AddOpcodeBuf(env->Bytecode, gt);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO_IF_TRUE);
+	bc_AddOpcodeBuf(env->Bytecode, gt);
 
 	GenerateILFactor(self->Message, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	AddOpcodeBuf(env->Bytecode, bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Exception"))->AbsoluteIndex);
-	AddOpcodeBuf(env->Bytecode, 0);
-	AddOpcodeBuf(env->Bytecode, OP_THROW);
-	gt->Cursor = AddNOPOpcodeBuf(env->Bytecode);
+	bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
+	bc_AddOpcodeBuf(env->Bytecode, bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Exception"))->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, 0);
+	bc_AddOpcodeBuf(env->Bytecode, OP_THROW);
+	gt->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void LoadILAssert(ILAssert* self, Enviroment* env, CallContext* cctx) {
+void LoadILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Condition, env, cctx);
 	if(self->Message == NULL) {
 		char* str = ILFactorToString(self->Condition, env);

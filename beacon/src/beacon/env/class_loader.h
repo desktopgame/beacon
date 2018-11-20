@@ -18,7 +18,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <stdbool.h>
-struct Enviroment;
+struct bc_Enviroment;
 
 /**
  * クラスローダーを表す構造体です.
@@ -27,7 +27,7 @@ typedef struct bc_ClassLoader {
 	bc_AST* SourceCode;
 	ILToplevel* ILCode;
 
-	struct Enviroment* Env;
+	struct bc_Enviroment* Env;
 	bc_ImportManager* ImportManager;
 	bc_ContentType Type;
 	bc_LinkType Link;

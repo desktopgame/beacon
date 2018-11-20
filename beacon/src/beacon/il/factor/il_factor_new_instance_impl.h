@@ -15,7 +15,7 @@
 #include "../../env/generic_cache.h"
 #include "../il_factor_interface.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Type;
 struct bc_Constructor;
 /**
@@ -35,13 +35,13 @@ ILFactor* WrapILNewInstance(ILNewInstance* self);
 
 ILNewInstance* NewILNewInstance();
 
-void GenerateILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
+void GenerateILNewInstance(ILNewInstance* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
+void LoadILNewInstance(ILNewInstance* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILNewInstance(ILNewInstance* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILNewInstance(ILNewInstance* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILNewInstanceToString(ILNewInstance* self, Enviroment* env);
+char* ILNewInstanceToString(ILNewInstance* self, bc_Enviroment* env);
 
 void DeleteILNewInstance(ILNewInstance* self);
 

@@ -32,10 +32,10 @@
 static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope, Vector* param_list, Vector* sg_param_liste, CallContext* cctx);
 static void CLBC_parameter_list_ctor(Vector* param_list);
 
-static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static void CLBC_chain_root(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static void CLBC_chain_auto(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
-static void CLBC_chain_super(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env);
+static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env);
+static void CLBC_chain_root(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env);
+static void CLBC_chain_auto(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env);
+static void CLBC_chain_super(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env);
 static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_OperatorOverload* opov);
 
 //
@@ -96,7 +96,7 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
 		return true;
 	}
 	//フィールドの初期値を設定する
-	Enviroment* env = NewEnviroment();
+	bc_Enviroment* env = bc_NewEnviroment();
 	env->ContextRef = self;
 	fi->InitialValueEnv = env;
 	LoadILFactor(fi->InitialValue, env, cctx);
@@ -119,12 +119,12 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
 	he->CollectBlocking++;
 	he->AcceptBlocking = 0;
 	if(bc_IsStaticModifier(fi->Modifier)) {
-		Frame* f = NewFrame();
+		bc_Frame* f = bc_NewFrame();
 		SetSGThreadFrameRef(GetMainSGThread(), f);
-		ExecuteVM(f, env);
+		bc_ExecuteVM(f, env);
 		fi->StaticValue = PopVector(f->ValueStack);
 		ReleaseSGThreadFrameRef(GetMainSGThread());
-		DeleteFrame(f);
+		bc_DeleteFrame(f);
 	}
 	he->AcceptBlocking = abtmp;
 	he->CollectBlocking--;
@@ -213,18 +213,18 @@ bool CLBC_Property_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
 	set->Env->ContextRef = self;
 	get->Env->ContextRef = self;
 	//setterのオペコードを生成
-	SymbolEntry* valueE = EntrySymbolTable(set->Env->Symboles, pr->GType, InternString("value"));
+	bc_SymbolEntry* valueE = bc_EntrySymbolTable(set->Env->Symboles, pr->GType, InternString("value"));
 	if(!bc_IsStaticModifier(pr->Modifier)) {
-		AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
-		AddOpcodeBuf(set->Env->Bytecode, 0);
+		bc_AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
+		bc_AddOpcodeBuf(set->Env->Bytecode, 0);
 	}
-	AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
-	AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
+	bc_AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
+	bc_AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
 	CLBC_body(self, set_stmt_list, set->Env, cctx, scope);
 	//getterのオペコードを生成
 	if(!bc_IsStaticModifier(pr->Modifier)) {
-		AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
-		AddOpcodeBuf(get->Env->Bytecode, 0);
+		bc_AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
+		bc_AddOpcodeBuf(get->Env->Bytecode, 0);
 	}
 	CLBC_body(self, get_stmt_list, get->Env, cctx, scope);
 	return true;
@@ -381,7 +381,7 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype,
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
-	Enviroment* env = NewEnviroment();
+	bc_Enviroment* env = bc_NewEnviroment();
 	env->ContextRef = self;
 	CallContext* cctx = NewCallContext(CALL_METHOD_T);
 	cctx->Scope = scope;
@@ -390,21 +390,21 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype,
 	//引数を保存
 	for (int i = 0; i < ilmethod->Parameters->Length; i++) {
 		ILParameter* ilparam = (ILParameter*)AtVector(ilmethod->Parameters, i);
-		EntrySymbolTable(
+		bc_EntrySymbolTable(
 			env->Symboles,
 			bc_ResolveImportManager(scope, ilparam->GCache, cctx),
 			ilparam->Name
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)(i + 1));
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)(i + 1));
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
 	if (!bc_IsStaticModifier(me->Modifier)) {
-		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)0);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 	}
 	CLBC_corutine(self, me, env, ilmethod->Parameters, ilmethod->Statements, cctx, scope);
 	DeleteCallContext(cctx);
@@ -466,7 +466,7 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 	//仮引数に型を設定する
 	//class_loader_sgload_params(self, scope, ilcons->parameter_list, cons->parameter_list);
 	//まずは仮引数の一覧にインデックスを割り振る
-	Enviroment* env = NewEnviroment();
+	bc_Enviroment* env = bc_NewEnviroment();
 	env->ContextRef = self;
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->Scope = scope;
@@ -474,15 +474,15 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 	cctx->Kind.Ctor = cons;
 	for (int i = 0; i < cons->Parameters->Length; i++) {
 		ILParameter* ilparam = (ILParameter*)AtVector(ilcons->Parameters, i);
-		EntrySymbolTable(
+		bc_EntrySymbolTable(
 			env->Symboles,
 			bc_ResolveImportManager(scope, ilparam->GCache, cctx),
 			ilparam->Name
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		AddOpcodeBuf(env->Bytecode, OP_STORE);
-		AddOpcodeBuf(env->Bytecode, (i + 1));
+		bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (i + 1));
 	}
 	CLBC_chain(self, iltype, tp, ilcons, ilcons->Chain, env);
 	//NOTE:ここなら名前空間を設定出来る
@@ -558,7 +558,7 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 	//オペコードを作成
 	//FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
 	//まずは仮引数の一覧にインデックスを割り振る
-	Enviroment* env = NewEnviroment();
+	bc_Enviroment* env = bc_NewEnviroment();
 	CallContext* cctx = NewCallContext(CALL_OPOV_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
@@ -567,19 +567,19 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 	env->ContextRef = self;
 	for (int i = 0; i < ilopov->Parameters->Length; i++) {
 		ILParameter* ilparam = (ILParameter*)AtVector(ilopov->Parameters, i);
-		EntrySymbolTable(
+		bc_EntrySymbolTable(
 			env->Symboles,
 			bc_ResolveImportManager(scope, ilparam->GCache, cctx),
 			ilparam->Name
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)(i + 1));
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)(i + 1));
 	}
 	//0番目をthisで埋める
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)0);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)0);
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilopov->Statements, env, cctx, scope);
 	DeleteCallContext(cctx);
@@ -610,7 +610,7 @@ void CLBC_operator_overloads_impl(bc_ClassLoader* self, ILType* iltype, bc_Type*
 	}
 }
 
-bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, bc_Namespace* range) {
+bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, bc_Namespace* range) {
 	//戻り値が iterator なら、
 	//コルーチンとして使えるようにする
 	bool yield_err = false;
@@ -622,16 +622,16 @@ bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, Enviroment* env,  Vector
 		//メソッド名からクラス名を作成して、
 		//beacon::$placeholderへ肩を格納する
 		bc_Type* iterT = bc_CreateIteratorTypeFromMethod(mt, self, ilstmts);
-		AddOpcodeBuf(env->Bytecode, OP_THIS);
+		bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
 		for(int i=0; i<ilparams->Length; i++) {
-			AddOpcodeBuf(env->Bytecode, OP_LOAD);
-			AddOpcodeBuf(env->Bytecode, i + 1);
+			bc_AddOpcodeBuf(env->Bytecode, OP_LOAD);
+			bc_AddOpcodeBuf(env->Bytecode, i + 1);
 		}
 		mt->Kind.Script->Env = env;
-		AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-		AddOpcodeBuf(env->Bytecode, iterT->AbsoluteIndex);
-		AddOpcodeBuf(env->Bytecode, 0);
-		AddOpcodeBuf(env->Bytecode, OP_RETURN);
+		bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
+		bc_AddOpcodeBuf(env->Bytecode, iterT->AbsoluteIndex);
+		bc_AddOpcodeBuf(env->Bytecode, 0);
+		bc_AddOpcodeBuf(env->Bytecode, OP_RETURN);
 		return true;
 	}
 	//NOTE:ここなら名前空間を設定出来る
@@ -640,7 +640,7 @@ bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, Enviroment* env,  Vector
 	return true;
 }
 
-void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, Enviroment* dest, CallContext* cctx, bc_Namespace* range) {
+void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, bc_Enviroment* dest, CallContext* cctx, bc_Namespace* range) {
 	bc_CL_ERROR(self);
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->Length; i++) {
@@ -685,7 +685,7 @@ static void CLBC_parameter_list_ctor(Vector* param_list) {
 }
 
 
-static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, Enviroment* env) {
+static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env) {
 	//親クラスがないなら作成
 	bc_Class* classz = tp->Kind.Class;
 	if (classz->SuperClass == NULL &&
@@ -702,13 +702,13 @@ static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILCons
 	CLBC_chain_super(self, iltype, tp, ilcons, ilchain, env);
 }
 
-static void CLBC_chain_root(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_NEW_OBJECT);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
+static void CLBC_chain_root(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, bc_Enviroment * env) {
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_NEW_OBJECT);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
 }
 
-static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
+static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, bc_Enviroment * env) {
 	bc_Class* classz = tp->Kind.Class;
 	int emptyTemp = 0;
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
@@ -733,16 +733,16 @@ static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 	ch_empty->Type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
 	ilcons->Chain = ch_empty;
 	//親クラスへ連鎖
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->SuperClass->CoreType->AbsoluteIndex);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->SuperClass->CoreType->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	//このクラスのフィールドを確保
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
 }
 
-static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, Enviroment * env) {
+static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, bc_Enviroment * env) {
 	bc_Class* classz = tp->Kind.Class;
 	//チェインコンストラクタの実引数をプッシュ
 	CallContext* cctx = NewCallContext(CALL_CTOR_ARGS_T);
@@ -757,16 +757,16 @@ static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	int temp = 0;
 	if (chain->Type == CHAIN_TYPE_THIS_T) {
 		chainTarget = bc_ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
-	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
 		chainTarget = bc_ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
-		AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
-		AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
+		bc_AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
+		bc_AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
 	}
 	if(chainTarget == NULL) {
 		bc_Panic(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,
@@ -778,8 +778,8 @@ static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	chain->Constructor = chainTarget;
 	chain->ConstructorIndex = temp;
 	//親クラスへのチェインなら即座にフィールドを確保
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
 }
 
 static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_OperatorOverload* opov) {

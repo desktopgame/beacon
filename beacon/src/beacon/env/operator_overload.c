@@ -25,14 +25,14 @@ bc_OperatorOverload* bc_NewOperatorOverload(bc_OperatorType type) {
 	return ret;
 }
 
-void bc_ExecuteOperatorOverload(bc_OperatorOverload* self, Frame* fr, Enviroment* env) {
-	Frame* sub = SubFrame(fr);
+void bc_ExecuteOperatorOverload(bc_OperatorOverload* self, bc_Frame* fr, bc_Enviroment* env) {
+	bc_Frame* sub = bc_SubFrame(fr);
 	sub->Receiver = fr->Receiver;
 	PushVector(sub->ValueStack, PopVector(fr->ValueStack));
 	for (int i = 0; i < self->Parameters->Length; i++) {
 		PushVector(sub->ValueStack, bc_CopyObject(PopVector(fr->ValueStack)));
 	}
-	ExecuteVM(sub, self->Env);
+	bc_ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(self->ReturnGType != BC_TYPE_VOID->GenericSelf &&
@@ -40,11 +40,11 @@ void bc_ExecuteOperatorOverload(bc_OperatorOverload* self, Frame* fr, Enviroment
 		bc_Object* o = (bc_Object*)PopVector(sub->ValueStack);
 		PushVector(fr->ValueStack, o);
 	}
-	DeleteFrame(sub);
+	bc_DeleteFrame(sub);
 }
 
 void bc_DeleteOperatorOverload(bc_OperatorOverload* self) {
-	DeleteEnviroment(self->Env);
+	bc_DeleteEnviroment(self->Env);
 	DeleteVector(self->Parameters, delete_parameter);
 	MEM_FREE(self);
 }

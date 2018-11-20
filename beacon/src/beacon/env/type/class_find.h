@@ -197,7 +197,7 @@ struct bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, StringView namev, 
  * @param outIndex
  * @return 無ければ空
  */
-struct bc_Constructor* bc_RFindConstructorClass(bc_Class* self, Vector* args, Vector* typeargs, Frame* fr, int* outIndex);
+struct bc_Constructor* bc_RFindConstructorClass(bc_Class* self, Vector* args, Vector* typeargs, bc_Frame* fr, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -208,7 +208,7 @@ struct bc_Constructor* bc_RFindConstructorClass(bc_Class* self, Vector* args, Ve
  * @param outIndex
  * @return 無ければ空
  */
-struct bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 引数が一つもないコンストラクタを検索して返します.
@@ -218,7 +218,7 @@ struct bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector* args, E
  * @param outIndex
  * @return
  */
-struct bc_Constructor* bc_ILFindEmptyConstructorClass(bc_Class* self, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Constructor* bc_ILFindEmptyConstructorClass(bc_Class* self, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -230,7 +230,7 @@ struct bc_Constructor* bc_ILFindEmptyConstructorClass(bc_Class* self, Enviroment
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct bc_Method* bc_ILFindMethodClass(bc_Class* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindMethodClass(bc_Class* self, StringView namev, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -260,7 +260,7 @@ struct bc_Method* bc_GFindEqMethodClass(bc_Class* self, int* outIndex);
  * @param outIndex メソッドへのインデックス
  * @return
  */
-struct bc_Method* bc_ILFindSMethodClass(bc_Class* self, StringView namev, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindSMethodClass(bc_Class* self, StringView namev, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致する静的メソッドを返します.
@@ -314,11 +314,11 @@ struct bc_Method* bc_GetImplMethodClass(bc_Class* self, bc_Type* interType, int 
  * @param outIndex
  * @return
  */
-struct bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
-struct bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * @param self

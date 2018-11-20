@@ -14,7 +14,7 @@
 #include "../il_stmt_interface.h"
 #include "../../util/vector.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILWhile {
 	ILFactor* Condition;
@@ -25,9 +25,9 @@ ILStatement* WrapILWhile(ILWhile* self);
 
 ILWhile* NewILWhile();
 
-void GenerateILWhile(ILWhile* self, Enviroment* env, CallContext* cctx);
+void GenerateILWhile(ILWhile* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILWhile(ILWhile* self, Enviroment* env, CallContext* cctx);
+void LoadILWhile(ILWhile* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILWhile(ILWhile* self);
 #endif // !SIGNAL_IL_IL_STMT_WHILE_H

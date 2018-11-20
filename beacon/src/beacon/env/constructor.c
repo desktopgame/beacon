@@ -21,19 +21,19 @@ bc_Constructor * bc_NewConstructor() {
 	return ret;
 }
 
-bc_Object * bc_NewInstanceConstructor(bc_Constructor * self, Vector * args, Frame* parent) {
-	Frame* sub = SubFrame(parent);
+bc_Object * bc_NewInstanceConstructor(bc_Constructor * self, Vector * args, bc_Frame* parent) {
+	bc_Frame* sub = bc_SubFrame(parent);
 	for (int i = 0; i < args->Length; i++) {
 		PushVector(sub->ValueStack, AtVector(args, i));
 	}
-	ExecuteVM(sub, self->Env);
+	bc_ExecuteVM(sub, self->Env);
 	bc_Object* ret = PopVector(sub->ValueStack);
-	DeleteFrame(sub);
+	bc_DeleteFrame(sub);
 	return ret;
 }
 
 void bc_DeleteConstructor(bc_Constructor * self) {
-	DeleteEnviroment(self->Env);
+	bc_DeleteEnviroment(self->Env);
 	DeleteVector(self->Parameters, delete_parameter);
 	MEM_FREE(self);
 }

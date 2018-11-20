@@ -14,14 +14,14 @@
 
 //proto
 static void DeleteILInvokeBound_typeargs(VectorItem item);
-static void resolve_non_default(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
-static void resolve_default(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
-static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
+static void resolve_non_default(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
+static void resolve_default(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
+static void ILInvokeBound_check(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
 static void ILInvokeBound_args_delete(VectorItem item);
-static void GenerateILInvokeBound_method(ILInvokeBound* self, Enviroment* env, CallContext* cctx);
-static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env, CallContext* cctx);
+static void GenerateILInvokeBound_method(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx);
+static void GenerateILInvokeBound_subscript(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx);
 static bc_GenericType* ILInvokeBound_return_gtype(ILInvokeBound* self, CallContext* cctx);
-static bc_GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env, CallContext* cctx);
+static bc_GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
 
 ILInvokeBound* NewILInvokeBound(StringView namev) {
 	ILInvokeBound* ret = (ILInvokeBound*)MEM_MALLOC(sizeof(ILInvokeBound));
@@ -34,22 +34,22 @@ ILInvokeBound* NewILInvokeBound(StringView namev) {
 	return ret;
 }
 
-void GenerateILInvokeBound(ILInvokeBound* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInvokeBound(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx) {
 	GenerateILInvokeBound_method(self, env, cctx);
 	GenerateILInvokeBound_subscript(self, env, cctx);
 }
 
-void LoadILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
+void LoadILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx) {
 	ILInvokeBound_check(self, env, cctx);
 }
 
-bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx) {
 	bc_GenericType* ret = EvalILInvokeBoundImpl(self, env, cctx);
 	assert(ret != NULL);
 	return ret;
 }
 
-char* ILInvokeBoundToString(ILInvokeBound* self, Enviroment* env) {
+char* ILInvokeBoundToString(ILInvokeBound* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	AppendsBuffer(sb, Ref2Str(self->Name));
 	ILTypeArgsToString(sb, self->TypeArgs, env);
@@ -64,7 +64,7 @@ void DeleteILInvokeBound(ILInvokeBound* self) {
 	MEM_FREE(self);
 }
 
-bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->Tag == BOUND_INVOKE_SUBSCRIPT_T);
 	Vector* args = NewVector();
 	PushVector(args, ((ILArgument*)AtVector(self->Arguments, 0))->Factor);
@@ -81,7 +81,7 @@ static void DeleteILInvokeBound_typeargs(VectorItem item) {
 	DeleteILTypeArgument(e);
 }
 
-static void resolve_non_default(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
+static void resolve_non_default(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx) {
 	if(self->Resolved != NULL) {
 		return;
 	}
@@ -99,7 +99,7 @@ static void resolve_non_default(ILInvokeBound * self, Enviroment * env, CallCont
 	}
 }
 
-static void resolve_default(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
+static void resolve_default(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx) {
 	if(self->Resolved != NULL) {
 		return;
 	}
@@ -107,7 +107,7 @@ static void resolve_default(ILInvokeBound * self, Enviroment * env, CallContext*
 	self->Resolved = bc_ApplyGenericType(rgtp, cctx);
 }
 
-static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
+static void ILInvokeBound_check(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx) {
 	if(self->Index != -1) {
 		return;
 	}
@@ -137,7 +137,7 @@ static void ILInvokeBound_check(ILInvokeBound * self, Enviroment * env, CallCont
 	}
 	//添字アクセスとして解決する
 	bc_GenericType* receiver_gtype = NULL;
-	SymbolEntry* local = EntrySymbolTable(env->Symboles, NULL, self->Name);
+	bc_SymbolEntry* local = bc_EntrySymbolTable(env->Symboles, NULL, self->Name);
 	if(receiver_gtype == NULL && local != NULL) {
 		receiver_gtype = local->GType;
 		self->Kind.Subscript.Tag = SUBSCRIPT_LOCAL_T;
@@ -184,7 +184,7 @@ static void ILInvokeBound_args_delete(VectorItem item) {
 	DeleteILArgument(e);
 }
 
-static void GenerateILInvokeBound_method(ILInvokeBound* self, Enviroment* env, CallContext* cctx) {
+static void GenerateILInvokeBound_method(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx) {
 	assert(self->Tag != BOUND_INVOKE_UNDEFINED_T);
 	if(self->Tag != BOUND_INVOKE_METHOD_T) {
 		return;
@@ -192,7 +192,7 @@ static void GenerateILInvokeBound_method(ILInvokeBound* self, Enviroment* env, C
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
-		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->Arguments->Length; i++) {
@@ -203,22 +203,22 @@ static void GenerateILInvokeBound_method(ILInvokeBound* self, Enviroment* env, C
 		}
 	}
 	if(bc_IsStaticModifier(self->Kind.Method->Modifier)) {
-		AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
-		AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Method->Parent->AbsoluteIndex);
-		AddOpcodeBuf(env->Bytecode,(VectorItem) self->Index);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
+		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Method->Parent->AbsoluteIndex);
+		bc_AddOpcodeBuf(env->Bytecode,(VectorItem) self->Index);
 	} else {
-		AddOpcodeBuf(env->Bytecode,(VectorItem) OP_THIS);
+		bc_AddOpcodeBuf(env->Bytecode,(VectorItem) OP_THIS);
 		if(self->Kind.Method->Access == ACCESS_PRIVATE_T) {
-			AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESPECIAL);
-			AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
+			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESPECIAL);
+			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
 		} else {
-			AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKEVIRTUAL);
-			AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
+			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKEVIRTUAL);
+			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
 		}
 	}
 }
 
-static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env, CallContext* cctx) {
+static void GenerateILInvokeBound_subscript(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx) {
 	assert(self->Tag != BOUND_INVOKE_UNDEFINED_T);
 	if(self->Tag != BOUND_INVOKE_SUBSCRIPT_T) {
 		return;
@@ -226,7 +226,7 @@ static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
-		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->Arguments->Length; i++) {
@@ -238,19 +238,19 @@ static void GenerateILInvokeBound_subscript(ILInvokeBound* self, Enviroment* env
 	}
 	SubscriptDescriptor subs = self->Kind.Subscript;
 	if(subs.Tag == SUBSCRIPT_LOCAL_T) {
-		AddOpcodeBuf(env->Bytecode, OP_LOAD);
-		AddOpcodeBuf(env->Bytecode, subs.Index);
+		bc_AddOpcodeBuf(env->Bytecode, OP_LOAD);
+		bc_AddOpcodeBuf(env->Bytecode, subs.Index);
 	} else if(subs.Tag == SUBSCRIPT_FIELD_T) {
-		AddOpcodeBuf(env->Bytecode, OP_THIS);
-		GenerateGetField(env->Bytecode, subs.Kind.Field, subs.Index);
+		bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
+		bc_GenerateGetField(env->Bytecode, subs.Kind.Field, subs.Index);
 	} else if(subs.Tag == SUBSCRIPT_PROPERTY_T) {
-		AddOpcodeBuf(env->Bytecode, OP_THIS);
-		GenerateGetProperty(env->Bytecode, subs.Kind.Property, subs.Index);
+		bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
+		bc_GenerateGetProperty(env->Bytecode, subs.Kind.Property, subs.Index);
 	} else {
 		assert(false);
 	}
-	AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
-	AddOpcodeBuf(env->Bytecode, self->Index);
+	bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
+	bc_AddOpcodeBuf(env->Bytecode, self->Index);
 }
 
 static bc_GenericType* ILInvokeBound_return_gtype(ILInvokeBound* self, CallContext* cctx) {
@@ -260,7 +260,7 @@ static bc_GenericType* ILInvokeBound_return_gtype(ILInvokeBound* self, CallConte
 			self->Kind.Subscript.Operator->ReturnGType, cctx);
 }
 
-static bc_GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, Enviroment * env, CallContext* cctx) {
+static bc_GenericType* EvalILInvokeBoundImpl(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx) {
 	bc_Type* tp = NULL;
 	//メソッドが見つからない
 	ILInvokeBound_check(self, env, cctx);

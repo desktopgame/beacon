@@ -25,13 +25,13 @@ ILFactor* WrapILSubscript(ILSubscript* self);
 #define NewILSubscript() (MallocILSubscript(__FILE__, __LINE__))
 ILSubscript* MallocILSubscript(const char* filename, int lineno);
 
-void GenerateILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
+void GenerateILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
+void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILSubscript(ILSubscript* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILSubscriptToString(ILSubscript* self, Enviroment* env);
+char* ILSubscriptToString(ILSubscript* self, bc_Enviroment* env);
 
 void DeleteILSubscript(ILSubscript* self);
 #endif

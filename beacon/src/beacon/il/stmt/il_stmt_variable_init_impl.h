@@ -14,8 +14,8 @@
 #include "../../util/string_pool.h"
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
-struct Enviroment;
-struct SymbolEntry;
+struct bc_Enviroment;
+struct bc_SymbolEntry;
 /**
  * 変数の初期化を表す要素.
  */
@@ -23,7 +23,7 @@ typedef struct ILVariableInit {
 	bc_GenericCache* GCache;
 	StringView Name;
 	ILFactor* Value;
-	struct SymbolEntry* Symbol;
+	struct bc_SymbolEntry* Symbol;
 } ILVariableInit;
 
 /**
@@ -46,7 +46,7 @@ ILVariableInit* NewILVariableInit(StringView namev);
  * @param env
  * @param ccctx
  */
-void GenerateILVariableInit(ILVariableInit* self, Enviroment* env, CallContext* cctx);
+void GenerateILVariableInit(ILVariableInit* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を読み込みます.
@@ -54,7 +54,7 @@ void GenerateILVariableInit(ILVariableInit* self, Enviroment* env, CallContext* 
  * @param env
  * @param cctx
  */
-void LoadILVariableInit(ILVariableInit* self, Enviroment* env, CallContext* cctx);
+void LoadILVariableInit(ILVariableInit* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を開放します.

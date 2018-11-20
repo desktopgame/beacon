@@ -12,7 +12,7 @@
 #include "../../ast/operator_type.h"
 #include "../call_context.h"
 struct ILFactor;
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
 
 typedef struct ILExplicitBinaryOp {
@@ -26,11 +26,11 @@ struct ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self);
 
 ILExplicitBinaryOp* NewILExplicitBinaryOp(bc_OperatorType type);
 
-void GenerateILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILExplicitBinaryOp(ILExplicitBinaryOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILExplicitBinaryOp(ILExplicitBinaryOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-struct bc_GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, struct Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILExplicitBinaryOp(ILExplicitBinaryOp* self);
 #endif

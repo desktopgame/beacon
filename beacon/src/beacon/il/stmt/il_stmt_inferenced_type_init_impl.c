@@ -20,14 +20,14 @@ ILInferencedTypeInit * NewILInferencedTypeInit(StringView namev) {
 	return ret;
 }
 
-void GenerateILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, CallContext* cctx) {
+void GenerateILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, CallContext* cctx) {
 	//右辺の方で宣言する
 	GenerateILFactor(self->Value, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_STORE);
-	AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
+	bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
+	bc_AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
-void LoadILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, CallContext* cctx) {
+void LoadILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, CallContext* cctx) {
 	//代入するオブジェクトを計算
 	LoadILFactor(self->Value, env, cctx);
 	bc_GenericType* gtp = EvalILFactor(self->Value, env, cctx);
@@ -39,12 +39,12 @@ void LoadILInferencedTypeInit(ILInferencedTypeInit * self, Enviroment * env, Cal
 		return;
 	}
 	//変数を登録
-	if(IsContainsSymbol(env->Symboles, self->Name)) {
+	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->Name)
 		);
 	}
-	SymbolEntry* e = EntrySymbolTable(
+	bc_SymbolEntry* e = bc_EntrySymbolTable(
 		env->Symboles,
 		gtp,
 		self->Name

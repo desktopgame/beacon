@@ -108,7 +108,7 @@ bc_Type* bc_NewPreloadClass(StringView namev);
  * @param o
  * @param fr
  */
-void bc_AllocFieldsClass(bc_Class* self, struct bc_Object* o, Frame* fr);
+void bc_AllocFieldsClass(bc_Class* self, struct bc_Object* o, bc_Frame* fr);
 
 /**
  * 指定のオブジェクトに追加されたフィールドの一覧を開放します.
@@ -235,7 +235,7 @@ int bc_CountAllSMethodClass(bc_Class* self);
  * @param type_args
  * @return
  */
-struct bc_Object* bc_NewInstanceClass(bc_Class* self, Frame* fr, Vector* args, Vector* type_args);
+struct bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, Vector* args, Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

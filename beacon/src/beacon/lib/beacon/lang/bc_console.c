@@ -7,10 +7,10 @@
 #include "../../../env/generic_type.h"
 
 //proto
-static void bc_console_writeLine(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_console_write(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_console_readLine(bc_Method* parent, Frame* fr, Enviroment* env);
-static void bc_console_read(bc_Method* parent, Frame* fr, Enviroment* env);
+static void bc_console_writeLine(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_console_write(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_console_readLine(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
+static void bc_console_read(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
 void InitConsole() {
 	bc_Namespace* lang = bc_GetLangNamespace();
@@ -29,12 +29,12 @@ bc_Type* GetConsoleType() {
 }
 
 //private
-static void bc_console_writeLine(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_console_writeLine(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_console_write(parent, fr, env);
 	printf("\n");
 }
 
-static void bc_console_write(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_console_write(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	bc_Object* o = AtVector(fr->VariableTable, 1);
 	if (bc_IsIntValue(o)) {
 		printf("%d", bc_ObjectToInt(o));
@@ -53,13 +53,13 @@ static void bc_console_write(bc_Method* parent, Frame* fr, Enviroment* env) {
 	}
 }
 
-static void bc_console_read(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_console_read(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	char c = getchar();
 	bc_Object* o = (bc_Object*)NewChar(c);
 	PushVector(fr->ValueStack, o);
 }
 
-static void bc_console_readLine(bc_Method* parent, Frame* fr, Enviroment* env) {
+static void bc_console_readLine(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	char* s = bc_ReadLine();
 	bc_Object* o = (bc_Object*)NewString(s);
 	PushVector(fr->ValueStack, o);

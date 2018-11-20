@@ -14,7 +14,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int bc_MetaILCalcScore(Vector* params, Vector* ilargs, Enviroment* env, CallContext* cctx) {
+int bc_MetaILCalcScore(Vector* params, Vector* ilargs, bc_Enviroment* env, CallContext* cctx) {
 	assert(params->Length == ilargs->Length);
 	int score = 0;
 	bool illegal = false;
@@ -91,7 +91,7 @@ int bc_MetaGCalcScore(Vector* params, Vector* gargs) {
 	return score;
 }
 
-int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr) {
+int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, bc_Frame* fr) {
 	assert(params->Length == args->Length);
 	int score = 0;
 	bool illegal = false;
@@ -118,7 +118,7 @@ int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, Frame* fr)
 	return score;
 }
 
-bc_Method * bc_MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	return bc_MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
@@ -126,7 +126,7 @@ bc_Method* bc_MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gar
 	return bc_MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, Vector* method_vec, StringView namev, Vector * ilargs, Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, Vector* method_vec, StringView namev, Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	bc_Method* ret = NULL;
@@ -197,15 +197,15 @@ bc_Method* bc_MetaScopedGFindMethod(bc_Class* context, Vector* method_vec, Strin
 	return ret;
 }
 
-bc_Constructor* bc_MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	return bc_MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-bc_Constructor* bc_MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, Frame* fr, int* outIndex) {
+bc_Constructor* bc_MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, bc_Frame* fr, int* outIndex) {
 	return bc_MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* ilargs, Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;
@@ -239,7 +239,7 @@ bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, Vector* ctor_v
 	return ret;
 }
 
-bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, Frame* fr, int* outIndex) {
+bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, bc_Frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;

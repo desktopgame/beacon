@@ -22,22 +22,22 @@ ILInt * MallocILInt(int32_t i, const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILInt(ILInt * self, Enviroment* env, CallContext* cctx) {
+void GenerateILInt(ILInt * self, bc_Enviroment* env, CallContext* cctx) {
 	assert(self->Count == 0);
-	int index = AddCIntEnviroment(env, self->Value);
-	AddOpcodeBuf(env->Bytecode, OP_ICONST);
-	AddOpcodeBuf(env->Bytecode, index);
+	int index = bc_AddCIntEnviroment(env, self->Value);
+	bc_AddOpcodeBuf(env->Bytecode, OP_ICONST);
+	bc_AddOpcodeBuf(env->Bytecode, index);
 	self->Count++;
 }
 
-void LoadILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
+void LoadILInt(ILInt * self, bc_Enviroment * env, CallContext* cctx) {
 }
 
-bc_GenericType* EvalILInt(ILInt * self, Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILInt(ILInt * self, bc_Enviroment * env, CallContext* cctx) {
 	return BC_GENERIC_INT;
 }
 
-char* ILIntToString(ILInt* self, Enviroment* env) {
+char* ILIntToString(ILInt* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char block[32];
 	int res = sprintf(block, "%d", self->Value);

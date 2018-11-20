@@ -13,9 +13,9 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 struct bc_Type;
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_GenericType;
-struct Frame;
+struct bc_Frame;
 /**
  * 演算子オーバーロードを表す構造体.
  */
@@ -24,7 +24,7 @@ typedef struct bc_OperatorOverload {
 	struct bc_GenericType* ReturnGType;
 	bc_OperatorType Type;
 	Vector* Parameters;
-	struct Enviroment* Env;
+	struct bc_Enviroment* Env;
 	bc_AccessLevel Access;
 } bc_OperatorOverload;
 
@@ -41,7 +41,7 @@ bc_OperatorOverload* bc_NewOperatorOverload(bc_OperatorType type);
  * @param fr
  * @param env
  */
-void bc_ExecuteOperatorOverload(bc_OperatorOverload* self, struct Frame* fr, struct Enviroment* env);
+void bc_ExecuteOperatorOverload(bc_OperatorOverload* self, struct bc_Frame* fr, struct bc_Enviroment* env);
 
 /**
  * 演算子オーバーロードを解放します.

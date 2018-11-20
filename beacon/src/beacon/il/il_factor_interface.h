@@ -125,7 +125,7 @@ ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
  * @param env
  * @param cctx
  */
-void GenerateILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
+void GenerateILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 因子を読み込みます.
@@ -134,7 +134,7 @@ void GenerateILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
+void LoadILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * この因子が表す型を返します.
@@ -144,7 +144,7 @@ void LoadILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
  * @param cctx
  * @return
  */
-bc_GenericType* EvalILFactor(ILFactor* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * ファクターの文字列表現を返します.
@@ -153,19 +153,19 @@ bc_GenericType* EvalILFactor(ILFactor* self, Enviroment* env, CallContext* cctx)
  * @param ilctx
  * @return
  */
-char* ILFactorToString(ILFactor* self, Enviroment* env);
+char* ILFactorToString(ILFactor* self, bc_Enviroment* env);
 
 /**
  * @param sb
  * @param args
  */
-void ILArgsToString(Buffer* sb, Vector* args, Enviroment* env);
+void ILArgsToString(Buffer* sb, Vector* args, bc_Enviroment* env);
 
 /**
  * @param sb
  * @param type_args
  */
-void ILTypeArgsToString(Buffer* sb, Vector* type_args, Enviroment* env);
+void ILTypeArgsToString(Buffer* sb, Vector* type_args, bc_Enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

@@ -14,7 +14,7 @@
 
 struct ILBinaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 typedef struct ILLogicOp {
 	struct ILBinaryOp* Parent;
 	bc_OperatorType Type;
@@ -23,13 +23,13 @@ typedef struct ILLogicOp {
 
 ILLogicOp* NewILLogicOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void GenerateILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILLogicOp(ILLogicOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILLogicOp(ILLogicOp* self);
 
-char* ILLogicOpToString(ILLogicOp* self, struct Enviroment* env);
+char* ILLogicOpToString(ILLogicOp* self, struct bc_Enviroment* env);
 #endif

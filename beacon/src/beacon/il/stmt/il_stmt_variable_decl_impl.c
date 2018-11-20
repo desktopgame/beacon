@@ -21,17 +21,17 @@ ILVariableDecl * NewILVariableDecl(StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableDecl(ILVariableDecl * self, Enviroment * env, CallContext* cctx) {
+void GenerateILVariableDecl(ILVariableDecl * self, bc_Enviroment * env, CallContext* cctx) {
 
 }
 
-void LoadILVariableDecl(ILVariableDecl * self, Enviroment* env, CallContext* cctx) {
-	if(IsContainsSymbol(env->Symboles, self->Name)) {
+void LoadILVariableDecl(ILVariableDecl * self, bc_Enviroment* env, CallContext* cctx) {
+	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			Ref2Str(self->Name)
 		);
 	}
-	SymbolEntry* e = EntrySymbolTable(
+	bc_SymbolEntry* e = bc_EntrySymbolTable(
 		env->Symboles,
 		bc_ResolveImportManager(NULL, self->GCache, cctx),
 		self->Name

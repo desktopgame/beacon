@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include "../il_factor_interface.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 struct bc_Type;
 /**
  * boolリテラルを表す要素.
@@ -26,11 +26,11 @@ ILFactor* WrapILBool(ILBool* self);
 
 ILBool* NewILBool(bool b);
 
-void GenerateILBool(ILBool* self, Enviroment* env, CallContext* cctx);
+void GenerateILBool(ILBool* self, bc_Enviroment* env, CallContext* cctx);
 
-bc_GenericType* EvalILBool(ILBool* self, Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILBool(ILBool* self, bc_Enviroment* env, CallContext* cctx);
 
-char* ILBoolToString(ILBool* self, Enviroment* env);
+char* ILBoolToString(ILBool* self, bc_Enviroment* env);
 
 void DeleteILBool(ILBool* self);
 

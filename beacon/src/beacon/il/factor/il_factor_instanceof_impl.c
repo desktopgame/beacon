@@ -21,24 +21,24 @@ ILInstanceOf* NewILInstanceOf() {
 	return ret;
 }
 
-void LoadILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
+void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Source, env, cctx);
 }
 
-void GenerateILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx) {
 	bc_GenericType* gtype = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	bc_Type* type = gtype->CoreType;
 	GenerateILFactor(self->Source, env, cctx);
-	AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+	bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	bc_GenerateGenericType(gtype, env);
-	AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
+	bc_AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 }
 
-bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx) {
 	return BC_TYPE_BOOL->GenericSelf;
 }
 
-char* ILInstanceOfToString(ILInstanceOf* self, Enviroment* env) {
+char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* a = ILFactorToString(self->Source, env);
 	char* b = bc_GenericCacheToString(self->GCache);

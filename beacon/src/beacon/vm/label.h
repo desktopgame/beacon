@@ -15,27 +15,27 @@
  * goto の引数として使用します。
  * ジャンプ先が後方であるとき、これを使用して前方参照します。
  */
-typedef struct Label {
+typedef struct bc_Label {
 	int Cursor;
-} Label;
+} bc_Label;
 
 /**
  * ラベルを作成します.
  * @param cursor
  * @return
  */
-Label* NewLabel(int cursor);
+bc_Label* bc_NewLabel(int cursor);
 
 /**
  * ラベルを複製します.
  * @param src
  * @return
  */
-Label* CloneLabel(Label* src);
+bc_Label* bc_CloneLabel(bc_Label* src);
 
 /**
  * ラベルを開放します.
  * @param self
  */
-void DeleteLabel(Label* self);
+void bc_DeleteLabel(bc_Label* self);
 #endif // !SIGNAL_VM_LABEL_H

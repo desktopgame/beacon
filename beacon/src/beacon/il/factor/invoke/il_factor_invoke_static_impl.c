@@ -9,9 +9,9 @@
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx);
-static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx);
-static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx);
+static void resolve_non_default(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx);
+static void resolve_default(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx);
+static void ILInvokeStatic_check(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx);
 static void ILInvokeStatic_args_delete(VectorItem item);
 static void ILInvokeStatic_typeargs_delete(VectorItem item);
 
@@ -27,11 +27,11 @@ ILInvokeStatic* NewILInvokeStatic(StringView namev) {
 	return ret;
 }
 
-void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* cctx) {
+void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, CallContext* cctx) {
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
-		AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
+		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->Arguments->Length; i++) {
@@ -41,16 +41,16 @@ void GenerateILInvokeStatic(ILInvokeStatic* self, Enviroment* env, CallContext* 
 			return;
 		}
 	}
-	AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)self->Method->Parent->AbsoluteIndex);
-	AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESTATIC);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->Method->Parent->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->Index);
 }
 
-void LoadILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+void LoadILInvokeStatic(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx) {
 	ILInvokeStatic_check(self, env, cctx);
 }
 
-bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx) {
 	ILInvokeStatic_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(bc_GetLastPanic()) {
@@ -67,7 +67,7 @@ bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, Enviroment* env, CallC
 	return NULL;
 }
 
-char* ILInvokeStaticToString(ILInvokeStatic* self, Enviroment* env) {
+char* ILInvokeStaticToString(ILInvokeStatic* self, bc_Enviroment* env) {
 	Buffer* sb = NewBuffer();
 	char* name = bc_FQCNCacheToString(self->FQCN);
 	AppendsBuffer(sb, name);
@@ -87,7 +87,7 @@ void DeleteILInvokeStatic(ILInvokeStatic* self) {
 }
 //private
 //FIXME:ILInvokeからのコピペ
-static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+static void resolve_non_default(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx) {
 	if(self->Resolved != NULL) {
 		return;
 	}
@@ -98,7 +98,7 @@ static void resolve_non_default(ILInvokeStatic * self, Enviroment* env, CallCont
 	self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
 
-static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+static void resolve_default(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx) {
 	if(self->Resolved != NULL) {
 		return;
 	}
@@ -110,7 +110,7 @@ static void resolve_default(ILInvokeStatic * self, Enviroment* env, CallContext*
 	PopCallContext(cctx);
 }
 
-static void ILInvokeStatic_check(ILInvokeStatic * self, Enviroment* env, CallContext* cctx) {
+static void ILInvokeStatic_check(ILInvokeStatic * self, bc_Enviroment* env, CallContext* cctx) {
 	bc_Type* ty =GetEvalTypeCContext(cctx, self->FQCN);
 	if(ty == NULL) {
 		bc_Panic(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,

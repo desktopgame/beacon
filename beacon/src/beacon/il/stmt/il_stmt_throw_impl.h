@@ -12,7 +12,7 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILThrow {
 	ILFactor* Factor;
@@ -22,9 +22,9 @@ ILStatement* WrapILThrow(ILThrow* self);
 
 ILThrow* NewILThrow();
 
-void GenerateILThrow(ILThrow* self, Enviroment* env, CallContext* cctx);
+void GenerateILThrow(ILThrow* self, bc_Enviroment* env, CallContext* cctx);
 
-void LoadILThrow(ILThrow* self, Enviroment* env, CallContext* cctx);
+void LoadILThrow(ILThrow* self, bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILThrow(ILThrow* self);
 #endif

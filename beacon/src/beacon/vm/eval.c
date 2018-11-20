@@ -62,7 +62,7 @@ bool bc_EvalOp(const char* filename) {
 	bc_LoadClassLoader(cl);
 
 	if(!bc_GetLastPanic()) {
-		DumpEnviromentOp(cl->Env, 0);
+		bc_DumpEnviromentOp(cl->Env, 0);
 	}
 	bc_DeleteClassLoader(cl);
 	return true;
@@ -95,7 +95,7 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
 		bc_LoadPassASTClassLoader(cll, aOpt);
 	}
 	//実行
-	Frame* fr = NewFrame();
+	bc_Frame* fr = bc_NewFrame();
 	SetSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()), fr);
 	//エラーによって中断された場合のため、ここで戻す
 	bc_Heap* he = bc_GetHeap();
@@ -104,14 +104,14 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
 	bc_Printfln("start");
 #endif
 	if(!bc_GetLastPanic()) {
-		ExecuteVM(fr, cll->Env);
+		bc_ExecuteVM(fr, cll->Env);
 	}
 	if(fr->IsTerminate) {
 		bc_Panic(BCERROR_GENERIC_T, "unexpected terminate");
 	}
-	CatchVM(fr);
+	bc_CatchVM(fr);
 	bc_CollectHeap(bc_GetHeap());
-	DeleteFrame(fr);
+	bc_DeleteFrame(fr);
 	ReleaseSGThreadFrameRef(GetCurrentSGThread(bc_GetCurrentScriptContext()));
 
 	bool ret = bc_GetLastPanic();

@@ -38,7 +38,7 @@ ILProc* NewILProc();
  * @param env
  * @param cctx
  */
-void GenerateILProc(ILProc* self, Enviroment* env, CallContext* cctx);
+void GenerateILProc(ILProc* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 式のみで構成される文を読み込みます.
@@ -46,7 +46,7 @@ void GenerateILProc(ILProc* self, Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILProc(ILProc* self, Enviroment* env, CallContext* cctx);
+void LoadILProc(ILProc* self, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 式のみで構成される文を表す要素を開放します.

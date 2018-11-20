@@ -13,7 +13,7 @@
 #include "../../call_context.h"
 struct ILBinaryOp;
 struct bc_GenericType;
-struct Enviroment;
+struct bc_Enviroment;
 
 typedef struct ILExcorOp {
 	struct ILBinaryOp* Parent;
@@ -23,13 +23,13 @@ typedef struct ILExcorOp {
 
 ILExcorOp* NewILExcorOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILExcorOp(ILExcorOp * self, struct Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILExcorOp(ILExcorOp * self, struct bc_Enviroment * env, CallContext* cctx);
 
-void GenerateILExcorOp(ILExcorOp* self, struct Enviroment* env, CallContext* cctx);
+void GenerateILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
-void LoadILExcorOp(ILExcorOp* self, struct Enviroment* env, CallContext* cctx);
+void LoadILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, CallContext* cctx);
 
 void DeleteILExcorOp(ILExcorOp* self);
 
-char* ILExcorOpToString(ILExcorOp* self, struct Enviroment* env);
+char* ILExcorOpToString(ILExcorOp* self, struct bc_Enviroment* env);
 #endif
