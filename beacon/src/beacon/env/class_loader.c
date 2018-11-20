@@ -53,7 +53,7 @@ static bc_ClassLoader* load_special_class(bc_ClassLoader* self, bc_ClassLoader* 
 static void load_toplevel(bc_ClassLoader* self);
 static void link_all(bc_ClassLoader* self);
 static void load_toplevel_function(bc_ClassLoader* self);
-static bool check_parser_error(Parser* p);
+static bool check_parser_error(bc_Parser* p);
 
 bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type) {
 	bc_ClassLoader* ret = (bc_ClassLoader*)MEM_MALLOC(sizeof(bc_ClassLoader));
@@ -73,13 +73,13 @@ bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type) {
 
 void bc_LoadClassLoader(bc_ClassLoader * self) {
 	//ASTを読み込む
-	Parser* p = ParseFile(self->FileName);
+	bc_Parser* p = bc_ParseFile(self->FileName);
 	//解析に失敗した場合
 	if (check_parser_error(p)) {
 		return;
 	}
-	bc_AST* a = ReleaseParserAST(p);
-	DestroyParser(p);
+	bc_AST* a = bc_ReleaseParserAST(p);
+	bc_DestroyParser(p);
 	bc_LoadPassASTClassLoader(self, a);
 }
 
@@ -161,13 +161,13 @@ static void delete_cache(bc_VectorItem item) {
 static bc_ClassLoader* load_special_class(bc_ClassLoader* self, bc_ClassLoader* cll, char* full_path) {
 	cll = CLBC_import_new(self, full_path);
 	//parser
-	Parser* p = ParseFile(full_path);
+	bc_Parser* p = bc_ParseFile(full_path);
 	if(check_parser_error(p)) {
 		return cll;
 	}
 	//ASTをclassloaderへ
-	cll->SourceCode = ReleaseParserAST(p);
-	DestroyParser(p);
+	cll->SourceCode = bc_ReleaseParserAST(p);
+	bc_DestroyParser(p);
 	//AST -> IL へ
 	ILLoadClassLoader(cll, cll->SourceCode);
 	if (bc_GetLastPanic()) { return cll; }
@@ -287,14 +287,14 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 	}
 }
 
-static bool check_parser_error(Parser* p) {
+static bool check_parser_error(bc_Parser* p) {
 	if(p->Result == PARSE_SYNTAX_ERROR_T) {
 		bc_Panic(BCERROR_PARSE_T, p->ErrorMessage);
-		DestroyParser(p);
+		bc_DestroyParser(p);
 		return true;
 	} else if(p->Result == PARSE_OPEN_ERROR_T) {
 		bc_Panic(BCERROR_REQUIRE_NOT_FOUND_T, p->SourceName);
-		DestroyParser(p);
+		bc_DestroyParser(p);
 		return true;
 	}
 	return false;

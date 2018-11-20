@@ -12,7 +12,7 @@ static bc_ModifierType ast_to_modifier(bc_AST* self, bool* error);
 static void delete_ast_self(bc_VectorItem item);
 
 void bc_CompileEntryAST(bc_AST* self) {
-	Parser* p = GetCurrentParser();
+	bc_Parser* p = bc_GetCurrentParser();
 	bc_PushAST(p->Root, self);
 }
 
@@ -22,7 +22,7 @@ bc_AST* bc_MallocAST(bc_ASTTag tag, const char* filename, int lineno) {
 	ret->Tag = tag;
 	ret->Children = NULL;
 	//行番号を取得
-	Parser* p = GetCurrentParser();
+	bc_Parser* p = bc_GetCurrentParser();
 	if (p != NULL) {
 		ret->Lineno = p->Lineno;
 		assert(p->Lineno >= 0);
@@ -108,7 +108,7 @@ bc_AST* bc_PushAST(bc_AST* self, bc_AST* achild) {
 	}
 	bc_PushVector(self->Children, achild);
 	//行番号を補正
-	Parser* p = GetCurrentParser();
+	bc_Parser* p = bc_GetCurrentParser();
 	if (p != NULL) {
 		if (!bc_IsEmptyVector(p->LinenoTable)) {
 			int lineno = (int)bc_PopVector(p->LinenoTable);

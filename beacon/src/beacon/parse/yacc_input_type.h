@@ -13,8 +13,8 @@
 /**
  * Yacc/Bisonの入力タイプを表す列挙型.
  */
-typedef enum YaccInputType {
+typedef enum bc_YaccInputType {
 	YINPUT_FILE_T,
 	YINPUT_STRING_T
-} YaccInputType;
+} bc_YaccInputType;
 #endif // !SIGNAL_PARSE_YACC_INPU_TYPE_H

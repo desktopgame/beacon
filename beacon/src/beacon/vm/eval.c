@@ -74,15 +74,15 @@ bool bc_EvalFile(const char * filename) {
 }
 
 bool bc_EvalString(const char* source) {
-	Parser* p = ParseString(source);
+	bc_Parser* p = bc_ParseString(source);
 	if (p->Result != PARSE_COMPLETE_T) {
 		bc_Panic(BCERROR_PARSE_T, p->ErrorMessage);
-		DestroyParser(p);
+		bc_DestroyParser(p);
 		return false;
 	}
 	bc_ClassLoader* cll = bc_NewClassLoader("", CONTENT_ENTRY_POINT_T);
-	bc_AST* a = ReleaseParserAST(p);
-	DestroyParser(p);
+	bc_AST* a = bc_ReleaseParserAST(p);
+	bc_DestroyParser(p);
 	return eval_top_from_cll(cll, a);
 }
 

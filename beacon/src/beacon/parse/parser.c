@@ -10,10 +10,10 @@
 #pragma warning(disable:4996)
 #endif
 
-static Parser* parser_new();
-static Parser* gParser;
+static bc_Parser* parser_new();
+static bc_Parser* gParser;
 
-Parser* ParseString(const char* source) {
+bc_Parser* bc_ParseString(const char* source) {
 	assert(gParser == NULL);
 	extern void yy_setstr(char *source);
 	extern void yy_clearstr();
@@ -25,7 +25,7 @@ Parser* ParseString(const char* source) {
 	if (yyparse()) {
 		yy_clearstr();
 		gParser->Result = PARSE_SYNTAX_ERROR_T;
-		RelocationParserError(gParser);
+		bc_RelocationParserError(gParser);
 		return gParser;
 	}
 	yy_clearstr();
@@ -33,7 +33,7 @@ Parser* ParseString(const char* source) {
 	return gParser;
 }
 
-Parser* ParseFile(const char* filename) {
+bc_Parser* bc_ParseFile(const char* filename) {
 	assert(gParser == NULL);
 	extern void yy_setstr(char *source);
 	extern int yyparse(void);
@@ -50,18 +50,18 @@ Parser* ParseFile(const char* filename) {
 	}
 	if (yyparse()) {
 		gParser->Result = PARSE_SYNTAX_ERROR_T;
-		RelocationParserError(gParser);
+		bc_RelocationParserError(gParser);
 		return gParser;
 	}
 	gParser->Result = PARSE_COMPLETE_T;
 	return gParser;
 }
 
-Parser* GetCurrentParser() {
+bc_Parser* bc_GetCurrentParser() {
 	return gParser;
 }
 
-void DestroyParser(Parser* self) {
+void bc_DestroyParser(bc_Parser* self) {
 	assert(gParser != NULL);
 	if (gParser->Root) {
 		bc_DeleteAST(gParser->Root);
@@ -73,18 +73,18 @@ void DestroyParser(Parser* self) {
 	gParser =  NULL;
 }
 
-void ClearParserBuffer(Parser* self) {
+void bc_ClearParserBuffer(bc_Parser* self) {
 	self->LiteralBuffer = NULL;
 }
 
-void AppendParserBuffer(Parser* self, char ch) {
+void bc_AppendParserBuffer(bc_Parser* self, char ch) {
 	if (self->LiteralBuffer == NULL) {
 		self->LiteralBuffer = bc_NewBuffer();
 	}
 	bc_AppendBuffer(self->LiteralBuffer, ch);
 }
 
-bc_AST* ReduceParserBuffer(Parser* self) {
+bc_AST* bc_ReduceParserBuffer(bc_Parser* self) {
 	//""のような空文字の場合
 	if (self->LiteralBuffer == NULL) {
 		return bc_NewASTString(bc_InternString(""));
@@ -94,21 +94,21 @@ bc_AST* ReduceParserBuffer(Parser* self) {
 	return ret;
 }
 
-bc_AST* ReleaseParserAST(Parser* self) {
+bc_AST* bc_ReleaseParserAST(bc_Parser* self) {
 	bc_AST* ret = self->Root;
 	self->Root = NULL;
 	return ret;
 }
 
-void RelocationParserError(Parser* p) {
+void bc_RelocationParserError(bc_Parser* p) {
 	bc_SetPanicFile(p->SourceName);
 	bc_SetPanicLine(p->ErrorLineIndex);
 	bc_SetPanicColumn(p->ErrorColumnIndex);
 }
 
 //private
-static Parser* parser_new() {
-	Parser* ret = MEM_MALLOC(sizeof(Parser));
+static bc_Parser* parser_new() {
+	bc_Parser* ret = MEM_MALLOC(sizeof(bc_Parser));
 	assert(gParser == NULL);
 	gParser = ret;
 	ret->SourceName = NULL;

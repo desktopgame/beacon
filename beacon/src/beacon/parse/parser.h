@@ -20,17 +20,17 @@
 /**
  * 解析の結果を表す構造体.
  */
-typedef enum ParseResult {
+typedef enum bc_ParseResult {
 	PARSE_AWAIT_T = -1,
 	PARSE_COMPLETE_T = 0,
 	PARSE_OPEN_ERROR_T,
 	PARSE_SYNTAX_ERROR_T
-} ParseResult;
+} bc_ParseResult;
 
 /**
  * Yacc/Bisonの解析結果を保存する構造体です.
  */
-typedef struct Parser {
+typedef struct bc_Parser {
 	bc_AST* Root;
 	bc_Buffer* LiteralBuffer;
 	//char* source;
@@ -39,11 +39,11 @@ typedef struct Parser {
 	char* ErrorMessage;
 	int ErrorLineIndex;
 	int ErrorColumnIndex;
-	YaccInputType InputType;
-	ParseResult Result;
+	bc_YaccInputType InputType;
+	bc_ParseResult Result;
 	int Lineno;
 	bc_Vector* LinenoTable;
-} Parser;
+} bc_Parser;
 
 /**
  * 文字列を入力として構文解析を実行します.
@@ -51,7 +51,7 @@ typedef struct Parser {
  * @param source
  * @return
  */
-Parser* ParseString(const char* source);
+bc_Parser* bc_ParseString(const char* source);
 
 /**
  * ファイルを入力として構文解析を実行します.
@@ -59,39 +59,39 @@ Parser* ParseString(const char* source);
  * @param source
  * @return
  */
-Parser* ParseFile(const char* filename);
+bc_Parser* bc_ParseFile(const char* filename);
 
 /**
  * 現在のパーサーを返します.
  * @return
  */
-Parser* GetCurrentParser();
+bc_Parser* bc_GetCurrentParser();
 
 /**
  * エラー情報とASTを解放します.
  * @param self
  */
-void DestroyParser(Parser* self);
+void bc_DestroyParser(bc_Parser* self);
 
 /**
  * 文字列バッファーをクリアします.
  * @param self
  */
-void ClearParserBuffer(Parser* self);
+void bc_ClearParserBuffer(bc_Parser* self);
 
 /**
  * 文字列バッファーに一文字加算します.
  * @param self
  * @return
  */
-void AppendParserBuffer(Parser* self, char ch);
+void bc_AppendParserBuffer(bc_Parser* self, char ch);
 
 /**
  * 文字列バッファーをリテラルノードへ還元します.
  * @param self
  * @return
  */
-bc_AST* ReduceParserBuffer(Parser* self);
+bc_AST* bc_ReduceParserBuffer(bc_Parser* self);
 
 /**
  * パーサーからASTを取り上げて解放させないようにします.
@@ -99,11 +99,11 @@ bc_AST* ReduceParserBuffer(Parser* self);
  * @param self
  * @return
  */
-bc_AST* ReleaseParserAST(Parser* self);
+bc_AST* bc_ReleaseParserAST(bc_Parser* self);
 
 /**
  * エラー発生位置を設定します.
  * @param p
  */
-void RelocationParserError(Parser* p);
+void bc_RelocationParserError(bc_Parser* p);
 #endif // !SIGNAL_PARSE_PARSER_H
