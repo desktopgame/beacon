@@ -5,31 +5,31 @@
 #include <string.h>
 
 static bc_Vector* gThreads = NULL;
-static NativeMutex gThreadsMTX;
-static void mount_thread(NativeThread* self);
-static void unmount_thread(NativeThread* self);
+static bc_NativeMutex gThreadsMTX;
+static void mount_thread(bc_NativeThread* self);
+static void unmount_thread(bc_NativeThread* self);
 
-void InitNativeThread() {
+void bc_InitNativeThread() {
 	assert(gThreads == NULL);
 	gThreads = bc_NewVector();
-	InitNativeMutex(&gThreadsMTX);
+	bc_InitNativeMutex(&gThreadsMTX);
 	//最初のスレッドを作成
-	NativeThread* main = AllocNativeThread(NULL, NULL);
+	bc_NativeThread* main = bc_AllocNativeThread(NULL, NULL);
 	main->t = pthread_self();
 	mount_thread(main);
 }
 
-NativeThread* AllocNativeThread(Runnable runnable, ThreadStartArgument arg) {
-	NativeThread* ret = (NativeThread*)MEM_MALLOC(sizeof(NativeThread));
-	memset((void*)ret, 0, sizeof(NativeThread));
+bc_NativeThread* bc_AllocNativeThread(bc_Runnable runnable, bc_ThreadStartArgument arg) {
+	bc_NativeThread* ret = (bc_NativeThread*)MEM_MALLOC(sizeof(bc_NativeThread));
+	memset((void*)ret, 0, sizeof(bc_NativeThread));
 	ret->Runnable = runnable;
 	ret->Arg = arg;
 	return ret;
 }
 
-int StartNativeThread(Runnable runnable, ThreadStartArgument arg, NativeThread** outNativeThread) {
+int bc_StartNativeThread(bc_Runnable runnable, bc_ThreadStartArgument arg, bc_NativeThread** outNativeThread) {
 	assert(gThreads != NULL);
-	NativeThread* nt = AllocNativeThread(runnable, arg);
+	bc_NativeThread* nt = bc_AllocNativeThread(runnable, arg);
 	(*outNativeThread) = nt;
 	mount_thread(nt);
 
@@ -40,7 +40,7 @@ int StartNativeThread(Runnable runnable, ThreadStartArgument arg, NativeThread**
 	#endif
 }
 
-void InitNativeMutex(NativeMutex * mtx) {
+void bc_InitNativeMutex(bc_NativeMutex * mtx) {
 	#if defined(USE_PTHREAD)
 	pthread_mutex_init(mtx, NULL);
 	#elif defined(USE_WINTHREAD)
@@ -48,7 +48,7 @@ void InitNativeMutex(NativeMutex * mtx) {
 	#endif
 }
 
-void NativeMutexEnter(NativeMutex * mtx) {
+void bc_NativeMutexEnter(bc_NativeMutex * mtx) {
 	#if defined(USE_PTHREAD)
 	pthread_mutex_lock(mtx);
 	#elif defined(USE_WINTHREAD)
@@ -56,7 +56,7 @@ void NativeMutexEnter(NativeMutex * mtx) {
 	#endif
 }
 
-void NativeMutexExit(NativeMutex * mtx) {
+void bc_NativeMutexExit(bc_NativeMutex * mtx) {
 	#if defined(USE_PTHREAD)
 	pthread_mutex_unlock(mtx);
 	#elif defined(USE_WINTHREAD)
@@ -64,7 +64,7 @@ void NativeMutexExit(NativeMutex * mtx) {
 	#endif
 }
 
-void DestroyNativeMutex(NativeMutex * mtx) {
+void bc_DestroyNativeMutex(bc_NativeMutex * mtx) {
 	#if defined(USE_PTHREAD)
 	pthread_mutex_destroy(mtx);
 	#elif defined(USE_WINTHREAD)
@@ -72,7 +72,7 @@ void DestroyNativeMutex(NativeMutex * mtx) {
 	#endif
 }
 
-unsigned int NativeSleep(unsigned int seconds) {
+unsigned int bc_NativeSleep(unsigned int seconds) {
 	#if defined(USE_PTHREAD)
 	return sleep(seconds);
 	#elif defined(USE_WINTHREAD)
@@ -81,7 +81,7 @@ unsigned int NativeSleep(unsigned int seconds) {
 	#endif
 }
 
-void JoinNativeThread(NativeThread* self) {
+void bc_JoinNativeThread(bc_NativeThread* self) {
 	assert(self != NULL);
 	#if defined(USE_PTHREAD)
 	pthread_join(self->t, NULL);
@@ -90,8 +90,8 @@ void JoinNativeThread(NativeThread* self) {
 	#endif
 }
 
-void DetachNativeThread(NativeThread** self) {
-	NativeThread* data = (*self);
+void bc_DetachNativeThread(bc_NativeThread** self) {
+	bc_NativeThread* data = (*self);
 	assert(data != NULL);
 	unmount_thread(data);
 
@@ -105,19 +105,19 @@ void DetachNativeThread(NativeThread** self) {
 	#endif
 }
 
-NativeThread* GetNativeThreadAt(int index) {
-	return (NativeThread*)bc_AtVector(gThreads, index);
+bc_NativeThread* bc_GetNativeThreadAt(int index) {
+	return (bc_NativeThread*)bc_AtVector(gThreads, index);
 }
 
-NativeThread* GetMainThread() {
-	return GetNativeThreadAt(0);
+bc_NativeThread* bc_GetMainThread() {
+	return bc_GetNativeThreadAt(0);
 }
 
-NativeThread* GetActiveThread() {
+bc_NativeThread* bc_GetActiveThread() {
 	#if defined(USE_PTHREAD)
 	pthread_t self = pthread_self();
 	for(int i=0; i<gThreads->Length; i++) {
-		NativeThread* th = (NativeThread*)bc_AtVector(gThreads, i);
+		bc_NativeThread* th = (bc_NativeThread*)bc_AtVector(gThreads, i);
 		pthread_t other = th->t;
 		if(pthread_equal(self, other)) {
 			return th;
@@ -127,33 +127,33 @@ NativeThread* GetActiveThread() {
 	return NULL;
 }
 
-int GetNativeThreadCount() {
+int bc_GetNativeThreadCount() {
 	return gThreads->Length;
 }
 
-void DestroyNativeThread() {
+void bc_DestroyNativeThread() {
 	assert(gThreads != NULL);
 	while(gThreads->Length > 0) {
-		NativeThread* nt = (NativeThread*)bc_AtVector(gThreads, 0);
-		DetachNativeThread(&nt);
+		bc_NativeThread* nt = (bc_NativeThread*)bc_AtVector(gThreads, 0);
+		bc_DetachNativeThread(&nt);
 	}
 	bc_DeleteVector(gThreads, bc_VectorDeleterOfNull);
-	DestroyNativeMutex(&gThreadsMTX);
+	bc_DestroyNativeMutex(&gThreadsMTX);
 }
 //private
-static void mount_thread(NativeThread* self) {
-	NativeMutexEnter(&gThreadsMTX);
+static void mount_thread(bc_NativeThread* self) {
+	bc_NativeMutexEnter(&gThreadsMTX);
 	{
 		self->Index = gThreads->Length;
 		bc_PushVector(gThreads, self);
 	}
-	NativeMutexExit(&gThreadsMTX);
+	bc_NativeMutexExit(&gThreadsMTX);
 }
 
-static void unmount_thread(NativeThread* self) {
-	NativeMutexEnter(&gThreadsMTX);
+static void unmount_thread(bc_NativeThread* self) {
+	bc_NativeMutexEnter(&gThreadsMTX);
 	{
 		bc_RemoveVector(gThreads, bc_FindVector(gThreads, self));
 	}
-	NativeMutexExit(&gThreadsMTX);
+	bc_NativeMutexExit(&gThreadsMTX);
 }

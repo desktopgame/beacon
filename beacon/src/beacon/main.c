@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 	//_CrtSetBreakAlloc(36862);
 #endif
 bc_InitMX();
-	InitNativeThread();
+	bc_InitNativeThread();
 	bc_InitStringPool();
 	HideILPrintLayout(true);
 	//mem_break(16066);
@@ -89,7 +89,7 @@ bc_InitMX();
 	//設定を元に戻す
 	//DumpStringPool(stdout);
 	bc_DestroyStringPool();
-	DestroyNativeThread();
+	bc_DestroyNativeThread();
 bc_DestroyMX();
 #if defined(_MSC_VER) && defined(DEBUG)
 	_CrtDumpMemoryLeaks();
