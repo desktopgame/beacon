@@ -7,7 +7,7 @@
 #include "../../../vm/frame.h"
 #include "../../../env/field.h"
 #include "../../../env/heap.h"
-#include "bc_array.h"
+#include "array.h"
 #include <string.h>
 #include <assert.h>
 //proto
@@ -73,9 +73,9 @@ static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Envirome
 		}
 	} while (temp != NULL);
 	//配列へ
-	bc_Object* arr = DynamicNewArray(stackTraceElementClass->Parent->GenericSelf, stackTraceElementVec->Length, fr);
+	bc_Object* arr = bc_DynamicNewArray(stackTraceElementClass->Parent->GenericSelf, stackTraceElementVec->Length, fr);
 	for (int i = 0; i < stackTraceElementVec->Length; i++) {
-		SetElementAt(arr, i, bc_AtVector(stackTraceElementVec, i));
+		bc_SetElementAt(arr, i, bc_AtVector(stackTraceElementVec, i));
 	}
 	//Exception#stackTraceをここで初期化する
 	int tempi = 0;

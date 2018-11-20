@@ -17,9 +17,9 @@ bc_Object* NewString(const char* str) {
 	//ret->VPtr = GetVTableType(TYPE_STRING);
 
 	//配列を生成
-	bc_Object* arr = NewArray(strlen(str), BC_GENERIC_CHAR);
+	bc_Object* arr = bc_NewArray(strlen(str), BC_GENERIC_CHAR);
 	//arr->Tag = OBJECT_ARRAY_T;
-	bc_Type* arrType = GetArrayType();
+	bc_Type* arrType = bc_GetArrayType();
 	bc_Type* strType = bc_FindTypeFromNamespace(bc_GetLangNamespace(), bc_InternString("String"));
 	//arr->GType = NewGenericType(arrType);
 	//arr->VPtr = GetVTableType(arrType);
@@ -33,7 +33,7 @@ bc_Object* NewString(const char* str) {
 		if(c == '\0') {
 			break;
 		}
-		SetElementAt((bc_Object*)arr, i, (bc_Object*)NewChar(c));
+		bc_SetElementAt((bc_Object*)arr, i, (bc_Object*)NewChar(c));
 		bc_AppendBuffer(sb, c);
 	}
 	bc_ShrinkBuffer(sb);
@@ -99,7 +99,7 @@ static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment*
 	//String#charArrayを取得
 	int temp = 0;
 	bc_FindFieldClass(BC_TYPE_STRING->Kind.Class, bc_InternString("charArray"), &temp);
-	Array* charArr = (Array*)bc_AtVector(self->Fields, temp);
+	bc_Array* charArr = (bc_Array*)bc_AtVector(self->Fields, temp);
 	//これを char* へ変換
 	bc_Buffer* sb = bc_NewBuffer();
 	for (int i = 0; i < charArr->Elements->Length; i++) {

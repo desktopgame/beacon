@@ -20,7 +20,7 @@
 #include "beacon/lang/bc_bool.h"
 #include "beacon/lang/bc_void.h"
 #include "beacon/lang/bc_console.h"
-#include "beacon/lang/bc_array.h"
+#include "beacon/lang/array.h"
 #include "beacon/lang/bc_null.h"
 #include "beacon/lang/bc_exception.h"
 #include "beacon/lang/unsafe/bc_file.h"

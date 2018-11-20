@@ -65,7 +65,7 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
 	bc_Namespace* unsafe = bc_AddNamespaceNamespace(beacon, bc_InternString("unsafe"));
 	bc_Namespace* placeholder = bc_CreateNamespaceAtRoot(bc_InternString("$placeholder"));
 	InitObject();
-	InitArray();
+	bc_InitArray();
 	InitException();
 	InitInt();
 	InitDouble();

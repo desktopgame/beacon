@@ -18,7 +18,7 @@
 #include "../env/operator_overload.h"
 #include "../env/property.h"
 #include "../env/coroutine.h"
-#include "../lib/beacon/lang/bc_array.h"
+#include "../lib/beacon/lang/array.h"
 #include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/string_buffer.h"
@@ -1281,9 +1281,9 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
 	int lineIndexptr = -1;
 	bc_FindFieldClass(stackTraceElementT->Kind.Class, bc_InternString("fileName"), &fileNameptr);
 	bc_FindFieldClass(stackTraceElementT->Kind.Class, bc_InternString("lineIndex"), &lineIndexptr);
-	int stackLen = GetArrayLength(stackTraceObj);
+	int stackLen = bc_GetArrayLength(stackTraceObj);
 	for(int i=0; i<stackLen; i++) {
-		bc_Object* e = GetElementAt(stackTraceObj, i);
+		bc_Object* e = bc_GetElementAt(stackTraceObj, i);
 		bc_Object* fileNameObj = bc_AtVector(e->Fields, fileNameptr);
 		bc_Object* lineIndexObj = bc_AtVector(e->Fields, lineIndexptr);
 		sprintf(block, "    @%d: %s\n", bc_ObjectToInt(lineIndexObj), GetRawString(fileNameObj)->Text);

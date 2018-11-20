@@ -1,4 +1,4 @@
-#include "bc_array.h"
+#include "array.h"
 #include "../../bc_library_interface.h"
 #include "../../bc_library_impl.h"
 #include "../../../env/field.h"
@@ -17,11 +17,11 @@ static void bc_array_nativeGet(bc_Method* parent, bc_Frame* fr, bc_Enviroment* e
 static void bc_array_nativeCopy(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 static void delete_self(bc_VectorItem item);
 
-bc_Object* NewArray(int size, bc_GenericType* element_type) {
+bc_Object* bc_NewArray(int size, bc_GenericType* element_type) {
 	//Array[T]を作成する
-	bc_GenericType* array_type = bc_NewGenericType(GetArrayType());
+	bc_GenericType* array_type = bc_NewGenericType(bc_GetArrayType());
 	bc_AddArgsGenericType(array_type, element_type);
-	Array* ret = bc_ConstructObject(sizeof(Array), array_type);
+	bc_Array* ret = bc_ConstructObject(sizeof(bc_Array), array_type);
 	ret->Super.OnMessage = handle_obj_message;
 	ret->Elements = bc_NewVector();
 	for(int i=0; i<size; i++) {
@@ -30,11 +30,11 @@ bc_Object* NewArray(int size, bc_GenericType* element_type) {
 	return (bc_Object*)ret;
 }
 
-void InitArray() {
+void bc_InitArray() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	bc_Type* arrayType = bc_NewPreloadClass(bc_InternString("Array"));
 	bc_Class* arrayClass = BC_TYPE2CLASS(arrayType);
-	arrayType->AllocSize = sizeof(Array);
+	arrayType->AllocSize = sizeof(bc_Array);
 	bc_AddTypeNamespace(lang, arrayType);
 	bc_DefineNativeMethodClass(arrayClass, "nativeInit", bc_array_nativeInit);
 	bc_DefineNativeMethodClass(arrayClass, "nativeSet", bc_array_nativeSet);
@@ -42,13 +42,13 @@ void InitArray() {
 	bc_DefineNativeMethodClass(arrayClass, "nativeCopy", bc_array_nativeCopy);
 }
 
-bc_Type* GetArrayType() {
+bc_Type* bc_GetArrayType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	return bc_FindTypeFromNamespace(lang, bc_InternString("Array"));
 }
 
-bc_Object * DynamicNewArray(struct bc_GenericType* gtype, int length, bc_Frame* fr) {
-	bc_Type* arrayType = GetArrayType();
+bc_Object * bc_DynamicNewArray(struct bc_GenericType* gtype, int length, bc_Frame* fr) {
+	bc_Type* arrayType = bc_GetArrayType();
 
 	bc_Vector* args = bc_NewVector();
 	bc_Vector* type_args = bc_NewVector();
@@ -61,16 +61,16 @@ bc_Object * DynamicNewArray(struct bc_GenericType* gtype, int length, bc_Frame* 
 	return ret;
 }
 
-#define ARRAY_VALUE(obj) (((Array*)obj)->Elements)
-void SetElementAt(bc_Object * arr, int index, bc_Object * o) {
+#define ARRAY_VALUE(obj) (((bc_Array*)obj)->Elements)
+void bc_SetElementAt(bc_Object * arr, int index, bc_Object * o) {
 	bc_AssignVector(ARRAY_VALUE(arr), index, o);
 }
 
-bc_Object * GetElementAt(bc_Object * arr, int index) {
+bc_Object * bc_GetElementAt(bc_Object * arr, int index) {
 	return (bc_Object*)bc_AtVector(ARRAY_VALUE(arr), index);
 }
 
-int GetArrayLength(bc_Object* arr) {
+int bc_GetArrayLength(bc_Object* arr) {
 	//assert(arr->tag == OBJECT_ARRAY_T);
 	return ARRAY_VALUE(arr)->Length;
 }
@@ -111,7 +111,7 @@ static void bc_array_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* 
 	bc_Field* lengthField = bc_FindFieldClass(tp->Kind.Class, bc_InternString("length"), &temp);
 	assert(lengthField != NULL && temp != -1);
 	//対応する位置のオブジェクトを取り出す
-	Array* self = (Array*)bc_AtVector(fr->VariableTable, 0);
+	bc_Array* self = (bc_Array*)bc_AtVector(fr->VariableTable, 0);
 	bc_Object* lengthObj = bc_AtVector(self->Super.Fields, temp);
 	self->Super.OnMessage = handle_obj_message;
 	assert(lengthObj != NULL);
