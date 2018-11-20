@@ -120,10 +120,10 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
 	he->AcceptBlocking = 0;
 	if(bc_IsStaticModifier(fi->Modifier)) {
 		bc_Frame* f = bc_NewFrame();
-		SetSGThreadFrameRef(GetMainSGThread(), f);
+		bc_SetScriptThreadFrameRef(bc_GetMainScriptThread(), f);
 		bc_ExecuteVM(f, env);
 		fi->StaticValue = bc_PopVector(f->ValueStack);
-		ReleaseSGThreadFrameRef(GetMainSGThread());
+		bc_ReleaseScriptThreadFrameRef(bc_GetMainScriptThread());
 		bc_DeleteFrame(f);
 	}
 	he->AcceptBlocking = abtmp;

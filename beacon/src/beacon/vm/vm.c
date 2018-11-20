@@ -97,7 +97,7 @@ void bc_NativeThrowVM(bc_Frame* self, bc_Object * exc) {
 	self->Exception = exc;
 
 	bc_ThrowVM(self, exc);
-	ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
+	bc_ScriptThread* th = bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
 	//空ならプログラムを終了
 	if (bc_IsEmptyVector(th->TraceStack)) {
 		bc_TerminateVM(self);
@@ -132,7 +132,7 @@ void bc_CatchVM(bc_Frame* self) {
 }
 
 bool bc_ValidateVM(bc_Frame* self, int source_len, int* pcDest) {
-	ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
+	bc_ScriptThread* th = bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
 	bc_VMTrace* trace = (bc_VMTrace*)bc_TopVector(th->TraceStack);
 	self->IsValidate = true;
 	//汚染
@@ -165,7 +165,7 @@ bool bc_ValidateVM(bc_Frame* self, int source_len, int* pcDest) {
 }
 
 void bc_TerminateVM(bc_Frame* self) {
-	GetMainSGThread()->IsVMCrushByException = true;
+	bc_GetMainScriptThread()->IsVMCrushByException = true;
 	bc_Frame* temp = self;
 	do {
 		temp->IsTerminate = true;
@@ -452,7 +452,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				//例外は呼び出し全てへ伝播
 				bc_Object* e = (bc_Object*)bc_PopVector(self->ValueStack);
 				bc_ThrowVM(self, e);
-				ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
+				bc_ScriptThread* th = bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
 				//空ならプログラムを終了
 				if (bc_IsEmptyVector(th->TraceStack)) {
 					bc_TerminateVM(self);
@@ -464,7 +464,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 			}
 			case OP_TRY_ENTER:
 			{
-				ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
+				bc_ScriptThread* th = bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
 				bc_VMTrace* trace = bc_NewVMTrace(self);
 				trace->PC = IDX; //goto
 				bc_PushVector(th->TraceStack, trace);
@@ -477,14 +477,14 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 			}
 			case OP_TRY_EXIT:
 			{
-				ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
+				bc_ScriptThread* th = bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
 				bc_VMTrace* trace = (bc_VMTrace*)bc_PopVector(th->TraceStack);
 				bc_DeleteVMTrace(trace);
 				break;
 			}
 			case OP_TRY_CLEAR:
 			{
-				ScriptThread* th = GetCurrentSGThread(bc_GetCurrentScriptContext());
+				bc_ScriptThread* th = bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
 				bc_CatchVM(self);
 				bc_VMTrace* trace = (bc_VMTrace*)bc_PopVector(th->TraceStack);
 				bc_DeleteVMTrace(trace);
@@ -503,7 +503,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				//bc_Printfln("");
 				//PrintGenericType(v->GType);
 				//bc_Printfln("");
-				int dist = bc_DistanceGenericType(gtype, v->GType, GetSGThreadCContext());
+				int dist = bc_DistanceGenericType(gtype, v->GType, bc_GetScriptThreadContext());
 				bc_Object* b = bc_GetBoolObject(dist >= 0);
 				bc_PushVector(self->ValueStack, b);
 				break;
@@ -571,7 +571,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				//また、現在のVMから実引数をポップ
 				bc_Frame* sub = bc_SubFrame(self);
 				sub->Receiver = tp;
-				CallFrame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
+				CallFrame* cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = bc_NewVector();
 				cfr->Kind.StaticInvoke.TypeArgs = bc_NewVector();
 				for (int i = 0; i < ctor->Parameters->Length; i++) {
@@ -594,7 +594,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_ExecuteVM(sub, ctor->Env);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.Args, bc_VectorDeleterOfNull);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.TypeArgs, bc_VectorDeleterOfNull);
-				PopCallContext(GetSGThreadCContext());
+				PopCallContext(bc_GetScriptThreadContext());
 				//コンストラクタを実行した場合、
 				//Objectがスタックのトップに残っているはず
 				bc_VectorItem returnV = bc_TopVector(sub->ValueStack);
@@ -620,7 +620,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_Frame* sub = bc_SubFrame(self);
 				sub->ObjectSize = allocSize;
 				sub->Receiver = tp;
-				CallFrame* cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
+				CallFrame* cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = bc_NewVector();
 				cfr->Kind.StaticInvoke.TypeArgs = bc_NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
@@ -637,7 +637,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_ExecuteVM(sub, ctor->Env);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.Args, bc_VectorDeleterOfNull);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.TypeArgs, bc_VectorDeleterOfNull);
-				PopCallContext(GetSGThreadCContext());
+				PopCallContext(bc_GetScriptThreadContext());
 				//コンストラクタを実行した場合、
 				//Objectがスタックのトップに残っているはず
 				bc_VectorItem returnV = bc_TopVector(sub->ValueStack);
@@ -812,7 +812,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 			{
 				bc_Object* o = bc_PopVector(self->ValueStack);
 				bc_GenericType* a = bc_PopVector(self->TypeArgs);
-				a = bc_ApplyGenericType(a, GetSGThreadCContext());
+				a = bc_ApplyGenericType(a, bc_GetScriptThreadContext());
 				if(a->CoreType->Tag == TYPE_INTERFACE_T) {
 					bc_Interface* inter = BC_TYPE2INTERFACE(bc_GENERIC2TYPE(a));
 					bc_Vector* inter_list = bc_GetInterfaceTreeClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(o->GType)));
@@ -825,7 +825,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 					}
 					break;
 				}
-				if(bc_DistanceGenericType(o->GType, a, GetSGThreadCContext()) < 0) {
+				if(bc_DistanceGenericType(o->GType, a, bc_GetScriptThreadContext()) < 0) {
 					bc_PushVector(self->ValueStack, bc_GetNullObject());
 				} else {
 					//o = CloneObject(o);
@@ -838,7 +838,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 			{
 				bc_Object* o = bc_PopVector(self->ValueStack);
 				bc_GenericType* a = bc_PopVector(self->TypeArgs);
-				a = bc_ApplyGenericType(a, GetSGThreadCContext());
+				a = bc_ApplyGenericType(a, bc_GetScriptThreadContext());
 				assert(a->CoreType != NULL);
 				if(a->CoreType->Tag == TYPE_CLASS_T) {
 					bc_PushVector(self->ValueStack, o);
@@ -866,7 +866,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 					break;
 				}
 				bc_Method* m = bc_GetImplMethodClass(o->GType->CoreType->Kind.Class, tp, methodIndex);
-				CallContext* cctx = GetSGThreadCContext();
+				CallContext* cctx = bc_GetScriptThreadContext();
 				bc_ExecuteMethod(m, self, env);
 				break;
 			}
@@ -1170,7 +1170,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 			self->NativeThrowPos = -1;
 		}
 		//キャッチされなかった例外によって終了する
-		ScriptThread* thr = GetMainSGThread();
+		bc_ScriptThread* thr = bc_GetMainScriptThread();
 		if (self->IsTerminate && !thr->IsVMDump) {
 			bc_UncaughtVM(self, env, IDX);
 			thr->IsVMDump = true;

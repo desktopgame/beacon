@@ -30,7 +30,7 @@ static bc_ScriptContext* gScriptContext = NULL;
 bc_ScriptContext* bc_OpenScriptContext() {
 	if(gScriptContextVec == NULL) {
 		gScriptContextVec = bc_NewVector();
-		LaunchSGThread();
+		bc_LaunchScriptThread();
 	}
 	bc_ScriptContext* sctx = malloc_script_context();
 	gScriptContext = sctx;
@@ -49,7 +49,7 @@ void bc_CloseScriptContext() {
 	free_script_context(sctx);
 	gScriptContext = NULL;
 	if(gScriptContextVec->Length == 0) {
-		DestroySGThread();
+		bc_DestroyScriptThread();
 		bc_DeleteVector(gScriptContextVec, bc_VectorDeleterOfNull);
 		gScriptContextVec = NULL;
 	} else {
@@ -188,7 +188,7 @@ static bc_ScriptContext* malloc_script_context(void) {
 	ret->IntegerCacheMap = bc_NewNumericMap();
 	ret->IsPrintError = true;
 	ret->IsAbortOnError = true;
-	bc_PushVector(ret->ThreadList, GetMainSGThread());
+	bc_PushVector(ret->ThreadList, bc_GetMainScriptThread());
 	return ret;
 }
 
@@ -196,7 +196,7 @@ static void free_script_context(bc_ScriptContext* self) {
 	int aa = bc_CountActiveObject();
 	assert(self->Heap->CollectBlocking == 0);
 	//全ての例外フラグをクリア
-	bc_Frame* thv = GetSGThreadFrameRef(GetCurrentSGThread(self));
+	bc_Frame* thv = bc_GetScriptThreadFrameRef(bc_GetCurrentScriptThread(self));
 	bc_CatchVM(thv);
 	bc_DeleteClassLoader(self->BootstrapClassLoader);
 	if(self->Null != NULL) {

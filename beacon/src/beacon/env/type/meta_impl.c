@@ -77,7 +77,7 @@ int bc_MetaGCalcScore(bc_Vector* params, bc_Vector* gargs) {
 			//	ApplyGenericType(argType, ilctx),
 			//	param->gtype,
 				argType,
-				GetSGThreadCContext()
+				bc_GetScriptThreadContext()
 			//	ilctx
 			);
 		}

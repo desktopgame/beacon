@@ -20,43 +20,43 @@ struct CallContext;
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
  */
-typedef struct ScriptThread {
+typedef struct bc_ScriptThread {
 	bc_Vector* TraceStack;
 	bool IsVMCrushByException;
 	bool IsVMDump;
 	struct bc_Frame* FrameRef;
 	struct CallContext* CCtx;
-} ScriptThread;
+} bc_ScriptThread;
 
 /**
  * メインスレッドを作成します.
  */
-void LaunchSGThread();
+void bc_LaunchScriptThread();
 
 /**
  * 新しいスレッドを作成します.
  * @return
  */
-ScriptThread* NewSGThread();
+bc_ScriptThread* bc_NewScriptThread();
 
 /**
  * 現在のスレッドを返します.
  * @param sctx
  * @return
  */
-ScriptThread* GetCurrentSGThread(struct bc_ScriptContext* sctx);
+bc_ScriptThread* bc_GetCurrentScriptThread(struct bc_ScriptContext* sctx);
 
 /**
  * スレッドに記録された全てのトレースを解放します.
  * @param self
  */
-void ClearSGThread(ScriptThread* self);
+void bc_ClearScriptThread(bc_ScriptThread* self);
 
 /**
  * スレッドを解放します.
  * @param self
  */
-void DeleteSGThread(ScriptThread* self);
+void bc_DeleteScriptThread(bc_ScriptThread* self);
 
 /**
  * このスレッドが "実行中のVMのルート" を渡します.
@@ -66,37 +66,37 @@ void DeleteSGThread(ScriptThread* self);
  * @param self
  * @param frame_ref 呼び出し側で開放してください.
  */
-void SetSGThreadFrameRef(ScriptThread* self, struct bc_Frame* frame_ref);
+void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, struct bc_Frame* frame_ref);
 
 /**
  * このスレッドが "実行中のVMのルート" を返します.
  * @param self
  * @return
  */
-struct bc_Frame* GetSGThreadFrameRef(ScriptThread* self);
+struct bc_Frame* bc_GetScriptThreadFrameRef(bc_ScriptThread* self);
 
 /**
  * このスレッドからVMを参照出来ないようにします.
  * 通常、このスレッドに設定されたVMを開放したあとに呼び出します。
  * @param self
  */
-void ReleaseSGThreadFrameRef(ScriptThread* self);
+void bc_ReleaseScriptThreadFrameRef(bc_ScriptThread* self);
 
 /**
  * メインスレッドを返します.
  * @return
  */
-ScriptThread* GetMainSGThread();
+bc_ScriptThread* bc_GetMainScriptThread();
 
 
 /**
  * メインスレッドの呼び出しコンテキストを返します.
  * @return
  */
-struct CallContext* GetSGThreadCContext();
+struct CallContext* bc_GetScriptThreadContext();
 
 /**
  * メインスレッドを終了します.
  */
-void DestroySGThread();
+void bc_DestroyScriptThread();
 #endif // SIGNAL_THREAD_THREAD_H

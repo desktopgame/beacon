@@ -66,12 +66,12 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
 		if(!bc_IsStaticModifier(self->Modifier)) {
 			bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
 			bc_AssignVector(a->VariableTable, 0, receiver_obj);
-			cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
+			cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_INSTANCE_INVOKE_T);
 			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
 			aArgs = cfr->Kind.InstanceInvoke.Args = method_vm_args(self, fr, a);
 			aTArgs = cfr->Kind.InstanceInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		} else {
-			cfr = PushCallContext(GetSGThreadCContext(), FRAME_STATIC_INVOKE_T);
+			cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 			aArgs = cfr->Kind.StaticInvoke.Args = method_vm_args(self, fr, a);
 			aTArgs = cfr->Kind.StaticInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		}
@@ -84,7 +84,7 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
 		}
 		bc_DeleteVector(aArgs, bc_VectorDeleterOfNull);
 		bc_DeleteVector(aTArgs, bc_VectorDeleterOfNull);
-		PopCallContext(GetSGThreadCContext());
+		PopCallContext(bc_GetScriptThreadContext());
 		bc_DeleteFrame(a);
 	}
 }

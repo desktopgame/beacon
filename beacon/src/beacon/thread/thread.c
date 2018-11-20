@@ -9,42 +9,42 @@
 //proto
 static void ScriptThread_trace_delete(bc_VectorItem item);
 
-static ScriptThread* g_sg_main_thread = NULL;
+static bc_ScriptThread* g_sg_main_thread = NULL;
 
-void LaunchSGThread() {
+void bc_LaunchScriptThread() {
 	assert(g_sg_main_thread == NULL);
-	g_sg_main_thread = NewSGThread();
+	g_sg_main_thread = bc_NewScriptThread();
 }
 
-ScriptThread * NewSGThread() {
-	ScriptThread* ret = (ScriptThread*)MEM_MALLOC(sizeof(ScriptThread));
+bc_ScriptThread * bc_NewScriptThread() {
+	bc_ScriptThread* ret = (bc_ScriptThread*)MEM_MALLOC(sizeof(bc_ScriptThread));
 	ret->TraceStack = bc_NewVector();
 	ret->FrameRef = NULL;
 	ret->CCtx = NULL;
 	return ret;
 }
 
-ScriptThread * GetCurrentSGThread(bc_ScriptContext* sctx) {
+bc_ScriptThread * bc_GetCurrentScriptThread(bc_ScriptContext* sctx) {
 	//ScriptContext* ctx = GetCurrentScriptContext();
 	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする
-	ScriptThread* ret = (ScriptThread*)bc_AtVector(sctx->ThreadList, 0);
+	bc_ScriptThread* ret = (bc_ScriptThread*)bc_AtVector(sctx->ThreadList, 0);
 	return ret;
 }
 
-void ClearSGThread(ScriptThread* self) {
+void bc_ClearScriptThread(bc_ScriptThread* self) {
 	while (!bc_IsEmptyStack(self->TraceStack)) {
 		bc_VMTrace* trace = (bc_VMTrace*)bc_PopVector(self->TraceStack);
 		bc_DeleteVMTrace(trace);
 	}
 }
 
-void DeleteSGThread(ScriptThread * self) {
+void bc_DeleteScriptThread(bc_ScriptThread * self) {
 	bc_DeleteVector(self->TraceStack, ScriptThread_trace_delete);
 	MEM_FREE(self);
 }
 
-void SetSGThreadFrameRef(ScriptThread * self, bc_Frame* frame_ref) {
+void bc_SetScriptThreadFrameRef(bc_ScriptThread * self, bc_Frame* frame_ref) {
 	//TODO:ここで同期をとる
 	assert(frame_ref != NULL);
 	assert(self->CCtx == NULL);
@@ -54,28 +54,28 @@ void SetSGThreadFrameRef(ScriptThread * self, bc_Frame* frame_ref) {
 	self->CCtx = NewCallContext(CALL_TOP_T);
 }
 
-bc_Frame* GetSGThreadFrameRef(ScriptThread * self) {
+bc_Frame* bc_GetScriptThreadFrameRef(bc_ScriptThread * self) {
 	//TODO:ここで同期をとる
 	return self->FrameRef;
 }
 
-void ReleaseSGThreadFrameRef(ScriptThread * self) {
+void bc_ReleaseScriptThreadFrameRef(bc_ScriptThread * self) {
 	assert(self->CCtx != NULL);
 	self->FrameRef = NULL;
 	DeleteCallContext(self->CCtx);
 	self->CCtx = NULL;
 }
 
-ScriptThread * GetMainSGThread() {
+bc_ScriptThread * bc_GetMainScriptThread() {
 	return g_sg_main_thread;
 }
 
-CallContext* GetSGThreadCContext() {
+CallContext* bc_GetScriptThreadContext() {
 	return g_sg_main_thread->CCtx;
 }
 
-void DestroySGThread() {
-	DeleteSGThread(g_sg_main_thread);
+void bc_DestroyScriptThread() {
+	bc_DeleteScriptThread(g_sg_main_thread);
 	g_sg_main_thread = NULL;
 }
 //private
