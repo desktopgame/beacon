@@ -102,7 +102,7 @@ char* bc_ResolveScriptPath(const char* target);
  * @param dirname
  * @return
  */
-Vector* bc_GetFiles(const char* dirname);
+bc_Vector* bc_GetFiles(const char* dirname);
 
 /**
  * ファイル一覧をソートするための比較関数.
@@ -116,7 +116,7 @@ int bc_SortFiles(const void* a, const void* b);
  * io_list_files によって確保された vector を解放します.s
  * @param files
  */
-void bc_DeleteFiles(Vector* files);
+void bc_DeleteFiles(bc_Vector* files);
 
 /**
  * filename の拡張子が ext なら true.

@@ -19,8 +19,8 @@ static void ILInvokeBound_check(ILCallOp* self, bc_Enviroment* env);
 static void ILMemberOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
 static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
 
-static void ILCallOp_argument_delete(VectorItem item);
-static void ILCallOp_type_argument_delete(VectorItem item);
+static void ILCallOp_argument_delete(bc_VectorItem item);
+static void ILCallOp_type_argument_delete(bc_VectorItem item);
 
 ILFactor* WrapCallOp(ILCallOp* self) {
 	ILFactor* ret = NewILFactor(ILFACTOR_CALL_OP_T);
@@ -32,7 +32,7 @@ ILFactor* WrapCallOp(ILCallOp* self) {
 ILCallOp* NewILCallOp() {
 	ILCallOp* ret = (ILCallOp*)MEM_MALLOC(sizeof(ILCallOp));
 	ret->Receiver = NULL;
-	ret->Arguments = NewVector();
+	ret->Arguments = bc_NewVector();
 	ret->Type = ILCALL_TYPE_UNDEFINED_T;
 	return ret;
 }
@@ -98,7 +98,7 @@ void DeleteILCallOp(ILCallOp* self) {
 	} else if(self->Type == ILCALL_TYPE_INVOKE_BOUND_T) {
 		DeleteILInvokeBound(self->Kind.InvokeBound);
 	}
-	DeleteVector(self->Arguments, ILCallOp_argument_delete);
+	bc_DeleteVector(self->Arguments, ILCallOp_argument_delete);
 	MEM_FREE(self);
 }
 
@@ -154,7 +154,7 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Envi
 	//hoge.foo()
 	} else {
 		#if defined(DEBUG)
-		const char* clname = Ref2Str(ilvar->FQCN->Name);
+		const char* clname = bc_Ref2Str(ilvar->FQCN->Name);
 		#endif
 		bc_Namespace* cur = GetNamespaceCContext(cctx);
 		bc_Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
@@ -198,7 +198,7 @@ static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariabl
 static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
 	ILFactor* receiver = self->Receiver;
 	ILCallOp* call_left = receiver->Kind.Call;
-	ILInvoke* iv = NewILInvoke(ZERO_VIEW);
+	ILInvoke* iv = NewILInvoke(BC_ZERO_VIEW);
 	bc_GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
 	bc_Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
 	int temp;
@@ -207,7 +207,7 @@ static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* c
 	assert(temp != -1);
 	//入れ替える
 	iv->args = self->Arguments;
-	iv->type_args = NewVector();
+	iv->type_args = bc_NewVector();
 	iv->receiver = receiver;
 	iv->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
 	self->Receiver = NULL;
@@ -216,12 +216,12 @@ static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* c
 	self->Kind.Invoke = iv;
 }
 
-static void ILCallOp_argument_delete(VectorItem item) {
+static void ILCallOp_argument_delete(bc_VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
 
-static void ILCallOp_type_argument_delete(VectorItem item) {
+static void ILCallOp_type_argument_delete(bc_VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

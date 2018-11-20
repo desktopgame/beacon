@@ -2,13 +2,13 @@
 #include <stdlib.h>
 
 //proto
-static bc_AST* ast_new_field_GetTypeName(StringView GetTypeNamev);
-static bc_AST* NewASTFieldAccess_name(StringView field_namev);
-static bc_AST* ast_new_function_name(StringView func_namev);
-static bc_AST* ast_new_method_name(StringView func_namev);
-static bc_AST* ast_new_method_return_name(StringView return_GetTypeNamev);
-static bc_AST* NewASTParameter_GetTypeName(StringView GetTypeNamev);
-static bc_AST* NewASTParameter_access_name(StringView parameter_namev);
+static bc_AST* ast_new_field_GetTypeName(bc_StringView GetTypeNamev);
+static bc_AST* NewASTFieldAccess_name(bc_StringView field_namev);
+static bc_AST* ast_new_function_name(bc_StringView func_namev);
+static bc_AST* ast_new_method_name(bc_StringView func_namev);
+static bc_AST* ast_new_method_return_name(bc_StringView return_GetTypeNamev);
+static bc_AST* NewASTParameter_GetTypeName(bc_StringView GetTypeNamev);
+static bc_AST* NewASTParameter_access_name(bc_StringView parameter_namev);
 static bc_AST* NewASTClassDeclImpl(bc_AST* aclass_name, bc_AST* aextend_list, bc_AST* amember_list, bc_ASTTag tag);
 
 bc_AST* bc_NewASTNamespaceDecl(bc_AST* anamespace_path, bc_AST* abody) {
@@ -45,7 +45,7 @@ bc_AST* bc_NewASTInterfaceDecl(bc_AST* ainterface_name, bc_AST* asuper_interface
 	return ret;
 }
 
-bc_AST* bc_NewASTEnumDecl(StringView enum_name, bc_AST* aident_list) {
+bc_AST* bc_NewASTEnumDecl(bc_StringView enum_name, bc_AST* aident_list) {
 	bc_AST* ret = bc_NewAST(AST_ENUM_DECL_T);
 	ret->Attr.StringVValue = enum_name;
 	bc_PushAST(ret, aident_list);
@@ -105,7 +105,7 @@ bc_AST* bc_NewASTMemberDeclList(bc_AST* amember_list, bc_AST* amember) {
 	return ret;
 }
 
-bc_AST* bc_NewASTFieldDecl(bc_AST* amodifier, bc_AST* atypename, StringView field_name, bc_AST* afact) {
+bc_AST* bc_NewASTFieldDecl(bc_AST* amodifier, bc_AST* atypename, bc_StringView field_name, bc_AST* afact) {
 	bc_AST* ret = bc_NewAST(AST_FIELD_DECL_T);
 	bc_PushAST(ret, amodifier);
 	bc_PushAST(ret, atypename);
@@ -114,7 +114,7 @@ bc_AST* bc_NewASTFieldDecl(bc_AST* amodifier, bc_AST* atypename, StringView fiel
 	return ret;
 }
 
-bc_AST* bc_NewASTFunctionDecl(StringView function_namev, bc_AST* atypeparams, bc_AST* aparameter_list, bc_AST* abody, bc_AST* areturn_type) {
+bc_AST* bc_NewASTFunctionDecl(bc_StringView function_namev, bc_AST* atypeparams, bc_AST* aparameter_list, bc_AST* abody, bc_AST* areturn_type) {
 	bc_AST* ret = bc_NewAST(AST_FUNCTION_DECL_T);
 	bc_PushAST(ret, ast_new_function_name(function_namev));
 	bc_PushAST(ret, atypeparams);
@@ -124,11 +124,11 @@ bc_AST* bc_NewASTFunctionDecl(StringView function_namev, bc_AST* atypeparams, bc
 	return ret;
 }
 
-bc_AST* bc_NewASTFunctionDeclEmptyParams(StringView function_name, bc_AST* atypeparams, bc_AST* abody, bc_AST* areturn_type) {
+bc_AST* bc_NewASTFunctionDeclEmptyParams(bc_StringView function_name, bc_AST* atypeparams, bc_AST* abody, bc_AST* areturn_type) {
 	return bc_NewASTFunctionDecl(function_name, atypeparams, bc_NewASTBlank(), abody, areturn_type);
 }
 
-bc_AST* bc_NewASTMethodDecl(bc_AST* amodifier, StringView func_name, bc_AST* atype_parameter, bc_AST* aparameter_list, bc_AST* abody, bc_AST* areturn_type) {
+bc_AST* bc_NewASTMethodDecl(bc_AST* amodifier, bc_StringView func_name, bc_AST* atype_parameter, bc_AST* aparameter_list, bc_AST* abody, bc_AST* areturn_type) {
 	bc_AST* ret = bc_NewAST(AST_METHOD_DECL_T);
 	bc_PushAST(ret, amodifier);
 	bc_PushAST(ret, ast_new_method_name(func_name));
@@ -139,7 +139,7 @@ bc_AST* bc_NewASTMethodDecl(bc_AST* amodifier, StringView func_name, bc_AST* aty
 	return ret;
 }
 
-bc_AST* bc_NewASTMethodDeclEmptyParams(bc_AST* amodifier, StringView func_name, bc_AST* atype_parameter, bc_AST* abody, bc_AST* areturn_type) {
+bc_AST* bc_NewASTMethodDeclEmptyParams(bc_AST* amodifier, bc_StringView func_name, bc_AST* atype_parameter, bc_AST* abody, bc_AST* areturn_type) {
 	return bc_NewASTMethodDecl(amodifier, func_name, atype_parameter, bc_NewASTBlank(), abody, areturn_type);
 }
 
@@ -162,14 +162,14 @@ bc_AST* bc_NewASTConstructorChain(bc_ConstructorChainType chain_type, bc_AST* aa
 	return ret;
 }
 
-bc_AST* bc_NewASTParameter(bc_AST* atypename, StringView parameter_access_name) {
+bc_AST* bc_NewASTParameter(bc_AST* atypename, bc_StringView parameter_access_name) {
 	bc_AST* ret = bc_NewAST(AST_PARAMETER_T);
 	bc_PushAST(ret, atypename);
 	bc_PushAST(ret, NewASTParameter_access_name(parameter_access_name));
 	return ret;
 }
 
-bc_AST* bc_NewASTParameterList(bc_AST* atypename, StringView parameter_access_name, bc_AST* aparameter_list) {
+bc_AST* bc_NewASTParameterList(bc_AST* atypename, bc_StringView parameter_access_name, bc_AST* aparameter_list) {
 	bc_AST* ret = bc_NewAST(AST_PARAMETER_LIST_T);
 	bc_PushAST(ret, aparameter_list);
 	bc_PushAST(ret, bc_NewASTParameter(atypename, parameter_access_name));
@@ -190,21 +190,21 @@ bc_AST* bc_NewASTTypename(bc_AST* afqcn, bc_AST* atype_args) {
 	return ret;
 }
 
-bc_AST* bc_NewASTTypeParameter(StringView name, bc_AST* arule_list) {
+bc_AST* bc_NewASTTypeParameter(bc_StringView name, bc_AST* arule_list) {
 	bc_AST* ret = bc_NewAST(AST_TYPE_PARAMETER_T);
 	ret->Attr.StringVValue = name;
 	bc_PushAST(ret, arule_list);
 	return ret;
 }
 
-bc_AST* bc_NewASTTypeInParameter(StringView name, bc_AST* arule_list) {
+bc_AST* bc_NewASTTypeInParameter(bc_StringView name, bc_AST* arule_list) {
 	bc_AST* ret = bc_NewAST(AST_TYPE_IN_PARAMETER_T);
 	ret->Attr.StringVValue = name;
 	bc_PushAST(ret, arule_list);
 	return ret;
 }
 
-bc_AST* bc_NewASTTypeOutParameter(StringView name, bc_AST* arule_list) {
+bc_AST* bc_NewASTTypeOutParameter(bc_StringView name, bc_AST* arule_list) {
 	bc_AST* ret = bc_NewAST(AST_TYPE_OUT_PARAMETER_T);
 	ret->Attr.StringVValue = name;
 	bc_PushAST(ret, arule_list);
@@ -218,7 +218,7 @@ bc_AST* bc_NewASTTypeParameterList(bc_AST* aparam, bc_AST* alist) {
 	return ret;
 }
 
-bc_AST* bc_NewASTParameterizedTypename(StringView name, bc_AST* aparams) {
+bc_AST* bc_NewASTParameterizedTypename(bc_StringView name, bc_AST* aparams) {
 	bc_AST* ret = bc_NewAST(AST_PARAMETERIZED_TYPENAME_T);
 	ret->Attr.StringVValue = name;
 	bc_PushAST(ret, aparams);
@@ -254,7 +254,7 @@ bc_AST* bc_NewASTPropGet(bc_AST* aacess, bc_AST* abody) {
 	return aret;
 }
 
-bc_AST* bc_NewASTPropDecl(bc_AST* amodifier, bc_AST* atypename, StringView name, bc_AST* aset, bc_AST* aget) {
+bc_AST* bc_NewASTPropDecl(bc_AST* amodifier, bc_AST* atypename, bc_StringView name, bc_AST* aset, bc_AST* aget) {
 	bc_AST* aprop = bc_NewAST(AST_PROP_DECL_T);
 	aprop->Attr.StringVValue = name;
 	bc_PushAST(aprop, amodifier);
@@ -265,43 +265,43 @@ bc_AST* bc_NewASTPropDecl(bc_AST* amodifier, bc_AST* atypename, StringView name,
 }
 
 //private
-static bc_AST* ast_new_field_GetTypeName(StringView GetTypeNamev) {
+static bc_AST* ast_new_field_GetTypeName(bc_StringView GetTypeNamev) {
 	bc_AST* ret = bc_NewAST(AST_FIELD_TYPE_NAME_T);
 	ret->Attr.StringVValue = GetTypeNamev;
 	return ret;
 }
 
-static bc_AST* NewASTFieldAccess_name(StringView field_namev) {
+static bc_AST* NewASTFieldAccess_name(bc_StringView field_namev) {
 	bc_AST* ret = bc_NewAST(AST_FIELD_ACCESS_NAME_T);
 	ret->Attr.StringVValue = field_namev;
 	return ret;
 }
 
-static bc_AST* ast_new_function_name(StringView func_namev) {
+static bc_AST* ast_new_function_name(bc_StringView func_namev) {
 	bc_AST* ret = bc_NewAST(AST_FUNCTION_NAME_T);
 	ret->Attr.StringVValue = func_namev;
 	return ret;
 }
 
-static bc_AST* ast_new_method_name(StringView func_namev) {
+static bc_AST* ast_new_method_name(bc_StringView func_namev) {
 	bc_AST* ret = bc_NewAST(AST_METHOD_NAME_T);
 	ret->Attr.StringVValue = func_namev;
 	return ret;
 }
 
-static bc_AST* ast_new_method_return_name(StringView return_GetTypeNamev) {
+static bc_AST* ast_new_method_return_name(bc_StringView return_GetTypeNamev) {
 	bc_AST* ret = bc_NewAST(AST_METHOD_RETURN_NAME_T);
 	ret->Attr.StringVValue = return_GetTypeNamev;
 	return ret;
 }
 
-static bc_AST* NewASTParameter_GetTypeName(StringView GetTypeNamev) {
+static bc_AST* NewASTParameter_GetTypeName(bc_StringView GetTypeNamev) {
 	bc_AST* ret = bc_NewAST(AST_PARAMETER_TYPE_NAME_T);
 	ret->Attr.StringVValue = GetTypeNamev;
 	return ret;
 }
 
-static bc_AST* NewASTParameter_access_name(StringView parameter_namev) {
+static bc_AST* NewASTParameter_access_name(bc_StringView parameter_namev) {
 	bc_AST* ret = bc_NewAST(AST_PARAMETER_ACCESS_NAME_T);
 	ret->Attr.StringVValue = parameter_namev;
 	return ret;

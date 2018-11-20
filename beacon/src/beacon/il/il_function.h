@@ -18,10 +18,10 @@ struct bc_GenericCache;
  * 関数宣言を表す要素.
  */
 typedef struct ILFunction {
-	StringView Name;
-	Vector* TypeParameters;
-	Vector* Parameters;
-	Vector* Statements;
+	bc_StringView Name;
+	bc_Vector* TypeParameters;
+	bc_Vector* Parameters;
+	bc_Vector* Statements;
 	struct bc_GenericCache* ReturnGCache;
 } ILFunction;
 
@@ -30,7 +30,7 @@ typedef struct ILFunction {
  * @param name
  * @return
  */
-ILFunction* NewILFunction(StringView name);
+ILFunction* NewILFunction(bc_StringView name);
 
 /**
  * 関数を解放します.

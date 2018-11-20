@@ -15,9 +15,9 @@
 #include <assert.h>
 
 //proto
-static void DeleteILNewInstance_typearg(VectorItem item);
+static void DeleteILNewInstance_typearg(bc_VectorItem item);
 static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx);
-static void il_Factor_new_instace_delete_arg(VectorItem item);
+static void il_Factor_new_instace_delete_arg(bc_VectorItem item);
 
 ILFactor * WrapILNewInstance(ILNewInstance * self) {
 	ILFactor* ret = NewILFactor(ILFACTOR_NEW_INSTANCE_T);
@@ -28,8 +28,8 @@ ILFactor * WrapILNewInstance(ILNewInstance * self) {
 ILNewInstance * NewILNewInstance() {
 	ILNewInstance* ret = (ILNewInstance*)MEM_MALLOC(sizeof(ILNewInstance));
 	ret->FQCNCache = bc_NewFQCNCache();
-	ret->TypeArgs = NewVector();
-	ret->Arguments = NewVector();
+	ret->TypeArgs = bc_NewVector();
+	ret->Arguments = bc_NewVector();
 	ret->Constructor = NULL;
 	ret->ConstructorIndex = -1;
 	ret->InstanceGType = NULL;
@@ -39,14 +39,14 @@ ILNewInstance * NewILNewInstance() {
 void GenerateILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	for(int i=0; i<self->TypeArgs->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
+		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
 		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->Arguments->Length; i++) {
-		ILArgument* ilarg = (ILArgument*)AtVector(self->Arguments, i);
+		ILArgument* ilarg = (ILArgument*)bc_AtVector(self->Arguments, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);
 		if(bc_GetLastPanic()) {
 			return;
@@ -65,7 +65,7 @@ void LoadILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* c
 	}
 	//抽象クラスはインスタンス化できない
 	if(bc_IsAbstractType(self->Constructor->Parent)) {
-		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, Ref2Str(bc_GetTypeName(self->Constructor->Parent)));
+		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, bc_Ref2Str(bc_GetTypeName(self->Constructor->Parent)));
 	}
 }
 
@@ -84,7 +84,7 @@ bc_GenericType* EvalILNewInstance(ILNewInstance * self, bc_Enviroment * env, Cal
 		bc_Namespace* scope = NULL;
 		bc_GenericType* a = bc_NewGenericType(self->Constructor->Parent);
 		for (int i = 0; i < self->TypeArgs->Length; i++) {
-			ILTypeArgument* e = (ILTypeArgument*)AtVector(self->TypeArgs, i);
+			ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
 			bc_GenericType* arg = bc_ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
 			bc_AddArgsGenericType(a, arg);
 		}
@@ -94,25 +94,25 @@ bc_GenericType* EvalILNewInstance(ILNewInstance * self, bc_Enviroment * env, Cal
 }
 
 char* ILNewInstanceToString(ILNewInstance* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
-	AppendsBuffer(sb, "new ");
+	bc_Buffer* sb = bc_NewBuffer();
+	bc_AppendsBuffer(sb, "new ");
 	char* type = bc_FQCNCacheToString(self->FQCNCache);
-	AppendsBuffer(sb, type);
+	bc_AppendsBuffer(sb, type);
 	ILTypeArgsToString(sb, self->TypeArgs, env);
 	ILArgsToString(sb, self->Arguments, env);
 	MEM_FREE(type);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILNewInstance(ILNewInstance * self) {
-	DeleteVector(self->Arguments, il_Factor_new_instace_delete_arg);
-	DeleteVector(self->TypeArgs, DeleteILNewInstance_typearg);
+	bc_DeleteVector(self->Arguments, il_Factor_new_instace_delete_arg);
+	bc_DeleteVector(self->TypeArgs, DeleteILNewInstance_typearg);
 	bc_DeleteFQCNCache(self->FQCNCache);
 	MEM_FREE(self);
 }
 
 //private
-static void DeleteILNewInstance_typearg(VectorItem item) {
+static void DeleteILNewInstance_typearg(bc_VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }
@@ -122,8 +122,8 @@ static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallCo
 		return;
 	}
 	#if defined(DEBUG)
-	const char* namea = Ref2Str(self->FQCNCache->Name);
-	if(self->FQCNCache->Name == InternString("Vector")) {
+	const char* namea = bc_Ref2Str(self->FQCNCache->Name);
+	if(self->FQCNCache->Name == bc_InternString("Vector")) {
 		int a = 0;
 	}
 	#endif
@@ -131,7 +131,7 @@ static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallCo
 	bc_Type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
 	if(ty == NULL) {
 		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
-			Ref2Str(self->FQCNCache->Name)
+			bc_Ref2Str(self->FQCNCache->Name)
 		);
 		return;
 	}
@@ -147,12 +147,12 @@ static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallCo
 	PopCallContext(cctx);
 	if(temp == -1) {
 		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
-			Ref2Str(cls->Name)
+			bc_Ref2Str(cls->Name)
 		);
 	}
 }
 
-static void il_Factor_new_instace_delete_arg(VectorItem item) {
+static void il_Factor_new_instace_delete_arg(bc_VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }

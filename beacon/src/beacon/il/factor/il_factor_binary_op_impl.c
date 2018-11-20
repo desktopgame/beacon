@@ -171,15 +171,15 @@ void DeleteILBinaryOp(ILBinaryOp * self) {
 }
 
 char* ILBinaryOpToString_simple(ILBinaryOp* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* a = ILFactorToString(self->Left, env);
 	char* b = ILFactorToString(self->Right, env);
-	AppendsBuffer(sb, a);
-	AppendfBuffer(sb, " %s ", bc_OperatorToString(self->Type));
-	AppendsBuffer(sb, b);
+	bc_AppendsBuffer(sb, a);
+	bc_AppendfBuffer(sb, " %s ", bc_OperatorToString(self->Type));
+	bc_AppendsBuffer(sb, b);
 	MEM_FREE(a);
 	MEM_FREE(b);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 bool IsIntIntBinaryOp(ILBinaryOp* self, bc_Enviroment* env, CallContext* cctx) {
@@ -207,7 +207,7 @@ int GetIndexILBinaryOp(ILBinaryOp* self, bc_Enviroment* env, CallContext* cctx) 
 }
 
 int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, bc_OperatorType otype, bc_Enviroment* env, CallContext* cctx) {
-	Vector* args = NewVector();
+	bc_Vector* args = bc_NewVector();
 	bc_GenericType* lgtype = EvalILFactor(receiver, env, cctx);
 	bc_GenericType* rgtype = EvalILFactor(arg, env, cctx);
 	
@@ -215,13 +215,13 @@ int GetIndexILBinaryOp2(ILFactor* receiver, ILFactor* arg, bc_OperatorType otype
 		assert(false);
 	}
 	//PushVector(args, lgtype);
-	PushVector(args, rgtype);
+	bc_PushVector(args, rgtype);
 	bc_Type* lctype = bc_GENERIC2TYPE(lgtype);
 	assert(lctype->Tag == TYPE_CLASS_T);
 	bc_Class* lclass = BC_TYPE2CLASS(lctype);
 	int temp = 0;
 	bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
-	DeleteVector(args, VectorDeleterOfNull);
+	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 	return temp;
 }
 

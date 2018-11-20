@@ -35,17 +35,17 @@
 static void create_vtable_top(bc_Class* self);
 static void create_vtable_override(bc_Class* self);
 static void create_vtable_interface(bc_Class* self);
-static void class_impl_delete(VectorItem item);
-static void delete_field(VectorItem item);
-static void delete_method(VectorItem item);
-static void class_ctor_delete(VectorItem item);
-static void delete_native_method_ref(NumericMapKey key, NumericMapItem item);
+static void class_impl_delete(bc_VectorItem item);
+static void delete_field(bc_VectorItem item);
+static void delete_method(bc_VectorItem item);
+static void class_ctor_delete(bc_VectorItem item);
+static void delete_native_method_ref(bc_NumericMapKey key, bc_NumericMapItem item);
 static bc_Method* class_find_impl_method(bc_Class* self, bc_Method* virtualMethod);
-static void delete_vtable(VectorItem item);
-static void delete_type_parameter(VectorItem item);
-static void delete_generic_type(VectorItem item);
-static void delete_operator_overload(VectorItem item);
-static void delete_property(VectorItem item);
+static void delete_vtable(bc_VectorItem item);
+static void delete_type_parameter(bc_VectorItem item);
+static void delete_generic_type(bc_VectorItem item);
+static void delete_operator_overload(bc_VectorItem item);
+static void delete_property(bc_VectorItem item);
 
 bc_Type* bc_WrapClass(bc_Class* self) {
 	bc_Type* ret = bc_NewType();
@@ -55,40 +55,40 @@ bc_Type* bc_WrapClass(bc_Class* self) {
 	return ret;
 }
 
-bc_Class* bc_NewClass(StringView namev) {
+bc_Class* bc_NewClass(bc_StringView namev) {
 	bc_Class* ret = (bc_Class*)MEM_MALLOC(sizeof(bc_Class));
 	ret->Name = namev;
 	ret->Parent = NULL;
 	ret->Location = NULL;
 	ret->RefCount = 0;
 	ret->SuperClass = NULL;
-	ret->Implements = NewVector();
-	ret->Fields = NewVector();
-	ret->StaticFields = NewVector();
-	ret->Properties = NewVector();
-	ret->StaticProperties = NewVector();
-	ret->Methods = NewVector();
-	ret->StaticMethods = NewVector();
-	ret->Constructors = NewVector();
-	ret->NativeMethodRefMap = NewNumericMap();
-	ret->VTTable = NewVector();
-	ret->TypeParameters = NewVector();
+	ret->Implements = bc_NewVector();
+	ret->Fields = bc_NewVector();
+	ret->StaticFields = bc_NewVector();
+	ret->Properties = bc_NewVector();
+	ret->StaticProperties = bc_NewVector();
+	ret->Methods = bc_NewVector();
+	ret->StaticMethods = bc_NewVector();
+	ret->Constructors = bc_NewVector();
+	ret->NativeMethodRefMap = bc_NewNumericMap();
+	ret->VTTable = bc_NewVector();
+	ret->TypeParameters = bc_NewVector();
 	ret->VT = NULL;
 	ret->OVT = NULL;
 	ret->IsAbstract = false;
-	ret->OperatorOverloads = NewVector();
+	ret->OperatorOverloads = bc_NewVector();
 	return ret;
 }
 
-bc_Class* bc_NewClassProxy(bc_GenericType* gt, StringView namev) {
+bc_Class* bc_NewClassProxy(bc_GenericType* gt, bc_StringView namev) {
 	assert(gt->CoreType->Tag == TYPE_INTERFACE_T);
 	bc_Class* ret = bc_NewClass(namev);
 	ret->SuperClass = BC_GENERIC_OBJECT;
-	PushVector(ret->Implements, gt);
+	bc_PushVector(ret->Implements, gt);
 	return ret;
 }
 
-bc_Type* bc_NewPreloadClass(StringView namev) {
+bc_Type* bc_NewPreloadClass(bc_StringView namev) {
 	bc_Class* cl = bc_NewClass(namev);
 	bc_Type* tp = bc_WrapClass(cl);
 	tp->State = TYPE_PENDING;
@@ -107,7 +107,7 @@ void bc_AllocFieldsClass(bc_Class* self, bc_Object * o, bc_Frame* fr) {
 	//assert(o->Tag == OBJECT_REF_T);
 	bc_Heap* he = bc_GetHeap();
 	for (int i = 0; i < self->Fields->Length; i++) {
-		bc_Field* f = (bc_Field*)AtVector(self->Fields, i);
+		bc_Field* f = (bc_Field*)bc_AtVector(self->Fields, i);
 		bc_Object* a = bc_GetDefaultObject(f->GType);
 		//静的フィールドは別の場所に確保
 		if (bc_IsStaticModifier(f->Modifier)) {
@@ -117,15 +117,15 @@ void bc_AllocFieldsClass(bc_Class* self, bc_Object * o, bc_Frame* fr) {
 		if(f->InitialValue != NULL) {
 			bc_Frame* sub = bc_SubFrame(fr);
 			for(int i=0; i<fr->TypeArgs->Length; i++) {
-				PushVector(sub->TypeArgs, AtVector(fr->TypeArgs, i));
+				bc_PushVector(sub->TypeArgs, bc_AtVector(fr->TypeArgs, i));
 			}
 			sub->Receiver = self->Parent;
-			CopyVector(fr->VariableTable, sub->VariableTable);
+			bc_CopyVector(fr->VariableTable, sub->VariableTable);
 			bc_ExecuteVM(sub, f->InitialValueEnv);
-			a = PopVector(sub->ValueStack);
+			a = bc_PopVector(sub->ValueStack);
 			bc_DeleteFrame(sub);
 		}
-		PushVector(o->Fields, a);
+		bc_PushVector(o->Fields, a);
 		he->CollectBlocking--;
 	}
 }
@@ -136,25 +136,25 @@ void bc_FreeClassFields(bc_Class* self, bc_Object * o) {
 void bc_AddFieldClass(bc_Class* self, bc_Field* f) {
 	assert(f != NULL);
 	if (bc_IsStaticModifier(f->Modifier)) {
-		PushVector(self->StaticFields, f);
+		bc_PushVector(self->StaticFields, f);
 	} else {
-		PushVector(self->Fields, f);
+		bc_PushVector(self->Fields, f);
 	}
 }
 
 void bc_AddPropertyClass(bc_Class* self, bc_Property* p) {
 	if (bc_IsStaticModifier(p->Modifier)) {
-		PushVector(self->StaticProperties, p);
+		bc_PushVector(self->StaticProperties, p);
 	} else {
-		PushVector(self->Properties, p);
+		bc_PushVector(self->Properties, p);
 	}
 	//プロパティが単純な省略形として記述されているなら、
 	//それはフィールドと同じなのでフィールドも定義する
 	#if defined(DEBUG)
-	const char* name = Ref2Str(p->Name);
+	const char* name = bc_Ref2Str(p->Name);
 	#endif
 	if(p->IsShort) {
-		bc_Field* f = bc_NewField(ConcatIntern("$propery.", p->Name));
+		bc_Field* f = bc_NewField(bc_ConcatIntern("$propery.", p->Name));
 		f->Access = ACCESS_PRIVATE_T;
 		f->GType = p->GType;
 		f->Modifier = p->Modifier;
@@ -168,23 +168,23 @@ void bc_AddPropertyClass(bc_Class* self, bc_Property* p) {
 void bc_AddMethodClass(bc_Class* self, bc_Method * m) {
 	assert(m != NULL);
 	if (bc_IsStaticModifier(m->Modifier)) {
-		PushVector(self->StaticMethods, m);
+		bc_PushVector(self->StaticMethods, m);
 	} else {
-		PushVector(self->Methods, m);
+		bc_PushVector(self->Methods, m);
 	}
 }
 
 void bc_AddConstructorClass(bc_Class* self, bc_Constructor* c) {
-	PushVector(self->Constructors, c);
+	bc_PushVector(self->Constructors, c);
 }
 
 void bc_DefineNativeMethodClass(bc_Class* self, const char* name, bc_NativeImpl impl) {
-	bc_DefineNativeMethodByRefClass(self, InternString(name), impl);
+	bc_DefineNativeMethodByRefClass(self, bc_InternString(name), impl);
 }
 
-void bc_DefineNativeMethodByRefClass(bc_Class* self, StringView namev, bc_NativeImpl impl) {
+void bc_DefineNativeMethodByRefClass(bc_Class* self, bc_StringView namev, bc_NativeImpl impl) {
 	bc_NativeMethodRef* ref = bc_NewNativeMethodRef(impl);
-	PutNumericMap(self->NativeMethodRefMap, namev, ref);
+	bc_PutNumericMap(self->NativeMethodRefMap, namev, ref);
 }
 
 int bc_DistanceClass(bc_Class* super, bc_Class* sub) {
@@ -215,7 +215,7 @@ int bc_DistanceClass(bc_Class* super, bc_Class* sub) {
 void bc_CreateVTableClass(bc_Class* self) {
 	//TEST(!strcmp(self->name, "Int"));
 	#if defined(DEBUG)
-	const char* str = Ref2Str(self->Name);
+	const char* str = bc_Ref2Str(self->Name);
 	#endif
 	assert(self != NULL);
 	//初期化済み
@@ -245,17 +245,17 @@ void bc_CreateOperatorVTClass(bc_Class* self) {
 	self->OVT = bc_NewOperatorVt();
 	if(self->SuperClass == NULL) {
 		for(int i=0; i<self->OperatorOverloads->Length; i++) {
-			bc_OperatorOverload* opov = AtVector(self->OperatorOverloads, i);
-			PushVector(self->OVT->Operators, opov);
+			bc_OperatorOverload* opov = bc_AtVector(self->OperatorOverloads, i);
+			bc_PushVector(self->OVT->Operators, opov);
 		}
 	} else {
 		bc_OperatorVT* super_vt = BC_TYPE2CLASS(bc_GENERIC2TYPE(self->SuperClass))->OVT;
 		for(int i=0; i<super_vt->Operators->Length; i++) {
-			bc_OperatorOverload* opov = AtVector(super_vt->Operators, i);
-			PushVector(self->OVT->Operators, opov);
+			bc_OperatorOverload* opov = bc_AtVector(super_vt->Operators, i);
+			bc_PushVector(self->OVT->Operators, opov);
 		}
 		for(int i=0; i<self->OperatorOverloads->Length; i++) {
-			bc_OperatorOverload* opov = AtVector(self->OperatorOverloads, i);
+			bc_OperatorOverload* opov = bc_AtVector(self->OperatorOverloads, i);
 			bc_ReplaceOperatorVt(self->OVT, opov);
 		}
 	}
@@ -339,7 +339,7 @@ int bc_CountAllSMethodClass(bc_Class* self) {
 	return sum;
 }
 
-bc_Object * bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, Vector* args, Vector* type_args) {
+bc_Object * bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args, bc_Vector* type_args) {
 	//コンストラクタを検索
 	int temp = 0;
 	bc_Constructor* ctor = bc_RFindConstructorClass(self, args, NULL, fr, &temp);
@@ -349,17 +349,17 @@ bc_Object * bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, Vector* args, Vect
 	bc_Heap* h = bc_GetHeap();
 	if(args != NULL) {
 		for (int i = args->Length-1; i>=0; i--) {
-			bc_Object* o = AtVector(args, i);
-			PushVector(sub->ValueStack, o);
+			bc_Object* o = bc_AtVector(args, i);
+			bc_PushVector(sub->ValueStack, o);
 		}
 	}
 	if(type_args != NULL) {
 		for(int i = 0; i<type_args->Length; i++) {
-			PushVector(sub->TypeArgs, AtVector(type_args, i));
+			bc_PushVector(sub->TypeArgs, bc_AtVector(type_args, i));
 		}
 	}
 	bc_ExecuteVM(sub, ctor->Env);
-	bc_Object* inst = PopVector(sub->ValueStack);
+	bc_Object* inst = bc_PopVector(sub->ValueStack);
 	h->CollectBlocking++;
 	bc_DeleteFrame(sub);
 	h->CollectBlocking--;
@@ -368,15 +368,15 @@ bc_Object * bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, Vector* args, Vect
 
 void bc_LinkAllClass(bc_Class* self) {
 	for (int i = 0; i < self->Fields->Length; i++) {
-		bc_Field* f = (bc_Field*)AtVector(self->Fields, i);
+		bc_Field* f = (bc_Field*)bc_AtVector(self->Fields, i);
 		f->Parent = self->Parent;
 	}
 	for (int i = 0; i < self->Methods->Length; i++) {
-		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
+		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);
 		m->Parent = self->Parent;
 	}
 	for (int i = 0; i < self->Constructors->Length; i++) {
-		bc_Constructor* ctor = (bc_Constructor*)AtVector(self->Constructors, i);
+		bc_Constructor* ctor = (bc_Constructor*)bc_AtVector(self->Constructors, i);
 		ctor->Parent = self->Parent;
 	}
 }
@@ -387,19 +387,19 @@ void bc_UnlinkClass(bc_Class* self) {
 	}
 	//XSTREQ(self->name, "Object");
 	//generic_DeleteType(self->SuperClass);
-	DeleteNumericMap(self->NativeMethodRefMap, delete_native_method_ref);
-	DeleteVector(self->Implements, class_impl_delete);
-	DeleteVector(self->Fields, delete_field);
-	DeleteVector(self->StaticFields, delete_field);
-	DeleteVector(self->Methods, delete_method);
-	DeleteVector(self->StaticMethods, delete_method);
-	DeleteVector(self->Constructors, class_ctor_delete);
-	DeleteVector(self->OperatorOverloads, delete_operator_overload);
-	DeleteVector(self->Properties, delete_property);
-	DeleteVector(self->StaticProperties, delete_property);
+	bc_DeleteNumericMap(self->NativeMethodRefMap, delete_native_method_ref);
+	bc_DeleteVector(self->Implements, class_impl_delete);
+	bc_DeleteVector(self->Fields, delete_field);
+	bc_DeleteVector(self->StaticFields, delete_field);
+	bc_DeleteVector(self->Methods, delete_method);
+	bc_DeleteVector(self->StaticMethods, delete_method);
+	bc_DeleteVector(self->Constructors, class_ctor_delete);
+	bc_DeleteVector(self->OperatorOverloads, delete_operator_overload);
+	bc_DeleteVector(self->Properties, delete_property);
+	bc_DeleteVector(self->StaticProperties, delete_property);
 	bc_DeleteVTable(self->VT);
 	bc_DeleteOperatorVt(self->OVT);
-	DeleteVector(self->VTTable, delete_vtable);
+	bc_DeleteVector(self->VTTable, delete_vtable);
 }
 
 void bc_DeleteClass(bc_Class* self) {
@@ -407,14 +407,14 @@ void bc_DeleteClass(bc_Class* self) {
 //	assert(self->RefCount == 0);
 //	MEM_FREE(self->name);
 	//printf("delete %s\n", self->name);
-	DeleteVector(self->TypeParameters, delete_type_parameter);
+	bc_DeleteVector(self->TypeParameters, delete_type_parameter);
 	MEM_FREE(self);
 }
 
 //private
 static void create_vtable_top(bc_Class* self) {
 	for (int i = 0; i < self->Methods->Length; i++) {
-		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
+		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
 		   !bc_IsStaticModifier(m->Modifier)) {
 			bc_AddVTable(self->VT, m);
@@ -424,7 +424,7 @@ static void create_vtable_top(bc_Class* self) {
 
 static void create_vtable_override(bc_Class* self) {
 	#if defined(DEBUG)
-	const char* clname = Ref2Str(self->Name);
+	const char* clname = bc_Ref2Str(self->Name);
 	#endif
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->Parent->Location;
@@ -432,7 +432,7 @@ static void create_vtable_override(bc_Class* self) {
 	bc_CreateVTableClass(self->SuperClass->CoreType->Kind.Class);
 	bc_CopyVTable(self->SuperClass->CoreType->Kind.Class->VT, self->VT);
 	for (int i = 0; i < self->Methods->Length; i++) {
-		bc_Method* m = (bc_Method*)AtVector(self->Methods, i);
+		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);
 		if(m->Access != ACCESS_PRIVATE_T &&
 		   !bc_IsStaticModifier(m->Modifier)) {
 			bc_ReplaceVTable(self->VT, m, cctx);
@@ -443,14 +443,14 @@ static void create_vtable_override(bc_Class* self) {
 
 static void create_vtable_interface(bc_Class* self) {
 	#if defined(DEBUG)
-	const char* clname = Ref2Str(bc_GetTypeName(self->Parent));
+	const char* clname = bc_Ref2Str(bc_GetTypeName(self->Parent));
 	#endif
-	Vector* tbl = bc_GetInterfaceTreeClass(self);
+	bc_Vector* tbl = bc_GetInterfaceTreeClass(self);
 	//もしインターフェースを実装しているなら、
 	//インターフェースに対応する同じ並びのメソッドテーブルも作る
 	for (int i = 0; i < tbl->Length; i++) {
 		//GenericType* gtp = (GenericType*)AtVector(tbl, i);
-		bc_Interface* inter = (bc_Interface*)AtVector(tbl, i);
+		bc_Interface* inter = (bc_Interface*)bc_AtVector(tbl, i);
 		bc_VTable* interVT = inter->VT;
 		bc_VTable* newVT = bc_NewVTable();
 		assert(interVT != NULL);
@@ -459,15 +459,15 @@ static void create_vtable_interface(bc_Class* self) {
 		for (int j = 0; j < interVT->Elements->Length; j++) {
 			//実装クラスの中の、
 			//シグネチャが同じメソッドをテーブルへ。
-			bc_Method* interVTM = AtVector(interVT->Elements, j);
+			bc_Method* interVTM = bc_AtVector(interVT->Elements, j);
 			bc_Method* classVTM = class_find_impl_method(self, interVTM);
 			if(!self->IsAbstract && classVTM == NULL) {
-				PushVector(self->VTTable, newVT);
+				bc_PushVector(self->VTTable, newVT);
 				bc_Panic(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
-					Ref2Str(bc_GetTypeName(interVTM->Parent)),
-					Ref2Str(interVTM->Name)
+					bc_Ref2Str(bc_GetTypeName(interVTM->Parent)),
+					bc_Ref2Str(interVTM->Name)
 				);
-				DeleteVector(tbl, VectorDeleterOfNull);
+				bc_DeleteVector(tbl, bc_VectorDeleterOfNull);
 				return;
 			}
 			//assert(self->IsAbstract || classVTM != NULL);
@@ -478,32 +478,32 @@ static void create_vtable_interface(bc_Class* self) {
 			}
 			bc_AddVTable(newVT, classVTM);
 		}
-		PushVector(self->VTTable, newVT);
+		bc_PushVector(self->VTTable, newVT);
 	}
-	DeleteVector(tbl, VectorDeleterOfNull);
+	bc_DeleteVector(tbl, bc_VectorDeleterOfNull);
 }
 
-static void class_impl_delete(VectorItem item) {
+static void class_impl_delete(bc_VectorItem item) {
 	bc_GenericType* e = (bc_GenericType*)item;
 	//generic_DeleteType(e);
 }
 
-static void delete_field(VectorItem item) {
+static void delete_field(bc_VectorItem item) {
 	bc_Field* e = (bc_Field*)item;
 	bc_DeleteField(e);
 }
 
-static void delete_method(VectorItem item) {
+static void delete_method(bc_VectorItem item) {
 	bc_Method* e = (bc_Method*)item;
 	bc_DeleteMethod(e);
 }
 
-static void class_ctor_delete(VectorItem item) {
+static void class_ctor_delete(bc_VectorItem item) {
 	bc_Constructor* e = (bc_Constructor*)item;
 	bc_DeleteConstructor(e);
 }
 
-static void delete_native_method_ref(NumericMapKey key, NumericMapItem item) {
+static void delete_native_method_ref(bc_NumericMapKey key, bc_NumericMapItem item) {
 	bc_NativeMethodRef* e = (bc_NativeMethodRef*)item;
 	bc_DeleteNativeMethodRef(e);
 }
@@ -515,7 +515,7 @@ static bc_Method* class_find_impl_method(bc_Class* self, bc_Method* virtualMetho
 	bc_Method* ret = NULL;
 	bc_VTable* clVT = self->VT;
 	for (int i = 0; i < clVT->Elements->Length; i++) {
-		bc_Method* clM = AtVector(clVT->Elements, i);
+		bc_Method* clM = bc_AtVector(clVT->Elements, i);
 		if (bc_IsOverridedMethod(virtualMethod, clM, cctx)) {
 			ret = clM;
 			break;
@@ -525,27 +525,27 @@ static bc_Method* class_find_impl_method(bc_Class* self, bc_Method* virtualMetho
 	return ret;
 }
 
-static void delete_vtable(VectorItem item) {
+static void delete_vtable(bc_VectorItem item) {
 	bc_VTable* e = (bc_VTable*)item;
 	bc_DeleteVTable(e);
 }
 
-static void delete_type_parameter(VectorItem item) {
+static void delete_type_parameter(bc_VectorItem item) {
 	bc_TypeParameter* e = (bc_TypeParameter*)item;
 	bc_DeleteTypeParameter(e);
 }
 
-static void delete_generic_type(VectorItem item) {
+static void delete_generic_type(bc_VectorItem item) {
 	bc_GenericType* e = (bc_GenericType*)item;
 //	generic_DeleteType(e);
 }
 
-static void delete_operator_overload(VectorItem item) {
+static void delete_operator_overload(bc_VectorItem item) {
 	bc_OperatorOverload* e = (bc_OperatorOverload*)item;
 	bc_DeleteOperatorOverload(e);
 }
 
-static void delete_property(VectorItem item) {
+static void delete_property(bc_VectorItem item) {
 	bc_Property* e = (bc_Property*)item;
 	bc_DeleteProperty(e);
 }

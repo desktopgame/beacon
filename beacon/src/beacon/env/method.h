@@ -37,12 +37,12 @@ typedef enum bc_MethodType {
  * メソッドを表す構造体.
  */
 typedef struct bc_Method {
-	StringView Name;
+	bc_StringView Name;
 	bc_MethodType Type;
 	struct bc_Type* Parent;
 	struct bc_GenericType* ReturnGType;
-	Vector* Parameters;
-	Vector* TypeParameters;
+	bc_Vector* Parameters;
+	bc_Vector* TypeParameters;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	union {
@@ -58,7 +58,7 @@ typedef struct bc_Method {
  * @param lineno
  * @return
  */
-bc_Method* bc_MallocMethod(StringView name, const char* filename, int lineno);
+bc_Method* bc_MallocMethod(bc_StringView name, const char* filename, int lineno);
 #define bc_NewMethod(name) (bc_MallocMethod(name, __FILE__, __LINE__))
 
 /**
@@ -85,7 +85,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, struct CallContext
  * @param name
  * @return
  */
-int bc_GetGenericIndexForMethod(bc_Method* self, StringView namev);
+int bc_GetGenericIndexForMethod(bc_Method* self, bc_StringView namev);
 
 /**
  * メソッドを開放します.
@@ -98,14 +98,14 @@ void bc_DeleteMethod(bc_Method* self);
  * @param self
  * @return
  */
-StringView bc_MangleMethod(bc_Method* self);
+bc_StringView bc_MangleMethod(bc_Method* self);
 
 /**
  * 型の完全名とマングル表現を連結して返します.
  * @param self
  * @return
  */
-StringView bc_GetMethodUniqueName(bc_Method* self);
+bc_StringView bc_GetMethodUniqueName(bc_Method* self);
 
 /**
  * メソッドがコルーチンとして機能できるなら true.
@@ -120,7 +120,7 @@ bool bc_IsCoroutineMethod(bc_Method* self);
  * @param error
  * @return
  */
-bool bc_IsYieldMethod(bc_Method* self, Vector* stmt_list, bool* error);
+bool bc_IsYieldMethod(bc_Method* self, bc_Vector* stmt_list, bool* error);
 
 /**
  * このメソッドのためのユニークなイテレータ型を作成します.
@@ -130,6 +130,6 @@ bool bc_IsYieldMethod(bc_Method* self, Vector* stmt_list, bool* error);
  * @param stmt_list
  * @return
  */
-struct bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, struct bc_ClassLoader* cll, Vector* stmt_list);
+struct bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, struct bc_ClassLoader* cll, bc_Vector* stmt_list);
 
 #endif // !SIGNAL_ENV_METHOD_H

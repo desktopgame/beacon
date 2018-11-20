@@ -16,5 +16,5 @@ struct ILStatement;
 
 struct ILStatement* CLILStmt(struct bc_ClassLoader* self, struct bc_AST* source);
 
-void CLILBody(struct bc_ClassLoader* self, Vector* list, struct bc_AST* source);
+void CLILBody(struct bc_ClassLoader* self, bc_Vector* list, struct bc_AST* source);
 #endif

@@ -16,7 +16,7 @@ static void bc_Object_nativeReferenceEquals(bc_Method* parent, bc_Frame* fr, bc_
 
 void InitObject() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* ObjectType = bc_NewPreloadClass(InternString("Object"));
+	bc_Type* ObjectType = bc_NewPreloadClass(bc_InternString("Object"));
 	bc_Class* ObjectClass = BC_TYPE2CLASS(ObjectType);
 	bc_AddTypeNamespace(lang, ObjectType);
 	bc_DefineNativeMethodClass(ObjectClass, "nativeToString", bc_Object_nativeToString);
@@ -25,22 +25,22 @@ void InitObject() {
 
 bc_Type* GetObjectType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	return bc_FindTypeFromNamespace(lang, InternString("Object"));
+	return bc_FindTypeFromNamespace(lang, bc_InternString("Object"));
 }
 
 //private
 static void bc_Object_nativeToString(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = (bc_Object*)AtVector(fr->VariableTable, 0);
-	Buffer* sb = NewBuffer();
-	AppendfBuffer(sb, "%p", self);
-	char* str = ReleaseBuffer(sb);
+	bc_Object* self = (bc_Object*)bc_AtVector(fr->VariableTable, 0);
+	bc_Buffer* sb = bc_NewBuffer();
+	bc_AppendfBuffer(sb, "%p", self);
+	char* str = bc_ReleaseBuffer(sb);
 	bc_Object* ret = (bc_Object*)NewString(str);
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 	MEM_FREE(str);
 }
 
 static void bc_Object_nativeReferenceEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* a = (bc_Object*)AtVector(fr->VariableTable, 1);
-	bc_Object* b = (bc_Object*)AtVector(fr->VariableTable, 2);
-	PushVector(fr->ValueStack, bc_GetBoolObject(a == b));
+	bc_Object* a = (bc_Object*)bc_AtVector(fr->VariableTable, 1);
+	bc_Object* b = (bc_Object*)bc_AtVector(fr->VariableTable, 2);
+	bc_PushVector(fr->ValueStack, bc_GetBoolObject(a == b));
 }

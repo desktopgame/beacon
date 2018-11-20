@@ -17,21 +17,21 @@
 struct bc_Enviroment;
 
 typedef struct ILTry {
-	Vector* Statements;
-	Vector* Catches;
+	bc_Vector* Statements;
+	bc_Vector* Catches;
 } ILTry;
 
 typedef struct ILCatch {
 	bc_GenericCache* GCache;
-	StringView Name;
-	Vector* Statements;
+	bc_StringView Name;
+	bc_Vector* Statements;
 } ILCatch;
 
 ILStatement* WrapILTry(ILTry* self);
 
 ILTry* NewILTry();
 
-ILCatch* NewILCatch(StringView namev);
+ILCatch* NewILCatch(bc_StringView namev);
 
 void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx);
 

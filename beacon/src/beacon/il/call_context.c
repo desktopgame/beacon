@@ -14,7 +14,7 @@ CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno) 
 #else
 	ControlStructure cs = {};
 #endif
-	ret->CallStack = MallocVector(filename, lineno);
+	ret->CallStack = bc_MallocVector(filename, lineno);
 	ret->Scope = NULL;
 	ret->Ty = NULL;
 	ret->Tag = tag;
@@ -25,16 +25,16 @@ CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno) 
 
 CallFrame* PushImplCallContext(CallContext* self, CallFrameTag tag, const char* filename, int lineno) {
 	CallFrame* fr = MallocCallFrame(tag, filename, lineno);
-	PushVector(self->CallStack, fr);
+	bc_PushVector(self->CallStack, fr);
 	return fr;
 }
 
 CallFrame* TopCallContext(CallContext* self) {
-	return TopVector(self->CallStack);
+	return bc_TopVector(self->CallStack);
 }
 
 void PopCallContext(CallContext* self) {
-	CallFrame* fr = PopVector(self->CallStack);
+	CallFrame* fr = bc_PopVector(self->CallStack);
 	DeleteCallFrame(fr);
 }
 
@@ -54,7 +54,7 @@ bc_Method* GetMethodCContext(CallContext* self) {
 
 bc_Type* GetTypeCContext(CallContext* self) {
 	if(self->Tag == CALL_TOP_T) {
-		return bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("World"));
+		return bc_FindTypeFromNamespace(bc_GetLangNamespace(), bc_InternString("World"));
 	}
 	return self->Ty;
 }
@@ -64,7 +64,7 @@ bc_Class* GetClassCContext(CallContext* self) {
 }
 
 bc_GenericType* GetReceiverCContext(CallContext* self) {
-	CallFrame* cfr = TopVector(self->CallStack);
+	CallFrame* cfr = bc_TopVector(self->CallStack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.Receiver;
 	} else if(cfr->Tag == FRAME_SELF_INVOKE_T) {
@@ -83,8 +83,8 @@ bc_Type* GetEvalTypeCContext(CallContext* self, bc_FQCNCache* fqcn) {
 	return tp;
 }
 
-Vector* GetTypeArgsCContext(CallContext* self) {
-	CallFrame* cfr = TopVector(self->CallStack);
+bc_Vector* GetTypeArgsCContext(CallContext* self) {
+	CallFrame* cfr = bc_TopVector(self->CallStack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.TypeArgs;
 	} else if(cfr->Tag == FRAME_STATIC_INVOKE_T) {
@@ -104,6 +104,6 @@ bool IsStaticCContext(CallContext* self) {
 
 void DeleteCallContext(CallContext* self) {
 	FreeControlStructure(self->Control);
-	DeleteVector(self->CallStack, VectorDeleterOfNull);
+	bc_DeleteVector(self->CallStack, bc_VectorDeleterOfNull);
 	MEM_FREE(self);
 }

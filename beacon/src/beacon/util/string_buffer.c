@@ -8,8 +8,8 @@
 #pragma warning(disable:4996)
 #endif
 //proto
-Buffer* MallocBuffer(const char* filename, int lineno) {
-	Buffer* ret = bc_MXMalloc(sizeof(Buffer), filename, lineno);
+bc_Buffer* bc_MallocBuffer(const char* filename, int lineno) {
+	bc_Buffer* ret = bc_MXMalloc(sizeof(bc_Buffer), filename, lineno);
 	ret->Length = 0;
 	ret->Capacity = 16;
 	ret->Text = (char*)bc_MXMalloc(sizeof(char) * 16, filename, lineno);
@@ -17,23 +17,23 @@ Buffer* MallocBuffer(const char* filename, int lineno) {
 	return ret;
 }
 
-void AppendBuffer(Buffer * self, char c) {
+void bc_AppendBuffer(bc_Buffer * self, char c) {
 	if (self->Length >= self->Capacity) {
-		ReserveBuffer(self);
+		bc_ReserveBuffer(self);
 	}
 	self->Text[self->Length] = c;
 	self->Length++;
 }
 
-void AppendfBuffer(Buffer * self, const char * fmt, ...) {
+void bc_AppendfBuffer(bc_Buffer * self, const char * fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 
-	VappendfBuffer(self, fmt, ap);
+	bc_VappendfBuffer(self, fmt, ap);
 	va_end(ap);
 }
 
-void VappendfBuffer(Buffer * self, const char * fmt, va_list ap) {
+void bc_VappendfBuffer(bc_Buffer * self, const char * fmt, va_list ap) {
 #define BUFF_LEN (256)
 	char block[BUFF_LEN];
 	memset(block, '\0', BUFF_LEN);
@@ -43,29 +43,29 @@ void VappendfBuffer(Buffer * self, const char * fmt, va_list ap) {
 	for (int i = 0; i < len; i++) {
 		char c = block[i];
 		if (c == '\0') { break; }
-		AppendBuffer(self, c);
+		bc_AppendBuffer(self, c);
 	}
 
 #undef BUFF_LEN
 }
 
-void AppendsBuffer(Buffer * self, const char * s) {
+void bc_AppendsBuffer(bc_Buffer * self, const char * s) {
 	for (int i = 0; ; i++) {
 		char c = s[i];
 		if (c == '\0') break;
-		AppendBuffer(self, c);
+		bc_AppendBuffer(self, c);
 	}
 }
 
-char* ReleaseBuffer(Buffer* self) {
-	ShrinkBuffer(self);
+char* bc_ReleaseBuffer(bc_Buffer* self) {
+	bc_ShrinkBuffer(self);
 	char* ret = self->Text;
 	self->Text = NULL;
 	MEM_FREE(self);
 	return ret;
 }
 
-void ReserveBuffer(Buffer* self) {
+void bc_ReserveBuffer(bc_Buffer* self) {
 	int newSize = self->Capacity + (self->Capacity / 2);
 	char* temp = (char*)MEM_REALLOC(self->Text, newSize);
 	assert(temp != NULL);
@@ -74,7 +74,7 @@ void ReserveBuffer(Buffer* self) {
 	self->Capacity = newSize;
 }
 
-void ShrinkBuffer(Buffer * self) {
+void bc_ShrinkBuffer(bc_Buffer * self) {
 	if (self->Length == 0) {
 		return;
 	}
@@ -85,8 +85,8 @@ void ShrinkBuffer(Buffer * self) {
 	self->Capacity = self->Length;
 }
 
-Buffer* IndentBuffer(Buffer* self, int lineIndex, int len) {
-	Buffer* buf = NewBuffer();
+bc_Buffer* bc_IndentBuffer(bc_Buffer* self, int lineIndex, int len) {
+	bc_Buffer* buf = bc_NewBuffer();
 	int linec = 0;
 	int pos = 0;
 	for(int i=0; i<self->Length; i++) {
@@ -95,21 +95,21 @@ Buffer* IndentBuffer(Buffer* self, int lineIndex, int len) {
 			((linec >= lineIndex && linec < (lineIndex + len)) ||
 			(lineIndex == -1 && len == -1))
 		) {
-			AppendsBuffer(buf, "    ");
+			bc_AppendsBuffer(buf, "    ");
 		}
 		if(c == '\n') {
 			linec++;
 			pos = 0;
-			AppendBuffer(buf, '\n');
+			bc_AppendBuffer(buf, '\n');
 		} else {
-			AppendBuffer(buf, c);
+			bc_AppendBuffer(buf, c);
 			pos++;
 		}
 	}
 	return buf;
 }
 
-void DeleteBuffer(Buffer * self) {
+void bc_DeleteBuffer(bc_Buffer * self) {
 	if(self == NULL) {
 		return;
 	}

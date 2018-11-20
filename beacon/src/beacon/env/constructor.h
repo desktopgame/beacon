@@ -23,7 +23,7 @@ struct bc_Frame;
 typedef struct bc_Constructor {
 	struct bc_Type* Parent;
 	struct bc_Enviroment* Env;
-	Vector* Parameters;
+	bc_Vector* Parameters;
 	bc_AccessLevel Access;
 } bc_Constructor;
 
@@ -40,7 +40,7 @@ bc_Constructor* bc_NewConstructor();
  * @param parent
  * @return
  */
-struct bc_Object* bc_NewInstanceConstructor(bc_Constructor* self, Vector* args, struct bc_Frame* parent);
+struct bc_Object* bc_NewInstanceConstructor(bc_Constructor* self, bc_Vector* args, struct bc_Frame* parent);
 
 /**
  * コンストラクタを開放します.

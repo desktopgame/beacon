@@ -27,14 +27,14 @@ typedef enum ILParameterType {
 typedef struct ILParameter {
 	ILParameterType Type;
 	bc_GenericCache* GCache;
-	StringView Name;
+	bc_StringView Name;
 } ILParameter;
 /**
  * パラメータを作成します.
  * @param name
  * @return
  */
-ILParameter* NewILParameter(StringView namev);
+ILParameter* NewILParameter(bc_StringView namev);
 
 /**
  * パラメータを開放します.

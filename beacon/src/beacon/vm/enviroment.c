@@ -15,36 +15,36 @@
 #include "../env/generic_type.h"
 
 //proto
-static void delete_constant(VectorItem item);
-static void delete_line_range(VectorItem item);
+static void delete_constant(bc_VectorItem item);
+static void delete_line_range(bc_VectorItem item);
 static void add_constant(bc_Enviroment* self, bc_Object* o);
-static void delete_object_self(VectorItem item);
+static void delete_object_self(bc_VectorItem item);
 static void delete_object(bc_Object* obj);
 
 bc_Enviroment * bc_NewEnviroment() {
 	bc_Enviroment* ret = (bc_Enviroment*)MEM_MALLOC(sizeof(bc_Enviroment));
 	ret->Bytecode = bc_NewOpcodeBuf();
-	ret->ConstantPool = NewVector();
+	ret->ConstantPool = bc_NewVector();
 	ret->Symboles = bc_NewSymbolTable();
 	ret->ContextRef = NULL;
-	ret->LineRangeTable = NewVector();
+	ret->LineRangeTable = bc_NewVector();
 	return ret;
 }
 
 void bc_AddRangeEnviroment(bc_Enviroment* self, int lineno) {
 	assert(lineno >= 0);
 	//空なので追加
-	if (IsEmptyVector(self->LineRangeTable)) {
+	if (bc_IsEmptyVector(self->LineRangeTable)) {
 		bc_LineRange* lr = bc_NewLineRange();
 		lr->StartOffset = 0;
 		lr->EndOffset = 0;
 		lr->Lineno = lineno;
-		PushVector(self->LineRangeTable, lr);
+		bc_PushVector(self->LineRangeTable, lr);
 		return;
 	}
 	//空ではないなら、
 	//最後についかしたレンジを伸ばすか新たに追加する
-	bc_LineRange* lrt = (bc_LineRange*)TopVector(self->LineRangeTable);
+	bc_LineRange* lrt = (bc_LineRange*)bc_TopVector(self->LineRangeTable);
 	if (lrt->Lineno == lineno) {
 		lrt->EndOffset = self->Bytecode->Instructions->Length;
 	} else {
@@ -52,7 +52,7 @@ void bc_AddRangeEnviroment(bc_Enviroment* self, int lineno) {
 		lr->StartOffset = self->Bytecode->Instructions->Length;
 		lr->EndOffset = self->Bytecode->Instructions->Length;
 		lr->Lineno = lineno;
-		PushVector(self->LineRangeTable, lr);
+		bc_PushVector(self->LineRangeTable, lr);
 	}
 }
 
@@ -63,15 +63,15 @@ void bc_DumpEnviromentOp(bc_Enviroment * self, int depth) {
 	for (int i = 0; i < buf->Instructions->Length; i++) {
 		bc_Printi(depth);
 		i = bc_PrintOpcode(buf->Instructions, i);
-		if (!IsEmptyVector(self->LineRangeTable)) {
+		if (!bc_IsEmptyVector(self->LineRangeTable)) {
 			if (lr == NULL) {
-				lr = AtVector(self->LineRangeTable, 0);
+				lr = bc_AtVector(self->LineRangeTable, 0);
 				lrPos = 0;
 			} else {
 				if (i > lr->EndOffset) {
 					lrPos++;
 					if (lrPos < self->LineRangeTable->Length) {
-						lr = AtVector(self->LineRangeTable, lrPos);
+						lr = bc_AtVector(self->LineRangeTable, lrPos);
 					}
 				}
 			}
@@ -102,18 +102,18 @@ int bc_AddCCharEnviroment(bc_Enviroment * self, char c) {
 	return len;
 }
 
-int bc_AddCStringEnviroment(bc_Enviroment * self, StringView sv) {
+int bc_AddCStringEnviroment(bc_Enviroment * self, bc_StringView sv) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (bc_Object*)NewString(Ref2Str(sv)));
+	add_constant(self, (bc_Object*)NewString(bc_Ref2Str(sv)));
 	return len;
 }
 
-VectorItem bc_GetEnviromentSourceAt(bc_Enviroment * self, int index) {
-	return AtVector(self->Bytecode->Instructions, index);
+bc_VectorItem bc_GetEnviromentSourceAt(bc_Enviroment * self, int index) {
+	return bc_AtVector(self->Bytecode->Instructions, index);
 }
 
 bc_Object* bc_GetEnviromentConstantAt(bc_Enviroment * self, int index) {
-	return (bc_Object*)AtVector(self->ConstantPool, index);
+	return (bc_Object*)bc_AtVector(self->ConstantPool, index);
 }
 
 bc_Object* bc_GetEnviromentCIntAt(bc_Enviroment * self, int index) {
@@ -144,29 +144,29 @@ void bc_DeleteEnviroment(bc_Enviroment * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->ConstantPool, delete_constant);
-	DeleteVector(self->LineRangeTable, delete_line_range);
+	bc_DeleteVector(self->ConstantPool, delete_constant);
+	bc_DeleteVector(self->LineRangeTable, delete_line_range);
 	bc_DeleteOpcodeBuf(self->Bytecode);
 	bc_DeleteSymbolTable(self->Symboles);
 	MEM_FREE(self);
 }
 
 //private
-static void delete_constant(VectorItem item) {
+static void delete_constant(bc_VectorItem item) {
 	delete_object((bc_Object*)item);
 }
 
-static void delete_line_range(VectorItem item) {
+static void delete_line_range(bc_VectorItem item) {
 	bc_LineRange* e = (bc_LineRange*)item;
 	bc_DeleteLineRange(e);
 }
 
 static void add_constant(bc_Enviroment* self, bc_Object* o) {
-	PushVector(self->ConstantPool, o);
+	bc_PushVector(self->ConstantPool, o);
 	assert(o->Paint == PAINT_ONEXIT_T);
 }
 
-static void delete_object_self(VectorItem item) {
+static void delete_object_self(bc_VectorItem item) {
 }
 
 static void delete_object(bc_Object* obj) {

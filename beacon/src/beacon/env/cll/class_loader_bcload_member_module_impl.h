@@ -34,8 +34,8 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
  * @param tp
  * @param ilfields
  */
-void CLBC_fields_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilfields, bc_Namespace* scope);
-void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_Type* tp,Vector* ilfields, Vector* sgfields);
+void CLBC_fields_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilfields, bc_Namespace* scope);
+void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_Type* tp,bc_Vector* ilfields, bc_Vector* sgfields);
 
 bool CLBC_Property_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILProperty* ilprop, bc_Namespace* scope, CallContext* cctx);
 bool CLBC_Property_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILProperty* ilprop, bc_Property* prop, bc_Namespace* scope, CallContext* cctx);
@@ -46,8 +46,8 @@ bool CLBC_Property_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
  * @param tp
  * @param scope
  */
-void CLBC_properties_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilprops, bc_Namespace* scope);
-void CLBC_properties_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilprops, Vector* sgprops, bc_Namespace* scope);
+void CLBC_properties_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilprops, bc_Namespace* scope);
+void CLBC_properties_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilprops, bc_Vector* sgprops, bc_Namespace* scope);
 
 bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMethod* ilmt, bc_Namespace* scope);
 bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype, bc_Type* tp, ILMethod* ilmt, bc_Method* mt);
@@ -60,8 +60,8 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype,
  * @param ilmethods
  * @param scope
  */
-void CLBC_methods_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilmethods, bc_Namespace* scope);
-void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype, bc_Type* tp, Vector* ilmethods, Vector* sgmethods);
+void CLBC_methods_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilmethods, bc_Namespace* scope);
+void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype, bc_Type* tp, bc_Vector* ilmethods, bc_Vector* sgmethods);
 
 
 bool CLBC_ctor_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, bc_Namespace* scope);
@@ -83,7 +83,7 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 void CLBC_operator_overloads_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
 void CLBC_operator_overloads_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
 
-bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env, Vector* ilparams, Vector* ilstmts, CallContext* cctx, bc_Namespace* range);
+bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env, bc_Vector* ilparams, bc_Vector* ilstmts, CallContext* cctx, bc_Namespace* range);
 
-void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, bc_Enviroment* dest, CallContext* cctx, bc_Namespace* range);
+void CLBC_body(bc_ClassLoader* self, bc_Vector* stmt_list, bc_Enviroment* dest, CallContext* cctx, bc_Namespace* range);
 #endif

@@ -20,7 +20,7 @@ struct bc_SymbolEntry;
  * var y = new X::Y();
  */
 typedef struct ILInferencedTypeInit {
-	StringView Name;
+	bc_StringView Name;
 	ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
 } ILInferencedTypeInit;
@@ -37,7 +37,7 @@ ILStatement* WrapILInferencedTypeInit(ILInferencedTypeInit* self);
  * @param namev
  * @return
  */
-ILInferencedTypeInit* NewILInferencedTypeInit(StringView namev);
+ILInferencedTypeInit* NewILInferencedTypeInit(bc_StringView namev);
 
 /**
  * 推論された型の初期化を表す要素を生成します.

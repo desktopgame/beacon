@@ -51,7 +51,7 @@ void GenerateILShiftOp(ILShiftOp* self, bc_Enviroment* env, CallContext* cctx) {
 		GenerateILFactor(self->Parent->Right, env, cctx);
 		GenerateILFactor(self->Parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->Type));
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_iopcode(self->Type));
 		} else {
 			bc_Panic(
 				BCERROR_UNDEFINED_SHIFT_OPERATOR_T,

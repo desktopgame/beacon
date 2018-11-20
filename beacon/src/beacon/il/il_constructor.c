@@ -6,31 +6,31 @@
 #include "il_constructor_chain.h"
 
 //proto
-static void ILConstructor_DeleteParameter(VectorItem item);
-static void ILConstructor_stmt_delete(VectorItem item);
+static void ILConstructor_DeleteParameter(bc_VectorItem item);
+static void ILConstructor_stmt_delete(bc_VectorItem item);
 
 ILConstructor * NewILConstructor() {
 	ILConstructor* ret = (ILConstructor*)MEM_MALLOC(sizeof(ILConstructor));
 	ret->Access = ACCESS_PUBLIC_T;
-	ret->Parameters = NewVector();
-	ret->Statements = NewVector();
+	ret->Parameters = bc_NewVector();
+	ret->Statements = bc_NewVector();
 	ret->Chain = NULL;
 	return ret;
 }
 
 void DeleteILConstructor(ILConstructor * self) {
 	DeleteILConstructorChain(self->Chain);
-	DeleteVector(self->Parameters, ILConstructor_DeleteParameter);
-	DeleteVector(self->Statements, ILConstructor_stmt_delete);
+	bc_DeleteVector(self->Parameters, ILConstructor_DeleteParameter);
+	bc_DeleteVector(self->Statements, ILConstructor_stmt_delete);
 	MEM_FREE(self);
 }
 //private
-static void ILConstructor_DeleteParameter(VectorItem item) {
+static void ILConstructor_DeleteParameter(bc_VectorItem item) {
 	ILParameter* e = (ILParameter*)item;
 	DeleteILParameter(e);
 }
 
-static void ILConstructor_stmt_delete(VectorItem item) {
+static void ILConstructor_stmt_delete(bc_VectorItem item) {
 	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }

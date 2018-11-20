@@ -100,7 +100,7 @@ bc_AST* bc_NewASTTry(bc_AST* abody, bc_AST* acatch_list) {
 	return ret;
 }
 
-bc_AST* bc_NewASTCatch(bc_AST* stypename, StringView name, bc_AST* abody) {
+bc_AST* bc_NewASTCatch(bc_AST* stypename, bc_StringView name, bc_AST* abody) {
 	bc_AST* ret = bc_NewAST(AST_STMT_CATCH_T);
 	bc_AST* aname = bc_NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = name;
@@ -130,7 +130,7 @@ bc_AST* bc_NewASTArgumentList(bc_AST* afactor, bc_AST* aargument_list) {
 	return ret;
 }
 
-bc_AST* bc_NewASTFQCN(bc_AST* apart_list, StringView class_name) {
+bc_AST* bc_NewASTFQCN(bc_AST* apart_list, bc_StringView class_name) {
 	bc_AST* ret = bc_NewAST(AST_FQCN_T);
 	bc_AST* a = bc_NewAST(AST_FQCN_CLASS_NAME_T);
 	a->Attr.StringVValue = class_name;
@@ -139,7 +139,7 @@ bc_AST* bc_NewASTFQCN(bc_AST* apart_list, StringView class_name) {
 	return ret;
 }
 
-bc_AST* bc_MallocASTFQCNPart(StringView namev, const char* filename, int lineno) {
+bc_AST* bc_MallocASTFQCNPart(bc_StringView namev, const char* filename, int lineno) {
 	bc_AST* ret = bc_MallocAST(AST_FQCN_PART_T, filename, lineno);
 	ret->Attr.StringVValue = namev;
 	return ret;
@@ -152,7 +152,7 @@ bc_AST* bc_NewASTFQCNPartList(bc_AST* apart, bc_AST* apart_list) {
 	return ret;
 }
 
-bc_AST* bc_NewASTVariableDecl(bc_AST* atype, StringView name) {
+bc_AST* bc_NewASTVariableDecl(bc_AST* atype, bc_StringView name) {
 	bc_AST* ret = bc_NewAST(AST_STMT_VARIABLE_DECL_T);
 	bc_AST* aname = bc_NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = name;
@@ -161,7 +161,7 @@ bc_AST* bc_NewASTVariableDecl(bc_AST* atype, StringView name) {
 	return ret;
 }
 
-bc_AST* bc_NewASTVariableInit(bc_AST* atype, StringView name, bc_AST* afact) {
+bc_AST* bc_NewASTVariableInit(bc_AST* atype, bc_StringView name, bc_AST* afact) {
 	bc_AST* ret = bc_NewAST(AST_STMT_VARIABLE_INIT_T);
 	bc_AST* aname = bc_NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = name;
@@ -171,7 +171,7 @@ bc_AST* bc_NewASTVariableInit(bc_AST* atype, StringView name, bc_AST* afact) {
 	return ret;
 }
 
-bc_AST* bc_NewASTInferencedTypeInit(StringView name, bc_AST* afact) {
+bc_AST* bc_NewASTInferencedTypeInit(bc_StringView name, bc_AST* afact) {
 	bc_AST* ret = bc_NewAST(AST_INFERENCED_TYPE_INIT_T);
 	bc_AST* aname = bc_NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = name;
@@ -203,7 +203,7 @@ bc_AST* bc_NewASTYieldBreak() {
 	return bc_NewAST(AST_YIELD_BREAK_T);
 }
 
-bc_AST* bc_NewASTInject(StringView name, bc_AST* avalue) {
+bc_AST* bc_NewASTInject(bc_StringView name, bc_AST* avalue) {
 	bc_AST* ret = bc_NewAST(AST_INJECT_JNI_VALUE_T);
 	ret->Attr.StringVValue = name;
 	bc_PushAST(ret, avalue);

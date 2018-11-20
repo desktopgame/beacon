@@ -41,7 +41,7 @@ bc_AST* bc_NewASTVariable(bc_AST* a, bc_AST* atype_args) {
 	return ret;
 }
 
-bc_AST* bc_NewASTVariableFromString(StringView str, bc_AST* atype_args) {
+bc_AST* bc_NewASTVariableFromString(bc_StringView str, bc_AST* atype_args) {
 	bc_AST* ret = bc_NewAST(AST_VARIABLE_T);
 	ret->Attr.StringVValue = str;
 	bc_PushAST(ret, atype_args);
@@ -63,7 +63,7 @@ bc_AST* bc_NewASTSuper() {
 	return bc_NewAST(AST_SUPER_T);
 }
 
-bc_AST* bc_NewASTFieldAccess(bc_AST* afact, StringView name, bc_AST* atype_args) {
+bc_AST* bc_NewASTFieldAccess(bc_AST* afact, bc_StringView name, bc_AST* atype_args) {
 	bc_AST* ret = bc_NewAST(AST_FIELD_ACCESS_T);
 	bc_AST* aname = bc_NewAST(AST_IDENTIFIER_T);
 	aname->Attr.StringVValue = name;

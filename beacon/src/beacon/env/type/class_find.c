@@ -11,13 +11,13 @@
 #include "../../il/il_factor_impl.h"
 #include "../../util/vector.h"
 
-static bool IsContainsFieldClassImpl(Vector* fields, bc_Field* f);
-static bool IsContainsPropertyClassImpl(Vector* props, bc_Property* p);
+static bool IsContainsFieldClassImpl(bc_Vector* fields, bc_Field* f);
+static bool IsContainsPropertyClassImpl(bc_Vector* props, bc_Property* p);
 
-bc_Field* bc_FindFieldClass(bc_Class* self, StringView namev, int* outIndex) {
+bc_Field* bc_FindFieldClass(bc_Class* self, bc_StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->Fields->Length; i++) {
-		VectorItem e = AtVector(self->Fields, i);
+		bc_VectorItem e = bc_AtVector(self->Fields, i);
 		bc_Field* f = (bc_Field*)e;
 		if (namev == f->Name) {
 			(*outIndex) = (bc_CountAllFieldClass(self) - self->Fields->Length) + i;
@@ -27,7 +27,7 @@ bc_Field* bc_FindFieldClass(bc_Class* self, StringView namev, int* outIndex) {
 	return NULL;
 }
 
-bc_Field* bc_FindTreeFieldClass(bc_Class* self, StringView namev, int * outIndex) {
+bc_Field* bc_FindTreeFieldClass(bc_Class* self, bc_StringView namev, int * outIndex) {
 	bc_Class* pointee = self;
 	do {
 		bc_Field* f = bc_FindFieldClass(pointee, namev, outIndex);
@@ -43,10 +43,10 @@ bc_Field* bc_FindTreeFieldClass(bc_Class* self, StringView namev, int * outIndex
 	return NULL;
 }
 
-bc_Field* bc_FindSFieldClass(bc_Class* self, StringView namev, int * outIndex) {
+bc_Field* bc_FindSFieldClass(bc_Class* self, bc_StringView namev, int * outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->StaticFields->Length; i++) {
-		VectorItem e = AtVector(self->StaticFields, i);
+		bc_VectorItem e = bc_AtVector(self->StaticFields, i);
 		bc_Field* f = (bc_Field*)e;
 		if (namev == f->Name) {
 			(*outIndex) = (bc_CountAllSFieldClass(self) - self->StaticFields->Length) + i;
@@ -56,7 +56,7 @@ bc_Field* bc_FindSFieldClass(bc_Class* self, StringView namev, int * outIndex) {
 	return NULL;
 }
 
-bc_Field* bc_FindTreeSFieldClass(bc_Class* self, StringView namev, int * outIndex) {
+bc_Field* bc_FindTreeSFieldClass(bc_Class* self, bc_StringView namev, int * outIndex) {
 	bc_Class* pointee = self;
 	do {
 		bc_Field* f = bc_FindSFieldClass(pointee, namev, outIndex);
@@ -76,7 +76,7 @@ bc_Field* bc_GetFieldClass(bc_Class* self, int index) {
 	int all = bc_CountAllFieldClass(self);
 	if (index >= (all - self->Fields->Length) &&
 		index < all) {
-		return AtVector(self->Fields, self->Fields->Length - (all - index));
+		return bc_AtVector(self->Fields, self->Fields->Length - (all - index));
 	}
 	return bc_GetFieldClass(self->SuperClass->CoreType->Kind.Class, index);
 }
@@ -86,7 +86,7 @@ bc_Field* bc_GetSFieldClass(bc_Class* self, int index) {
 	int all = bc_CountAllSFieldClass(self);
 	if (index >= (all - self->StaticFields->Length) &&
 		index < all) {
-		return AtVector(self->StaticFields, self->StaticFields->Length - (all - index));
+		return bc_AtVector(self->StaticFields, self->StaticFields->Length - (all - index));
 	}
 	return bc_GetSFieldClass(self->SuperClass->CoreType->Kind.Class, index);
 }
@@ -197,7 +197,7 @@ bc_Property* bc_GetPropertyClass(bc_Class* self, int index) {
 	int all = bc_CountAllPropertyClass(self);
 	if (index >= (all - self->Properties->Length) &&
 		index < all) {
-		return AtVector(self->Properties, self->Properties->Length - (all - index));
+		return bc_AtVector(self->Properties, self->Properties->Length - (all - index));
 	}
 	return bc_GetPropertyClass(self->SuperClass->CoreType->Kind.Class, index);
 }
@@ -207,15 +207,15 @@ bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
 	int all = bc_CountAllSPropertyClass(self);
 	if (index >= (all - self->StaticProperties->Length) &&
 		index < all) {
-		return AtVector(self->StaticProperties, self->StaticProperties->Length - (all - index));
+		return bc_AtVector(self->StaticProperties, self->StaticProperties->Length - (all - index));
 	}
 	return bc_GetPropertyClass(self->SuperClass->CoreType->Kind.Class, index);
 }
 
-bc_Property* bc_FindPropertyClass(bc_Class* self, StringView namev, int* outIndex) {
+bc_Property* bc_FindPropertyClass(bc_Class* self, bc_StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->Properties->Length; i++) {
-		VectorItem e = AtVector(self->Properties, i);
+		bc_VectorItem e = bc_AtVector(self->Properties, i);
 		bc_Property* p = (bc_Property*)e;
 		if (namev == p->Name) {
 			(*outIndex) = (bc_CountAllPropertyClass(self) - self->Properties->Length) + i;
@@ -225,7 +225,7 @@ bc_Property* bc_FindPropertyClass(bc_Class* self, StringView namev, int* outInde
 	return NULL;
 }
 
-bc_Property* bc_FindTreePropertyClass(bc_Class* self, StringView namev, int* outIndex) {
+bc_Property* bc_FindTreePropertyClass(bc_Class* self, bc_StringView namev, int* outIndex) {
 	bc_Class* pointee = self;
 	do {
 		bc_Property* p = bc_FindPropertyClass(pointee, namev, outIndex);
@@ -241,10 +241,10 @@ bc_Property* bc_FindTreePropertyClass(bc_Class* self, StringView namev, int* out
 	return NULL;
 }
 
-bc_Property* bc_FindSPropertyClass(bc_Class* self, StringView namev, int* outIndex) {
+bc_Property* bc_FindSPropertyClass(bc_Class* self, bc_StringView namev, int* outIndex) {
 	(*outIndex) = -1;
 	for (int i = 0; i < self->StaticProperties->Length; i++) {
-		VectorItem e = AtVector(self->StaticProperties, i);
+		bc_VectorItem e = bc_AtVector(self->StaticProperties, i);
 		bc_Property* p = (bc_Property*)e;
 		if (namev == p->Name) {
 			(*outIndex) = (bc_CountAllSPropertyClass(self) - self->StaticProperties->Length) + i;
@@ -254,7 +254,7 @@ bc_Property* bc_FindSPropertyClass(bc_Class* self, StringView namev, int* outInd
 	return NULL;
 }
 
-bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, StringView namev, int* outIndex) {
+bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, bc_StringView namev, int* outIndex) {
 	bc_Class* pointee = self;
 	do {
 		bc_Property* p = bc_FindSPropertyClass(pointee, namev, outIndex);
@@ -272,11 +272,11 @@ bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, StringView namev, int* ou
 
 
 
-bc_Constructor* bc_RFindConstructorClass(bc_Class* self, Vector * args, Vector* typeargs, bc_Frame* fr, int* outIndex) {
+bc_Constructor* bc_RFindConstructorClass(bc_Class* self, bc_Vector * args, bc_Vector* typeargs, bc_Frame* fr, int* outIndex) {
 	return bc_MetaScopedRFindConstructor(self, self->Constructors, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector * args, bc_Enviroment * env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector * args, bc_Enviroment * env, CallContext* cctx, int* outIndex) {
 	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
@@ -285,19 +285,19 @@ bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, Vector * args, bc_Envi
 }
 
 bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
-	Vector* emptyArgs = NewVector();
+	bc_Vector* emptyArgs = bc_NewVector();
 	bc_Constructor* ret = bc_ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
-	DeleteVector(emptyArgs, VectorDeleterOfNull);
+	bc_DeleteVector(emptyArgs, bc_VectorDeleterOfNull);
 	return ret;
 }
 
 
 
-bc_Method * bc_ILFindMethodClass(bc_Class* self, StringView namev, Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindMethodClass(bc_Class* self, bc_StringView namev, bc_Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	bc_CreateVTableClass(self);
 	#if defined(DEBUG)
-	const char* str = Ref2Str(self->Name);
+	const char* str = bc_Ref2Str(self->Name);
 	#endif
 	//assert(self->vt->elements->Length > 0);
 	bc_Method* ret = NULL;
@@ -316,7 +316,7 @@ bc_Method * bc_ILFindMethodClass(bc_Class* self, StringView namev, Vector * args
 	return NULL;
 }
 
-bc_Method* bc_GFindMethodClass(bc_Class* self, StringView namev, Vector* gargs, int* outIndex) {
+bc_Method* bc_GFindMethodClass(bc_Class* self, bc_StringView namev, bc_Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	bc_CreateVTableClass(self);
 	//assert(self->vt->elements->Length > 0);
@@ -337,16 +337,16 @@ bc_Method* bc_GFindMethodClass(bc_Class* self, StringView namev, Vector* gargs, 
 }
 
 bc_Method* bc_GFindEqMethodClass(bc_Class* self, int* outIndex) {
-	Vector* gargs = NewVector();
-	PushVector(gargs, BC_TYPE_OBJECT->GenericSelf);
-	bc_Method* ret = bc_GFindMethodClass(self, InternString("equals"), gargs, outIndex);
-	DeleteVector(gargs, VectorDeleterOfNull);
+	bc_Vector* gargs = bc_NewVector();
+	bc_PushVector(gargs, BC_TYPE_OBJECT->GenericSelf);
+	bc_Method* ret = bc_GFindMethodClass(self, bc_InternString("equals"), gargs, outIndex);
+	bc_DeleteVector(gargs, bc_VectorDeleterOfNull);
 	return ret;
 }
 
-bc_Method * bc_ILFindSMethodClass(bc_Class* self, StringView namev, Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindSMethodClass(bc_Class* self, bc_StringView namev, bc_Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	#if defined(DEBUG)
-	const char* str = Ref2Str(namev);
+	const char* str = bc_Ref2Str(namev);
 	#endif
 	(*outIndex) = -1;
 	bc_CreateVTableClass(self);
@@ -357,7 +357,7 @@ bc_Method * bc_ILFindSMethodClass(bc_Class* self, StringView namev, Vector * arg
 	return ret;
 }
 
-bc_Method* bc_GFindSMethodClass(bc_Class* self, StringView namev, Vector* gargs, int* outIndex) {
+bc_Method* bc_GFindSMethodClass(bc_Class* self, bc_StringView namev, bc_Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	bc_CreateVTableClass(self);
 	int temp = 0;
@@ -376,7 +376,7 @@ bc_Method * bc_GetMethodClass(bc_Object * o, int index) {
 		o->VPtr = BC_TYPE2CLASS(BC_TYPE_OBJECT)->VT;
 	}
 	bc_VTable* vx = (o->VPtr);
-	return (bc_Method*)AtVector(vx->Elements, index);
+	return (bc_Method*)bc_AtVector(vx->Elements, index);
 }
 
 bc_Method * bc_GetSMethodClass(bc_Class* self, int index) {
@@ -390,20 +390,20 @@ bc_Method * bc_GetSMethodClass(bc_Class* self, int index) {
 	}
 	return GetSMethodClass(self->SuperClass->CoreType->Kind.Class, index);
 	//*/
-	return AtVector(self->StaticMethods, index);
+	return bc_AtVector(self->StaticMethods, index);
 }
 
 bc_Method * bc_GetImplMethodClass(bc_Class* self, bc_Type* interType, int interMIndex) {
 	#if defined(DEBUG)
-	const char* str = Ref2Str(self->Name);
+	const char* str = bc_Ref2Str(self->Name);
 	#endif
 	assert(self->VTTable->Length > 0);
-	Vector* tbl = bc_GetGenericInterfaceTreeClass(self);
+	bc_Vector* tbl = bc_GetGenericInterfaceTreeClass(self);
 	//指定のインターフェイスが
 	//このクラスにおいて何番目かを調べる
 	int declIndex = -1;
 	for (int i = 0; i < tbl->Length; i++) {
-		bc_GenericType* e = AtVector(tbl, i);
+		bc_GenericType* e = bc_AtVector(tbl, i);
 		bc_Interface* inter = e->CoreType->Kind.Interface;
 		if (inter == interType->Kind.Interface) {
 			declIndex = i;
@@ -412,30 +412,30 @@ bc_Method * bc_GetImplMethodClass(bc_Class* self, bc_Type* interType, int interM
 	}
 	//仮想関数テーブルの一覧から引く
 	assert(declIndex != -1);
-	DeleteVector(tbl, VectorDeleterOfNull);
-	bc_VTable* vtAt = AtVector(self->VTTable, declIndex);
-	return AtVector(vtAt->Elements, interMIndex);
+	bc_DeleteVector(tbl, bc_VectorDeleterOfNull);
+	bc_VTable* vtAt = bc_AtVector(self->VTTable, declIndex);
+	return bc_AtVector(vtAt->Elements, interMIndex);
 }
 
 
 
 
-bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	bc_OperatorOverload* ret = NULL;
 	bc_CreateOperatorVTClass(self);
 	for(int i=0; i<self->OVT->Operators->Length; i++) {
-		bc_OperatorOverload* operator_ov = AtVector(self->OVT->Operators, i);
+		bc_OperatorOverload* operator_ov = bc_AtVector(self->OVT->Operators, i);
 		if(operator_ov->Type != type) {
 			continue;
 		}
 		bool nomatch = false;
 		int score = 1024;
 		int sum = 0;
-		Vector* params = operator_ov->Parameters;
+		bc_Vector* params = operator_ov->Parameters;
 		for(int j=0; j<params->Length; j++) {
-			bc_Parameter* param = AtVector(params, j);
-			bc_GenericType* arg = AtVector(args, j);
+			bc_Parameter* param = bc_AtVector(params, j);
+			bc_GenericType* arg = bc_AtVector(args, j);
 			int dist = bc_DistanceGenericType(param->GType, arg, cctx);
 			if(dist == -1) {
 				nomatch = true;
@@ -455,48 +455,48 @@ bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorTy
 	return ret;
 }
 
-bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
-	Vector* gargs =NewVector();
+bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+	bc_Vector* gargs =bc_NewVector();
 	for(int i=0; i<args->Length; i++) {
-		ILFactor* ilfact = (ILFactor*)AtVector(args,i);
+		ILFactor* ilfact = (ILFactor*)bc_AtVector(args,i);
 		bc_GenericType* g = EvalILFactor(ilfact, env, cctx);
-		PushVector(gargs, g);
+		bc_PushVector(gargs, g);
 	}
 	bc_OperatorOverload* ret = bc_GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
-	DeleteVector(gargs, VectorDeleterOfNull);
+	bc_DeleteVector(gargs, bc_VectorDeleterOfNull);
 	return ret;
 }
 
-bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
-	Vector* gargs =NewVector();
+bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+	bc_Vector* gargs =bc_NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//ILFactor* ilfact = (ILFactor*)AtVector(args,i);
-		ILArgument* ilarg = (ILArgument*)AtVector(args, i);
+		ILArgument* ilarg = (ILArgument*)bc_AtVector(args, i);
 		ILFactor* ilfact = ilarg->Factor;
 		bc_GenericType* g = EvalILFactor(ilfact, env, cctx);
-		PushVector(gargs, g);
+		bc_PushVector(gargs, g);
 	}
 	bc_OperatorOverload* ret = bc_GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
-	DeleteVector(gargs, VectorDeleterOfNull);
+	bc_DeleteVector(gargs, bc_VectorDeleterOfNull);
 	return ret;
 }
 
 bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self, int index) {
-	return AtVector(self->OVT->Operators, index);
+	return bc_AtVector(self->OVT->Operators, index);
 }
 
-Vector* bc_FindTreeMethodClass(bc_Class* self, bc_Method* m) {
+bc_Vector* bc_FindTreeMethodClass(bc_Class* self, bc_Method* m) {
 	assert(self != NULL);
 	assert(m != NULL);
 	bc_Class* ptr = self;
-	Vector* ret = NewVector();
+	bc_Vector* ret = bc_NewVector();
 	#if defined(DEBUG)
-	const char* ptrname = Ref2Str(ptr->Name);
+	const char* ptrname = bc_Ref2Str(ptr->Name);
 	#endif
 	do {
 		bc_Method* tmp = NULL;
 		if(bc_IsContainsMethod(ptr->Methods, m, &tmp)) {
-			PushVector(ret, tmp);
+			bc_PushVector(ret, tmp);
 		}
 		//親クラスへ
 		if(ptr->SuperClass != NULL) {
@@ -508,7 +508,7 @@ Vector* bc_FindTreeMethodClass(bc_Class* self, bc_Method* m) {
 	return ret;
 }
 
-bool bc_IsContainsMethod(Vector* method_list, bc_Method* m, bc_Method** outM) {
+bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m, bc_Method** outM) {
 	assert(!bc_IsStaticModifier(m->Modifier));
 	(*outM) = NULL;
 	bool ret = false;
@@ -516,7 +516,7 @@ bool bc_IsContainsMethod(Vector* method_list, bc_Method* m, bc_Method** outM) {
 	cctx->Scope = m->Parent->Location;
 	cctx->Ty = m->Parent;
 	for(int i=0; i<method_list->Length; i++) {
-		bc_Method* mE = AtVector(method_list, i);
+		bc_Method* mE = bc_AtVector(method_list, i);
 		if(bc_IsOverridedMethod(m, mE, cctx)) {
 			(*outM) = mE;
 			ret = true;
@@ -527,25 +527,25 @@ bool bc_IsContainsMethod(Vector* method_list, bc_Method* m, bc_Method** outM) {
 	return ret;
 }
 
-Vector* bc_GetGenericInterfaceListClass(bc_Class* self) {
-	Vector* ret = NewVector();
+bc_Vector* bc_GetGenericInterfaceListClass(bc_Class* self) {
+	bc_Vector* ret = bc_NewVector();
 	for(int i=0; i<self->Implements->Length; i++) {
-		bc_GenericType* ginter = AtVector(self->Implements, i);
-		Vector* inner = bc_GetGenericInterfaceTreeInterface(BC_TYPE2INTERFACE(bc_GENERIC2TYPE(ginter)));
-		MergeVector(ret, inner);
-		PushVector(ret, ginter);
-		DeleteVector(inner, VectorDeleterOfNull);
+		bc_GenericType* ginter = bc_AtVector(self->Implements, i);
+		bc_Vector* inner = bc_GetGenericInterfaceTreeInterface(BC_TYPE2INTERFACE(bc_GENERIC2TYPE(ginter)));
+		bc_MergeVector(ret, inner);
+		bc_PushVector(ret, ginter);
+		bc_DeleteVector(inner, bc_VectorDeleterOfNull);
 	}
 	return ret;
 }
 
-Vector* bc_GetGenericInterfaceTreeClass(bc_Class* self) {
+bc_Vector* bc_GetGenericInterfaceTreeClass(bc_Class* self) {
 	bc_Class* ptr = self;
-	Vector* ret = NewVector();
+	bc_Vector* ret = bc_NewVector();
 	do {
-		Vector* v = bc_GetGenericInterfaceListClass(ptr);
-		MergeVector(v, ret);
-		DeleteVector(v, VectorDeleterOfNull);
+		bc_Vector* v = bc_GetGenericInterfaceListClass(ptr);
+		bc_MergeVector(v, ret);
+		bc_DeleteVector(v, bc_VectorDeleterOfNull);
 		if(ptr->SuperClass == NULL) {
 			break;
 		}
@@ -554,25 +554,25 @@ Vector* bc_GetGenericInterfaceTreeClass(bc_Class* self) {
 	return ret;
 }
 
-Vector* bc_GetInterfaceListClass(bc_Class* self) {
-	Vector* ret = NewVector();
-	Vector* c = bc_GetGenericInterfaceListClass(self);
+bc_Vector* bc_GetInterfaceListClass(bc_Class* self) {
+	bc_Vector* ret = bc_NewVector();
+	bc_Vector* c = bc_GetGenericInterfaceListClass(self);
 	for(int i=0; i<c->Length; i++) {
-		bc_GenericType* gt = AtVector(c, i);
-		PushVector(ret, BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gt)));
+		bc_GenericType* gt = bc_AtVector(c, i);
+		bc_PushVector(ret, BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gt)));
 	}
-	DeleteVector(c, VectorDeleterOfNull);
+	bc_DeleteVector(c, bc_VectorDeleterOfNull);
 	return ret;
 }
 
-Vector* bc_GetInterfaceTreeClass(bc_Class* self) {
-	Vector* ret = NewVector();
-	Vector* c = bc_GetGenericInterfaceTreeClass(self);
+bc_Vector* bc_GetInterfaceTreeClass(bc_Class* self) {
+	bc_Vector* ret = bc_NewVector();
+	bc_Vector* c = bc_GetGenericInterfaceTreeClass(self);
 	for(int i=0; i<c->Length; i++) {
-		bc_GenericType* gt = AtVector(c, i);
-		PushVector(ret, BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gt)));
+		bc_GenericType* gt = bc_AtVector(c, i);
+		bc_PushVector(ret, BC_TYPE2INTERFACE(bc_GENERIC2TYPE(gt)));
 	}
-	DeleteVector(c, VectorDeleterOfNull);
+	bc_DeleteVector(c, bc_VectorDeleterOfNull);
 	return ret;
 }
 
@@ -589,9 +589,9 @@ bc_GenericType* bc_FindInterfaceTypeClass(bc_Class* self, bc_Type* tinter, bc_Ge
 		}
 		bool found = false;
 		//Vector* gimpl_list = GetGenericInterfaceListClass(ptr);
-		Vector* gimpl_list = ptr->Implements;
+		bc_Vector* gimpl_list = ptr->Implements;
 		for (int i = 0; i < gimpl_list->Length; i++) {
-			bc_GenericType* gimpl = AtVector(gimpl_list, i);
+			bc_GenericType* gimpl = bc_AtVector(gimpl_list, i);
 			if (gimpl->CoreType == tinter) {
 				found = true;
 				ret = gimpl;
@@ -610,9 +610,9 @@ bc_GenericType* bc_FindInterfaceTypeClass(bc_Class* self, bc_Type* tinter, bc_Ge
 }
 
 //private
-static bool IsContainsFieldClassImpl(Vector* fields, bc_Field* f) {
+static bool IsContainsFieldClassImpl(bc_Vector* fields, bc_Field* f) {
 	for(int i=0; i<fields->Length; i++) {
-		bc_Field* e = (bc_Field*)AtVector(fields, i);
+		bc_Field* e = (bc_Field*)bc_AtVector(fields, i);
 		if(e == f) {
 			return true;
 		}
@@ -620,9 +620,9 @@ static bool IsContainsFieldClassImpl(Vector* fields, bc_Field* f) {
 	return false;
 }
 
-static bool IsContainsPropertyClassImpl(Vector* props, bc_Property* p) {
+static bool IsContainsPropertyClassImpl(bc_Vector* props, bc_Property* p) {
 	for(int i=0; i<props->Length; i++) {
-		bc_Property* e = (bc_Property*)AtVector(props, i);
+		bc_Property* e = (bc_Property*)bc_AtVector(props, i);
 		if(e == p) {
 			return true;
 		}

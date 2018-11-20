@@ -44,8 +44,8 @@ static void check_context(ILThis * self, bc_Enviroment * env, CallContext* cctx)
 	bc_Method* met = GetMethodCContext(cctx);
 	if(bc_IsStaticModifier(met->Modifier)) {
 		bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-			Ref2Str(bc_GetTypeName(met->Parent)),
-			Ref2Str(met->Name)
+			bc_Ref2Str(bc_GetTypeName(met->Parent)),
+			bc_Ref2Str(met->Name)
 		);
 	}
 }

@@ -21,7 +21,7 @@ struct ILFactor;
  */
 typedef struct ILField {
 	struct bc_GenericCache* GCache;
-	StringView Name;
+	bc_StringView Name;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	struct ILFactor* InitialValue;
@@ -31,7 +31,7 @@ typedef struct ILField {
  * @param name
  * @return
  */
-ILField* NewILField(StringView name);
+ILField* NewILField(bc_StringView name);
 
 /**
  * フィールドを開放します.

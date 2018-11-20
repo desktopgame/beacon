@@ -15,13 +15,13 @@
 #include "../il_type_interface.h"
 
 typedef struct ILEnum {
-	StringView Name;
-	Vector* Items;
+	bc_StringView Name;
+	bc_Vector* Items;
 } ILEnum;
 
 ILType* WrapILEnum(ILEnum* self);
 
-ILEnum* NewILEnum(StringView namev);
+ILEnum* NewILEnum(bc_StringView namev);
 
 void DeleteILEnum(ILEnum* self);
 #endif // !SIGNAL_IL_IL_ENUM_H

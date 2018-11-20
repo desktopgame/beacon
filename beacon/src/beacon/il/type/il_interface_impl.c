@@ -6,10 +6,10 @@
 #include "../il_property.h"
 
 //proto
-static void ILInterface_fqcn_delete(VectorItem item);
-static void ILInterface_DeleteMethod(VectorItem item);
-static void ILInterface_DeleteTypeParameter(VectorItem item);
-static void ILInterface_DeleteProperty(VectorItem item);
+static void ILInterface_fqcn_delete(bc_VectorItem item);
+static void ILInterface_DeleteMethod(bc_VectorItem item);
+static void ILInterface_DeleteTypeParameter(bc_VectorItem item);
+static void ILInterface_DeleteProperty(bc_VectorItem item);
 
 ILType * WrapILInterface(ILInterface * self) {
 	ILType* ret = NewILType();
@@ -18,48 +18,48 @@ ILType * WrapILInterface(ILInterface * self) {
 	return ret;
 }
 
-ILInterface * NewILInterface(StringView namev) {
+ILInterface * NewILInterface(bc_StringView namev) {
 	ILInterface* ret = (ILInterface*)MEM_MALLOC(sizeof(ILInterface));
-	ret->Extends = NewVector();
-	ret->Methods = NewVector();
+	ret->Extends = bc_NewVector();
+	ret->Methods = bc_NewVector();
 	ret->Name = namev;
-	ret->TypeParameters = NewVector();
-	ret->Properties = NewVector();
+	ret->TypeParameters = bc_NewVector();
+	ret->Properties = bc_NewVector();
 	return ret;
 }
 
 void AddPropertyILInterface(ILInterface* self, ILProperty* prop) {
-	PushVector(self->Properties, prop);
+	bc_PushVector(self->Properties, prop);
 }
 
 void AddMethodILInterface(ILInterface * self, ILMethod * method) {
-	PushVector(self->Methods, method);
+	bc_PushVector(self->Methods, method);
 }
 
 void DeleteILInterface(ILInterface * self) {
-	DeleteVector(self->Extends, ILInterface_fqcn_delete);
-	DeleteVector(self->Methods, ILInterface_DeleteMethod);
-	DeleteVector(self->TypeParameters, ILInterface_DeleteTypeParameter);
-	DeleteVector(self->Properties, ILInterface_DeleteProperty);
+	bc_DeleteVector(self->Extends, ILInterface_fqcn_delete);
+	bc_DeleteVector(self->Methods, ILInterface_DeleteMethod);
+	bc_DeleteVector(self->TypeParameters, ILInterface_DeleteTypeParameter);
+	bc_DeleteVector(self->Properties, ILInterface_DeleteProperty);
 	MEM_FREE(self);
 }
 //private 
-static void ILInterface_fqcn_delete(VectorItem item) {
+static void ILInterface_fqcn_delete(bc_VectorItem item) {
 	bc_GenericCache* e = (bc_GenericCache*)item;
 	bc_DeleteGenericCache(e);
 }
 
-static void ILInterface_DeleteMethod(VectorItem item) {
+static void ILInterface_DeleteMethod(bc_VectorItem item) {
 	ILMethod* e = (ILMethod*)item;
 	DeleteILMethod(e);
 }
 
-static void ILInterface_DeleteTypeParameter(VectorItem item) {
+static void ILInterface_DeleteTypeParameter(bc_VectorItem item) {
 	ILTypeParameter* e = (ILTypeParameter*)item;
 	DeleteILTypeParameter(e);
 }
 
-static void ILInterface_DeleteProperty(VectorItem item) {
+static void ILInterface_DeleteProperty(bc_VectorItem item) {
 	ILProperty* e = (ILProperty*)item;
 	DeleteILProperty(e);
 }

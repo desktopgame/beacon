@@ -189,7 +189,7 @@ void bc_SetPanicColumn(int column);
  * 最後に発生したパニックメッセージを返します.
  * @return
  */
-StringView bc_GetPanicMessage();
+bc_StringView bc_GetPanicMessage();
 
 /**
  * 現在発生中のパニックを返します.

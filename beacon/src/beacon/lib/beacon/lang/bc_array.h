@@ -16,7 +16,7 @@
  */
 typedef struct Array {
 	bc_Object Super;
-	Vector* Elements;
+	bc_Vector* Elements;
 } Array;
 
 struct bc_Frame;

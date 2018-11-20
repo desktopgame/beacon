@@ -7,37 +7,37 @@
 
 bc_OperatorVT* bc_NewOperatorVt() {
 	bc_OperatorVT* ret = (bc_OperatorVT*)MEM_MALLOC(sizeof(bc_OperatorVT));
-	ret->Operators = NewVector();
+	ret->Operators = bc_NewVector();
 	return ret;
 }
 
 void bc_ReplaceOperatorVt(bc_OperatorVT* self, bc_OperatorOverload* opov) {
 	for(int i=0; i<self->Operators->Length; i++) {
-		bc_OperatorOverload* e = AtVector(self->Operators, i);
+		bc_OperatorOverload* e = bc_AtVector(self->Operators, i);
 		if(e->Type != opov->Type) {
 			continue;
 		}
 		if(bc_Is1ArgOperator(e->Type)) {
-			AssignVector(self->Operators, i, opov);
+			bc_AssignVector(self->Operators, i, opov);
 			return;
 		} else if(bc_Is2ArgOperator(e->Type)) {
-			bc_Parameter* param_a = AtVector(e->Parameters, 0);
-			bc_Parameter* param_b = AtVector(opov->Parameters, 0);
+			bc_Parameter* param_a = bc_AtVector(e->Parameters, 0);
+			bc_Parameter* param_b = bc_AtVector(opov->Parameters, 0);
 			if(bc_DistanceGenericType(param_a->GType, param_b->GType, NULL) == 0) {
-				AssignVector(self->Operators, i, opov);
+				bc_AssignVector(self->Operators, i, opov);
 				return;
 			}
 		} else {
 			assert(false);
 		}
 	}
-	PushVector(self->Operators, opov);
+	bc_PushVector(self->Operators, opov);
 }
 
 void bc_DeleteOperatorVt(bc_OperatorVT* self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->Operators, VectorDeleterOfNull);
+	bc_DeleteVector(self->Operators, bc_VectorDeleterOfNull);
 	MEM_FREE(self);
 }

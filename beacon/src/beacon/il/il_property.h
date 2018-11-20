@@ -19,13 +19,13 @@ typedef struct ILProperty {
 	struct bc_GenericCache* GCache;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
-	StringView Name;
+	bc_StringView Name;
 	ILPropertyBody* Set;
 	ILPropertyBody* Get;
 } ILProperty;
 
 #define ILNewProperty(namev) (MallocILProperty(namev, __FILE__, __LINE__))
-ILProperty* MallocILProperty(StringView namev, const char* filename, int lineno);
+ILProperty* MallocILProperty(bc_StringView namev, const char* filename, int lineno);
 
 void DeleteILProperty(ILProperty* self);
 #endif

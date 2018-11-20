@@ -23,7 +23,7 @@ struct bc_SymbolEntry;
  * オペコードの中では、添え字で変数アクセスを行います。
  */
 typedef struct bc_SymbolTable {
-	NumericMap* VariableMap;
+	bc_NumericMap* VariableMap;
 	int Count;
 	int ScopeDepth;
 } bc_SymbolTable;
@@ -42,7 +42,7 @@ bc_SymbolTable* bc_NewSymbolTable();
  * @param namev
  * @return nameに対応するエントリが存在せず、clsがNULLならNULL
  */
-struct bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, struct bc_GenericType* gtp, StringView namev);
+struct bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, struct bc_GenericType* gtp, bc_StringView namev);
 
 /**
  * 既に指定の名前が含まれるなら true.
@@ -50,7 +50,7 @@ struct bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, struct bc_Gener
  * @param namev
  * @return
  */
-bool bc_IsContainsSymbol(bc_SymbolTable* self, StringView namev);
+bool bc_IsContainsSymbol(bc_SymbolTable* self, bc_StringView namev);
 
 /**
  * シンボルテーブルをダンプします.

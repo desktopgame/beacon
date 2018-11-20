@@ -12,13 +12,13 @@ static ILVariableDecl* CLIL_variable_decl(bc_ClassLoader* self, bc_AST* asource)
 static ILVariableInit* CLIL_variable_init(bc_ClassLoader* self, bc_AST* asource);
 static ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource);
 static ILIf* CLIL_if_elif_list(bc_ClassLoader* self, bc_AST* asource);
-static void CLIL_elif_list(bc_ClassLoader* self, Vector* list, bc_AST* asource);
+static void CLIL_elif_list(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource);
 static ILIf* CLIL_if_else(bc_ClassLoader* self, bc_AST* asource);
 static ILIf* CLIL_if_elif_list_else(bc_ClassLoader* self, bc_AST* asource);
 static ILWhile* CLIL_while(bc_ClassLoader* self, bc_AST* asource);
 static ILReturn* CLIL_return(bc_ClassLoader* self, bc_AST* asource);
 static ILTry* CLIL_try(bc_ClassLoader* self, bc_AST* asource);
-static void CLIL_catch_list(bc_ClassLoader* self, Vector* dest, bc_AST* asource);
+static void CLIL_catch_list(bc_ClassLoader* self, bc_Vector* dest, bc_AST* asource);
 static ILThrow* CLIL_throw(bc_ClassLoader* self, bc_AST* asource);
 static ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource);
 static ILDefer* CLIL_defer(bc_ClassLoader* self, bc_AST* asource);
@@ -31,7 +31,7 @@ ILStatement* CLILStmt(bc_ClassLoader* self, bc_AST* source) {
 	return ret;
 }
 
-void CLILBody(bc_ClassLoader* self, Vector* list, bc_AST* source) {
+void CLILBody(bc_ClassLoader* self, bc_Vector* list, bc_AST* source) {
 	if(source == NULL) {
 		return;
 	}
@@ -44,7 +44,7 @@ void CLILBody(bc_ClassLoader* self, Vector* list, bc_AST* source) {
 		if (stmt != NULL) {
 			stmt->Lineno = source->Lineno;
 			assert(source->Lineno >= 0);
-			PushVector(list, stmt);
+			bc_PushVector(list, stmt);
 		}
 	}
 }
@@ -241,7 +241,7 @@ static ILWhile * CLIL_while(bc_ClassLoader * self, bc_AST* asource) {
 	return ilwhile;
 }
 
-static void CLIL_elif_list(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
+static void CLIL_elif_list(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_ELIF_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
 			CLIL_elif_list(self, list, bc_AtAST(asource, i));
@@ -274,7 +274,7 @@ static ILTry* CLIL_try(bc_ClassLoader* self, bc_AST* asource) {
 	return ret;
 }
 
-static void CLIL_catch_list(bc_ClassLoader* self, Vector* dest, bc_AST* asource) {
+static void CLIL_catch_list(bc_ClassLoader* self, bc_Vector* dest, bc_AST* asource) {
 	if(asource->Tag == AST_STMT_CATCH_T) {
 		bc_AST* atypename = bc_FirstAST(asource);
 		bc_AST* aname = bc_SecondAST(asource);
@@ -282,7 +282,7 @@ static void CLIL_catch_list(bc_ClassLoader* self, Vector* dest, bc_AST* asource)
 		ILCatch* ilcatch = NewILCatch(aname->Attr.StringVValue);
 		CLILGenericCache(bc_FirstAST(atypename), ilcatch->GCache);
 		CLILBody(self, ilcatch->Statements, abody);
-		PushVector(dest, ilcatch);
+		bc_PushVector(dest, ilcatch);
 
 	} else if(asource->Tag == AST_STMT_CATCH_LIST_T) {
 		for(int i=0; i<asource->Children->Length; i++) {

@@ -159,13 +159,13 @@ char* ILFactorToString(ILFactor* self, bc_Enviroment* env);
  * @param sb
  * @param args
  */
-void ILArgsToString(Buffer* sb, Vector* args, bc_Enviroment* env);
+void ILArgsToString(bc_Buffer* sb, bc_Vector* args, bc_Enviroment* env);
 
 /**
  * @param sb
  * @param type_args
  */
-void ILTypeArgsToString(Buffer* sb, Vector* type_args, bc_Enviroment* env);
+void ILTypeArgsToString(bc_Buffer* sb, bc_Vector* type_args, bc_Enviroment* env);
 
 /**
  * 計算可能な要素を開放します.

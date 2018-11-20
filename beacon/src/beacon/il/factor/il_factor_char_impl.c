@@ -33,11 +33,11 @@ bc_GenericType* EvalILChar(ILChar * self, bc_Enviroment * env, CallContext* cctx
 }
 
 char* ILCharToString(ILChar* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
-	AppendBuffer(sb, '\'');
-	AppendBuffer(sb, self->Value);
-	AppendBuffer(sb, '\'');
-	return ReleaseBuffer(sb);
+	bc_Buffer* sb = bc_NewBuffer();
+	bc_AppendBuffer(sb, '\'');
+	bc_AppendBuffer(sb, self->Value);
+	bc_AppendBuffer(sb, '\'');
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILChar(ILChar * self) {

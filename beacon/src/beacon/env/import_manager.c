@@ -16,18 +16,18 @@
 #include "TYPE_IMPL.h"
 
 //proto
-static void delete_import_info(VectorItem item);
+static void delete_import_info(bc_VectorItem item);
 
 bc_ImportManager * bc_NewImportManager() {
 	bc_ImportManager* ret = (bc_ImportManager*)MEM_MALLOC(sizeof(bc_ImportManager));
-	ret->Items = NewVector();
+	ret->Items = bc_NewVector();
 	return ret;
 }
 
 bc_ImportInfo* bc_ImportImportManager(bc_ImportManager * self, bc_ClassLoader * target) {
 	bc_ImportInfo* info = bc_NewImportInfo();
 	info->Context = target;
-	PushVector(self->Items, info);
+	bc_PushVector(self->Items, info);
 	return info;
 }
 
@@ -35,15 +35,15 @@ bool bc_IsLoadedImportManager(bc_ImportManager * self, int index) {
 	if (index >= self->Items->Length) {
 		return false;
 	}
-	bc_ImportInfo* info = (bc_ImportInfo*)AtVector(self->Items, index);
+	bc_ImportInfo* info = (bc_ImportInfo*)bc_AtVector(self->Items, index);
 	return info->IsConsume;
 }
 
 bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope, bc_GenericCache* fqcn, CallContext* cctx) {
 	bc_Type* CoreType = bc_GetTypeFQCN(fqcn->FQCN, scope);
 	#if defined(DEBUG)
-	const char* ctname = Ref2Str(bc_GetTypeName(CoreType));
-	const char* it = Ref2Str(fqcn->FQCN->Name);
+	const char* ctname = bc_Ref2Str(bc_GetTypeName(CoreType));
+	const char* it = bc_Ref2Str(fqcn->FQCN->Name);
 	#endif
 	//Int, Double
 	if(CoreType != NULL && fqcn->TypeArgs->Length == 0) {
@@ -57,7 +57,7 @@ bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope, bc_GenericCache* fq
 		bc_GenericType* normalGType = bc_NewGenericType(CoreType);
 		assert(CoreType->Tag != TYPE_ENUM_T);
 		for (int i = 0; i < fqcn->TypeArgs->Length; i++) {
-			bc_GenericCache* e = (bc_GenericCache*)AtVector(fqcn->TypeArgs, i);
+			bc_GenericCache* e = (bc_GenericCache*)bc_AtVector(fqcn->TypeArgs, i);
 			bc_GenericType* child = bc_ResolveImportManager(scope, e, cctx);
 			bc_AddArgsGenericType(normalGType, child);
 		}
@@ -110,7 +110,7 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn
 	bc_Method* mt = GetMethodCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
 		#if defined(DEBUG)
-		const char* methodname = Ref2Str(mt->Name);
+		const char* methodname = bc_Ref2Str(mt->Name);
 		#endif
 		int index = bc_GetGenericIndexForMethod(mt, fqcn->Name);
 		parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
@@ -121,7 +121,7 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn
 	bc_Type* ty = GetTypeCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && ty != NULL) {
 		#if defined(DEBUG)
-		const char* typename_ = Ref2Str(bc_GetTypeName(ty));
+		const char* typename_ = bc_Ref2Str(bc_GetTypeName(ty));
 		#endif
 		int index = bc_GetGenericIndexType(ty, fqcn->Name);
 		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
@@ -133,11 +133,11 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn
 }
 
 void bc_DeleteImportManager(bc_ImportManager * self) {
-	DeleteVector(self->Items, delete_import_info);
+	bc_DeleteVector(self->Items, delete_import_info);
 	MEM_FREE(self);
 }
 //private
-static void delete_import_info(VectorItem item) {
+static void delete_import_info(bc_VectorItem item) {
 	bc_ImportInfo* e = (bc_ImportInfo*)item;
 	bc_DeleteImportInfo(e);
 }

@@ -14,7 +14,7 @@ ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
 	return ret;
 }
 
-ILVariableDecl * NewILVariableDecl(StringView namev) {
+ILVariableDecl * NewILVariableDecl(bc_StringView namev) {
 	ILVariableDecl* ret = (ILVariableDecl*)MEM_MALLOC(sizeof(ILVariableDecl));
 	ret->Name = namev;
 	ret->GCache = bc_NewGenericCache();
@@ -28,7 +28,7 @@ void GenerateILVariableDecl(ILVariableDecl * self, bc_Enviroment * env, CallCont
 void LoadILVariableDecl(ILVariableDecl * self, bc_Enviroment* env, CallContext* cctx) {
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
-			Ref2Str(self->Name)
+			bc_Ref2Str(self->Name)
 		);
 	}
 	bc_SymbolEntry* e = bc_EntrySymbolTable(

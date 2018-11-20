@@ -27,13 +27,13 @@ struct bc_Type;
  */
 typedef struct bc_Interface {
 	struct bc_Type* Parent;
-	StringView Name;
-	Vector* Implements;
-	Vector* Properties;
-	Vector* Methods;
+	bc_StringView Name;
+	bc_Vector* Implements;
+	bc_Vector* Properties;
+	bc_Vector* Methods;
 	bc_Namespace* Location;
 	bc_VTable* VT;
-	Vector* TypeParameters;
+	bc_Vector* TypeParameters;
 } bc_Interface;
 
 /**
@@ -48,7 +48,7 @@ bc_Type* bc_WrapInterface(bc_Interface* self);
  * @param namev
  * @return
  */
-bc_Interface* bc_NewInterface(StringView namev);
+bc_Interface* bc_NewInterface(bc_StringView namev);
 
 /**
  * インターフェイスにメソッドを追加します.
@@ -74,7 +74,7 @@ void bc_AddPropertyInterface(bc_Interface* self, struct bc_Property* p);
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, StringView namev, Vector * args, struct bc_Enviroment * env, CallContext* cctx, int * outIndex);
+struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, bc_StringView namev, bc_Vector * args, struct bc_Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.
@@ -84,14 +84,14 @@ struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, StringView namev,
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_GFindMethodInterface(bc_Interface* self, StringView namev, Vector* gargs, int* outIndex);
+struct bc_Method* bc_GFindMethodInterface(bc_Interface* self, bc_StringView namev, bc_Vector* gargs, int* outIndex);
 
 /**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
  * @param inter_list
  * @return
  */
-Vector* bc_FlattenMethodInterfaceList(Vector* inter_list);
+bc_Vector* bc_FlattenMethodInterfaceList(bc_Vector* inter_list);
 
 /**
  * あるインターフェイスとそれ自体が実装しているインターフェイスの一覧の
@@ -99,7 +99,7 @@ Vector* bc_FlattenMethodInterfaceList(Vector* inter_list);
  * @param self
  * @return 呼び出し側で開放してください
  */
-Vector* bc_FlattenMethodInterface(bc_Interface* self);
+bc_Vector* bc_FlattenMethodInterface(bc_Interface* self);
 
 /**
  * メソッドの一覧から VTable を作成します.
@@ -146,7 +146,7 @@ struct bc_Method* bc_GetFunctionInterface(bc_Interface* self);
  * @param self
  * @return
  */
-Vector* bc_GetGenericInterfaceTreeInterface(bc_Interface* self);
+bc_Vector* bc_GetGenericInterfaceTreeInterface(bc_Interface* self);
 
 /**
  * @param self

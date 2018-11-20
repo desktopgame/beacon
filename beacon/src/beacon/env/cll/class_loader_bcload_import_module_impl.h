@@ -16,7 +16,7 @@
  * @param self
  * @param ilimports
  */
-void CLBC_import(bc_ClassLoader* self, Vector* ilimports);
+void CLBC_import(bc_ClassLoader* self, bc_Vector* ilimports);
 /**
  * selfを親として fullPath のファイルを読み込みます.
  * @param self

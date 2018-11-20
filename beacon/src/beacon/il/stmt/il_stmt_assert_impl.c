@@ -30,7 +30,7 @@ void GenerateILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx) {
 
 	GenerateILFactor(self->Message, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	bc_AddOpcodeBuf(env->Bytecode, bc_FindTypeFromNamespace(bc_GetLangNamespace(), InternString("Exception"))->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, bc_FindTypeFromNamespace(bc_GetLangNamespace(), bc_InternString("Exception"))->AbsoluteIndex);
 	bc_AddOpcodeBuf(env->Bytecode, 0);
 	bc_AddOpcodeBuf(env->Bytecode, OP_THROW);
 	gt->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
@@ -40,7 +40,7 @@ void LoadILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Condition, env, cctx);
 	if(self->Message == NULL) {
 		char* str = ILFactorToString(self->Condition, env);
-		ILString* ilstr = NewILString(InternString(str));
+		ILString* ilstr = NewILString(bc_InternString(str));
 		self->Message = WrapILString(ilstr);
 		assert(ilstr->Value != 0);
 		MEM_FREE(str);

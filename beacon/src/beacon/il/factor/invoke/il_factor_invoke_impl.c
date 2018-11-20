@@ -17,13 +17,13 @@
 //proto
 static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, CallContext* cctx);
 static void resolve_default(ILInvoke * self, bc_Enviroment* env, CallContext* cctx);
-static void ILInvoke_args_delete(VectorItem item);
+static void ILInvoke_args_delete(bc_VectorItem item);
 static void ILInvoke_check(ILInvoke * self, bc_Enviroment* env, CallContext* cctx);
 static bc_GenericType* ILInvoke_return_gtype(ILInvoke* self);
 static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
 static void GenerateILInvoke_subscript(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
 
-ILInvoke* NewILInvoke(StringView namev) {
+ILInvoke* NewILInvoke(bc_StringView namev) {
 	ILInvoke* ret = (ILInvoke*)MEM_MALLOC(sizeof(ILInvoke));
 	ret->args = NULL;
 	ret->receiver = NULL;
@@ -73,20 +73,20 @@ bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment* env, CallContext* c
 }
 
 char* ILInvokeToString(ILInvoke* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* invstr = ILFactorToString(self->receiver, env);
-	AppendsBuffer(sb, invstr);
-	AppendBuffer(sb, '.');
-	AppendsBuffer(sb, Ref2Str(self->namev));
+	bc_AppendsBuffer(sb, invstr);
+	bc_AppendBuffer(sb, '.');
+	bc_AppendsBuffer(sb, bc_Ref2Str(self->namev));
 	ILTypeArgsToString(sb, self->type_args, env);
 	ILArgsToString(sb, self->type_args, env);
 	MEM_FREE(invstr);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILInvoke(ILInvoke* self) {
-	DeleteVector(self->args, ILInvoke_args_delete);
-	DeleteVector(self->type_args, VectorDeleterOfNull);
+	bc_DeleteVector(self->args, ILInvoke_args_delete);
+	bc_DeleteVector(self->type_args, bc_VectorDeleterOfNull);
 	DeleteILFactor(self->receiver);
 	//generic_DeleteType(self->resolved);
 	MEM_FREE(self);
@@ -94,11 +94,11 @@ void DeleteILInvoke(ILInvoke* self) {
 
 bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
-	Vector* args = NewVector();
-	PushVector(args, ((ILArgument*)AtVector(self->args, 0))->Factor);
-	PushVector(args, value);
+	bc_Vector* args = bc_NewVector();
+	bc_PushVector(args, ((ILArgument*)bc_AtVector(self->args, 0))->Factor);
+	bc_PushVector(args, value);
 	bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(BC_TYPE2CLASS(self->u.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
-	DeleteVector(args, VectorDeleterOfNull);
+	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 	return opov;
 }
 //private
@@ -111,12 +111,12 @@ static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, CallContext
 	if(rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		//レシーバの実体化された型の中で、
 		//メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
-		bc_GenericType* instanced_type = (bc_GenericType*)AtVector(receivergType->TypeArgs, rgtp->VirtualTypeIndex);
+		bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(receivergType->TypeArgs, rgtp->VirtualTypeIndex);
 		self->resolved = bc_CloneGenericType(instanced_type);
 		self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
 	} else if(rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
 		//メソッドに渡された型引数を参照する
-		bc_GenericType* instanced_type = (bc_GenericType*)AtVector(self->type_args, rgtp->VirtualTypeIndex);
+		bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(self->type_args, rgtp->VirtualTypeIndex);
 		self->resolved = bc_CloneGenericType(instanced_type);
 		self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
 	}
@@ -157,7 +157,7 @@ static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, CallContext* cc
 	ResolveILTypeArgument(self->type_args, cctx);
 	bc_Type* ctype = gtype->CoreType;
 	#if defined(DEBUG)
-	const char* cname = Ref2Str(bc_GetTypeName(ctype));
+	const char* cname = bc_Ref2Str(bc_GetTypeName(ctype));
 	#endif
 	//ジェネリックな変数に対しても
 	//Objectクラスのメソッドは呼び出せる
@@ -179,8 +179,8 @@ static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, CallContext* cc
 		//hoge(1) = 0;
 		//の形式なら引数は一つのはず
 		bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
-			Ref2Str(bc_GetTypeName(ctype)),
-			Ref2Str(self->namev)
+			bc_Ref2Str(bc_GetTypeName(ctype)),
+			bc_Ref2Str(self->namev)
 		);
 		return;
 	}
@@ -189,14 +189,14 @@ static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, CallContext* cc
 	self->index = temp;
 	if(temp == -1) {
 		bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
-			Ref2Str(bc_GetTypeName(ctype)),
-			Ref2Str(self->namev)
+			bc_Ref2Str(bc_GetTypeName(ctype)),
+			bc_Ref2Str(self->namev)
 		);
 		return;
 	}
 }
 
-static void ILInvoke_args_delete(VectorItem item) {
+static void ILInvoke_args_delete(bc_VectorItem item) {
 	ILArgument* e = (ILArgument*)item;
 	DeleteILArgument(e);
 }
@@ -212,28 +212,28 @@ static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, CallCont
 		return;
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->type_args, i);
 		assert(e->GType != NULL);
 		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		ILArgument* e = (ILArgument*)bc_AtVector(self->args, i);
 		GenerateILFactor(e->Factor, env, cctx);
 	}
 	GenerateILFactor(self->receiver, env, cctx);
 	if(self->u.m->Parent->Tag == TYPE_INTERFACE_T) {
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKEINTERFACE);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->u.m->Parent->AbsoluteIndex);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKEINTERFACE);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->u.m->Parent->AbsoluteIndex);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->index);
 	} else {
 		assert(!bc_IsStaticModifier(self->u.m->Modifier));
 		if(self->u.m->Access == ACCESS_PRIVATE_T) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKESPECIAL);
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKESPECIAL);
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->index);
 		} else {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_INVOKEVIRTUAL);
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->index);
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKEVIRTUAL);
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->index);
 		}
 	}
 }
@@ -244,13 +244,13 @@ static void GenerateILInvoke_subscript(ILInvoke* self, bc_Enviroment* env, CallC
 		return;
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(self->type_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->type_args, i);
 		assert(e->GType != NULL);
 		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		ILArgument* e = (ILArgument*)AtVector(self->args, i);
+		ILArgument* e = (ILArgument*)bc_AtVector(self->args, i);
 		GenerateILFactor(e->Factor, env, cctx);
 	}
 	GenerateILFactor(self->receiver, env, cctx);

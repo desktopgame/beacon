@@ -19,16 +19,16 @@ bc_ScriptMethod * bc_NewScriptMethod() {
 
 void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 #if defined(DEBUG)
-	const char* name = Ref2Str(parent->Name);
+	const char* name = bc_Ref2Str(parent->Name);
 #endif
 	bc_Frame* sub = bc_SubFrame(fr);
 	CallFrame* cfr = NULL;
 	sub->Receiver = parent->Parent;
-	Vector* aArgs = NewVector();
-	Vector* aTArgs = NewVector();
+	bc_Vector* aArgs = bc_NewVector();
+	bc_Vector* aTArgs = bc_NewVector();
 	if (!bc_IsStaticModifier(parent->Modifier)) {
-		bc_Object* receiver_obj = PopVector(fr->ValueStack);
-		PushVector(sub->ValueStack, receiver_obj);
+		bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
+		bc_PushVector(sub->ValueStack, receiver_obj);
 		cfr = PushCallContext(GetSGThreadCContext(), FRAME_INSTANCE_INVOKE_T);
 		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
 		cfr->Kind.InstanceInvoke.Args = aArgs;
@@ -39,27 +39,27 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, bc_Frame*
 		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
 	for (int i = 0; i < parent->Parameters->Length; i++) {
-		bc_Object* arg = bc_CopyObject(PopVector(fr->ValueStack));
-		PushVector(sub->ValueStack, arg);
-		AssignVector(aArgs, (parent->Parameters->Length - i), arg);
+		bc_Object* arg = bc_CopyObject(bc_PopVector(fr->ValueStack));
+		bc_PushVector(sub->ValueStack, arg);
+		bc_AssignVector(aArgs, (parent->Parameters->Length - i), arg);
 	}
 	//メソッドに渡された型引数を引き継ぐ
 	int typeparams = parent->TypeParameters->Length;
 	for(int i=0; i<typeparams; i++) {
-		VectorItem e = PopVector(fr->TypeArgs);
-		AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
-		AssignVector(aTArgs, (typeparams - i) - 1, e);
+		bc_VectorItem e = bc_PopVector(fr->TypeArgs);
+		bc_AssignVector(sub->TypeArgs, (typeparams - i) - 1, e);
+		bc_AssignVector(aTArgs, (typeparams - i) - 1, e);
 	}
 	bc_ExecuteVM(sub, self->Env);
 	//戻り値が Void 以外ならスタックトップの値を引き継ぐ
 	//例外によって終了した場合には戻り値がない
 	if(parent->ReturnGType != BC_TYPE_VOID->GenericSelf &&
 	   sub->ValueStack->Length > 0) {
-		bc_Object* o = (bc_Object*)PopVector(sub->ValueStack);
-		PushVector(fr->ValueStack, NON_NULL(o));
+		bc_Object* o = (bc_Object*)bc_PopVector(sub->ValueStack);
+		bc_PushVector(fr->ValueStack, NON_NULL(o));
 	}
-	DeleteVector(aArgs, VectorDeleterOfNull);
-	DeleteVector(aTArgs, VectorDeleterOfNull);
+	bc_DeleteVector(aArgs, bc_VectorDeleterOfNull);
+	bc_DeleteVector(aTArgs, bc_VectorDeleterOfNull);
 	PopCallContext(GetSGThreadCContext());
 	bc_DeleteFrame(sub);
 }

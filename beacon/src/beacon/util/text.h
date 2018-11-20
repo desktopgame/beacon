@@ -51,7 +51,7 @@ char* bc_GetLineAt(const char* src, int lineno);
  * @param v 呼び出し側で開放してください.
  * @return 呼び出し側で開放してください.
  */
-char* bc_JoinString(Vector* v, char* join);
+char* bc_JoinString(bc_Vector* v, char* join);
 
 /**
  * ソースにテキストが含まれるなら true.

@@ -12,7 +12,7 @@ bc_Object* NewBool(bool value) {
 
 void InitBool() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* boolType = bc_NewPreloadClass(InternString("Bool"));
+	bc_Type* boolType = bc_NewPreloadClass(bc_InternString("Bool"));
 	bc_Class* boolClass = BC_TYPE2CLASS(boolType);
 	boolType->AllocSize = sizeof(Bool);
 	bc_AddTypeNamespace(lang, boolType);
@@ -22,19 +22,19 @@ void InitBool() {
 
 bc_Type* GetBoolType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	return bc_FindTypeFromNamespace(lang, InternString("Bool"));
+	return bc_FindTypeFromNamespace(lang, bc_InternString("Bool"));
 }
 //private
 static void bc_bool_nativeBitOr(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(bc_ObjectToBool(self) | bc_ObjectToBool(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_bool_nativeBitAnd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(bc_ObjectToBool(self) & bc_ObjectToBool(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }

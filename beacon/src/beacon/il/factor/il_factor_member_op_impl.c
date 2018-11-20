@@ -18,7 +18,7 @@ static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, CallContext* 
 static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type, bool* swap);
 static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
 static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
-static void ILMemberOp_typearg_delete(VectorItem item);
+static void ILMemberOp_typearg_delete(bc_VectorItem item);
 
 ILFactor* WrapILMemberOp(ILMemberOp* self) {
 	ILFactor* ret = NewILFactor(ILFACTOR_MEMBER_OP_T);
@@ -27,10 +27,10 @@ ILFactor* WrapILMemberOp(ILMemberOp* self) {
 	return ret;
 }
 
-ILMemberOp* NewILMemberOp(StringView namev) {
+ILMemberOp* NewILMemberOp(bc_StringView namev) {
 	ILMemberOp* ret = (ILMemberOp*)MEM_MALLOC(sizeof(ILMemberOp));
 	ret->Source = NULL;
-	ret->TypeArgs = NewVector();
+	ret->TypeArgs = bc_NewVector();
 	ret->Name = namev;
 	ret->Index = -1;
 	ret->Parent = NULL;
@@ -68,22 +68,22 @@ bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext
 		return a;
 	}
 	bc_GenericType* a = EvalILFactor(self->Source, env, cctx);
-	return AtVector(a->TypeArgs, self->Field->GType->VirtualTypeIndex);
+	return bc_AtVector(a->TypeArgs, self->Field->GType->VirtualTypeIndex);
 }
 
 char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* name = ILFactorToString(self->Source, env);
-	AppendsBuffer(sb, name);
-	AppendBuffer(sb, '.');
-	AppendsBuffer(sb, Ref2Str(self->Name));
+	bc_AppendsBuffer(sb, name);
+	bc_AppendBuffer(sb, '.');
+	bc_AppendsBuffer(sb, bc_Ref2Str(self->Name));
 	MEM_FREE(name);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILMemberOp(ILMemberOp* self) {
 	DeleteILFactor(self->Source);
-	DeleteVector(self->TypeArgs, ILMemberOp_typearg_delete);
+	bc_DeleteVector(self->TypeArgs, ILMemberOp_typearg_delete);
 	MEM_FREE(self);
 }
 //private
@@ -112,11 +112,11 @@ static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, CallContext* 
 		ILMemberOp_check_prop(self, env, cctx, gtype, swap);
 	} else {
 		#if defined(DEBUG)
-		const char* clname = Ref2Str(GetClassCContext(cctx)->Name);
+		const char* clname = bc_Ref2Str(GetClassCContext(cctx)->Name);
 		#endif
 		//フィールドの可視性を確認
 		if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), self->Field)) {
-			bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(self->Field->Name));
+			bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, bc_Ref2Str(bc_GetTypeName(ctype)), bc_Ref2Str(self->Field->Name));
 		}
 	}
 }
@@ -125,7 +125,7 @@ static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, CallCo
 	ILFactor* fact = self->Source;
 	ILVariable* ilvar = fact->Kind.Variable;
 	#if defined(DEBUG)
-	const char* ilvarname = Ref2Str(ilvar->Kind.Static->FQCN->Name);
+	const char* ilvarname = bc_Ref2Str(ilvar->Kind.Static->FQCN->Name);
 	#endif
 	//Name.call
 	//の Name を型名として解決する
@@ -146,7 +146,7 @@ static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, CallCo
 static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
-	const char* name = Ref2Str(self->Name);
+	const char* name = bc_Ref2Str(self->Name);
 	#endif
 	bc_Type* ctype = receiver_type->CoreType;
 	bc_Property* p = bc_FindTreePropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
@@ -160,11 +160,11 @@ static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, CallCont
 	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
 	if(temp == -1) {
-		bc_Panic(BCERROR_UNDEFINED_PROPERTY_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(self->Name));
+		bc_Panic(BCERROR_UNDEFINED_PROPERTY_T, bc_Ref2Str(bc_GetTypeName(ctype)), bc_Ref2Str(self->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	} else if(!bc_IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(p->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, bc_Ref2Str(bc_GetTypeName(ctype)), bc_Ref2Str(p->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	}
@@ -186,7 +186,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, C
 	self->Parent->Kind.PropertyAccess = factp;
 	//プロパティの可視性を確認
 	if(!bc_IsAccessiblePropertyClass(GetClassCContext(cctx), p)) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(ctype)), Ref2Str(p->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, bc_Ref2Str(bc_GetTypeName(ctype)), bc_Ref2Str(p->Name));
 		DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	}
@@ -197,7 +197,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, C
 }
 
 
-static void ILMemberOp_typearg_delete(VectorItem item) {
+static void ILMemberOp_typearg_delete(bc_VectorItem item) {
 //	GenericCache* e = (GenericCache*)item;
 //	DeleteGenericCache(e);
 	ILTypeArgument* e = (ILTypeArgument*)item;

@@ -8,7 +8,7 @@
 #include "../il/il_factor_interface.h"
 #include "generic_type.h"
 
-bc_Field * bc_NewField(StringView namev) {
+bc_Field * bc_NewField(bc_StringView namev) {
 	bc_Field* ret = (bc_Field*)MEM_MALLOC(sizeof(bc_Field));
 	ret->Name = namev;
 	ret->Access = ACCESS_PUBLIC_T;

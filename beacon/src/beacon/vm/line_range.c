@@ -9,9 +9,9 @@ bc_LineRange * bc_NewLineRange() {
 	return ret;
 }
 
-bc_LineRange * bc_FindLineRange(Vector * line_rangeVec, int pc) {
+bc_LineRange * bc_FindLineRange(bc_Vector * line_rangeVec, int pc) {
 	for (int i = 0; i < line_rangeVec->Length; i++) {
-		bc_LineRange* lr = (bc_LineRange*)AtVector(line_rangeVec, i);
+		bc_LineRange* lr = (bc_LineRange*)bc_AtVector(line_rangeVec, i);
 		if (i >= lr->StartOffset && i <= lr->EndOffset) {
 			return lr;
 		}

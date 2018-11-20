@@ -15,14 +15,14 @@
 struct bc_SymbolEntry;
 
 typedef struct ILInjectJNI {
-	StringView Name;
+	bc_StringView Name;
 	ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
 } ILInjectJNI;
 
 ILStatement* WrapILInjectJNI(ILInjectJNI* self);
 
-ILInjectJNI* NewILInjectJNI(StringView namev);
+ILInjectJNI* NewILInjectJNI(bc_StringView namev);
 
 void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, CallContext* cctx);
 

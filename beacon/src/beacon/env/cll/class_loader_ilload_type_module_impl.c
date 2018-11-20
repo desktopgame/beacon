@@ -19,9 +19,9 @@
 static void CLILFQCNCache_impl(bc_AST* afqcn, bc_FQCNCache* fqcn, int level);
 static void CLILGenericCache_impl(bc_AST* afqcn, bc_GenericCache* dest);
 static void CLILGenericCache_inner(bc_AST* atype_args, bc_GenericCache* dest);
-static void CLILTypeParameter_rule(struct bc_ClassLoader* self, struct bc_AST* asource, Vector* dest);
-static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest);
-static void CLILArgumentListImpl(bc_ClassLoader* self, Vector* list, bc_AST* asource);
+static void CLILTypeParameter_rule(struct bc_ClassLoader* self, struct bc_AST* asource, bc_Vector* dest);
+static void ast_fqcn_flatten(bc_AST* afqcn, bc_Vector* dest);
+static void CLILArgumentListImpl(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource);
 
 void CLILFQCNCache(bc_AST* afqcn, bc_FQCNCache* fqcn) {
 	CLILFQCNCache_impl(afqcn, fqcn, 0);
@@ -37,11 +37,11 @@ void CLILGenericCache(bc_AST* afqcn, bc_GenericCache* dest) {
 	//FIXME: Int のような文字パースで失敗してしまうので対策
 	if (body->Name == 0 &&
 		body->Scope->Length > 0) {
-		body->Name = (StringView)PopVector(body->Scope);
+		body->Name = (bc_StringView)bc_PopVector(body->Scope);
 	}
 }
 
-void CLILTypenameList(bc_ClassLoader * self, Vector * dst, bc_AST* atypename_list) {
+void CLILTypenameList(bc_ClassLoader * self, bc_Vector * dst, bc_AST* atypename_list) {
 	if (bc_IsBlankAST(atypename_list)) {
 		return;
 	}
@@ -49,7 +49,7 @@ void CLILTypenameList(bc_ClassLoader * self, Vector * dst, bc_AST* atypename_lis
 		bc_GenericCache* e = bc_NewGenericCache();
 		//[typename [fqcn]]
 		CLILGenericCache(atypename_list, e);
-		PushVector(dst, e);
+		bc_PushVector(dst, e);
 	} else if(atypename_list->Tag == AST_TYPENAME_LIST_T) {
 		for (int i = 0; i < atypename_list->Children->Length; i++) {
 			CLILTypenameList(self, dst, bc_AtAST(atypename_list, i));
@@ -58,7 +58,7 @@ void CLILTypenameList(bc_ClassLoader * self, Vector * dst, bc_AST* atypename_lis
 }
 
 
-void CLILTypeParameter(bc_ClassLoader* self, bc_AST* asource, Vector* dest) {
+void CLILTypeParameter(bc_ClassLoader* self, bc_AST* asource, bc_Vector* dest) {
 	if (bc_IsBlankAST(asource)) {
 		return;
 	}
@@ -75,13 +75,13 @@ void CLILTypeParameter(bc_ClassLoader* self, bc_AST* asource, Vector* dest) {
 	ILTypeParameter* iltypeparam = NewILTypeParameter(asource->Attr.StringVValue);
 	if (asource->Tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_IN_T;
 	if (asource->Tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_OUT_T;
-	PushVector(dest, iltypeparam);
+	bc_PushVector(dest, iltypeparam);
 	//制約があるならそれも設定
 	//制約はとりあえずなしで
 	assert(bc_IsBlankAST(arule_list));
 }
 
-void CLILTypeArgument(bc_ClassLoader* self, bc_AST* atype_args, Vector* dest) {
+void CLILTypeArgument(bc_ClassLoader* self, bc_AST* atype_args, bc_Vector* dest) {
 	if(bc_IsBlankAST(atype_args)) {
 		return;
 	}
@@ -92,12 +92,12 @@ void CLILTypeArgument(bc_ClassLoader* self, bc_AST* atype_args, Vector* dest) {
 		}
 	} else if(atype_args->Tag == AST_TYPENAME_T) {
 		ILTypeArgument* iltype_arg = NewILTypeArgument();
-		PushVector(dest, iltype_arg);
+		bc_PushVector(dest, iltype_arg);
 		CLILGenericCache(atype_args, iltype_arg->GCache);
 	} else assert(false);
 }
 
-void CLILParameterList(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
+void CLILParameterList(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_PARAMETER_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
 			CLILParameterList(self, list, bc_AtAST(asource, i));
@@ -107,26 +107,26 @@ void CLILParameterList(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
 		bc_AST* aaccess_name = bc_SecondAST(asource);
 		ILParameter* p = NewILParameter(aaccess_name->Attr.StringVValue);
 		CLILGenericCache(aGetTypeName, p->GCache);
-		PushVector(list, p);
+		bc_PushVector(list, p);
 	}
 }
 
-void CLILArgumentList(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
+void CLILArgumentList(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource) {
 	CLILArgumentListImpl(self, list, asource);
 }
 //private
 static void CLILFQCNCache_impl(bc_AST* afqcn, bc_FQCNCache* fqcn, int level) {
-	Vector* v = NewVector();
+	bc_Vector* v = bc_NewVector();
 	ast_fqcn_flatten(afqcn, v);
 	for(int i=0; i<v->Length; i++) {
-		StringView S = (StringView)AtVector(v, i);
+		bc_StringView S = (bc_StringView)bc_AtVector(v, i);
 		if(i < v->Length - 1) {
-			PushVector(fqcn->Scope, S);
+			bc_PushVector(fqcn->Scope, S);
 		} else {
 			fqcn->Name = S;
 		}
 	}
-	DeleteVector(v, VectorDeleterOfNull);
+	bc_DeleteVector(v, bc_VectorDeleterOfNull);
 }
 
 static void CLILGenericCache_impl(bc_AST* afqcn, bc_GenericCache* dest) {
@@ -158,7 +158,7 @@ static void CLILGenericCache_impl(bc_AST* afqcn, bc_GenericCache* dest) {
 		}
 	} else {
 		//FIXME:とりあえずここでタグを直してるけどast.cの時点でどうにかするべき
-		PushVector(body->Scope, afqcn->Attr.StringVValue);
+		bc_PushVector(body->Scope, afqcn->Attr.StringVValue);
 		afqcn->Tag = AST_FQCN_PART_T;
 	}
 }
@@ -172,11 +172,11 @@ static void CLILGenericCache_inner(bc_AST* atype_args, bc_GenericCache* dest) {
 	} else {
 		bc_GenericCache* newCache = bc_NewGenericCache();
 		CLILGenericCache(atype_args, newCache);
-		PushVector(dest->TypeArgs, newCache);
+		bc_PushVector(dest->TypeArgs, newCache);
 	}
 }
 
-static void CLILTypeParameter_rule(bc_ClassLoader* self, bc_AST* asource, Vector* dest) {
+static void CLILTypeParameter_rule(bc_ClassLoader* self, bc_AST* asource, bc_Vector* dest) {
 	assert(false);
 	/*
 	if (source->Tag == AST_TYPE_PARAMETER_LIST_T) {
@@ -195,9 +195,9 @@ static void CLILTypeParameter_rule(bc_ClassLoader* self, bc_AST* asource, Vector
 	*/
 }
 
-static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest) {
+static void ast_fqcn_flatten(bc_AST* afqcn, bc_Vector* dest) {
 	if(afqcn->Tag == AST_FQCN_PART_T) {
-		PushVector(dest, afqcn->Attr.StringVValue);
+		bc_PushVector(dest, afqcn->Attr.StringVValue);
 	} else {
 		for(int i=0; i<afqcn->Children->Length; i++) {
 			ast_fqcn_flatten(bc_AtAST(afqcn, i), dest);
@@ -205,7 +205,7 @@ static void ast_fqcn_flatten(bc_AST* afqcn, Vector* dest) {
 	}
 }
 
-static void CLILArgumentListImpl(bc_ClassLoader* self, Vector* list, bc_AST* asource) {
+static void CLILArgumentListImpl(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource) {
 	if (asource->Tag == AST_ARGUMENT_LIST_T) {
 		for (int i = 0; i < asource->Children->Length; i++) {
 			CLILArgumentListImpl(self, list, bc_AtAST(asource, i));
@@ -214,6 +214,6 @@ static void CLILArgumentListImpl(bc_ClassLoader* self, Vector* list, bc_AST* aso
 		bc_AST* aprimary = bc_FirstAST(asource);
 		ILArgument* ilarg = NewILArgument();
 		ilarg->Factor = CLILFactor(self, aprimary);
-		PushVector(list, ilarg);
+		bc_PushVector(list, ilarg);
 	}
 }

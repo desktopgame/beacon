@@ -13,7 +13,7 @@ bc_Object* NewChar(char value) {
 
 void InitChar() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* charType = bc_NewPreloadClass(InternString("Char"));
+	bc_Type* charType = bc_NewPreloadClass(bc_InternString("Char"));
 	bc_Class* charClass = BC_TYPE2CLASS(charType);
 	charType->AllocSize = sizeof(Char);
 	bc_AddTypeNamespace(lang, charType);
@@ -23,20 +23,20 @@ void InitChar() {
 
 bc_Type* GetCharType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	return bc_FindTypeFromNamespace(lang, InternString("Char"));
+	return bc_FindTypeFromNamespace(lang, bc_InternString("Char"));
 }
 
 //private
 #define CHAR_VALUE(obj) (((Char*)obj)->Value)
 static void bc_char_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* ch = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* ch = bc_AtVector(fr->VariableTable, 1);
 
 	CHAR_VALUE(self) = CHAR_VALUE(ch);
 	//self->Tag = OBJECT_CHAR_T;
 }
 
 static void bc_char_nativeToInt(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	PushVector(fr->ValueStack, bc_GetIntObject((int)CHAR_VALUE(self)));
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_PushVector(fr->ValueStack, bc_GetIntObject((int)CHAR_VALUE(self)));
 }

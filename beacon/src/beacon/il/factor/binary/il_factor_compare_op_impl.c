@@ -33,11 +33,11 @@ void GenerateILCompareOp(ILCompareOp* self, bc_Enviroment* env, CallContext* cct
 		GenerateILFactor(self->Parent->Right, env, cctx);
 		GenerateILFactor(self->Parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->Type));
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_iopcode(self->Type));
 		} else if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_dopcode(self->Type));
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_dopcode(self->Type));
 		} else if(IsCharCharBinaryOp(self->Parent, env, cctx)) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_copcode(self->Type));
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_copcode(self->Type));
 		} else {
 			bc_Panic(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
 				bc_OperatorToString(self->Type)

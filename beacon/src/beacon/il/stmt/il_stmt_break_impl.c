@@ -13,7 +13,7 @@ void GenerateILBreak(void * empty, bc_Enviroment * env, CallContext* cctx) {
 		bc_Panic(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
 	}
-	bc_Label* lab = (bc_Label*)TopVector(cctx->Control.WhileEndTable);
+	bc_Label* lab = (bc_Label*)bc_TopVector(cctx->Control.WhileEndTable);
 	bc_AddOpcodeBuf(env->Bytecode, OP_GOTO);
 	bc_AddOpcodeBuf(env->Bytecode, lab);
 }

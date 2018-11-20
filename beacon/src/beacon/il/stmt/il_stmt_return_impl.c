@@ -44,8 +44,8 @@ static void check_method_return(ILReturn * self, bc_Enviroment * env, CallContex
 	//戻り値が Void なのに値を返している
 	if(m->ReturnGType->CoreType == BC_TYPE_VOID) {
 		bc_Panic(BCERROR_RETURN_VALUE_VOID_METHOD_T,
-			Ref2Str(bc_GetTypeName(m->Parent)),
-			Ref2Str(m->Name)
+			bc_Ref2Str(bc_GetTypeName(m->Parent)),
+			bc_Ref2Str(m->Name)
 		);
 		return;
 	}
@@ -54,8 +54,8 @@ static void check_method_return(ILReturn * self, bc_Enviroment * env, CallContex
 	if(retT->CoreType != BC_TYPE_NULL &&
 	   bc_DistanceGenericType(m->ReturnGType, retT, cctx) < 0) {
 		bc_Panic(BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
-			Ref2Str(bc_GetTypeName(m->Parent)),
-			Ref2Str(m->Name)
+			bc_Ref2Str(bc_GetTypeName(m->Parent)),
+			bc_Ref2Str(m->Name)
 		);
 	}
 }

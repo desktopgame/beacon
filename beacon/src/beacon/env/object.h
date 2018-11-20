@@ -71,7 +71,7 @@ typedef struct bc_Object {
 	struct bc_VTable* VPtr;
 	bc_ObjectPaint Paint;
 	bc_ObjectFlags Flags;
-	Vector* Fields;
+	bc_Vector* Fields;
 	void* (*OnMessage)(struct bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
 } bc_Object;
 

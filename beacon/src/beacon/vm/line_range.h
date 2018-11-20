@@ -33,7 +33,7 @@ bc_LineRange* bc_NewLineRange();
  * @param pc
  * @return 見つからなければ NULL
  */
-bc_LineRange* bc_FindLineRange(Vector* line_rangeVec, int pc);
+bc_LineRange* bc_FindLineRange(bc_Vector* line_rangeVec, int pc);
 
 void bc_DeleteLineRange(bc_LineRange* self);
 #endif // !SIGNAL_VM_LINE_RANGE_H

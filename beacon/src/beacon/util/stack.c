@@ -3,15 +3,15 @@
 #include <stdlib.h>
 #include "../util/mem.h"
 
-Stack* NewStack() {
-	Stack* ret = (Stack*)MEM_MALLOC(sizeof(Stack));
+bc_Stack* bc_NewStack() {
+	bc_Stack* ret = (bc_Stack*)MEM_MALLOC(sizeof(bc_Stack));
 	ret->Item = NULL;
 	ret->Prev = NULL;
 	ret->Next = NULL;
 	return ret;
 }
 
-void PushStack(Stack* self, StackItem item) {
+void bc_PushStack(bc_Stack* self, bc_StackItem item) {
 	assert(self != NULL);
 	assert(item != NULL);
 	if (self->Item == NULL) {
@@ -19,59 +19,59 @@ void PushStack(Stack* self, StackItem item) {
 		return;
 	}
 	if (self->Next == NULL) {
-		Stack* next_elem = NewStack();
+		bc_Stack* next_elem = bc_NewStack();
 		self->Next = next_elem;
 		next_elem->Prev = self;
 		next_elem->Item = item;
 	} else {
-		PushStack(self->Next, item);
+		bc_PushStack(self->Next, item);
 	}
 }
 
-StackItem TopStack(Stack* self) {
+bc_StackItem bc_TopStack(bc_Stack* self) {
 	assert(self != NULL);
 	if (self->Next == NULL) {
 		return self->Item;
 	} else {
-		return TopStack(self->Next);
+		return bc_TopStack(self->Next);
 	}
 }
 
-StackItem PopStack(Stack* self) {
+bc_StackItem bc_PopStack(bc_Stack* self) {
 	assert(self != NULL);
 	if (self->Next == NULL) {
 		if (self->Prev == NULL) {
-			StackItem ret = self->Item;
+			bc_StackItem ret = self->Item;
 			self->Item = NULL;
 			return ret;
 		} else {
-			Stack* prev_elem = self->Prev;
+			bc_Stack* prev_elem = self->Prev;
 			prev_elem->Next = NULL;
 			self->Prev = NULL;
-			StackItem ret = self->Item;
+			bc_StackItem ret = self->Item;
 			MEM_FREE(self);
 			return ret;
 		}
 	} else {
-		return PopStack(self->Next);
+		return bc_PopStack(self->Next);
 	}
 }
 
-bool IsEmptyStack(Stack * self) {
+bool bc_IsEmptyStack(bc_Stack * self) {
 	assert(self != NULL);
 	return (self->Item == NULL);
 }
 
-void DeleteStack(Stack* self, StackElementDeleter deleter) {
+void bc_DeleteStack(bc_Stack* self, bc_StackElementDeleter deleter) {
 	assert(self != NULL);
-	Stack* pointee = self;
+	bc_Stack* pointee = self;
 	while (1) {
-		Stack* next = pointee->Next;
+		bc_Stack* next = pointee->Next;
 		pointee->Next = NULL;
 		if (next) {
 			next->Prev = NULL;
 		}
-		StackItem item = pointee->Item;
+		bc_StackItem item = pointee->Item;
 		pointee->Item = NULL;
 		if (item) {
 			deleter(item);
@@ -84,9 +84,9 @@ void DeleteStack(Stack* self, StackElementDeleter deleter) {
 	}
 }
 
-void StackDeleterByFree(StackItem item) {
+void bc_StackDeleterByFree(bc_StackItem item) {
 	MEM_FREE(item);
 }
 
-void StackDeleterOfNull(StackItem item) {
+void bc_StackDeleterOfNull(bc_StackItem item) {
 }

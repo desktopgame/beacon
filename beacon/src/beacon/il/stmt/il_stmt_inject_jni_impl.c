@@ -11,7 +11,7 @@ ILStatement* WrapILInjectJNI(ILInjectJNI* self) {
 	return ret;
 }
 
-ILInjectJNI* NewILInjectJNI(StringView namev) {
+ILInjectJNI* NewILInjectJNI(bc_StringView namev) {
 	ILInjectJNI* ret = (ILInjectJNI*)MEM_MALLOC(sizeof(ILInjectJNI));
 	ret->Name = namev;
 	ret->Value = NULL;

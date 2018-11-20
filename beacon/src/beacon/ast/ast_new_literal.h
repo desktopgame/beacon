@@ -36,5 +36,5 @@ bc_AST* bc_NewASTChar(char ch);
  * @param str
  * @return
  */
-bc_AST* bc_NewASTString(StringView str);
+bc_AST* bc_NewASTString(bc_StringView str);
 #endif // !SIGNAL_AST_AST_NEW_LITERAL_H

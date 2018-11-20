@@ -32,14 +32,14 @@ ILTypeArgument* NewILTypeArgument();
  * 全ての型実引数を出力します.
  * @param iltype_args
  */
-void PrintILTypeArgument(Vector* iltype_args);
+void PrintILTypeArgument(bc_Vector* iltype_args);
 
 /**
  * @param iltype_args
  * @param cctx
  * @return
  */
-void ResolveILTypeArgument(Vector* iltype_args, struct CallContext* cctx);
+void ResolveILTypeArgument(bc_Vector* iltype_args, struct CallContext* cctx);
 
 /**
  * 型実引数を解放します.

@@ -19,8 +19,8 @@ struct ILConstructorChain;
  * コンストラクタを表す要素.
  */
 typedef struct ILConstructor {
-	Vector* Parameters;
-	Vector* Statements;
+	bc_Vector* Parameters;
+	bc_Vector* Statements;
 	struct ILConstructorChain* Chain;
 	bc_AccessLevel Access;
 } ILConstructor;

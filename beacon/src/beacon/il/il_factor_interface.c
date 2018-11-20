@@ -301,39 +301,39 @@ char* ILFactorToString(ILFactor* self, bc_Enviroment* env) {
 	}
 }
 
-void ILArgsToString(Buffer* sb, Vector* args, bc_Enviroment* env) {
+void ILArgsToString(bc_Buffer* sb, bc_Vector* args, bc_Enviroment* env) {
 	if(args->Length > 0) {
-		AppendBuffer(sb, '(');
+		bc_AppendBuffer(sb, '(');
 	}
 	for(int i=0; i<args->Length; i++) {
-		ILArgument* e = (ILArgument*)AtVector(args, i);
+		ILArgument* e = (ILArgument*)bc_AtVector(args, i);
 		char* str = ILFactorToString(e->Factor, env);
-		AppendsBuffer(sb, str);
+		bc_AppendsBuffer(sb, str);
 		if(i != (args->Length)) {
-			AppendsBuffer(sb, ", ");
+			bc_AppendsBuffer(sb, ", ");
 		}
 		MEM_FREE(str);
 	}
 	if(args->Length > 0) {
-		AppendBuffer(sb, ')');
+		bc_AppendBuffer(sb, ')');
 	}
 }
 
-void ILTypeArgsToString(Buffer* sb, Vector* type_args, bc_Enviroment* env) {
+void ILTypeArgsToString(bc_Buffer* sb, bc_Vector* type_args, bc_Enviroment* env) {
 	if(type_args->Length > 0) {
-		AppendsBuffer(sb, "<|");
+		bc_AppendsBuffer(sb, "<|");
 	}
 	for(int i=0; i<type_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(type_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(type_args, i);
 		char* str = bc_GenericCacheToString(e->GCache);
-		AppendsBuffer(sb, str);
+		bc_AppendsBuffer(sb, str);
 		if(i != (type_args->Length - 1)) {
-			AppendsBuffer(sb, ", ");
+			bc_AppendsBuffer(sb, ", ");
 		}
 		MEM_FREE(str);
 	}
 	if(type_args->Length > 0) {
-		AppendsBuffer(sb, "|>");
+		bc_AppendsBuffer(sb, "|>");
 	}
 }
 

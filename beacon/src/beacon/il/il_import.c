@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "../util/mem.h"
 
-ILImport* NewILImport(StringView path) {
+ILImport* NewILImport(bc_StringView path) {
 	ILImport* ret = (ILImport*)MEM_MALLOC(sizeof(ILImport));
 	ret->Path = path;
 	return ret;

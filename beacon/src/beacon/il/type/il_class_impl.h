@@ -20,17 +20,17 @@ struct ILMethod;
  * クラスを表す要素.
  */
 typedef struct ILClass {
-	StringView Name;
-	Vector* Extends;
-	Vector* Fields;
-	Vector* StaticFields;
-	Vector* Methods;
-	Vector* StaticMethods;
-	Vector* Constructors;
-	Vector* TypeParameters;
-	Vector* OperatorOverloads;
-	Vector* Properties;
-	Vector* StaticProperties;
+	bc_StringView Name;
+	bc_Vector* Extends;
+	bc_Vector* Fields;
+	bc_Vector* StaticFields;
+	bc_Vector* Methods;
+	bc_Vector* StaticMethods;
+	bc_Vector* Constructors;
+	bc_Vector* TypeParameters;
+	bc_Vector* OperatorOverloads;
+	bc_Vector* Properties;
+	bc_Vector* StaticProperties;
 	bool IsAbstract;
 } ILClass;
 
@@ -46,7 +46,7 @@ ILType* WrapILClass(ILClass* self);
  * @param namev
  * @return
  */
-ILClass* NewILClass(StringView namev);
+ILClass* NewILClass(bc_StringView namev);
 
 /**
  * フィールドを追加します.

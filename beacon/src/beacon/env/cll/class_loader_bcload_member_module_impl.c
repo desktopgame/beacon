@@ -29,8 +29,8 @@
 #include <string.h>
 
 //proto
-static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope, Vector* param_list, Vector* sg_param_liste, CallContext* cctx);
-static void CLBC_parameter_list_ctor(Vector* param_list);
+static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope, bc_Vector* param_list, bc_Vector* sg_param_liste, CallContext* cctx);
+static void CLBC_parameter_list_ctor(bc_Vector* param_list);
 
 static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env);
 static void CLBC_chain_root(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, ILConstructorChain* ilchain, bc_Enviroment* env);
@@ -55,24 +55,24 @@ bool CLBC_field_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILField*
 	//フィールドの修飾子に native が使用されている
 	if(bc_IsNativeModifier(fi->Modifier)) {
 		bc_Panic(BCERROR_NATIVE_FIELD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(fi->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(fi->Name)
 		);
 		return false;
 	}
 	//.. abstractが使用されている
 	if(bc_IsAbstractModifier(fi->Modifier)) {
 		bc_Panic(BCERROR_ABSTRACT_FIELD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(fi->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(fi->Name)
 		);
 		return false;
 	}
 	//.. overrideが使用されている
 	if(bc_IsOverrideModifier(fi->Modifier)) {
 		bc_Panic(BCERROR_OVERRIDE_FIELD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(fi->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(fi->Name)
 		);
 		return false;
 	}
@@ -82,8 +82,8 @@ bool CLBC_field_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILField*
 	   bc_IsFinalModifier(fi->Modifier) &&
 	   fi->InitialValue == NULL) {
 		bc_Panic(BCERROR_NOT_DEFAULT_VALUE_STATIC_FINAL_FIELD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(fi->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(fi->Name)
 		);
 		return false;
 	}
@@ -107,8 +107,8 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
 		bc_PrintGenericType(fi->GType); bc_Println();
 		bc_PrintGenericType(gf); bc_Println();
 		bc_Panic(BCERROR_FIELD_DEFAULT_VALUE_NOT_COMPATIBLE_TO_FIELD_TYPE_T,
-			Ref2Str(bc_GetTypeName(fi->Parent)),
-			Ref2Str(fi->Name)
+			bc_Ref2Str(bc_GetTypeName(fi->Parent)),
+			bc_Ref2Str(fi->Name)
 		);
 		return false;
 	}
@@ -122,7 +122,7 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
 		bc_Frame* f = bc_NewFrame();
 		SetSGThreadFrameRef(GetMainSGThread(), f);
 		bc_ExecuteVM(f, env);
-		fi->StaticValue = PopVector(f->ValueStack);
+		fi->StaticValue = bc_PopVector(f->ValueStack);
 		ReleaseSGThreadFrameRef(GetMainSGThread());
 		bc_DeleteFrame(f);
 	}
@@ -131,26 +131,26 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi, bc_Namespa
 	return true;
 }
 
-void CLBC_fields_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilfields, bc_Namespace* scope) {
+void CLBC_fields_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilfields, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	for (int i = 0; i < ilfields->Length; i++) {
-		if(!CLBC_field_decl(self, iltype, tp, AtVector(ilfields, i), scope, cctx)) {
+		if(!CLBC_field_decl(self, iltype, tp, bc_AtVector(ilfields, i), scope, cctx)) {
 			break;
 		}
 	}
 	DeleteCallContext(cctx);
 }
 
-void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_Type* tp,Vector* ilfields, Vector* sgfields) {
+void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_Type* tp,bc_Vector* ilfields, bc_Vector* sgfields) {
 	bc_CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	for (int i = 0; i < sgfields->Length; i++) {
-		if(!CLBC_field_impl(self, tp, AtVector(sgfields, i), scope, cctx)) {
+		if(!CLBC_field_impl(self, tp, bc_AtVector(sgfields, i), scope, cctx)) {
 			break;
 		}
 	}
@@ -176,7 +176,7 @@ bool CLBC_Property_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
 	if(bc_IsAbstractModifier(prop->Modifier) ||
 	   bc_IsOverrideModifier(prop->Modifier) ||
 	   bc_IsNativeModifier(prop->Modifier)) {
-		   bc_Panic(BCERROR_NATIVE_FIELD_T, Ref2Str(prop->Name));
+		   bc_Panic(BCERROR_NATIVE_FIELD_T, bc_Ref2Str(prop->Name));
 			DeleteCallContext(cctx);
 		   return false;
 	   }
@@ -184,8 +184,8 @@ bool CLBC_Property_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
 	if(bc_IsWeakAccess(ilprop->Access, ilprop->Set->Access) ||
 	   bc_IsWeakAccess(ilprop->Access, ilprop->Get->Access)) {
 		bc_Panic(BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(ilprop->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(ilprop->Name)
 		);
 		   return false;
 	}
@@ -193,8 +193,8 @@ bool CLBC_Property_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
 	if((ilprop->Access != ilprop->Set->Access) &&
 	    ilprop->Access != ilprop->Get->Access) {
 		bc_Panic(BCERROR_SPECIFIED_BOTH_PROPERTY_ACCESSOR_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(ilprop->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(ilprop->Name)
 		);
 		   return false;
 	}
@@ -208,12 +208,12 @@ bool CLBC_Property_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
 	if(pr->IsShort) { return true; }
 	bc_PropertyBody* set = pr->Set;
 	bc_PropertyBody* get = pr->Get;
-	Vector* set_stmt_list = ilpr->Set->Statements;
-	Vector* get_stmt_list = ilpr->Get->Statements;
+	bc_Vector* set_stmt_list = ilpr->Set->Statements;
+	bc_Vector* get_stmt_list = ilpr->Get->Statements;
 	set->Env->ContextRef = self;
 	get->Env->ContextRef = self;
 	//setterのオペコードを生成
-	bc_SymbolEntry* valueE = bc_EntrySymbolTable(set->Env->Symboles, pr->GType, InternString("value"));
+	bc_SymbolEntry* valueE = bc_EntrySymbolTable(set->Env->Symboles, pr->GType, bc_InternString("value"));
 	if(!bc_IsStaticModifier(pr->Modifier)) {
 		bc_AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
 		bc_AddOpcodeBuf(set->Env->Bytecode, 0);
@@ -230,26 +230,26 @@ bool CLBC_Property_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILPro
 	return true;
 }
 
-void CLBC_properties_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilprops, bc_Namespace* scope) {
+void CLBC_properties_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilprops, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	for (int i = 0; i < ilprops->Length; i++) {
-		if(!CLBC_Property_decl(self, iltype, tp, AtVector(ilprops, i), scope, cctx)) {
+		if(!CLBC_Property_decl(self, iltype, tp, bc_AtVector(ilprops, i), scope, cctx)) {
 			break;
 		}
 	}
 	DeleteCallContext(cctx);
 }
 
-void CLBC_properties_impl(bc_ClassLoader* self,  ILType* iltype, bc_Type* tp, Vector* ilprops, Vector* sgprops, bc_Namespace* scope) {
+void CLBC_properties_impl(bc_ClassLoader* self,  ILType* iltype, bc_Type* tp, bc_Vector* ilprops, bc_Vector* sgprops, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
 	CallContext* cctx = NewCallContext(CALL_DECL_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;
 	for (int i = 0; i < sgprops->Length; i++) {
-		if(!CLBC_Property_impl(self, iltype, tp, AtVector(ilprops, i), AtVector(sgprops, i), scope, cctx)) {
+		if(!CLBC_Property_impl(self, iltype, tp, bc_AtVector(ilprops, i), bc_AtVector(sgprops, i), scope, cctx)) {
 			break;
 		}
 	}
@@ -264,10 +264,10 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	//メソッド一覧から取り出す
 	ILMethod* ilmethod = ilmt;
 	//メソッドから仮引数一覧を取りだす
-	Vector* ilparams = ilmethod->Parameters;
+	bc_Vector* ilparams = ilmethod->Parameters;
 	//実行時のメソッド情報を作成する
 	bc_Method* method = bc_NewMethod(ilmethod->Name);
-	Vector* parameter_list = method->Parameters;
+	bc_Vector* parameter_list = method->Parameters;
 	method->Type = bc_IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
 	method->Access = ilmethod->Access;
 	method->Modifier = ilmethod->Modifier;
@@ -293,7 +293,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	if(bc_IsAbstractModifier(method->Modifier) &&
 	  (tp->Tag == TYPE_CLASS_T &&
 	  !BC_TYPE2CLASS(tp)->IsAbstract)) {
-		bc_Panic(BCERROR_ABSTRACT_METHOD_BY_T, Ref2Str(method->Name));
+		bc_Panic(BCERROR_ABSTRACT_METHOD_BY_T, bc_Ref2Str(method->Name));
 		bc_DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
@@ -304,7 +304,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	   ilmethod->IsNoStmt &&
 		(!bc_IsAbstractModifier(method->Modifier) && !bc_IsNativeModifier(method->Modifier))
 	) {
-		bc_Panic(BCERROR_EMPTY_STMT_METHOD_T, Ref2Str(method->Name));
+		bc_Panic(BCERROR_EMPTY_STMT_METHOD_T, bc_Ref2Str(method->Name));
 		bc_DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
@@ -314,7 +314,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	   !ilmethod->IsNoStmt &&
 		(bc_IsAbstractModifier(method->Modifier) || bc_IsNativeModifier(method->Modifier))
 	) {
-		bc_Panic(BCERROR_NOT_EMPTY_STMT_METHOD_T, Ref2Str(method->Name));
+		bc_Panic(BCERROR_NOT_EMPTY_STMT_METHOD_T, bc_Ref2Str(method->Name));
 		bc_DeleteMethod(method);
 		DeleteCallContext(cctx);
 		return false;
@@ -323,8 +323,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	if(bc_IsStaticModifier(method->Modifier) &&
 	   bc_IsOverrideModifier(method->Modifier)) {
 		bc_Panic(BCERROR_STATIC_OVERRIDE_METHOD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(method->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(method->Name)
 		);
 		bc_DeleteMethod(method);
 		DeleteCallContext(cctx);
@@ -334,8 +334,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	if(bc_IsAbstractModifier(method->Modifier) &&
 	   bc_IsOverrideModifier(method->Modifier)) {
 		bc_Panic(BCERROR_ABSTRACT_OVERRIDE_METHOD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(method->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(method->Name)
 		);
 		bc_DeleteMethod(method);
 		DeleteCallContext(cctx);
@@ -345,8 +345,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	if(bc_IsAbstractModifier(method->Modifier) &&
 	   bc_IsStaticModifier(method->Modifier)) {
 		bc_Panic(BCERROR_ABSTRACT_STATIC_METHOD_T,
-			Ref2Str(bc_GetTypeName(tp)),
-			Ref2Str(method->Name)
+			bc_Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(method->Name)
 		);
 		bc_DeleteMethod(method);
 		DeleteCallContext(cctx);
@@ -358,10 +358,10 @@ bool CLBC_method_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILMetho
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
 	for (int i = 0; i < ilparams->Length; i++) {
-		VectorItem e = AtVector(ilparams, i);
+		bc_VectorItem e = bc_AtVector(ilparams, i);
 		ILParameter* ilp = (ILParameter*)e;
 		bc_Parameter* param = bc_NewParameter(ilp->Name);
-		PushVector(parameter_list, param);
+		bc_PushVector(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilmethod->Parameters, method->Parameters, cctx);
 	bc_AddMethodType(tp, method);
@@ -389,7 +389,7 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype,
 	cctx->Kind.Method = me;
 	//引数を保存
 	for (int i = 0; i < ilmethod->Parameters->Length; i++) {
-		ILParameter* ilparam = (ILParameter*)AtVector(ilmethod->Parameters, i);
+		ILParameter* ilparam = (ILParameter*)bc_AtVector(ilmethod->Parameters, i);
 		bc_EntrySymbolTable(
 			env->Symboles,
 			bc_ResolveImportManager(scope, ilparam->GCache, cctx),
@@ -397,33 +397,33 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype,
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)(i + 1));
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)(i + 1));
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
 	if (!bc_IsStaticModifier(me->Modifier)) {
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)0);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)0);
 	}
 	CLBC_corutine(self, me, env, ilmethod->Parameters, ilmethod->Statements, cctx, scope);
 	DeleteCallContext(cctx);
 	return true;
 }
 
-void CLBC_methods_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, Vector* ilmethods, bc_Namespace* scope) {
+void CLBC_methods_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Vector* ilmethods, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
 	for (int i = 0; i < ilmethods->Length; i++) {
-		if(!CLBC_method_decl(self, iltype, tp, AtVector(ilmethods,i),scope)) {
+		if(!CLBC_method_decl(self, iltype, tp, bc_AtVector(ilmethods,i),scope)) {
 			break;
 		}
 	}
 }
 
-void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype, bc_Type* tp, Vector* ilmethods, Vector* sgmethods) {
+void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype, bc_Type* tp, bc_Vector* ilmethods, bc_Vector* sgmethods) {
 	bc_CL_ERROR(self);
 	for (int i = 0; i < ilmethods->Length; i++) {
-		if(!CLBC_method_impl(self, scope, iltype, tp, AtVector(ilmethods, i), AtVector(sgmethods, i))) {
+		if(!CLBC_method_impl(self, scope, iltype, tp, bc_AtVector(ilmethods, i), bc_AtVector(sgmethods, i))) {
 			break;
 		}
 		BC_ERROR();
@@ -436,11 +436,11 @@ void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope, ILType* iltype
 //
 bool CLBC_ctor_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstructor* ilcons, bc_Namespace* scope) {
 	//メソッドから仮引数一覧を取りだす
-	Vector* ilparams = ilcons->Parameters;
+	bc_Vector* ilparams = ilcons->Parameters;
 	bc_Class* classz = tp->Kind.Class;
 	//実行時のメソッド情報を作成する
 	bc_Constructor* cons = bc_NewConstructor();
-	Vector* parameter_list = cons->Parameters;
+	bc_Vector* parameter_list = cons->Parameters;
 	cons->Access = ilcons->Access;
 	cons->Parent = tp;
 	CallContext* cctx = NewCallContext(CALL_CTOR_T);
@@ -450,10 +450,10 @@ bool CLBC_ctor_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
 	//     class_loader_sgload_complete参照
 	for (int i = 0; i < ilparams->Length; i++) {
-		VectorItem e = AtVector(ilparams, i);
+		bc_VectorItem e = bc_AtVector(ilparams, i);
 		ILParameter* ilp = (ILParameter*)e;
 		bc_Parameter* param = bc_NewParameter(ilp->Name);
-		PushVector(parameter_list, param);
+		bc_PushVector(parameter_list, param);
 	}
 	CLBC_parameter_list(self, scope, ilcons->Parameters, cons->Parameters, cctx);
 	CLBC_parameter_list_ctor(cons->Parameters);
@@ -473,7 +473,7 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 	cctx->Ty = tp;
 	cctx->Kind.Ctor = cons;
 	for (int i = 0; i < cons->Parameters->Length; i++) {
-		ILParameter* ilparam = (ILParameter*)AtVector(ilcons->Parameters, i);
+		ILParameter* ilparam = (ILParameter*)bc_AtVector(ilcons->Parameters, i);
 		bc_EntrySymbolTable(
 			env->Symboles,
 			bc_ResolveImportManager(scope, ilparam->GCache, cctx),
@@ -495,9 +495,9 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILConstru
 void CLBC_ctors_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
 	bc_Class* classz = tp->Kind.Class;
-	Vector* ilcons_list = iltype->Kind.Class->Constructors;
+	bc_Vector* ilcons_list = iltype->Kind.Class->Constructors;
 	for (int i = 0; i < ilcons_list->Length; i++) {
-		if(!CLBC_ctor_decl(self, iltype, tp, AtVector(ilcons_list, i), scope)) {
+		if(!CLBC_ctor_decl(self, iltype, tp, bc_AtVector(ilcons_list, i), scope)) {
 			break;
 		}
 	}
@@ -508,14 +508,14 @@ void CLBC_ctors_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp) {
 	assert(tp->Tag == TYPE_CLASS_T);
 	bc_Class* classz = tp->Kind.Class;
 	bc_Namespace* scope = classz->Location;
-	Vector* constructors = classz->Constructors;
+	bc_Vector* constructors = classz->Constructors;
 	if (iltype->Tag != ILTYPE_CLASS_T) {
 		return;
 	}
 	//既に登録されたが、
 	//オペコードが空っぽになっているコンストラクタの一覧
 	for (int i = 0; i < constructors->Length; i++) {
-		if(!CLBC_ctor_impl(self, iltype, tp, AtVector(iltype->Kind.Class->Constructors,i),AtVector(constructors, i), scope)) {
+		if(!CLBC_ctor_impl(self, iltype, tp, bc_AtVector(iltype->Kind.Class->Constructors,i),bc_AtVector(constructors, i), scope)) {
 			break;
 		}
 	}
@@ -539,12 +539,12 @@ bool CLBC_operator_overload_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 	opov->ReturnGType = bc_ResolveImportManager(scope, ilopov->ReturnGCache, cctx);
 	//パラメータ読み込み
 	for(int j=0; j<ilopov->Parameters->Length; j++) {
-		ILParameter* ilparam = AtVector(ilopov->Parameters, j);
+		ILParameter* ilparam = bc_AtVector(ilopov->Parameters, j);
 		bc_Parameter* param = bc_NewParameter(ilparam->Name);
-		PushVector(opov->Parameters, param);
+		bc_PushVector(opov->Parameters, param);
 	}
 	CLBC_parameter_list(self, scope, ilopov->Parameters, opov->Parameters, cctx);
-	PushVector(tp->Kind.Class->OperatorOverloads, opov);
+	bc_PushVector(tp->Kind.Class->OperatorOverloads, opov);
 	//オペレータオーバロードの妥当性をテストする
 	if(CLBC_test_operator_overlaod(self, iltype, tp, opov)) {
 		DeleteCallContext(cctx);
@@ -566,7 +566,7 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 	//ccpush_method(me);
 	env->ContextRef = self;
 	for (int i = 0; i < ilopov->Parameters->Length; i++) {
-		ILParameter* ilparam = (ILParameter*)AtVector(ilopov->Parameters, i);
+		ILParameter* ilparam = (ILParameter*)bc_AtVector(ilopov->Parameters, i);
 		bc_EntrySymbolTable(
 			env->Symboles,
 			bc_ResolveImportManager(scope, ilparam->GCache, cctx),
@@ -574,12 +574,12 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 		);
 		//実引数を保存
 		//0番目は this のために開けておく
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)(i + 1));
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)(i + 1));
 	}
 	//0番目をthisで埋める
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_STORE);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)0);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)0);
 	//NOTE:ここなら名前空間を設定出来る
 	CLBC_body(self, ilopov->Statements, env, cctx, scope);
 	DeleteCallContext(cctx);
@@ -590,9 +590,9 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* 
 
 void CLBC_operator_overloads_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
-	Vector* opov_list = iltype->Kind.Class->OperatorOverloads;
+	bc_Vector* opov_list = iltype->Kind.Class->OperatorOverloads;
 	for (int i = 0; i < opov_list->Length; i++) {
-		if(!CLBC_operator_overload_decl(self, iltype, tp, AtVector(opov_list, i), scope)) {
+		if(!CLBC_operator_overload_decl(self, iltype, tp, bc_AtVector(opov_list, i), scope)) {
 			break;
 		}
 	}
@@ -601,16 +601,16 @@ void CLBC_operator_overloads_decl(bc_ClassLoader* self, ILType* iltype, bc_Type*
 
 void CLBC_operator_overloads_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope) {
 	bc_CL_ERROR(self);
-	Vector* opov_list = tp->Kind.Class->OperatorOverloads;
+	bc_Vector* opov_list = tp->Kind.Class->OperatorOverloads;
 	//ここで暗黙的に作成される == != によって長さが合わなくなる
 	for (int i = 0; i < iltype->Kind.Class->OperatorOverloads->Length; i++) {
-		if(!CLBC_operator_overload_impl(self, iltype, tp, AtVector(iltype->Kind.Class->OperatorOverloads, i), AtVector(opov_list, i), scope)) {
+		if(!CLBC_operator_overload_impl(self, iltype, tp, bc_AtVector(iltype->Kind.Class->OperatorOverloads, i), bc_AtVector(opov_list, i), scope)) {
 			break;
 		}
 	}
 }
 
-bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,  Vector* ilparams, Vector* ilstmts, CallContext* cctx, bc_Namespace* range) {
+bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,  bc_Vector* ilparams, bc_Vector* ilstmts, CallContext* cctx, bc_Namespace* range) {
 	//戻り値が iterator なら、
 	//コルーチンとして使えるようにする
 	bool yield_err = false;
@@ -640,14 +640,14 @@ bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,  Vec
 	return true;
 }
 
-void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, bc_Enviroment* dest, CallContext* cctx, bc_Namespace* range) {
+void CLBC_body(bc_ClassLoader* self, bc_Vector* stmt_list, bc_Enviroment* dest, CallContext* cctx, bc_Namespace* range) {
 	bc_CL_ERROR(self);
 	//まずは全てのステートメントを読み込む
 	for (int i = 0; i < stmt_list->Length; i++) {
 		if(bc_GetLastPanic()) {
 			break;
 		}
-		VectorItem e = AtVector(stmt_list, i);
+		bc_VectorItem e = bc_AtVector(stmt_list, i);
 		ILStatement* s = (ILStatement*)e;
 		LoadILStmt(s, dest, cctx);
 	}
@@ -656,19 +656,19 @@ void CLBC_body(bc_ClassLoader* self, Vector* stmt_list, bc_Enviroment* dest, Cal
 		if(bc_GetLastPanic()) {
 			break;
 		}
-		VectorItem e = AtVector(stmt_list, i);
+		bc_VectorItem e = bc_AtVector(stmt_list, i);
 		ILStatement* s = (ILStatement*)e;
 		GenerateILStmt(s, dest, cctx);
 	}
 }
 
 //private
-static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope, Vector* param_list, Vector* sg_param_list, CallContext* cctx) {
+static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope, bc_Vector* param_list, bc_Vector* sg_param_list, CallContext* cctx) {
 	for (int j = 0; j < param_list->Length; j++) {
-		VectorItem e = AtVector(param_list, j);
+		bc_VectorItem e = bc_AtVector(param_list, j);
 		ILParameter* ilparam = (ILParameter*)e;
 		//FIXME:ILパラメータと実行時パラメータのインデックスが同じなのでとりあえず動く
-		bc_Parameter* mep = (bc_Parameter*)AtVector(sg_param_list, j);
+		bc_Parameter* mep = (bc_Parameter*)bc_AtVector(sg_param_list, j);
 		mep->GType = bc_ResolveImportManager(
 			scope,
 			ilparam->GCache,
@@ -677,9 +677,9 @@ static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope, Vecto
 	}
 }
 
-static void CLBC_parameter_list_ctor(Vector* param_list) {
+static void CLBC_parameter_list_ctor(bc_Vector* param_list) {
 	for(int i=0; i<param_list->Length; i++) {
-		bc_Parameter* param = AtVector(param_list, i);
+		bc_Parameter* param = bc_AtVector(param_list, i);
 		param->GType->IsCtor = true;
 	}
 }
@@ -703,9 +703,9 @@ static void CLBC_chain(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, ILCons
 }
 
 static void CLBC_chain_root(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, bc_Enviroment * env) {
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_NEW_OBJECT);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_NEW_OBJECT);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_ALLOC_FIELD);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)tp->AbsoluteIndex);
 }
 
 static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, bc_Enviroment * env) {
@@ -720,7 +720,7 @@ static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 	//(この場合自動的にチェインコンストラクタを補うことが出来ないため。)
 	if(emptyTarget == NULL) {
 		bc_Panic(BCERROR_AUTO_CHAIN_CTOR_NOT_FOUND_T,
-			Ref2Str(bc_GetTypeName(tp))
+			bc_Ref2Str(bc_GetTypeName(tp))
 		);
 		return;
 	}
@@ -733,13 +733,13 @@ static void CLBC_chain_auto(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 	ch_empty->Type = AST_CONSTRUCTOR_CHAIN_SUPER_T;
 	ilcons->Chain = ch_empty;
 	//親クラスへ連鎖
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_SUPER);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->SuperClass->CoreType->AbsoluteIndex);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)emptyTemp);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_CHAIN_SUPER);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)classz->SuperClass->CoreType->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)emptyTemp);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)classz->Parent->AllocSize);
 	//このクラスのフィールドを確保
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_ALLOC_FIELD);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)tp->AbsoluteIndex);
 }
 
 static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, ILConstructor * ilcons, ILConstructorChain * ilchain, bc_Enviroment * env) {
@@ -749,7 +749,7 @@ static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	cctx->Ty = tp;
 	ILConstructorChain* chain = ilcons->Chain;
 	for (int i = 0; i < chain->Arguments->Length; i++) {
-		ILArgument* ilarg = (ILArgument*)AtVector(chain->Arguments, i);
+		ILArgument* ilarg = (ILArgument*)bc_AtVector(chain->Arguments, i);
 		GenerateILFactor(ilarg->Factor, env, cctx);
 	}
 	//連鎖先のコンストラクタを検索する
@@ -757,20 +757,20 @@ static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	int temp = 0;
 	if (chain->Type == CHAIN_TYPE_THIS_T) {
 		chainTarget = bc_ILFindConstructorClass(classz, chain->Arguments, env, cctx, &temp);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_CHAIN_THIS);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)(tp->AbsoluteIndex));
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_CHAIN_THIS);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)(tp->AbsoluteIndex));
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)temp);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)classz->Parent->AllocSize);
 	} else if (chain->Type == CHAIN_TYPE_SUPER_T) {
 		chainTarget = bc_ILFindConstructorClass(classz->SuperClass->CoreType->Kind.Class, chain->Arguments, env, cctx, &temp);
 		bc_AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
 		bc_AddOpcodeBuf(env->Bytecode, classz->SuperClass->CoreType->AbsoluteIndex);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)temp);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)classz->Parent->AllocSize);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)temp);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)classz->Parent->AllocSize);
 	}
 	if(chainTarget == NULL) {
 		bc_Panic(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,
-			Ref2Str(bc_GetTypeName(tp))
+			bc_Ref2Str(bc_GetTypeName(tp))
 		);
 		return;
 	}
@@ -778,8 +778,8 @@ static void CLBC_chain_super(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	chain->Constructor = chainTarget;
 	chain->ConstructorIndex = temp;
 	//親クラスへのチェインなら即座にフィールドを確保
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_ALLOC_FIELD);
-	bc_AddOpcodeBuf(env->Bytecode, (VectorItem)tp->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_ALLOC_FIELD);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)tp->AbsoluteIndex);
 }
 
 static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_OperatorOverload* opov) {
@@ -820,7 +820,7 @@ static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, ILType* iltype, bc
 	//== などの比較演算子の戻り値が bool ではない
 	if(bc_IsCompareOperator(opov->Type) && opov->ReturnGType->CoreType != BC_TYPE_BOOL) {
 		bc_Panic(BCERROR_RETURN_TYPE_NOT_BOOL_COMPARE_OPERATOR_T,
-			Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(bc_GetTypeName(tp)),
 			bc_OperatorToString(opov->Type)
 		);
 		return true;
@@ -828,7 +828,7 @@ static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, ILType* iltype, bc
 	//! の戻り値が bool ではない
 	if(opov->Type == OPERATOR_NOT_T && opov->ReturnGType->CoreType != BC_TYPE_BOOL) {
 		bc_Panic(BCERROR_RETURN_TYPE_NOT_BOOL_NOT_OPERATOR_T,
-			Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(bc_GetTypeName(tp)),
 			bc_OperatorToString(opov->Type)
 		);
 		return true;
@@ -837,7 +837,7 @@ static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, ILType* iltype, bc
 	//(IntならInt, Vector2ならVector2)
 	if(opov->Type == OPERATOR_NEGATIVE_T && opov->ReturnGType->CoreType != opov->Parent) {
 		bc_Panic(BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T,
-			Ref2Str(bc_GetTypeName(tp)),
+			bc_Ref2Str(bc_GetTypeName(tp)),
 			bc_OperatorToString(opov->Type)
 		);
 		return true;

@@ -18,7 +18,7 @@ struct bc_Constructor;
  */
 typedef struct ILConstructorChain {
 	bc_ConstructorChainType Type;
-	Vector* Arguments;
+	bc_Vector* Arguments;
 	struct bc_Constructor* Constructor;
 	int ConstructorIndex;
 } ILConstructorChain;

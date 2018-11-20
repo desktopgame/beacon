@@ -20,11 +20,11 @@ static int distance_impl(bc_GenericType* self, bc_GenericType* other, bc_Frame* 
 static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other, bc_Frame* fr, CallContext* cctx);
 static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other, bc_Frame* fr, CallContext* cctx);
 static int distance_interface(int dist, bc_GenericType* self, bc_GenericType* other, bc_Frame* fr, CallContext* cctx);
-static Vector* apply_by_hierarchy(bc_GenericType* impl_baseline, bc_GenericType* impl);
+static bc_Vector* apply_by_hierarchy(bc_GenericType* impl_baseline, bc_GenericType* impl);
 static bc_GenericType* typeargs_at(CallContext* cctx, bc_Frame* fr, int index);
 static bc_GenericType* receiver_at(CallContext* cctx, bc_Frame* fr, int index);
-static void delete_self(VectorItem item);
-static void delete_recursive_self(VectorItem item);
+static void delete_self(bc_VectorItem item);
+static void delete_recursive_self(bc_VectorItem item);
 static void recursive_mark(bc_GenericType* a);
 static bc_GenericType* get_generic(bc_GenericType* a);
 /*
@@ -43,20 +43,20 @@ bc_GenericType* bc_RefGenericType(bc_Type* CoreType) {
 bc_GenericType* bc_MallocGenericType(struct bc_Type* CoreType, const char* filename, int lineno) {
 	bc_GenericType* ret = (bc_GenericType*)bc_MXMalloc(sizeof(bc_GenericType), filename, lineno);
 	ret->CoreType = CoreType;
-	ret->TypeArgs = NewVector();
+	ret->TypeArgs = bc_NewVector();
 	ret->VirtualTypeIndex = -1;
 	ret->Tag = GENERIC_TYPE_TAG_NONE_T;
 	ret->IsCtor = false;
 	//現在のスクリプトコンテキストに登録
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-	PushVector(ctx->AllGenericList, ret);
+	bc_PushVector(ctx->AllGenericList, ret);
 	return ret;
 }
 
 bc_GenericType* bc_CloneGenericType(bc_GenericType* self) {
 	bc_GenericType* a = bc_NewGenericType(self->CoreType);
 	for(int i=0; i<self->TypeArgs->Length; i++) {
-		bc_GenericType* e = AtVector(self->TypeArgs, i);
+		bc_GenericType* e = bc_AtVector(self->TypeArgs, i);
 		bc_AddArgsGenericType(a, bc_CloneGenericType(e));
 	}
 	a->Tag = self->Tag;
@@ -73,22 +73,22 @@ void bc_CollectGenericType() {
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	//マークを外す
 	for(int i=0; i<ctx->AllGenericList->Length; i++) {
-		bc_GenericType* e= (bc_GenericType*)AtVector(ctx->AllGenericList, i);
+		bc_GenericType* e= (bc_GenericType*)bc_AtVector(ctx->AllGenericList, i);
 		e->IsMark = false;
 	}
 	//全ての型に定義された自身を参照するための generic をマーク
 	for(int i=0; i<ctx->TypeList->Length; i++) {
-		bc_Type* e= (bc_Type*)AtVector(ctx->TypeList, i);
+		bc_Type* e= (bc_Type*)bc_AtVector(ctx->TypeList, i);
 		recursive_mark(e->GenericSelf);
 	}
-	Vector* alive = NewVector();
-	Vector* dead = NewVector();
+	bc_Vector* alive = bc_NewVector();
+	bc_Vector* dead = bc_NewVector();
 	for(int i=0; i<ctx->AllGenericList->Length; i++) {
-		bc_GenericType* e= (bc_GenericType*)AtVector(ctx->AllGenericList, i);
-		PushVector((!e->IsMark ? dead : alive), e);
+		bc_GenericType* e= (bc_GenericType*)bc_AtVector(ctx->AllGenericList, i);
+		bc_PushVector((!e->IsMark ? dead : alive), e);
 	}
-	DeleteVector(ctx->AllGenericList, VectorDeleterOfNull);
-	DeleteVector(dead, delete_self);
+	bc_DeleteVector(ctx->AllGenericList, bc_VectorDeleterOfNull);
+	bc_DeleteVector(dead, delete_self);
 	ctx->AllGenericList = alive;
 }
 
@@ -105,7 +105,7 @@ void bc_LostownershipGenericType(bc_GenericType* a) {
 
 void bc_AddArgsGenericType(bc_GenericType* self, bc_GenericType* a) {
 	assert(a != NULL);
-	PushVector(self->TypeArgs, a);
+	bc_PushVector(self->TypeArgs, a);
 }
 
 int bc_DistanceGenericType(bc_GenericType * self, bc_GenericType * other, CallContext* cctx) {
@@ -134,15 +134,15 @@ void bc_PrintGenericType(bc_GenericType * self) {
 	if (self->VirtualTypeIndex != -1) {
 		//(Array)[0]
 		if(self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-			printf("(%s)", Ref2Str(bc_GetTypeName(self->Kind.Type)));
+			printf("(%s)", bc_Ref2Str(bc_GetTypeName(self->Kind.Type)));
 		//copy[0]
 		} else if(self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-			printf("(%s)", Ref2Str(self->Kind.Method->Name));
+			printf("(%s)", bc_Ref2Str(self->Kind.Method->Name));
 		}
 		printf("[%d]", self->VirtualTypeIndex);
 	//Intなど
 	} else {
-		printf("%s", Ref2Str(bc_GetTypeName(self->CoreType)));
+		printf("%s", bc_Ref2Str(bc_GetTypeName(self->CoreType)));
 	}
 	if(self->IsCtor) {
 		printf("!!");
@@ -153,7 +153,7 @@ void bc_PrintGenericType(bc_GenericType * self) {
 	//[...]
 	printf("[");
 	for (int i = 0; i < self->TypeArgs->Length; i++) {
-		bc_GenericType* e = (bc_GenericType*)AtVector(self->TypeArgs, i);
+		bc_GenericType* e = (bc_GenericType*)bc_AtVector(self->TypeArgs, i);
 		bc_PrintGenericType(e);
 		if (i != self->TypeArgs->Length - 1) {
 			printf(",");
@@ -179,7 +179,7 @@ void bc_GenerateGenericType(bc_GenericType* self, bc_Enviroment* env) {
 		bc_AddOpcodeBuf(env->Bytecode, self->CoreType->AbsoluteIndex);
 	}
 	for(int i=0; i<self->TypeArgs->Length; i++) {
-		bc_GenericType* e = (bc_GenericType*)AtVector(self->TypeArgs, i);
+		bc_GenericType* e = (bc_GenericType*)bc_AtVector(self->TypeArgs, i);
 		bc_GenerateGenericType(e, env);
 	}
 	bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_EXIT);
@@ -221,7 +221,7 @@ static bc_GenericType* apply_impl(bc_GenericType* self, CallContext* cctx, bc_Fr
 	}
 	assert(ret != NULL);
 	for(int i=0; i<self->TypeArgs->Length; i++) {
-		bc_AddArgsGenericType(ret, bc_ApplyGenericType(AtVector(self->TypeArgs, i), cctx));
+		bc_AddArgsGenericType(ret, bc_ApplyGenericType(bc_AtVector(self->TypeArgs, i), cctx));
 	}
 	return ret;
 }
@@ -267,8 +267,8 @@ static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other, bc_Fr
 	assert(self->CoreType != NULL);
 	assert(other->CoreType != NULL);
 	#if defined(DEBUG)
-	const char* sname = Ref2Str(bc_GetTypeName(self->CoreType));
-	const char* oname = Ref2Str(bc_GetTypeName(other->CoreType));
+	const char* sname = bc_Ref2Str(bc_GetTypeName(self->CoreType));
+	const char* oname = bc_Ref2Str(bc_GetTypeName(other->CoreType));
 	#endif
 	//List : Dict みたいな型ならもうこの時点で次へ
 	if(dist == -1) {
@@ -297,8 +297,8 @@ static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other,
 	assert(target != NULL);
 	assert(self->TypeArgs->Length == target->TypeArgs->Length);
 	for (int i = 0; i<self->TypeArgs->Length; i++) {
-		bc_GenericType* a = AtVector(self->TypeArgs, i);
-		bc_GenericType* b = AtVector(target->TypeArgs, i);
+		bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
+		bc_GenericType* b = bc_AtVector(target->TypeArgs, i);
 		int calc = distance_impl(a, b, fr, cctx);
 		if (calc == -1 || calc > 0) {
 			dist = -1;
@@ -316,17 +316,17 @@ static int distance_interface(int dist, bc_GenericType* self, bc_GenericType* ot
 		if (impl_baseline == NULL) {
 			impl_baseline = other;
 		}
-		Vector* gargs = apply_by_hierarchy(impl_baseline, impl);
+		bc_Vector* gargs = apply_by_hierarchy(impl_baseline, impl);
 		for (int i = 0; i<self->TypeArgs->Length; i++) {
-			bc_GenericType* a = AtVector(self->TypeArgs, i);
-			bc_GenericType* b = AtVector(gargs, i);
+			bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
+			bc_GenericType* b = bc_AtVector(gargs, i);
 			int calc = distance_impl(a, b, fr, cctx);
 			if (calc == -1 || calc > 0) {
 				dist = -1;
 				break;
 			}
 		}
-		DeleteVector(gargs, VectorDeleterOfNull);
+		bc_DeleteVector(gargs, bc_VectorDeleterOfNull);
 		return dist;
 	} else if (other->CoreType->Tag == TYPE_INTERFACE_T) {
 		bc_GenericType* impl = bc_FindInterfaceInterface(BC_TYPE2INTERFACE(bc_GENERIC2TYPE(other)), (bc_GENERIC2TYPE(self)));
@@ -334,8 +334,8 @@ static int distance_interface(int dist, bc_GenericType* self, bc_GenericType* ot
 			impl = other;
 		}
 		for (int i = 0; i<self->TypeArgs->Length; i++) {
-			bc_GenericType* a = AtVector(self->TypeArgs, i);
-			bc_GenericType* b = AtVector(impl->TypeArgs, i);
+			bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
+			bc_GenericType* b = bc_AtVector(impl->TypeArgs, i);
 			int calc = distance_impl(a, b, fr, cctx);
 			if (calc == -1 || calc > 0) {
 				dist = -1;
@@ -350,26 +350,26 @@ static int distance_interface(int dist, bc_GenericType* self, bc_GenericType* ot
 	return dist;
 }
 
-static Vector* apply_by_hierarchy(bc_GenericType* impl_baseline, bc_GenericType* impl) {
+static bc_Vector* apply_by_hierarchy(bc_GenericType* impl_baseline, bc_GenericType* impl) {
 	assert(impl_baseline->CoreType != NULL);
-	Vector* gargs = NewVector();
+	bc_Vector* gargs = bc_NewVector();
 	for (int i = 0; i < impl->TypeArgs->Length; i++) {
-		bc_GenericType* e = AtVector(impl->TypeArgs, i);
+		bc_GenericType* e = bc_AtVector(impl->TypeArgs, i);
 		if (e->CoreType == NULL) {
-			e = AtVector(impl_baseline->TypeArgs, e->VirtualTypeIndex);
+			e = bc_AtVector(impl_baseline->TypeArgs, e->VirtualTypeIndex);
 		}
-		PushVector(gargs, e);
+		bc_PushVector(gargs, e);
 	}
 	return gargs;
 }
 
 static bc_GenericType* typeargs_at(CallContext* cctx, bc_Frame* fr, int index) {
 	if(fr == NULL) {
-		Vector* type_args = GetTypeArgsCContext(cctx);
-		ILTypeArgument* a = AtVector(type_args, index);
+		bc_Vector* type_args = GetTypeArgsCContext(cctx);
+		ILTypeArgument* a = bc_AtVector(type_args, index);
 		return a->GType;
 	} else {
-		bc_GenericType* a = AtVector(fr->TypeArgs, index);
+		bc_GenericType* a = bc_AtVector(fr->TypeArgs, index);
 		return a;
 	}
 	return NULL;
@@ -378,12 +378,12 @@ static bc_GenericType* typeargs_at(CallContext* cctx, bc_Frame* fr, int index) {
 static bc_GenericType* receiver_at(CallContext* cctx, bc_Frame* fr, int index) {
 	if(fr == NULL) {
 		bc_GenericType* tp = GetReceiverCContext(cctx);
-		bc_GenericType* instanced = AtVector(tp->TypeArgs, index);
+		bc_GenericType* instanced = bc_AtVector(tp->TypeArgs, index);
 		return instanced;
 	} else {
-		bc_Object* a = AtVector(fr->VariableTable, 0);
+		bc_Object* a = bc_AtVector(fr->VariableTable, 0);
 		printf("receiver at: "); bc_PrintGenericType(a->GType); bc_Println();
-		return AtVector(a->GType->TypeArgs, index);
+		return bc_AtVector(a->GType->TypeArgs, index);
 	}
 	return NULL;
 }
@@ -405,15 +405,15 @@ static bc_GenericType* get_generic(bc_GenericType* a) {
 	return NULL;
 }
 
-static void delete_self(VectorItem item) {
+static void delete_self(bc_VectorItem item) {
 	bc_GenericType* e = (bc_GenericType*)item;
-	DeleteVector(e->TypeArgs, VectorDeleterOfNull);
+	bc_DeleteVector(e->TypeArgs, bc_VectorDeleterOfNull);
 	MEM_FREE(e);
 }
 
-static void delete_recursive_self(VectorItem item) {
+static void delete_recursive_self(bc_VectorItem item) {
 	bc_GenericType* e = (bc_GenericType*)item;
-	DeleteVector(e->TypeArgs, delete_recursive_self);
+	bc_DeleteVector(e->TypeArgs, delete_recursive_self);
 	MEM_FREE(e);
 }
 
@@ -423,6 +423,6 @@ static void recursive_mark(bc_GenericType* a) {
 	}
 	a->IsMark = true;
 	for(int i=0; i<a->TypeArgs->Length; i++) {
-		recursive_mark((bc_GenericType*)AtVector(a->TypeArgs, i));
+		recursive_mark((bc_GenericType*)bc_AtVector(a->TypeArgs, i));
 	}
 }

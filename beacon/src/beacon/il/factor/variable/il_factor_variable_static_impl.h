@@ -16,7 +16,7 @@ struct bc_GenericType;
 
 typedef struct ILVariableStatic {
 	bc_FQCNCache* FQCN;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 } ILVariableStatic;
 
 ILVariableStatic* NewILVariableStatic();

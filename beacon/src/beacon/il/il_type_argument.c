@@ -13,13 +13,13 @@ ILTypeArgument* NewILTypeArgument() {
 	return ret;
 }
 
-void PrintILTypeArgument(Vector* iltype_args) {
+void PrintILTypeArgument(bc_Vector* iltype_args) {
 	if(iltype_args->Length == 0) {
 		return;
 	}
 	printf("<");
 	for(int i=0; i<iltype_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(iltype_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(iltype_args, i);
 		bc_PrintGenericCache(e->GCache);
 		if(i != iltype_args->Length - 1) {
 			printf(",");
@@ -28,9 +28,9 @@ void PrintILTypeArgument(Vector* iltype_args) {
 	printf("<");
 }
 
-void ResolveILTypeArgument(Vector* iltype_args, CallContext* cctx) {
+void ResolveILTypeArgument(bc_Vector* iltype_args, CallContext* cctx) {
 	for(int i=0; i<iltype_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)AtVector(iltype_args, i);
+		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(iltype_args, i);
 		if(e->GType == NULL) {
 	//		Namespace* scope = cc_namespace(
 			e->GType = bc_ResolveImportManager(cctx->Scope, e->GCache, cctx);

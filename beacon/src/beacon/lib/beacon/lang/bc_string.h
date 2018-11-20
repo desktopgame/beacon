@@ -17,7 +17,7 @@
  */
 typedef struct String {
 	bc_Object Super;
-	Buffer* Buffer;
+	bc_Buffer* Buffer;
 } String;
 struct bc_Type;
 
@@ -38,7 +38,7 @@ void InitString();
  * @param self
  * @return
  */
-Buffer* GetRawString(bc_Object* self);
+bc_Buffer* GetRawString(bc_Object* self);
 
 /**
  * beacon::lang::String型を返します.

@@ -36,12 +36,12 @@ bc_GenericType* EvalILDouble(ILDouble * self, bc_Enviroment * env, CallContext* 
 }
 
 char* ILDoubleToString(ILDouble* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char block[32] = {0};
 	int res = sprintf(block, "%lf", self->Value);
 	assert(res >= 0);
-	AppendsBuffer(sb, block);
-	return ReleaseBuffer(sb);
+	bc_AppendsBuffer(sb, block);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILDouble(ILDouble * self) {

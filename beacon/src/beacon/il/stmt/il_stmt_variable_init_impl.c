@@ -16,7 +16,7 @@ ILStatement * WrapILVariableInit(ILVariableInit * self) {
 	return ret;
 }
 
-ILVariableInit * NewILVariableInit(StringView namev) {
+ILVariableInit * NewILVariableInit(bc_StringView namev) {
 	ILVariableInit* ret = (ILVariableInit*)MEM_MALLOC(sizeof(ILVariableInit));
 	ret->Name = namev;
 	ret->Value = NULL;
@@ -40,7 +40,7 @@ void GenerateILVariableInit(ILVariableInit * self, bc_Enviroment * env, CallCont
 	int dist = bc_DistanceGenericType(gb, ga, cctx);
 	if (dist < 0) {
 		bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
-			Ref2Str(self->Name)
+			bc_Ref2Str(self->Name)
 		);
 	}
 	bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
@@ -51,14 +51,14 @@ void LoadILVariableInit(ILVariableInit * self, bc_Enviroment * env, CallContext*
 	LoadILFactor(self->Value, env, cctx);
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
-			Ref2Str(self->Name)
+			bc_Ref2Str(self->Name)
 		);
 	}
 	bc_GenericType* gt = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	if(gt == NULL) {
 		bc_Panic(
 			BCERROR_UNDEFINED_TYPE_DECL_T,
-			Ref2Str(self->GCache->FQCN->Name)
+			bc_Ref2Str(self->GCache->FQCN->Name)
 		);
 		return;
 	}

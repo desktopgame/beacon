@@ -25,7 +25,7 @@ struct CallContext;
  * あるファイルが参照しているファイルの一覧を管理します.
  */
 typedef struct bc_ImportManager {
-	Vector* Items;
+	bc_Vector* Items;
 } bc_ImportManager;
 
 /**

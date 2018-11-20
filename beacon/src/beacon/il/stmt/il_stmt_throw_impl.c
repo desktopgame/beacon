@@ -30,7 +30,7 @@ void LoadILThrow(ILThrow* self, bc_Enviroment* env, CallContext* cctx) {
 		if(tgt->CoreType != NULL) {
 			bc_Panic(
 				BCERROR_THROWN_NOT_EXCEPTION_TYPE_T,
-				Ref2Str(bc_GetTypeName(tgt->CoreType))
+				bc_Ref2Str(bc_GetTypeName(tgt->CoreType))
 			);
 		}
 	}

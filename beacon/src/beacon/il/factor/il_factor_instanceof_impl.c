@@ -39,15 +39,15 @@ bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallCon
 }
 
 char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* a = ILFactorToString(self->Source, env);
 	char* b = bc_GenericCacheToString(self->GCache);
-	AppendsBuffer(sb, a);
-	AppendsBuffer(sb, " is ");
-	AppendsBuffer(sb, b);
+	bc_AppendsBuffer(sb, a);
+	bc_AppendsBuffer(sb, " is ");
+	bc_AppendsBuffer(sb, b);
 	MEM_FREE(a);
 	MEM_FREE(b);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILInstanceOf(ILInstanceOf* self) {

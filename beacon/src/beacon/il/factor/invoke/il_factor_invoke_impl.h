@@ -25,9 +25,9 @@ typedef enum InstanceInvokeTag {
 
 typedef struct ILInvoke {
 	ILFactor* receiver;
-	Vector* args;
-	Vector* type_args;
-	StringView namev;
+	bc_Vector* args;
+	bc_Vector* type_args;
+	bc_StringView namev;
 	int index;
 	union {
 		struct bc_Method* m;
@@ -37,7 +37,7 @@ typedef struct ILInvoke {
 	InstanceInvokeTag tag;
 } ILInvoke;
 
-ILInvoke* NewILInvoke(StringView namev);
+ILInvoke* NewILInvoke(bc_StringView namev);
 
 void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
 

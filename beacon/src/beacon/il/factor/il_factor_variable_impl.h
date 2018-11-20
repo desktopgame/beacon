@@ -40,7 +40,7 @@ typedef enum ILVariableType {
  */
 typedef struct ILVariable {
 	bc_FQCNCache* FQCN;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 	int Index;
 	ILVariableType Type;
 	union {

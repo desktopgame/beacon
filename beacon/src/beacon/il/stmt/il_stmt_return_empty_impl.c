@@ -25,8 +25,8 @@ static void check_method_return(ILReturnEmpty self, bc_Enviroment * env, CallCon
 	//戻り値が Void ではないのに値を返さない
 	if(m->ReturnGType->CoreType != BC_TYPE_VOID) {
 		bc_Panic(BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T,
-			Ref2Str(bc_GetTypeName(m->Parent)),
-			Ref2Str(m->Name)
+			bc_Ref2Str(bc_GetTypeName(m->Parent)),
+			bc_Ref2Str(m->Name)
 		);
 		return;
 	}

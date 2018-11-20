@@ -18,11 +18,11 @@ struct ILMethod;
  * インターフェースを表す要素.
  */
 typedef struct ILInterface {
-	StringView Name;
-	Vector* Methods;
-	Vector* Extends;
-	Vector* TypeParameters;
-	Vector* Properties;
+	bc_StringView Name;
+	bc_Vector* Methods;
+	bc_Vector* Extends;
+	bc_Vector* TypeParameters;
+	bc_Vector* Properties;
 } ILInterface;
 
 /**
@@ -37,7 +37,7 @@ ILType* WrapILInterface(ILInterface* self);
  * @param namev
  * @return
  */
-ILInterface* NewILInterface(StringView namev);
+ILInterface* NewILInterface(bc_StringView namev);
 
 /**
  * プロパティを追加します.

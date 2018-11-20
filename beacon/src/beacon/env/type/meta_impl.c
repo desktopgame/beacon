@@ -14,15 +14,15 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int bc_MetaILCalcScore(Vector* params, Vector* ilargs, bc_Enviroment* env, CallContext* cctx) {
+int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx) {
 	assert(params->Length == ilargs->Length);
 	int score = 0;
 	bool illegal = false;
 	//assert(ilctx->type_args_vec->Length != 0);
 	//Vector* type_args = TopVector(ilctx->type_args_vec);
 	for (int i = 0; i < params->Length; i++) {
-		VectorItem varg = AtVector(ilargs, i);
-		VectorItem vparam = AtVector(params, i);
+		bc_VectorItem varg = bc_AtVector(ilargs, i);
+		bc_VectorItem vparam = bc_AtVector(params, i);
 		ILArgument* arg = (ILArgument*)varg;
 		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
@@ -52,7 +52,7 @@ int bc_MetaILCalcScore(Vector* params, Vector* ilargs, bc_Enviroment* env, CallC
 	return score;
 }
 
-int bc_MetaGCalcScore(Vector* params, Vector* gargs) {
+int bc_MetaGCalcScore(bc_Vector* params, bc_Vector* gargs) {
 	assert(params->Length == gargs->Length);
 	//MetaILCalcScoreからのコピペ
 	int score = 0;
@@ -60,8 +60,8 @@ int bc_MetaGCalcScore(Vector* params, Vector* gargs) {
 	//assert(ilctx->type_args_vec->Length != 0);
 	//Vector* type_args = TopVector(ilctx->type_args_vec);
 	for (int i = 0; i < params->Length; i++) {
-		VectorItem varg = AtVector(gargs, i);
-		VectorItem vparam = AtVector(params, i);
+		bc_VectorItem varg = bc_AtVector(gargs, i);
+		bc_VectorItem vparam = bc_AtVector(params, i);
 		//il_argument* arg = (il_argument*)varg;
 		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
@@ -91,13 +91,13 @@ int bc_MetaGCalcScore(Vector* params, Vector* gargs) {
 	return score;
 }
 
-int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, bc_Frame* fr) {
+int bc_MetaRCalcScore(bc_Vector* params, bc_Vector* args, bc_Vector* typeargs, bc_Frame* fr) {
 	assert(params->Length == args->Length);
 	int score = 0;
 	bool illegal = false;
 	for (int i = 0; i < params->Length; i++) {
-		VectorItem varg = AtVector(args, i);
-		VectorItem vparam = AtVector(params, i);
+		bc_VectorItem varg = bc_AtVector(args, i);
+		bc_VectorItem vparam = bc_AtVector(params, i);
 		bc_Object* arg = (bc_Object*)varg;
 		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
@@ -118,22 +118,22 @@ int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, bc_Frame* 
 	return score;
 }
 
-bc_Method * bc_MetaILFindMethod(Vector * method_vec, StringView namev, Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_MetaILFindMethod(bc_Vector * method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	return bc_MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
-bc_Method* bc_MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex) {
+bc_Method* bc_MetaGFindMethod(bc_Vector* method_vec, bc_StringView namev, bc_Vector * gargs, int* outIndex) {
 	return bc_MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, Vector* method_vec, StringView namev, Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, bc_Vector* method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	bc_Method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->Length; i++) {
-		VectorItem ve = AtVector(method_vec, i);
+		bc_VectorItem ve = bc_AtVector(method_vec, i);
 		bc_Method* m = (bc_Method*)ve;
 		if(!bc_IsMetaMethodAccessValid(m, cctx)) {
 			continue;
@@ -163,14 +163,14 @@ bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, Vector* method_vec, Stri
 	return ret;
 }
 
-bc_Method* bc_MetaScopedGFindMethod(bc_Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex) {
+bc_Method* bc_MetaScopedGFindMethod(bc_Class* context, bc_Vector* method_vec, bc_StringView namev, bc_Vector * gargs, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	bc_Method* ret = NULL;
 	int min = 1024;
 	//全てのメソッドへ
 	for (int i = 0; i < method_vec->Length; i++) {
-		VectorItem ve = AtVector(method_vec, i);
+		bc_VectorItem ve = bc_AtVector(method_vec, i);
 		bc_Method* m = (bc_Method*)ve;
 		//名前か引数の個数が違うので無視
 		if (m->Name != namev ||
@@ -197,20 +197,20 @@ bc_Method* bc_MetaScopedGFindMethod(bc_Class* context, Vector* method_vec, Strin
 	return ret;
 }
 
-bc_Constructor* bc_MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaILFindConstructor(bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	return bc_MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
-bc_Constructor* bc_MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, bc_Frame* fr, int* outIndex) {
+bc_Constructor* bc_MetaRFindConstructor(bc_Vector* ctor_vec, bc_Vector* args, bc_Vector* typeargs, bc_Frame* fr, int* outIndex) {
 	return bc_MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->Length; i++) {
-		VectorItem ve = AtVector(ctor_vec, i);
+		bc_VectorItem ve = bc_AtVector(ctor_vec, i);
 		bc_Constructor* ctor = (bc_Constructor*)ve;
 		if(!bc_IsMetaConstructorAccessValid(ctor, cctx)) {
 			continue;
@@ -239,12 +239,12 @@ bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, Vector* ctor_v
 	return ret;
 }
 
-bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, bc_Frame* fr, int* outIndex) {
+bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, bc_Vector* ctor_vec, bc_Vector* gargs, bc_Vector* typeargs, bc_Frame* fr, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;
 	for (int i = 0; i < ctor_vec->Length; i++) {
-		VectorItem ve = AtVector(ctor_vec, i);
+		bc_VectorItem ve = bc_AtVector(ctor_vec, i);
 		bc_Constructor* ctor = (bc_Constructor*)ve;
 		bc_Class* cls = BC_TYPE2CLASS(ctor->Parent);
 		//引数の個数が違うので無視
@@ -261,12 +261,12 @@ bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, Vector* ctor_ve
 	return ret;
 }
 
-bc_OperatorOverload* bc_MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex) {
+bc_OperatorOverload* bc_MetaGFindOperator(bc_Vector* opov_vec, bc_OperatorType type, bc_Vector* gargs, int* outIndex) {
 	(*outIndex) = -1;
 	int min = 1024;
 	bc_OperatorOverload* ret = NULL;
 	for(int i=0; i<opov_vec->Length; i++) {
-		bc_OperatorOverload* opov = AtVector(opov_vec, i);
+		bc_OperatorOverload* opov = bc_AtVector(opov_vec, i);
 		//オペレータの種類が違うので無視
 		if(opov->Type != type) {
 			continue;

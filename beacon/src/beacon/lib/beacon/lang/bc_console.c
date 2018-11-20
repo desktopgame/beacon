@@ -14,7 +14,7 @@ static void bc_console_read(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env)
 
 void InitConsole() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Type* consoleType = bc_NewPreloadClass(InternString("Console"));
+	bc_Type* consoleType = bc_NewPreloadClass(bc_InternString("Console"));
 	bc_Class* consoleClass = BC_TYPE2CLASS(consoleType);
 	bc_AddTypeNamespace(lang, consoleType);
 	bc_DefineNativeMethodClass(consoleClass, "writeLine", bc_console_writeLine);
@@ -25,7 +25,7 @@ void InitConsole() {
 
 bc_Type* GetConsoleType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	return bc_FindTypeFromNamespace(lang, InternString("Console"));
+	return bc_FindTypeFromNamespace(lang, bc_InternString("Console"));
 }
 
 //private
@@ -35,7 +35,7 @@ static void bc_console_writeLine(bc_Method* parent, bc_Frame* fr, bc_Enviroment*
 }
 
 static void bc_console_write(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* o = AtVector(fr->VariableTable, 1);
+	bc_Object* o = bc_AtVector(fr->VariableTable, 1);
 	if (bc_IsIntValue(o)) {
 		printf("%d", bc_ObjectToInt(o));
 	}  else if (bc_IsDoubleValue(o)) {
@@ -56,11 +56,11 @@ static void bc_console_write(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env
 static void bc_console_read(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	char c = getchar();
 	bc_Object* o = (bc_Object*)NewChar(c);
-	PushVector(fr->ValueStack, o);
+	bc_PushVector(fr->ValueStack, o);
 }
 
 static void bc_console_readLine(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	char* s = bc_ReadLine();
 	bc_Object* o = (bc_Object*)NewString(s);
-	PushVector(fr->ValueStack, o);
+	bc_PushVector(fr->ValueStack, o);
 }

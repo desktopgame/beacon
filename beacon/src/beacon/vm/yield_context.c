@@ -16,15 +16,15 @@ bc_YieldContext* bc_MallocYieldContext(const char* filename, int lineno) {
 }
 
 void bc_ClearBackupYieldContext(bc_YieldContext* self) {
-	DeleteVector(self->BackupVariableTable, VectorDeleterOfNull);
-	DeleteVector(self->BackupValueStack, VectorDeleterOfNull);
+	bc_DeleteVector(self->BackupVariableTable, bc_VectorDeleterOfNull);
+	bc_DeleteVector(self->BackupValueStack, bc_VectorDeleterOfNull);
 	self->BackupVariableTable = NULL;
 	self->BackupValueStack = NULL;
 }
 
 void bc_DeleteYieldContext(bc_YieldContext* self) {
-	DeleteVector(self->BackupVariableTable, VectorDeleterOfNull);
-	DeleteVector(self->BackupValueStack, VectorDeleterOfNull);
-	DeleteVector(self->Parameters, VectorDeleterOfNull);
+	bc_DeleteVector(self->BackupVariableTable, bc_VectorDeleterOfNull);
+	bc_DeleteVector(self->BackupValueStack, bc_VectorDeleterOfNull);
+	bc_DeleteVector(self->Parameters, bc_VectorDeleterOfNull);
 	MEM_FREE(self);
 }

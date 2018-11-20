@@ -12,7 +12,7 @@
 #include <assert.h>
 
 //proto
-static void CLBC_import_internal(bc_ClassLoader* self, Vector* ilimports, int i);
+static void CLBC_import_internal(bc_ClassLoader* self, bc_Vector* ilimports, int i);
 
 
 static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path);
@@ -20,7 +20,7 @@ static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path);
 static void CLBC_import_already(bc_ClassLoader* self, bc_ClassLoader* cll);
 //static ClassLoader* CLBC_import_new(ClassLoader* self, char* fullPath);
 
-void CLBC_import(bc_ClassLoader* self, Vector* ilimports) {
+void CLBC_import(bc_ClassLoader* self, bc_Vector* ilimports) {
 	bc_CL_ERROR(self);
 	for (int i = self->ImportManager->Items->Length; i < ilimports->Length; i++) {
 		CLBC_import_internal(self, ilimports, i);
@@ -30,7 +30,7 @@ void CLBC_import(bc_ClassLoader* self, Vector* ilimports) {
 	//全てのクラスローダーはデフォルトで beacon/lang をロードする
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	for(int i=0; i<ctx->IncludeList->Length; i++) {
-		FileEntry* entry = AtVector(ctx->IncludeList, i);
+		bc_FileEntry* entry = bc_AtVector(ctx->IncludeList, i);
 		if(entry->IsFile && bc_IsMatchExtension(entry->FileName, "bc")) {
 			char* p = bc_GetAbsolutePath(entry->FileName);
 			CLBC_new_load(self, p);
@@ -54,20 +54,20 @@ bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {
 	cll->Parent = self;
 	bc_ImportInfo* info = bc_ImportImportManager(self->ImportManager, cll);
 	info->IsConsume = false;
-	PutTreeMap(ctx->ClassLoaderMap, full_path, cll);
+	bc_PutTreeMap(ctx->ClassLoaderMap, full_path, cll);
 	return cll;
 }
 
 //private
-static void CLBC_import_internal(bc_ClassLoader* self, Vector* ilimports, int i) {
+static void CLBC_import_internal(bc_ClassLoader* self, bc_Vector* ilimports, int i) {
 	bc_CL_ERROR(self);
 	if (i >= ilimports->Length ||
 	    bc_IsLoadedImportManager(self->ImportManager, i)) {
 		return;
 	}
-	VectorItem e = AtVector(ilimports, i);
+	bc_VectorItem e = bc_AtVector(ilimports, i);
 	ILImport* import = (ILImport*)e;
-	char* withExt = bc_ConcatString(Ref2Str(import->Path), ".bc");
+	char* withExt = bc_ConcatString(bc_Ref2Str(import->Path), ".bc");
 	char* fullPath = bc_ResolveScriptPath(withExt);
 	CLBC_new_load(self, fullPath);
 	MEM_FREE(withExt);
@@ -79,7 +79,7 @@ static void CLBC_new_load_internal(bc_ClassLoader * self, char * full_path) {
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	//そのファイルパスに対応した
 	//クラスローダが既に存在するなら無視
-	bc_ClassLoader* cll = GetTreeMapValue(ctx->ClassLoaderMap, full_path);
+	bc_ClassLoader* cll = bc_GetTreeMapValue(ctx->ClassLoaderMap, full_path);
 	if (cll != NULL) {
 		CLBC_import_already(self, cll);
 		return;

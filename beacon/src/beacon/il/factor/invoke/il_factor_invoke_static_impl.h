@@ -17,16 +17,16 @@ struct bc_GenericType;
 struct bc_Method;
 
 typedef struct ILInvokeStatic {
-	StringView Name;
+	bc_StringView Name;
 	bc_FQCNCache* FQCN;
-	Vector* Arguments;
-	Vector* TypeArgs;
+	bc_Vector* Arguments;
+	bc_Vector* TypeArgs;
 	struct bc_Method* Method;
 	int Index;
 	struct bc_GenericType* Resolved;
 } ILInvokeStatic;
 
-ILInvokeStatic* NewILInvokeStatic(StringView namev);
+ILInvokeStatic* NewILInvokeStatic(bc_StringView namev);
 
 void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, CallContext* cctx);
 

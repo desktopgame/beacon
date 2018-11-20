@@ -51,14 +51,14 @@ ILType* NewILType();
  * @param self
  * @return
  */
-Vector* GetMethodsILType(ILType* self);
+bc_Vector* GetMethodsILType(ILType* self);
 
 /**
  * 静的メソッドの一覧を返します.
  * @param self
  * @return
  */
-Vector* GetSMethodsILType(ILType* self);
+bc_Vector* GetSMethodsILType(ILType* self);
 
 /**
  * コンストラクタを追加します.
@@ -99,5 +99,5 @@ void DeleteILType(ILType* self);
  * @param self
  * @return
  */
-Vector* GetTypeParametersILType(ILType* self);
+bc_Vector* GetTypeParametersILType(ILType* self);
 #endif // !SIGNAL_IL_IL_TYPE_INTERFACE_H

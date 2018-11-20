@@ -31,18 +31,18 @@ typedef void(*bc_StaticEach)(struct bc_Field* item);
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct bc_ScriptContext {
-	NumericMap* NamespaceMap;
-	TreeMap* ClassLoaderMap;
-	Vector* ThreadList;
-	Vector* IncludeList;
+	bc_NumericMap* NamespaceMap;
+	bc_TreeMap* ClassLoaderMap;
+	bc_Vector* ThreadList;
+	bc_Vector* IncludeList;
 	struct bc_ClassLoader* BootstrapClassLoader;
 	//通し番号でクラスを参照するためのベクター
-	Vector* TypeList;
-	Vector* AllGenericList;
+	bc_Vector* TypeList;
+	bc_Vector* AllGenericList;
 	//整数のキャッシュ
-	Vector* PositiveIntegerCacheList;
-	Vector* NegativeIntegerCacheList;
-	NumericMap* IntegerCacheMap;
+	bc_Vector* PositiveIntegerCacheList;
+	bc_Vector* NegativeIntegerCacheList;
+	bc_NumericMap* IntegerCacheMap;
 	bool IsPrintError;
 	bool IsAbortOnError;
 	struct bc_Heap* Heap;

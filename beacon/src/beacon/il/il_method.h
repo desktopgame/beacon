@@ -20,13 +20,13 @@
  * メソッドの定義を表す要素.
  */
 typedef struct ILMethod {
-	StringView Name;
-	Vector* Parameters;
-	Vector* Statements;
+	bc_StringView Name;
+	bc_Vector* Parameters;
+	bc_Vector* Statements;
 	bc_GenericCache* ReturnGCache;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
-	Vector* TypeParameters;
+	bc_Vector* TypeParameters;
 	bool IsNoStmt;
 } ILMethod;
 /**
@@ -34,7 +34,7 @@ typedef struct ILMethod {
  * @param name
  * @return
  */
-ILMethod* NewILMethod(StringView name);
+ILMethod* NewILMethod(bc_StringView name);
 
 /**
  * メソッドを開放します.

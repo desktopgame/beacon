@@ -41,26 +41,26 @@ struct bc_OperatorOverload;
  */
 typedef struct bc_Class {
 	bc_Type* Parent;
-	StringView Name;
+	bc_StringView Name;
 	bc_Namespace* Location;
 	struct bc_GenericType* SuperClass;
-	Vector* Implements;
-	Vector* Fields;
-	Vector* StaticFields;
-	Vector* Properties;
-	Vector* StaticProperties;
-	Vector* Methods;
-	Vector* StaticMethods;
-	Vector* Constructors;
-	Vector* OperatorOverloads;
+	bc_Vector* Implements;
+	bc_Vector* Fields;
+	bc_Vector* StaticFields;
+	bc_Vector* Properties;
+	bc_Vector* StaticProperties;
+	bc_Vector* Methods;
+	bc_Vector* StaticMethods;
+	bc_Vector* Constructors;
+	bc_Vector* OperatorOverloads;
 	//class_type type;
 	uint32_t RefCount;
-	NumericMap* NativeMethodRefMap;
-	Vector* TypeParameters;
+	bc_NumericMap* NativeMethodRefMap;
+	bc_Vector* TypeParameters;
 	//インターフェースに対応した
 	//実装メソッドのテーブルのベクター
 	//http://d.hatena.ne.jp/tetz42/20120205/1328449750
-	Vector* VTTable;
+	bc_Vector* VTTable;
 	//Vector* static_fieldval_vec;
 	bc_VTable* VT;
 	bc_OperatorVT* OVT;
@@ -81,7 +81,7 @@ bc_Type* bc_WrapClass(bc_Class* self);
  * @param namev
  * @return
  */
-bc_Class* bc_NewClass(StringView namev);
+bc_Class* bc_NewClass(bc_StringView namev);
 
 /**
  * 指定のインターフェイスを実装するクラスを作成します.
@@ -89,13 +89,13 @@ bc_Class* bc_NewClass(StringView namev);
  * @param namev
  * @return
  */
-bc_Class* bc_NewClassProxy(struct bc_GenericType* gt, StringView namev);
+bc_Class* bc_NewClassProxy(struct bc_GenericType* gt, bc_StringView namev);
 
 /**
  * 事前に読みこまれる必要があるクラスを作成します.
  * @param namev
  */
-bc_Type* bc_NewPreloadClass(StringView namev);
+bc_Type* bc_NewPreloadClass(bc_StringView namev);
 
 /**
  * 指定のオブジェクトにこのクラスのフィールドを表す
@@ -160,7 +160,7 @@ void bc_DefineNativeMethodClass(bc_Class* self, const char* name, bc_NativeImpl 
  * @param namev
  * @param impl
  */
-void bc_DefineNativeMethodByRefClass(bc_Class* self, StringView namev, bc_NativeImpl impl);
+void bc_DefineNativeMethodByRefClass(bc_Class* self, bc_StringView namev, bc_NativeImpl impl);
 
 /**
  * super と sub の距離を返します.
@@ -235,7 +235,7 @@ int bc_CountAllSMethodClass(bc_Class* self);
  * @param type_args
  * @return
  */
-struct bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, Vector* args, Vector* type_args);
+struct bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args, bc_Vector* type_args);
 
 /**
  * 全てのメンバーがこのクラスを参照できるようにします.

@@ -44,10 +44,10 @@ struct bc_Interface;
  * 名前空間を表す構造体.
  */
 typedef struct bc_Namespace {
-	StringView Name;
+	bc_StringView Name;
 	struct bc_Namespace* Parent;
-	NumericMap* NamespaceMap;
-	NumericMap* TypeMap;
+	bc_NumericMap* NamespaceMap;
+	bc_NumericMap* TypeMap;
 	uint32_t RefCount;
 } bc_Namespace;
 
@@ -56,14 +56,14 @@ typedef struct bc_Namespace {
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-bc_Namespace* bc_CreateNamespaceAtRoot(StringView namev);
+bc_Namespace* bc_CreateNamespaceAtRoot(bc_StringView namev);
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.
  * @param namev
  * @return
  */
-bc_Namespace* bc_FindNamespaceFromRoot(StringView namev);
+bc_Namespace* bc_FindNamespaceFromRoot(bc_StringView namev);
 
 /**
  * コンテキストを指定してトップレベルの名前空間を返します.
@@ -71,7 +71,7 @@ bc_Namespace* bc_FindNamespaceFromRoot(StringView namev);
  * @param namev
  * @return
  */
-bc_Namespace* bc_CFindNamespaceFromRoot(struct bc_ScriptContext* sctx, StringView namev);
+bc_Namespace* bc_CFindNamespaceFromRoot(struct bc_ScriptContext* sctx, bc_StringView namev);
 
 /**
  * 指定の名前空間に新しい名前空間を定義します.
@@ -79,7 +79,7 @@ bc_Namespace* bc_CFindNamespaceFromRoot(struct bc_ScriptContext* sctx, StringVie
  * @param namev
  * @return 既に存在するならそれを返します.
  */
-bc_Namespace* bc_AddNamespaceNamespace(bc_Namespace* self, StringView namev);
+bc_Namespace* bc_AddNamespaceNamespace(bc_Namespace* self, bc_StringView namev);
 
 /**
  * この名前空間にクラスを含めます.
@@ -95,7 +95,7 @@ struct bc_Type* bc_AddTypeNamespace(bc_Namespace* self, struct bc_Type* type);
  * @param namev
  * @return 見つからないなら NULL
  */
-bc_Namespace* bc_FindNamespaceFromNamespace(bc_Namespace* self, StringView namev);
+bc_Namespace* bc_FindNamespaceFromNamespace(bc_Namespace* self, bc_StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のタイプを検索します.
@@ -103,7 +103,7 @@ bc_Namespace* bc_FindNamespaceFromNamespace(bc_Namespace* self, StringView namev
  * @param namev
  * @return 見つからないなら NULL
  */
-struct bc_Type* bc_FindTypeFromNamespace(bc_Namespace* self, StringView namev);
+struct bc_Type* bc_FindTypeFromNamespace(bc_Namespace* self, bc_StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のクラスを検索します.
@@ -111,7 +111,7 @@ struct bc_Type* bc_FindTypeFromNamespace(bc_Namespace* self, StringView namev);
  * @param namev
  * @return 見つからないなら NULL
  */
-struct bc_Class* bc_FindClassFromNamespace(bc_Namespace* self, StringView namev);
+struct bc_Class* bc_FindClassFromNamespace(bc_Namespace* self, bc_StringView namev);
 
 /**
  * 指定の名前空間で指定の名前のインターフェースを検索します.
@@ -119,7 +119,7 @@ struct bc_Class* bc_FindClassFromNamespace(bc_Namespace* self, StringView namev)
  * @param namev
  * @return 見つからないなら NULL
  */
-struct bc_Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self, StringView namev);
+struct bc_Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self, bc_StringView namev);
 
 /**
  * beacon 名前空間を返します.
@@ -210,7 +210,7 @@ void bc_UnlinkNamespace(bc_Namespace* self);
  * @param self
  * @return
  */
-StringView bc_NamespaceToString(bc_Namespace* self);
+bc_StringView bc_NamespaceToString(bc_Namespace* self);
 
 /**
  * 名前空間を開放します.

@@ -41,7 +41,7 @@ typedef enum bc_GenericTypeTag {
  */
 typedef struct bc_GenericType {
 	struct bc_Type* CoreType;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 	//このジェネリックタイプの紐づけたられたコンテナ
 	union {
 		struct bc_Type* Type;

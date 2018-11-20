@@ -9,7 +9,7 @@
 //proto
 static void delete_ast_impl(bc_AST* self);
 static bc_ModifierType ast_to_modifier(bc_AST* self, bool* error);
-static void delete_ast_self(VectorItem item);
+static void delete_ast_self(bc_VectorItem item);
 
 void bc_CompileEntryAST(bc_AST* self) {
 	Parser* p = GetCurrentParser();
@@ -26,20 +26,20 @@ bc_AST* bc_MallocAST(bc_ASTTag tag, const char* filename, int lineno) {
 	if (p != NULL) {
 		ret->Lineno = p->Lineno;
 		assert(p->Lineno >= 0);
-		PushVector(p->LinenoTable, p->Lineno);
+		bc_PushVector(p->LinenoTable, p->Lineno);
 	} else {
 		ret->Lineno = -1;
 	}
 	return ret;
 }
 
-bc_AST* bc_NewASTNamespacePath(StringView name) {
+bc_AST* bc_NewASTNamespacePath(bc_StringView name) {
 	bc_AST* ret = bc_NewAST(AST_NAMESPACE_PATH_T);
 	ret->Attr.StringVValue = name;
 	return ret;
 }
 
-bc_AST* bc_NewASTNamespacePathList(bc_AST* aforward, StringView name) {
+bc_AST* bc_NewASTNamespacePathList(bc_AST* aforward, bc_StringView name) {
 	bc_AST* ret = bc_NewAST(AST_NAMESPACE_PATH_LIST_T);
 	bc_PushAST(ret, aforward);
 	bc_PushAST(ret, bc_NewASTNamespacePath(name));
@@ -81,13 +81,13 @@ bc_AST* bc_NewASTBlank() {
 	return bc_NewAST(AST_BLANK_T);
 }
 
-bc_AST* bc_NewASTIdentifier(StringView str) {
+bc_AST* bc_NewASTIdentifier(bc_StringView str) {
 	bc_AST* ret = bc_NewAST(AST_IDENTIFIER_T);
 	ret->Attr.StringVValue = str;
 	return ret;
 }
 
-bc_AST* bc_NewASTIdentifierList(StringView str, bc_AST* aident_list) {
+bc_AST* bc_NewASTIdentifierList(bc_StringView str, bc_AST* aident_list) {
 	bc_AST* ret = bc_NewAST(AST_IDENTIFIER_LIST_T);
 	bc_PushAST(ret, aident_list);
 	bc_PushAST(ret, bc_NewASTIdentifier(str));
@@ -104,14 +104,14 @@ bc_AST* bc_PushAST(bc_AST* self, bc_AST* achild) {
 	assert(self != NULL);
 	assert(achild != NULL);
 	if (self->Children == NULL) {
-		self->Children = NewVector();
+		self->Children = bc_NewVector();
 	}
-	PushVector(self->Children, achild);
+	bc_PushVector(self->Children, achild);
 	//行番号を補正
 	Parser* p = GetCurrentParser();
 	if (p != NULL) {
-		if (!IsEmptyVector(p->LinenoTable)) {
-			int lineno = (int)PopVector(p->LinenoTable);
+		if (!bc_IsEmptyVector(p->LinenoTable)) {
+			int lineno = (int)bc_PopVector(p->LinenoTable);
 			assert(lineno >= 0);
 			self->Lineno = lineno;
 		}
@@ -121,7 +121,7 @@ bc_AST* bc_PushAST(bc_AST* self, bc_AST* achild) {
 
 bc_AST* bc_AtAST(bc_AST* self, int index) {
 	assert(self != NULL);
-	return (bc_AST*)AtVector(self->Children, index);
+	return (bc_AST*)bc_AtVector(self->Children, index);
 }
 
 bc_AST* bc_FirstAST(bc_AST* self) {
@@ -208,7 +208,7 @@ bc_ConstructorChainType bc_ASTCastToChainType(bc_AST* self) {
 //private
 static void delete_ast_impl(bc_AST* self) {
 	bc_ASTTag tag = self->Tag;
-	DeleteVector(self->Children, delete_ast_self);
+	bc_DeleteVector(self->Children, delete_ast_self);
 	self->Children = NULL;
 	MEM_FREE(self);
 }
@@ -235,7 +235,7 @@ static bc_ModifierType ast_to_modifier(bc_AST* self, bool* error) {
 	return mt;
 }
 
-static void delete_ast_self(VectorItem item) {
+static void delete_ast_self(bc_VectorItem item) {
 	bc_AST* e = (bc_AST*)item;
 	bc_DeleteAST(e);
 }

@@ -17,10 +17,10 @@
  * 名前空間の宣言を表す要素.
  */
 typedef struct ILNamespace {
-	StringView Name;
+	bc_StringView Name;
 	struct ILNamespace* Parent;
-	Vector* NamespaceList;
-	Vector* TypeList;
+	bc_Vector* NamespaceList;
+	bc_Vector* TypeList;
 } ILNamespace;
 
 /**
@@ -28,7 +28,7 @@ typedef struct ILNamespace {
  * @param namev
  * @return
  */
-ILNamespace* NewILNamespace(StringView namev);
+ILNamespace* NewILNamespace(bc_StringView namev);
 
 /**
  * 最も上の要素を返します.

@@ -67,7 +67,7 @@ bc_AST* bc_NewASTVariable(bc_AST* a, bc_AST* atype_args);
  * @param atype_args
  * @return
  */
-bc_AST* bc_NewASTVariableFromString(StringView str, bc_AST* atype_args);
+bc_AST* bc_NewASTVariableFromString(bc_StringView str, bc_AST* atype_args);
 
 /**
  * 関数呼び出し演算子を表す要素を作成します.
@@ -96,7 +96,7 @@ bc_AST* bc_NewASTSuper();
  * @param atype_args
  * @return
  */
-bc_AST* bc_NewASTFieldAccess(bc_AST* afact, StringView name, bc_AST* atype_args);
+bc_AST* bc_NewASTFieldAccess(bc_AST* afact, bc_StringView name, bc_AST* atype_args);
 
 /**
  * new X::Y(...) を表す因子を作成します.

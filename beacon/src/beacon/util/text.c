@@ -52,10 +52,10 @@ char * bc_ConcatString(const char * a, const char * b) {
 	block[alen + blen] = '\0';
 	return block;
 	#else
-	Buffer* buff = NewBuffer();
-	AppendsBuffer(buff, a);
-	AppendsBuffer(buff, b);
-	char* ret = ReleaseBuffer(buff);
+	bc_Buffer* buff = bc_NewBuffer();
+	bc_AppendsBuffer(buff, a);
+	bc_AppendsBuffer(buff, b);
+	char* ret = bc_ReleaseBuffer(buff);
 	return ret;
 	#endif
 }
@@ -68,7 +68,7 @@ char * bc_GetLineAt(const char * src, int lineno) {
 	}
 	int len = strlen(src);
 	int curLine = 0;
-	Buffer* buf = NewBuffer();
+	bc_Buffer* buf = bc_NewBuffer();
 	char* PTR = NULL;
 	for (int i = 0; i < len; i++) {
 		char c = src[i];
@@ -80,25 +80,25 @@ char * bc_GetLineAt(const char * src, int lineno) {
 			curLine++;
 		} else {
 			if (lineno == 0 || lineno == curLine) {
-				AppendBuffer(buf, c);
+				bc_AppendBuffer(buf, c);
 			}
 		}
 	}
-	ShrinkBuffer(buf);
+	bc_ShrinkBuffer(buf);
 	char* ret = buf->Text;
 	MEM_FREE(buf);
 	return ret;
 }
 
-char* bc_JoinString(Vector * v, char * join) {
+char* bc_JoinString(bc_Vector * v, char * join) {
 	if (v == NULL || v->Length == 0) {
 		return NULL;
 	}
 	//FIXME:もうちょっと無駄をなくせるはず
-	char* head = bc_Strdup((char*)AtVector(v, 0));
+	char* head = bc_Strdup((char*)bc_AtVector(v, 0));
 	int ptr = strlen(head);
 	for (int i = 1; i < v->Length; i++) {
-		char* e = (char*)AtVector(v, i);
+		char* e = (char*)bc_AtVector(v, i);
 		if (i <= (v->Length - 1) && 
 			join != NULL) {
 			char* conn = bc_ConcatString(head, join);
@@ -154,13 +154,13 @@ static char* text_strclone(const char* source) {
 }
 
 static char* read_line_impl(FILE* fp) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	while(1) {
 		char ch = getc(fp);
 		if(ch == '\0' || ch == '\n' || feof(fp)) {
 			break;
 		}
-		AppendBuffer(sb, ch);
+		bc_AppendBuffer(sb, ch);
 	}
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }

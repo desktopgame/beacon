@@ -12,7 +12,7 @@ ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno) {
 	ILPropertyAccess* ret = bc_MXMalloc(sizeof(ILPropertyAccess), filename, lineno);
 	ret->Source = NULL;
 	ret->Index = -1;
-	ret->Name = ZERO_VIEW;
+	ret->Name = BC_ZERO_VIEW;
 	ret->Property = NULL;
 	return ret;
 }
@@ -31,8 +31,8 @@ void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cct
 	if(temp == -1) {
 		bc_Panic(
 			BCERROR_UNDEFINED_PROPERTY_T,
-			Ref2Str(bc_GetTypeName(receiverT)),
-			Ref2Str(self->Name)
+			bc_Ref2Str(bc_GetTypeName(receiverT)),
+			bc_Ref2Str(self->Name)
 		);
 	}
 }
@@ -42,13 +42,13 @@ bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallC
 }
 
 char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* name = ILFactorToString(self->Source, env);
-	AppendsBuffer(sb, name);
-	AppendBuffer(sb, '.');
-	AppendsBuffer(sb, Ref2Str(self->Name));
+	bc_AppendsBuffer(sb, name);
+	bc_AppendBuffer(sb, '.');
+	bc_AppendsBuffer(sb, bc_Ref2Str(self->Name));
 	MEM_FREE(name);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILPropertyAccess(ILPropertyAccess* self) {

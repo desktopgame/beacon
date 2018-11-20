@@ -81,14 +81,14 @@ int main(int argc, char *argv[]) {
 #endif
 bc_InitMX();
 	InitNativeThread();
-	InitStringPool();
+	bc_InitStringPool();
 	HideILPrintLayout(true);
 	//mem_break(16066);
 	//コマンドライン引数を解析して実行
 	int ret = main_cl(argc, argv);
 	//設定を元に戻す
 	//DumpStringPool(stdout);
-	DestroyStringPool();
+	bc_DestroyStringPool();
 	DestroyNativeThread();
 bc_DestroyMX();
 #if defined(_MSC_VER) && defined(DEBUG)

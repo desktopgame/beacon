@@ -17,8 +17,8 @@
  * オペコードの一覧を表す構造体.
  */
 typedef struct bc_OpcodeBuf {
-	Vector* Instructions;
-	Vector* LabelTable;
+	bc_Vector* Instructions;
+	bc_Vector* LabelTable;
 } bc_OpcodeBuf;
 
 /**
@@ -33,7 +33,7 @@ bc_OpcodeBuf* bc_NewOpcodeBuf();
  * @param item
  * @return
  */
-int bc_AddOpcodeBuf(bc_OpcodeBuf* self, VectorItem item);
+int bc_AddOpcodeBuf(bc_OpcodeBuf* self, bc_VectorItem item);
 
 /**
  * このバッファーの開放時に開放されるラベルを作成します.

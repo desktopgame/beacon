@@ -35,7 +35,7 @@ typedef struct ILCallOp {
 	ILFactor* Parent;
 	ILFactor* Receiver;
 	//Vector* type_argument_list;
-	Vector* Arguments;
+	bc_Vector* Arguments;
 	ILCallType Type;
 	union {
 		ILInvoke* Invoke;

@@ -37,7 +37,7 @@ typedef enum CallContextTag {
 } CallContextTag;
 
 typedef struct CallContext {
-	Vector* CallStack;
+	bc_Vector* CallStack;
 	ControlStructure Control;
 	CallContextTag Tag;
 	struct bc_Namespace* Scope;
@@ -71,7 +71,7 @@ struct bc_GenericType* GetReceiverCContext(CallContext* self);
 
 struct bc_Type* GetEvalTypeCContext(CallContext* self, struct bc_FQCNCache* fqcn);
 
-Vector* GetTypeArgsCContext(CallContext* self);
+bc_Vector* GetTypeArgsCContext(CallContext* self);
 
 bool IsStaticCContext(CallContext* self);
 

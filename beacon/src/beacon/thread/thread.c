@@ -7,7 +7,7 @@
 #include <assert.h>
 
 //proto
-static void ScriptThread_trace_delete(VectorItem item);
+static void ScriptThread_trace_delete(bc_VectorItem item);
 
 static ScriptThread* g_sg_main_thread = NULL;
 
@@ -18,7 +18,7 @@ void LaunchSGThread() {
 
 ScriptThread * NewSGThread() {
 	ScriptThread* ret = (ScriptThread*)MEM_MALLOC(sizeof(ScriptThread));
-	ret->TraceStack = NewVector();
+	ret->TraceStack = bc_NewVector();
 	ret->FrameRef = NULL;
 	ret->CCtx = NULL;
 	return ret;
@@ -28,19 +28,19 @@ ScriptThread * GetCurrentSGThread(bc_ScriptContext* sctx) {
 	//ScriptContext* ctx = GetCurrentScriptContext();
 	assert(sctx != NULL);
 	//TODO:今は仮実装なのでちゃんと現在のスレッドを返すようにする
-	ScriptThread* ret = (ScriptThread*)AtVector(sctx->ThreadList, 0);
+	ScriptThread* ret = (ScriptThread*)bc_AtVector(sctx->ThreadList, 0);
 	return ret;
 }
 
 void ClearSGThread(ScriptThread* self) {
-	while (!IsEmptyStack(self->TraceStack)) {
-		bc_VMTrace* trace = (bc_VMTrace*)PopVector(self->TraceStack);
+	while (!bc_IsEmptyStack(self->TraceStack)) {
+		bc_VMTrace* trace = (bc_VMTrace*)bc_PopVector(self->TraceStack);
 		bc_DeleteVMTrace(trace);
 	}
 }
 
 void DeleteSGThread(ScriptThread * self) {
-	DeleteVector(self->TraceStack, ScriptThread_trace_delete);
+	bc_DeleteVector(self->TraceStack, ScriptThread_trace_delete);
 	MEM_FREE(self);
 }
 
@@ -79,7 +79,7 @@ void DestroySGThread() {
 	g_sg_main_thread = NULL;
 }
 //private
-static void ScriptThread_trace_delete(VectorItem item) {
+static void ScriptThread_trace_delete(bc_VectorItem item) {
 	bc_VMTrace* e = (bc_VMTrace*)item;
 	bc_DeleteVMTrace(e);
 }

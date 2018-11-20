@@ -5,85 +5,85 @@
 #include "mem.h"
 #include <assert.h>
 
-static TreeMap* gMap = NULL;
-static Vector* gVec = NULL;
+static bc_TreeMap* gMap = NULL;
+static bc_Vector* gVec = NULL;
 
 #define HEADER (2)
 
-void InitStringPool() {
+void bc_InitStringPool() {
 	assert(gMap == NULL);
 	assert(gVec == NULL);
-	gMap = NewTreeMap();
-	gVec = NewVector();
+	gMap = bc_NewTreeMap();
+	gVec = bc_NewVector();
 }
 
-StringView InternString(const char* str) {
+bc_StringView bc_InternString(const char* str) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
-	TreeMap* cell = GetTreeMapCell(gMap, str);
+	bc_TreeMap* cell = bc_GetTreeMapCell(gMap, str);
 	if(cell == NULL) {
-		cell = PutTreeMap(gMap, str, (void*)(gVec->Length + HEADER));
-		PushVector(gVec, cell->Key);
+		cell = bc_PutTreeMap(gMap, str, (void*)(gVec->Length + HEADER));
+		bc_PushVector(gVec, cell->Key);
 	}
 	if(cell == gMap) {
-		return ZERO_VIEW;
+		return BC_ZERO_VIEW;
 	}
 	assert(cell->Item != 0);
-	return (StringView)cell->Item;
+	return (bc_StringView)cell->Item;
 }
 
-StringView InternString2(Buffer* buffer) {
-	char* raw = ReleaseBuffer(buffer);
-	StringView sv = InternString(raw);
+bc_StringView bc_InternString2(bc_Buffer* buffer) {
+	char* raw = bc_ReleaseBuffer(buffer);
+	bc_StringView sv = bc_InternString(raw);
 	MEM_FREE(raw);
 	assert(sv != 0);
 	return sv;
 }
 
-StringView ConcatIntern(const char* head, StringView foot) {
+bc_StringView bc_ConcatIntern(const char* head, bc_StringView foot) {
 	//連結する
-	const char* footstr = Ref2Str(foot);
-	Buffer* buf = NewBuffer();
-	AppendsBuffer(buf, head);
-	AppendsBuffer(buf, footstr);
-	char* retstr = ReleaseBuffer(buf);
-	StringView ret = InternString(retstr);
+	const char* footstr = bc_Ref2Str(foot);
+	bc_Buffer* buf = bc_NewBuffer();
+	bc_AppendsBuffer(buf, head);
+	bc_AppendsBuffer(buf, footstr);
+	char* retstr = bc_ReleaseBuffer(buf);
+	bc_StringView ret = bc_InternString(retstr);
 	MEM_FREE(retstr);
 	return ret;
 }
 
-StringView Str2Ref(const char* str) {
-	TreeMap* cell = GetTreeMapCell(gMap, str);
+bc_StringView bc_Str2Ref(const char* str) {
+	bc_TreeMap* cell = bc_GetTreeMapCell(gMap, str);
 	if(cell == gMap) {
-		return ZERO_VIEW;
+		return BC_ZERO_VIEW;
 	}
-	return (StringView)cell->Item;
+	return (bc_StringView)cell->Item;
 }
 
-const char* Ref2Str(StringView ref) {
-	if(ref == NULL_VIEW) {
+const char* bc_Ref2Str(bc_StringView ref) {
+	if(ref == BC_NULL_VIEW) {
 		return NULL;
 	}
-	if(ref == ZERO_VIEW) {
+	if(ref == BC_ZERO_VIEW) {
 		return "";
 	}
-	const char* str = (const char*)AtVector(gVec, ref - HEADER);
+	const char* str = (const char*)bc_AtVector(gVec, ref - HEADER);
 	return str;
 }
 
-void DumpStringPool(FILE* fp) {
+void bc_DumpStringPool(FILE* fp) {
 	assert(gMap != NULL);
 	assert(gVec != NULL);
 	fprintf(fp, "string pool---\n");
 	for(int i=0; i<gVec->Length; i++) {
-		char* e = (char*)AtVector(gVec, i);
+		char* e = (char*)bc_AtVector(gVec, i);
 		fprintf(fp, "    [%d] = %s\n", i, e);
 	}
 }
 
-void DestroyStringPool() {
-	DeleteTreeMap(gMap, TreeMapDeleterOfNull);
-	DeleteVector(gVec, VectorDeleterOfNull);
+void bc_DestroyStringPool() {
+	bc_DeleteTreeMap(gMap, bc_TreeMapDeleterOfNull);
+	bc_DeleteVector(gVec, bc_VectorDeleterOfNull);
 	gMap = NULL;
 	gVec = NULL;
 }

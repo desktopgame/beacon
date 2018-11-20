@@ -13,13 +13,13 @@
 #include <string.h>
 #include <stdio.h>
 
-static void DeleteILVariableLocal_typeargs(VectorItem item);
+static void DeleteILVariableLocal_typeargs(bc_VectorItem item);
 static void LoadILVariableLocalImpl(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
 static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
 static void set_gtype(ILVariableLocal * self, bc_GenericType* gt);
 
-ILVariableLocal* NewILVariableLocal(StringView namev) {
+ILVariableLocal* NewILVariableLocal(bc_StringView namev) {
 	ILVariableLocal* ret = (ILVariableLocal*)MEM_MALLOC(sizeof(ILVariableLocal));
 	ret->Name = namev;
 	ret->Type = VARIABLE_LOCAL_UNDEFINED_T;
@@ -36,12 +36,12 @@ void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, CallCont
 		if(self->Kind.Entry->ScopeDepth > env->Symboles->ScopeDepth) {
 			bc_Panic(
 				BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T,
-				Ref2Str(self->Name)
+				bc_Ref2Str(self->Name)
 			);
 			return;
 		}
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)OP_LOAD);
-		bc_AddOpcodeBuf(env->Bytecode, (VectorItem)self->Kind.Entry->Index);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_LOAD);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Kind.Entry->Index);
 	} else if(self->Type == VARIABLE_LOCAL_FIELD_T) {
 		bc_Field* f = self->Kind.FieldI.Field;
 		if(!bc_IsStaticModifier(f->Modifier)) {
@@ -71,16 +71,16 @@ bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env,
 }
 
 char* ILVariableLocalToString(ILVariableLocal * self, bc_Enviroment * env) {
-	return bc_Strdup(Ref2Str(self->Name));
+	return bc_Strdup(bc_Ref2Str(self->Name));
 }
 
 void DeleteILVariableLocal(ILVariableLocal* self) {
-	DeleteVector(self->TypeArgs, DeleteILVariableLocal_typeargs);
+	bc_DeleteVector(self->TypeArgs, DeleteILVariableLocal_typeargs);
 //	generic_DeleteType(self->GType);
 	MEM_FREE(self);
 }
 //private
-static void DeleteILVariableLocal_typeargs(VectorItem item) {
+static void DeleteILVariableLocal_typeargs(bc_VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }
@@ -109,7 +109,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * en
 	//定義されていない変数とみなせる？
 	bc_Type* tp = GetTypeCContext(cctx);
 	if(tp->Tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
-		bc_Panic(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, Ref2Str(self->Name));
+		bc_Panic(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, bc_Ref2Str(self->Name));
 		return;
 	}
 	int temp = -1;
@@ -134,7 +134,7 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * en
 		return;
 	//フィールドが見つかったなら可視性を確認する
 	} else if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, Ref2Str(GetClassCContext(cctx)->Name), Ref2Str(f->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, bc_Ref2Str(GetClassCContext(cctx)->Name), bc_Ref2Str(f->Name));
 		return;
 	}
 	set_gtype(self, f->GType);
@@ -148,7 +148,7 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment *
 		p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	}
 	if(temp == -1) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(tp)), Ref2Str(self->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(self->Name));
 		return;
 	}
 #if defined(_MSC_VER)
@@ -162,7 +162,7 @@ static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment *
 	self->Kind.PropertyI = pwi;
 	//プロパティにアクセスできない
 	if(!bc_IsAccessiblePropertyClass(BC_TYPE2CLASS(tp), p)) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, Ref2Str(bc_GetTypeName(tp)), Ref2Str(p->Name));
+		bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T, bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(p->Name));
 	}
 	set_gtype(self, p->GType);
 }

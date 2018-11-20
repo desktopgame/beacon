@@ -16,8 +16,8 @@
 #include "../ast/access_level.h"
 typedef struct ILOperatorOverload {
 	bc_OperatorType Type;
-	Vector* Parameters;
-	Vector* Statements;
+	bc_Vector* Parameters;
+	bc_Vector* Statements;
 	bc_GenericCache* ReturnGCache;
 	bc_AccessLevel Access;
 } ILOperatorOverload;

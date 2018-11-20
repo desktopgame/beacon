@@ -8,40 +8,40 @@
 #include <stdio.h>
 
 //proto
-static void ILFunction_DeleteTypeParameter(VectorItem item);
-static void ILFunction_DeleteParameter(VectorItem item);
-static void ILFunction_stmt_delete(VectorItem item);
+static void ILFunction_DeleteTypeParameter(bc_VectorItem item);
+static void ILFunction_DeleteParameter(bc_VectorItem item);
+static void ILFunction_stmt_delete(bc_VectorItem item);
 
-ILFunction * NewILFunction(StringView name) {
+ILFunction * NewILFunction(bc_StringView name) {
 	ILFunction* ret = (ILFunction*)MEM_MALLOC(sizeof(ILFunction));
 	ret->Name = name;
-	ret->TypeParameters = NewVector();
-	ret->Parameters = NewVector();
-	ret->Statements = NewVector();
+	ret->TypeParameters = bc_NewVector();
+	ret->Parameters = bc_NewVector();
+	ret->Statements = bc_NewVector();
 	ret->ReturnGCache = bc_NewGenericCache();
 	return ret;
 }
 
 void DeleteILFunction(ILFunction * self) {
-	DeleteVector(self->TypeParameters, ILFunction_DeleteTypeParameter);
-	DeleteVector(self->Parameters, ILFunction_DeleteParameter);
-	DeleteVector(self->Statements, ILFunction_stmt_delete);
+	bc_DeleteVector(self->TypeParameters, ILFunction_DeleteTypeParameter);
+	bc_DeleteVector(self->Parameters, ILFunction_DeleteParameter);
+	bc_DeleteVector(self->Statements, ILFunction_stmt_delete);
 	bc_DeleteGenericCache(self->ReturnGCache);
 	MEM_FREE(self);
 }
 
 //private
-static void ILFunction_DeleteTypeParameter(VectorItem item) {
+static void ILFunction_DeleteTypeParameter(bc_VectorItem item) {
 	ILTypeParameter* e = (ILTypeParameter*)item;
 	DeleteILTypeParameter(e);
 }
 
-static void ILFunction_DeleteParameter(VectorItem item) {
+static void ILFunction_DeleteParameter(bc_VectorItem item) {
 	ILParameter* e = (ILParameter*)item;
 	DeleteILParameter(e);
 }
 
-static void ILFunction_stmt_delete(VectorItem item) {
+static void ILFunction_stmt_delete(bc_VectorItem item) {
 	ILStatement* e = (ILStatement*)item;
 	DeleteILStmt(e);
 }

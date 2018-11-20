@@ -22,7 +22,7 @@
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
 static bc_Frame* bc_eval_allocate(bc_ClassLoader* cll);
 static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a);
-static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, bc_Frame* fr, jobject target);
+static void bc_write_symbol(JNIEnv* env, bc_NumericMap* nmap, bc_Frame* fr, jobject target);
 static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, bc_Frame* fr);
 static void printClassInfo(JNIEnv* env, jobject Object);
 static jint jobject2jint(JNIEnv* env, jobject obj);
@@ -50,7 +50,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 		bc_Panic(BCERROR_PARSE_T, p->ErrorMessage);
 		DestroyParser(p);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_GetPanicMessage()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, bc_Ref2Str(bc_GetPanicMessage()));
 		return NULL;
 	}
 	bc_AST* a = ReleaseParserAST(p);
@@ -66,7 +66,7 @@ static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject tab
 	if(bc_GetLastPanic()) {
 		bc_DeleteClassLoader(cll);
 		jclass bc_compile_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCCompileException");
-		(*env)->ThrowNew(env, bc_compile_exc_cls, Ref2Str(bc_GetPanicMessage()));
+		(*env)->ThrowNew(env, bc_compile_exc_cls, bc_Ref2Str(bc_GetPanicMessage()));
 		return NULL;
 	}
 	//jp.koya.jbeacon.SymbolTableを検索する
@@ -155,7 +155,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 		jstring keyE = (jstring)((*env)->GetObjectArrayElement(env, keys_array, i));
 		jobject valueE = (*env)->CallObjectMethod(env, table, symbol_table_get_id, keyE);
 		const char *keystr = (*env)->GetStringUTFChars(env, keyE, JNI_FALSE);
-		StringView keyv = InternString(keystr);
+		bc_StringView keyv = bc_InternString(keystr);
 		if(valueE == NULL) {
 			(*env)->FatalError(env, "null pointer: get");
 			return false;
@@ -172,7 +172,7 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 		} else if((*env)->IsInstanceOf(env, valueE, string_cls) == JNI_TRUE) {
 			jstring valuej = (jstring)valueE;
 			const char *valuestr = (*env)->GetStringUTFChars(env, valuej, JNI_FALSE);
-			StringView valuev = InternString(valuestr);
+			bc_StringView valuev = bc_InternString(valuestr);
 			astmt = bc_NewASTInject(keyv, bc_NewASTString(valuev));
 		//それ以外はまだ未対応
 		} else {
@@ -180,20 +180,20 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
 			(*env)->ThrowNew(env, bc_not_supported_exc_cls, "not supported inject of reference type");
 			return false;
 		}
-		InsertVector(a->Children, 0, astmt);
+		bc_InsertVector(a->Children, 0, astmt);
 	}
 	return true;
 }
 
-static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, bc_Frame* fr, jobject target) {
+static void bc_write_symbol(JNIEnv* env, bc_NumericMap* nmap, bc_Frame* fr, jobject target) {
 	if(nmap == NULL) {
 		return;
 	}
-	NumericMapKey key = nmap->Key;
-	NumericMapItem val = nmap->Item;
-	const char* name = Ref2Str(key);
+	bc_NumericMapKey key = nmap->Key;
+	bc_NumericMapItem val = nmap->Item;
+	const char* name = bc_Ref2Str(key);
 	bc_SymbolEntry* se = (bc_SymbolEntry*)val;
-	bc_Object* bcobj = AtVector(fr->VariableTable, se->Index);
+	bc_Object* bcobj = bc_AtVector(fr->VariableTable, se->Index);
 	//jp.koya.jbeacon.SymbolTableを検索する
 	jclass symbol_table_cls = (*env)->FindClass(env, "jp/koya/jbeacon/SymbolTable");
 	if(symbol_table_cls == NULL) {
@@ -276,10 +276,10 @@ static void bc_write_symbol(JNIEnv* env, NumericMap* nmap, bc_Frame* fr, jobject
 
 static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, bc_Frame* fr) {
 	if(bc_GetLastPanic()) {
-		Buffer* sbuf = NewBuffer();
-		AppendsBuffer(sbuf, "\n");
-		AppendsBuffer(sbuf, Ref2Str(bc_GetVMErrorMessage()));
-		char* mes = ReleaseBuffer(sbuf);
+		bc_Buffer* sbuf = bc_NewBuffer();
+		bc_AppendsBuffer(sbuf, "\n");
+		bc_AppendsBuffer(sbuf, bc_Ref2Str(bc_GetVMErrorMessage()));
+		char* mes = bc_ReleaseBuffer(sbuf);
 		jclass bc_runtime_exc_cls = (*env)->FindClass(env, "jp/koya/jbeacon/BCRuntimeException");
 		(*env)->ThrowNew(env, bc_runtime_exc_cls, mes);
 		MEM_FREE(mes);

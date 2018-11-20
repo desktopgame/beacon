@@ -19,7 +19,7 @@ struct bc_Enviroment;
  */
 typedef struct ILVariableDecl {
 	bc_GenericCache* GCache;
-	StringView Name;
+	bc_StringView Name;
 } ILVariableDecl;
 /**
  * 型宣言を表す要素をスーパーセットにラップします.
@@ -33,7 +33,7 @@ ILStatement* WrapILVariableDecl(ILVariableDecl* self);
  * @param namev
  * @return
  */
-ILVariableDecl* NewILVariableDecl(StringView namev);
+ILVariableDecl* NewILVariableDecl(bc_StringView namev);
 
 /**
  * 型宣言を表す要素を出力します.

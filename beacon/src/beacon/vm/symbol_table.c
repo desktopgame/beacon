@@ -10,19 +10,19 @@
 #include "../env/generic_type.h"
 
 //proto
-static void delete_entry(NumericMapKey key, NumericMapItem item);
-static void dump_entry(NumericMapKey key, NumericMapItem item);
+static void delete_entry(bc_NumericMapKey key, bc_NumericMapItem item);
+static void dump_entry(bc_NumericMapKey key, bc_NumericMapItem item);
 
 bc_SymbolTable * bc_NewSymbolTable() {
 	bc_SymbolTable* ret = (bc_SymbolTable*)MEM_MALLOC(sizeof(bc_SymbolTable));
 	ret->Count = 1;
-	ret->VariableMap = NewNumericMap();
+	ret->VariableMap = bc_NewNumericMap();
 	ret->ScopeDepth = 0;
 	return ret;
 }
 
-bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, bc_GenericType* gtp, StringView namev) {
-	NumericMap* data = GetNumericMapCell(self->VariableMap, namev);
+bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, bc_GenericType* gtp, bc_StringView namev) {
+	bc_NumericMap* data = bc_GetNumericMapCell(self->VariableMap, namev);
 	if (data) {
 		return ((bc_SymbolEntry*)data->Item);
 	}
@@ -35,29 +35,29 @@ bc_SymbolEntry* bc_EntrySymbolTable(bc_SymbolTable* self, bc_GenericType* gtp, S
 	e->Index = self->Count;
 	e->GType = gtp;
 	e->ScopeDepth = self->ScopeDepth;
-	PutNumericMap(self->VariableMap, namev, e);
+	bc_PutNumericMap(self->VariableMap, namev, e);
 	self->Count++;
 	return e;
 }
 
-bool bc_IsContainsSymbol(bc_SymbolTable* self, StringView namev) {
-	return GetNumericMapCell(self->VariableMap, namev) != NULL;
+bool bc_IsContainsSymbol(bc_SymbolTable* self, bc_StringView namev) {
+	return bc_GetNumericMapCell(self->VariableMap, namev) != NULL;
 }
 
 void bc_DumpSymbolTable(bc_SymbolTable* self) {
-	EachNumericMap(self->VariableMap, dump_entry);
+	bc_EachNumericMap(self->VariableMap, dump_entry);
 }
 
 void bc_DeleteSymbolTable(bc_SymbolTable * self) {
-	DeleteNumericMap(self->VariableMap, delete_entry);
+	bc_DeleteNumericMap(self->VariableMap, delete_entry);
 	MEM_FREE(self);
 }
 
 //private
-static void delete_entry(NumericMapKey key, NumericMapItem item) {
+static void delete_entry(bc_NumericMapKey key, bc_NumericMapItem item) {
 	bc_SymbolEntry* e = (bc_SymbolEntry*)item;
 	bc_DeleteSymbolEntry(e);
 }
-static void dump_entry(NumericMapKey key, NumericMapItem item) {
-	printf("[%s] = %d\n", Ref2Str(key), ((bc_SymbolEntry*)item)->Index);
+static void dump_entry(bc_NumericMapKey key, bc_NumericMapItem item) {
+	printf("[%s] = %d\n", bc_Ref2Str(key), ((bc_SymbolEntry*)item)->Index);
 }

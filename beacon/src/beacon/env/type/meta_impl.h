@@ -31,7 +31,7 @@ struct bc_Constructor;
  * @param cctx
  * @return
  */
-int bc_MetaILCalcScore(Vector* params, Vector* ilargs, bc_Enviroment* env, CallContext* cctx);
+int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx);
 
 /**
  * 仮引数と実引数のマッチ率を返します.
@@ -40,7 +40,7 @@ int bc_MetaILCalcScore(Vector* params, Vector* ilargs, bc_Enviroment* env, CallC
  * @param gargs
  * @return
  */
-int bc_MetaGCalcScore(Vector* params, Vector* gargs);
+int bc_MetaGCalcScore(bc_Vector* params, bc_Vector* gargs);
 
 /**
  * 仮引数と実引数のマッチ率を返します.
@@ -51,7 +51,7 @@ int bc_MetaGCalcScore(Vector* params, Vector* gargs);
  * @param fr
  * @return
  */
-int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct bc_Frame* fr);
+int bc_MetaRCalcScore(bc_Vector* params, bc_Vector* args, bc_Vector* typeargs, struct bc_Frame* fr);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -63,7 +63,7 @@ int bc_MetaRCalcScore(Vector* params, Vector* args, Vector* typeargs, struct bc_
  * @param outIndex
  * @return
  */
-bc_Method* bc_MetaILFindMethod(Vector* method_vec, StringView namev, Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex);
+bc_Method* bc_MetaILFindMethod(bc_Vector* method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex);
 
 /**
  * もっとも一致するメソッドを返します.
@@ -73,7 +73,7 @@ bc_Method* bc_MetaILFindMethod(Vector* method_vec, StringView namev, Vector * il
  * @param outIndex
  * @return
  */
-bc_Method* bc_MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gargs, int* outIndex);
+bc_Method* bc_MetaGFindMethod(bc_Vector* method_vec, bc_StringView namev, bc_Vector * gargs, int* outIndex);
 
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
@@ -86,7 +86,7 @@ bc_Method* bc_MetaGFindMethod(Vector* method_vec, StringView namev, Vector * gar
  * @param outIndex
  * @return
  */
-bc_Method* bc_MetaScopedILFindMethod(struct bc_Class* context, Vector* method_vec, StringView namev, Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex);
+bc_Method* bc_MetaScopedILFindMethod(struct bc_Class* context, bc_Vector* method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex);
 /**
  * スコープに基づく方法でもっとも一致するメソッドを返します.
  * @param context
@@ -96,7 +96,7 @@ bc_Method* bc_MetaScopedILFindMethod(struct bc_Class* context, Vector* method_ve
  * @param outIndex
  * @return
  */
-bc_Method* bc_MetaScopedGFindMethod(struct bc_Class* context, Vector* method_vec, StringView namev, Vector * gargs, int * outIndex);
+bc_Method* bc_MetaScopedGFindMethod(struct bc_Class* context, bc_Vector* method_vec, bc_StringView namev, bc_Vector * gargs, int * outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -108,7 +108,7 @@ bc_Method* bc_MetaScopedGFindMethod(struct bc_Class* context, Vector* method_vec
  * @param outIndex
  * @return
  */
-bc_Constructor* bc_MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex);
+bc_Constructor* bc_MetaILFindConstructor(bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * もっとも一致するコンストラクタを返します.
@@ -119,7 +119,7 @@ bc_Constructor* bc_MetaILFindConstructor(Vector* ctor_vec, Vector* ilargs, bc_En
  * @param outIndex
  * @return
  */
-bc_Constructor* bc_MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* typeargs, struct bc_Frame* fr, int* outIndex);
+bc_Constructor* bc_MetaRFindConstructor(bc_Vector* ctor_vec, bc_Vector* args, bc_Vector* typeargs, struct bc_Frame* fr, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -130,7 +130,7 @@ bc_Constructor* bc_MetaRFindConstructor(Vector* ctor_vec, Vector* args, Vector* 
  * @param outIndex
  * @return
  */
-bc_Constructor* bc_MetaScopedILFindConstructor(struct bc_Class* context, Vector* ctor_vec, Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex);
+bc_Constructor* bc_MetaScopedILFindConstructor(struct bc_Class* context, bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex);
 /**
  * スコープに基づく方法でもっとも一致するコンストラクタを返します.
  * @param context
@@ -141,7 +141,7 @@ bc_Constructor* bc_MetaScopedILFindConstructor(struct bc_Class* context, Vector*
  * @param outIndex
  * @return
  */
-bc_Constructor* bc_MetaScopedRFindConstructor(struct bc_Class* context, Vector* ctor_vec, Vector* gargs, Vector* typeargs, struct bc_Frame* fr, int* outIndex);
+bc_Constructor* bc_MetaScopedRFindConstructor(struct bc_Class* context, bc_Vector* ctor_vec, bc_Vector* gargs, bc_Vector* typeargs, struct bc_Frame* fr, int* outIndex);
 
 /**
  * 演算子オーバーロードを検索します.
@@ -151,7 +151,7 @@ bc_Constructor* bc_MetaScopedRFindConstructor(struct bc_Class* context, Vector* 
  * @param outIndex
  * @return
  */
-bc_OperatorOverload* bc_MetaGFindOperator(Vector* opov_vec, bc_OperatorType type, Vector* gargs, int* outIndex);
+bc_OperatorOverload* bc_MetaGFindOperator(bc_Vector* opov_vec, bc_OperatorType type, bc_Vector* gargs, int* outIndex);
 
 /**
  * 指定のメソッドが現在のコンテキストで有効なら true.

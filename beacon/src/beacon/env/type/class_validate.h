@@ -66,7 +66,7 @@ bool bc_IsValidPropertyClass(struct bc_Class* self, struct bc_Property** out);
  * @param out_name
  * @return
  */
-bool bc_IsMethodParameterValidClass(struct bc_Class* cls, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodParameterValidClass(struct bc_Class* cls, struct bc_Method** out_method, bc_StringView* out_name);
 
 /**
  * 全てのコンストラクタを巡回して、全てにおいてパラメータ名の重複がないなら true.
@@ -75,7 +75,7 @@ bool bc_IsMethodParameterValidClass(struct bc_Class* cls, struct bc_Method** out
  * @param out_name
  * @return
  */
-bool bc_IsConstructorParameterValidClass(struct bc_Class* self, struct bc_Constructor** out_ctor, StringView* out_name);
+bool bc_IsConstructorParameterValidClass(struct bc_Class* self, struct bc_Constructor** out_ctor, bc_StringView* out_name);
 
 /**
  * クラスの型変数に重複する名前がないなら true.
@@ -83,7 +83,7 @@ bool bc_IsConstructorParameterValidClass(struct bc_Class* self, struct bc_Constr
  * @param out_name
  * @return
  */
-bool bc_IsTypeParameterValidClass(struct bc_Class* self, StringView* out_name);
+bool bc_IsTypeParameterValidClass(struct bc_Class* self, bc_StringView* out_name);
 
 /**
  * メソッドの型変数に重複するものがないなら true.
@@ -92,5 +92,5 @@ bool bc_IsTypeParameterValidClass(struct bc_Class* self, StringView* out_name);
  * @param out_name
  * @return
  */
-bool bc_IsMethodTypeParameterValidClass(struct bc_Class* self, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodTypeParameterValidClass(struct bc_Class* self, struct bc_Method** out_method, bc_StringView* out_name);
 #endif

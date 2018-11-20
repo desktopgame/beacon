@@ -23,7 +23,7 @@ typedef struct bc_OperatorOverload {
 	struct bc_Type* Parent;
 	struct bc_GenericType* ReturnGType;
 	bc_OperatorType Type;
-	Vector* Parameters;
+	bc_Vector* Parameters;
 	struct bc_Enviroment* Env;
 	bc_AccessLevel Access;
 } bc_OperatorOverload;

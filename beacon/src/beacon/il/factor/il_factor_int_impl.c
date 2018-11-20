@@ -38,12 +38,12 @@ bc_GenericType* EvalILInt(ILInt * self, bc_Enviroment * env, CallContext* cctx) 
 }
 
 char* ILIntToString(ILInt* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char block[32];
 	int res = sprintf(block, "%d", self->Value);
 	assert(res >= 0);
-	AppendsBuffer(sb, block);
-	return ReleaseBuffer(sb);
+	bc_AppendsBuffer(sb, block);
+	return bc_ReleaseBuffer(sb);
 }
 
 void DeleteILInt(ILInt * self) {

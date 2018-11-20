@@ -1,6 +1,7 @@
 #include "storage.h"
 #include <stdlib.h>
 #include <string.h>
+/*
 static void* safe_malloc(size_t size);
 static Unit* new_unit(Storage* self, size_t size, const char* filename, int lineno);
 static void get_next_storage(Storage* self, size_t size);
@@ -122,3 +123,4 @@ static UnitTag get_unit_tag(Unit* self) {
 	unsigned char* area = (raw + self->UserSize);
 	return *((UnitTag*)area);
 }
+ * */

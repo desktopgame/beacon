@@ -34,12 +34,12 @@ void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx) {
 	LoadILFactor(self->Position, env, cctx);
 	bc_GenericType* receiver_gtype = EvalILFactor(self->Receiver, env, cctx);
 	bc_GenericType* arg_gtype = EvalILFactor(self->Position, env, cctx);
-	Vector* args = NewVector();
-	PushVector(args, arg_gtype);
+	bc_Vector* args = bc_NewVector();
+	bc_PushVector(args, arg_gtype);
 	int temp = -1;
 	self->Operator = bc_GFindOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)), OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
 	self->OperatorIndex = temp;
-	DeleteVector(args, VectorDeleterOfNull);
+	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 }
 
 bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx) {
@@ -47,16 +47,16 @@ bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, CallConte
 }
 
 char* ILSubscriptToString(ILSubscript* self, bc_Enviroment* env) {
-	Buffer* buf = NewBuffer();
+	bc_Buffer* buf = bc_NewBuffer();
 	char* src = ILFactorToString(self->Receiver, env);
 	char* pos = ILFactorToString(self->Position, env);
-	AppendsBuffer(buf, src);
-	AppendBuffer(buf, '[');
-	AppendsBuffer(buf, pos);
-	AppendBuffer(buf, ']');
+	bc_AppendsBuffer(buf, src);
+	bc_AppendBuffer(buf, '[');
+	bc_AppendsBuffer(buf, pos);
+	bc_AppendBuffer(buf, ']');
 	MEM_FREE(src);
 	MEM_FREE(pos);
-	return ReleaseBuffer(buf);
+	return bc_ReleaseBuffer(buf);
 }
 
 void DeleteILSubscript(ILSubscript* self) {

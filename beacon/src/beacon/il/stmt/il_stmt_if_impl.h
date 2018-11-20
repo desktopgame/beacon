@@ -18,14 +18,14 @@
  */
 typedef struct ILElif {
 	ILFactor* Condition;
-	Vector* Body;
+	bc_Vector* Body;
 } ILElif;
 
 /**
  * } else { ... } を表す要素.
  */
 typedef struct ILElse {
-	Vector* Body;
+	bc_Vector* Body;
 } ILElse;
 
 /**
@@ -36,8 +36,8 @@ typedef struct ILElse {
  */
 typedef struct ILIf {
 	ILFactor* Condition;
-	Vector* Body;
-	Vector* ElifList;
+	bc_Vector* Body;
+	bc_Vector* ElifList;
 	ILElse* Else;
 } ILIf;
 
@@ -64,7 +64,7 @@ ILElif* NewILElif();
  * elif の一覧を表す要素を作成します.
  * @return
  */
-Vector* NewILElifList();
+bc_Vector* NewILElifList();
 
 /**
  * else を表す要素を作成します.
@@ -75,7 +75,7 @@ ILElse* NewILElse();
 /**
  * elif を一覧に加えます.
  */
-void PushILElifList(Vector* self, ILElif* child);
+void PushILElifList(bc_Vector* self, ILElif* child);
 
 /**
  * if とその子要素を生成します.
@@ -109,7 +109,7 @@ void DeleteILElif(ILElif* self);
  * elifの一覧 を表す要素を開放します.
  * @param self
  */
-void DeleteILElifList(Vector* self);
+void DeleteILElifList(bc_Vector* self);
 
 /**
  * else を表す要素を開放します.

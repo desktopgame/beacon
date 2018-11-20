@@ -39,7 +39,7 @@ typedef struct PropertyWithIndex {
  * ローカル変数を表す構造体.
  */
 typedef struct ILVariableLocal {
-	StringView Name;
+	bc_StringView Name;
 	VariableLocalType Type;
 	struct bc_GenericType* GType;
 	union {
@@ -47,10 +47,10 @@ typedef struct ILVariableLocal {
 		FieldWithIndex FieldI;
 		PropertyWithIndex PropertyI;
 	} Kind;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 } ILVariableLocal;
 
-ILVariableLocal* NewILVariableLocal(StringView namev);
+ILVariableLocal* NewILVariableLocal(bc_StringView namev);
 
 void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, CallContext* cctx);
 

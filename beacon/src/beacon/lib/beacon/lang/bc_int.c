@@ -29,7 +29,7 @@ bc_Object* NewInteger(int value) {
 
 void InitInt() {
 	bc_Namespace* lang =  bc_GetLangNamespace();
-	bc_Type* intType = bc_NewPreloadClass(InternString("Int"));
+	bc_Type* intType = bc_NewPreloadClass(bc_InternString("Int"));
 	bc_Class* intClass = BC_TYPE2CLASS(intType);
 	intType->AllocSize = sizeof(Integer);
 	bc_AddTypeNamespace(lang, intType);
@@ -54,123 +54,123 @@ void InitInt() {
 
 bc_Type* GetIntType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	return bc_FindTypeFromNamespace(lang, InternString("Int"));
+	return bc_FindTypeFromNamespace(lang, bc_InternString("Int"));
 }
 //private
 #define INT_VALUE(obj) (((Integer*)obj)->Value)
 static void bc_int_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* i = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* i = bc_AtVector(fr->VariableTable, 1);
 
 	INT_VALUE(self) = INT_VALUE(i);
 	//self->Tag = OBJECT_INT_T;
 }
 
 static void bc_int_nativeEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* i = AtVector(fr->VariableTable, 1);
-	PushVector(fr->ValueStack, bc_BoolToObject(bc_ObjectToInt(self) == bc_ObjectToInt(i)));
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* i = bc_AtVector(fr->VariableTable, 1);
+	bc_PushVector(fr->ValueStack, bc_BoolToObject(bc_ObjectToInt(self) == bc_ObjectToInt(i)));
 }
 
 static void bc_int_nativeAdd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) + INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeSub(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) - INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeMul(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) * INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeDiv(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) / INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeMod(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) % INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeLShift(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) << INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeRShift(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) >> INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeGT(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) > INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeGE(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) >= INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeLT(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) < INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeLE(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) <= INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeBitOr(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) | INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeBitAnd(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = (bc_Object*)NewInteger(INT_VALUE(self) & INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeEQ(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	bc_Object* a = AtVector(fr->VariableTable, 1);
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_Object* a = bc_AtVector(fr->VariableTable, 1);
 	bc_Object* ret = bc_GetBoolObject(INT_VALUE(self) == INT_VALUE(a));
-	PushVector(fr->ValueStack, ret);
+	bc_PushVector(fr->ValueStack, ret);
 }
 
 static void bc_int_nativeToChar(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Object* self = AtVector(fr->VariableTable, 0);
-	PushVector(fr->ValueStack, NewChar(INT_VALUE(self)));
+	bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+	bc_PushVector(fr->ValueStack, NewChar(INT_VALUE(self)));
 }

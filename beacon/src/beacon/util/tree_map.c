@@ -7,10 +7,10 @@
 #include <assert.h>
 
 //proto
-static void each_impl(TreeMap* self, TreeAction act);
+static void each_impl(bc_TreeMap* self, bc_TreeAction act);
 
-TreeMap * NewTreeMap() {
-	TreeMap* ret = (TreeMap*)MEM_MALLOC(sizeof(TreeMap));
+bc_TreeMap * bc_NewTreeMap() {
+	bc_TreeMap* ret = (bc_TreeMap*)MEM_MALLOC(sizeof(bc_TreeMap));
 	ret->Key = "\0";
 	ret->Item = NULL;
 	ret->Left = NULL;
@@ -19,7 +19,7 @@ TreeMap * NewTreeMap() {
 	return ret;
 }
 
-TreeMap* PutTreeMap(TreeMap* self, TreeKey key, TreeItem item) {
+bc_TreeMap* bc_PutTreeMap(bc_TreeMap* self, bc_TreeKey key, bc_TreeItem item) {
 	assert(strcmp(key, "\0"));
 	//リテラルによってキーが指定される場合は、
 	//プログラムによって明示的にそれを削除する必要はありませんが、
@@ -27,46 +27,46 @@ TreeMap* PutTreeMap(TreeMap* self, TreeKey key, TreeItem item) {
 	//リテラルによって与えられたものなのか
 	//動的に確保されたものなのか判別がつかないので、
 	//とりあえず複製し、DeleteTreeMapのときに一緒に削除します。
-	int comp = CompareTreeMap(self, key);
+	int comp = bc_CompareTreeMap(self, key);
 	if (comp == 0) {
 		self->Item = item;
 		return self;
 	} else if (comp < 0) {
 		if (self->Left == NULL) {
-			self->Left = NewTreeMap();
+			self->Left = bc_NewTreeMap();
 			self->Left->Key = bc_Strdup(key);
 			self->Left->Parent = self;
 		} else {
-			return PutTreeMap(self->Left, key, item);
+			return bc_PutTreeMap(self->Left, key, item);
 		}
 		self->Left->Item = item;
 		return self->Left;
 	} else if (comp > 0) {
 		if (self->Right == NULL) {
-			self->Right = NewTreeMap();
+			self->Right = bc_NewTreeMap();
 			self->Right->Key = bc_Strdup(key);
 			self->Right->Parent = self;
 		} else {
-			return PutTreeMap(self->Right, key, item);
+			return bc_PutTreeMap(self->Right, key, item);
 		}
 		self->Right->Item = item;
 		return self->Right;
 	}
 }
 
-TreeItem GetTreeMapValue(TreeMap * self, TreeKey key) {
-	TreeMap* ret = GetTreeMapCell(self, key);
+bc_TreeItem bc_GetTreeMapValue(bc_TreeMap * self, bc_TreeKey key) {
+	bc_TreeMap* ret = bc_GetTreeMapCell(self, key);
 	if (ret == NULL) {
 		return NULL;
 	}
 	return ret->Item;
 }
 
-TreeMap * GetTreeMapCell(TreeMap * self, TreeKey key) {
+bc_TreeMap * bc_GetTreeMapCell(bc_TreeMap * self, bc_TreeKey key) {
 	if (self == NULL) {
 		return NULL;
 	}
-	int comp = CompareTreeMap(self, key);
+	int comp = bc_CompareTreeMap(self, key);
 	if (comp == 0) {
 		return self;
 	} else if (comp < 0) {
@@ -74,37 +74,37 @@ TreeMap * GetTreeMapCell(TreeMap * self, TreeKey key) {
 		if (self->Left == NULL) {
 			return NULL;
 		}
-		return GetTreeMapCell(self->Left, key);
+		return bc_GetTreeMapCell(self->Left, key);
 	} else if (comp > 0) {
 		//指定のキーが存在しない
 		if (self->Right == NULL) {
 			return NULL;
 		}
-		return GetTreeMapCell(self->Right, key);
+		return bc_GetTreeMapCell(self->Right, key);
 	}
 	return NULL;
 }
 
-int CompareTreeMap(TreeMap * self, TreeKey key) {
+int bc_CompareTreeMap(bc_TreeMap * self, bc_TreeKey key) {
 	return strcmp(self->Key, key);
 }
 
-void EachTreeMap(TreeMap * self, TreeAction act) {
+void bc_EachTreeMap(bc_TreeMap * self, bc_TreeAction act) {
 	assert(self != NULL);
 	each_impl(self, act);
 }
 
-void DeleteTreeMap(TreeMap * self, TreeElementDeleter deleter) {
+void bc_DeleteTreeMap(bc_TreeMap * self, bc_TreeElementDeleter deleter) {
 	if(self == NULL) {
 		return;
 	}
 	//先に子要素を開放する
 	if (self->Left != NULL) {
-		DeleteTreeMap(self->Left, deleter);
+		bc_DeleteTreeMap(self->Left, deleter);
 		self->Left = NULL;
 	}
 	if (self->Right != NULL) {
-		DeleteTreeMap(self->Right, deleter);
+		bc_DeleteTreeMap(self->Right, deleter);
 		self->Right = NULL;
 	}
 	//printf("delete %s\n", self->Key);
@@ -115,15 +115,15 @@ void DeleteTreeMap(TreeMap * self, TreeElementDeleter deleter) {
 	MEM_FREE(self);
 }
 
-void TreeMapDeleterByFree(const char* key, TreeItem item) {
+void bc_TreeMapDeleterByFree(const char* key, bc_TreeItem item) {
 	MEM_FREE(item);
 }
 
-void TreeMapDeleterOfNull(const char* key, TreeItem item) {
+void bc_TreeMapDeleterOfNull(const char* key, bc_TreeItem item) {
 }
 
 //private
-static void each_impl(TreeMap* self, TreeAction act) {
+static void each_impl(bc_TreeMap* self, bc_TreeAction act) {
 	if (self->Left != NULL) {
 		each_impl(self->Left, act);
 	}

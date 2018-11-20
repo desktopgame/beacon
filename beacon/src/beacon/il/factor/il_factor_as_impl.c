@@ -67,8 +67,8 @@ void LoadILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
 	//それ以外
 	} else {
 		bc_Panic(BCERROR_CAST_NOT_COMPATIBLE_T,
-			Ref2Str(bc_GetTypeName(a->CoreType)),
-			Ref2Str(bc_GetTypeName(self->GType->CoreType))
+			bc_Ref2Str(bc_GetTypeName(a->CoreType)),
+			bc_Ref2Str(bc_GetTypeName(self->GType->CoreType))
 		);
 	}
 }
@@ -85,11 +85,11 @@ void DeleteILAs(ILAs * self) {
 }
 
 char* ILAsToString(ILAs* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* factstr = ILFactorToString(self->Source, env);
 	char* to = bc_GenericCacheToString(self->GCache);
-	AppendfBuffer(sb, "%s as %s", factstr, to);
+	bc_AppendfBuffer(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);
 	MEM_FREE(to);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }

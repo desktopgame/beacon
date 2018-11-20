@@ -2,17 +2,17 @@
 #include "mem.h"
 #include "text.h"
 
-FileEntry* NewFileEntry(const char* filename) {
-	return RefFileEntry(bc_Strdup(filename));
+bc_FileEntry* bc_NewFileEntry(const char* filename) {
+	return bc_RefFileEntry(bc_Strdup(filename));
 }
 
-FileEntry* RefFileEntry(char* filename) {
-	FileEntry* ret = (FileEntry*)MEM_MALLOC(sizeof(FileEntry));
+bc_FileEntry* bc_RefFileEntry(char* filename) {
+	bc_FileEntry* ret = (bc_FileEntry*)MEM_MALLOC(sizeof(bc_FileEntry));
 	ret->FileName = filename;
 	return ret;
 }
 
-void DeleteFileEntry(FileEntry* self) {
+void bc_DeleteFileEntry(bc_FileEntry* self) {
 	MEM_FREE(self->FileName);
 	MEM_FREE(self);
 }

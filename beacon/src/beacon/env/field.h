@@ -23,7 +23,7 @@ struct ILFactor;
  * フィールドを表す構造体.
  */
 typedef struct bc_Field {
-	StringView Name;
+	bc_StringView Name;
 	struct bc_Type* Parent;
 	struct bc_GenericType* GType;
 	struct bc_Object* StaticValue;
@@ -39,7 +39,7 @@ typedef struct bc_Field {
  * @param namev
  * @return
  */
-bc_Field* bc_NewField(StringView namev);
+bc_Field* bc_NewField(bc_StringView namev);
 
 /**
  * フィールドを開放します.

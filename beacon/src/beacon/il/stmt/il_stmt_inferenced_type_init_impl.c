@@ -13,7 +13,7 @@ ILStatement * WrapILInferencedTypeInit(ILInferencedTypeInit * self) {
 	return ret;
 }
 
-ILInferencedTypeInit * NewILInferencedTypeInit(StringView namev) {
+ILInferencedTypeInit * NewILInferencedTypeInit(bc_StringView namev) {
 	ILInferencedTypeInit* ret = (ILInferencedTypeInit*)MEM_MALLOC(sizeof(ILInferencedTypeInit));
 	ret->Name = namev;
 	ret->Value = NULL;
@@ -41,7 +41,7 @@ void LoadILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, 
 	//変数を登録
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
-			Ref2Str(self->Name)
+			bc_Ref2Str(self->Name)
 		);
 	}
 	bc_SymbolEntry* e = bc_EntrySymbolTable(

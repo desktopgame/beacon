@@ -43,7 +43,7 @@ static void CLBC_namespace_tree(bc_ClassLoader* self);
  * @param ilNamespacelist
  * @param parent
  */
-static void CLBC_namespace_list(bc_ClassLoader* self, Vector* ilNamespacelist, bc_Namespace* parent);
+static void CLBC_namespace_list(bc_ClassLoader* self, bc_Vector* ilNamespacelist, bc_Namespace* parent);
 
 /**
  * 名前空間と含まれるエントリの一覧を読み込みます.
@@ -59,7 +59,7 @@ static void CLBC_namespace(bc_ClassLoader* self, ILNamespace* ilnamespace, bc_Na
  * @param iltype_list
  * @param parent
  */
-static void CLBC_type_list(bc_ClassLoader* self, Vector* iltype_list, bc_Namespace* parent);
+static void CLBC_type_list(bc_ClassLoader* self, bc_Vector* iltype_list, bc_Namespace* parent);
 
 /**
  * 列挙宣言を読み込んで名前空間に登録します.
@@ -117,11 +117,11 @@ static void CLBC_namespace_tree(bc_ClassLoader* self) {
 	CLBC_namespace_list(self, self->ILCode->NamespaceList, NULL);
 }
 
-static void CLBC_namespace_list(bc_ClassLoader* self, Vector* ilNamespacelist, bc_Namespace* parent) {
+static void CLBC_namespace_list(bc_ClassLoader* self, bc_Vector* ilNamespacelist, bc_Namespace* parent) {
 	//self->link = classlink_resume;
 	bc_CL_ERROR(self);
 	for (int i = 0; i < ilNamespacelist->Length; i++) {
-		VectorItem e = AtVector(ilNamespacelist, i);
+		bc_VectorItem e = bc_AtVector(ilNamespacelist, i);
 		ILNamespace* iln = (ILNamespace*)e;
 		CLBC_namespace(self, iln, parent);
 		bc_CL_ERROR(self);
@@ -140,10 +140,10 @@ static void CLBC_namespace(bc_ClassLoader* self, ILNamespace* ilnamespace, bc_Na
 	CLBC_type_list(self, ilnamespace->TypeList, current);
 }
 
-static void CLBC_type_list(bc_ClassLoader* self, Vector* iltype_list, bc_Namespace* parent) {
+static void CLBC_type_list(bc_ClassLoader* self, bc_Vector* iltype_list, bc_Namespace* parent) {
 	bc_CL_ERROR(self);
 	for (int i = 0; i < iltype_list->Length; i++) {
-		VectorItem e = AtVector(iltype_list, i);
+		bc_VectorItem e = bc_AtVector(iltype_list, i);
 		ILType* ilt = (ILType*)e;
 		if (ilt->Tag == ILTYPE_CLASS_T) {
 			CLBC_class(self, ilt, parent);
@@ -169,7 +169,7 @@ static void CLBC_enum(bc_ClassLoader * self, ILType * iltype, bc_Namespace * par
 	bc_InitGenericSelf(tp, 0);
 	//全ての列挙子を public static final フィールドとして追加
 	for (int i = 0; i < ilenum->Items->Length; i++) {
-		StringView str = (StringView)AtVector(ilenum->Items, i);
+		bc_StringView str = (bc_StringView)bc_AtVector(ilenum->Items, i);
 		bc_Field* f = bc_NewField(str);
 		f->Modifier = MODIFIER_STATIC_T;
 		f->Access = ACCESS_PUBLIC_T;
@@ -189,7 +189,7 @@ static void CLBC_enum(bc_ClassLoader * self, ILType * iltype, bc_Namespace * par
 		parent,
 		CACHEKIND_ENUM_DECL_T
 	);
-	PushVector(self->TypeCaches, tc);
+	bc_PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
 	bc_TypeCache* mtc = bc_InitTypeCache(
 		bc_NewTypeCache(),
@@ -199,7 +199,7 @@ static void CLBC_enum(bc_ClassLoader * self, ILType * iltype, bc_Namespace * par
 		parent,
 		CACHEKIND_ENUM_IMPL_T
 	);
-	PushVector(self->TypeCaches, mtc);
+	bc_PushVector(self->TypeCaches, mtc);
 	tp->State = tp->State | TYPE_REGISTER;
 }
 
@@ -227,7 +227,7 @@ static void CLBC_class(bc_ClassLoader* self, ILType* iltype, bc_Namespace* paren
 		parent,
 		CACHEKIND_CLASS_DECL_T
 	);
-	PushVector(self->TypeCaches, tc);
+	bc_PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
 	bc_TypeCache* mtc = bc_InitTypeCache(
 		bc_NewTypeCache(),
@@ -237,7 +237,7 @@ static void CLBC_class(bc_ClassLoader* self, ILType* iltype, bc_Namespace* paren
 		parent,
 		CACHEKIND_CLASS_IMPL_T
 	);
-	PushVector(self->TypeCaches, mtc);
+	bc_PushVector(self->TypeCaches, mtc);
 	tp->State = tp->State | TYPE_REGISTER;
 }
 
@@ -261,7 +261,7 @@ static void CLBC_interface(bc_ClassLoader * self, ILType * iltype, bc_Namespace 
 		parent,
 		CACHEKIND_INTERFACE_DECL_T
 	);
-	PushVector(self->TypeCaches, tc);
+	bc_PushVector(self->TypeCaches, tc);
 	//実装のロードを予約
 	bc_TypeCache* mtc = bc_InitTypeCache(
 		bc_NewTypeCache(),
@@ -271,7 +271,7 @@ static void CLBC_interface(bc_ClassLoader * self, ILType * iltype, bc_Namespace 
 		parent,
 		CACHEKIND_INTERFACE_IMPL_T
 	);
-	PushVector(self->TypeCaches, mtc);
+	bc_PushVector(self->TypeCaches, mtc);
 	tp->State = tp->State | TYPE_REGISTER;
 }
 
@@ -334,7 +334,7 @@ static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent, ILTy
 	cctx->Scope = parent;
 	cctx->Ty = tp;
 	for (int i = 0; i < iltype->Kind.Class->Extends->Length; i++) {
-		bc_GenericCache* e = (bc_GenericCache*)AtVector(iltype->Kind.Class->Extends, i);
+		bc_GenericCache* e = (bc_GenericCache*)bc_AtVector(iltype->Kind.Class->Extends, i);
 		//最初の一つはクラスでもインターフェースでもよい
 		if (i == 0) {
 			bc_GenericType* gtp = bc_ResolveImportManager(parent, e, cctx);
@@ -342,18 +342,18 @@ static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent, ILTy
 			if (gtp->CoreType->Tag == TYPE_CLASS_T) {
 				cls->SuperClass = gtp;
 			} else if (gtp->CoreType->Tag == TYPE_INTERFACE_T) {
-				PushVector(cls->Implements, gtp);
+				bc_PushVector(cls->Implements, gtp);
 			} else assert(false);
 		//二つ目以降はインターフェースのみ
 		} else {
 			bc_GenericType* gtp = bc_ResolveImportManager(parent, e, cctx);
 			bc_Type* E = bc_GENERIC2TYPE(gtp);
 			#if defined(DEBUG)
-			const char* Estr = Ref2Str(bc_GetTypeName(E));
+			const char* Estr = bc_Ref2Str(bc_GetTypeName(E));
 			#endif
-			PushVector(cls->Implements, gtp);
+			bc_PushVector(cls->Implements, gtp);
 			if(E->Tag != TYPE_INTERFACE_T) {
-				bc_Panic(BCERROR_CLASS_FIRST_T, Ref2Str(bc_GetTypeName(tp)));
+				bc_Panic(BCERROR_CLASS_FIRST_T, bc_Ref2Str(bc_GetTypeName(tp)));
 				bc_AddTypeNamespace(parent, tp);
 				DeleteCallContext(cctx);
 				return;
@@ -366,7 +366,7 @@ static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent, ILTy
 	//重複するインターフェイスを検出
 	bc_Interface* inter = NULL;
 	if((inter = bc_IsValidInterface(tp))) {
-		bc_Panic(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(inter->Name));
+		bc_Panic(BCERROR_MULTI_EQINTERFACE_T, bc_Ref2Str(inter->Name));
 	}
 }
 
@@ -396,18 +396,18 @@ static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent, 
 	cctx->Scope = parent;
 	cctx->Ty = tp;
 	for (int i = 0; i < iltype->Kind.Interface->Extends->Length; i++) {
-		bc_GenericCache* e = (bc_GenericCache*)AtVector(iltype->Kind.Interface->Extends, i);
+		bc_GenericCache* e = (bc_GenericCache*)bc_AtVector(iltype->Kind.Interface->Extends, i);
 		//インターフェースはインターフェースのみ継承
 		bc_GenericType* gtp = bc_ResolveImportManager(parent, e, cctx);
 		bc_Type* E = bc_GENERIC2TYPE(gtp);
 		if(E->Tag != TYPE_INTERFACE_T) {
-			bc_Panic(BCERROR_INTERFACE_ONLY_T, Ref2Str(bc_GetTypeName(tp)));
+			bc_Panic(BCERROR_INTERFACE_ONLY_T, bc_Ref2Str(bc_GetTypeName(tp)));
 			bc_AddTypeNamespace(parent, tp);
 			DeleteCallContext(cctx);
 			return;
 		//インターフェイスの時のみ追加
 		} else {
-			PushVector(inter->Implements, gtp);
+			bc_PushVector(inter->Implements, gtp);
 		}
 	}
 	//場所を設定
@@ -417,6 +417,6 @@ static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent, 
 	//重複するインターフェイスを検出
 	bc_Interface* ovinter = NULL;
 	if((ovinter = bc_IsValidInterface(tp))) {
-		bc_Panic(BCERROR_MULTI_EQINTERFACE_T, Ref2Str(ovinter->Name));
+		bc_Panic(BCERROR_MULTI_EQINTERFACE_T, bc_Ref2Str(ovinter->Name));
 	}
 }

@@ -146,7 +146,7 @@ bc_AST* bc_NewASTTry(bc_AST* abody, bc_AST* acatch_list);
  * @param abody
  * @return
  */
-bc_AST* bc_NewASTCatch(bc_AST* stypename, StringView name, bc_AST* abody);
+bc_AST* bc_NewASTCatch(bc_AST* stypename, bc_StringView name, bc_AST* abody);
 
 /**
  * キャッチ節の一覧を作成します.
@@ -177,7 +177,7 @@ bc_AST* bc_NewASTArgumentList(bc_AST* factor, bc_AST* argument_list);
  * @param class_name
  * @return
  */
-bc_AST* bc_NewASTFQCN(bc_AST* part_list, StringView class_name);
+bc_AST* bc_NewASTFQCN(bc_AST* part_list, bc_StringView class_name);
 
 /**
  * 完全修飾クラス名の 1節 を表す要素を作成します.
@@ -191,7 +191,7 @@ bc_AST* bc_NewASTFQCN(bc_AST* part_list, StringView class_name);
  * @param lineno
  * @return
  */
-bc_AST* bc_MallocASTFQCNPart(StringView namev, const char* filename, int lineno);
+bc_AST* bc_MallocASTFQCNPart(bc_StringView namev, const char* filename, int lineno);
 
 /**
  * 完全修飾クラス名の名前空間部分(XX::YY::)の一覧を表す要素を作成します.
@@ -207,7 +207,7 @@ bc_AST* bc_NewASTFQCNPartList(bc_AST* part, bc_AST* part_list);
  * @param name
  * @return
  */
-bc_AST* bc_NewASTVariableDecl(bc_AST* type, StringView name);
+bc_AST* bc_NewASTVariableDecl(bc_AST* type, bc_StringView name);
 
 /**
  * X::Y y = new X::Y() のような初期化を表す要素を作成します.
@@ -216,7 +216,7 @@ bc_AST* bc_NewASTVariableDecl(bc_AST* type, StringView name);
  * @param afact
  * @return
  */
-bc_AST* bc_NewASTVariableInit(bc_AST* type, StringView name, bc_AST* fact);
+bc_AST* bc_NewASTVariableInit(bc_AST* type, bc_StringView name, bc_AST* fact);
 
 /**
  * var y = new X::Y() のような初期化を表す要素を作成します.
@@ -224,7 +224,7 @@ bc_AST* bc_NewASTVariableInit(bc_AST* type, StringView name, bc_AST* fact);
  * @param afact
  * @return
  */
-bc_AST* bc_NewASTInferencedTypeInit(StringView name, bc_AST* fact);
+bc_AST* bc_NewASTInferencedTypeInit(bc_StringView name, bc_AST* fact);
 
 /**
  * assert 条件 を表す要素を作成します.
@@ -260,5 +260,5 @@ bc_AST* bc_NewASTYieldBreak();
  * @param avalue 値
  * @return
  */
-bc_AST* bc_NewASTInject(StringView name, bc_AST* avalue);
+bc_AST* bc_NewASTInject(bc_StringView name, bc_AST* avalue);
 #endif // !SIGNAL_AST_AST_NEW_STMT_H

@@ -25,23 +25,23 @@ typedef enum CallFrameTag {
 
 typedef struct CallResolve {
 	struct bc_GenericType* GType;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 } CallResolve;
 
 typedef struct CallSelfInvoke {
-	Vector* Args;
-	Vector* TypeArgs;
+	bc_Vector* Args;
+	bc_Vector* TypeArgs;
 } CallSelfInvoke;
 
 typedef struct CallStaticInvoke {
-	Vector* Args;
-	Vector* TypeArgs;
+	bc_Vector* Args;
+	bc_Vector* TypeArgs;
 } CallStaticInvoke;
 
 typedef struct CallInstanceInvoke {
 	struct bc_GenericType* Receiver;
-	Vector* Args;
-	Vector* TypeArgs;
+	bc_Vector* Args;
+	bc_Vector* TypeArgs;
 } CallInstanceInvoke;
 
 typedef struct CallFrame {

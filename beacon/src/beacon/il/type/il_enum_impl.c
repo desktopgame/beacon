@@ -13,15 +13,15 @@ ILType * WrapILEnum(ILEnum * self) {
 	return ret;
 }
 
-ILEnum * NewILEnum(StringView namev) {
+ILEnum * NewILEnum(bc_StringView namev) {
 	ILEnum* ret = (ILEnum*)MEM_MALLOC(sizeof(ILEnum));
 	ret->Name = namev;
-	ret->Items = NewVector();
+	ret->Items = bc_NewVector();
 	return ret;
 }
 
 void DeleteILEnum(ILEnum * self) {
-	DeleteVector(self->Items, ILEnum_name_delete);
+	bc_DeleteVector(self->Items, ILEnum_name_delete);
 	MEM_FREE(self);
 }
 

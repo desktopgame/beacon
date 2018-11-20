@@ -17,7 +17,7 @@
  * メソッドの仮引数を表す構造体です.
  */
 typedef struct bc_Parameter {
-	StringView Name;
+	bc_StringView Name;
 	struct bc_GenericType* GType;
 } bc_Parameter;
 
@@ -26,7 +26,7 @@ typedef struct bc_Parameter {
  * @param namev
  * @return
  */
-bc_Parameter* bc_NewParameter(StringView namev);
+bc_Parameter* bc_NewParameter(bc_StringView namev);
 
 /**
  * パラメータを開放します.
@@ -40,5 +40,5 @@ void bc_DeleteParameter(bc_Parameter* self);
  * @param outName
  * @return
  */
-bool bc_IsOverwrappedParameterName(Vector* parameters, StringView* outName);
+bool bc_IsOverwrappedParameterName(bc_Vector* parameters, bc_StringView* outName);
 #endif // !SIGNAL_ENV_PARAMETER_H

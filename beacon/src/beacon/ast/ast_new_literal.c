@@ -19,7 +19,7 @@ bc_AST* bc_NewASTChar(char ch) {
 	return ret;
 }
 
-bc_AST* bc_NewASTString(StringView str) {
+bc_AST* bc_NewASTString(bc_StringView str) {
 	bc_AST* ret = bc_NewAST(AST_STRING_T);
 	ret->Attr.StringVValue = str;
 	return ret;

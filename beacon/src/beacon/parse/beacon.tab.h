@@ -175,7 +175,7 @@ union YYSTYPE
 #line 17 "beacon.y" /* yacc.c:1916  */
 
 	char char_value;
-	StringView stringv_value;
+	bc_StringView stringv_value;
 	bc_AST* ast_value;
 	bc_AssignOperatorType assign_otype_value;
 	bc_ConstructorChainType chain_type_value;

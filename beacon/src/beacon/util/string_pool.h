@@ -15,36 +15,36 @@
 /**
  * NULL に対応する StringView です.
  */
-#define NULL_VIEW (0)
+#define BC_NULL_VIEW (0)
 
 /**
  * 空文字に対応する StringView です.
  */
-#define ZERO_VIEW (1)
+#define BC_ZERO_VIEW (1)
 
 /**
  * 符号化された文字列.
  */
-typedef unsigned int StringView;
+typedef unsigned int bc_StringView;
 
 /**
  * 文字列プールを初期化します.
  */
-void InitStringPool();
+void bc_InitStringPool();
 
 /**
  * 文字列を符号化してその参照を返します.
  * @param str
  * @return
  */
-StringView InternString(const char* str);
+bc_StringView bc_InternString(const char* str);
 
 /**
  * 引数の文字列を符号化して返します.
  * @param buffer
  * @return
  */
-StringView InternString2(Buffer* buffer);
+bc_StringView bc_InternString2(bc_Buffer* buffer);
 
 /**
  * 二つの文字列を連結してインターンします.
@@ -52,30 +52,30 @@ StringView InternString2(Buffer* buffer);
  * @param foot
  * @return
  */
-StringView ConcatIntern(const char* head, StringView foot);
+bc_StringView bc_ConcatIntern(const char* head, bc_StringView foot);
 
 /**
  * 文字列が既に符号化されているならそれを返します.
  * @param str
  * @return
  */
-StringView Str2Ref(const char* str);
+bc_StringView bc_Str2Ref(const char* str);
 
 /**
  * 参照からソース文字列を返します.
  * @param ref
  * @return
  */
-const char* Ref2Str(StringView ref);
+const char* bc_Ref2Str(bc_StringView ref);
 
 /**
  * プールに格納された全ての文字列を出力します.
  * @param fp
  */
-void DumpStringPool(FILE* fp);
+void bc_DumpStringPool(FILE* fp);
 
 /**
  * 文字列プールを解放します.
  */
-void DestroyStringPool();
+void bc_DestroyStringPool();
 #endif

@@ -16,7 +16,7 @@ struct bc_OperatorOverload;
  * オペレータの仮想関数テーブル.
  */
 typedef struct bc_OperatorVT {
-	Vector* Operators;
+	bc_Vector* Operators;
 } bc_OperatorVT;
 
 bc_OperatorVT* bc_NewOperatorVt();

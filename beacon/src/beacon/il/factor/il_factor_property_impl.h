@@ -17,7 +17,7 @@ struct bc_GenericType;
 
 typedef struct ILPropertyAccess {
 	ILFactor* Source;
-	StringView Name;
+	bc_StringView Name;
 	int Index;
 	bc_Property* Property;
 } ILPropertyAccess;

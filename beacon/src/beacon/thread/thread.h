@@ -21,7 +21,7 @@ struct CallContext;
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
  */
 typedef struct ScriptThread {
-	Vector* TraceStack;
+	bc_Vector* TraceStack;
 	bool IsVMCrushByException;
 	bool IsVMDump;
 	struct bc_Frame* FrameRef;

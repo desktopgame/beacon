@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include "../util/text.h"
 
-int bc_PrintOpcode(Vector* source, int index) {
+int bc_PrintOpcode(bc_Vector* source, int index) {
 	return bc_FprintOpcode(stdout, source, index);
 }
 
-int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
-	VectorItem e = AtVector(source, index);
+int bc_FprintOpcode(FILE* fp, bc_Vector* source, int index) {
+	bc_VectorItem e = bc_AtVector(source, index);
 	bc_Opcode code = (bc_Opcode)e;
 	fprintf(fp,"%d: ", index);
 	switch (code) {
@@ -152,25 +152,25 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		//push const
 		case OP_ICONST:
 		{
-			int a = AtVector(source, ++index);
+			int a = bc_AtVector(source, ++index);
 			fprintf(fp,"push iconst(%d)", a);
 			break;
 		}
 		case OP_DCONST:
 		{
-			int a = AtVector(source, ++index);
+			int a = bc_AtVector(source, ++index);
 			fprintf(fp,"push dconst(%d)", a);
 			break;
 		}
 		case OP_CCONST:
 		{
-			int a = AtVector(source, ++index);
+			int a = bc_AtVector(source, ++index);
 			fprintf(fp,"push cconst(%d)", a);
 			break;
 		}
 		case OP_SCONST:
 		{
-			int a = AtVector(source, ++index);
+			int a = bc_AtVector(source, ++index);
 			fprintf(fp,"push sconst(%d)", a);
 			break;
 		}
@@ -207,67 +207,67 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		//store,load
 		case OP_PUT_FIELD:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"put field(%d)", a);
 			break;
 		}
 		case OP_GET_FIELD:
 		{
 			//int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"get field(%d)", b);
 			break;
 		}
 		case OP_PUT_STATIC:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"put static(%d %d)", a, b);
 			break;
 		}
 		case OP_GET_STATIC:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"get static(%d %d)", a, b);
 			break;
 		}
 		case OP_PUT_PROPERTY:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"put Property(%d)", a);
 			break;
 		}
 		case OP_GET_PROPERTY:
 		{
 			//int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"get Property(%d)", b);
 			break;
 		}
 		case OP_PUT_STATIC_PROPERTY:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"put static_Property(%d %d)", a, b);
 			break;
 		}
 		case OP_GET_STATIC_PROPERTY:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"get static_Property(%d %d)", a, b);
 			break;
 		}
 		case OP_STORE:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"store %d", a);
 			break;
 		}
 		case OP_LOAD:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"load %d", a);
 			break;
 		}
@@ -284,15 +284,15 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		//invoke
 		case OP_CHAIN_THIS:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"chain this(%d %d)", a, b);
 			break;
 		}
 		case OP_CHAIN_SUPER:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"chain super(%d %d)", a, b);
 			break;
 		}
@@ -303,14 +303,14 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_ALLOC_FIELD:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"alloc field(%d)", a);
 			break;
 		}
 		case OP_NEW_INSTANCE:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"new instance(%d %d)", a, b);
 			break;
 		}
@@ -326,40 +326,40 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_INVOKEVIRTUAL:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"invoke virtual(%d)", a);
 			break;
 		}
 		case OP_INVOKESTATIC:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"invoke static(%d %d)", a, b);
 			break;
 		}
 		case OP_INVOKESPECIAL:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"invoke special(%d)", a);
 			break;
 		}
 		case OP_INVOKEINTERFACE:
 		{
-			int a = (int)AtVector(source, ++index);
-			int b = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
+			int b = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"invoke interface(%d %d)", a, b);
 			break;
 		}
 		case OP_INVOKEOPERATOR:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp,"invoke operator(%d)", a);
 			break;
 		}
 
 		case OP_CORO_INIT:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			printf("coro init(%d)", a);
 			break;
 		}
@@ -395,25 +395,25 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_GENERIC_ENTER:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp, "generic enter(%d)", a);
 			break;
 		}
 		case OP_GENERIC_UNIQUE_TYPE:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp, "generic unique_type(%d)", a);
 			break;
 		}
 		case OP_GENERIC_INSTANCE_TYPE:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp, "generic instance_type(%d)", a);
 			break;
 		}
 		case OP_GENERIC_STATIC_TYPE:
 		{
-			int a = (int)AtVector(source, ++index);
+			int a = (int)bc_AtVector(source, ++index);
 			fprintf(fp, "generic static_type(%d)", a);
 			break;
 		}
@@ -455,7 +455,7 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		}
 		case OP_DEFER_REGISTER:
 		{
-			bc_Label* l = (bc_Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)bc_AtVector(source, ++index);
 			fprintf(fp, "defer enter(%d)", l->Cursor);
 			break;
 		}
@@ -482,19 +482,19 @@ int bc_FprintOpcode(FILE* fp, Vector* source, int index) {
 		//goto
 		case OP_GOTO:
 		{
-			bc_Label* l = (bc_Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)bc_AtVector(source, ++index);
 			fprintf(fp,"goto(%d)", l->Cursor);
 			break;
 		}
 		case OP_GOTO_IF_TRUE:
 		{
-			bc_Label* l = (bc_Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)bc_AtVector(source, ++index);
 			fprintf(fp,"goto if true(%d)", l->Cursor);
 			break;
 		}
 		case OP_GOTO_IF_FALSE:
 		{
-			bc_Label* l = (bc_Label*)AtVector(source, ++index);
+			bc_Label* l = (bc_Label*)bc_AtVector(source, ++index);
 			fprintf(fp,"goto if false(%d)", l->Cursor);
 			break;
 		}

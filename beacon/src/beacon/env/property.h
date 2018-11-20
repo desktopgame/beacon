@@ -20,7 +20,7 @@ struct bc_Object;
 
 typedef struct bc_Property {
 	bc_ModifierType Modifier;
-	StringView Name;
+	bc_StringView Name;
 	struct bc_Type* Parent;
 	struct bc_Field* SourceRef;
 	struct bc_GenericType* GType;
@@ -31,7 +31,7 @@ typedef struct bc_Property {
 } bc_Property;
 
 #define bc_NewProperty(namev) (bc_MallocProperty(namev, __FILE__, __LINE__))
-bc_Property* bc_MallocProperty(StringView namev, const char* filename, int lineno);
+bc_Property* bc_MallocProperty(bc_StringView namev, const char* filename, int lineno);
 
 void bc_DeleteProperty(bc_Property* self);
 #endif

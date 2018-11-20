@@ -9,6 +9,6 @@ bc_DeferContext* bc_NewDeferContext() {
 }
 
 void bc_DeleteDeferContext(bc_DeferContext* self) {
-	DeleteVector(self->VariableTable, VectorDeleterOfNull);
+	bc_DeleteVector(self->VariableTable, bc_VectorDeleterOfNull);
 	MEM_FREE(self);
 }

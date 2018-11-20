@@ -58,8 +58,8 @@ void CLILField(bc_ClassLoader* self, ILType* current, bc_AST* afield, bc_AccessL
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		bc_Panic(
 			BCERROR_INTERFACE_HAS_FIELD_T,
-			Ref2Str(current->Kind.Interface->Name),
-			Ref2Str(aaccess_name->Attr.StringVValue)
+			bc_Ref2Str(current->Kind.Interface->Name),
+			bc_Ref2Str(aaccess_name->Attr.StringVValue)
 		);
 		return;
 	}
@@ -75,7 +75,7 @@ void CLILField(bc_ClassLoader* self, ILType* current, bc_AST* afield, bc_AccessL
 	}
 	//重複する修飾子を検出
 	if(error) {
-		bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
+		bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, bc_Ref2Str(v->Name));
 	}
 }
 
@@ -84,7 +84,7 @@ void CLILProperty(bc_ClassLoader* self, ILType* current, bc_AST* aprop, bc_Acces
 	bc_AST* atypename = bc_AtAST(aprop, 1);
 	bc_AST* aset = bc_AtAST(aprop, 2);
 	bc_AST* aget = bc_AtAST(aprop, 3);
-	StringView propname = aprop->Attr.StringVValue;
+	bc_StringView propname = aprop->Attr.StringVValue;
 	ILProperty* ret = ILNewProperty(propname);
 	CLILGenericCache(atypename, ret->GCache);
 	if(bc_IsBlankAST(amod)) {
@@ -93,7 +93,7 @@ void CLILProperty(bc_ClassLoader* self, ILType* current, bc_AST* aprop, bc_Acces
 		bool err = false;
 		ret->Modifier = bc_ASTCastToModifier(amod, &err);
 		if(err) {
-			bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(ret->Name));
+			bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, bc_Ref2Str(ret->Name));
 		}
 	}
 	ret->Access = level;
@@ -101,7 +101,7 @@ void CLILProperty(bc_ClassLoader* self, ILType* current, bc_AST* aprop, bc_Acces
 	ret->Get = CLILProperty_body(self, current, aget, IL_PROPERTY_GET_T, level);
 	AddPropertyILType(current, ret);
 	if(ret->Set->IsShort != ret->Get->IsShort) {
-		bc_Panic(BCERROR_INVALID_PROPERTY_DECL_T, Ref2Str(current->Kind.Class->Name), Ref2Str(propname));
+		bc_Panic(BCERROR_INVALID_PROPERTY_DECL_T, bc_Ref2Str(current->Kind.Class->Name), bc_Ref2Str(propname));
 	}
 }
 
@@ -129,7 +129,7 @@ void CLILMethod(bc_ClassLoader* self, ILType* current, bc_AST* amethod, bc_Acces
 	AddMethodILType(current, v);
 	//重複する修飾子を検出
 	if(error) {
-		bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, Ref2Str(v->Name));
+		bc_Panic(BCERROR_OVERWRAP_MODIFIER_T, bc_Ref2Str(v->Name));
 	}
 }
 
@@ -143,7 +143,7 @@ void CLILConstructor(bc_ClassLoader* self, ILType* current, bc_AST* aconstructor
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		bc_Panic(
 			BCERROR_INTERFACE_HAS_CTOR_T,
-			Ref2Str(current->Kind.Interface->Name)
+			bc_Ref2Str(current->Kind.Interface->Name)
 		);
 		return;
 	}
@@ -159,7 +159,7 @@ void CLILConstructor(bc_ClassLoader* self, ILType* current, bc_AST* aconstructor
 	ilcons->Chain = ilchain;
 	CLILParameterList(self, ilcons->Parameters, aparams);
 	CLILBody(self, ilcons->Statements, abody);
-	PushVector(current->Kind.Class->Constructors, ilcons);
+	bc_PushVector(current->Kind.Class->Constructors, ilcons);
 }
 
 void CLILOperatorOverload(bc_ClassLoader* self, ILType* current, bc_AST* aopov, bc_AccessLevel level) {
@@ -172,7 +172,7 @@ void CLILOperatorOverload(bc_ClassLoader* self, ILType* current, bc_AST* aopov, 
 	if(current->Tag == ILTYPE_INTERFACE_T) {
 		bc_Panic(
 			BCERROR_INTERFACE_HAS_OPOV_T,
-			Ref2Str(current->Kind.Interface->Name),
+			bc_Ref2Str(current->Kind.Interface->Name),
 			bc_OperatorToString(ot)
 		);
 		return;
@@ -182,7 +182,7 @@ void CLILOperatorOverload(bc_ClassLoader* self, ILType* current, bc_AST* aopov, 
 	CLILParameterList(self, ilopov->Parameters, aparam_list);
 	CLILBody(self, ilopov->Statements, abody);
 	CLILGenericCache(areturn, ilopov->ReturnGCache);
-	PushVector(current->Kind.Class->OperatorOverloads, ilopov);
+	bc_PushVector(current->Kind.Class->OperatorOverloads, ilopov);
 }
 //private
 static ILPropertyBody* CLILProperty_body(bc_ClassLoader* self, ILType* current, bc_AST* abody, ILPropertyBodyTag tag, bc_AccessLevel level) {

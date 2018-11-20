@@ -22,9 +22,9 @@ struct bc_Constructor;
  * コンストラクタの呼び出しを表す要素.
  */
 typedef struct ILNewInstance {
-	Vector* Arguments;
+	bc_Vector* Arguments;
 	bc_FQCNCache* FQCNCache;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 //	GenericCache* fqcn;
 	bc_GenericType* InstanceGType;
 	struct bc_Constructor* Constructor;

@@ -4,11 +4,11 @@
 #include "../../vm/eval.h"
 
 JNIEXPORT void JNICALL Java_jp_koya_jbeacon_Beacon_nativeInit(JNIEnv * env, jclass cls) {
-	InitStringPool();
+	bc_InitStringPool();
 	bc_OpenScriptContext();
 }
 
 JNIEXPORT void JNICALL Java_jp_koya_jbeacon_Beacon_nativeDestroy(JNIEnv * env, jclass cls) {
 	bc_CloseScriptContext();
-	DestroyStringPool();
+	bc_DestroyStringPool();
 }

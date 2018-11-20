@@ -8,8 +8,8 @@
 #pragma warning(disable:4996)
 #endif
 static BCErrorID gGlobalPanic = BCERROR_NONE_T;
-static StringView gPanicFile = ZERO_VIEW;
-static StringView gLastMessage = ZERO_VIEW;
+static bc_StringView gPanicFile = BC_ZERO_VIEW;
+static bc_StringView gLastMessage = BC_ZERO_VIEW;
 static int gPanicLineNo = -1;
 static int gPanicColumn = -1;
 static void check_abort(bc_ScriptContext* sctx);
@@ -24,7 +24,7 @@ void bc_Panic(BCErrorID id, ...) {
 void bc_Vpanic(BCErrorID id, va_list ap) {
 	char* fmt = bc_Vfpanic(id, ap);
 	gGlobalPanic = id;
-	gLastMessage = InternString(fmt);
+	gLastMessage = bc_InternString(fmt);
 	bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
 	if(sctx->IsPrintError) {
 		fprintf(stderr, "%s", fmt);
@@ -348,35 +348,35 @@ char* bc_Vfpanic(BCErrorID id, va_list ap) {
 				return bc_Strdup("if shown this message, it compiler bug\n");
 			}
 	}
-	Buffer* sbuf = NewBuffer();
+	bc_Buffer* sbuf = bc_NewBuffer();
 	//メインメッセージを出力
 	char block[256] = {0};
 	vsprintf(block, fmt, ap);
-	AppendsBuffer(sbuf, block);
-	AppendBuffer(sbuf, '\n');
+	bc_AppendsBuffer(sbuf, block);
+	bc_AppendBuffer(sbuf, '\n');
 	//行番号など出力
 	sprintf(block, "file=%s line=%d column=%d\n",
-		Ref2Str(gPanicFile),
+		bc_Ref2Str(gPanicFile),
 		gPanicLineNo,
 		gPanicColumn
 	);
-	AppendsBuffer(sbuf, block);
-	return ReleaseBuffer(sbuf);
+	bc_AppendsBuffer(sbuf, block);
+	return bc_ReleaseBuffer(sbuf);
 }
 
 void bc_Recover() {
 	gGlobalPanic = BCERROR_NONE_T;
-	gPanicFile = ZERO_VIEW;
+	gPanicFile = BC_ZERO_VIEW;
 	gPanicLineNo = -1;
 	gPanicColumn = -1;
-	gLastMessage = ZERO_VIEW;
+	gLastMessage = BC_ZERO_VIEW;
 }
 
 void bc_SetPanicFile(const char* filename) {
 	if(filename == NULL) {
 		filename = "NULL";
 	}
-	gPanicFile = InternString(filename);
+	gPanicFile = bc_InternString(filename);
 }
 
 void bc_SetPanicLine(int lineno) {
@@ -387,7 +387,7 @@ void bc_SetPanicColumn(int column) {
 	gPanicColumn = column;
 }
 
-StringView bc_GetPanicMessage() {
+bc_StringView bc_GetPanicMessage() {
 	return gLastMessage;
 }
 

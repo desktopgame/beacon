@@ -26,9 +26,9 @@ typedef enum BoundInvokeTag {
 } BoundInvokeTag;
 
 typedef struct ILInvokeBound {
-	StringView Name;
-	Vector* TypeArgs;
-	Vector* Arguments;
+	bc_StringView Name;
+	bc_Vector* TypeArgs;
+	bc_Vector* Arguments;
 	union {
 		struct bc_Method* Method;
 		SubscriptDescriptor Subscript;
@@ -38,7 +38,7 @@ typedef struct ILInvokeBound {
 	BoundInvokeTag Tag;
 } ILInvokeBound;
 
-ILInvokeBound* NewILInvokeBound(StringView namev);
+ILInvokeBound* NewILInvokeBound(bc_StringView namev);
 
 void GenerateILInvokeBound(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx);
 

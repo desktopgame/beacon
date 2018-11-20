@@ -222,14 +222,14 @@ typedef struct bc_AST {
 		int IntValue;
 		double DoubleValue;
 		char CharValue;
-		StringView StringVValue;
+		bc_StringView StringVValue;
 		bc_AccessLevel AccessValue;
 		bc_ModifierType ModifierValue;
 		bc_OperatorType OperatorValue;
 	} Attr;
 	bc_ASTTag Tag;
 	int Lineno;
-	Vector* Children;
+	bc_Vector* Children;
 } bc_AST;
 
 /**
@@ -256,7 +256,7 @@ bc_AST* bc_MallocAST(bc_ASTTag tag, const char* filename, int lineno);
  * @param name
  * @return
  */
-bc_AST* bc_NewASTNamespacePath(StringView name);
+bc_AST* bc_NewASTNamespacePath(bc_StringView name);
 
 /**
  * 二つの名前空間を連結します.
@@ -264,7 +264,7 @@ bc_AST* bc_NewASTNamespacePath(StringView name);
  * @param name
  * @return
  */
-bc_AST* bc_NewASTNamespacePathList(bc_AST* aforward, StringView name);
+bc_AST* bc_NewASTNamespacePathList(bc_AST* aforward, bc_StringView name);
 
 /**
  * インポート先のファイルを表す要素を作成します.
@@ -311,7 +311,7 @@ bc_AST* bc_NewASTBlank();
  * @param str
  * @return
  */
-bc_AST* bc_NewASTIdentifier(StringView str);
+bc_AST* bc_NewASTIdentifier(bc_StringView str);
 
 /**
  * 識別子のリストを表す要素を作成します.
@@ -319,7 +319,7 @@ bc_AST* bc_NewASTIdentifier(StringView str);
  * @param aident_list
  * @return
  */
-bc_AST* bc_NewASTIdentifierList(StringView str, bc_AST* aident_list);
+bc_AST* bc_NewASTIdentifierList(bc_StringView str, bc_AST* aident_list);
 
 /**
  * 計算可能な要素だけで構成される文を作成します.

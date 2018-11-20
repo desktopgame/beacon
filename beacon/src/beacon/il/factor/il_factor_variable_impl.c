@@ -16,7 +16,7 @@
 static void ILVariable_check(ILVariable* self, bc_Enviroment* env, CallContext* cctx);
 static void ILVariable_check_instance(ILVariable* self, bc_Enviroment* env, CallContext* cctx);
 static void ILVariable_check_static(ILVariable* self, bc_Enviroment* env, CallContext* cctx);
-static void DeleteILFactor_typeargs(VectorItem item);
+static void DeleteILFactor_typeargs(bc_VectorItem item);
 
 ILFactor * WrapILVariable(ILVariable * self) {
 	ILFactor* ret = NewILFactor(ILFACTOR_VARIABLE_T);
@@ -27,7 +27,7 @@ ILFactor * WrapILVariable(ILVariable * self) {
 ILVariable * MallocILVariable(const char* filename, int lineno) {
 	ILVariable* ret = (ILVariable*)bc_MXMalloc(sizeof(ILVariable), filename, lineno);
 	ret->FQCN = bc_MallocFQCNCache(filename, lineno);
-	ret->TypeArgs = MallocVector(filename, lineno);
+	ret->TypeArgs = bc_MallocVector(filename, lineno);
 	ret->Type = ILVARIABLE_TYPE_UNDEFINED_T;
 	return ret;
 }
@@ -78,7 +78,7 @@ void DeleteILVariable(ILVariable * self) {
 		DeleteILVariableStatic(self->Kind.Static);
 	}
 	bc_DeleteFQCNCache(self->FQCN);
-	DeleteVector(self->TypeArgs, DeleteILFactor_typeargs);
+	bc_DeleteVector(self->TypeArgs, DeleteILFactor_typeargs);
 	MEM_FREE(self);
 }
 
@@ -128,7 +128,7 @@ static void ILVariable_check_static(ILVariable* self, bc_Enviroment* env, CallCo
 	self->Kind.Static = st;
 }
 
-static void DeleteILFactor_typeargs(VectorItem item) {
+static void DeleteILFactor_typeargs(bc_VectorItem item) {
 	ILTypeArgument* e = (ILTypeArgument*)item;
 	DeleteILTypeArgument(e);
 }

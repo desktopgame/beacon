@@ -9,16 +9,16 @@
 #include "../vm/vm.h"
 
 //proto
-static void delete_object(VectorItem item);
+static void delete_object(bc_VectorItem item);
 static void gc_clear(bc_Heap* self);
 static void gc_mark(bc_Heap* self);
 static void gc_sweep(bc_Heap* self);
-static void gc_delete(VectorItem item);
+static void gc_delete(bc_VectorItem item);
 
 
 bc_Heap * bc_NewHeap() {
 	bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
-	ret->Objects = NewVector();
+	ret->Objects = bc_NewVector();
 	ret->AcceptBlocking= 0;
 	ret->CollectBlocking = 0;
 	return ret;
@@ -39,7 +39,7 @@ void bc_AddHeap(bc_Heap * self, bc_Object * obj) {
 		obj->Paint = PAINT_ONEXIT_T;
 		return;
 	}
-	PushVector(self->Objects, obj);
+	bc_PushVector(self->Objects, obj);
 }
 
 void bc_CollectHeap(bc_Heap * self) {
@@ -52,21 +52,21 @@ void bc_CollectHeap(bc_Heap * self) {
 }
 
 void bc_IgnoreHeap(bc_Heap* self, bc_Object* o) {
-	int i = FindVector(self->Objects, o);
+	int i = bc_FindVector(self->Objects, o);
 	if(i >= 0) {
-		RemoveVector(self->Objects, i);
+		bc_RemoveVector(self->Objects, i);
 	}
 }
 
 void bc_DeleteHeap(bc_Heap * self) {
-	DeleteVector(self->Objects,delete_object);
+	bc_DeleteVector(self->Objects,delete_object);
 	MEM_FREE(self);
 }
 
 void bc_DumpHeap(bc_Heap* self) {
 	printf("heap dump:\n");
 	for(int i=0; i<self->Objects->Length; i++) {
-		bc_Object* a = AtVector(self->Objects, i);
+		bc_Object* a = bc_AtVector(self->Objects, i);
 		printf("    ");
 		bc_PrintGenericType(a->GType);
 		printf("\n");
@@ -74,14 +74,14 @@ void bc_DumpHeap(bc_Heap* self) {
 }
 
 //private
-static void delete_object(VectorItem item) {
+static void delete_object(bc_VectorItem item) {
 	bc_Object* e = (bc_Object*)item;
 	bc_DeleteObject(e);
 }
 
 static void gc_clear(bc_Heap* self) {
 	for (int i = 0; i < self->Objects->Length; i++) {
-		bc_Object* e = (bc_Object*)AtVector(self->Objects, i);
+		bc_Object* e = (bc_Object*)bc_AtVector(self->Objects, i);
 		if (e->Paint == PAINT_MARKED_T) {
 			e->Paint = PAINT_UNMARKED_T;
 		}
@@ -104,23 +104,23 @@ static void gc_mark(bc_Heap* self) {
 
 static void gc_sweep(bc_Heap* self) {
 	int sweep = 0;
-	Vector* recycle = NewVector();
-	Vector* garabage = NewVector();
+	bc_Vector* recycle = bc_NewVector();
+	bc_Vector* garabage = bc_NewVector();
 	for (int i = 0; i < self->Objects->Length; i++) {
-		bc_Object* e = (bc_Object*)AtVector(self->Objects, i);
+		bc_Object* e = (bc_Object*)bc_AtVector(self->Objects, i);
 		if (e->Paint == PAINT_UNMARKED_T) {
-			PushVector(garabage, e);
+			bc_PushVector(garabage, e);
 			sweep++;
 		} else {
-			PushVector(recycle, e);
+			bc_PushVector(recycle, e);
 		}
 	}
-	DeleteVector(self->Objects, VectorDeleterOfNull);
-	DeleteVector(garabage, gc_delete);
+	bc_DeleteVector(self->Objects, bc_VectorDeleterOfNull);
+	bc_DeleteVector(garabage, gc_delete);
 	self->Objects = recycle;
 }
 
-static void gc_delete(VectorItem item) {
+static void gc_delete(bc_VectorItem item) {
 	bc_Object* e = (bc_Object*)item;
 	bc_DeleteObject(e);
 }

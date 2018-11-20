@@ -26,14 +26,14 @@ void CLILGenericCache(struct bc_AST* afqcn, struct bc_GenericCache* dest);
  * @param dst
  * @param typename_list
  */
-void CLILTypenameList(struct bc_ClassLoader* self, Vector* dst, struct bc_AST* atypename_list);
+void CLILTypenameList(struct bc_ClassLoader* self, bc_Vector* dst, struct bc_AST* atypename_list);
 
 
-void CLILTypeParameter(struct bc_ClassLoader* self, struct bc_AST* asource, Vector* dest);
+void CLILTypeParameter(struct bc_ClassLoader* self, struct bc_AST* asource, bc_Vector* dest);
 
-void CLILTypeArgument(struct bc_ClassLoader* self, struct bc_AST* atype_args, Vector* dest);
+void CLILTypeArgument(struct bc_ClassLoader* self, struct bc_AST* atype_args, bc_Vector* dest);
 
-void CLILParameterList(struct bc_ClassLoader* self, Vector* list, struct bc_AST* asource);
+void CLILParameterList(struct bc_ClassLoader* self, bc_Vector* list, struct bc_AST* asource);
 
-void CLILArgumentList(struct bc_ClassLoader* self, Vector* list, struct bc_AST* asource);
+void CLILArgumentList(struct bc_ClassLoader* self, bc_Vector* list, struct bc_AST* asource);
 #endif

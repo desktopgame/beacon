@@ -52,9 +52,9 @@ void GenerateILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, CallContex
 		GenerateILFactor(self->Parent->Right, env, cctx);
 		GenerateILFactor(self->Parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_iopcode(self->Type));
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_iopcode(self->Type));
 		} else if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
-			bc_AddOpcodeBuf(env->Bytecode, (VectorItem)operator_to_dopcode(self->Type));
+			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_dopcode(self->Type));
 		} else {
 			assert(false);
 		}

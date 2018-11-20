@@ -18,14 +18,14 @@ FQCNCache * NewFQCNCache() {
 
 bc_FQCNCache* bc_MallocFQCNCache(const char* filename, int lineno) {
 	bc_FQCNCache* ret = (bc_FQCNCache*)bc_MXMalloc(sizeof(bc_FQCNCache), filename, lineno);
-	ret->Scope = MallocVector(filename, lineno);
+	ret->Scope = bc_MallocVector(filename, lineno);
 	ret->Name = 0;
 	return ret;
 }
 
 void bc_DumpFQCNCache(bc_FQCNCache * self, int depth) {
 	bc_Printi(depth);
-	printf("type %s", Ref2Str(self->Name));
+	printf("type %s", bc_Ref2Str(self->Name));
 	bc_Println();
 	//X::C.call() のような呼び出しなら
 	if (self->Scope->Length > 0) {
@@ -33,9 +33,9 @@ void bc_DumpFQCNCache(bc_FQCNCache * self, int depth) {
 		printf("scope");
 		bc_Println();
 		for (int i = 0; i < self->Scope->Length; i++) {
-			StringView sv = (StringView)AtVector(self->Scope, i);
+			bc_StringView sv = (bc_StringView)bc_AtVector(self->Scope, i);
 			bc_Printi(depth + 1);
-			printf("%s", Ref2Str(sv));
+			printf("%s", bc_Ref2Str(sv));
 			bc_Println();
 		}
 	}
@@ -47,13 +47,13 @@ void bc_PrintFQCNCache(bc_FQCNCache * self) {
 		return;
 	}
 	if (self->Scope->Length == 0) {
-		printf("%s", Ref2Str(self->Name));
+		printf("%s", bc_Ref2Str(self->Name));
 	} else {
 		for (int i = 0; i < self->Scope->Length; i++) {
-			printf("%s", Ref2Str((StringView)AtVector(self->Scope, i)));
+			printf("%s", bc_Ref2Str((bc_StringView)bc_AtVector(self->Scope, i)));
 			printf("::");
 		}
-		printf("%s", Ref2Str(self->Name));
+		printf("%s", bc_Ref2Str(self->Name));
 	}
 }
 
@@ -63,7 +63,7 @@ bc_Namespace * bc_GetScopeFQCN(bc_FQCNCache * self, bc_Namespace* current) {
 	}
 	bc_Namespace* top = NULL;
 	for (int i = 0; i < self->Scope->Length; i++) {
-		StringView ev = (StringView)AtVector(self->Scope, i);
+		bc_StringView ev = (bc_StringView)bc_AtVector(self->Scope, i);
 		if (top == NULL) {
 			top = bc_FindNamespaceFromRoot(ev);
 		} else {
@@ -92,24 +92,24 @@ bc_Class* bc_GetClassFQCN(bc_FQCNCache * self, bc_Namespace * current) {
 }
 
 char* bc_FQCNCacheToString(bc_FQCNCache* self) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	for(int i=0; i<self->Scope->Length; i++) {
-		StringView ev = (StringView)AtVector(self->Scope, i);
-		AppendsBuffer(sb, Ref2Str(ev));
+		bc_StringView ev = (bc_StringView)bc_AtVector(self->Scope, i);
+		bc_AppendsBuffer(sb, bc_Ref2Str(ev));
 		if(i == (self->Scope->Length - 1)) {
 			break;
 		}
-		AppendsBuffer(sb, "::");
+		bc_AppendsBuffer(sb, "::");
 	}
-	AppendsBuffer(sb, Ref2Str(self->Name));
-	return ReleaseBuffer(sb);
+	bc_AppendsBuffer(sb, bc_Ref2Str(self->Name));
+	return bc_ReleaseBuffer(sb);
 }
 
 void bc_DeleteFQCNCache(bc_FQCNCache * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteVector(self->Scope, VectorDeleterOfNull);
+	bc_DeleteVector(self->Scope, bc_VectorDeleterOfNull);
 	MEM_FREE(self);
 }
 
@@ -121,8 +121,8 @@ bool bc_EqualsFQCNCache(bc_FQCNCache* a, bc_FQCNCache* b) {
 		return true;
 	}
 	for(int i=0; i<a->Scope->Length; i++) {
-		StringView as = (StringView)AtVector(a->Scope, i);
-		StringView bs = (StringView)AtVector(b->Scope, i);
+		bc_StringView as = (bc_StringView)bc_AtVector(a->Scope, i);
+		bc_StringView bs = (bc_StringView)bc_AtVector(b->Scope, i);
 		if(as != bs) {
 			return false;
 		}
@@ -133,21 +133,21 @@ bool bc_EqualsFQCNCache(bc_FQCNCache* a, bc_FQCNCache* b) {
 static bc_Type* resolve_type(bc_FQCNCache * self, bc_Namespace* current) {
 	//Y形式
 	if (self->Scope->Length == 0) {
-		StringView namev = self->Name;
+		bc_StringView namev = self->Name;
 		//プリミティブ型はどこからでも参照できる
-		if (namev == InternString("Object")) {
+		if (namev == bc_InternString("Object")) {
 			return BC_TYPE_OBJECT;
-		} else if (namev == InternString("Int")) {
+		} else if (namev == bc_InternString("Int")) {
 			return BC_TYPE_INT;
-		} else if (namev == InternString("Double")) {
+		} else if (namev == bc_InternString("Double")) {
 			return BC_TYPE_DOUBLE;
-		} else if (namev == InternString("Char")) {
+		} else if (namev == bc_InternString("Char")) {
 			return BC_TYPE_CHAR;
-		} else if (namev == InternString("String")) {
+		} else if (namev == bc_InternString("String")) {
 			return BC_TYPE_STRING;
-		} else if (namev == InternString("Bool")) {
+		} else if (namev == bc_InternString("Bool")) {
 			return BC_TYPE_BOOL;
-		} else if (namev == InternString("Void")) {
+		} else if (namev == bc_InternString("Void")) {
 			return BC_TYPE_VOID;
 		}
 		if (current == NULL) {

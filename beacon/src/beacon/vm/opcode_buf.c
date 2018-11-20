@@ -5,25 +5,25 @@
 #include "../util/text.h"
 
 //proto
-static void delete_label(VectorItem item);
+static void delete_label(bc_VectorItem item);
 static void copy_buf(bc_OpcodeBuf* src, bc_OpcodeBuf* dst);
 
 bc_OpcodeBuf * bc_NewOpcodeBuf() {
 	bc_OpcodeBuf* ret = (bc_OpcodeBuf*)MEM_MALLOC(sizeof(bc_OpcodeBuf));
-	ret->LabelTable = NewVector();
-	ret->Instructions = NewVector();
+	ret->LabelTable = bc_NewVector();
+	ret->Instructions = bc_NewVector();
 	return ret;
 }
 
-int bc_AddOpcodeBuf(bc_OpcodeBuf * self, VectorItem item) {
+int bc_AddOpcodeBuf(bc_OpcodeBuf * self, bc_VectorItem item) {
 	int len = self->Instructions->Length;
-	PushVector(self->Instructions, item);
+	bc_PushVector(self->Instructions, item);
 	return len;
 }
 
 bc_Label * bc_AddLabelOpcodeBuf(bc_OpcodeBuf * self, int index) {
 	bc_Label* ret = bc_NewLabel(index);
-	PushVector(self->LabelTable, ret);
+	bc_PushVector(self->LabelTable, ret);
 	return ret;
 }
 
@@ -53,29 +53,29 @@ void bc_DeleteOpcodeBuf(bc_OpcodeBuf * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteVector(self->Instructions, VectorDeleterOfNull);
-	DeleteVector(self->LabelTable, delete_label);
+	bc_DeleteVector(self->Instructions, bc_VectorDeleterOfNull);
+	bc_DeleteVector(self->LabelTable, delete_label);
 	MEM_FREE(self);
 }
 
 
 //private
-static void delete_label(VectorItem item) {
+static void delete_label(bc_VectorItem item) {
 	bc_Label* l = (bc_Label*)item;
 	bc_DeleteLabel(l);
 }
 
 static void copy_buf(bc_OpcodeBuf* src, bc_OpcodeBuf* dst) {
 	for (int i = 0; i < src->Instructions->Length; i++) {
-		VectorItem e = AtVector(src->Instructions, i);
+		bc_VectorItem e = bc_AtVector(src->Instructions, i);
 		if (e == OP_GOTO ||
 			e == OP_GOTO_IF_FALSE ||
 			e == OP_GOTO_IF_TRUE) {
 
 			bc_AddOpcodeBuf(dst, e);
-			bc_Label* lb = (bc_Label*)AtVector(src->Instructions, ++i);
+			bc_Label* lb = (bc_Label*)bc_AtVector(src->Instructions, ++i);
 			bc_AddOpcodeBuf(dst, e);
-			PushVector(dst->LabelTable, lb);
+			bc_PushVector(dst->LabelTable, lb);
 		} else {
 			bc_AddOpcodeBuf(dst, e);
 		}

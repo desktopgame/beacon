@@ -29,8 +29,8 @@ typedef struct bc_Enviroment {
 	struct bc_ClassLoader* ContextRef;
 	bc_OpcodeBuf* Bytecode;
 	bc_SymbolTable* Symboles;
-	Vector* ConstantPool;
-	Vector* LineRangeTable;
+	bc_Vector* ConstantPool;
+	bc_Vector* LineRangeTable;
 } bc_Enviroment;
 
 /**
@@ -80,7 +80,7 @@ int bc_AddCCharEnviroment(bc_Enviroment* self, char c);
  * @param sv
  * @return
  */
-int bc_AddCStringEnviroment(bc_Enviroment* self, StringView sv);
+int bc_AddCStringEnviroment(bc_Enviroment* self, bc_StringView sv);
 
 /**
  * 指定位置のオペコード/オペランドを返します.
@@ -88,7 +88,7 @@ int bc_AddCStringEnviroment(bc_Enviroment* self, StringView sv);
  * @param index
  * @return
  */
-VectorItem bc_GetEnviromentSourceAt(bc_Enviroment* self, int index);
+bc_VectorItem bc_GetEnviromentSourceAt(bc_Enviroment* self, int index);
 
 /**
  * 指定位置の定数を返します.

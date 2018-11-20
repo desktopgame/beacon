@@ -19,7 +19,7 @@
 #include "../lib/bc_library_interface.h"
 
 //proto
-static void delete_self(VectorItem item);
+static void delete_self(bc_VectorItem item);
 static void mark_coroutine(bc_Object* self);
 //static Object* Object_malloc(ObjectTag type);
 //static Object* gObjectTrue = NULL;
@@ -30,7 +30,7 @@ static int gObjectCount = 0;
 void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]) {
 	#if DEBUG
 	assert(self->GType != NULL);
-	const char* name = Ref2Str(bc_GetTypeName(self->GType->CoreType));
+	const char* name = bc_Ref2Str(bc_GetTypeName(self->GType->CoreType));
 	#endif
 	switch(msg) {
 		case OBJECT_MSG_NONE:
@@ -39,11 +39,11 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc, bc
 			printf("%p", self);
 			break;
 		case OBJECT_MSG_DELETE:
-			DeleteVector(self->Fields, VectorDeleterOfNull);
+			bc_DeleteVector(self->Fields, bc_VectorDeleterOfNull);
 			MEM_FREE(self);
 			break;
 		case OBJECT_MSG_DESTROY:
-			DeleteVector(self->Fields, delete_self);
+			bc_DeleteVector(self->Fields, delete_self);
 			self->Fields = NULL;
 			bc_DeleteObject(self);
 			break;
@@ -52,7 +52,7 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc, bc
 			assert(argc == 1);
 			bc_ObjectPaint paint = argv[0].Int;
 			for (int i = 0; i < self->Fields->Length; i++) {
-				bc_Object* e = (bc_Object*)AtVector(self->Fields, i);
+				bc_Object* e = (bc_Object*)bc_AtVector(self->Fields, i);
 				bc_PaintAllObject(e, paint);
 			}
 			break;
@@ -67,7 +67,7 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc, bc
 			}
 			*/
 			bc_Object* ret = bc_NewObject(sizeof(bc_Object));
-			DeleteVector(ret->Fields, VectorDeleterOfNull);
+			bc_DeleteVector(ret->Fields, bc_VectorDeleterOfNull);
 			ret->GType = self->GType;
 			ret->VPtr = self->VPtr;
 			//ret->NativeSlotVec  = self->NativeSlotVec;
@@ -92,7 +92,7 @@ void* bc_NewObject(size_t object_size) {
 	ret->GType = BC_GENERIC_NULL;
 	ret->Paint = PAINT_UNMARKED_T;
 	ret->VPtr = BC_GENERIC_NULL->CoreType->Kind.Class->VT;
-	ret->Fields = NewVector();
+	ret->Fields = bc_NewVector();
 	ret->Flags = OBJECT_FLG_NONE;
 	bc_AddHeap(bc_GetHeap(), ret);
 	gObjectCount++;
@@ -115,8 +115,8 @@ bc_Object* bc_GetIntObject(int i) {
 		return bc_IInternScriptContext(ctx, i);
 		//return Object_int_new(i);
 	}
-	if(i < 0) { return (bc_Object*)AtVector(ctx->NegativeIntegerCacheList, (-i) - 1); }
-	return (bc_Object*)AtVector(ctx->PositiveIntegerCacheList, i);
+	if(i < 0) { return (bc_Object*)bc_AtVector(ctx->NegativeIntegerCacheList, (-i) - 1); }
+	return (bc_Object*)bc_AtVector(ctx->PositiveIntegerCacheList, i);
 }
 
 bc_Object * bc_GetBoolObject(bool b) {
@@ -336,13 +336,13 @@ bool bc_IsNullValue(bc_Object* self) {
 const char* bc_GetObjectName(bc_Object* self) {
 	const char* name = "NULL";
 	if(self->GType != NULL && self->GType->CoreType != NULL) {
-		name = Ref2Str(bc_GetTypeFullName(self->GType->CoreType));
+		name = bc_Ref2Str(bc_GetTypeFullName(self->GType->CoreType));
 	}
 	return name;
 }
 
 //private
-static void delete_self(VectorItem item) {
+static void delete_self(bc_VectorItem item) {
 	bc_Object* e = (bc_Object*)item;
 	bc_DestroyObject(e);
 }
@@ -358,6 +358,6 @@ static void mark_coroutine(bc_Object* self) {
 	bc_MarkAllObject(yctx->Source);
 	//コルーチンに渡された引数
 	for(int i=0; i<yctx->Parameters->Length; i++) {
-		bc_MarkAllObject(AtVector(yctx->Parameters, i));
+		bc_MarkAllObject(bc_AtVector(yctx->Parameters, i));
 	}
 }

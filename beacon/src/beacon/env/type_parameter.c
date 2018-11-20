@@ -6,9 +6,9 @@
 #include <assert.h>
 
 //proto
-static void delete_rule(VectorItem item);
+static void delete_rule(bc_VectorItem item);
 
-bc_TypeParameter * bc_NewTypeParameter(StringView name) {
+bc_TypeParameter * bc_NewTypeParameter(bc_StringView name) {
 	bc_TypeParameter* ret = (bc_TypeParameter*)MEM_MALLOC(sizeof(bc_TypeParameter));
 	ret->Name = name;
 	ret->Kind = TYPE_PARAMETER_KIND_DEFAULT_T;
@@ -34,7 +34,7 @@ bc_TypeParameter * bc_DupTypeParameter(ILTypeParameter * src) {
 	return ret;
 }
 
-void bc_DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
+void bc_DupTypeParameterList(bc_Vector* ilSource, bc_Vector* sgDest) {
 	assert(ilSource != NULL);
 	//これはILレベルの<K, V>の並びを
 	//SGレベルの<K, V> へ変換します。
@@ -44,27 +44,27 @@ void bc_DupTypeParameterList(Vector* ilSource, Vector* sgDest) {
 	//あとからルール一覧を対応づける必要があります。
 	//DupTypeParameterからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->Length; i++) {
-		ILTypeParameter* e = (ILTypeParameter*)AtVector(ilSource, i);
+		ILTypeParameter* e = (ILTypeParameter*)bc_AtVector(ilSource, i);
 		bc_TypeParameter* newTP = bc_DupTypeParameter(e);
-		PushVector(sgDest, newTP);
+		bc_PushVector(sgDest, newTP);
 		//TypeParameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);
 	}
 }
 
-void bc_PrintTypeParameter(Vector* v) {
+void bc_PrintTypeParameter(bc_Vector* v) {
 	//FIXME:il_TypeParameterからのコピペ
 	if (v->Length <= 0) {
 		return;
 	}
 	printf("[");
 	for (int i = 0; i < v->Length; i++) {
-		bc_TypeParameter* e = (bc_TypeParameter*)AtVector(v, i);
+		bc_TypeParameter* e = (bc_TypeParameter*)bc_AtVector(v, i);
 		if (e->Kind == TYPE_PARAMETER_KIND_IN_T) {
 			printf("in ");
 		} else if (e->Kind == TYPE_PARAMETER_KIND_OUT_T) {
 			printf("out ");
 		}
-		printf("%s", Ref2Str(e->Name));
+		printf("%s", bc_Ref2Str(e->Name));
 		if (i != v->Length - 1) {
 			printf(", ");
 		}
@@ -76,15 +76,15 @@ void bc_DeleteTypeParameter(bc_TypeParameter * self) {
 	MEM_FREE(self);
 }
 
-bool bc_IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
+bool bc_IsOverwrappedTypeParameterName(bc_Vector* tparameters, bc_StringView* namev) {
 	if(tparameters->Length <= 1) {
 		return false;
 	}
 	for(int i=0; i<tparameters->Length; i++) {
-		bc_TypeParameter* e = (bc_TypeParameter*)AtVector(tparameters, i);
+		bc_TypeParameter* e = (bc_TypeParameter*)bc_AtVector(tparameters, i);
 		for(int j=0; j<tparameters->Length; j++) {
 			if(i == j) { continue; }
-			bc_TypeParameter* e2 = (bc_TypeParameter*)AtVector(tparameters, j);
+			bc_TypeParameter* e2 = (bc_TypeParameter*)bc_AtVector(tparameters, j);
 			if(e->Name == e2->Name) {
 				(*namev) = e->Name;
 				return true;
@@ -95,7 +95,7 @@ bool bc_IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev) {
 }
 
 //private
-static void delete_rule(VectorItem item) {
+static void delete_rule(bc_VectorItem item) {
 //	TypeParameter_rule* e = (TypeParameter_rule*)item;
 //	TypeParameter_rule_delete(e);
 }

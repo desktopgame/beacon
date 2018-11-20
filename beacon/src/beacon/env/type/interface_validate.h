@@ -19,7 +19,7 @@ struct bc_Method;
  * @param out
  * @return
  */
-bool bc_IsMethodParameterValidInterface(struct bc_Interface* inter, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodParameterValidInterface(struct bc_Interface* inter, struct bc_Method** out_method, bc_StringView* out_name);
 
 /**
  * インターフェイスの型変数に重複する名前がないなら true.
@@ -27,7 +27,7 @@ bool bc_IsMethodParameterValidInterface(struct bc_Interface* inter, struct bc_Me
  * @param out_name
  * @return
  */
-bool bc_IsTypeParameterValidInterface(struct bc_Interface* inter, StringView* out_name);
+bool bc_IsTypeParameterValidInterface(struct bc_Interface* inter, bc_StringView* out_name);
 
 /**
  * メソッドの型変数に重複するものがないなら true.
@@ -36,6 +36,6 @@ bool bc_IsTypeParameterValidInterface(struct bc_Interface* inter, StringView* ou
  * @param out_name
  * @return
  */
-bool bc_IsMethodTypeParameterValidInterface(struct bc_Interface* inter, struct bc_Method** out_method, StringView* out_name);
+bool bc_IsMethodTypeParameterValidInterface(struct bc_Interface* inter, struct bc_Method** out_method, bc_StringView* out_name);
 
 #endif

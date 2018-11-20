@@ -21,7 +21,7 @@ struct CallContext;
 typedef struct bc_VTable {
 	//恐らくアップキャストのときに必要
 	struct bc_VTable* Parent;
-	Vector* Elements;
+	bc_Vector* Elements;
 } bc_VTable;
 
 /**

@@ -27,7 +27,7 @@ typedef enum bc_TypeParameterKind {
  * 型変数を表す構造体.
  */
 typedef struct bc_TypeParameter {
-	StringView Name;
+	bc_StringView Name;
 	bc_TypeParameterKind Kind;
 } bc_TypeParameter;
 /**
@@ -35,7 +35,7 @@ typedef struct bc_TypeParameter {
  * @param name
  * @return
  */
-bc_TypeParameter* bc_NewTypeParameter(StringView name);
+bc_TypeParameter* bc_NewTypeParameter(bc_StringView name);
 
 /**
  * ILから型変数を生成します.
@@ -49,13 +49,13 @@ bc_TypeParameter* bc_DupTypeParameter(struct ILTypeParameter* src);
  * @param ilSource
  * @param sgDest
  */
-void bc_DupTypeParameterList(Vector* ilSource, Vector* sgDest);
+void bc_DupTypeParameterList(bc_Vector* ilSource, bc_Vector* sgDest);
 
 /**
  * 型変数の一覧を出力します.
  * @param v
  */
-void bc_PrintTypeParameter(Vector* v);
+void bc_PrintTypeParameter(bc_Vector* v);
 
 /**
  * 型変数を解放します.
@@ -69,5 +69,5 @@ void bc_DeleteTypeParameter(bc_TypeParameter* self);
  * @param namev
  * @return
  */
-bool bc_IsOverwrappedTypeParameterName(Vector* tparameters, StringView* namev);
+bool bc_IsOverwrappedTypeParameterName(bc_Vector* tparameters, bc_StringView* namev);
 #endif // !SIGNAL_ENV_TYPE_PARAMETER_H

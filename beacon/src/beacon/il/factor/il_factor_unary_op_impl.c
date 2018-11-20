@@ -123,12 +123,12 @@ void DeleteILUnaryOp(ILUnaryOp * self) {
 }
 
 char* ILUnaryOpToString_simple(ILUnaryOp* self, bc_Enviroment* env) {
-	Buffer* sb = NewBuffer();
+	bc_Buffer* sb = bc_NewBuffer();
 	char* a = ILFactorToString(self->Arg, env);
-	AppendfBuffer(sb, "%s", bc_OperatorToString(self->Type));
-	AppendsBuffer(sb, a);
+	bc_AppendfBuffer(sb, "%s", bc_OperatorToString(self->Type));
+	bc_AppendsBuffer(sb, a);
 	MEM_FREE(a);
-	return ReleaseBuffer(sb);
+	return bc_ReleaseBuffer(sb);
 }
 
 int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx) {
@@ -136,7 +136,7 @@ int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx) {
 }
 
 int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, CallContext* cctx) {
-	Vector* args = NewVector();
+	bc_Vector* args = bc_NewVector();
 	bc_GenericType* gtype = EvalILFactor(receiver, env, cctx);
 	if(gtype->VirtualTypeIndex != -1) {
 		assert(false);
@@ -144,7 +144,7 @@ int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, bc_Enviroment*
 	bc_Class* lclass = BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype));
 	int temp = 0;
 	bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
-	DeleteVector(args, VectorDeleterOfNull);
+	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 	return temp;
 }
 

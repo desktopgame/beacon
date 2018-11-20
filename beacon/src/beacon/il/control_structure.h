@@ -12,8 +12,8 @@
 #include "../util/vector.h"
 
 typedef struct ControlStructure {
-	Vector* WhileStartTable;
-	Vector* WhileEndTable;
+	bc_Vector* WhileStartTable;
+	bc_Vector* WhileEndTable;
 } ControlStructure;
 
 void AllocControlStructure(ControlStructure* self);

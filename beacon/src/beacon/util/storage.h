@@ -1,7 +1,7 @@
 #ifndef BEACON_UTIL_STORAGE_H
 #define BEACON_UTIL_STORAGE_H
 #include <stdlib.h>
-
+/*
 typedef uintptr_t UnitTag;
 
 typedef struct Unit {
@@ -46,4 +46,5 @@ int GetUnitLineno(Unit* self);
 size_t GetKeepSize(Storage* self);
 
 void DeleteStorage(Storage* self);
+ */
 #endif

@@ -16,17 +16,17 @@
  * 可変長の文字列を格納する構造体.
  * 文字を格納する場合はこちらを使用します。
  */
-typedef struct Buffer {
+typedef struct bc_Buffer {
 	int Length;
 	int Capacity;
 	char* Text;
-} Buffer;
+} bc_Buffer;
 
 /**
  * 文字列バッファーを作成します.
  * @return
  */
-#define NewBuffer() (MallocBuffer(__FILE__, __LINE__))
+#define bc_NewBuffer() (bc_MallocBuffer(__FILE__, __LINE__))
 
 /**
  * 文字列バッファーを作成します.
@@ -34,14 +34,14 @@ typedef struct Buffer {
  * @param lineno
  * @return
  */
-Buffer* MallocBuffer(const char* filename, int lineno);
+bc_Buffer* bc_MallocBuffer(const char* filename, int lineno);
 
 /**
  * バッファーの最後に追記します.
  * @param self
  * @param c
  */
-void AppendBuffer(Buffer* self, char c);
+void bc_AppendBuffer(bc_Buffer* self, char c);
 
 /**
  * フォーマットして追記します.
@@ -49,7 +49,7 @@ void AppendBuffer(Buffer* self, char c);
  * @param fmt
  * @param ...
  */
-void AppendfBuffer(Buffer* self, const char* fmt, ...);
+void bc_AppendfBuffer(bc_Buffer* self, const char* fmt, ...);
 
 /**
  * フォーマットして追記します.
@@ -57,34 +57,34 @@ void AppendfBuffer(Buffer* self, const char* fmt, ...);
  * @param fmt
  * @param ap
  */
-void VappendfBuffer(Buffer* self, const char* fmt, va_list ap);
+void bc_VappendfBuffer(bc_Buffer* self, const char* fmt, va_list ap);
 
 /**
  * 全て追記します.
  * @param self
  * @param s
  */
-void AppendsBuffer(Buffer* self, const char* s);
+void bc_AppendsBuffer(bc_Buffer* self, const char* s);
 
 /**
  * shrink,freeを実行して文字列だけを返します.
  * @param self
  * @return
  */
-char* ReleaseBuffer(Buffer* self);
+char* bc_ReleaseBuffer(bc_Buffer* self);
 
 /**
  * バッファを拡張します.
  * @param self
  */
-void ReserveBuffer(Buffer* self);
+void bc_ReserveBuffer(bc_Buffer* self);
 
 /**
  * 将来の拡張のために確保された余分な領域を開放します.
  * また、末尾をゼロ文字にします。
  * @param self
  */
-void ShrinkBuffer(Buffer* self);
+void bc_ShrinkBuffer(bc_Buffer* self);
 
 /**
  * @param self
@@ -92,11 +92,11 @@ void ShrinkBuffer(Buffer* self);
  * @param len
  * @return
  */
-Buffer* IndentBuffer(Buffer* self, int lineIndex, int len);
+bc_Buffer* bc_IndentBuffer(bc_Buffer* self, int lineIndex, int len);
 
 /**
  * バッファーと中身を開放します.
  * @param self
  */
-void DeleteBuffer(Buffer* self);
+void bc_DeleteBuffer(bc_Buffer* self);
 #endif // !SIGNAL_UTIL_Buffer_H

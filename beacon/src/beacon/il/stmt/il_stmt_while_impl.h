@@ -18,7 +18,7 @@ struct bc_Enviroment;
 
 typedef struct ILWhile {
 	ILFactor* Condition;
-	Vector* Statements;
+	bc_Vector* Statements;
 } ILWhile;
 
 ILStatement* WrapILWhile(ILWhile* self);

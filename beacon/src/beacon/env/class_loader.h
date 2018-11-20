@@ -31,7 +31,7 @@ typedef struct bc_ClassLoader {
 	bc_ImportManager* ImportManager;
 	bc_ContentType Type;
 	bc_LinkType Link;
-	Vector* TypeCaches;
+	bc_Vector* TypeCaches;
 
 	struct bc_ClassLoader* Parent;
 	int Level;

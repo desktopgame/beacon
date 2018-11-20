@@ -24,15 +24,15 @@ struct bc_Field;
 typedef struct ILMemberOp {
 	ILFactor* Parent;
 	ILFactor* Source;
-	StringView Name;
-	Vector* TypeArgs;
+	bc_StringView Name;
+	bc_Vector* TypeArgs;
 	int Index;
 	struct bc_Field* Field;
 } ILMemberOp;
 
 ILFactor* WrapILMemberOp(ILMemberOp* self);
 
-ILMemberOp* NewILMemberOp(StringView namev);
+ILMemberOp* NewILMemberOp(bc_StringView namev);
 
 void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
 

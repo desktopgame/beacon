@@ -27,7 +27,7 @@ typedef enum ILTypeParameterTag {
  */
 typedef struct ILTypeParameter {
 	ILTypeParameterTag Tag;
-	StringView Name;
+	bc_StringView Name;
 } ILTypeParameter;
 
 /**
@@ -35,13 +35,13 @@ typedef struct ILTypeParameter {
  * @param name
  * @return
  */
-ILTypeParameter* NewILTypeParameter(StringView name);
+ILTypeParameter* NewILTypeParameter(bc_StringView name);
 
 /**
  * 型引数の一覧を出力します.
  * @param v<il_>
  */
-void PrintILTypeParameterList(Vector* v);
+void PrintILTypeParameterList(bc_Vector* v);
 
 /**
  * 型引数を解放します.

@@ -18,12 +18,12 @@
  * 文字列を表す要素.
  */
 typedef struct ILString {
-	StringView Value;
+	bc_StringView Value;
 } ILString;
 
 ILFactor* WrapILString(ILString* self);
 
-ILString* NewILString(StringView valuev);
+ILString* NewILString(bc_StringView valuev);
 
 void GenerateILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
 

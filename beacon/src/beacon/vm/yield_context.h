@@ -13,11 +13,11 @@
 struct bc_Object;
 
 typedef struct bc_YieldContext {
-	Vector* BackupVariableTable;
-	Vector* BackupValueStack;
-	Vector* VariableTable;
-	Vector* ValueStack;
-	Vector* Parameters;
+	bc_Vector* BackupVariableTable;
+	bc_Vector* BackupValueStack;
+	bc_Vector* VariableTable;
+	bc_Vector* ValueStack;
+	bc_Vector* Parameters;
 	struct bc_Object* Source;
 	struct bc_Object* Stock;
 	bool IsCached;

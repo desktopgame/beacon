@@ -87,5 +87,5 @@ void bc_UncaughtVM(bc_Frame* self, bc_Enviroment* env, int pc);
  * そのメッセージを返します.
  * @return
  */
-StringView bc_GetVMErrorMessage();
+bc_StringView bc_GetVMErrorMessage();
 #endif // !SIGNAL_VM_VM_H

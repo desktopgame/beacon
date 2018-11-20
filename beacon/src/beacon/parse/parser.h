@@ -32,7 +32,7 @@ typedef enum ParseResult {
  */
 typedef struct Parser {
 	bc_AST* Root;
-	Buffer* LiteralBuffer;
+	bc_Buffer* LiteralBuffer;
 	//char* source;
 	char* SourceName;
 	char* ErrorLineText;
@@ -42,7 +42,7 @@ typedef struct Parser {
 	YaccInputType InputType;
 	ParseResult Result;
 	int Lineno;
-	Vector* LinenoTable;
+	bc_Vector* LinenoTable;
 } Parser;
 
 /**

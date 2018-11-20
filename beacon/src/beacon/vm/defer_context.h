@@ -17,7 +17,7 @@
  */
 typedef struct bc_DeferContext {
 	bc_Label* Offset;
-	Vector* VariableTable;
+	bc_Vector* VariableTable;
 } bc_DeferContext;
 
 /**

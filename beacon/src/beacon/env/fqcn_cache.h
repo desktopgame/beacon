@@ -21,8 +21,8 @@ struct bc_Interface;
  * Full Quality Class Name を表す構造体.
  */
 typedef struct bc_FQCNCache {
-	Vector* Scope;
-	StringView Name;
+	bc_Vector* Scope;
+	bc_StringView Name;
 } bc_FQCNCache;
 
 /**

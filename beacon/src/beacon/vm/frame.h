@@ -20,15 +20,15 @@ struct bc_Type;
  */
 typedef struct bc_Frame {
 	//演算子や引数を記憶しておくためのスタックです
-	Vector* ValueStack;
+	bc_Vector* ValueStack;
 
 	//ローカル変数や引数を記憶しておくためのスタックです
 	//0番目は this であることが保証されます。
 	//その次には実引数が順番に並びます。
-	Vector* VariableTable;
+	bc_Vector* VariableTable;
 
 	//コンストラクタやメソッドの型引数を記憶するベクタ
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 
 	//このVMの子要素です。
 	//VMを分ける必要があるのは主に例外のためです。
@@ -38,7 +38,7 @@ typedef struct bc_Frame {
 	//つまりメインファイルとなります。
 	//子要素を記憶しておく必要があるのは、
 	//ガベージコレクションのためです。
-	Vector* Children;
+	bc_Vector* Children;
 
 	//親VMです.
 	//コンストラクタ/メソッドが終了した場合、
@@ -81,7 +81,7 @@ typedef struct bc_Frame {
 	int NativeThrowPos;
 
 	//deferによる強制実行を記録するベクタ
-	Vector* DeferList;
+	bc_Vector* DeferList;
 
 	//現在実行している強制実行
 	int DeferAt;

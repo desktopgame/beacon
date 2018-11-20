@@ -15,10 +15,10 @@ static bc_Class* exception_class();
 
 bc_Object * bc_NewSimpleException(bc_Frame* fr, const char* message) {
 	bc_Class* excClass = exception_class();
-	Vector* args = NewVector();
-	PushVector(args, NewString(message));
+	bc_Vector* args = bc_NewVector();
+	bc_PushVector(args, NewString(message));
 	bc_Object* e = bc_NewInstanceClass(excClass, fr, args, NULL);
-	DeleteVector(args, VectorDeleterOfNull);
+	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 	return e;
 }
 
@@ -37,7 +37,7 @@ bc_Object * bc_NewSimplefException(bc_Frame* fr, const char * message, ...) {
 //private
 static bc_Class* exception_class() {
 	bc_Namespace* lang = bc_GetLangNamespace();
-	bc_Class* excClass = bc_FindClassFromNamespace(lang, InternString("Exception"));
+	bc_Class* excClass = bc_FindClassFromNamespace(lang, bc_InternString("Exception"));
 	assert(excClass != NULL);
 	return excClass;
 }

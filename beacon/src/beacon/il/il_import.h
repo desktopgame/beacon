@@ -14,7 +14,7 @@
  * インポート宣言を表す要素.
  */
 typedef struct ILImport {
-	StringView Path;
+	bc_StringView Path;
 } ILImport;
 
 /**
@@ -23,7 +23,7 @@ typedef struct ILImport {
  * @param path
  * @return
  */
-ILImport* NewILImport(StringView path);
+ILImport* NewILImport(bc_StringView path);
 
 /**
  * このインポート宣言と包含された文字列を解放します.

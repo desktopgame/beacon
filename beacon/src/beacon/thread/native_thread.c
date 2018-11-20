@@ -4,14 +4,14 @@
 #include <assert.h>
 #include <string.h>
 
-static Vector* gThreads = NULL;
+static bc_Vector* gThreads = NULL;
 static NativeMutex gThreadsMTX;
 static void mount_thread(NativeThread* self);
 static void unmount_thread(NativeThread* self);
 
 void InitNativeThread() {
 	assert(gThreads == NULL);
-	gThreads = NewVector();
+	gThreads = bc_NewVector();
 	InitNativeMutex(&gThreadsMTX);
 	//最初のスレッドを作成
 	NativeThread* main = AllocNativeThread(NULL, NULL);
@@ -106,7 +106,7 @@ void DetachNativeThread(NativeThread** self) {
 }
 
 NativeThread* GetNativeThreadAt(int index) {
-	return (NativeThread*)AtVector(gThreads, index);
+	return (NativeThread*)bc_AtVector(gThreads, index);
 }
 
 NativeThread* GetMainThread() {
@@ -117,7 +117,7 @@ NativeThread* GetActiveThread() {
 	#if defined(USE_PTHREAD)
 	pthread_t self = pthread_self();
 	for(int i=0; i<gThreads->Length; i++) {
-		NativeThread* th = (NativeThread*)AtVector(gThreads, i);
+		NativeThread* th = (NativeThread*)bc_AtVector(gThreads, i);
 		pthread_t other = th->t;
 		if(pthread_equal(self, other)) {
 			return th;
@@ -134,10 +134,10 @@ int GetNativeThreadCount() {
 void DestroyNativeThread() {
 	assert(gThreads != NULL);
 	while(gThreads->Length > 0) {
-		NativeThread* nt = (NativeThread*)AtVector(gThreads, 0);
+		NativeThread* nt = (NativeThread*)bc_AtVector(gThreads, 0);
 		DetachNativeThread(&nt);
 	}
-	DeleteVector(gThreads, VectorDeleterOfNull);
+	bc_DeleteVector(gThreads, bc_VectorDeleterOfNull);
 	DestroyNativeMutex(&gThreadsMTX);
 }
 //private
@@ -145,7 +145,7 @@ static void mount_thread(NativeThread* self) {
 	NativeMutexEnter(&gThreadsMTX);
 	{
 		self->Index = gThreads->Length;
-		PushVector(gThreads, self);
+		bc_PushVector(gThreads, self);
 	}
 	NativeMutexExit(&gThreadsMTX);
 }
@@ -153,7 +153,7 @@ static void mount_thread(NativeThread* self) {
 static void unmount_thread(NativeThread* self) {
 	NativeMutexEnter(&gThreadsMTX);
 	{
-		RemoveVector(gThreads, FindVector(gThreads, self));
+		bc_RemoveVector(gThreads, bc_FindVector(gThreads, self));
 	}
 	NativeMutexExit(&gThreadsMTX);
 }

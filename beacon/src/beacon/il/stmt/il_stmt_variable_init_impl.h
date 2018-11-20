@@ -21,7 +21,7 @@ struct bc_SymbolEntry;
  */
 typedef struct ILVariableInit {
 	bc_GenericCache* GCache;
-	StringView Name;
+	bc_StringView Name;
 	ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
 } ILVariableInit;
@@ -38,7 +38,7 @@ ILStatement* WrapILVariableInit(ILVariableInit* self);
  * @param namev
  * @return
  */
-ILVariableInit* NewILVariableInit(StringView namev);
+ILVariableInit* NewILVariableInit(bc_StringView namev);
 
 /**
  * 変数の初期化を表す要素を出力します.

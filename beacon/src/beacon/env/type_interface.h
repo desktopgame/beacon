@@ -96,14 +96,14 @@ struct bc_GenericType* bc_InitGenericSelf(bc_Type* self, int counts);
  * @param self
  * @return
  */
-StringView bc_GetTypeName(bc_Type* self);
+bc_StringView bc_GetTypeName(bc_Type* self);
 
 /**
  * この型の完全な名前を返します.
  * @param self
  * @return
  */
-StringView bc_GetTypeFullName(bc_Type* self);
+bc_StringView bc_GetTypeFullName(bc_Type* self);
 
 /**
  * この型にフィールドを追加します.
@@ -136,7 +136,7 @@ void bc_AddMethodType(bc_Type* self, struct bc_Method* m);
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindMethodType(bc_Type* self, StringView namev, Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindMethodType(bc_Type* self, bc_StringView namev, bc_Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -148,7 +148,7 @@ struct bc_Method* bc_ILFindMethodType(bc_Type* self, StringView namev, Vector* a
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindSMethodType(bc_Type* self, StringView namev, Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindSMethodType(bc_Type* self, bc_StringView namev, bc_Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.
@@ -177,7 +177,7 @@ void bc_UnlinkType(bc_Type* self);
  * @param namev
  * @return
  */
-int bc_GetGenericIndexType(bc_Type* self, StringView namev);
+int bc_GetGenericIndexType(bc_Type* self, bc_StringView namev);
 
 /**
  * selfの継承クラスや実装インターフェイスに a が現れるなら型変数付きで返します.
@@ -196,14 +196,14 @@ struct bc_GenericType* bc_FindImplementType(bc_Type* self, bc_Type* a);
  * @param self
  * @return
  */
-Vector* bc_GetParameterListType(bc_Type* self);
+bc_Vector* bc_GetParameterListType(bc_Type* self);
 
 /**
  * この型の実装インターフェイスの一覧を返します.
  * @param self
  * @return
  */
-Vector* bc_GetImplementList(bc_Type* self);
+bc_Vector* bc_GetImplementList(bc_Type* self);
 
 /**
  * この型がクラス/インターフェイスを表すとき、

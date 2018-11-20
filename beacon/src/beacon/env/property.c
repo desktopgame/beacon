@@ -1,7 +1,7 @@
 #include "property.h"
 #include "../util/mem.h"
 
-bc_Property* bc_MallocProperty(StringView namev, const char* filename, int lineno) {
+bc_Property* bc_MallocProperty(bc_StringView namev, const char* filename, int lineno) {
 	bc_Property* ret = bc_MXMalloc(sizeof(bc_Property), filename, lineno);
 	ret->Name = namev;
 	ret->GType = NULL;

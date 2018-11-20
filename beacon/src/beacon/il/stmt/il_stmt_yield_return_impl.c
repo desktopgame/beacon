@@ -42,12 +42,12 @@ static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env
 		return;
 	}
 	bc_Method* m = GetMethodCContext(cctx);
-	bc_GenericType* arg = AtVector(m->ReturnGType->TypeArgs, 0);
+	bc_GenericType* arg = bc_AtVector(m->ReturnGType->TypeArgs, 0);
 	//戻り値の型に互換性がない
 	if(bc_DistanceGenericType(arg, EvalILFactor(self->Value, env, cctx), cctx) < 0) {
 		bc_Panic(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
-			Ref2Str(bc_GetTypeName(m->Parent)),
-			Ref2Str(m->Name)
+			bc_Ref2Str(bc_GetTypeName(m->Parent)),
+			bc_Ref2Str(m->Name)
 		);
 	}
 }

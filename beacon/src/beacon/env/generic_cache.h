@@ -24,7 +24,7 @@ struct bc_Namespace;
  */
 typedef struct bc_GenericCache {
 	bc_FQCNCache* FQCN;
-	Vector* TypeArgs;
+	bc_Vector* TypeArgs;
 } bc_GenericCache;
 
 /**
