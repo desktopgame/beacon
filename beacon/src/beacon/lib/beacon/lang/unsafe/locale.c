@@ -1,10 +1,10 @@
-#include "bc_locale.h"
+#include "locale.h"
 #include "../../../../env/namespace.h"
 #include "../../../../env/TYPE_IMPL.h"
 #include "../../../../util/string_buffer.h"
 #include "../../../../util/text.h"
 #include "../../../bc_library_impl.h"
-#include "../bc_string.h"
+#include "../string.h"
 #include <assert.h>
 #include <locale.h>
 
@@ -20,7 +20,7 @@ static void bc_locale_nativeGetNegativeSign(bc_Method* parent, bc_Frame* fr, bc_
 static void bc_locale_nativeGetIntFracDigits(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 static void bc_locale_nativeGetFracDigits(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
-void InitLocaleType() {
+void bc_InitLocaleType() {
 	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
 	bc_Type* localeType = bc_NewPreloadClass(bc_InternString("Locale"));
 	bc_Class* localeClass = BC_TYPE2CLASS(localeType);
@@ -38,7 +38,7 @@ void InitLocaleType() {
 	bc_DefineNativeMethodClass(localeClass, "nativeGetFracDigits", bc_locale_nativeGetFracDigits);
 }
 
-bc_Type* GetLocaleType() {
+bc_Type* bc_GetLocaleType() {
 	bc_Namespace* unsafe = bc_GetUnsafeNamespace();
 	return bc_FindTypeFromNamespace(unsafe, bc_InternString("Locale"));
 }
@@ -67,48 +67,48 @@ static void bc_locale_nativeSetLocale(bc_Method* parent, bc_Frame* fr, bc_Enviro
 			category = LC_TIME;
 			break;
 	}
-	const char* locale = GetRawString(localeObj)->Text;
+	const char* locale = bc_GetRawString(localeObj)->Text;
 	assert(setlocale(category, locale) != NULL);
 }
 
 static void bc_locale_nativeGetDecimalPoint(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->decimal_point));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->decimal_point));
 }
 
 static void bc_locale_nativeGetThousandsSep(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->thousands_sep));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->thousands_sep));
 }
 
 static void bc_locale_nativeGetIntCurrSymbol(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->int_curr_symbol));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->int_curr_symbol));
 }
 
 static void bc_locale_nativeGetCurrencySymbol(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->currency_symbol));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->currency_symbol));
 }
 
 static void bc_locale_nativeGetMonDecimalPoint(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->mon_decimal_point));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->mon_decimal_point));
 }
 
 static void bc_locale_nativeGetMonThousandsSep(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->mon_thousands_sep));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->mon_thousands_sep));
 }
 
 static void bc_locale_nativeGetPositiveSign(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->positive_sign));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->positive_sign));
 }
 
 static void bc_locale_nativeGetNegativeSign(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
 	struct lconv* lc = localeconv();
-	bc_PushVector(fr->ValueStack, NewString(lc->negative_sign));
+	bc_PushVector(fr->ValueStack, bc_NewString(lc->negative_sign));
 }
 
 static void bc_locale_nativeGetIntFracDigits(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {

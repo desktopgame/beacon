@@ -1,4 +1,4 @@
-#include "bc_object.h"
+#include "object.h"
 #include "../../bc_library_interface.h"
 #include "../../bc_library_impl.h"
 #include "../../../util/string_buffer.h"
@@ -14,7 +14,7 @@
 static void bc_Object_nativeToString(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 static void bc_Object_nativeReferenceEquals(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
-void InitObject() {
+void bc_InitObject() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	bc_Type* ObjectType = bc_NewPreloadClass(bc_InternString("Object"));
 	bc_Class* ObjectClass = BC_TYPE2CLASS(ObjectType);
@@ -23,7 +23,7 @@ void InitObject() {
 	bc_DefineNativeMethodClass(ObjectClass, "nativeReferenceEquals", bc_Object_nativeReferenceEquals);
 }
 
-bc_Type* GetObjectType() {
+bc_Type* bc_GetObjectType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	return bc_FindTypeFromNamespace(lang, bc_InternString("Object"));
 }
@@ -34,7 +34,7 @@ static void bc_Object_nativeToString(bc_Method* parent, bc_Frame* fr, bc_Envirom
 	bc_Buffer* sb = bc_NewBuffer();
 	bc_AppendfBuffer(sb, "%p", self);
 	char* str = bc_ReleaseBuffer(sb);
-	bc_Object* ret = (bc_Object*)NewString(str);
+	bc_Object* ret = (bc_Object*)bc_NewString(str);
 	bc_PushVector(fr->ValueStack, ret);
 	MEM_FREE(str);
 }

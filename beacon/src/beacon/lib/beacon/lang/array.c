@@ -52,7 +52,7 @@ bc_Object * bc_DynamicNewArray(struct bc_GenericType* gtype, int length, bc_Fram
 
 	bc_Vector* args = bc_NewVector();
 	bc_Vector* type_args = bc_NewVector();
-	bc_PushVector(args, NewInteger(length));
+	bc_PushVector(args, bc_NewInteger(length));
 	bc_PushVector(type_args, gtype);
 	bc_Object* ret = bc_NewInstanceClass(arrayType->Kind.Class, fr, args,type_args);
 	bc_DeleteVector(args, bc_VectorDeleterOfNull);

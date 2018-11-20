@@ -64,21 +64,21 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
 	bc_Namespace* lang = bc_AddNamespaceNamespace(beacon, bc_InternString("lang"));
 	bc_Namespace* unsafe = bc_AddNamespaceNamespace(beacon, bc_InternString("unsafe"));
 	bc_Namespace* placeholder = bc_CreateNamespaceAtRoot(bc_InternString("$placeholder"));
-	InitObject();
+	bc_InitObject();
 	bc_InitArray();
-	InitException();
-	InitInt();
-	InitDouble();
-	InitChar();
-	InitString();
-	InitBool();
-	InitVoid();
-	InitConsole();
-	InitNull();
-	InitFile();
-	InitSystem();
-	InitLocaleType();
-	InitTime();
+	bc_InitException();
+	bc_InitInt();
+	bc_InitDouble();
+	bc_InitChar();
+	bc_InitString();
+	bc_InitBool();
+	bc_InitVoid();
+	bc_InitConsole();
+	bc_InitNull();
+	bc_InitFile();
+	bc_InitSystem();
+	bc_InitLocaleType();
+	bc_InitTime();
 	//ブートストラップクラスローダー
 	self->BootstrapClassLoader = bc_NewClassLoader("bootstrap", CONTENT_LIB_T);
 	bc_SpecialLoadClassLoader(self->BootstrapClassLoader, "beacon/lang/Object.bc");
@@ -129,7 +129,7 @@ bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
 	bc_NumericMap* cell = bc_GetNumericMapCell(self->IntegerCacheMap, i);
 	he->AcceptBlocking++;
 	if(cell == NULL) {
-		bc_Object* obj = (bc_Object*)NewInteger(i);
+		bc_Object* obj = (bc_Object*)bc_NewInteger(i);
 		obj->Paint = PAINT_ONEXIT_T;
 		cell = bc_PutNumericMap(self->IntegerCacheMap, i, obj);
 	}
@@ -150,13 +150,13 @@ void bc_CacheScriptContext() {
 	   }
 	//正の数のキャッシュ
 	for(int i=0; i<100; i++) {
-		bc_Object* a = (bc_Object*)NewInteger(i);
+		bc_Object* a = (bc_Object*)bc_NewInteger(i);
 		bc_PushVector(self->PositiveIntegerCacheList, a);
 		a->Paint = PAINT_ONEXIT_T;
 	}
 	//負の数のキャッシュ
 	for(int i=1; i<10; i++) {
-		bc_Object* a = (bc_Object*)NewInteger(-i);
+		bc_Object* a = (bc_Object*)bc_NewInteger(-i);
 		bc_PushVector(self->NegativeIntegerCacheList, a);
 		a->Paint = PAINT_ONEXIT_T;
 	}

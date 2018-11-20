@@ -1,4 +1,4 @@
-#include "bc_string.h"
+#include "string.h"
 #include "../../bc_library_impl.h"
 #include "../../bc_library_interface.h"
 #include <assert.h>
@@ -8,8 +8,8 @@
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]);
 static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
-bc_Object* NewString(const char* str) {
-	bc_Object* ret = bc_ConstructObject(sizeof(String), BC_GENERIC_STRING);
+bc_Object* bc_NewString(const char* str) {
+	bc_Object* ret = bc_ConstructObject(sizeof(bc_String), BC_GENERIC_STRING);
 	ret->OnMessage = handle_obj_message;
 	//ret->u.string_ = s;
 	//ret->u.field_vec = NewVector();
@@ -33,7 +33,7 @@ bc_Object* NewString(const char* str) {
 		if(c == '\0') {
 			break;
 		}
-		bc_SetElementAt((bc_Object*)arr, i, (bc_Object*)NewChar(c));
+		bc_SetElementAt((bc_Object*)arr, i, (bc_Object*)bc_NewChar(c));
 		bc_AppendBuffer(sb, c);
 	}
 	bc_ShrinkBuffer(sb);
@@ -46,36 +46,36 @@ bc_Object* NewString(const char* str) {
 	//Array#lengthを埋める
 	temp = 0;
 	bc_FindFieldClass(arrType->Kind.Class, bc_InternString("length"), &temp);
-	bc_AssignVector(arr->Fields, temp, NewInteger(sb->Length));
+	bc_AssignVector(arr->Fields, temp, bc_NewInteger(sb->Length));
 	//C形式の文字列でも保存
 	//AssignVector(ret->NativeSlotVec, 0, sb);
-	((String*)ret)->Buffer = sb;
+	((bc_String*)ret)->Buffer = sb;
 	return (bc_Object*)ret;
 }
 
-void InitString() {
+void bc_InitString() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	bc_Type* stringType = bc_NewPreloadClass(bc_InternString("String"));
 	bc_Class* stringClass = BC_TYPE2CLASS(stringType);
-	stringType->AllocSize = sizeof(String);
+	stringType->AllocSize = sizeof(bc_String);
 	bc_AddTypeNamespace(lang, stringType);
 	bc_DefineNativeMethodClass(stringClass, "nativeInit", bc_string_nativeInit);
 }
 
-bc_Buffer * GetRawString(bc_Object* self) {
+bc_Buffer * bc_GetRawString(bc_Object* self) {
 	//VectorItem e = AtVector(self->NativeSlotVec, 0);
 	//assert(self->Tag == OBJECT_STRING_T);
-	return ((String*)self)->Buffer;
+	return ((bc_String*)self)->Buffer;
 }
 
-bc_Type* GetStringType() {
+bc_Type* bc_GetStringType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	return bc_FindTypeFromNamespace(lang, bc_InternString("String"));
 }
 
 //private
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc, bc_ObjectMessageArgument argv[]) {
-	String* str = ((String*)self);
+	bc_String* str = ((bc_String*)self);
 	if(msg == OBJECT_MSG_DELETE) {
 		bc_DeleteBuffer(str->Buffer); str->Buffer = NULL;
 		return bc_HandleObjectMessage(self, msg, argc, argv);
@@ -105,9 +105,9 @@ static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment*
 	for (int i = 0; i < charArr->Elements->Length; i++) {
 		bc_Object* e = (bc_Object*)bc_AtVector(charArr->Elements, i);
 		assert(bc_IsCharValue(e));
-		bc_AppendBuffer(sb, ((Char*)e)->Value);
+		bc_AppendBuffer(sb, ((bc_Char*)e)->Value);
 	}
 	//AssignVector(self->NativeSlotVec, 0, sb);
-	((String*)self)->Buffer = sb;
+	((bc_String*)self)->Buffer = sb;
 	//self->Tag = OBJECT_STRING_T;
 }

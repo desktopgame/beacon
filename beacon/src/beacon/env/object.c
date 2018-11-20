@@ -126,7 +126,7 @@ bc_Object * bc_GetBoolObject(bool b) {
 bc_Object * bc_GetTrueObject() {
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	if (ctx->True == NULL) {
-		ctx->True = (bc_Object*)NewBool(true);
+		ctx->True = (bc_Object*)bc_NewBool(true);
 		ctx->True->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->True;
@@ -135,7 +135,7 @@ bc_Object * bc_GetTrueObject() {
 bc_Object * bc_GetFalseObject() {
 	bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
 	if (ctx->False == NULL) {
-		ctx->False = (bc_Object*)NewBool(false);
+		ctx->False = (bc_Object*)bc_NewBool(false);
 		ctx->False->Paint = PAINT_ONEXIT_T;
 	}
 	return ctx->False;
@@ -251,35 +251,35 @@ void bc_DestroyObject(bc_Object* self) {
 
 int bc_ObjectToInt(bc_Object* self) {
 	assert(bc_IsIntValue(self));
-	return ((Integer*)self)->Value;
+	return ((bc_Integer*)self)->Value;
 }
 
 double bc_ObjectToDouble(bc_Object* self) {
 	assert(bc_IsDoubleValue(self));
-	return ((Double*)self)->Value;
+	return ((bc_Double*)self)->Value;
 }
 
 bool bc_ObjectToBool(bc_Object* self) {
 	assert(bc_IsBoolValue(self));
-	return ((Bool*)self)->Value;
+	return ((bc_Bool*)self)->Value;
 }
 
 char bc_ObjectToChar(bc_Object* self) {
 	assert(bc_IsCharValue(self));
-	return ((Char*)self)->Value;
+	return ((bc_Char*)self)->Value;
 }
 
 long bc_ObjectToLong(bc_Object* self) {
 	//assert(self->Tag == OBJECT_LONG_T);
-	return ((Long*)self)->Value;
+	return ((bc_Long*)self)->Value;
 }
 
 bc_Object* bc_IntToObject(int i) {
-	return (bc_Object*)NewInteger(i);
+	return (bc_Object*)bc_NewInteger(i);
 }
 
 bc_Object* bc_DoubleToObject(double d) {
-	return (bc_Object*)NewDouble(d);
+	return (bc_Object*)bc_NewDouble(d);
 }
 
 bc_Object* bc_BoolToObject(bool b) {
@@ -287,11 +287,11 @@ bc_Object* bc_BoolToObject(bool b) {
 }
 
 bc_Object* bc_CharToObject(char c) {
-	return (bc_Object*)NewChar(c);
+	return (bc_Object*)bc_NewChar(c);
 }
 
 bc_Object* bc_LongToObject(long l) {
-	return (bc_Object*)NewLong(l);
+	return (bc_Object*)bc_NewLong(l);
 }
 
 bc_Object* bc_GetDefaultObject(bc_GenericType* gt) {
@@ -299,11 +299,11 @@ bc_Object* bc_GetDefaultObject(bc_GenericType* gt) {
 	if (gt->CoreType == BC_TYPE_INT) {
 		a = bc_GetIntObject(0);
 	} else if (gt->CoreType == BC_TYPE_DOUBLE) {
-		a = (bc_Object*)NewDouble(0.0);
+		a = (bc_Object*)bc_NewDouble(0.0);
 	} else if (gt->CoreType == BC_TYPE_BOOL) {
 		a = bc_GetBoolObject(false);
 	} else if (gt->CoreType == BC_TYPE_CHAR) {
-		a = (bc_Object*)NewChar('\0');
+		a = (bc_Object*)bc_NewChar('\0');
 	}
 	assert(a->GType != NULL);
 	return a;

@@ -108,39 +108,39 @@ bc_Namespace* bc_GetPlaceholderNamespace() {
 }
 
 bc_Type* bc_GetObjectTypeNamespace() {
-	return GetObjectType();
+	return bc_GetObjectType();
 }
 
 bc_Type* bc_GetIntTypeNamespace() {
-	return GetIntType();
+	return bc_GetIntType();
 }
 
 bc_Type* bc_GetDoubleTypeNamespace() {
-	return GetDoubleType();
+	return bc_GetDoubleType();
 }
 
 bc_Type* bc_GetCharTypeNamespace() {
-	return GetCharType();
+	return bc_GetCharType();
 }
 
 bc_Type* bc_GetStringTypeNamespace() {
-	return GetStringType();
+	return bc_GetStringType();
 }
 
 bc_Type* bc_GetBoolTypeNamespace() {
-	return GetBoolType();
+	return bc_GetBoolType();
 }
 
 bc_Type* bc_GetVoidTypeNamespace() {
-	return GetVoidType();
+	return bc_GetVoidType();
 }
 
 bc_Type* bc_GetNullTypeNamespace() {
-	return GetNullType();
+	return bc_GetNullType();
 }
 
 bc_Type* bc_GetExceptionTypeNamespace() {
-	return GetExceptionType();
+	return bc_GetExceptionType();
 }
 
 void bc_UnlinkNamespace(bc_Namespace * self) {

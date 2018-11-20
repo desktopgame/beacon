@@ -16,7 +16,7 @@ static bc_Class* exception_class();
 bc_Object * bc_NewSimpleException(bc_Frame* fr, const char* message) {
 	bc_Class* excClass = exception_class();
 	bc_Vector* args = bc_NewVector();
-	bc_PushVector(args, NewString(message));
+	bc_PushVector(args, bc_NewString(message));
 	bc_Object* e = bc_NewInstanceClass(excClass, fr, args, NULL);
 	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 	return e;

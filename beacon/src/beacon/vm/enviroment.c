@@ -86,25 +86,25 @@ void bc_DumpEnviromentOp(bc_Enviroment * self, int depth) {
 
 int bc_AddCIntEnviroment(bc_Enviroment * self, int i) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (bc_Object*)NewInteger(i));
+	add_constant(self, (bc_Object*)bc_NewInteger(i));
 	return len;
 }
 
 int bc_AddCDoubleEnviroment(bc_Enviroment * self, double d) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (bc_Object*)NewDouble(d));
+	add_constant(self, (bc_Object*)bc_NewDouble(d));
 	return len;
 }
 
 int bc_AddCCharEnviroment(bc_Enviroment * self, char c) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (bc_Object*)NewChar(c));
+	add_constant(self, (bc_Object*)bc_NewChar(c));
 	return len;
 }
 
 int bc_AddCStringEnviroment(bc_Enviroment * self, bc_StringView sv) {
 	int len = self->ConstantPool->Length;
-	add_constant(self, (bc_Object*)NewString(bc_Ref2Str(sv)));
+	add_constant(self, (bc_Object*)bc_NewString(bc_Ref2Str(sv)));
 	return len;
 }
 

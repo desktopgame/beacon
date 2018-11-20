@@ -319,19 +319,19 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				break;
 				//double & double
 			case OP_DADD:
-				bc_PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) + SPD(self))));
+				bc_PushVector(self->ValueStack, NON_NULL(bc_NewDouble(SPD(self) + SPD(self))));
 				break;
 			case OP_DSUB:
-				bc_PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) - SPD(self))));
+				bc_PushVector(self->ValueStack, NON_NULL(bc_NewDouble(SPD(self) - SPD(self))));
 				break;
 			case OP_DMUL:
-				bc_PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) * SPD(self))));
+				bc_PushVector(self->ValueStack, NON_NULL(bc_NewDouble(SPD(self) * SPD(self))));
 				break;
 			case OP_DDIV:
-				bc_PushVector(self->ValueStack, NON_NULL(NewDouble(SPD(self) / SPD(self))));
+				bc_PushVector(self->ValueStack, NON_NULL(bc_NewDouble(SPD(self) / SPD(self))));
 				break;
 			case OP_DMOD:
-				bc_PushVector(self->ValueStack, NON_NULL(NewDouble((double)((int)SPD(self) % (int)SPD(self)))));
+				bc_PushVector(self->ValueStack, NON_NULL(bc_NewDouble((double)((int)SPD(self) % (int)SPD(self)))));
 				break;
 			case OP_DEQ:
 				bc_PushVector(self->ValueStack, NON_NULL(bc_GetBoolObject(SPD(self) == SPD(self))));
@@ -355,7 +355,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_PushVector(self->ValueStack, NON_NULL(bc_GetIntObject(-SPI(self))));
 				break;
 			case OP_DNEG:
-				bc_PushVector(self->ValueStack, NON_NULL(NewDouble(-SPD(self))));
+				bc_PushVector(self->ValueStack, NON_NULL(bc_NewDouble(-SPD(self))));
 				break;
 			case OP_BNOT:
 			{
@@ -1182,62 +1182,62 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 static int stack_topi(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
 	assert(bc_IsIntValue(ret));
-	return ((Integer*)ret)->Value;
+	return ((bc_Integer*)ret)->Value;
 }
 
 static double stack_topd(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
 	assert(bc_IsDoubleValue(ret));
-	return ((Double*)ret)->Value;
+	return ((bc_Double*)ret)->Value;
 }
 
 static char stack_topc(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
 	assert(bc_IsCharValue(ret));
-	return ((Char*)ret)->Value;
+	return ((bc_Char*)ret)->Value;
 }
 
 static char* stack_tops(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
 	bc_IsStringValue(ret);
-	return GetRawString(ret)->Text;
+	return bc_GetRawString(ret)->Text;
 }
 
 static bool stack_topb(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
 	assert(bc_IsBoolValue(ret));
-	return ((Bool*)ret)->Value;
+	return ((bc_Bool*)ret)->Value;
 }
 
 
 static int stack_popi(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
 	assert(bc_IsIntValue(ret));
-	return ((Integer*)ret)->Value;
+	return ((bc_Integer*)ret)->Value;
 }
 
 static double stack_popd(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
 	assert(bc_IsDoubleValue(ret));
-	return ((Double*)ret)->Value;
+	return ((bc_Double*)ret)->Value;
 }
 
 static char stack_popc(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
 	assert(bc_IsCharValue(ret));
-	return ((Char*)ret)->Value;
+	return ((bc_Char*)ret)->Value;
 }
 
 static char* stack_pops(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
 	assert(bc_IsStringValue(ret));
-	return GetRawString(ret)->Text;
+	return bc_GetRawString(ret)->Text;
 }
 
 static bool stack_popb(bc_Frame* self) {
 	bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
 	assert(bc_IsBoolValue(ret));
-	return ((Bool*)ret)->Value;
+	return ((bc_Bool*)ret)->Value;
 }
 
 static bool throw_npe(bc_Frame* self, bc_Object* o) {
@@ -1261,7 +1261,7 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
 	bc_FindFieldClass(exceptionT->Kind.Class, bc_InternString("message"), &temp);
 	bc_Object* ex = self->Exception;
 	bc_Object* msg = bc_AtVector(ex->Fields, temp);
-	bc_Buffer* cstr = ((String*)msg)->Buffer;
+	bc_Buffer* cstr = ((bc_String*)msg)->Buffer;
 
 	char block[256] = {0};
 	sprintf(block, "file: %s <%d>", env->ContextRef->FileName, line);
@@ -1286,7 +1286,7 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
 		bc_Object* e = bc_GetElementAt(stackTraceObj, i);
 		bc_Object* fileNameObj = bc_AtVector(e->Fields, fileNameptr);
 		bc_Object* lineIndexObj = bc_AtVector(e->Fields, lineIndexptr);
-		sprintf(block, "    @%d: %s\n", bc_ObjectToInt(lineIndexObj), GetRawString(fileNameObj)->Text);
+		sprintf(block, "    @%d: %s\n", bc_ObjectToInt(lineIndexObj), bc_GetRawString(fileNameObj)->Text);
 		bc_AppendsBuffer(sbuf, block);
 	}
 	return bc_ReleaseBuffer(sbuf);

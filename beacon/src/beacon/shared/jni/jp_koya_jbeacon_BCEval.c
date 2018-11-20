@@ -16,7 +16,7 @@
 #include "../../util/io.h"
 #include "../../util/mem.h"
 #include "../../parse/parser.h"
-#include "../../lib/beacon/lang/bc_string.h"
+#include "../../lib/beacon/lang/string.h"
 #include "../../error.h"
 
 static jobject bc_eval_string(JNIEnv * env, jclass cls, jstring str, jobject table, const char* filename, const char* source);
@@ -252,7 +252,7 @@ static void bc_write_symbol(JNIEnv* env, bc_NumericMap* nmap, bc_Frame* fr, jobj
 			(*env)->FatalError(env, "not found method: put");
 			return;
 		}
-		jstring str = (*env)->NewStringUTF(env, GetRawString(bcobj)->Text);
+		jstring str = (*env)->NewStringUTF(env, bc_GetRawString(bcobj)->Text);
 		(*env)->CallVoidMethod(env, target, symbol_table_put_id, keyj, str);
 	//それ以外の型はとりあえず BCObject へ変換する
 	} else {

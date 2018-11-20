@@ -14,15 +14,15 @@
 /**
  * 64bit整数を扱うオブジェクトです。
  */
-typedef struct Long {
+typedef struct bc_Long {
 	bc_Object Super;
 	long Value;
-} Long;
+} bc_Long;
 
 /**
  * 64bit整数を返します。
  * @param value
  * @return
  */
-struct bc_Object* NewLong(long value);
+struct bc_Object* bc_NewLong(long value);
 #endif

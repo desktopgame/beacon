@@ -1,4 +1,4 @@
-#include "bc_exception.h"
+#include "exception.h"
 #include "../../bc_library_interface.h"
 #include "../../bc_library_impl.h"
 #include "../../../env/constructor.h"
@@ -13,7 +13,7 @@
 //proto
 static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env);
 
-void InitException() {
+void bc_InitException() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	bc_Type* exceptionType = bc_NewPreloadClass(bc_InternString("Exception"));
 	bc_Class* exceptionClass = BC_TYPE2CLASS(exceptionType);
@@ -21,7 +21,7 @@ void InitException() {
 	bc_DefineNativeMethodClass(exceptionClass, "nativeInit", bc_exception_nativeInit);
 }
 
-bc_Type* GetExceptionType() {
+bc_Type* bc_GetExceptionType() {
 	bc_Namespace* lang = bc_GetLangNamespace();
 	return bc_FindTypeFromNamespace(lang, bc_InternString("Exception"));
 }
@@ -54,8 +54,8 @@ static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Envirome
 		//スタックトレースを作成
 		//assert(lineno >= 0);
 		bc_Vector* args = bc_NewVector();
-		bc_PushVector(args, NewString(temp->ContextRef->ContextRef->FileName));
-		bc_PushVector(args, NewInteger(lineno));
+		bc_PushVector(args, bc_NewString(temp->ContextRef->ContextRef->FileName));
+		bc_PushVector(args, bc_NewInteger(lineno));
 		bc_Object* trace = bc_NewInstanceClass(
 			stackTraceElementClass,
 			//ilctx,
