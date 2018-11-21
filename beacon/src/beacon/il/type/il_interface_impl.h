@@ -17,45 +17,45 @@ struct bc_ILMethod;
 /**
  * インターフェースを表す要素.
  */
-typedef struct ILInterface {
+typedef struct bc_ILInterface {
 	bc_StringView Name;
 	bc_Vector* Methods;
 	bc_Vector* Extends;
 	bc_Vector* TypeParameters;
 	bc_Vector* Properties;
-} ILInterface;
+} bc_ILInterface;
 
 /**
  * 型をスーパーセットにラップします.
  * @param self
  * @return
  */
-bc_ILType* WrapILInterface(ILInterface* self);
+bc_ILType* bc_WrapILInterface(bc_ILInterface* self);
 
 /**
  * インターフェースを作成します.
  * @param namev
  * @return
  */
-ILInterface* NewILInterface(bc_StringView namev);
+bc_ILInterface* bc_NewILInterface(bc_StringView namev);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void AddPropertyILInterface(ILInterface* self, struct bc_ILProperty* prop);
+void bc_AddPropertyILInterface(bc_ILInterface* self, struct bc_ILProperty* prop);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param method
  */
-void AddMethodILInterface(ILInterface* self, struct bc_ILMethod* method);
+void bc_AddMethodILInterface(bc_ILInterface* self, struct bc_ILMethod* method);
 
 /**
  * インターフェースを開放します.
  * @param self
  */
-void DeleteILInterface(ILInterface* self);
+void bc_DeleteILInterface(bc_ILInterface* self);
 #endif // !SIGNAL_IL_IL_INTERFACE_H

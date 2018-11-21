@@ -20,9 +20,9 @@ typedef enum bc_ILTypeTag {
 	ILTYPE_ENUM_T,
 } bc_ILTypeTag;
 
-struct ILClass;
-struct ILInterface;
-struct ILEnum;
+struct bc_ILClass;
+struct bc_ILInterface;
+struct bc_ILEnum;
 struct bc_ILField;
 struct bc_ILMethod;
 struct bc_ILProperty;
@@ -34,9 +34,9 @@ struct bc_ILConstructor;
 typedef struct bc_ILType {
 	bc_ILTypeTag Tag;
 	union {
-		struct ILClass* Class;
-		struct ILInterface* Interface;
-		struct ILEnum* Enum;
+		struct bc_ILClass* Class;
+		struct bc_ILInterface* Interface;
+		struct bc_ILEnum* Enum;
 	} Kind;
 } bc_ILType;
 

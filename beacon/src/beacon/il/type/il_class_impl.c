@@ -20,15 +20,15 @@ static void ILClass_DeleteTypeParameter(bc_VectorItem item);
 static void DeleteILClass_operator_overload(bc_VectorItem item);
 static void ILClass_prop_delete(bc_VectorItem item );
 
-bc_ILType * WrapILClass(ILClass * self) {
+bc_ILType * bc_WrapILClass(bc_ILClass * self) {
 	bc_ILType* ret = bc_NewILType();
 	ret->Tag = ILTYPE_CLASS_T;
 	ret->Kind.Class = self;
 	return ret;
 }
 
-ILClass* NewILClass(bc_StringView namev) {
-	ILClass* ret = (ILClass*)MEM_MALLOC(sizeof(ILClass));
+bc_ILClass* bc_NewILClass(bc_StringView namev) {
+	bc_ILClass* ret = (bc_ILClass*)MEM_MALLOC(sizeof(bc_ILClass));
 	ret->Name = namev;
 	ret->Extends = bc_NewVector();
 	ret->Fields = bc_NewVector();
@@ -44,7 +44,7 @@ ILClass* NewILClass(bc_StringView namev) {
 	return ret;
 }
 
-void AddFieldILClass(ILClass * self, bc_ILField * f) {
+void bc_AddFieldILClass(bc_ILClass * self, bc_ILField * f) {
 	if (bc_IsStaticModifier(f->Modifier)) {
 		bc_PushVector(self->StaticFields, f);
 	} else {
@@ -52,7 +52,7 @@ void AddFieldILClass(ILClass * self, bc_ILField * f) {
 	}
 }
 
-void AddPropertyILClass(ILClass* self, bc_ILProperty* prop) {
+void bc_AddPropertyILClass(bc_ILClass* self, bc_ILProperty* prop) {
 	if(bc_IsStaticModifier(prop->Modifier)) {
 		bc_PushVector(self->StaticProperties, prop);
 	} else {
@@ -60,7 +60,7 @@ void AddPropertyILClass(ILClass* self, bc_ILProperty* prop) {
 	}
 }
 
-void AddMethodILClass(ILClass * self, bc_ILMethod * m) {
+void bc_AddMethodILClass(bc_ILClass * self, bc_ILMethod * m) {
 	if (bc_IsStaticModifier(m->Modifier)) {
 		bc_PushVector(self->StaticMethods, m);
 	} else {
@@ -68,7 +68,7 @@ void AddMethodILClass(ILClass * self, bc_ILMethod * m) {
 	}
 }
 
-void DeleteILClass(ILClass * self) {
+void bc_DeleteILClass(bc_ILClass * self) {
 	if (self == NULL) {
 		return;
 	}

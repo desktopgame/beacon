@@ -91,7 +91,7 @@ static void class_loader_ilload_Namespacebody(bc_ClassLoader* self, bc_ILNamespa
  */
 static void class_loader_ilload_abstract_class(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl);
 static void class_loader_ilload_class(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl);
-static ILClass* class_loader_ilload_classImpl(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl);
+static bc_ILClass* class_loader_ilload_classImpl(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl);
 static void class_loader_ilload_interface(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* ainterface_decl);
 static void class_loader_ilload_enum(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aenum_decl);
 
@@ -235,22 +235,22 @@ static void class_loader_ilload_Namespacebody(bc_ClassLoader* self, bc_ILNamespa
 
 static void class_loader_ilload_abstract_class(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_ABSTRACT_CLASS_DECL_T);
-	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
+	bc_ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
 	ilc->IsAbstract = true;
 }
 
 static void class_loader_ilload_class(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl) {
 	assert(aclass_decl->Tag == AST_CLASS_DECL_T);
-	ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
+	bc_ILClass* ilc = class_loader_ilload_classImpl(self, current, aclass_decl);
 	ilc->IsAbstract = false;
 }
 
-static ILClass* class_loader_ilload_classImpl(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl) {
+static bc_ILClass* class_loader_ilload_classImpl(bc_ClassLoader* self, bc_ILNamespace* current, bc_AST* aclass_decl) {
 	bc_AST* atypename = bc_FirstAST(aclass_decl);
 	bc_AST* aextend_list = bc_SecondAST(aclass_decl);
 	bc_AST* amember_tree = bc_AtAST(aclass_decl, 2);
-	ILClass* ilclassz = NewILClass(atypename->Attr.StringVValue);
-	bc_ILType* iltype = WrapILClass(ilclassz);
+	bc_ILClass* ilclassz = bc_NewILClass(atypename->Attr.StringVValue);
+	bc_ILType* iltype = bc_WrapILClass(ilclassz);
 	//class Foo<A, B>
 	CLILTypeParameter(self, bc_FirstAST(atypename), ilclassz->TypeParameters);
 	//class Foo : X, Y 
@@ -269,8 +269,8 @@ static void class_loader_ilload_interface(bc_ClassLoader* self, bc_ILNamespace* 
 	bc_AST* atypename = bc_FirstAST(ainterface_decl);
 	bc_AST* aextends_list = bc_SecondAST(ainterface_decl);
 	bc_AST* amember_tree = bc_AtAST(ainterface_decl, 2);
-	ILInterface* ilinter = NewILInterface(atypename->Attr.StringVValue);
-	bc_ILType* iltype = WrapILInterface(ilinter);
+	bc_ILInterface* ilinter = bc_NewILInterface(atypename->Attr.StringVValue);
+	bc_ILType* iltype = bc_WrapILInterface(ilinter);
 	//interface Foo<A, B>
 	CLILTypeParameter(self, bc_FirstAST(atypename), ilinter->TypeParameters);
 	//interface Foo : XXX, YYY, CCC
@@ -286,9 +286,9 @@ static void class_loader_ilload_interface(bc_ClassLoader* self, bc_ILNamespace* 
 static void class_loader_ilload_enum(bc_ClassLoader * self, bc_ILNamespace * current, bc_AST* aenum_decl) {
 	assert(aenum_decl->Tag == AST_ENUM_DECL_T);
 	bc_AST* aname_list = bc_FirstAST(aenum_decl);
-	ILEnum* ilenum = NewILEnum(aenum_decl->Attr.StringVValue);
+	bc_ILEnum* ilenum = bc_NewILEnum(aenum_decl->Attr.StringVValue);
 	class_loader_ilload_identifier_list(self, ilenum->Items, aname_list);
-	bc_PushVector(current->TypeList, WrapILEnum(ilenum));
+	bc_PushVector(current->TypeList, bc_WrapILEnum(ilenum));
 }
 
 static void class_loader_ilload_identifier_list(bc_ClassLoader * self, bc_Vector * list, bc_AST* asource) {

@@ -159,7 +159,7 @@ static void CLBC_type_list(bc_ClassLoader* self, bc_Vector* iltype_list, bc_Name
 static void CLBC_enum(bc_ClassLoader * self, bc_ILType * iltype, bc_Namespace * parent) {
 	bc_CL_ERROR(self);
 	assert(iltype->Tag == ILTYPE_ENUM_T);
-	ILEnum* ilenum = iltype->Kind.Enum;
+	bc_ILEnum* ilenum = iltype->Kind.Enum;
 	bc_Type* tp = CLBC_get_or_load_enum(parent, iltype);
 	bc_CL_ERROR(self);
 	bc_Class* cls = BC_TYPE2CLASS(tp);

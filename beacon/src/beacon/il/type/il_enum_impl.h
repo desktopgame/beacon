@@ -14,14 +14,14 @@
 #include "../../util/string_pool.h"
 #include "../il_type_interface.h"
 
-typedef struct ILEnum {
+typedef struct bc_ILEnum {
 	bc_StringView Name;
 	bc_Vector* Items;
-} ILEnum;
+} bc_ILEnum;
 
-bc_ILType* WrapILEnum(ILEnum* self);
+bc_ILType* bc_WrapILEnum(bc_ILEnum* self);
 
-ILEnum* NewILEnum(bc_StringView namev);
+bc_ILEnum* bc_NewILEnum(bc_StringView namev);
 
-void DeleteILEnum(ILEnum* self);
+void bc_DeleteILEnum(bc_ILEnum* self);
 #endif // !SIGNAL_IL_IL_ENUM_H

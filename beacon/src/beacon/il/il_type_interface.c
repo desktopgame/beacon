@@ -40,33 +40,33 @@ void bc_AddConstructorILType(bc_ILType * self, bc_ILConstructor * ctor) {
 void bc_AddFieldILType(bc_ILType * self, bc_ILField * field) {
 	assert(self->Tag == ILTYPE_CLASS_T);
 	if (self->Tag == ILTYPE_CLASS_T) {
-		AddFieldILClass(self->Kind.Class, field);
+		bc_AddFieldILClass(self->Kind.Class, field);
 	}
 }
 
 void bc_AddPropertyILType(bc_ILType* self, bc_ILProperty* prop) {
 	if (self->Tag == ILTYPE_CLASS_T) {
-		AddPropertyILClass(self->Kind.Class, prop);
+		bc_AddPropertyILClass(self->Kind.Class, prop);
 	} else if(self->Tag == ILTYPE_INTERFACE_T) {
-		AddPropertyILInterface(self->Kind.Interface, prop);
+		bc_AddPropertyILInterface(self->Kind.Interface, prop);
 	}
 }
 
 void bc_AddMethodILType(bc_ILType * self, bc_ILMethod * method) {
 	if (self->Tag == ILTYPE_CLASS_T) {
-		AddMethodILClass(self->Kind.Class, method);
+		bc_AddMethodILClass(self->Kind.Class, method);
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
-		AddMethodILInterface(self->Kind.Interface, method);
+		bc_AddMethodILInterface(self->Kind.Interface, method);
 	}
 }
 
 void bc_DeleteILType(bc_ILType * self) {
 	if (self->Tag == ILTYPE_CLASS_T) {
-		DeleteILClass(self->Kind.Class);
+		bc_DeleteILClass(self->Kind.Class);
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
-		DeleteILInterface(self->Kind.Interface);
+		bc_DeleteILInterface(self->Kind.Interface);
 	} else if(self->Tag == ILTYPE_ENUM_T) {
-		DeleteILEnum(self->Kind.Enum);
+		bc_DeleteILEnum(self->Kind.Enum);
 	}
 	MEM_FREE(self);
 }
