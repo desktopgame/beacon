@@ -20,8 +20,8 @@ static void ILClass_DeleteTypeParameter(bc_VectorItem item);
 static void DeleteILClass_operator_overload(bc_VectorItem item);
 static void ILClass_prop_delete(bc_VectorItem item );
 
-ILType * WrapILClass(ILClass * self) {
-	ILType* ret = NewILType();
+bc_ILType * WrapILClass(ILClass * self) {
+	bc_ILType* ret = bc_NewILType();
 	ret->Tag = ILTYPE_CLASS_T;
 	ret->Kind.Class = self;
 	return ret;
@@ -44,7 +44,7 @@ ILClass* NewILClass(bc_StringView namev) {
 	return ret;
 }
 
-void AddFieldILClass(ILClass * self, ILField * f) {
+void AddFieldILClass(ILClass * self, bc_ILField * f) {
 	if (bc_IsStaticModifier(f->Modifier)) {
 		bc_PushVector(self->StaticFields, f);
 	} else {
@@ -52,7 +52,7 @@ void AddFieldILClass(ILClass * self, ILField * f) {
 	}
 }
 
-void AddPropertyILClass(ILClass* self, ILProperty* prop) {
+void AddPropertyILClass(ILClass* self, bc_ILProperty* prop) {
 	if(bc_IsStaticModifier(prop->Modifier)) {
 		bc_PushVector(self->StaticProperties, prop);
 	} else {
@@ -60,7 +60,7 @@ void AddPropertyILClass(ILClass* self, ILProperty* prop) {
 	}
 }
 
-void AddMethodILClass(ILClass * self, ILMethod * m) {
+void AddMethodILClass(ILClass * self, bc_ILMethod * m) {
 	if (bc_IsStaticModifier(m->Modifier)) {
 		bc_PushVector(self->StaticMethods, m);
 	} else {
@@ -89,18 +89,18 @@ void DeleteILClass(ILClass * self) {
 
 //private
 static void ILClass_DeleteField(bc_VectorItem item) {
-	ILField* e = (ILField*)item;
-	DeleteILField(e);
+	bc_ILField* e = (bc_ILField*)item;
+	bc_DeleteILField(e);
 }
 
 static void ILClass_DeleteMethod(bc_VectorItem item) {
-	ILMethod* e = (ILMethod*)item;
-	DeleteILMethod(e);
+	bc_ILMethod* e = (bc_ILMethod*)item;
+	bc_DeleteILMethod(e);
 }
 
 static void ILClass_ctor_delete(bc_VectorItem item) {
-	ILConstructor* e = (ILConstructor*)item;
-	DeleteILConstructor(e);
+	bc_ILConstructor* e = (bc_ILConstructor*)item;
+	bc_DeleteILConstructor(e);
 }
 
 static void ILClass_extend_delete(bc_VectorItem item) {
@@ -111,16 +111,16 @@ static void ILClass_extend_delete(bc_VectorItem item) {
 }
 
 static void ILClass_DeleteTypeParameter(bc_VectorItem item) {
-	ILTypeParameter* e = (ILTypeParameter*)item;
-	DeleteILTypeParameter(e);
+	bc_ILTypeParameter* e = (bc_ILTypeParameter*)item;
+	bc_DeleteILTypeParameter(e);
 }
 
 static void DeleteILClass_operator_overload(bc_VectorItem item) {
-	ILOperatorOverload* e = (ILOperatorOverload*)item;
-	DeleteILOperatorOverload(e);
+	bc_ILOperatorOverload* e = (bc_ILOperatorOverload*)item;
+	bc_DeleteILOperatorOverload(e);
 }
 
 static void ILClass_prop_delete(bc_VectorItem item ) {
-	ILProperty* e = (ILProperty*)item;
-	DeleteILProperty(e);
+	bc_ILProperty* e = (bc_ILProperty*)item;
+	bc_DeleteILProperty(e);
 }

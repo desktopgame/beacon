@@ -27,19 +27,19 @@ typedef struct ILCatch {
 	bc_Vector* Statements;
 } ILCatch;
 
-ILStatement* WrapILTry(ILTry* self);
+bc_ILStatement* WrapILTry(ILTry* self);
 
 ILTry* NewILTry();
 
 ILCatch* NewILCatch(bc_StringView namev);
 
-void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILTry(ILTry* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILCatch(ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILTry(ILTry* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILCatch(ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILCatch(ILCatch* self);
 

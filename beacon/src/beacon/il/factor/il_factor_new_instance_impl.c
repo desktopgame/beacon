@@ -16,11 +16,11 @@
 
 //proto
 static void DeleteILNewInstance_typearg(bc_VectorItem item);
-static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx);
+static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, bc_CallContext* cctx);
 static void il_Factor_new_instace_delete_arg(bc_VectorItem item);
 
-ILFactor * WrapILNewInstance(ILNewInstance * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_NEW_INSTANCE_T);
+bc_ILFactor * WrapILNewInstance(ILNewInstance * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_NEW_INSTANCE_T);
 	ret->Kind.NewInstance = self;
 	return ret;
 }
@@ -36,18 +36,18 @@ ILNewInstance * NewILNewInstance() {
 	return ret;
 }
 
-void GenerateILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILNewInstance(ILNewInstance * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	for(int i=0; i<self->TypeArgs->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
+		bc_ILTypeArgument* e = (bc_ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
 		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	//実引数を全てスタックへ
 	for (int i = 0; i < self->Arguments->Length; i++) {
-		ILArgument* ilarg = (ILArgument*)bc_AtVector(self->Arguments, i);
-		GenerateILFactor(ilarg->Factor, env, cctx);
+		bc_ILArgument* ilarg = (bc_ILArgument*)bc_AtVector(self->Arguments, i);
+		bc_GenerateILFactor(ilarg->Factor, env, cctx);
 		if(bc_GetLastPanic()) {
 			return;
 		}
@@ -58,7 +58,7 @@ void GenerateILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContex
 	bc_AddOpcodeBuf(env->Bytecode, self->ConstructorIndex);
 }
 
-void LoadILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILNewInstance(ILNewInstance * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	if(bc_GetLastPanic()) {
 		return;
@@ -69,7 +69,7 @@ void LoadILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* c
 	}
 }
 
-bc_GenericType* EvalILNewInstance(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILNewInstance(ILNewInstance * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	ILNewInstance_find(self, env, cctx);
 	if(bc_GetLastPanic()) {
 		return NULL;
@@ -84,8 +84,8 @@ bc_GenericType* EvalILNewInstance(ILNewInstance * self, bc_Enviroment * env, Cal
 		bc_Namespace* scope = NULL;
 		bc_GenericType* a = bc_NewGenericType(self->Constructor->Parent);
 		for (int i = 0; i < self->TypeArgs->Length; i++) {
-			ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
-			bc_GenericType* arg = bc_ResolveImportManager(GetNamespaceCContext(cctx), e->GCache, cctx);
+			bc_ILTypeArgument* e = (bc_ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
+			bc_GenericType* arg = bc_ResolveImportManager(bc_GetNamespaceCContext(cctx), e->GCache, cctx);
 			bc_AddArgsGenericType(a, arg);
 		}
 		self->InstanceGType = a;
@@ -98,8 +98,8 @@ char* ILNewInstanceToString(ILNewInstance* self, bc_Enviroment* env) {
 	bc_AppendsBuffer(sb, "new ");
 	char* type = bc_FQCNCacheToString(self->FQCNCache);
 	bc_AppendsBuffer(sb, type);
-	ILTypeArgsToString(sb, self->TypeArgs, env);
-	ILArgsToString(sb, self->Arguments, env);
+	bc_ILTypeArgsToString(sb, self->TypeArgs, env);
+	bc_ILArgsToString(sb, self->Arguments, env);
 	MEM_FREE(type);
 	return bc_ReleaseBuffer(sb);
 }
@@ -113,11 +113,11 @@ void DeleteILNewInstance(ILNewInstance * self) {
 
 //private
 static void DeleteILNewInstance_typearg(bc_VectorItem item) {
-	ILTypeArgument* e = (ILTypeArgument*)item;
-	DeleteILTypeArgument(e);
+	bc_ILTypeArgument* e = (bc_ILTypeArgument*)item;
+	bc_DeleteILTypeArgument(e);
 }
 
-static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallContext* cctx) {
+static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(self->ConstructorIndex != -1) {
 		return;
 	}
@@ -128,7 +128,7 @@ static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallCo
 	}
 	#endif
 	//コンストラクタで生成するオブジェクトの肩を取得
-	bc_Type* ty = GetEvalTypeCContext(cctx, self->FQCNCache);
+	bc_Type* ty = bc_GetEvalTypeCContext(cctx, self->FQCNCache);
 	if(ty == NULL) {
 		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
 			bc_Ref2Str(self->FQCNCache->Name)
@@ -138,13 +138,13 @@ static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallCo
 	//使用するコンストラクタを取得
 	bc_Class* cls = BC_TYPE2CLASS(ty);
 	int temp = -1;
-	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
+	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = cls->Parent->GenericSelf;
 	cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
-	ResolveILTypeArgument(self->TypeArgs, cctx);
+	bc_ResolveILTypeArgument(self->TypeArgs, cctx);
 	self->Constructor = bc_ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
 	self->ConstructorIndex = temp;
-	PopCallContext(cctx);
+	bc_PopCallContext(cctx);
 	if(temp == -1) {
 		bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
 			bc_Ref2Str(cls->Name)
@@ -153,6 +153,6 @@ static void ILNewInstance_find(ILNewInstance * self, bc_Enviroment * env, CallCo
 }
 
 static void il_Factor_new_instace_delete_arg(bc_VectorItem item) {
-	ILArgument* e = (ILArgument*)item;
-	DeleteILArgument(e);
+	bc_ILArgument* e = (bc_ILArgument*)item;
+	bc_DeleteILArgument(e);
 }

@@ -8,8 +8,8 @@
 static void il_NamespaceDeleteType(bc_VectorItem item);
 static void il_NamespaceDeleteNamespace(bc_VectorItem item);
 
-ILNamespace* NewILNamespace(bc_StringView namev) {
-	ILNamespace* ret = (ILNamespace*)MEM_MALLOC(sizeof(ILNamespace));
+bc_ILNamespace* bc_NewILNamespace(bc_StringView namev) {
+	bc_ILNamespace* ret = (bc_ILNamespace*)MEM_MALLOC(sizeof(bc_ILNamespace));
 	ret->Name = namev;
 	ret->NamespaceList = bc_NewVector();
 	ret->TypeList = bc_NewVector();
@@ -17,17 +17,17 @@ ILNamespace* NewILNamespace(bc_StringView namev) {
 	return ret;
 }
 
-ILNamespace* GetRootILNamespace(ILNamespace* self) {
+bc_ILNamespace* bc_GetRootILNamespace(bc_ILNamespace* self) {
 	if(self == NULL) {
 		return NULL;
 	}
 	if(self->Parent == NULL) {
 		return self;
 	}
-	return GetRootILNamespace(self->Parent);
+	return bc_GetRootILNamespace(self->Parent);
 }
 
-void DeleteILNamespace(ILNamespace* self) {
+void bc_DeleteILNamespace(bc_ILNamespace* self) {
 	if(self == NULL) {
 		return;
 	}
@@ -38,11 +38,11 @@ void DeleteILNamespace(ILNamespace* self) {
 
 //private
 static void il_NamespaceDeleteType(bc_VectorItem item) {
-	ILType* e = (ILType*)item;
-	DeleteILType(e);
+	bc_ILType* e = (bc_ILType*)item;
+	bc_DeleteILType(e);
 }
 
 static void il_NamespaceDeleteNamespace(bc_VectorItem item) {
-	ILNamespace* e = (ILNamespace*)item;
-	DeleteILNamespace(e);
+	bc_ILNamespace* e = (bc_ILNamespace*)item;
+	bc_DeleteILNamespace(e);
 }

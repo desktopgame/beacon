@@ -14,90 +14,90 @@
 /**
  * 型の種類を判別する列挙.
  */
-typedef enum ILTypeTag {
+typedef enum bc_ILTypeTag {
 	ILTYPE_CLASS_T,
 	ILTYPE_INTERFACE_T,
 	ILTYPE_ENUM_T,
-} ILTypeTag;
+} bc_ILTypeTag;
 
 struct ILClass;
 struct ILInterface;
 struct ILEnum;
-struct ILField;
-struct ILMethod;
-struct ILProperty;
-struct ILConstructor;
+struct bc_ILField;
+struct bc_ILMethod;
+struct bc_ILProperty;
+struct bc_ILConstructor;
 
 /**
  * 名前空間に含めることが出来る型.
  */
-typedef struct ILType {
-	ILTypeTag Tag;
+typedef struct bc_ILType {
+	bc_ILTypeTag Tag;
 	union {
 		struct ILClass* Class;
 		struct ILInterface* Interface;
 		struct ILEnum* Enum;
 	} Kind;
-} ILType;
+} bc_ILType;
 
 /**
  * 型を作成します.
  * @return
  */
-ILType* NewILType();
+bc_ILType* bc_NewILType();
 
 /**
  * メソッドの一覧を返します.
  * @param self
  * @return
  */
-bc_Vector* GetMethodsILType(ILType* self);
+bc_Vector* bc_GetMethodsILType(bc_ILType* self);
 
 /**
  * 静的メソッドの一覧を返します.
  * @param self
  * @return
  */
-bc_Vector* GetSMethodsILType(ILType* self);
+bc_Vector* bc_GetSMethodsILType(bc_ILType* self);
 
 /**
  * コンストラクタを追加します.
  * @param self
  * @param ctor
  */
-void AddConstructorILType(ILType* self, struct ILConstructor* ctor);
+void bc_AddConstructorILType(bc_ILType* self, struct bc_ILConstructor* ctor);
 
 /**
  * フィールドを追加します.
  * @param self
  * @param field
  */
-void AddFieldILType(ILType* self, struct ILField* field);
+void bc_AddFieldILType(bc_ILType* self, struct bc_ILField* field);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void AddPropertyILType(ILType* self, struct ILProperty* prop);
+void bc_AddPropertyILType(bc_ILType* self, struct bc_ILProperty* prop);
 
 /**
  * メソッドを追加します.
  * @param self
  * @param field
  */
-void AddMethodILType(ILType* self, struct ILMethod* method);
+void bc_AddMethodILType(bc_ILType* self, struct bc_ILMethod* method);
 
 /**
  * 型を開放します.
  * @param self
  */
-void DeleteILType(ILType* self);
+void bc_DeleteILType(bc_ILType* self);
 
 /**
  * 型変数の一覧を返します.
  * @param self
  * @return
  */
-bc_Vector* GetTypeParametersILType(ILType* self);
+bc_Vector* bc_GetTypeParametersILType(bc_ILType* self);
 #endif // !SIGNAL_IL_IL_TYPE_INTERFACE_H

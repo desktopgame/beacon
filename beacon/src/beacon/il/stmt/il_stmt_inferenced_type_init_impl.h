@@ -21,7 +21,7 @@ struct bc_SymbolEntry;
  */
 typedef struct ILInferencedTypeInit {
 	bc_StringView Name;
-	ILFactor* Value;
+	bc_ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
 } ILInferencedTypeInit;
 
@@ -30,7 +30,7 @@ typedef struct ILInferencedTypeInit {
  * @param self
  * @return
  */
-ILStatement* WrapILInferencedTypeInit(ILInferencedTypeInit* self);
+bc_ILStatement* WrapILInferencedTypeInit(ILInferencedTypeInit* self);
 
 /**
  * 推論された型の初期化を表す要素を作成します.
@@ -45,7 +45,7 @@ ILInferencedTypeInit* NewILInferencedTypeInit(bc_StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を読み込みます.
@@ -53,7 +53,7 @@ void GenerateILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env
  * @param env
  * @param cctx
  */
-void LoadILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILInferencedTypeInit(ILInferencedTypeInit* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 推論された型の初期化を表す要素を開放します.

@@ -12,19 +12,19 @@
 #include "../il_factor_interface.h"
 struct bc_GenericType;
 typedef struct ILAssignOp {
-	ILFactor* Left;
-	ILFactor* Right;
+	bc_ILFactor* Left;
+	bc_ILFactor* Right;
 } ILAssignOp;
 
-ILFactor* WrapILAssignOp(ILAssignOp* self);
+bc_ILFactor* WrapILAssignOp(ILAssignOp* self);
 
 ILAssignOp* NewILAssignOp();
 
-void LoadILAssignOp(ILAssignOp* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILAssignOp(ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILAssignOp(ILAssignOp* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILAssignOp(ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILAssignOp(ILAssignOp* self, bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILAssignOp(ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILAssignOp(ILAssignOp* self);
 #endif

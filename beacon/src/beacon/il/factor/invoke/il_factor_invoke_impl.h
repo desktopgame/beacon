@@ -24,7 +24,7 @@ typedef enum InstanceInvokeTag {
 } InstanceInvokeTag;
 
 typedef struct ILInvoke {
-	ILFactor* receiver;
+	bc_ILFactor* receiver;
 	bc_Vector* args;
 	bc_Vector* type_args;
 	bc_StringView namev;
@@ -39,15 +39,15 @@ typedef struct ILInvoke {
 
 ILInvoke* NewILInvoke(bc_StringView namev);
 
-void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInvoke(ILInvoke * self, bc_Enviroment * env, CallContext* cctx);
+void LoadILInvoke(ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 char* ILInvokeToString(ILInvoke* self, bc_Enviroment* env);
 
 void DeleteILInvoke(ILInvoke* self);
 
-struct bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
 #endif

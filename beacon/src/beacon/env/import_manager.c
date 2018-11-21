@@ -39,7 +39,7 @@ bool bc_IsLoadedImportManager(bc_ImportManager * self, int index) {
 	return info->IsConsume;
 }
 
-bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope, bc_GenericCache* fqcn, CallContext* cctx) {
+bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope, bc_GenericCache* fqcn, bc_CallContext* cctx) {
 	bc_Type* CoreType = bc_GetTypeFQCN(fqcn->FQCN, scope);
 	#if defined(DEBUG)
 	const char* ctname = bc_Ref2Str(bc_GetTypeName(CoreType));
@@ -70,13 +70,13 @@ bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope, bc_GenericCache* fq
 	}
 	bc_GenericType* parameterized = bc_NewGenericType(NULL);
 	//T, Eなど
-	bc_Method* mt = GetMethodCContext(cctx);
+	bc_Method* mt = bc_GetMethodCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
 		parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
 		parameterized->VirtualTypeIndex = bc_GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
 		parameterized->Kind.Method = mt;
 	}
-	bc_Type* ty = GetTypeCContext(cctx);
+	bc_Type* ty = bc_GetTypeCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 &&  ty != NULL) {
 		parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
 		parameterized->VirtualTypeIndex = bc_GetGenericIndexType(ty, fqcn->FQCN->Name);
@@ -90,7 +90,7 @@ bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope, bc_GenericCache* fq
 	return parameterized;
 }
 
-bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn, CallContext* cctx) {
+bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn, bc_CallContext* cctx) {
 	bc_Type* CoreType = bc_GetTypeFQCN(fqcn, scope);
 	//Int
 	//Foo::MyClass
@@ -107,7 +107,7 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn
 	//V = class_tag 1
 	bc_GenericType* parameterized = bc_NewGenericType(NULL);
 	//まずはメソッドの型変数を調べる
-	bc_Method* mt = GetMethodCContext(cctx);
+	bc_Method* mt = bc_GetMethodCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && mt != NULL) {
 		#if defined(DEBUG)
 		const char* methodname = bc_Ref2Str(mt->Name);
@@ -118,7 +118,7 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope, bc_FQCNCache* fqcn
 		parameterized->Kind.Method = mt;
 	}
 	//次にクラスの型変数を調べる
-	bc_Type* ty = GetTypeCContext(cctx);
+	bc_Type* ty = bc_GetTypeCContext(cctx);
 	if(parameterized->VirtualTypeIndex == -1 && ty != NULL) {
 		#if defined(DEBUG)
 		const char* typename_ = bc_Ref2Str(bc_GetTypeName(ty));

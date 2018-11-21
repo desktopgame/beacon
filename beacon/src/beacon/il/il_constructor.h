@@ -14,26 +14,26 @@
 #include "../util/vector.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
-struct ILConstructorChain;
+struct bc_ILConstructorChain;
 /**
  * コンストラクタを表す要素.
  */
-typedef struct ILConstructor {
+typedef struct bc_ILConstructor {
 	bc_Vector* Parameters;
 	bc_Vector* Statements;
-	struct ILConstructorChain* Chain;
+	struct bc_ILConstructorChain* Chain;
 	bc_AccessLevel Access;
-} ILConstructor;
+} bc_ILConstructor;
 
 /**
  * コンストラクタを表す要素を作成します.
  * @return
  */
-ILConstructor* NewILConstructor();
+bc_ILConstructor* bc_NewILConstructor();
 
 /**
  * コンストラクタを表す要素を開放します.
  * @param self
  */
-void DeleteILConstructor(ILConstructor* self);
+void bc_DeleteILConstructor(bc_ILConstructor* self);
 #endif // !SIGNAL_IL_IL_CONSTRUCTOR_H

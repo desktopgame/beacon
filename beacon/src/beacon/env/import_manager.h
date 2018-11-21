@@ -19,7 +19,7 @@ struct bc_FQCNCache;
 struct bc_Namespace;
 struct bc_ClassLoader;
 struct bc_ImportInfo;
-struct CallContext;
+struct bc_CallContext;
 
 /**
  * あるファイルが参照しているファイルの一覧を管理します.
@@ -58,7 +58,7 @@ bool bc_IsLoadedImportManager(bc_ImportManager* self, int index);
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct bc_GenericType* bc_ResolveImportManager(struct bc_Namespace* scope, struct bc_GenericCache* fqcn, struct CallContext* cctx);
+struct bc_GenericType* bc_ResolveImportManager(struct bc_Namespace* scope, struct bc_GenericCache* fqcn, struct bc_CallContext* cctx);
 
 /**
  * 指定の名前から型を解決します.
@@ -68,7 +68,7 @@ struct bc_GenericType* bc_ResolveImportManager(struct bc_Namespace* scope, struc
  * @param cctx
  * @return 解決出来なかったなら NULL を返します.
  */
-struct bc_GenericType* bc_ResolvefImportManager(struct bc_Namespace* scope, struct bc_FQCNCache* fqcn, struct CallContext* cctx);
+struct bc_GenericType* bc_ResolvefImportManager(struct bc_Namespace* scope, struct bc_FQCNCache* fqcn, struct bc_CallContext* cctx);
 
 /**
  * インポートマネージャを開放します.

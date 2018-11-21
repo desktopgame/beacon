@@ -12,12 +12,12 @@
 
 struct bc_ClassLoader;
 struct bc_AST;
-struct ILFactor;
+struct bc_ILFactor;
 /**
  * 因子を IL に変換します.
  * @param self
  * @param source
  * @return
  */
-struct ILFactor* CLILFactor(struct bc_ClassLoader* self, struct bc_AST* source);
+struct bc_ILFactor* CLILFactor(struct bc_ClassLoader* self, struct bc_AST* source);
 #endif

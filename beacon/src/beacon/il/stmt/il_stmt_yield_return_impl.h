@@ -13,17 +13,17 @@
 #include "../il_factor_interface.h"
 
 typedef struct ILYieldReturn {
-	ILFactor* Value;
+	bc_ILFactor* Value;
 } ILYieldReturn;
 
-ILStatement* WrapILYieldReturn(ILYieldReturn* self);
+bc_ILStatement* WrapILYieldReturn(ILYieldReturn* self);
 
 #define NewILYieldReturn() (MallocILYieldReturn(__FILE__, __LINE__))
 ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno);
 
-void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, CallContext* cctx);
+void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILYieldReturn(ILYieldReturn* self);
 #endif

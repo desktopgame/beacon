@@ -21,7 +21,7 @@ struct bc_Type;
 struct bc_Interface;
 struct bc_Frame;
 struct bc_Enviroment;
-struct CallContext;
+struct bc_CallContext;
 struct bc_ClassLoader;
 
 /**
@@ -78,7 +78,7 @@ void bc_ExecuteMethod(bc_Method* self, struct bc_Frame* fr, bc_Enviroment* env);
  * @param cctx
  * @return
  */
-bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, struct CallContext* cctx);
+bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, struct bc_CallContext* cctx);
 
 /**
  * @param self

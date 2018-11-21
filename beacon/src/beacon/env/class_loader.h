@@ -25,7 +25,7 @@ struct bc_Enviroment;
  */
 typedef struct bc_ClassLoader {
 	bc_AST* SourceCode;
-	ILToplevel* ILCode;
+	bc_ILToplevel* ILCode;
 
 	struct bc_Enviroment* Env;
 	bc_ImportManager* ImportManager;

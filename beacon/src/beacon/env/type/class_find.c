@@ -276,7 +276,7 @@ bc_Constructor* bc_RFindConstructorClass(bc_Class* self, bc_Vector * args, bc_Ve
 	return bc_MetaScopedRFindConstructor(self, self->Constructors, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector * args, bc_Enviroment * env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector * args, bc_Enviroment * env, bc_CallContext* cctx, int* outIndex) {
 	//	Vector* v = meta_find_constructors(self, args, env, ilctx);
 	//	(*outIndex) = -1;
 	//	return class_find_constructor_impl(v, args, env, ilctx, outIndex);
@@ -284,7 +284,7 @@ bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector * args, bc_E
 	return ctor;
 }
 
-bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, bc_Enviroment * env, bc_CallContext* cctx, int * outIndex) {
 	bc_Vector* emptyArgs = bc_NewVector();
 	bc_Constructor* ret = bc_ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
 	bc_DeleteVector(emptyArgs, bc_VectorDeleterOfNull);
@@ -293,7 +293,7 @@ bc_Constructor * bc_ILFindEmptyConstructorClass(bc_Class* self, bc_Enviroment * 
 
 
 
-bc_Method * bc_ILFindMethodClass(bc_Class* self, bc_StringView namev, bc_Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindMethodClass(bc_Class* self, bc_StringView namev, bc_Vector * args, bc_Enviroment * env, bc_CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	bc_CreateVTableClass(self);
 	#if defined(DEBUG)
@@ -344,7 +344,7 @@ bc_Method* bc_GFindEqMethodClass(bc_Class* self, int* outIndex) {
 	return ret;
 }
 
-bc_Method * bc_ILFindSMethodClass(bc_Class* self, bc_StringView namev, bc_Vector * args, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_ILFindSMethodClass(bc_Class* self, bc_StringView namev, bc_Vector * args, bc_Enviroment * env, bc_CallContext* cctx, int * outIndex) {
 	#if defined(DEBUG)
 	const char* str = bc_Ref2Str(namev);
 	#endif
@@ -420,7 +420,7 @@ bc_Method * bc_GetImplMethodClass(bc_Class* self, bc_Type* interType, int interM
 
 
 
-bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex) {
 	(*outIndex) = -1;
 	bc_OperatorOverload* ret = NULL;
 	bc_CreateOperatorVTClass(self);
@@ -455,11 +455,11 @@ bc_OperatorOverload* bc_GFindOperatorOverloadClass(bc_Class* self, bc_OperatorTy
 	return ret;
 }
 
-bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex) {
 	bc_Vector* gargs =bc_NewVector();
 	for(int i=0; i<args->Length; i++) {
-		ILFactor* ilfact = (ILFactor*)bc_AtVector(args,i);
-		bc_GenericType* g = EvalILFactor(ilfact, env, cctx);
+		bc_ILFactor* ilfact = (bc_ILFactor*)bc_AtVector(args,i);
+		bc_GenericType* g = bc_EvalILFactor(ilfact, env, cctx);
 		bc_PushVector(gargs, g);
 	}
 	bc_OperatorOverload* ret = bc_GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
@@ -467,13 +467,13 @@ bc_OperatorOverload* bc_ILFindOperatorOverloadClass(bc_Class* self, bc_OperatorT
 	return ret;
 }
 
-bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex) {
 	bc_Vector* gargs =bc_NewVector();
 	for(int i=0; i<args->Length; i++) {
 		//ILFactor* ilfact = (ILFactor*)AtVector(args,i);
-		ILArgument* ilarg = (ILArgument*)bc_AtVector(args, i);
-		ILFactor* ilfact = ilarg->Factor;
-		bc_GenericType* g = EvalILFactor(ilfact, env, cctx);
+		bc_ILArgument* ilarg = (bc_ILArgument*)bc_AtVector(args, i);
+		bc_ILFactor* ilfact = ilarg->Factor;
+		bc_GenericType* g = bc_EvalILFactor(ilfact, env, cctx);
 		bc_PushVector(gargs, g);
 	}
 	bc_OperatorOverload* ret = bc_GFindOperatorOverloadClass(self, type, gargs, env, cctx, outIndex);
@@ -512,7 +512,7 @@ bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m, bc_Method** outM)
 	assert(!bc_IsStaticModifier(m->Modifier));
 	(*outM) = NULL;
 	bool ret = false;
-	CallContext* cctx = NewCallContext(CALL_DECL_T);
+	bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
 	cctx->Scope = m->Parent->Location;
 	cctx->Ty = m->Parent;
 	for(int i=0; i<method_list->Length; i++) {
@@ -523,7 +523,7 @@ bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m, bc_Method** outM)
 			break;
 		}
 	}
-	DeleteCallContext(cctx);
+	bc_DeleteCallContext(cctx);
 	return ret;
 }
 

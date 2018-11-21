@@ -17,8 +17,8 @@ ILChildaOp* NewILChildaOp(bc_OperatorType type) {
 	return ret;
 }
 
-bc_GenericType* EvalILChildaOp(ILChildaOp * self, bc_Enviroment * env, CallContext* cctx) {
-	bc_GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
+bc_GenericType* EvalILChildaOp(ILChildaOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(self->OperatorIndex == -1) {
 		//GenerateILFactor(self->Parent->Arg, env);
 		if(bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
@@ -37,10 +37,10 @@ bc_GenericType* EvalILChildaOp(ILChildaOp * self, bc_Enviroment * env, CallConte
 	}
 }
 
-void GenerateILChildaOp(ILChildaOp* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->OperatorIndex == -1) {
-		GenerateILFactor(self->Parent->Arg, env, cctx);
-		bc_GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
+		bc_GenerateILFactor(self->Parent->Arg, env, cctx);
+		bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 		if(bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
 			bc_AddOpcodeBuf(env->Bytecode, OP_IFLIP);
 		} else if(bc_GENERIC2TYPE(gtype) == BC_TYPE_BOOL) {
@@ -49,14 +49,14 @@ void GenerateILChildaOp(ILChildaOp* self, bc_Enviroment* env, CallContext* cctx)
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->Parent->Arg, env, cctx);
+		bc_GenerateILFactor(self->Parent->Arg, env, cctx);
 		bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		bc_AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 	}
 }
 
-void LoadILChildaOp(ILChildaOp* self, bc_Enviroment* env, CallContext* cctx) {
-	bc_GenericType* gtype = EvalILFactor(self->Parent->Arg, env, cctx);
+void LoadILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(bc_GENERIC2TYPE(gtype) != BC_TYPE_INT &&
 	   bc_GENERIC2TYPE(gtype) != BC_TYPE_BOOL) {
 		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);

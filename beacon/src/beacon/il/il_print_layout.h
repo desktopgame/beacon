@@ -17,17 +17,17 @@
  * @param lineno
  * @return
  */
-bool IsLineOfAlreadyILPrint(int lineno);
+bool bc_IsLineOfAlreadyILPrint(int lineno);
 
 /**
  * 必要に応じて行番号を表示します.
  * @param lineno
  */
-void FormatILPrintLayout(int lineno);
+void bc_FormatILPrintLayout(int lineno);
 
 /**
  * 行番号を表示しないならtrue.
  * @param is_hide
  */
-void HideILPrintLayout(bool is_hide);
+void bc_HideILPrintLayout(bool is_hide);
 #endif // !SIGNAL_IL_PRINT_LAYOUT_H

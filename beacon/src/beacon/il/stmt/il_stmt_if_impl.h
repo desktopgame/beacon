@@ -17,7 +17,7 @@
  * elif (...) { ... } を表す要素.
  */
 typedef struct ILElif {
-	ILFactor* Condition;
+	bc_ILFactor* Condition;
 	bc_Vector* Body;
 } ILElif;
 
@@ -35,7 +35,7 @@ typedef struct ILElse {
  * を表す要素.
  */
 typedef struct ILIf {
-	ILFactor* Condition;
+	bc_ILFactor* Condition;
 	bc_Vector* Body;
 	bc_Vector* ElifList;
 	ILElse* Else;
@@ -46,7 +46,7 @@ typedef struct ILIf {
  * @param self
  * @return
  */
-ILStatement* WrapILIf(ILIf* self);
+bc_ILStatement* WrapILIf(ILIf* self);
 
 /**
  * if を表す要素を作成します.
@@ -83,7 +83,7 @@ void PushILElifList(bc_Vector* self, ILElif* child);
  * @param env
  * @param cctx
  */
-void GenerateILIf(ILIf* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILIf(ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * if とその子要素を読み込みます.
@@ -91,7 +91,7 @@ void GenerateILIf(ILIf* self, bc_Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILIf(ILIf* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILIf(ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * if を表す要素を開放します.

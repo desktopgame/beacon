@@ -28,11 +28,11 @@ typedef struct ILInvokeStatic {
 
 ILInvokeStatic* NewILInvokeStatic(bc_StringView namev);
 
-void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, CallContext* cctx);
+void LoadILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 char* ILInvokeStaticToString(ILInvokeStatic* self, bc_Enviroment* env);
 

@@ -16,21 +16,21 @@ struct bc_Constructor;
 /**
  * コンストラクタの連鎖を表す要素.
  */
-typedef struct ILConstructorChain {
+typedef struct bc_ILConstructorChain {
 	bc_ConstructorChainType Type;
 	bc_Vector* Arguments;
 	struct bc_Constructor* Constructor;
 	int ConstructorIndex;
-} ILConstructorChain;
+} bc_ILConstructorChain;
 /**
  * コンストラクタの連鎖を表す要素を作成します.
  * @return
  */
-ILConstructorChain* NewILConstructorChain();
+bc_ILConstructorChain* bc_NewILConstructorChain();
 
 /**
  * コンストラクタの連鎖を表す要素を開放します.
  * @param self
  */
-void DeleteILConstructorChain(ILConstructorChain* self);
+void bc_DeleteILConstructorChain(bc_ILConstructorChain* self);
 #endif // !SIGNAL_IL_IL_CONSTRUCTOR_CHAIN_H

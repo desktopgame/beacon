@@ -10,8 +10,8 @@
 #pragma warning(disable:4996)
 #endif
 
-ILFactor * WrapILDouble(ILDouble * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_DOUBLE_T);
+bc_ILFactor * WrapILDouble(ILDouble * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_DOUBLE_T);
 	ret->Kind.Double = self;
 	return ret;
 }
@@ -22,16 +22,16 @@ ILDouble * NewILDouble(double d) {
 	return ret;
 }
 
-void GenerateILDouble(ILDouble * self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILDouble(ILDouble * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	int index = bc_AddCDoubleEnviroment(env, self->Value);
 	bc_AddOpcodeBuf(env->Bytecode, OP_DCONST);
 	bc_AddOpcodeBuf(env->Bytecode, index);
 }
 
-void LoadILDouble(ILDouble * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILDouble(ILDouble * self, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
-bc_GenericType* EvalILDouble(ILDouble * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILDouble(ILDouble * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return BC_GENERIC_DOUBLE;
 }
 

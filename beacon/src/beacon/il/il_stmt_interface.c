@@ -6,14 +6,14 @@
 #include "../util/mem.h"
 #include "il_print_layout.h"
 
-ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno) {
-	ILStatement* ret = bc_MXMalloc(sizeof(ILStatement), filename, lineno);
+bc_ILStatement* bc_MallocILStmt(bc_ILStatementTag type, const char* filename, int lineno) {
+	bc_ILStatement* ret = bc_MXMalloc(sizeof(bc_ILStatement), filename, lineno);
 	ret->Type = type;
 	ret->Lineno = -1;
 	return ret;
 }
 
-void GenerateILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx) {
+void bc_GenerateILStmt(bc_ILStatement * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return;
 	}
@@ -80,7 +80,7 @@ void GenerateILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx) {
 	bc_AddRangeEnviroment(env, self->Lineno);
 }
 
-void LoadILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx) {
+void bc_LoadILStmt(bc_ILStatement * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(bc_GetLastPanic()) {
 		return;
 	}
@@ -144,7 +144,7 @@ void LoadILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx) {
 	}
 }
 
-void DeleteILStmt(ILStatement * self) {
+void bc_DeleteILStmt(bc_ILStatement * self) {
 	switch (self->Type) {
 		case ILSTMT_IF_T:
 			DeleteILIf(self->Kind.If);

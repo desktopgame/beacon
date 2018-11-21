@@ -16,29 +16,29 @@
 /**
  * パラメータの種類を表す列挙型.
  */
-typedef enum ILParameterType {
+typedef enum bc_ILParameterType {
 	IL_PARAM_TYPE_DEFAULT,
 	IL_PARAM_TYPE_REF_T,
 	IL_PARAM_TYPE_OUT_T,
-} ILParameterType;
+} bc_ILParameterType;
 /**
  * メソッド/関数の引数を表す要素.
  */
-typedef struct ILParameter {
-	ILParameterType Type;
+typedef struct bc_ILParameter {
+	bc_ILParameterType Type;
 	bc_GenericCache* GCache;
 	bc_StringView Name;
-} ILParameter;
+} bc_ILParameter;
 /**
  * パラメータを作成します.
  * @param name
  * @return
  */
-ILParameter* NewILParameter(bc_StringView namev);
+bc_ILParameter* bc_NewILParameter(bc_StringView namev);
 
 /**
  * パラメータを開放します.
  * @param self
  */
-void DeleteILParameter(ILParameter* self);
+void bc_DeleteILParameter(bc_ILParameter* self);
 #endif // !SIGNAL_IL_IL_PARAMETER_H

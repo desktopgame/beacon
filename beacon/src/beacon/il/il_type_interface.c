@@ -7,13 +7,13 @@
 #include "il_method.h"
 #include <assert.h>
 
-ILType * NewILType() {
-	ILType* ret = (ILType*)MEM_MALLOC(sizeof(ILType));
+bc_ILType * bc_NewILType() {
+	bc_ILType* ret = (bc_ILType*)MEM_MALLOC(sizeof(bc_ILType));
 	ret->Tag = ILTYPE_CLASS_T;
 	return ret;
 }
 
-bc_Vector * GetMethodsILType(ILType * self) {
+bc_Vector * bc_GetMethodsILType(bc_ILType * self) {
 	if (self->Tag == ILTYPE_CLASS_T) {
 		return self->Kind.Class->Methods;
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
@@ -22,7 +22,7 @@ bc_Vector * GetMethodsILType(ILType * self) {
 	return NULL;
 }
 
-bc_Vector * GetSMethodsILType(ILType * self) {
+bc_Vector * bc_GetSMethodsILType(bc_ILType * self) {
 	if (self->Tag == ILTYPE_CLASS_T) {
 		return self->Kind.Class->StaticMethods;
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
@@ -31,20 +31,20 @@ bc_Vector * GetSMethodsILType(ILType * self) {
 	return NULL;
 }
 
-void AddConstructorILType(ILType * self, ILConstructor * ctor) {
+void bc_AddConstructorILType(bc_ILType * self, bc_ILConstructor * ctor) {
 	assert(self->Tag == ILTYPE_CLASS_T);
 	if (self->Tag == ILTYPE_CLASS_T) {
 	}
 }
 
-void AddFieldILType(ILType * self, ILField * field) {
+void bc_AddFieldILType(bc_ILType * self, bc_ILField * field) {
 	assert(self->Tag == ILTYPE_CLASS_T);
 	if (self->Tag == ILTYPE_CLASS_T) {
 		AddFieldILClass(self->Kind.Class, field);
 	}
 }
 
-void AddPropertyILType(ILType* self, ILProperty* prop) {
+void bc_AddPropertyILType(bc_ILType* self, bc_ILProperty* prop) {
 	if (self->Tag == ILTYPE_CLASS_T) {
 		AddPropertyILClass(self->Kind.Class, prop);
 	} else if(self->Tag == ILTYPE_INTERFACE_T) {
@@ -52,7 +52,7 @@ void AddPropertyILType(ILType* self, ILProperty* prop) {
 	}
 }
 
-void AddMethodILType(ILType * self, ILMethod * method) {
+void bc_AddMethodILType(bc_ILType * self, bc_ILMethod * method) {
 	if (self->Tag == ILTYPE_CLASS_T) {
 		AddMethodILClass(self->Kind.Class, method);
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
@@ -60,7 +60,7 @@ void AddMethodILType(ILType * self, ILMethod * method) {
 	}
 }
 
-void DeleteILType(ILType * self) {
+void bc_DeleteILType(bc_ILType * self) {
 	if (self->Tag == ILTYPE_CLASS_T) {
 		DeleteILClass(self->Kind.Class);
 	} else if (self->Tag == ILTYPE_INTERFACE_T) {
@@ -71,6 +71,6 @@ void DeleteILType(ILType * self) {
 	MEM_FREE(self);
 }
 
-bc_Vector* GetTypeParametersILType(ILType* self) {
+bc_Vector* bc_GetTypeParametersILType(bc_ILType* self) {
 	return self->Tag == ILTYPE_INTERFACE_T ? self->Kind.Interface->TypeParameters : self->Kind.Class->TypeParameters;
 }

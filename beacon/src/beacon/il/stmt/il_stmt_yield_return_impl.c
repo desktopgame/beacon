@@ -8,10 +8,10 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
-static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env, CallContext* cctx);
+static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-ILStatement* WrapILYieldReturn(ILYieldReturn* self) {
-	ILStatement* ret = NewILStatement(ILSTMT_YIELD_RETURN_T);
+bc_ILStatement* WrapILYieldReturn(ILYieldReturn* self) {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_YIELD_RETURN_T);
 	ret->Type = ILSTMT_YIELD_RETURN_T;
 	ret->Kind.YieldReturn = self;
 	return ret;
@@ -23,28 +23,28 @@ ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->Value, env, cctx);
+void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Value, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_CORO_NEXT);
 }
 
-void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	check_IsYieldMethod_return(self, env, cctx);
 }
 
 void DeleteILYieldReturn(ILYieldReturn* self) {
-	DeleteILFactor(self->Value);
+	bc_DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }
 //private
-static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env, CallContext* cctx) {
+static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
-	bc_Method* m = GetMethodCContext(cctx);
+	bc_Method* m = bc_GetMethodCContext(cctx);
 	bc_GenericType* arg = bc_AtVector(m->ReturnGType->TypeArgs, 0);
 	//戻り値の型に互換性がない
-	if(bc_DistanceGenericType(arg, EvalILFactor(self->Value, env, cctx), cctx) < 0) {
+	if(bc_DistanceGenericType(arg, bc_EvalILFactor(self->Value, env, cctx), cctx) < 0) {
 		bc_Panic(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
 			bc_Ref2Str(bc_GetTypeName(m->Parent)),
 			bc_Ref2Str(m->Name)

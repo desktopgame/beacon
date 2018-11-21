@@ -18,7 +18,7 @@ struct bc_Type;
 struct bc_GenericType;
 struct bc_Object;
 struct bc_Enviroment;
-struct ILFactor;
+struct bc_ILFactor;
 /**
  * フィールドを表す構造体.
  */
@@ -29,7 +29,7 @@ typedef struct bc_Field {
 	struct bc_Object* StaticValue;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
-	struct ILFactor* InitialValue;
+	struct bc_ILFactor* InitialValue;
 	struct bc_Enviroment* InitialValueEnv;
 	bool IsNotInitializedAtCtor;
 } bc_Field;

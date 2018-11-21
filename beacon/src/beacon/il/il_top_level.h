@@ -14,21 +14,21 @@
 /**
  * 中間言語ILのトップレベル要素です.
  */
-typedef struct ILToplevel {
+typedef struct bc_ILToplevel {
 	bc_Vector* ImportList;
 	bc_Vector* NamespaceList;
 	bc_Vector* StatementList;
 	bc_Vector* FunctionList;
-} ILToplevel;
+} bc_ILToplevel;
 /**
  * トップレベルの要素を作成します.
  * @return
  */
-ILToplevel* NewILToplevel();
+bc_ILToplevel* bc_NewILToplevel();
 
 /**
  * この要素と付随する全てを解放します.
  * @param self
  */
-void DeleteILToplevel(ILToplevel* self);
+void bc_DeleteILToplevel(bc_ILToplevel* self);
 #endif // !SIGNAL_IL_IL_TOP_LEVEL_H

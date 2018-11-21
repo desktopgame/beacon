@@ -22,7 +22,7 @@ struct bc_SymbolEntry;
 typedef struct ILVariableInit {
 	bc_GenericCache* GCache;
 	bc_StringView Name;
-	ILFactor* Value;
+	bc_ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
 } ILVariableInit;
 
@@ -31,7 +31,7 @@ typedef struct ILVariableInit {
  * @param self
  * @return
  */
-ILStatement* WrapILVariableInit(ILVariableInit* self);
+bc_ILStatement* WrapILVariableInit(ILVariableInit* self);
 
 /**
  * 変数の初期化を表す要素を作成します.
@@ -46,7 +46,7 @@ ILVariableInit* NewILVariableInit(bc_StringView namev);
  * @param env
  * @param ccctx
  */
-void GenerateILVariableInit(ILVariableInit* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILVariableInit(ILVariableInit* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を読み込みます.
@@ -54,7 +54,7 @@ void GenerateILVariableInit(ILVariableInit* self, bc_Enviroment* env, CallContex
  * @param env
  * @param cctx
  */
-void LoadILVariableInit(ILVariableInit* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILVariableInit(ILVariableInit* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 変数の初期化を表す要素を開放します.

@@ -28,7 +28,7 @@
 //proto
 static void delete_parameter(bc_VectorItem item);
 static void delete_type_parameter(bc_VectorItem item);
-static void method_count(ILStatement* s, int* yeild_ret, int* ret);
+static void method_count(bc_ILStatement* s, int* yeild_ret, int* ret);
 static bc_Constructor* create_delegate_ctor(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,int op_len);
 static bc_Method* create_has_next(bc_Method* self, bc_Type* ty,bc_ClassLoader* cll, bc_Vector* stmt_list, int* out_op_len);
 static bc_Method* create_next(bc_Method* self, bc_Type* ty,bc_ClassLoader* cll, bc_GenericType* a, bc_Vector* stmt_list, int* out_op_len);
@@ -59,19 +59,19 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
 		bc_ExecuteScriptMethod(self->Kind.Script, self, fr, env);
 	} else if (self->Type == METHOD_TYPE_NATIVE_T) {
 		bc_Frame* a = bc_SubFrame(fr);
-		CallFrame* cfr = NULL;
+		bc_CallFrame* cfr = NULL;
 		bc_Vector* aArgs = NULL;
 		bc_Vector* aTArgs = NULL;
 		//レシーバも
 		if(!bc_IsStaticModifier(self->Modifier)) {
 			bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
 			bc_AssignVector(a->VariableTable, 0, receiver_obj);
-			cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_INSTANCE_INVOKE_T);
+			cfr = bc_PushCallContext(bc_GetScriptThreadContext(), FRAME_INSTANCE_INVOKE_T);
 			cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
 			aArgs = cfr->Kind.InstanceInvoke.Args = method_vm_args(self, fr, a);
 			aTArgs = cfr->Kind.InstanceInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		} else {
-			cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
+			cfr = bc_PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 			aArgs = cfr->Kind.StaticInvoke.Args = method_vm_args(self, fr, a);
 			aTArgs = cfr->Kind.StaticInvoke.TypeArgs = method_vm_typeargs(self, fr, a);
 		}
@@ -84,12 +84,12 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
 		}
 		bc_DeleteVector(aArgs, bc_VectorDeleterOfNull);
 		bc_DeleteVector(aTArgs, bc_VectorDeleterOfNull);
-		PopCallContext(bc_GetScriptThreadContext());
+		bc_PopCallContext(bc_GetScriptThreadContext());
 		bc_DeleteFrame(a);
 	}
 }
 
-bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, CallContext* cctx) {
+bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, bc_CallContext* cctx) {
 	//名前が違うか引数の数が違う
 	if (superM->Name != subM->Name ||
 		superM->Parameters->Length != subM->Parameters->Length) {
@@ -104,10 +104,10 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, CallContext* cctx)
 		bc_GenericType* superGT = superP->GType;
 		bc_GenericType* subGT = subP->GType;
 
-		CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
+		bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_RESOLVE_T);
 		cfr->Kind.Resolve.GType = bl;
 		bc_GenericType* superGT2 = bc_ApplyGenericType(superGT, cctx);
-		PopCallContext(cctx);
+		bc_PopCallContext(cctx);
 //		assert(!GenericType_equals(superGT, superGT2));
 
 //		GenericType_diff(superGT, superGT2);
@@ -117,13 +117,13 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM, CallContext* cctx)
 	}
 	bc_GenericType* superRet = superM->ReturnGType;
 	bc_GenericType* subRet = subM->ReturnGType;
-	CallFrame* cfr = PushCallContext(cctx, FRAME_RESOLVE_T);
+	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_RESOLVE_T);
 	cfr->Kind.Resolve.GType = bl;
 	bc_GenericType* superRet2 = bc_ApplyGenericType(superRet, cctx);
 //	GenericType_diff(superRet, superRet2);
 //	assert(!GenericType_equals(superRet, superRet2));
 	int ret =bc_DistanceGenericType(superRet2, subRet, cctx);
-	PopCallContext(cctx);
+	bc_PopCallContext(cctx);
 	return ret != -1;
 }
 
@@ -214,7 +214,7 @@ bool bc_IsYieldMethod(bc_Method* self, bc_Vector* stmt_list, bool* error) {
 	for(int i=0; i<stmt_list->Length; i++) {
 		int yrtemp = 0;
 		int rtemp = 0;
-		ILStatement* e = (ILStatement*)bc_AtVector(stmt_list, i);
+		bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(stmt_list, i);
 		method_count(e, &yrtemp, &rtemp);
 		yield_ret += yrtemp;
 		ret += rtemp;
@@ -228,8 +228,8 @@ bool bc_IsYieldMethod(bc_Method* self, bc_Vector* stmt_list, bool* error) {
 }
 
 bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self,  bc_ClassLoader* cll, bc_Vector* stmt_list) {
-	CallContext* lCctx = NewCallContext(CALL_CTOR_T);
-	CallFrame* lCfr = PushCallContext(lCctx, FRAME_RESOLVE_T);
+	bc_CallContext* lCctx = bc_NewCallContext(CALL_CTOR_T);
+	bc_CallFrame* lCfr = bc_PushCallContext(lCctx, FRAME_RESOLVE_T);
 	lCfr->Kind.Resolve.GType = self->ReturnGType;
 	bc_StringView iterName = bc_GetMethodUniqueName(self);
 	bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(), bc_InternString("Iterator"));
@@ -244,8 +244,8 @@ bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self,  bc_ClassLoader* cll, 
 	bc_AddMethodClass(iterImplC, create_has_next(self,  iterImplT, cll, stmt_list, &op_len));
 	bc_AddMethodClass(iterImplC, create_next(self, iterImplT, cll, bc_AtVector(self->ReturnGType->TypeArgs, 0), stmt_list, &op_len));
 	bc_AddConstructorClass(iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
-	PopCallContext(lCctx);
-	DeleteCallContext(lCctx);
+	bc_PopCallContext(lCctx);
+	bc_DeleteCallContext(lCctx);
 	return iterImplT;
 }
 
@@ -260,24 +260,24 @@ static void delete_type_parameter(bc_VectorItem item) {
 	bc_DeleteTypeParameter(e);
 }
 
-static void method_count(ILStatement* s, int* yield_ret, int* ret) {
+static void method_count(bc_ILStatement* s, int* yield_ret, int* ret) {
 	switch (s->Type) {
 		case ILSTMT_IF_T:
 		{
 			//if() { ... }
 			ILIf* sif = s->Kind.If;
 			for(int i=0; i<sif->Body->Length; i++) {
-				method_count((ILStatement*)bc_AtVector(sif->Body, i), yield_ret, ret);
+				method_count((bc_ILStatement*)bc_AtVector(sif->Body, i), yield_ret, ret);
 			}
 			for(int i=0; i<sif->ElifList->Length; i++) {
 				ILElif* seif = (ILElif*)bc_AtVector(sif->ElifList, i);
 				bc_Vector* body = seif->Body;
 				for(int j=0; j<body->Length; j++) {
-					method_count((ILStatement*)bc_AtVector(body, j), yield_ret, ret);
+					method_count((bc_ILStatement*)bc_AtVector(body, j), yield_ret, ret);
 				}
 			}
 			for(int i=0; i<sif->Else->Body->Length; i++) {
-				ILStatement* e = bc_AtVector(sif->Else->Body, i);
+				bc_ILStatement* e = bc_AtVector(sif->Else->Body, i);
 				method_count(e, yield_ret, ret);
 			}
 			break;
@@ -293,7 +293,7 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 		{
 			ILWhile* whi = s->Kind.While;
 			for(int i=0; i<whi->Statements->Length; i++) {
-				ILStatement* e = bc_AtVector(whi->Statements, i);
+				bc_ILStatement* e = bc_AtVector(whi->Statements, i);
 				method_count(e, yield_ret, ret);
 			}
 			break;
@@ -306,14 +306,14 @@ static void method_count(ILStatement* s, int* yield_ret, int* ret) {
 		{
 			ILTry* tr = s->Kind.Try;
 			for(int i=0; i<tr->Statements->Length; i++) {
-				ILStatement* e = (ILStatement*)bc_AtVector(tr->Statements, i);
+				bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(tr->Statements, i);
 				method_count(e, yield_ret, ret);
 			}
 			bc_Vector* catches = tr->Catches;
 			for(int i=0; i<catches->Length; i++) {
 				ILCatch* ce = (ILCatch*)bc_AtVector(catches, i);
 				for(int j=0; j<ce->Statements->Length; j++) {
-					ILStatement* e = (ILStatement*)bc_AtVector(ce->Statements, j);
+					bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(ce->Statements, j);
 					method_count(e, yield_ret, ret);
 				}
 			}
@@ -384,7 +384,7 @@ static bc_Method* create_has_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* 
 	mt->Type = METHOD_TYPE_SCRIPT_T;
 	bc_ScriptMethod* smt = bc_NewScriptMethod();
 	bc_Enviroment* envSmt = bc_NewEnviroment();
-	CallContext* cctx = NewCallContext(CALL_METHOD_T);
+	bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
 	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
 	cctx->Kind.Method = self;
@@ -408,19 +408,19 @@ static bc_Method* create_has_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* 
 	bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)OP_CORO_SWAP_SELF);
 	bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)OP_CORO_RESUME);
 	for(int i=0; i<stmt_list->Length; i++) {
-		ILStatement* e = (ILStatement*)bc_AtVector(stmt_list, i);
-		LoadILStmt(e, envSmt, cctx);
+		bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(stmt_list, i);
+		bc_LoadILStmt(e, envSmt, cctx);
 	}
 	for(int i=0; i<stmt_list->Length; i++) {
-		ILStatement* e = (ILStatement*)bc_AtVector(stmt_list, i);
-		GenerateILStmt(e, envSmt, cctx);
+		bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(stmt_list, i);
+		bc_GenerateILStmt(e, envSmt, cctx);
 	}
 	bc_AddOpcodeBuf(envSmt->Bytecode, OP_CORO_EXIT);
 	if(bc_GetTypeName(self->Parent) == bc_InternString("Base")) {
 	//	DumpEnviromentOp(envSmt, 0);
 	}
 	(*out_op_len) = envSmt->Bytecode->Instructions->Length;
-	DeleteCallContext(cctx);
+	bc_DeleteCallContext(cctx);
 	smt->Env = envSmt;
 	mt->Kind.Script = smt;
 	mt->Parent = ty;
@@ -435,7 +435,7 @@ static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,
 	mt->Type = METHOD_TYPE_SCRIPT_T;
 	bc_ScriptMethod* smt = bc_NewScriptMethod();
 	bc_Enviroment* envSmt = bc_NewEnviroment();
-	CallContext* cctx = NewCallContext(CALL_METHOD_T);
+	bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
 	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
 	cctx->Kind.Method = mt;
@@ -452,7 +452,7 @@ static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,
 	smt->Env = envSmt;
 	mt->Kind.Script = smt;
 	mt->Parent = ty;
-	DeleteCallContext(cctx);
+	bc_DeleteCallContext(cctx);
 	//DumpEnviromentOp(envSmt, 0);
 	return mt;
 }

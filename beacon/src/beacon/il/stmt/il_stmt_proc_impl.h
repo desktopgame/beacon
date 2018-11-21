@@ -16,7 +16,7 @@
  * 式のみで構成される文を表す要素.
  */
 typedef struct ILProc {
-	ILFactor* Factor;
+	bc_ILFactor* Factor;
 } ILProc;
 
 /**
@@ -24,7 +24,7 @@ typedef struct ILProc {
  * @param self
  * @return
  */
-ILStatement* WrapILProc(ILProc* self);
+bc_ILStatement* WrapILProc(ILProc* self);
 
 /**
  * 式のみで構成される文を表す要素を作成します.
@@ -38,7 +38,7 @@ ILProc* NewILProc();
  * @param env
  * @param cctx
  */
-void GenerateILProc(ILProc* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILProc(ILProc* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式のみで構成される文を読み込みます.
@@ -46,7 +46,7 @@ void GenerateILProc(ILProc* self, bc_Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILProc(ILProc* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILProc(ILProc* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式のみで構成される文を表す要素を開放します.

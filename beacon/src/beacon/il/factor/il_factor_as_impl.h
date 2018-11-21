@@ -24,7 +24,7 @@ typedef enum CastMode {
  * as演算子を表す構造体.
  */
 typedef struct ILAs {
-	ILFactor* Source;
+	bc_ILFactor* Source;
 	bc_GenericCache* GCache;
 	bc_GenericType* GType;
 	CastMode Mode;
@@ -34,15 +34,15 @@ struct bc_Enviroment;
 struct bc_Type;
 struct bc_Field;
 
-ILFactor* WrapILAs(ILAs* self);
+bc_ILFactor* WrapILAs(ILAs* self);
 
 ILAs* NewILAs();
 
-void GenerateILAs(ILAs* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILAs(ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILAs(ILAs* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILAs(ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILAs(ILAs* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILAs(ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILAs(ILAs* self);
 

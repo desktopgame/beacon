@@ -22,19 +22,19 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, bc_Frame*
 	const char* name = bc_Ref2Str(parent->Name);
 #endif
 	bc_Frame* sub = bc_SubFrame(fr);
-	CallFrame* cfr = NULL;
+	bc_CallFrame* cfr = NULL;
 	sub->Receiver = parent->Parent;
 	bc_Vector* aArgs = bc_NewVector();
 	bc_Vector* aTArgs = bc_NewVector();
 	if (!bc_IsStaticModifier(parent->Modifier)) {
 		bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
 		bc_PushVector(sub->ValueStack, receiver_obj);
-		cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_INSTANCE_INVOKE_T);
+		cfr = bc_PushCallContext(bc_GetScriptThreadContext(), FRAME_INSTANCE_INVOKE_T);
 		cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
 		cfr->Kind.InstanceInvoke.Args = aArgs;
 		cfr->Kind.InstanceInvoke.TypeArgs = aTArgs;
 	} else {
-		cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
+		cfr = bc_PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 		cfr->Kind.StaticInvoke.Args = aArgs;
 		cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
 	}
@@ -60,7 +60,7 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod * self, bc_Method* parent, bc_Frame*
 	}
 	bc_DeleteVector(aArgs, bc_VectorDeleterOfNull);
 	bc_DeleteVector(aTArgs, bc_VectorDeleterOfNull);
-	PopCallContext(bc_GetScriptThreadContext());
+	bc_PopCallContext(bc_GetScriptThreadContext());
 	bc_DeleteFrame(sub);
 }
 

@@ -3,12 +3,12 @@
 #include "../../util/text.h"
 #include <stdio.h>
 
-ILStatement * WrapILContinue() {
-	ILStatement* ret = NewILStatement(ILSTMT_CONTINUE_T);
+bc_ILStatement * WrapILContinue() {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_CONTINUE_T);
 	return ret;
 }
 
-void GenerateILContinue(void * empty, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILContinue(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Control.WhileStartTable->Length == 0) {
 		bc_Panic(BCERROR_CONTINUE_AT_NOT_LOOP_T);
 		return;
@@ -18,7 +18,7 @@ void GenerateILContinue(void * empty, bc_Enviroment * env, CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, lab);
 }
 
-void LoadILContinue(void * empty, bc_Enviroment * env, CallContext* cctx) {
+void LoadILContinue(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
 void DeleteILContinue(void * empty) {

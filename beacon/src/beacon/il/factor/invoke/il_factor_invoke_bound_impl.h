@@ -40,15 +40,15 @@ typedef struct ILInvokeBound {
 
 ILInvokeBound* NewILInvokeBound(bc_StringView namev);
 
-void GenerateILInvokeBound(ILInvokeBound* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInvokeBound(ILInvokeBound* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
+void LoadILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 char* ILInvokeBoundToString(ILInvokeBound* self, bc_Enviroment* env);
 
 void DeleteILInvokeBound(ILInvokeBound* self);
 
-struct bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
 #endif

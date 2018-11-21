@@ -49,16 +49,16 @@ typedef struct ILVariable {
 	} Kind;
 } ILVariable;
 
-ILFactor* WrapILVariable(ILVariable* self);
+bc_ILFactor* WrapILVariable(ILVariable* self);
 
 #define NewILVariable() (MallocILVariable(__FILE__, __LINE__))
 ILVariable* MallocILVariable(const char* filename, int lineno);
 
-void GenerateILVariable(ILVariable* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILVariable(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILVariable(ILVariable* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILVariable(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILVariable(ILVariable* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILVariable(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILVariableToString(ILVariable* self, bc_Enviroment* env);
 

@@ -21,11 +21,11 @@ typedef struct ILVariableStatic {
 
 ILVariableStatic* NewILVariableStatic();
 
-void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx);
+void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 char* ILVariableStaticToString(ILVariableStatic * self, bc_Enviroment * env);
 

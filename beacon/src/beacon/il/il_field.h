@@ -15,27 +15,27 @@
 #include "../util/string_pool.h"
 //#include "../env/fqcn_cache.h"
 struct bc_GenericCache;
-struct ILFactor;
+struct bc_ILFactor;
 /**
  * フィールドを表す要素.
  */
-typedef struct ILField {
+typedef struct bc_ILField {
 	struct bc_GenericCache* GCache;
 	bc_StringView Name;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
-	struct ILFactor* InitialValue;
-} ILField;
+	struct bc_ILFactor* InitialValue;
+} bc_ILField;
 /**
  * 新しいフィールドを作成します.
  * @param name
  * @return
  */
-ILField* NewILField(bc_StringView name);
+bc_ILField* bc_NewILField(bc_StringView name);
 
 /**
  * フィールドを開放します.
  * @param self
  */
-void DeleteILField(ILField* self);
+void bc_DeleteILField(bc_ILField* self);
 #endif // !SIGNAL_IL_IL_FIELD_H

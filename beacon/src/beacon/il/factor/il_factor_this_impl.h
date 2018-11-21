@@ -23,11 +23,11 @@ typedef struct ILThis {
 
 ILThis* NewILThis();
 
-void GenerateILThis(ILThis* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILThis(ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILThis(ILThis* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILThis(ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILThis(ILThis* self, struct bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILThis(ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILThisToString(ILThis* self, struct bc_Enviroment* env);
 

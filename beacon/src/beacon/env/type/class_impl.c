@@ -426,7 +426,7 @@ static void create_vtable_override(bc_Class* self) {
 	#if defined(DEBUG)
 	const char* clname = bc_Ref2Str(self->Name);
 	#endif
-	CallContext* cctx = NewCallContext(CALL_DECL_T);
+	bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->SuperClass->CoreType;
 	bc_CreateVTableClass(self->SuperClass->CoreType->Kind.Class);
@@ -438,7 +438,7 @@ static void create_vtable_override(bc_Class* self) {
 			bc_ReplaceVTable(self->VT, m, cctx);
 		}
 	}
-	DeleteCallContext(cctx);
+	bc_DeleteCallContext(cctx);
 }
 
 static void create_vtable_interface(bc_Class* self) {
@@ -509,7 +509,7 @@ static void delete_native_method_ref(bc_NumericMapKey key, bc_NumericMapItem ite
 }
 
 static bc_Method* class_find_impl_method(bc_Class* self, bc_Method* virtualMethod) {
-	CallContext* cctx = NewCallContext(CALL_DECL_T);
+	bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
 	cctx->Scope = self->Parent->Location;
 	cctx->Ty = self->Parent;
 	bc_Method* ret = NULL;
@@ -521,7 +521,7 @@ static bc_Method* class_find_impl_method(bc_Class* self, bc_Method* virtualMetho
 			break;
 		}
 	}
-	DeleteCallContext(cctx);
+	bc_DeleteCallContext(cctx);
 	return ret;
 }
 

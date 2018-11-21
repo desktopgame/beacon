@@ -15,17 +15,17 @@
 #include "il_property_body.h"
 struct bc_GenericCache;
 
-typedef struct ILProperty {
+typedef struct bc_ILProperty {
 	struct bc_GenericCache* GCache;
 	bc_AccessLevel Access;
 	bc_ModifierType Modifier;
 	bc_StringView Name;
-	ILPropertyBody* Set;
-	ILPropertyBody* Get;
-} ILProperty;
+	bc_ILPropertyBody* Set;
+	bc_ILPropertyBody* Get;
+} bc_ILProperty;
 
-#define ILNewProperty(namev) (MallocILProperty(namev, __FILE__, __LINE__))
-ILProperty* MallocILProperty(bc_StringView namev, const char* filename, int lineno);
+#define bc_ILNewProperty(namev) (bc_MallocILProperty(namev, __FILE__, __LINE__))
+bc_ILProperty* bc_MallocILProperty(bc_StringView namev, const char* filename, int lineno);
 
-void DeleteILProperty(ILProperty* self);
+void bc_DeleteILProperty(bc_ILProperty* self);
 #endif

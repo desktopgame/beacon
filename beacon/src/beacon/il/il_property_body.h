@@ -15,20 +15,20 @@
 
 struct bc_GenericCache;
 
-typedef enum ILPropertyBodyTag {
+typedef enum bc_ILPropertyBodyTag {
 	IL_PROPERTY_SET_T,
 	IL_PROPERTY_GET_T,
-} ILPropertyBodyTag;
+} bc_ILPropertyBodyTag;
 
-typedef struct ILPropertyBody {
+typedef struct bc_ILPropertyBody {
 	bc_AccessLevel Access;
 	bc_Vector* Statements;
-	ILPropertyBodyTag Tag;
+	bc_ILPropertyBodyTag Tag;
 	bool IsShort;
-} ILPropertyBody;
+} bc_ILPropertyBody;
 
-#define ILNewPropertyBody(tag) (MallocILPropertyBody(tag, __FILE__, __LINE__))
-ILPropertyBody* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno);
+#define bc_NewILPropertyBody(tag) (bc_MallocILPropertyBody(tag, __FILE__, __LINE__))
+bc_ILPropertyBody* bc_MallocILPropertyBody(bc_ILPropertyBodyTag tag, const char* filename, int lineno);
 
-void DeleteILPropertyBody(ILPropertyBody* self);
+void bc_DeleteILPropertyBody(bc_ILPropertyBody* self);
 #endif

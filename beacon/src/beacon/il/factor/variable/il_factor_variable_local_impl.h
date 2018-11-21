@@ -52,11 +52,11 @@ typedef struct ILVariableLocal {
 
 ILVariableLocal* NewILVariableLocal(bc_StringView namev);
 
-void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
+void LoadILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 char* ILVariableLocalToString(ILVariableLocal * self, bc_Enviroment * env);
 

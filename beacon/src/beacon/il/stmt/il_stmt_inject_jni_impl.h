@@ -16,17 +16,17 @@ struct bc_SymbolEntry;
 
 typedef struct ILInjectJNI {
 	bc_StringView Name;
-	ILFactor* Value;
+	bc_ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
 } ILInjectJNI;
 
-ILStatement* WrapILInjectJNI(ILInjectJNI* self);
+bc_ILStatement* WrapILInjectJNI(ILInjectJNI* self);
 
 ILInjectJNI* NewILInjectJNI(bc_StringView namev);
 
-void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, CallContext* cctx);
+void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILInjectJni(ILInjectJNI* self);
 #endif

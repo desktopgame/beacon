@@ -17,13 +17,13 @@ ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->Source, env, cctx);
+void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Source, env, cctx);
 	bc_GenerateGetProperty(env->Bytecode, self->Property, self->Index);
 }
 
-void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx) {
-	bc_GenericType* receiver = EvalILFactor(self->Source, env, cctx);
+void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenericType* receiver = bc_EvalILFactor(self->Source, env, cctx);
 	bc_Type* receiverT = bc_GENERIC2TYPE(receiver);
 	int temp = -1;
 	bc_FindTreePropertyClass(BC_TYPE2CLASS(receiverT), self->Property->Name, &temp);
@@ -37,13 +37,13 @@ void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cct
 	}
 }
 
-bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return self->Property->GType;
 }
 
 char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
-	char* name = ILFactorToString(self->Source, env);
+	char* name = bc_ILFactorToString(self->Source, env);
 	bc_AppendsBuffer(sb, name);
 	bc_AppendBuffer(sb, '.');
 	bc_AppendsBuffer(sb, bc_Ref2Str(self->Name));
@@ -52,6 +52,6 @@ char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env) {
 }
 
 void DeleteILPropertyAccess(ILPropertyAccess* self) {
-	DeleteILFactor(self->Source);
+	bc_DeleteILFactor(self->Source);
 	MEM_FREE(self);
 }

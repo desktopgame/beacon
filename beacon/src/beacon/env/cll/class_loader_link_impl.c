@@ -14,14 +14,14 @@
 #include "class_loader_bcload_impl.h"
 #include <assert.h>
 
-static void CLBC_class_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
-static void CLBC_class_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
+static void CLBC_class_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_Namespace* scope);
+static void CLBC_class_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_Namespace* scope);
 
-static void CLBC_interface_decl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
-static void CLBC_interface_impl(bc_ClassLoader* self, ILType* iltype, bc_Type* tp, bc_Namespace* scope);
+static void CLBC_interface_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_Namespace* scope);
+static void CLBC_interface_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_Namespace* scope);
 
-static void CLBC_enum_decl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope);
-static void CLBC_enum_impl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope);
+static void CLBC_enum_decl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope);
+static void CLBC_enum_impl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope);
 
 static void CLBC_excec_class_decl(bc_ClassLoader* self);
 static void CLBC_excec_class_impl(bc_ClassLoader* self);
@@ -29,8 +29,8 @@ static void CLBC_excec_interface_decl(bc_ClassLoader* self);
 static void CLBC_excec_interface_impl(bc_ClassLoader* self);
 static void CLBC_excec_enum_decl(bc_ClassLoader* self);
 static void CLBC_excec_enum_impl(bc_ClassLoader* self);
-static void CLBC_check_class(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope);
-static void CLBC_check_interface(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope);
+static void CLBC_check_class(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope);
+static void CLBC_check_interface(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope);
 
 void LinkClassLoader(bc_ClassLoader* self, bc_LinkType type) {
 	bc_CL_ERROR(self);
@@ -51,7 +51,7 @@ void LinkClassLoader(bc_ClassLoader* self, bc_LinkType type) {
 }
 
 //private
-static void CLBC_class_decl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_class_decl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	if((tp->State & TYPE_DECL) > 0) {
 		return;
 	}
@@ -80,7 +80,7 @@ static void CLBC_class_decl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 	tp->State = tp->State | TYPE_DECL;
 }
 
-static void CLBC_class_impl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_class_impl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	if((tp->State & TYPE_IMPL) > 0) {
 		return;
 	}
@@ -110,7 +110,7 @@ static void CLBC_class_impl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp,
 	CLBC_check_class(self, iltype, tp, scope);
 }
 
-static void CLBC_interface_decl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_interface_decl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	if((tp->State & TYPE_DECL) > 0) {
 		return;
 	}
@@ -145,7 +145,7 @@ static void CLBC_interface_decl(bc_ClassLoader * self, ILType * iltype, bc_Type*
 	CLBC_check_interface(self, iltype, tp, scope);
 }
 
-static void CLBC_interface_impl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_interface_impl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	if((tp->State & TYPE_IMPL) > 0) {
 		return;
 	}
@@ -154,7 +154,7 @@ static void CLBC_interface_impl(bc_ClassLoader * self, ILType * iltype, bc_Type*
 	tp->State = tp->State | TYPE_IMPL;
 }
 
-static void CLBC_enum_decl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_enum_decl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	if((tp->State & TYPE_DECL) > 0) {
 		return;
 	}
@@ -168,7 +168,7 @@ static void CLBC_enum_decl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, 
 	tp->State = tp->State | TYPE_DECL;
 }
 
-static void CLBC_enum_impl(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_enum_impl(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	if((tp->State & TYPE_IMPL) > 0) {
 		return;
 	}
@@ -262,7 +262,7 @@ static void CLBC_excec_enum_impl(bc_ClassLoader* self) {
 	}
 }
 
-static void CLBC_check_class(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_check_class(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	//実装されていないインターフェイスを確認する
 	bc_Method* outiMethod = NULL;
 	if(tp->Tag == TYPE_CLASS_T &&
@@ -363,7 +363,7 @@ static void CLBC_check_class(bc_ClassLoader * self, ILType * iltype, bc_Type* tp
 	}
 }
 
-static void CLBC_check_interface(bc_ClassLoader * self, ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
+static void CLBC_check_interface(bc_ClassLoader * self, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope) {
 	//重複するパラメータ名を検出する
 	bc_Method* out_overwrap_m = NULL;
 	bc_StringView out_overwrap_name;

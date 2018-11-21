@@ -13,7 +13,7 @@
 #include "../../util/vector.h"
 #include "../../util/string_pool.h"
 #include "../il_type_interface.h"
-struct ILMethod;
+struct bc_ILMethod;
 /**
  * インターフェースを表す要素.
  */
@@ -30,7 +30,7 @@ typedef struct ILInterface {
  * @param self
  * @return
  */
-ILType* WrapILInterface(ILInterface* self);
+bc_ILType* WrapILInterface(ILInterface* self);
 
 /**
  * インターフェースを作成します.
@@ -44,14 +44,14 @@ ILInterface* NewILInterface(bc_StringView namev);
  * @param self
  * @param prop
  */
-void AddPropertyILInterface(ILInterface* self, struct ILProperty* prop);
+void AddPropertyILInterface(ILInterface* self, struct bc_ILProperty* prop);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param method
  */
-void AddMethodILInterface(ILInterface* self, struct ILMethod* method);
+void AddMethodILInterface(ILInterface* self, struct bc_ILMethod* method);
 
 /**
  * インターフェースを開放します.

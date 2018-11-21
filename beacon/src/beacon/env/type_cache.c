@@ -13,7 +13,7 @@ bc_TypeCache * bc_NewTypeCache() {
 	return ret;
 }
 
-bc_TypeCache * bc_InitTypeCache(bc_TypeCache * self, bc_ClassLoader * context, ILType * iltype, bc_Type* tp, bc_Namespace * scope, bc_TypeCacheKind kind) {
+bc_TypeCache * bc_InitTypeCache(bc_TypeCache * self, bc_ClassLoader * context, bc_ILType * iltype, bc_Type* tp, bc_Namespace * scope, bc_TypeCacheKind kind) {
 	self->Context = context;
 	self->ILType = iltype;
 	self->Type = tp;

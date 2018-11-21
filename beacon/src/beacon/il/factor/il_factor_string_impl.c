@@ -8,8 +8,8 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 
-ILFactor * WrapILString(ILString * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_STRING_T);
+bc_ILFactor * WrapILString(ILString * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_STRING_T);
 	ret->Kind.String = self;
 	return ret;
 }
@@ -20,16 +20,16 @@ ILString * NewILString(bc_StringView valuev) {
 	return ret;
 }
 
-void GenerateILString(ILString * self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILString(ILString * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	int index = bc_AddCStringEnviroment(env, self->Value);
 	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_SCONST);
 	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)index);
 }
 
-void LoadILString(ILString * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILString(ILString * self, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
-bc_GenericType* EvalILString(ILString * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILString(ILString * self, bc_Enviroment * env, bc_CallContext* cctx) {
 //	assert(TYPE_STRING->GenericSelf->CoreType != NULL);
 	return BC_GENERIC_STRING;
 }

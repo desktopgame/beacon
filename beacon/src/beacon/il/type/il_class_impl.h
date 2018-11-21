@@ -14,8 +14,8 @@
 #include "../../env/fqcn_cache.h"
 #include "../il_type_interface.h"
 #include <stdbool.h>
-struct ILField;
-struct ILMethod;
+struct bc_ILField;
+struct bc_ILMethod;
 /**
  * クラスを表す要素.
  */
@@ -39,7 +39,7 @@ typedef struct ILClass {
  * @param self
  * @return
  */
-ILType* WrapILClass(ILClass* self);
+bc_ILType* WrapILClass(ILClass* self);
 
 /**
  * クラスを表す要素を作成します.
@@ -53,21 +53,21 @@ ILClass* NewILClass(bc_StringView namev);
  * @param self
  * @param f
  */
-void AddFieldILClass(ILClass* self, struct ILField* f);
+void AddFieldILClass(ILClass* self, struct bc_ILField* f);
 
 /**
  * プロパティを追加します.
  * @param self
  * @param prop
  */
-void AddPropertyILClass(ILClass* self, struct ILProperty* prop);
+void AddPropertyILClass(ILClass* self, struct bc_ILProperty* prop);
 
 /**
  * メソッドを追加します.
  * @param self
  * @param m
  */
-void AddMethodILClass(ILClass* self, struct ILMethod* m);
+void AddMethodILClass(ILClass* self, struct bc_ILMethod* m);
 
 /**
  * クラスと含まれるメンバー宣言の一覧を解放します.

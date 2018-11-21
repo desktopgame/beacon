@@ -23,11 +23,11 @@ typedef struct ILNotOp {
 
 ILNotOp* NewILNotOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILNotOp(ILNotOp * self, struct bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILNotOp(ILNotOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILNotOp(ILNotOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILNotOp(ILNotOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNotOp(ILNotOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILNotOp(ILNotOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILNotOp(ILNotOp* self);
 

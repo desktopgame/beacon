@@ -6,8 +6,8 @@
 #include "../../env/type_interface.h"
 #include <stdio.h>
 
-ILStatement* WrapILThrow(ILThrow* self) {
-	ILStatement* ret = NewILStatement(ILSTMT_THROW_T);
+bc_ILStatement* WrapILThrow(ILThrow* self) {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_THROW_T);
 	ret->Kind.Throw = self;
 	return ret;
 }
@@ -18,14 +18,14 @@ ILThrow* NewILThrow() {
 	return ret;
 }
 
-void GenerateILThrow(ILThrow* self, bc_Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->Factor, env, cctx);
+void GenerateILThrow(ILThrow* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Factor, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_THROW);
 }
 
-void LoadILThrow(ILThrow* self, bc_Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->Factor, env, cctx);
-	bc_GenericType* tgt = EvalILFactor(self->Factor, env, cctx);
+void LoadILThrow(ILThrow* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_LoadILFactor(self->Factor, env, cctx);
+	bc_GenericType* tgt = bc_EvalILFactor(self->Factor, env, cctx);
 	if(bc_DistanceGenericType(BC_GENERIC_EXCEPTION, tgt, cctx) < 0) {
 		if(tgt->CoreType != NULL) {
 			bc_Panic(
@@ -37,6 +37,6 @@ void LoadILThrow(ILThrow* self, bc_Enviroment* env, CallContext* cctx) {
 }
 
 void DeleteILThrow(ILThrow* self) {
-	DeleteILFactor(self->Factor);
+	bc_DeleteILFactor(self->Factor);
 	MEM_FREE(self);
 }

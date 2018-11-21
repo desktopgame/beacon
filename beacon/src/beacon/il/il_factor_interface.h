@@ -24,7 +24,7 @@
 /**
  * 計算可能な要素の種類.
  */
-typedef enum ILFactorType {
+typedef enum bc_ILFactorType {
 	ILFACTOR_INT_T,
 	ILFACTOR_DOUBLE_T,
 	ILFACTOR_CHAR_T,
@@ -46,7 +46,7 @@ typedef enum ILFactorType {
 	ILFACTOR_EXPLICIT_UNARY_OP_T,
 	ILFACTOR_PROPERTY_T,
 	ILFACTOR_SUBSCRIPT_T
-} ILFactorType;
+} bc_ILFactorType;
 
 //ファクターとして扱える要素自身が内側にファクターを含む(再帰)
 //ために、スーパーセットの定義ではサブセットを前方宣言します。
@@ -84,8 +84,8 @@ struct ILSubscript;
 /**
  * 計算可能な要素.
  */
-typedef struct ILFactor {
-	ILFactorType Type;
+typedef struct bc_ILFactor {
+	bc_ILFactorType Type;
 	int Lineno;
 	union {
 		struct ILInt* Int;
@@ -113,10 +113,10 @@ typedef struct ILFactor {
 		struct ILPropertyAccess* PropertyAccess;
 		struct ILSubscript* Subscript;
 	} Kind;
-} ILFactor;
+} bc_ILFactor;
 
-#define NewILFactor(type) (MallocILFactor(type, __FILE__, __LINE__))
-ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
+#define bc_NewILFactor(type) (bc_MallocILFactor(type, __FILE__, __LINE__))
+bc_ILFactor* bc_MallocILFactor(bc_ILFactorType type, const char* filename, int lineno);
 
 /**
  * オペコードを生成します.
@@ -125,7 +125,7 @@ ILFactor* MallocILFactor(ILFactorType type, const char* filename, int lineno);
  * @param env
  * @param cctx
  */
-void GenerateILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
+void bc_GenerateILFactor(bc_ILFactor* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 因子を読み込みます.
@@ -134,7 +134,7 @@ void GenerateILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
+void bc_LoadILFactor(bc_ILFactor* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * この因子が表す型を返します.
@@ -144,7 +144,7 @@ void LoadILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
  * @param cctx
  * @return
  */
-bc_GenericType* EvalILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* bc_EvalILFactor(bc_ILFactor* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * ファクターの文字列表現を返します.
@@ -153,23 +153,23 @@ bc_GenericType* EvalILFactor(ILFactor* self, bc_Enviroment* env, CallContext* cc
  * @param ilctx
  * @return
  */
-char* ILFactorToString(ILFactor* self, bc_Enviroment* env);
+char* bc_ILFactorToString(bc_ILFactor* self, bc_Enviroment* env);
 
 /**
  * @param sb
  * @param args
  */
-void ILArgsToString(bc_Buffer* sb, bc_Vector* args, bc_Enviroment* env);
+void bc_ILArgsToString(bc_Buffer* sb, bc_Vector* args, bc_Enviroment* env);
 
 /**
  * @param sb
  * @param type_args
  */
-void ILTypeArgsToString(bc_Buffer* sb, bc_Vector* type_args, bc_Enviroment* env);
+void bc_ILTypeArgsToString(bc_Buffer* sb, bc_Vector* type_args, bc_Enviroment* env);
 
 /**
  * 計算可能な要素を開放します.
  * @param self
  */
-void DeleteILFactor(ILFactor* self);
+void bc_DeleteILFactor(bc_ILFactor* self);
 #endif // !SIGNAL_IL_IL_FACTOR_INTERFACE_H

@@ -17,24 +17,24 @@ struct bc_GenericCache;
 /**
  * 関数宣言を表す要素.
  */
-typedef struct ILFunction {
+typedef struct bc_ILFunction {
 	bc_StringView Name;
 	bc_Vector* TypeParameters;
 	bc_Vector* Parameters;
 	bc_Vector* Statements;
 	struct bc_GenericCache* ReturnGCache;
-} ILFunction;
+} bc_ILFunction;
 
 /**
  * 新しい関数宣言を作成します.
  * @param name
  * @return
  */
-ILFunction* NewILFunction(bc_StringView name);
+bc_ILFunction* bc_NewILFunction(bc_StringView name);
 
 /**
  * 関数を解放します.
  * @param self
  */
-void DeleteILFunction(ILFunction* self);
+void bc_DeleteILFunction(bc_ILFunction* self);
 #endif // !SIGNAL_IL_IL_FUNCTION_H

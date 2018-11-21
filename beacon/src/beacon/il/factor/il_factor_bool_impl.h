@@ -22,13 +22,13 @@ typedef struct ILBool {
 	bool Value;
 } ILBool;
 
-ILFactor* WrapILBool(ILBool* self);
+bc_ILFactor* WrapILBool(ILBool* self);
 
 ILBool* NewILBool(bool b);
 
-void GenerateILBool(ILBool* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILBool(ILBool* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILBool(ILBool* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILBool(ILBool* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILBoolToString(ILBool* self, bc_Enviroment* env);
 

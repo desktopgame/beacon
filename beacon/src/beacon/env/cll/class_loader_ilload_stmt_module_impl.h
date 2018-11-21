@@ -12,9 +12,9 @@
 #include "../../util/vector.h"
 struct bc_ClassLoader;
 struct bc_AST;
-struct ILStatement;
+struct bc_ILStatement;
 
-struct ILStatement* CLILStmt(struct bc_ClassLoader* self, struct bc_AST* source);
+struct bc_ILStatement* CLILStmt(struct bc_ClassLoader* self, struct bc_AST* source);
 
 void CLILBody(struct bc_ClassLoader* self, bc_Vector* list, struct bc_AST* source);
 #endif

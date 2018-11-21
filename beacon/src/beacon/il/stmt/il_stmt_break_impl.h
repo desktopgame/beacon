@@ -14,11 +14,11 @@
 
 struct bc_Enviroment;
 
-ILStatement* WrapILBreak();
+bc_ILStatement* WrapILBreak();
 
-void GenerateILBreak(void* empty, bc_Enviroment* env, CallContext* cctx);
+void GenerateILBreak(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILBreak(void* empty, bc_Enviroment* env, CallContext* cctx);
+void LoadILBreak(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILBreak(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_BREAK_H

@@ -16,46 +16,46 @@ struct bc_Constructor;
 struct bc_OperatorOverload;
 struct bc_GenericType;
 
-typedef enum CallFrameTag {
+typedef enum bc_CallFrameTag {
 	FRAME_RESOLVE_T,
 	FRAME_SELF_INVOKE_T,
 	FRAME_STATIC_INVOKE_T,
 	FRAME_INSTANCE_INVOKE_T,
-} CallFrameTag;
+} bc_CallFrameTag;
 
-typedef struct CallResolve {
+typedef struct bc_CallResolve {
 	struct bc_GenericType* GType;
 	bc_Vector* TypeArgs;
-} CallResolve;
+} bc_CallResolve;
 
-typedef struct CallSelfInvoke {
+typedef struct bc_CallSelfInvoke {
 	bc_Vector* Args;
 	bc_Vector* TypeArgs;
-} CallSelfInvoke;
+} bc_CallSelfInvoke;
 
-typedef struct CallStaticInvoke {
+typedef struct bc_CallStaticInvoke {
 	bc_Vector* Args;
 	bc_Vector* TypeArgs;
-} CallStaticInvoke;
+} bc_CallStaticInvoke;
 
-typedef struct CallInstanceInvoke {
+typedef struct bc_CallInstanceInvoke {
 	struct bc_GenericType* Receiver;
 	bc_Vector* Args;
 	bc_Vector* TypeArgs;
-} CallInstanceInvoke;
+} bc_CallInstanceInvoke;
 
-typedef struct CallFrame {
-	CallFrameTag Tag;
+typedef struct bc_CallFrame {
+	bc_CallFrameTag Tag;
 	union {
-		CallResolve Resolve;
-		CallSelfInvoke SelfInvoke;
-		CallStaticInvoke StaticInvoke;
-		CallInstanceInvoke InstanceInvoke;
+		bc_CallResolve Resolve;
+		bc_CallSelfInvoke SelfInvoke;
+		bc_CallStaticInvoke StaticInvoke;
+		bc_CallInstanceInvoke InstanceInvoke;
 	} Kind;
-} CallFrame;
+} bc_CallFrame;
 
-#define NewCallFrame(tag) (MallocCallFrame(tag, __FILE__, __LINE__))
-CallFrame* MallocCallFrame(CallFrameTag tag, const char* filename, int lineno);
+#define bc_NewCallFrame(tag) (bc_MallocCallFrame(tag, __FILE__, __LINE__))
+bc_CallFrame* bc_MallocCallFrame(bc_CallFrameTag tag, const char* filename, int lineno);
 
-void DeleteCallFrame(CallFrame* self);
+void bc_DeleteCallFrame(bc_CallFrame* self);
 #endif

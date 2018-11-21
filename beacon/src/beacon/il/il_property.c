@@ -3,8 +3,8 @@
 #include "../env/generic_cache.h"
 #include "../util/text.h"
 
-ILProperty* MallocILProperty(bc_StringView namev, const char* filename, int lineno) {
-	ILProperty* ret = bc_MXMalloc(sizeof(ILProperty), filename, lineno);
+bc_ILProperty* bc_MallocILProperty(bc_StringView namev, const char* filename, int lineno) {
+	bc_ILProperty* ret = bc_MXMalloc(sizeof(bc_ILProperty), filename, lineno);
 	ret->Name = namev;
 	ret->GCache = bc_NewGenericCache();
 	ret->Set = NULL;
@@ -12,9 +12,9 @@ ILProperty* MallocILProperty(bc_StringView namev, const char* filename, int line
 	return ret;
 }
 
-void DeleteILProperty(ILProperty* self) {
+void bc_DeleteILProperty(bc_ILProperty* self) {
 	bc_DeleteGenericCache(self->GCache);
-	DeleteILPropertyBody(self->Set);
-	DeleteILPropertyBody(self->Get);
+	bc_DeleteILPropertyBody(self->Set);
+	bc_DeleteILPropertyBody(self->Get);
 	MEM_FREE(self);
 }

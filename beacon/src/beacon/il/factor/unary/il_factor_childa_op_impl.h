@@ -23,11 +23,11 @@ typedef struct ILChildaOp {
 
 ILChildaOp* NewILChildaOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILChildaOp(ILChildaOp * self, struct bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILChildaOp(ILChildaOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILChildaOp(ILChildaOp* self);
 

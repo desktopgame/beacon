@@ -11,25 +11,25 @@
 #define BEACON_IL_FACTOR_IL_FACTOR_EXPLICIT_UNARY_OP_IMPL_H
 #include "../../ast/operator_type.h"
 #include "../call_context.h"
-struct ILFactor;
+struct bc_ILFactor;
 struct bc_Enviroment;
 struct bc_GenericType;
 
 typedef struct ILExplicitUnaryOp {
-	struct ILFactor* Receiver;
+	struct bc_ILFactor* Receiver;
 	bc_OperatorType Type;
 	int Index;
 } ILExplicitUnaryOp;
 
-struct ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self);
+struct bc_ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self);
 
 ILExplicitUnaryOp* NewILExplicitUnaryOp(bc_OperatorType type);
 
-void GenerateILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILExplicitUnaryOp(ILExplicitUnaryOp* self);
 #endif

@@ -110,7 +110,7 @@ void bc_DeleteClassLoader(bc_ClassLoader * self) {
 		return;
 	}
 	bc_DeleteAST(self->SourceCode);
-	DeleteILToplevel(self->ILCode);
+	bc_DeleteILToplevel(self->ILCode);
 	bc_DeleteVector(self->TypeCaches, delete_cache);
 	bc_DeleteImportManager(self->ImportManager);
 	bc_DeleteEnviroment(self->Env);
@@ -196,15 +196,15 @@ static void load_toplevel(bc_ClassLoader* self) {
 	ILNewInstance* newWorldInstance = NewILNewInstance();
 	newWorldInstance->FQCNCache->Name = bc_InternString("World");
 	createWorldStmt->Value = WrapILNewInstance(newWorldInstance);
-	ILStatement* body = WrapILInferencedTypeInit(createWorldStmt);
+	bc_ILStatement* body = WrapILInferencedTypeInit(createWorldStmt);
 	//これをやらないと -1 のまま
 	body->Lineno = 0;
 	createWorldStmt->Value->Lineno = 0;
 	//worldをselfにする
-	CallContext* cctx = NewCallContext(CALL_TOP_T);
+	bc_CallContext* cctx = bc_NewCallContext(CALL_TOP_T);
 	cctx->Ty = bc_FindTypeFromNamespace(bc_GetLangNamespace(), bc_InternString("World"));
-	LoadILStmt(body, self->Env, cctx);
-	GenerateILStmt(body, self->Env, cctx);
+	bc_LoadILStmt(body, self->Env, cctx);
+	bc_GenerateILStmt(body, self->Env, cctx);
 	//$worldをthisにする
 	bc_AddOpcodeBuf(self->Env->Bytecode, OP_LOAD);
 	bc_AddOpcodeBuf(self->Env->Bytecode, 1);
@@ -212,8 +212,8 @@ static void load_toplevel(bc_ClassLoader* self) {
 	bc_AddOpcodeBuf(self->Env->Bytecode, 0);
 	//以下読み込み
 	CLBC_body(self, self->ILCode->StatementList, self->Env, cctx, NULL);
-	DeleteILStmt(body);
-	DeleteCallContext(cctx);
+	bc_DeleteILStmt(body);
+	bc_DeleteCallContext(cctx);
 	bc_CacheScriptContext();
 }
 
@@ -231,17 +231,17 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 	}
 	//メソッドの宣言のみロード
 	for(int i=0; i<funcs->Length; i++) {
-		ILFunction* ilfunc = bc_AtVector(funcs, i);
+		bc_ILFunction* ilfunc = bc_AtVector(funcs, i);
 		bc_Method* m = bc_NewMethod(ilfunc->Name);
 		bc_DupTypeParameterList(ilfunc->TypeParameters, m->TypeParameters);
 		bc_ScriptMethod* sm = bc_NewScriptMethod();
 		bc_Enviroment* env = bc_NewEnviroment();
 		//CallContextの設定
-		CallContext* cctx = NewCallContext(CALL_METHOD_T);
+		bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
 		cctx->Scope = bc_GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
-		bc_Namespace* loc = GetNamespaceCContext(cctx);
+		bc_Namespace* loc = bc_GetNamespaceCContext(cctx);
 		env->ContextRef = self;
 		sm->Env = env;
 		m->Access = ACCESS_PRIVATE_T;
@@ -253,7 +253,7 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 	//	bc_Println();
 		//引数を指定
 		for(int j=0; j<ilfunc->Parameters->Length; j++) {
-			ILParameter* ilparam = bc_AtVector(ilfunc->Parameters, j);
+			bc_ILParameter* ilparam = bc_AtVector(ilfunc->Parameters, j);
 			bc_Parameter* param = bc_NewParameter(ilparam->Name);
 			bc_PushVector(m->Parameters, param);
 			param->GType = bc_ResolveImportManager(loc, ilparam->GCache, cctx);
@@ -271,19 +271,19 @@ static void load_toplevel_function(bc_ClassLoader* self) {
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)0);
 		bc_PushVector(worldT->Kind.Class->Methods, m);
 		//CLBC_corutine(self, m, env, ilfunc->parameter_list, ilfunc->statement_list, cctx, GetLangNamespace());
-		DeleteCallContext(cctx);
+		bc_DeleteCallContext(cctx);
 	}
 	//実装のロード
 	for(int i=0; i<funcs->Length; i++) {
-		ILFunction* ilfunc = bc_AtVector(funcs, i);
+		bc_ILFunction* ilfunc = bc_AtVector(funcs, i);
 		bc_Method* m = bc_AtVector(BC_TYPE2CLASS(worldT)->Methods, i);
 		bc_ScriptMethod* sm = m->Kind.Script;
-		CallContext* cctx = NewCallContext(CALL_METHOD_T);
+		bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
 		cctx->Scope = bc_GetLangNamespace();
 		cctx->Ty = worldT;
 		cctx->Kind.Method = m;
 		CLBC_corutine(self, m, sm->Env, ilfunc->Parameters, ilfunc->Statements, cctx, bc_GetLangNamespace());
-		DeleteCallContext(cctx);
+		bc_DeleteCallContext(cctx);
 	}
 }
 

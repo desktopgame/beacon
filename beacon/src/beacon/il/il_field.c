@@ -6,8 +6,8 @@
 #include "il_factor_interface.h"
 #include "../env/generic_cache.h"
 
-ILField * NewILField(bc_StringView name) {
-	ILField* ret = (ILField*)MEM_MALLOC(sizeof(ILField));
+bc_ILField * bc_NewILField(bc_StringView name) {
+	bc_ILField* ret = (bc_ILField*)MEM_MALLOC(sizeof(bc_ILField));
 	ret->GCache = bc_NewGenericCache();
 	ret->Access = ACCESS_PUBLIC_T;
 	ret->Modifier = MODIFIER_NONE_T;
@@ -16,11 +16,11 @@ ILField * NewILField(bc_StringView name) {
 	return ret;
 }
 
-void DeleteILField(ILField * self) {
+void bc_DeleteILField(bc_ILField * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteILFactor(self->InitialValue);
+	bc_DeleteILFactor(self->InitialValue);
 	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

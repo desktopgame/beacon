@@ -14,7 +14,7 @@
 #include "../../util/text.h"
 #include <string.h>
 
-int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx) {
+int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env, bc_CallContext* cctx) {
 	assert(params->Length == ilargs->Length);
 	int score = 0;
 	bool illegal = false;
@@ -23,11 +23,11 @@ int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env,
 	for (int i = 0; i < params->Length; i++) {
 		bc_VectorItem varg = bc_AtVector(ilargs, i);
 		bc_VectorItem vparam = bc_AtVector(params, i);
-		ILArgument* arg = (ILArgument*)varg;
+		bc_ILArgument* arg = (bc_ILArgument*)varg;
 		bc_Parameter* param = (bc_Parameter*)vparam;
 		//実引数が NULL なら常に許容する
 		int dist = 0;
-		bc_GenericType* argType = EvalILFactor(arg->Factor, env, cctx);
+		bc_GenericType* argType = bc_EvalILFactor(arg->Factor, env, cctx);
 		if(bc_GetLastPanic()) {
 			return -1;
 		}
@@ -118,7 +118,7 @@ int bc_MetaRCalcScore(bc_Vector* params, bc_Vector* args, bc_Vector* typeargs, b
 	return score;
 }
 
-bc_Method * bc_MetaILFindMethod(bc_Vector * method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method * bc_MetaILFindMethod(bc_Vector * method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, bc_CallContext* cctx, int * outIndex) {
 	return bc_MetaScopedILFindMethod(NULL, method_vec, namev, ilargs, env, cctx, outIndex);
 }
 
@@ -126,7 +126,7 @@ bc_Method* bc_MetaGFindMethod(bc_Vector* method_vec, bc_StringView namev, bc_Vec
 	return bc_MetaScopedGFindMethod(NULL, method_vec, namev, gargs, outIndex);
 }
 
-bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, bc_Vector* method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, CallContext* cctx, int * outIndex) {
+bc_Method* bc_MetaScopedILFindMethod(bc_Class* context, bc_Vector* method_vec, bc_StringView namev, bc_Vector * ilargs, bc_Enviroment * env, bc_CallContext* cctx, int * outIndex) {
 	(*outIndex) = -1;
 	//CreateVTableClass(self);
 	bc_Method* ret = NULL;
@@ -197,7 +197,7 @@ bc_Method* bc_MetaScopedGFindMethod(bc_Class* context, bc_Vector* method_vec, bc
 	return ret;
 }
 
-bc_Constructor* bc_MetaILFindConstructor(bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaILFindConstructor(bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex) {
 	return bc_MetaScopedILFindConstructor(NULL, ctor_vec, ilargs, env, cctx, outIndex);
 }
 
@@ -205,7 +205,7 @@ bc_Constructor* bc_MetaRFindConstructor(bc_Vector* ctor_vec, bc_Vector* args, bc
 	return bc_MetaScopedRFindConstructor(NULL, ctor_vec, args, typeargs, fr, outIndex);
 }
 
-bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_Constructor* bc_MetaScopedILFindConstructor(bc_Class* context, bc_Vector* ctor_vec, bc_Vector* ilargs, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex) {
 	//見つかった中からもっとも一致するコンストラクタを選択する
 	int min = 1024;
 	bc_Constructor* ret = NULL;
@@ -288,8 +288,8 @@ bc_OperatorOverload* bc_MetaGFindOperator(bc_Vector* opov_vec, bc_OperatorType t
 	return ret;
 }
 
-bool bc_IsMetaMethodAccessValid(bc_Method* m, CallContext* cctx) {
-	bc_Class* context = GetClassCContext(cctx);
+bool bc_IsMetaMethodAccessValid(bc_Method* m, bc_CallContext* cctx) {
+	bc_Class* context = bc_GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		m->Access == ACCESS_PRIVATE_T &&
@@ -305,8 +305,8 @@ bool bc_IsMetaMethodAccessValid(bc_Method* m, CallContext* cctx) {
 	return true;
 }
 
-bool bc_IsMetaConstructorAccessValid(bc_Constructor* ctor, CallContext* cctx) {
-	bc_Class* context = GetClassCContext(cctx);
+bool bc_IsMetaConstructorAccessValid(bc_Constructor* ctor, bc_CallContext* cctx) {
+	bc_Class* context = bc_GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
 		ctor->Access == ACCESS_PRIVATE_T &&

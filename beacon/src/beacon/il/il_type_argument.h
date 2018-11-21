@@ -12,38 +12,38 @@
 #include "../env/generic_cache.h"
 #include "../env/generic_type.h"
 #include "../util/vector.h"
-struct CallContext;
+struct bc_CallContext;
 
 /**
  * 型実引数を表す構造体.
  */
-typedef struct ILTypeArgument {
+typedef struct bc_ILTypeArgument {
 	bc_GenericCache* GCache;
 	bc_GenericType* GType;
-} ILTypeArgument;
+} bc_ILTypeArgument;
 
 /**
  * 新しい型実引数を作成します.
  * @return
  */
-ILTypeArgument* NewILTypeArgument();
+bc_ILTypeArgument* bc_NewILTypeArgument();
 
 /**
  * 全ての型実引数を出力します.
  * @param iltype_args
  */
-void PrintILTypeArgument(bc_Vector* iltype_args);
+void bc_PrintILTypeArgument(bc_Vector* iltype_args);
 
 /**
  * @param iltype_args
  * @param cctx
  * @return
  */
-void ResolveILTypeArgument(bc_Vector* iltype_args, struct CallContext* cctx);
+void bc_ResolveILTypeArgument(bc_Vector* iltype_args, struct bc_CallContext* cctx);
 
 /**
  * 型実引数を解放します.
  * @param self
  */
-void DeleteILTypeArgument(ILTypeArgument* self);
+void bc_DeleteILTypeArgument(bc_ILTypeArgument* self);
 #endif

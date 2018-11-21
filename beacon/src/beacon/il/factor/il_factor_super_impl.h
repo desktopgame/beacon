@@ -25,11 +25,11 @@ typedef struct ILSuper {
 
 ILSuper* NewILSuper();
 
-void GenerateILSuper(ILSuper* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILSuper(ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILSuper(ILSuper* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILSuper(ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILSuper(ILSuper* self, struct bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILSuper(ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILSuperToString(ILSuper* self, struct bc_Enviroment* env);
 

@@ -136,7 +136,7 @@ void bc_AddMethodType(bc_Type* self, struct bc_Method* m);
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindMethodType(bc_Type* self, bc_StringView namev, bc_Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindMethodType(bc_Type* self, bc_StringView namev, bc_Vector* args, struct bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
 
 /**
  * この型から静的メソッドを検索します.
@@ -148,7 +148,7 @@ struct bc_Method* bc_ILFindMethodType(bc_Type* self, bc_StringView namev, bc_Vec
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindSMethodType(bc_Type* self, bc_StringView namev, bc_Vector* args, struct bc_Enviroment* env, CallContext* cctx, int* outIndex);
+struct bc_Method* bc_ILFindSMethodType(bc_Type* self, bc_StringView namev, bc_Vector* args, struct bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
 
 /**
  * 仮想関数の一覧を返します.

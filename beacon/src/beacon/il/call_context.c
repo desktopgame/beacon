@@ -7,64 +7,64 @@
 #include "../env/generic_type.h"
 #include "../env/fqcn_cache.h"
 
-CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno) {
-	CallContext* ret = bc_MXMalloc(sizeof(CallContext), filename, lineno);
+bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename, int lineno) {
+	bc_CallContext* ret = bc_MXMalloc(sizeof(bc_CallContext), filename, lineno);
 #if defined(_MSC_VER)
-	ControlStructure cs = { 0 };
+	bc_ControlStructure cs = { 0 };
 #else
-	ControlStructure cs = {};
+	bc_ControlStructure cs = {};
 #endif
 	ret->CallStack = bc_MallocVector(filename, lineno);
 	ret->Scope = NULL;
 	ret->Ty = NULL;
 	ret->Tag = tag;
 	ret->Control = cs;
-	AllocControlStructure(&ret->Control);
+	bc_AllocControlStructure(&ret->Control);
 	return ret;
 }
 
-CallFrame* PushImplCallContext(CallContext* self, CallFrameTag tag, const char* filename, int lineno) {
-	CallFrame* fr = MallocCallFrame(tag, filename, lineno);
+bc_CallFrame* bc_PushImplCallContext(bc_CallContext* self, bc_CallFrameTag tag, const char* filename, int lineno) {
+	bc_CallFrame* fr = bc_MallocCallFrame(tag, filename, lineno);
 	bc_PushVector(self->CallStack, fr);
 	return fr;
 }
 
-CallFrame* TopCallContext(CallContext* self) {
+bc_CallFrame* bc_TopCallContext(bc_CallContext* self) {
 	return bc_TopVector(self->CallStack);
 }
 
-void PopCallContext(CallContext* self) {
-	CallFrame* fr = bc_PopVector(self->CallStack);
-	DeleteCallFrame(fr);
+void bc_PopCallContext(bc_CallContext* self) {
+	bc_CallFrame* fr = bc_PopVector(self->CallStack);
+	bc_DeleteCallFrame(fr);
 }
 
-bc_Namespace* GetNamespaceCContext(CallContext* self) {
+bc_Namespace* bc_GetNamespaceCContext(bc_CallContext* self) {
 	if(self->Scope != NULL) {
 		return self->Scope;
 	}
 	return bc_GetLangNamespace();
 }
 
-bc_Method* GetMethodCContext(CallContext* self) {
+bc_Method* bc_GetMethodCContext(bc_CallContext* self) {
 	if(self->Tag != CALL_METHOD_T) {
 		return NULL;
 	}
 	return self->Kind.Method;
 }
 
-bc_Type* GetTypeCContext(CallContext* self) {
+bc_Type* bc_GetTypeCContext(bc_CallContext* self) {
 	if(self->Tag == CALL_TOP_T) {
 		return bc_FindTypeFromNamespace(bc_GetLangNamespace(), bc_InternString("World"));
 	}
 	return self->Ty;
 }
 
-bc_Class* GetClassCContext(CallContext* self) {
-	return BC_TYPE2CLASS(GetTypeCContext(self));
+bc_Class* bc_GetClassCContext(bc_CallContext* self) {
+	return BC_TYPE2CLASS(bc_GetTypeCContext(self));
 }
 
-bc_GenericType* GetReceiverCContext(CallContext* self) {
-	CallFrame* cfr = bc_TopVector(self->CallStack);
+bc_GenericType* bc_GetReceiverCContext(bc_CallContext* self) {
+	bc_CallFrame* cfr = bc_TopVector(self->CallStack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.Receiver;
 	} else if(cfr->Tag == FRAME_SELF_INVOKE_T) {
@@ -75,7 +75,7 @@ bc_GenericType* GetReceiverCContext(CallContext* self) {
 	return NULL;
 }
 
-bc_Type* GetEvalTypeCContext(CallContext* self, bc_FQCNCache* fqcn) {
+bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
 	bc_Type* tp = bc_GetTypeFQCN(fqcn, self->Scope);
 	if(tp == NULL) {
 		tp = bc_GetTypeFQCN(fqcn, bc_GetLangNamespace());
@@ -83,8 +83,8 @@ bc_Type* GetEvalTypeCContext(CallContext* self, bc_FQCNCache* fqcn) {
 	return tp;
 }
 
-bc_Vector* GetTypeArgsCContext(CallContext* self) {
-	CallFrame* cfr = bc_TopVector(self->CallStack);
+bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self) {
+	bc_CallFrame* cfr = bc_TopVector(self->CallStack);
 	if(cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
 		return cfr->Kind.InstanceInvoke.TypeArgs;
 	} else if(cfr->Tag == FRAME_STATIC_INVOKE_T) {
@@ -97,13 +97,13 @@ bc_Vector* GetTypeArgsCContext(CallContext* self) {
 	return NULL;
 }
 
-bool IsStaticCContext(CallContext* self) {
+bool bc_IsStaticCContext(bc_CallContext* self) {
 	return self->Tag == CALL_METHOD_T &&
 	       bc_IsStaticModifier(self->Kind.Method->Modifier);
 }
 
-void DeleteCallContext(CallContext* self) {
-	FreeControlStructure(self->Control);
+void bc_DeleteCallContext(bc_CallContext* self) {
+	bc_FreeControlStructure(self->Control);
 	bc_DeleteVector(self->CallStack, bc_VectorDeleterOfNull);
 	MEM_FREE(self);
 }

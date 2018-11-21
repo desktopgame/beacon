@@ -20,15 +20,15 @@ typedef struct ILDouble {
 	double Value;
 } ILDouble;
 
-ILFactor* WrapILDouble(ILDouble* self);
+bc_ILFactor* WrapILDouble(ILDouble* self);
 
 ILDouble* NewILDouble(double d);
 
-void GenerateILDouble(ILDouble* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILDouble(ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILDouble(ILDouble* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILDouble(ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILDouble(ILDouble* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILDouble(ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILDoubleToString(ILDouble* self, bc_Enviroment* env);
 

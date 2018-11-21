@@ -12,7 +12,7 @@
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 
-void GenerateILYieldBreak(ILStatementYieldBreak* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILYieldBreak(ILStatementYieldBreak* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILYieldBreak(ILStatementYieldBreak * self, bc_Enviroment* env, CallContext* cctx);
+void LoadILYieldBreak(ILStatementYieldBreak * self, bc_Enviroment* env, bc_CallContext* cctx);
 #endif

@@ -12,21 +12,21 @@
 #include "../il_factor_interface.h"
 #include "../il_stmt_interface.h"
 struct bc_Enviroment;
-struct ILStatement;
+struct bc_ILStatement;
 
 typedef struct ILAssert {
-	ILFactor* Condition;
-	ILFactor* Message;
-	struct ILStatement* Parent;
+	bc_ILFactor* Condition;
+	bc_ILFactor* Message;
+	struct bc_ILStatement* Parent;
 } ILAssert;
 
-ILStatement* WrapILAssert(ILAssert* self);
+bc_ILStatement* WrapILAssert(ILAssert* self);
 
 ILAssert* NewILAssert();
 
-void GenerateILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILAssert(ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILAssert(ILAssert* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILAssert(ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILAssert(ILAssert* self);
 #endif

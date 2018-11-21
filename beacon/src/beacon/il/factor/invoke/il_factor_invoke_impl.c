@@ -15,13 +15,13 @@
 #include <stdio.h>
 
 //proto
-static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, CallContext* cctx);
-static void resolve_default(ILInvoke * self, bc_Enviroment* env, CallContext* cctx);
+static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx);
+static void resolve_default(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx);
 static void ILInvoke_args_delete(bc_VectorItem item);
-static void ILInvoke_check(ILInvoke * self, bc_Enviroment* env, CallContext* cctx);
+static void ILInvoke_check(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx);
 static bc_GenericType* ILInvoke_return_gtype(ILInvoke* self);
-static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
-static void GenerateILInvoke_subscript(ILInvoke* self, bc_Enviroment* env, CallContext* cctx);
+static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx);
+static void GenerateILInvoke_subscript(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 ILInvoke* NewILInvoke(bc_StringView namev) {
 	ILInvoke* ret = (ILInvoke*)MEM_MALLOC(sizeof(ILInvoke));
@@ -35,25 +35,25 @@ ILInvoke* NewILInvoke(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	GenerateILInvoke_method(self, env, cctx);
 	GenerateILInvoke_subscript(self, env, cctx);
 }
 
-void LoadILInvoke(ILInvoke * self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILInvoke(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->index != -1) {
 		return;
 	}
-	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
+	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Args = self->args;
 	cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
-	cfr->Kind.InstanceInvoke.Receiver = EvalILFactor(self->receiver, env, cctx);
-	LoadILFactor(self->receiver, env, cctx);
+	cfr->Kind.InstanceInvoke.Receiver = bc_EvalILFactor(self->receiver, env, cctx);
+	bc_LoadILFactor(self->receiver, env, cctx);
 	ILInvoke_check(self, env, cctx);
-	PopCallContext(cctx);
+	bc_PopCallContext(cctx);
 }
 
-bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILInvoke_check(self, env, cctx);
 	if(bc_GetLastPanic()) {
 		return NULL;
@@ -74,12 +74,12 @@ bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment* env, CallContext* c
 
 char* ILInvokeToString(ILInvoke* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
-	char* invstr = ILFactorToString(self->receiver, env);
+	char* invstr = bc_ILFactorToString(self->receiver, env);
 	bc_AppendsBuffer(sb, invstr);
 	bc_AppendBuffer(sb, '.');
 	bc_AppendsBuffer(sb, bc_Ref2Str(self->namev));
-	ILTypeArgsToString(sb, self->type_args, env);
-	ILArgsToString(sb, self->type_args, env);
+	bc_ILTypeArgsToString(sb, self->type_args, env);
+	bc_ILArgsToString(sb, self->type_args, env);
 	MEM_FREE(invstr);
 	return bc_ReleaseBuffer(sb);
 }
@@ -87,26 +87,26 @@ char* ILInvokeToString(ILInvoke* self, bc_Enviroment* env) {
 void DeleteILInvoke(ILInvoke* self) {
 	bc_DeleteVector(self->args, ILInvoke_args_delete);
 	bc_DeleteVector(self->type_args, bc_VectorDeleterOfNull);
-	DeleteILFactor(self->receiver);
+	bc_DeleteILFactor(self->receiver);
 	//generic_DeleteType(self->resolved);
 	MEM_FREE(self);
 }
 
-bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, ILFactor* value, bc_Enviroment* env, CallContext* cctx, int* outIndex) {
+bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex) {
 	assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
 	bc_Vector* args = bc_NewVector();
-	bc_PushVector(args, ((ILArgument*)bc_AtVector(self->args, 0))->Factor);
+	bc_PushVector(args, ((bc_ILArgument*)bc_AtVector(self->args, 0))->Factor);
 	bc_PushVector(args, value);
 	bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(BC_TYPE2CLASS(self->u.opov->Parent), OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
 	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 	return opov;
 }
 //private
-static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, CallContext* cctx) {
+static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
-	bc_GenericType* receivergType = EvalILFactor(self->receiver, env, cctx);
+	bc_GenericType* receivergType = bc_EvalILFactor(self->receiver, env, cctx);
 	bc_GenericType* rgtp = ILInvoke_return_gtype(self);
 	if(rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
 		//レシーバの実体化された型の中で、
@@ -122,26 +122,26 @@ static void resolve_non_default(ILInvoke * self, bc_Enviroment* env, CallContext
 	}
 }
 
-static void resolve_default(ILInvoke * self, bc_Enviroment* env, CallContext* cctx) {
+static void resolve_default(ILInvoke * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->resolved != NULL) {
 		return;
 	}
-	bc_GenericType* receivergType = EvalILFactor(self->receiver, env, cctx);
+	bc_GenericType* receivergType = bc_EvalILFactor(self->receiver, env, cctx);
 	bc_GenericType* rgtp = ILInvoke_return_gtype(self);
 //	virtual_type returnvType = self->m->return_vtype;
 	//内側に型変数が含まれているかもしれないので、
 	//それをここで展開する。
-	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
+	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = receivergType;
 	cfr->Kind.InstanceInvoke.Args = self->args;
 	cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
 	self->resolved = bc_ApplyGenericType(rgtp, cctx);
-	PopCallContext(cctx);
+	bc_PopCallContext(cctx);
 }
 
-static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, CallContext* cctx) {
+static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	//レシーバの読み込み
-	LoadILFactor(self->receiver, env, cctx);
+	bc_LoadILFactor(self->receiver, env, cctx);
 	if(bc_GetLastPanic()) {
 		return;
 	}
@@ -150,11 +150,11 @@ static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, CallContext* cc
 		assert(ilvar->Type != ILVARIABLE_TYPE_STATIC_T);
 	}
 	//レシーバの型を評価
-	bc_GenericType* gtype = EvalILFactor(self->receiver, env, cctx);
+	bc_GenericType* gtype = bc_EvalILFactor(self->receiver, env, cctx);
 	if(bc_GetLastPanic()) {
 		return;
 	}
-	ResolveILTypeArgument(self->type_args, cctx);
+	bc_ResolveILTypeArgument(self->type_args, cctx);
 	bc_Type* ctype = gtype->CoreType;
 	#if defined(DEBUG)
 	const char* cname = bc_Ref2Str(bc_GetTypeName(ctype));
@@ -197,8 +197,8 @@ static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, CallContext* cc
 }
 
 static void ILInvoke_args_delete(bc_VectorItem item) {
-	ILArgument* e = (ILArgument*)item;
-	DeleteILArgument(e);
+	bc_ILArgument* e = (bc_ILArgument*)item;
+	bc_DeleteILArgument(e);
 }
 
 static bc_GenericType* ILInvoke_return_gtype(ILInvoke* self) {
@@ -206,22 +206,22 @@ static bc_GenericType* ILInvoke_return_gtype(ILInvoke* self) {
 	return self->tag == INSTANCE_INVOKE_METHOD_T ? self->u.m->ReturnGType : self->u.opov->ReturnGType;
 }
 
-static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, CallContext* cctx) {
+static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	if(self->tag != INSTANCE_INVOKE_METHOD_T) {
 		return;
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->type_args, i);
+		bc_ILTypeArgument* e = (bc_ILTypeArgument*)bc_AtVector(self->type_args, i);
 		assert(e->GType != NULL);
 		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		ILArgument* e = (ILArgument*)bc_AtVector(self->args, i);
-		GenerateILFactor(e->Factor, env, cctx);
+		bc_ILArgument* e = (bc_ILArgument*)bc_AtVector(self->args, i);
+		bc_GenerateILFactor(e->Factor, env, cctx);
 	}
-	GenerateILFactor(self->receiver, env, cctx);
+	bc_GenerateILFactor(self->receiver, env, cctx);
 	if(self->u.m->Parent->Tag == TYPE_INTERFACE_T) {
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKEINTERFACE);
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->u.m->Parent->AbsoluteIndex);
@@ -238,22 +238,22 @@ static void GenerateILInvoke_method(ILInvoke* self, bc_Enviroment* env, CallCont
 	}
 }
 
-static void GenerateILInvoke_subscript(ILInvoke* self, bc_Enviroment* env, CallContext* cctx) {
+static void GenerateILInvoke_subscript(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
 	if(self->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		return;
 	}
 	for(int i=0; i<self->type_args->Length; i++) {
-		ILTypeArgument* e = (ILTypeArgument*)bc_AtVector(self->type_args, i);
+		bc_ILTypeArgument* e = (bc_ILTypeArgument*)bc_AtVector(self->type_args, i);
 		assert(e->GType != NULL);
 		bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 		bc_GenerateGenericType(e->GType, env);
 	}
 	for(int i=0; i<self->args->Length; i++) {
-		ILArgument* e = (ILArgument*)bc_AtVector(self->args, i);
-		GenerateILFactor(e->Factor, env, cctx);
+		bc_ILArgument* e = (bc_ILArgument*)bc_AtVector(self->args, i);
+		bc_GenerateILFactor(e->Factor, env, cctx);
 	}
-	GenerateILFactor(self->receiver, env, cctx);
+	bc_GenerateILFactor(self->receiver, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 	bc_AddOpcodeBuf(env->Bytecode, self->index);
 }

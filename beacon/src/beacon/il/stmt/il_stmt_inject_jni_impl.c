@@ -3,8 +3,8 @@
 #include "../../util/io.h"
 #include "../../vm/symbol_entry.h"
 
-ILStatement* WrapILInjectJNI(ILInjectJNI* self) {
-	ILStatement* ret = NewILStatement(ILSTMT_INJECT_JNI_T);
+bc_ILStatement* WrapILInjectJNI(ILInjectJNI* self) {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_INJECT_JNI_T);
 	ret->Kind.InjectJNI = self;
 	//JNIに関しては後からソースの先頭に付け加えられるので必ず0
 	ret->Lineno = 0;
@@ -19,23 +19,23 @@ ILInjectJNI* NewILInjectJNI(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->Value, env, cctx);
+void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Value, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
 	bc_AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
-void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->Symbol != NULL) {
 		return;
 	}
 	self->Value->Lineno = 0;
-	LoadILFactor(self->Value, env, cctx);
-	bc_GenericType* gtype = EvalILFactor(self->Value, env, cctx);
+	bc_LoadILFactor(self->Value, env, cctx);
+	bc_GenericType* gtype = bc_EvalILFactor(self->Value, env, cctx);
 	self->Symbol = bc_EntrySymbolTable(env->Symboles, gtype, self->Name);
 }
 
 void DeleteILInjectJni(ILInjectJNI* self) {
-	DeleteILFactor(self->Value);
+	bc_DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }

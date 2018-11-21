@@ -21,9 +21,9 @@ ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type) {
 	return ret;
 }
 
-bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, bc_Enviroment* env, CallContext* cctx) {
-	bc_GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
-	bc_GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
+bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenericType* lgtype = bc_EvalILFactor(self->Parent->Left, env, cctx);
+	bc_GenericType* rgtype = bc_EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	bc_Type* cint = BC_TYPE_INT;
@@ -46,11 +46,11 @@ bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, bc_Enviroment* env, Ca
 	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->OperatorIndex == -1) {
-		GenerateILFactor(self->Parent->Right, env, cctx);
-		GenerateILFactor(self->Parent->Left, env, cctx);
+		bc_GenerateILFactor(self->Parent->Right, env, cctx);
+		bc_GenerateILFactor(self->Parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_iopcode(self->Type));
 		} else if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
@@ -59,14 +59,14 @@ void GenerateILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, CallContex
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->Parent->Right, env, cctx);
-		GenerateILFactor(self->Parent->Left, env, cctx);
+		bc_GenerateILFactor(self->Parent->Right, env, cctx);
+		bc_GenerateILFactor(self->Parent->Left, env, cctx);
 		bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		bc_AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 	}
 }
 
-void LoadILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->Parent, env, cctx) &&
 	   !IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
 		self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);

@@ -19,7 +19,7 @@
 /**
  * メソッドの定義を表す要素.
  */
-typedef struct ILMethod {
+typedef struct bc_ILMethod {
 	bc_StringView Name;
 	bc_Vector* Parameters;
 	bc_Vector* Statements;
@@ -28,17 +28,17 @@ typedef struct ILMethod {
 	bc_ModifierType Modifier;
 	bc_Vector* TypeParameters;
 	bool IsNoStmt;
-} ILMethod;
+} bc_ILMethod;
 /**
  * メソッドを作成します.
  * @param name
  * @return
  */
-ILMethod* NewILMethod(bc_StringView name);
+bc_ILMethod* bc_NewILMethod(bc_StringView name);
 
 /**
  * メソッドを開放します.
  * @param self
  */
-void DeleteILMethod(ILMethod* self);
+void bc_DeleteILMethod(bc_ILMethod* self);
 #endif // !SIGNAL_IL_IL_METHOD_H

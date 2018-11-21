@@ -9,8 +9,8 @@
 static void ILConstructor_DeleteParameter(bc_VectorItem item);
 static void ILConstructor_stmt_delete(bc_VectorItem item);
 
-ILConstructor * NewILConstructor() {
-	ILConstructor* ret = (ILConstructor*)MEM_MALLOC(sizeof(ILConstructor));
+bc_ILConstructor * bc_NewILConstructor() {
+	bc_ILConstructor* ret = (bc_ILConstructor*)MEM_MALLOC(sizeof(bc_ILConstructor));
 	ret->Access = ACCESS_PUBLIC_T;
 	ret->Parameters = bc_NewVector();
 	ret->Statements = bc_NewVector();
@@ -18,19 +18,19 @@ ILConstructor * NewILConstructor() {
 	return ret;
 }
 
-void DeleteILConstructor(ILConstructor * self) {
-	DeleteILConstructorChain(self->Chain);
+void bc_DeleteILConstructor(bc_ILConstructor * self) {
+	bc_DeleteILConstructorChain(self->Chain);
 	bc_DeleteVector(self->Parameters, ILConstructor_DeleteParameter);
 	bc_DeleteVector(self->Statements, ILConstructor_stmt_delete);
 	MEM_FREE(self);
 }
 //private
 static void ILConstructor_DeleteParameter(bc_VectorItem item) {
-	ILParameter* e = (ILParameter*)item;
-	DeleteILParameter(e);
+	bc_ILParameter* e = (bc_ILParameter*)item;
+	bc_DeleteILParameter(e);
 }
 
 static void ILConstructor_stmt_delete(bc_VectorItem item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }

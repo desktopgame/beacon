@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
-ILStatement * WrapILInferencedTypeInit(ILInferencedTypeInit * self) {
-	ILStatement* ret = NewILStatement(ILSTMT_INFERENCED_TYPE_INIT_T);
+bc_ILStatement * WrapILInferencedTypeInit(ILInferencedTypeInit * self) {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_INFERENCED_TYPE_INIT_T);
 	ret->Kind.InferencedTypeInit = self;
 	return ret;
 }
@@ -20,17 +20,17 @@ ILInferencedTypeInit * NewILInferencedTypeInit(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	//右辺の方で宣言する
-	GenerateILFactor(self->Value, env, cctx);
+	bc_GenerateILFactor(self->Value, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
 	bc_AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
-void LoadILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	//代入するオブジェクトを計算
-	LoadILFactor(self->Value, env, cctx);
-	bc_GenericType* gtp = EvalILFactor(self->Value, env, cctx);
+	bc_LoadILFactor(self->Value, env, cctx);
+	bc_GenericType* gtp = bc_EvalILFactor(self->Value, env, cctx);
 	BC_ERROR();
 	//voidは代入できない
 	if(gtp->CoreType != NULL &&
@@ -53,6 +53,6 @@ void LoadILInferencedTypeInit(ILInferencedTypeInit * self, bc_Enviroment * env, 
 }
 
 void DeleteILInferencedTypeInit(ILInferencedTypeInit * self) {
-	DeleteILFactor(self->Value);
+	bc_DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }

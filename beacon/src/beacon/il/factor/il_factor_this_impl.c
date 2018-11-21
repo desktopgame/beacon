@@ -9,7 +9,7 @@
 #include "../../error.h"
 #include <assert.h>
 
-static void check_context(ILThis * self, bc_Enviroment * env, CallContext* cctx);
+static void check_context(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 ILThis* NewILThis() {
 	ILThis* ret = (ILThis*)MEM_MALLOC(sizeof(ILThis));
@@ -17,16 +17,16 @@ ILThis* NewILThis() {
 	return ret;
 }
 
-void GenerateILThis(ILThis * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILThis(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
 }
 
-void LoadILThis(ILThis * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILThis(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-bc_GenericType* EvalILThis(ILThis * self, bc_Enviroment * env, CallContext* cctx) {
-	return GetTypeCContext(cctx)->GenericSelf;
+bc_GenericType* EvalILThis(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	return bc_GetTypeCContext(cctx)->GenericSelf;
 }
 
 char* ILThisToString(ILThis* self, bc_Enviroment* env) {
@@ -37,11 +37,11 @@ void DeleteILThis(ILThis * self) {
 	MEM_FREE(self);
 }
 //private
-static void check_context(ILThis * self, bc_Enviroment * env, CallContext* cctx) {
+static void check_context(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
-	bc_Method* met = GetMethodCContext(cctx);
+	bc_Method* met = bc_GetMethodCContext(cctx);
 	if(bc_IsStaticModifier(met->Modifier)) {
 		bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
 			bc_Ref2Str(bc_GetTypeName(met->Parent)),

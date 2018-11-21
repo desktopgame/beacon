@@ -6,7 +6,7 @@
 #include "../../util/mem.h"
 #include "../class_loader.h"
 //proto
-static ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource);
 static ILInferencedTypeInit* CLIL_inferenced_type_init(bc_ClassLoader* self, bc_AST* asource);
 static ILVariableDecl* CLIL_variable_decl(bc_ClassLoader* self, bc_AST* asource);
 static ILVariableInit* CLIL_variable_init(bc_ClassLoader* self, bc_AST* asource);
@@ -24,8 +24,8 @@ static ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource);
 static ILDefer* CLIL_defer(bc_ClassLoader* self, bc_AST* asource);
 static ILYieldReturn* CLIL_yield_return(bc_ClassLoader* self, bc_AST* asource);
 
-ILStatement* CLILStmt(bc_ClassLoader* self, bc_AST* source) {
-	ILStatement* ret = CLILBodyImpl(self, source);
+bc_ILStatement* CLILStmt(bc_ClassLoader* self, bc_AST* source) {
+	bc_ILStatement* ret = CLILBodyImpl(self, source);
 	assert(source->Lineno >= 0);
 	ret->Lineno = source->Lineno;
 	return ret;
@@ -40,7 +40,7 @@ void CLILBody(bc_ClassLoader* self, bc_Vector* list, bc_AST* source) {
 			CLILBody(self, list, bc_AtAST(source, i));
 		}
 	} else {
-		ILStatement* stmt = CLILBodyImpl(self, source);
+		bc_ILStatement* stmt = CLILBodyImpl(self, source);
 		if (stmt != NULL) {
 			stmt->Lineno = source->Lineno;
 			assert(source->Lineno >= 0);
@@ -51,7 +51,7 @@ void CLILBody(bc_ClassLoader* self, bc_Vector* list, bc_AST* source) {
 
 
 //private
-static ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 	switch (asource->Tag) {
 		case AST_STMT_T:
 		{
@@ -60,7 +60,7 @@ static ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 		case AST_PROC_T:
 		{
 			bc_AST* afact = bc_FirstAST(asource);
-			ILFactor* ilfact = CLILFactor(self, afact);
+			bc_ILFactor* ilfact = CLILFactor(self, afact);
 			ILProc* ilproc = NewILProc();
 				ilproc->Factor = ilfact;
 			assert(ilfact != NULL);
@@ -121,7 +121,7 @@ static ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 		}
 		case AST_RETURN_EMPTY_T:
 		{
-			ILStatement* ret = NewILStatement(ILSTMT_RETURN_EMPTY_T);
+			bc_ILStatement* ret = bc_NewILStatement(ILSTMT_RETURN_EMPTY_T);
 			ret->Kind.ReturnEmpty = NULL;
 			return ret;
 		}
@@ -151,7 +151,7 @@ static ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 		}
 		case AST_YIELD_BREAK_T:
 		{
-			ILStatement* ret = NewILStatement(ILSTMT_YIELD_BREAK_T);
+			bc_ILStatement* ret = bc_NewILStatement(ILSTMT_YIELD_BREAK_T);
 			ret->Kind.YieldBreak = NULL;
 			return ret;
 		}
@@ -201,7 +201,7 @@ static ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource) {
 	ILIf* ret = NewILIf();
 	bc_AST* acond = bc_FirstAST(asource);
 	bc_AST* abody = bc_SecondAST(asource);
-	ILFactor* ilcond = CLILFactor(self, acond);
+	bc_ILFactor* ilcond = CLILFactor(self, acond);
 	CLILBody(self, ret->Body, abody);
 	ret->Condition = ilcond;
 	return ret;
@@ -259,7 +259,7 @@ static void CLIL_elif_list(bc_ClassLoader* self, bc_Vector* list, bc_AST* asourc
 static ILReturn* CLIL_return(bc_ClassLoader* self, bc_AST* asource) {
 	assert(asource->Tag == AST_RETURN_T);
 	bc_AST* afact = bc_FirstAST(asource);
-	ILFactor* ilfact = CLILFactor(self, afact);
+	bc_ILFactor* ilfact = CLILFactor(self, afact);
 	ILReturn* ret = NewILReturn();
 	ret->Factor = ilfact;
 	return ret;

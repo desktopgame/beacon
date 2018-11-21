@@ -15,7 +15,7 @@ bc_TypeParameter * bc_NewTypeParameter(bc_StringView name) {
 	return ret;
 }
 
-bc_TypeParameter * bc_DupTypeParameter(ILTypeParameter * src) {
+bc_TypeParameter * bc_DupTypeParameter(bc_ILTypeParameter * src) {
 	bc_TypeParameter* ret = bc_NewTypeParameter(src->Name);
 	switch (src->Tag) {
 		case IL_TYPE_PARAMETER_KIND_DEFAULT_T:
@@ -44,7 +44,7 @@ void bc_DupTypeParameterList(bc_Vector* ilSource, bc_Vector* sgDest) {
 	//あとからルール一覧を対応づける必要があります。
 	//DupTypeParameterからルールの複製を削除したのもそのためです。
 	for (int i = 0; i < ilSource->Length; i++) {
-		ILTypeParameter* e = (ILTypeParameter*)bc_AtVector(ilSource, i);
+		bc_ILTypeParameter* e = (bc_ILTypeParameter*)bc_AtVector(ilSource, i);
 		bc_TypeParameter* newTP = bc_DupTypeParameter(e);
 		bc_PushVector(sgDest, newTP);
 		//TypeParameter_rule_list_dup(e->rule_vec, newTP->rule_vec, cache);

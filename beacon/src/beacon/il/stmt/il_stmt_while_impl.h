@@ -17,17 +17,17 @@
 struct bc_Enviroment;
 
 typedef struct ILWhile {
-	ILFactor* Condition;
+	bc_ILFactor* Condition;
 	bc_Vector* Statements;
 } ILWhile;
 
-ILStatement* WrapILWhile(ILWhile* self);
+bc_ILStatement* WrapILWhile(ILWhile* self);
 
 ILWhile* NewILWhile();
 
-void GenerateILWhile(ILWhile* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILWhile(ILWhile* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILWhile(ILWhile* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILWhile(ILWhile* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILWhile(ILWhile* self);
 #endif // !SIGNAL_IL_IL_STMT_WHILE_H

@@ -11,19 +11,19 @@
 #include <assert.h>
 
 //proto
-static void ILCallOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
-static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, CallContext* cctx);
-static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, CallContext* cctx);
-static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, bc_Enviroment* env, CallContext* cctx);
+static void ILCallOp_check(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, bc_Enviroment* env, bc_CallContext* cctx);
 static void ILInvokeBound_check(ILCallOp* self, bc_Enviroment* env);
-static void ILMemberOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
-static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
+static void ILMemberOp_check(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 static void ILCallOp_argument_delete(bc_VectorItem item);
 static void ILCallOp_type_argument_delete(bc_VectorItem item);
 
-ILFactor* WrapCallOp(ILCallOp* self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_CALL_OP_T);
+bc_ILFactor* WrapCallOp(ILCallOp* self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_CALL_OP_T);
 	ret->Kind.Call = self;
 	self->Parent = ret;
 	return ret;
@@ -37,7 +37,7 @@ ILCallOp* NewILCallOp() {
 	return ret;
 }
 
-void LoadCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
+void LoadCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	//argumentlistはサブクラスに渡しちゃってる
 	//LoadILFactor(self->Receiver, env, ilctx, eh);
 	ILCallOp_check(self, env, cctx);
@@ -50,7 +50,7 @@ void LoadCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
 	}
 }
 
-bc_GenericType* EvalILCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILCallOp_check(self, env, cctx);
 	bc_GenericType* ret = NULL;
 	if(self->Type == ILCALL_TYPE_INVOKE_T) {
@@ -78,7 +78,7 @@ char* ILCallOpToString(ILCallOp* self, bc_Enviroment* env) {
 	return NULL;
 }
 
-void GenerateILCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	LoadCallOp(self, env, cctx);
 	if(self->Type == ILCALL_TYPE_INVOKE_T) {
 		return GenerateILInvoke(self->Kind.Invoke, env, cctx);
@@ -90,7 +90,7 @@ void GenerateILCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
 }
 
 void DeleteILCallOp(ILCallOp* self) {
-	DeleteILFactor(self->Receiver);
+	bc_DeleteILFactor(self->Receiver);
 	if(self->Type == ILCALL_TYPE_INVOKE_T) {
 		DeleteILInvoke(self->Kind.Invoke);
 	} else if(self->Type == ILCALL_TYPE_INVOKE_STATIC_T) {
@@ -103,11 +103,11 @@ void DeleteILCallOp(ILCallOp* self) {
 }
 
 //private
-static void ILCallOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
+static void ILCallOp_check(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->Type != ILCALL_TYPE_UNDEFINED_T) {
 		return;
 	}
-	ILFactor* receiver = self->Receiver;
+	bc_ILFactor* receiver = self->Receiver;
 	//hoge() foo() Namespace::Class() の場合
 	if(receiver->Type == ILFACTOR_VARIABLE_T) {
 		ILInvokeBound_check(self, env);
@@ -122,7 +122,7 @@ static void ILCallOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx
 }
 
 static void ILInvokeBound_check(ILCallOp* self, bc_Enviroment* env) {
-	ILFactor* receiver = self->Receiver;
+	bc_ILFactor* receiver = self->Receiver;
 	ILVariable* ilvar = receiver->Kind.Variable;
 	ILInvokeBound* bnd = NewILInvokeBound(ilvar->FQCN->Name);
 	assert(ilvar->FQCN->Scope->Length == 0);
@@ -135,8 +135,8 @@ static void ILInvokeBound_check(ILCallOp* self, bc_Enviroment* env) {
 	self->Type = ILCALL_TYPE_INVOKE_BOUND_T;
 }
 
-static void ILMemberOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
-	ILFactor* receiver = self->Receiver;
+static void ILMemberOp_check(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_ILFactor* receiver = self->Receiver;
 	ILMemberOp* ilmem = receiver->Kind.MemberOp;
 	//hoge.foo
 	if(ilmem->Source->Type == ILFACTOR_VARIABLE_T) {
@@ -146,7 +146,7 @@ static void ILMemberOp_check(ILCallOp* self, bc_Enviroment* env, CallContext* cc
 	}
 }
 
-static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, CallContext* cctx) {
+static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILVariable* ilvar = ilmem->Source->Kind.Variable;
 	//Namespace::Class.foo()
 	if(ilvar->FQCN->Scope->Length > 0) {
@@ -156,7 +156,7 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Envi
 		#if defined(DEBUG)
 		const char* clname = bc_Ref2Str(ilvar->FQCN->Name);
 		#endif
-		bc_Namespace* cur = GetNamespaceCContext(cctx);
+		bc_Namespace* cur = bc_GetNamespaceCContext(cctx);
 		bc_Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
 		if(ctype == NULL) {
 			ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(), ilvar->FQCN->Name);
@@ -169,7 +169,7 @@ static void ILMemberOp_check_namebase(ILCallOp* self, ILMemberOp* ilmem, bc_Envi
 	}
 }
 
-static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, CallContext* cctx) {
+static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, bc_Enviroment* env, bc_CallContext* cctx) {
 	//入れ替える
 	ILInvoke* iv = NewILInvoke(ilmem->Name);
 	iv->args = self->Arguments;
@@ -182,7 +182,7 @@ static void ILMemberOp_check_instance(ILCallOp* self, ILMemberOp* ilmem, bc_Envi
 	self->Arguments = NULL;
 }
 
-static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, bc_Enviroment* env, CallContext* cctx) {
+static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariable* ilvar, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILInvokeStatic* st = NewILInvokeStatic(ilmem->Name);
 	self->Type = ILCALL_TYPE_INVOKE_STATIC_T;
 	self->Kind.InvokeStatic = st;
@@ -195,11 +195,11 @@ static void ILMemberOp_check_static(ILCallOp* self, ILMemberOp* ilmem, ILVariabl
 	ilvar->FQCN = NULL;
 }
 
-static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* cctx) {
-	ILFactor* receiver = self->Receiver;
+static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_ILFactor* receiver = self->Receiver;
 	ILCallOp* call_left = receiver->Kind.Call;
 	ILInvoke* iv = NewILInvoke(BC_ZERO_VIEW);
-	bc_GenericType* receiver_gtype = EvalILFactor(receiver, env, cctx);
+	bc_GenericType* receiver_gtype = bc_EvalILFactor(receiver, env, cctx);
 	bc_Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
 	int temp;
 	iv->u.opov = bc_ArgFindOperatorOverloadClass(receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx, &temp);
@@ -217,11 +217,11 @@ static void ILSubscript_check(ILCallOp* self, bc_Enviroment* env, CallContext* c
 }
 
 static void ILCallOp_argument_delete(bc_VectorItem item) {
-	ILArgument* e = (ILArgument*)item;
-	DeleteILArgument(e);
+	bc_ILArgument* e = (bc_ILArgument*)item;
+	bc_DeleteILArgument(e);
 }
 
 static void ILCallOp_type_argument_delete(bc_VectorItem item) {
-	ILTypeArgument* e = (ILTypeArgument*)item;
-	DeleteILTypeArgument(e);
+	bc_ILTypeArgument* e = (bc_ILTypeArgument*)item;
+	bc_DeleteILTypeArgument(e);
 }

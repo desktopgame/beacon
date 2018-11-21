@@ -16,30 +16,30 @@
 /**
  * 名前空間の宣言を表す要素.
  */
-typedef struct ILNamespace {
+typedef struct bc_ILNamespace {
 	bc_StringView Name;
-	struct ILNamespace* Parent;
+	struct bc_ILNamespace* Parent;
 	bc_Vector* NamespaceList;
 	bc_Vector* TypeList;
-} ILNamespace;
+} bc_ILNamespace;
 
 /**
  * 名前空間を表す要素を作成します.
  * @param namev
  * @return
  */
-ILNamespace* NewILNamespace(bc_StringView namev);
+bc_ILNamespace* bc_NewILNamespace(bc_StringView namev);
 
 /**
  * 最も上の要素を返します.
  * @param self
  * @return
  */
-ILNamespace* GetRootILNamespace(ILNamespace* self);
+bc_ILNamespace* bc_GetRootILNamespace(bc_ILNamespace* self);
 
 /**
  * 名前空間を表す要素を解放します.
  * @param self
  */
-void DeleteILNamespace(ILNamespace* self);
+void bc_DeleteILNamespace(bc_ILNamespace* self);
 #endif // !SIGNAL_IL_IL_NAMESPACE_H

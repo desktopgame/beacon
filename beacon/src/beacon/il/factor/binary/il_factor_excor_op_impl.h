@@ -23,11 +23,11 @@ typedef struct ILExcorOp {
 
 ILExcorOp* NewILExcorOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILExcorOp(ILExcorOp * self, struct bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILExcorOp(ILExcorOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILExcorOp(ILExcorOp* self);
 

@@ -571,7 +571,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				//また、現在のVMから実引数をポップ
 				bc_Frame* sub = bc_SubFrame(self);
 				sub->Receiver = tp;
-				CallFrame* cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
+				bc_CallFrame* cfr = bc_PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = bc_NewVector();
 				cfr->Kind.StaticInvoke.TypeArgs = bc_NewVector();
 				for (int i = 0; i < ctor->Parameters->Length; i++) {
@@ -594,7 +594,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_ExecuteVM(sub, ctor->Env);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.Args, bc_VectorDeleterOfNull);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.TypeArgs, bc_VectorDeleterOfNull);
-				PopCallContext(bc_GetScriptThreadContext());
+				bc_PopCallContext(bc_GetScriptThreadContext());
 				//コンストラクタを実行した場合、
 				//Objectがスタックのトップに残っているはず
 				bc_VectorItem returnV = bc_TopVector(sub->ValueStack);
@@ -620,7 +620,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_Frame* sub = bc_SubFrame(self);
 				sub->ObjectSize = allocSize;
 				sub->Receiver = tp;
-				CallFrame* cfr = PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
+				bc_CallFrame* cfr = bc_PushCallContext(bc_GetScriptThreadContext(), FRAME_STATIC_INVOKE_T);
 				cfr->Kind.StaticInvoke.Args = bc_NewVector();
 				cfr->Kind.StaticInvoke.TypeArgs = bc_NewVector();
 				//チェインコンストラクタに渡された実引数をプッシュ
@@ -637,7 +637,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 				bc_ExecuteVM(sub, ctor->Env);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.Args, bc_VectorDeleterOfNull);
 				bc_DeleteVector(cfr->Kind.StaticInvoke.TypeArgs, bc_VectorDeleterOfNull);
-				PopCallContext(bc_GetScriptThreadContext());
+				bc_PopCallContext(bc_GetScriptThreadContext());
 				//コンストラクタを実行した場合、
 				//Objectがスタックのトップに残っているはず
 				bc_VectorItem returnV = bc_TopVector(sub->ValueStack);
@@ -866,7 +866,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment * env, int pos, int deferStart)
 					break;
 				}
 				bc_Method* m = bc_GetImplMethodClass(o->GType->CoreType->Kind.Class, tp, methodIndex);
-				CallContext* cctx = bc_GetScriptThreadContext();
+				bc_CallContext* cctx = bc_GetScriptThreadContext();
 				bc_ExecuteMethod(m, self, env);
 				break;
 			}

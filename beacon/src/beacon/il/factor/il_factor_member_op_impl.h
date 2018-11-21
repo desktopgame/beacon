@@ -22,23 +22,23 @@ struct bc_Field;
  * メンバアクセスを表す要素.
  */
 typedef struct ILMemberOp {
-	ILFactor* Parent;
-	ILFactor* Source;
+	bc_ILFactor* Parent;
+	bc_ILFactor* Source;
 	bc_StringView Name;
 	bc_Vector* TypeArgs;
 	int Index;
 	struct bc_Field* Field;
 } ILMemberOp;
 
-ILFactor* WrapILMemberOp(ILMemberOp* self);
+bc_ILFactor* WrapILMemberOp(ILMemberOp* self);
 
 ILMemberOp* NewILMemberOp(bc_StringView namev);
 
-void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env);
 

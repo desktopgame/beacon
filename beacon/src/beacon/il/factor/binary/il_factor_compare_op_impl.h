@@ -22,11 +22,11 @@ typedef struct ILCompareOp {
 
 ILCompareOp* NewILCompareOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILCompareOp(ILCompareOp * self, struct bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILCompareOp(ILCompareOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILCompareOp(ILCompareOp* self);
 

@@ -31,15 +31,15 @@ typedef struct ILNewInstance {
 	int ConstructorIndex;
 } ILNewInstance;
 
-ILFactor* WrapILNewInstance(ILNewInstance* self);
+bc_ILFactor* WrapILNewInstance(ILNewInstance* self);
 
 ILNewInstance* NewILNewInstance();
 
-void GenerateILNewInstance(ILNewInstance* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILNewInstance(ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNewInstance(ILNewInstance* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILNewInstance(ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILNewInstance(ILNewInstance* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILNewInstance(ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILNewInstanceToString(ILNewInstance* self, bc_Enviroment* env);
 

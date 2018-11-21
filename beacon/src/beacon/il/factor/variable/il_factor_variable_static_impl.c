@@ -13,15 +13,15 @@ ILVariableStatic* NewILVariableStatic() {
 	return ret;
 }
 
-void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	//FATAL("not implemented, because must be wrapped by call operator");
 }
 
-void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx) {
 //	FATAL("not implemented, because must be wrapped by call operator");
 }
 
-bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return NULL;
 }
 
@@ -36,6 +36,6 @@ void DeleteILVariableStatic(ILVariableStatic* self) {
 }
 //private
 static void ILFactor_static_delete_typeargs(bc_VectorItem item) {
-	ILTypeArgument* e = (ILTypeArgument*)item;
-	DeleteILTypeArgument(e);
+	bc_ILTypeArgument* e = (bc_ILTypeArgument*)item;
+	bc_DeleteILTypeArgument(e);
 }

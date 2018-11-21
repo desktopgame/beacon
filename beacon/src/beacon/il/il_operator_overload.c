@@ -7,8 +7,8 @@
 static void DeleteILOperatorOverload_parameter(bc_VectorItem item);
 static void DeleteILOperatorOverload_stmt(bc_VectorItem item);
 
-ILOperatorOverload* NewILOperatorOverload(bc_OperatorType type) {
-	ILOperatorOverload* ret = (ILOperatorOverload*)MEM_MALLOC(sizeof(ILOperatorOverload));
+bc_ILOperatorOverload* bc_NewILOperatorOverload(bc_OperatorType type) {
+	bc_ILOperatorOverload* ret = (bc_ILOperatorOverload*)MEM_MALLOC(sizeof(bc_ILOperatorOverload));
 	ret->Type = type;
 	ret->Parameters = bc_NewVector();
 	ret->Statements = bc_NewVector();
@@ -16,7 +16,7 @@ ILOperatorOverload* NewILOperatorOverload(bc_OperatorType type) {
 	return ret;
 }
 
-void DeleteILOperatorOverload(ILOperatorOverload* self) {
+void bc_DeleteILOperatorOverload(bc_ILOperatorOverload* self) {
 	bc_DeleteVector(self->Parameters, DeleteILOperatorOverload_parameter);
 	bc_DeleteVector(self->Statements, DeleteILOperatorOverload_stmt);
 	bc_DeleteGenericCache(self->ReturnGCache);
@@ -24,11 +24,11 @@ void DeleteILOperatorOverload(ILOperatorOverload* self) {
 }
 //private
 static void DeleteILOperatorOverload_parameter(bc_VectorItem item) {
-	ILParameter* e = (ILParameter*)item;
-	DeleteILParameter(e);
+	bc_ILParameter* e = (bc_ILParameter*)item;
+	bc_DeleteILParameter(e);
 }
 
 static void DeleteILOperatorOverload_stmt(bc_VectorItem item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }

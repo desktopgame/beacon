@@ -20,15 +20,15 @@ typedef struct ILChar {
 	char Value;
 } ILChar;
 
-ILFactor* WrapILChar(ILChar* self);
+bc_ILFactor* WrapILChar(ILChar* self);
 
 ILChar* NewILChar(char c);
 
-void GenerateILChar(ILChar* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILChar(ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILChar(ILChar* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILChar(ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILChar(ILChar* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILChar(ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILCharToString(ILChar* self, bc_Enviroment* env);
 

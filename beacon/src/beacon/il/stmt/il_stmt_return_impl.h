@@ -17,7 +17,7 @@ struct bc_Enviroment;
  * 値の返却を表す要素.
  */
 typedef struct ILReturn {
-	ILFactor* Factor;
+	bc_ILFactor* Factor;
 } ILReturn;
 
 /**
@@ -25,7 +25,7 @@ typedef struct ILReturn {
  * @param self
  * @return
  */
-ILStatement* WrapILReturn(ILReturn* self);
+bc_ILStatement* WrapILReturn(ILReturn* self);
 
 /**
  * 式を返却する文を作成します.
@@ -39,7 +39,7 @@ ILReturn* NewILReturn();
  * @param env
  * @param cctx
  */
-void GenerateILReturn(ILReturn* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILReturn(ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式を返却する文を読み込みます.
@@ -47,7 +47,7 @@ void GenerateILReturn(ILReturn* self, bc_Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILReturn(ILReturn* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILReturn(ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式を返却する文を開放します.

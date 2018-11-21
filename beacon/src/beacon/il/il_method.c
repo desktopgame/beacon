@@ -12,8 +12,8 @@ static void ILMethod_DeleteParameter(bc_VectorItem item);
 static void ILMethod_stmt_delete(bc_VectorItem item);
 static void ILMethod_DeleteTypeParameter(bc_VectorItem item);
 
-ILMethod * NewILMethod(bc_StringView name) {
-	ILMethod* ret = (ILMethod*)MEM_MALLOC(sizeof(ILMethod));
+bc_ILMethod * bc_NewILMethod(bc_StringView name) {
+	bc_ILMethod* ret = (bc_ILMethod*)MEM_MALLOC(sizeof(bc_ILMethod));
 	ret->Name = name;
 	ret->Parameters = bc_NewVector();
 	ret->ReturnGCache = bc_NewGenericCache();
@@ -25,7 +25,7 @@ ILMethod * NewILMethod(bc_StringView name) {
 	return ret;
 }
 
-void DeleteILMethod(ILMethod * self) {
+void bc_DeleteILMethod(bc_ILMethod * self) {
 	if (self == NULL) {
 		return;
 	}
@@ -38,16 +38,16 @@ void DeleteILMethod(ILMethod * self) {
 
 //private
 static void ILMethod_DeleteParameter(bc_VectorItem item) {
-	ILParameter* e = (ILParameter*)item;
-	DeleteILParameter(e);
+	bc_ILParameter* e = (bc_ILParameter*)item;
+	bc_DeleteILParameter(e);
 }
 
 static void ILMethod_stmt_delete(bc_VectorItem item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }
 
 static void ILMethod_DeleteTypeParameter(bc_VectorItem item) {
-	ILTypeParameter* e = (ILTypeParameter*)item;
-	DeleteILTypeParameter(e);
+	bc_ILTypeParameter* e = (bc_ILTypeParameter*)item;
+	bc_DeleteILTypeParameter(e);
 }

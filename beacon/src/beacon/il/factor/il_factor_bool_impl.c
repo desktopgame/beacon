@@ -5,8 +5,8 @@
 #include "../../env/namespace.h"
 #include "../../env/TYPE_IMPL.h"
 
-ILFactor * WrapILBool(ILBool * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_BOOL_T);
+bc_ILFactor * WrapILBool(ILBool * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_BOOL_T);
 	ret->Kind.Bool = self;
 	return ret;
 }
@@ -17,7 +17,7 @@ ILBool * NewILBool(bool b) {
 	return ret;
 }
 
-void GenerateILBool(ILBool * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILBool(ILBool * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if (self->Value) {
 		bc_AddOpcodeBuf(env->Bytecode, OP_TRUE);
 	} else {
@@ -25,7 +25,7 @@ void GenerateILBool(ILBool * self, bc_Enviroment * env, CallContext* cctx) {
 	}
 }
 
-bc_GenericType* EvalILBool(ILBool * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILBool(ILBool * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return BC_GENERIC_BOOL;
 }
 

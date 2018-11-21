@@ -23,7 +23,7 @@ struct bc_Method;
 struct bc_Enviroment;
 struct virtual_type;
 struct bc_Frame;
-struct CallContext;
+struct bc_CallContext;
 /**
  * 型変数つきの型宣言の型引数では GenericType 自身が使われますが、
  * それ自体が型変数の場合、何の型変数を指しているかを示す列挙型です.
@@ -117,7 +117,7 @@ void bc_AddArgsGenericType(bc_GenericType* self, bc_GenericType* a);
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int bc_DistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct CallContext* cctx);
+int bc_DistanceGenericType(bc_GenericType* self, bc_GenericType* other, struct bc_CallContext* cctx);
 /**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
@@ -151,7 +151,7 @@ void bc_GenerateGenericType(bc_GenericType* self, struct bc_Enviroment* env);
  * @param cctx
  * @return
  */
-bc_GenericType* bc_ApplyGenericType(bc_GenericType* self, struct CallContext* cctx);
+bc_GenericType* bc_ApplyGenericType(bc_GenericType* self, struct bc_CallContext* cctx);
 /**
  * 現在のコンテキストで self の型変数を解決します.
  * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
@@ -159,7 +159,7 @@ bc_GenericType* bc_ApplyGenericType(bc_GenericType* self, struct CallContext* cc
  * @param fr
  * @return
  */
-bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct CallContext* cctx, struct bc_Frame* fr);
+bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct bc_CallContext* cctx, struct bc_Frame* fr);
 
 /**
  * GenericType を type へ変換します.

@@ -14,8 +14,8 @@
 static void ILCatch_stmt_delete(void* item);
 static void ILTry_catch_delete(void* item);
 
-ILStatement* WrapILTry(ILTry* self) {
-	ILStatement* ret = (ILStatement*)MEM_MALLOC(sizeof(ILStatement));
+bc_ILStatement* WrapILTry(ILTry* self) {
+	bc_ILStatement* ret = (bc_ILStatement*)MEM_MALLOC(sizeof(bc_ILStatement));
 	ret->Type = ILSTMT_TRY_T;
 	ret->Kind.Try = self;
 	return ret;
@@ -36,7 +36,7 @@ ILCatch* NewILCatch(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILTry(ILTry* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Label* try_end = bc_AddLabelOpcodeBuf(env->Bytecode, -1);
 	bc_Label* catch_start = bc_AddLabelOpcodeBuf(env->Bytecode, -1);
 	bc_AddOpcodeBuf(env->Bytecode, OP_TRY_ENTER);
@@ -47,8 +47,8 @@ void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
 	//例外が発生するかもしれない
 	//ステートメントの一覧
 	for (int i = 0; i < self->Statements->Length; i++) {
-		ILStatement* e = (ILStatement*)bc_AtVector(self->Statements, i);
-		GenerateILStmt(e, env, cctx);
+		bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(self->Statements, i);
+		bc_GenerateILStmt(e, env, cctx);
 	}
 	bc_AddOpcodeBuf(env->Bytecode, OP_TRY_EXIT);
 	//例外が発生しなかったならcatchをスキップ
@@ -83,8 +83,8 @@ void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
 		bc_AddOpcodeBuf(env->Bytecode, exIndex);
 		//catchの内側のステートメントを生成
 		for (int j = 0; j < ilcatch->Statements->Length; j++) {
-			ILStatement* e = (ILStatement*)bc_AtVector(ilcatch->Statements, j);
-			GenerateILStmt(e, env, cctx);
+			bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(ilcatch->Statements, j);
+			bc_GenerateILStmt(e, env, cctx);
 		}
 		//catchされたので、
 		//例外フラグをクリアする
@@ -101,14 +101,14 @@ void GenerateILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
 	try_end->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void GenerateILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILCatch(ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx) {
 
 }
 
-void LoadILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILTry(ILTry* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	for(int i=0; i<self->Statements->Length; i++) {
-		ILStatement* e = (ILStatement*)bc_AtVector(self->Statements, i);
-		LoadILStmt(e, env, cctx);
+		bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(self->Statements, i);
+		bc_LoadILStmt(e, env, cctx);
 	}
 	for(int i=0; i<self->Catches->Length; i++) {
 		ILCatch* e = (ILCatch*)bc_AtVector(self->Catches, i);
@@ -116,12 +116,12 @@ void LoadILTry(ILTry* self, bc_Enviroment* env, CallContext* cctx) {
 	}
 }
 
-void LoadILCatch(ILCatch* self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILCatch(ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* exgType = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	bc_EntrySymbolTable(env->Symboles, exgType, self->Name);
 	for(int i=0; i<self->Statements->Length; i++) {
-		ILStatement* e = (ILStatement*)bc_AtVector(self->Statements, i);
-		LoadILStmt(e, env, cctx);
+		bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(self->Statements, i);
+		bc_LoadILStmt(e, env, cctx);
 	}
 }
 
@@ -138,8 +138,8 @@ void DeleteILTry(ILTry* self) {
 }
 //private
 static void ILCatch_stmt_delete(void* item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }
 
 static void ILTry_catch_delete(void* item) {

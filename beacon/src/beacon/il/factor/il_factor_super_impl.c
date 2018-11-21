@@ -9,7 +9,7 @@
 #include "../call_context.h"
 #include "../../error.h"
 
-static void check_context(ILSuper * self, bc_Enviroment * env, CallContext* cctx);
+static void check_context(ILSuper * self, bc_Enviroment * env, bc_CallContext* cctx);
 
 ILSuper* NewILSuper() {
 	ILSuper* ret = (ILSuper*)MEM_MALLOC(sizeof(ILSuper));
@@ -17,16 +17,16 @@ ILSuper* NewILSuper() {
 	return ret;
 }
 
-void GenerateILSuper(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILSuper(ILSuper * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, OP_SUPER);
 }
 
-void LoadILSuper(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILSuper(ILSuper * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-bc_GenericType* EvalILSuper(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
-	bc_Type* t = GetTypeCContext(cctx);
+bc_GenericType* EvalILSuper(ILSuper * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_Type* t = bc_GetTypeCContext(cctx);
 	return t->Kind.Class->SuperClass;
 }
 
@@ -39,11 +39,11 @@ void DeleteILSuper(ILSuper * self) {
 }
 
 //private
-static void check_context(ILSuper * self, bc_Enviroment * env, CallContext* cctx) {
+static void check_context(ILSuper * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
-	bc_Method* met = GetMethodCContext(cctx);
+	bc_Method* met = bc_GetMethodCContext(cctx);
 	if(bc_IsStaticModifier(met->Modifier)) {
 		bc_Panic(BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T,
 			bc_Ref2Str(bc_GetTypeName(met->Parent)),

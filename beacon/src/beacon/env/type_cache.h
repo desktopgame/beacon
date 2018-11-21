@@ -43,7 +43,7 @@ typedef enum bc_TypeCacheKind {
  */
 typedef struct bc_TypeCache {
 	struct bc_ClassLoader* Context;
-	ILType* ILType;
+	bc_ILType* ILType;
 	bc_Type* Type;
 	bc_Namespace* Scope;
 	bc_TypeCacheKind Kind;
@@ -55,7 +55,7 @@ bc_TypeCache* bc_NewTypeCache();
 bc_TypeCache * bc_InitTypeCache(
 	bc_TypeCache* self,
 	struct bc_ClassLoader* context,
-	ILType* iltype,
+	bc_ILType* iltype,
 	bc_Type* tp,
 	bc_Namespace* scope,
 	bc_TypeCacheKind kind

@@ -15,7 +15,7 @@
 #include "../util/vector.h"
 struct bc_ScriptContext;
 struct bc_Frame;
-struct CallContext;
+struct bc_CallContext;
 /**
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
@@ -25,7 +25,7 @@ typedef struct bc_ScriptThread {
 	bool IsVMCrushByException;
 	bool IsVMDump;
 	struct bc_Frame* FrameRef;
-	struct CallContext* CCtx;
+	struct bc_CallContext* CCtx;
 } bc_ScriptThread;
 
 /**
@@ -93,7 +93,7 @@ bc_ScriptThread* bc_GetMainScriptThread();
  * メインスレッドの呼び出しコンテキストを返します.
  * @return
  */
-struct CallContext* bc_GetScriptThreadContext();
+struct bc_CallContext* bc_GetScriptThreadContext();
 
 /**
  * メインスレッドを終了します.

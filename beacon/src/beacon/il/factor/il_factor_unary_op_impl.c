@@ -11,8 +11,8 @@
 #include "unary/il_factor_negative_op_impl.h"
 #include "unary/il_factor_not_op_impl.h"
 
-ILFactor * WrapILUnaryOp(ILUnaryOp * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_UNARY_OP_T);
+bc_ILFactor * WrapILUnaryOp(ILUnaryOp * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_UNARY_OP_T);
 	ret->Kind.UnaryOp = self;
 	return ret;
 }
@@ -27,7 +27,7 @@ ILUnaryOp * NewILUnaryOp(bc_OperatorType type) {
 	return ret;
 }
 
-void GenerateILUnaryOp(ILUnaryOp * self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILUnaryOp(ILUnaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
 			GenerateILNotOp(self->Kind.NotOp, env, cctx);
@@ -41,11 +41,11 @@ void GenerateILUnaryOp(ILUnaryOp * self, bc_Enviroment* env, CallContext* cctx) 
 	}
 }
 
-void LoadILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(self->Type == OPERATOR_NOT_T && self->Kind.NotOp != NULL) return;
 	if(self->Type == OPERATOR_CHILDA_T && self->Kind.ChildaOp != NULL) return;
 	if(self->Type == OPERATOR_NEGATIVE_T && self->Kind.NegativeOp != NULL) return;
-	LoadILFactor(self->Arg, env, cctx);
+	bc_LoadILFactor(self->Arg, env, cctx);
 	//カテゴリーわけ
 	if(self->Type == OPERATOR_NOT_T) {
 		self->Category = OPERATOR_CNOT_T;
@@ -70,7 +70,7 @@ void LoadILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, CallContext* cctx) {
 	}
 }
 
-bc_GenericType* EvalILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	LoadILUnaryOp(self, env, cctx);
 	bc_GenericType* ret = NULL;
 	switch(self->Type) {
@@ -107,7 +107,7 @@ void DeleteILUnaryOp(ILUnaryOp * self) {
 	if(self == NULL) {
 		return;
 	}
-	DeleteILFactor(self->Arg);
+	bc_DeleteILFactor(self->Arg);
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
 			DeleteILNotOp(self->Kind.NotOp);
@@ -124,20 +124,20 @@ void DeleteILUnaryOp(ILUnaryOp * self) {
 
 char* ILUnaryOpToString_simple(ILUnaryOp* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
-	char* a = ILFactorToString(self->Arg, env);
+	char* a = bc_ILFactorToString(self->Arg, env);
 	bc_AppendfBuffer(sb, "%s", bc_OperatorToString(self->Type));
 	bc_AppendsBuffer(sb, a);
 	MEM_FREE(a);
 	return bc_ReleaseBuffer(sb);
 }
 
-int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, CallContext* cctx) {
+int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return GetIndexILUnaryOp2(self->Arg, self->Type, env, cctx);
 }
 
-int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, CallContext* cctx) {
+int GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Vector* args = bc_NewVector();
-	bc_GenericType* gtype = EvalILFactor(receiver, env, cctx);
+	bc_GenericType* gtype = bc_EvalILFactor(receiver, env, cctx);
 	if(gtype->VirtualTypeIndex != -1) {
 		assert(false);
 	}
@@ -148,11 +148,11 @@ int GetIndexILUnaryOp2(ILFactor* receiver, bc_OperatorType otype, bc_Enviroment*
 	return temp;
 }
 
-bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, CallContext* cctx) {
-	bc_GenericType* lgtype = EvalILFactor(self->Arg, env, cctx);
-	CallFrame* cfr = PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
+bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenericType* lgtype = bc_EvalILFactor(self->Arg, env, cctx);
+	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;
 	bc_GenericType* ret = bc_ApplyGenericType(gtype,cctx);
-	PopCallContext(cctx);
+	bc_PopCallContext(cctx);
 	return ret;
 }

@@ -23,11 +23,11 @@ typedef struct ILLogicOp {
 
 ILLogicOp* NewILLogicOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILLogicOp(ILLogicOp* self);
 

@@ -72,7 +72,7 @@ void CLILTypeParameter(bc_ClassLoader* self, bc_AST* asource, bc_Vector* dest) {
 		   asource->Tag == AST_TYPE_IN_PARAMETER_T ||
 		   asource->Tag == AST_TYPE_OUT_PARAMETER_T);
 	bc_AST* arule_list = bc_FirstAST(asource);
-	ILTypeParameter* iltypeparam = NewILTypeParameter(asource->Attr.StringVValue);
+	bc_ILTypeParameter* iltypeparam = bc_NewILTypeParameter(asource->Attr.StringVValue);
 	if (asource->Tag == AST_TYPE_IN_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_IN_T;
 	if (asource->Tag == AST_TYPE_OUT_PARAMETER_T) iltypeparam->Tag = IL_TYPE_PARAMETER_KIND_OUT_T;
 	bc_PushVector(dest, iltypeparam);
@@ -91,7 +91,7 @@ void CLILTypeArgument(bc_ClassLoader* self, bc_AST* atype_args, bc_Vector* dest)
 			CLILTypeArgument(self, e, dest);
 		}
 	} else if(atype_args->Tag == AST_TYPENAME_T) {
-		ILTypeArgument* iltype_arg = NewILTypeArgument();
+		bc_ILTypeArgument* iltype_arg = bc_NewILTypeArgument();
 		bc_PushVector(dest, iltype_arg);
 		CLILGenericCache(atype_args, iltype_arg->GCache);
 	} else assert(false);
@@ -105,7 +105,7 @@ void CLILParameterList(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource) {
 	} else if (asource->Tag == AST_PARAMETER_T) {
 		bc_AST* aGetTypeName = bc_FirstAST(asource);
 		bc_AST* aaccess_name = bc_SecondAST(asource);
-		ILParameter* p = NewILParameter(aaccess_name->Attr.StringVValue);
+		bc_ILParameter* p = bc_NewILParameter(aaccess_name->Attr.StringVValue);
 		CLILGenericCache(aGetTypeName, p->GCache);
 		bc_PushVector(list, p);
 	}
@@ -212,7 +212,7 @@ static void CLILArgumentListImpl(bc_ClassLoader* self, bc_Vector* list, bc_AST* 
 		}
 	} else if (asource->Tag == AST_ARGUMENT_T) {
 		bc_AST* aprimary = bc_FirstAST(asource);
-		ILArgument* ilarg = NewILArgument();
+		bc_ILArgument* ilarg = bc_NewILArgument();
 		ilarg->Factor = CLILFactor(self, aprimary);
 		bc_PushVector(list, ilarg);
 	}

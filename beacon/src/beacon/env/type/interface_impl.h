@@ -74,7 +74,7 @@ void bc_AddPropertyInterface(bc_Interface* self, struct bc_Property* p);
  * @param outIndex
  * @return
  */
-struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, bc_StringView namev, bc_Vector * args, struct bc_Enviroment * env, CallContext* cctx, int * outIndex);
+struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self, bc_StringView namev, bc_Vector * args, struct bc_Enviroment * env, bc_CallContext* cctx, int * outIndex);
 
 /**
  * インターフェイスからメソッドを検索します.

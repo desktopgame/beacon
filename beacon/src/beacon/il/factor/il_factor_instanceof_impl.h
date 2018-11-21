@@ -15,19 +15,19 @@ struct bc_GenericType;
 struct bc_FQCNCache;
 
 typedef struct ILInstanceOf {
-	ILFactor* Source;
+	bc_ILFactor* Source;
 	struct bc_GenericCache* GCache;
 } ILInstanceOf;
 
-ILFactor* WrapILInstanceOf(ILInstanceOf* self);
+bc_ILFactor* WrapILInstanceOf(ILInstanceOf* self);
 
 ILInstanceOf* NewILInstanceOf();
 
-void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env);
 

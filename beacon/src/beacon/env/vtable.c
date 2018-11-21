@@ -24,7 +24,7 @@ void bc_AddVTable(bc_VTable * self, bc_Method * m) {
 	bc_PushVector(self->Elements, m);
 }
 
-void bc_ReplaceVTable(bc_VTable * self, bc_Method * m, CallContext* cctx) {
+void bc_ReplaceVTable(bc_VTable * self, bc_Method * m, bc_CallContext* cctx) {
 	if (bc_IsStaticModifier(m->Modifier)) {
 		return;
 	}

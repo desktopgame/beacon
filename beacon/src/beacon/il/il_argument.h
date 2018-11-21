@@ -14,20 +14,20 @@
 /**
  * 実引数を表す要素.
  */
-typedef struct ILArgument {
+typedef struct bc_ILArgument {
 	//char* name;
-	ILFactor* Factor;
-} ILArgument;
+	bc_ILFactor* Factor;
+} bc_ILArgument;
 
 /**
  * 実引数を表す要素を作成します.
  * @return
  */
-ILArgument* NewILArgument();
+bc_ILArgument* bc_NewILArgument();
 
 /**
  * 実引数を表す要素を開放します.
  * @param self
  */
-void DeleteILArgument(ILArgument* self);
+void bc_DeleteILArgument(bc_ILArgument* self);
 #endif // !SIGNAL_IL_IL_ARGUMENT_H

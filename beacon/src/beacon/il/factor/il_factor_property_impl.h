@@ -16,7 +16,7 @@ struct bc_Enviroment;
 struct bc_GenericType;
 
 typedef struct ILPropertyAccess {
-	ILFactor* Source;
+	bc_ILFactor* Source;
 	bc_StringView Name;
 	int Index;
 	bc_Property* Property;
@@ -25,11 +25,11 @@ typedef struct ILPropertyAccess {
 #define NewILPropertyAccess() (MallocILPropertyAccess(__FILE__, __LINE__))
 ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno);
 
-void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env);
 

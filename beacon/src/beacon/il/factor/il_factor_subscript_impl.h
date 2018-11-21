@@ -14,22 +14,22 @@
 struct bc_OperatorOverload;
 
 typedef struct ILSubscript {
-	ILFactor* Receiver;
-	ILFactor* Position;
+	bc_ILFactor* Receiver;
+	bc_ILFactor* Position;
 	int OperatorIndex;
 	struct bc_OperatorOverload* Operator;
 } ILSubscript;
 
-ILFactor* WrapILSubscript(ILSubscript* self);
+bc_ILFactor* WrapILSubscript(ILSubscript* self);
 
 #define NewILSubscript() (MallocILSubscript(__FILE__, __LINE__))
 ILSubscript* MallocILSubscript(const char* filename, int lineno);
 
-void GenerateILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILSubscriptToString(ILSubscript* self, bc_Enviroment* env);
 

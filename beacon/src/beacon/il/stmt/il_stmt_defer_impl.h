@@ -12,16 +12,16 @@
 #include "../il_stmt_interface.h"
 
 typedef struct ILDefer {
-	ILStatement* Task;
+	bc_ILStatement* Task;
 } ILDefer;
 
-ILStatement* WrapILDefer(ILDefer* self);
+bc_ILStatement* WrapILDefer(ILDefer* self);
 
 ILDefer* NewILDefer();
 
-void LoadILDefer(ILDefer* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILDefer(ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILDefer(ILDefer* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILDefer(ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILDefer(ILDefer* self);
 #endif

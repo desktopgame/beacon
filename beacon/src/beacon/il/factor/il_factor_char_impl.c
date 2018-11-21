@@ -7,8 +7,8 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../util/mem.h"
 
-ILFactor * WrapILChar(ILChar * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_CHAR_T);
+bc_ILFactor * WrapILChar(ILChar * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_CHAR_T);
 	ret->Kind.Char = self;
 	return ret;
 }
@@ -19,16 +19,16 @@ ILChar * NewILChar(char c) {
 	return ret;
 }
 
-void GenerateILChar(ILChar * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILChar(ILChar * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	int index = bc_AddCCharEnviroment(env, self->Value);
 	bc_AddOpcodeBuf(env->Bytecode, OP_CCONST);
 	bc_AddOpcodeBuf(env->Bytecode, index);
 }
 
-void LoadILChar(ILChar * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILChar(ILChar * self, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
-bc_GenericType* EvalILChar(ILChar * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILChar(ILChar * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return BC_GENERIC_CHAR;
 }
 

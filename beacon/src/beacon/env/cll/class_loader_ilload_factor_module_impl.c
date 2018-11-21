@@ -5,7 +5,7 @@
 #include "class_loader_ilload_type_module_impl.h"
 #include <stdio.h>
 //proto
-static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source);
+static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source);
 static ILBool* CLIL_true(bc_ClassLoader* self, bc_AST* source);
 static ILBool* CLIL_false(bc_ClassLoader* self, bc_AST* source);
 static ILUnaryOp* CLIL_unary(bc_ClassLoader* self, bc_AST* source, bc_OperatorType type);
@@ -22,8 +22,8 @@ static ILMemberOp* CLIL_member_op(bc_ClassLoader* self, bc_AST* source);
 static ILInstanceOf* CLIL_instanceof(bc_ClassLoader* self, bc_AST* source);
 static ILSubscript* CLIL_subscript(bc_ClassLoader* self, bc_AST* source);
 
-ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source) {
-	ILFactor* ret = CLILFactorImpl(self, source);
+bc_ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source) {
+	bc_ILFactor* ret = CLILFactorImpl(self, source);
 	assert(source->Lineno >= 0);
 	ret->Lineno = source->Lineno;
 	return ret;
@@ -31,7 +31,7 @@ ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source) {
 
 
 //private
-static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
 	if (source->Tag == AST_INT_T) {
 		return WrapILInt(NewILInt(source->Attr.IntValue));
 	} else if (source->Tag == AST_DOUBLE_T) {
@@ -122,12 +122,12 @@ static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
 		return WrapILExplicitBinaryOp(CLIL_explicit_binary(self, source, source->Attr.OperatorValue));
 		//this super
 	} else if (source->Tag == AST_THIS_T) {
-		ILFactor* ret = NewILFactor(ILFACTOR_THIS_T);
+		bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_THIS_T);
 		ILThis* th = NewILThis();
 		ret->Kind.This = th;
 		return ret;
 	} else if (source->Tag == AST_SUPER_T) {
-		ILFactor* ret = NewILFactor(ILFACTOR_SUPER_T);
+		bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_SUPER_T);
 		ILSuper* sp = NewILSuper();
 		ret->Kind.Super = sp;
 		return ret;
@@ -138,7 +138,7 @@ static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
 	} else if (source->Tag == AST_FALSE_T) {
 		return WrapILBool(CLIL_false(self, source));
 	} else if (source->Tag == AST_NULL_T) {
-		ILFactor* ret = NewILFactor(ILFACTOR_NULL_T);
+		bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_NULL_T);
 		ret->Kind.Null = NULL;
 		return ret;
 	} else if (source->Tag == AST_AS_T) {
@@ -150,7 +150,7 @@ static ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
 	} else if(source->Tag == AST_SUBSCRIPT_ACCESS_T) {
 		return WrapILSubscript(CLIL_subscript(self, source));
 	}
-	ILFactor* fact = NewILFactor(ILFACTOR_UNARY_OP_T);
+	bc_ILFactor* fact = bc_NewILFactor(ILFACTOR_UNARY_OP_T);
 	return fact;
 }
 

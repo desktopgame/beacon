@@ -4,8 +4,8 @@
 #include "../../env/TYPE_IMPL.h"
 #include "../../env/operator_overload.h"
 
-ILFactor* WrapILSubscript(ILSubscript* self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_SUBSCRIPT_T);
+bc_ILFactor* WrapILSubscript(ILSubscript* self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_SUBSCRIPT_T);
 	ret->Kind.Subscript = self;
 	return ret;
 }
@@ -19,21 +19,21 @@ ILSubscript* MallocILSubscript(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx) {
-	GenerateILFactor(self->Position, env, cctx);
-	GenerateILFactor(self->Receiver, env, cctx);
+void GenerateILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Position, env, cctx);
+	bc_GenerateILFactor(self->Receiver, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 	bc_AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 }
 
-void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->OperatorIndex != -1) {
 		return;
 	}
-	LoadILFactor(self->Receiver, env, cctx);
-	LoadILFactor(self->Position, env, cctx);
-	bc_GenericType* receiver_gtype = EvalILFactor(self->Receiver, env, cctx);
-	bc_GenericType* arg_gtype = EvalILFactor(self->Position, env, cctx);
+	bc_LoadILFactor(self->Receiver, env, cctx);
+	bc_LoadILFactor(self->Position, env, cctx);
+	bc_GenericType* receiver_gtype = bc_EvalILFactor(self->Receiver, env, cctx);
+	bc_GenericType* arg_gtype = bc_EvalILFactor(self->Position, env, cctx);
 	bc_Vector* args = bc_NewVector();
 	bc_PushVector(args, arg_gtype);
 	int temp = -1;
@@ -42,14 +42,14 @@ void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx) {
 	bc_DeleteVector(args, bc_VectorDeleterOfNull);
 }
 
-bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return bc_ApplyGenericType(self->Operator->ReturnGType, cctx);
 }
 
 char* ILSubscriptToString(ILSubscript* self, bc_Enviroment* env) {
 	bc_Buffer* buf = bc_NewBuffer();
-	char* src = ILFactorToString(self->Receiver, env);
-	char* pos = ILFactorToString(self->Position, env);
+	char* src = bc_ILFactorToString(self->Receiver, env);
+	char* pos = bc_ILFactorToString(self->Position, env);
 	bc_AppendsBuffer(buf, src);
 	bc_AppendBuffer(buf, '[');
 	bc_AppendsBuffer(buf, pos);
@@ -60,7 +60,7 @@ char* ILSubscriptToString(ILSubscript* self, bc_Enviroment* env) {
 }
 
 void DeleteILSubscript(ILSubscript* self) {
-	DeleteILFactor(self->Receiver);
-	DeleteILFactor(self->Position);
+	bc_DeleteILFactor(self->Receiver);
+	bc_DeleteILFactor(self->Position);
 	MEM_FREE(self);
 }

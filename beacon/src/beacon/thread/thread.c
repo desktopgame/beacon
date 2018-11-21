@@ -51,7 +51,7 @@ void bc_SetScriptThreadFrameRef(bc_ScriptThread * self, bc_Frame* frame_ref) {
 	self->IsVMCrushByException = false;
 	self->IsVMDump = false;
 	self->FrameRef = frame_ref;
-	self->CCtx = NewCallContext(CALL_TOP_T);
+	self->CCtx = bc_NewCallContext(CALL_TOP_T);
 }
 
 bc_Frame* bc_GetScriptThreadFrameRef(bc_ScriptThread * self) {
@@ -62,7 +62,7 @@ bc_Frame* bc_GetScriptThreadFrameRef(bc_ScriptThread * self) {
 void bc_ReleaseScriptThreadFrameRef(bc_ScriptThread * self) {
 	assert(self->CCtx != NULL);
 	self->FrameRef = NULL;
-	DeleteCallContext(self->CCtx);
+	bc_DeleteCallContext(self->CCtx);
 	self->CCtx = NULL;
 }
 
@@ -70,7 +70,7 @@ bc_ScriptThread * bc_GetMainScriptThread() {
 	return g_sg_main_thread;
 }
 
-CallContext* bc_GetScriptThreadContext() {
+bc_CallContext* bc_GetScriptThreadContext() {
 	return g_sg_main_thread->CCtx;
 }
 

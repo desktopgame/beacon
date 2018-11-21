@@ -22,16 +22,16 @@ typedef struct ILInt {
 	int Count;
 } ILInt;
 
-ILFactor* WrapILInt(ILInt* self);
+bc_ILFactor* WrapILInt(ILInt* self);
 
 #define NewILInt(i) (MallocILInt(i, __FILE__, __LINE__))
 ILInt* MallocILInt(int32_t i, const char* filename, int lineno);
 
-void GenerateILInt(ILInt* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILInt(ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInt(ILInt* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILInt(ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILInt(ILInt* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILInt(ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILIntToString(ILInt* self, bc_Enviroment* env);
 

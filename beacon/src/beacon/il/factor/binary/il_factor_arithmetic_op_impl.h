@@ -23,11 +23,11 @@ typedef struct ILArithmeticOp {
 ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type);
 
 
-struct bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILArithmeticOp(ILArithmeticOp* self);
 

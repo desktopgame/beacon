@@ -8,8 +8,8 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
-ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_INSTANCEOF_T);
+bc_ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_INSTANCEOF_T);
 	ret->Kind.InstanceOf = self;
 	return ret;
 }
@@ -21,26 +21,26 @@ ILInstanceOf* NewILInstanceOf() {
 	return ret;
 }
 
-void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->Source, env, cctx);
+void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_LoadILFactor(self->Source, env, cctx);
 }
 
-void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* gtype = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	bc_Type* type = gtype->CoreType;
-	GenerateILFactor(self->Source, env, cctx);
+	bc_GenerateILFactor(self->Source, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	bc_GenerateGenericType(gtype, env);
 	bc_AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 }
 
-bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, CallContext* cctx) {
+bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return BC_TYPE_BOOL->GenericSelf;
 }
 
 char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
-	char* a = ILFactorToString(self->Source, env);
+	char* a = bc_ILFactorToString(self->Source, env);
 	char* b = bc_GenericCacheToString(self->GCache);
 	bc_AppendsBuffer(sb, a);
 	bc_AppendsBuffer(sb, " is ");
@@ -51,7 +51,7 @@ char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env) {
 }
 
 void DeleteILInstanceOf(ILInstanceOf* self) {
-	DeleteILFactor(self->Source);
+	bc_DeleteILFactor(self->Source);
 	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

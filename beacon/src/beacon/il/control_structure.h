@@ -11,12 +11,12 @@
 #define BEACON_IL_CONTROL_STRUCTURE_H
 #include "../util/vector.h"
 
-typedef struct ControlStructure {
+typedef struct bc_ControlStructure {
 	bc_Vector* WhileStartTable;
 	bc_Vector* WhileEndTable;
-} ControlStructure;
+} bc_ControlStructure;
 
-void AllocControlStructure(ControlStructure* self);
+void bc_AllocControlStructure(bc_ControlStructure* self);
 
-void FreeControlStructure(ControlStructure self);
+void bc_FreeControlStructure(bc_ControlStructure self);
 #endif

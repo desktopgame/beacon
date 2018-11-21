@@ -22,11 +22,11 @@ typedef struct ILShiftOp {
 
 ILShiftOp* NewILShiftOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILShiftOp(ILShiftOp * self, struct bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILShiftOp(ILShiftOp * self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILShiftOp(ILShiftOp* self);
 

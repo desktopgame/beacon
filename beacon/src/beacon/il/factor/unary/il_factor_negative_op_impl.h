@@ -24,11 +24,11 @@ typedef struct ILNegativeOp {
 #define NewILNegativeOp(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
 ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno);
 
-struct bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, struct bc_Enviroment * env, CallContext* cctx);
+struct bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void GenerateILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, CallContext* cctx);
+void LoadILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILNegativeOp(ILNegativeOp* self);
 

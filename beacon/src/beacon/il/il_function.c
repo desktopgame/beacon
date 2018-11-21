@@ -12,8 +12,8 @@ static void ILFunction_DeleteTypeParameter(bc_VectorItem item);
 static void ILFunction_DeleteParameter(bc_VectorItem item);
 static void ILFunction_stmt_delete(bc_VectorItem item);
 
-ILFunction * NewILFunction(bc_StringView name) {
-	ILFunction* ret = (ILFunction*)MEM_MALLOC(sizeof(ILFunction));
+bc_ILFunction * bc_NewILFunction(bc_StringView name) {
+	bc_ILFunction* ret = (bc_ILFunction*)MEM_MALLOC(sizeof(bc_ILFunction));
 	ret->Name = name;
 	ret->TypeParameters = bc_NewVector();
 	ret->Parameters = bc_NewVector();
@@ -22,7 +22,7 @@ ILFunction * NewILFunction(bc_StringView name) {
 	return ret;
 }
 
-void DeleteILFunction(ILFunction * self) {
+void bc_DeleteILFunction(bc_ILFunction * self) {
 	bc_DeleteVector(self->TypeParameters, ILFunction_DeleteTypeParameter);
 	bc_DeleteVector(self->Parameters, ILFunction_DeleteParameter);
 	bc_DeleteVector(self->Statements, ILFunction_stmt_delete);
@@ -32,16 +32,16 @@ void DeleteILFunction(ILFunction * self) {
 
 //private
 static void ILFunction_DeleteTypeParameter(bc_VectorItem item) {
-	ILTypeParameter* e = (ILTypeParameter*)item;
-	DeleteILTypeParameter(e);
+	bc_ILTypeParameter* e = (bc_ILTypeParameter*)item;
+	bc_DeleteILTypeParameter(e);
 }
 
 static void ILFunction_DeleteParameter(bc_VectorItem item) {
-	ILParameter* e = (ILParameter*)item;
-	DeleteILParameter(e);
+	bc_ILParameter* e = (bc_ILParameter*)item;
+	bc_DeleteILParameter(e);
 }
 
 static void ILFunction_stmt_delete(bc_VectorItem item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }

@@ -13,9 +13,9 @@
 /**
  * インポート宣言を表す要素.
  */
-typedef struct ILImport {
+typedef struct bc_ILImport {
 	bc_StringView Path;
-} ILImport;
+} bc_ILImport;
 
 /**
  * 指定のパスをインポートするインポート宣言を作成します.
@@ -23,11 +23,11 @@ typedef struct ILImport {
  * @param path
  * @return
  */
-ILImport* NewILImport(bc_StringView path);
+bc_ILImport* bc_NewILImport(bc_StringView path);
 
 /**
  * このインポート宣言と包含された文字列を解放します.
  * @param self
  */
-void DeleteILImport(ILImport* self);
+void bc_DeleteILImport(bc_ILImport* self);
 #endif // !SIGNAL_IL_IL_IMPORT_H

@@ -16,9 +16,9 @@ ILExcorOp* NewILExcorOp(bc_OperatorType type) {
 	return ret;
 }
 
-bc_GenericType* EvalILExcorOp(ILExcorOp * self, bc_Enviroment* env, CallContext* cctx) {
-	bc_GenericType* lgtype = EvalILFactor(self->Parent->Left, env, cctx);
-	bc_GenericType* rgtype = EvalILFactor(self->Parent->Right, env, cctx);
+bc_GenericType* EvalILExcorOp(ILExcorOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_GenericType* lgtype = bc_EvalILFactor(self->Parent->Left, env, cctx);
+	bc_GenericType* rgtype = bc_EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
 	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
@@ -39,11 +39,11 @@ bc_GenericType* EvalILExcorOp(ILExcorOp * self, bc_Enviroment* env, CallContext*
 	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILExcorOp(ILExcorOp* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILExcorOp(ILExcorOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->OperatorIndex == -1) {
-		GenerateILFactor(self->Parent->Right, env, cctx);
-		GenerateILFactor(self->Parent->Left, env, cctx);
+		bc_GenerateILFactor(self->Parent->Right, env, cctx);
+		bc_GenerateILFactor(self->Parent->Left, env, cctx);
 		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, OP_IEXCOR);
 		} else if(IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
@@ -52,14 +52,14 @@ void GenerateILExcorOp(ILExcorOp* self, bc_Enviroment* env, CallContext* cctx) {
 			assert(false);
 		}
 	} else {
-		GenerateILFactor(self->Parent->Right, env, cctx);
-		GenerateILFactor(self->Parent->Left, env, cctx);
+		bc_GenerateILFactor(self->Parent->Right, env, cctx);
+		bc_GenerateILFactor(self->Parent->Left, env, cctx);
 		bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
 		bc_AddOpcodeBuf(env->Bytecode, self->OperatorIndex);
 	}
 }
 
-void LoadILExcorOp(ILExcorOp* self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILExcorOp(ILExcorOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(!IsIntIntBinaryOp(self->Parent, env, cctx) &&
 	   !IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
 	self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);

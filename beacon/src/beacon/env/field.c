@@ -26,7 +26,7 @@ void bc_DeleteField(bc_Field * self) {
 	if (self == NULL) {
 		return;
 	}
-	DeleteILFactor(self->InitialValue);
+	bc_DeleteILFactor(self->InitialValue);
 	bc_DeleteEnviroment(self->InitialValueEnv);
 	MEM_FREE(self);
 }

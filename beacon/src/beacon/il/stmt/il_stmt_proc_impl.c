@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include "../../util/mem.h"
 
-ILStatement * WrapILProc(ILProc * self) {
-	ILStatement* ret = NewILStatement(ILSTMT_PROC_T);
+bc_ILStatement * WrapILProc(ILProc * self) {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_PROC_T);
 	ret->Kind.Proc = self;
 	return ret;
 }
@@ -15,15 +15,15 @@ ILProc * NewILProc() {
 	return ret;
 }
 
-void GenerateILProc(ILProc * self, bc_Enviroment * env, CallContext* cctx) {
-	GenerateILFactor(self->Factor, env, cctx);
+void GenerateILProc(ILProc * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Factor, env, cctx);
 }
 
-void LoadILProc(ILProc * self, bc_Enviroment* env, CallContext* cctx) {
-	LoadILFactor(self->Factor, env, cctx);
+void LoadILProc(ILProc * self, bc_Enviroment* env, bc_CallContext* cctx) {
+	bc_LoadILFactor(self->Factor, env, cctx);
 }
 
 void DeleteILProc(ILProc * self) {
-	DeleteILFactor(self->Factor);
+	bc_DeleteILFactor(self->Factor);
 	MEM_FREE(self);
 }

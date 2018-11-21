@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-ILStatement * WrapILVariableInit(ILVariableInit * self) {
-	ILStatement* ret = (ILStatement*)MEM_MALLOC(sizeof(ILVariableInit));
+bc_ILStatement * WrapILVariableInit(ILVariableInit * self) {
+	bc_ILStatement* ret = (bc_ILStatement*)MEM_MALLOC(sizeof(ILVariableInit));
 	ret->Type = ILSTMT_VARIABLE_INIT_T;
 	ret->Kind.VariableInit = self;
 	return ret;
@@ -24,10 +24,10 @@ ILVariableInit * NewILVariableInit(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableInit(ILVariableInit * self, bc_Enviroment * env, CallContext* cctx) {
-	GenerateILFactor(self->Value, env, cctx);
+void GenerateILVariableInit(ILVariableInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Value, env, cctx);
 	//宣言型と代入型が異なる場合
-	bc_GenericType* ga = EvalILFactor(self->Value, env, cctx);
+	bc_GenericType* ga = bc_EvalILFactor(self->Value, env, cctx);
 	bc_GenericType* gb = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	//voidは代入できない
 	assert(gb != NULL);
@@ -47,8 +47,8 @@ void GenerateILVariableInit(ILVariableInit * self, bc_Enviroment * env, CallCont
 	bc_AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
-void LoadILVariableInit(ILVariableInit * self, bc_Enviroment * env, CallContext* cctx) {
-	LoadILFactor(self->Value, env, cctx);
+void LoadILVariableInit(ILVariableInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_LoadILFactor(self->Value, env, cctx);
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			bc_Ref2Str(self->Name)
@@ -72,7 +72,7 @@ void LoadILVariableInit(ILVariableInit * self, bc_Enviroment * env, CallContext*
 }
 
 void DeleteILVariableInit(ILVariableInit * self) {
-	DeleteILFactor(self->Value);
+	bc_DeleteILFactor(self->Value);
 	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);
 }

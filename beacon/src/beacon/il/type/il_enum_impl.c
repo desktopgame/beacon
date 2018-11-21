@@ -6,8 +6,8 @@
 //proto
 static void ILEnum_name_delete(ILEnum* self);
 
-ILType * WrapILEnum(ILEnum * self) {
-	ILType* ret = NewILType();
+bc_ILType * WrapILEnum(ILEnum * self) {
+	bc_ILType* ret = bc_NewILType();
 	ret->Tag = ILTYPE_ENUM_T;
 	ret->Kind.Enum = self;
 	return ret;

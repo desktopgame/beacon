@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <assert.h>
 
-ILFactor * WrapILAs(ILAs * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_AS_T);
+bc_ILFactor * WrapILAs(ILAs * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_AS_T);
 	ret->Kind.As = self;
 	return ret;
 }
@@ -23,8 +23,8 @@ ILAs * NewILAs() {
 	return ret;
 }
 
-void GenerateILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
-	GenerateILFactor(self->Source, env, cctx);
+void GenerateILAs(ILAs * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_GenerateILFactor(self->Source, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_GENERIC_ADD);
 	bc_GenerateGenericType(self->GType, env);
 	if(self->Mode == CAST_DOWN_T) {
@@ -34,13 +34,13 @@ void GenerateILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
 	}
 }
 
-void LoadILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILAs(ILAs * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(self->GType != NULL) {
 		return;
 	}
-	LoadILFactor(self->Source, env, cctx);
-	self->GType = bc_ResolveImportManager(GetNamespaceCContext(cctx), self->GCache, cctx);
-	bc_GenericType* a = EvalILFactor(self->Source, env, cctx);
+	bc_LoadILFactor(self->Source, env, cctx);
+	self->GType = bc_ResolveImportManager(bc_GetNamespaceCContext(cctx), self->GCache, cctx);
+	bc_GenericType* a = bc_EvalILFactor(self->Source, env, cctx);
 	//キャスト元がインターフェイスなら常にアップキャスト
 	if(self->GType->CoreType != NULL && bc_GENERIC2TYPE(self->GType)->Tag == TYPE_INTERFACE_T) {
 		self->Mode = CAST_UP_T;
@@ -73,20 +73,20 @@ void LoadILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
 	}
 }
 
-bc_GenericType* EvalILAs(ILAs * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILAs(ILAs * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	LoadILAs(self, env, cctx);
 	return self->GType;
 }
 
 void DeleteILAs(ILAs * self) {
 	bc_DeleteGenericCache(self->GCache);
-	DeleteILFactor(self->Source);
+	bc_DeleteILFactor(self->Source);
 	MEM_FREE(self);
 }
 
 char* ILAsToString(ILAs* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
-	char* factstr = ILFactorToString(self->Source, env);
+	char* factstr = bc_ILFactorToString(self->Source, env);
 	char* to = bc_GenericCacheToString(self->GCache);
 	bc_AppendfBuffer(sb, "%s as %s", factstr, to);
 	MEM_FREE(factstr);

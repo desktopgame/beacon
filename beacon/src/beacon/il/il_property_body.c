@@ -6,20 +6,20 @@
 
 static void ILPropertyBody_stmt_delete(bc_VectorItem item);
 
-ILPropertyBody* MallocILPropertyBody(ILPropertyBodyTag tag, const char* filename, int lineno) {
-	ILPropertyBody* ret = bc_MXMalloc(sizeof(ILPropertyBody), filename, lineno);
+bc_ILPropertyBody* bc_MallocILPropertyBody(bc_ILPropertyBodyTag tag, const char* filename, int lineno) {
+	bc_ILPropertyBody* ret = bc_MXMalloc(sizeof(bc_ILPropertyBody), filename, lineno);
 	ret->Statements = bc_NewVector();
 	ret->Tag = tag;
 	ret->IsShort = false;
 	return ret;
 }
 
-void DeleteILPropertyBody(ILPropertyBody* self) {
+void bc_DeleteILPropertyBody(bc_ILPropertyBody* self) {
 	bc_DeleteVector(self->Statements, ILPropertyBody_stmt_delete);
 	MEM_FREE(self);
 }
 //private
 static void ILPropertyBody_stmt_delete(bc_VectorItem item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }

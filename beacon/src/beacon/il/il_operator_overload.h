@@ -14,15 +14,15 @@
 #include "../env/generic_cache.h"
 #include "il_type_interface.h"
 #include "../ast/access_level.h"
-typedef struct ILOperatorOverload {
+typedef struct bc_ILOperatorOverload {
 	bc_OperatorType Type;
 	bc_Vector* Parameters;
 	bc_Vector* Statements;
 	bc_GenericCache* ReturnGCache;
 	bc_AccessLevel Access;
-} ILOperatorOverload;
+} bc_ILOperatorOverload;
 
-ILOperatorOverload* NewILOperatorOverload(bc_OperatorType type);
+bc_ILOperatorOverload* bc_NewILOperatorOverload(bc_OperatorType type);
 
-void DeleteILOperatorOverload(ILOperatorOverload* self);
+void bc_DeleteILOperatorOverload(bc_ILOperatorOverload* self);
 #endif

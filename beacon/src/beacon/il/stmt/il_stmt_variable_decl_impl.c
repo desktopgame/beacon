@@ -8,8 +8,8 @@
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
 
-ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
-	ILStatement* ret = NewILStatement(ILSTMT_VARIABLE_DECL_T);
+bc_ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
+	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_VARIABLE_DECL_T);
 	ret->Kind.VariableDecl = self;
 	return ret;
 }
@@ -21,11 +21,11 @@ ILVariableDecl * NewILVariableDecl(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableDecl(ILVariableDecl * self, bc_Enviroment * env, CallContext* cctx) {
+void GenerateILVariableDecl(ILVariableDecl * self, bc_Enviroment * env, bc_CallContext* cctx) {
 
 }
 
-void LoadILVariableDecl(ILVariableDecl * self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILVariableDecl(ILVariableDecl * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			bc_Ref2Str(self->Name)

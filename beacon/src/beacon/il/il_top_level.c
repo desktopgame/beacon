@@ -13,8 +13,8 @@ static void ILToplevel_DeleteNamespace(bc_VectorItem item);
 static void ILToplevel_function_delete(bc_VectorItem item);
 static void ILToplevel_stmt_delete(bc_VectorItem item);
 
-ILToplevel* NewILToplevel() {
-	ILToplevel* ret = (ILToplevel*)MEM_MALLOC(sizeof(ILToplevel));
+bc_ILToplevel* bc_NewILToplevel() {
+	bc_ILToplevel* ret = (bc_ILToplevel*)MEM_MALLOC(sizeof(bc_ILToplevel));
 	ret->ImportList = bc_NewVector();
 	ret->NamespaceList = bc_NewVector();
 	ret->StatementList = bc_NewVector();
@@ -22,7 +22,7 @@ ILToplevel* NewILToplevel() {
 	return ret;
 }
 
-void DeleteILToplevel(ILToplevel* self) {
+void bc_DeleteILToplevel(bc_ILToplevel* self) {
 	if(self == NULL) {
 		return;
 	}
@@ -35,21 +35,21 @@ void DeleteILToplevel(ILToplevel* self) {
 
 //private
 static void ILToplevel_import_delete(bc_VectorItem item) {
-	ILImport* e = (ILImport*)item;
-	DeleteILImport(e);
+	bc_ILImport* e = (bc_ILImport*)item;
+	bc_DeleteILImport(e);
 }
 
 static void ILToplevel_DeleteNamespace(bc_VectorItem item) {
-	ILNamespace* e = (ILNamespace*)item;
-	DeleteILNamespace(e);
+	bc_ILNamespace* e = (bc_ILNamespace*)item;
+	bc_DeleteILNamespace(e);
 }
 
 static void ILToplevel_function_delete(bc_VectorItem item) {
-	ILFunction* e = (ILFunction*)item;
-	DeleteILFunction(e);
+	bc_ILFunction* e = (bc_ILFunction*)item;
+	bc_DeleteILFunction(e);
 }
 
 static void ILToplevel_stmt_delete(bc_VectorItem item) {
-	ILStatement* e = (ILStatement*)item;
-	DeleteILStmt(e);
+	bc_ILStatement* e = (bc_ILStatement*)item;
+	bc_DeleteILStmt(e);
 }

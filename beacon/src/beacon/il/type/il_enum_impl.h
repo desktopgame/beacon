@@ -19,7 +19,7 @@ typedef struct ILEnum {
 	bc_Vector* Items;
 } ILEnum;
 
-ILType* WrapILEnum(ILEnum* self);
+bc_ILType* WrapILEnum(ILEnum* self);
 
 ILEnum* NewILEnum(bc_StringView namev);
 

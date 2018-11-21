@@ -21,15 +21,15 @@ typedef struct ILString {
 	bc_StringView Value;
 } ILString;
 
-ILFactor* WrapILString(ILString* self);
+bc_ILFactor* WrapILString(ILString* self);
 
 ILString* NewILString(bc_StringView valuev);
 
-void GenerateILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILString(ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILString(ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILString(ILString* self, bc_Enviroment* env, CallContext* cctx);
+bc_GenericType* EvalILString(ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILStringToString(ILString* self, bc_Enviroment* env);
 

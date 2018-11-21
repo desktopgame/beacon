@@ -14,9 +14,9 @@
 #include <stdio.h>
 
 static void DeleteILVariableLocal_typeargs(bc_VectorItem item);
-static void LoadILVariableLocalImpl(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
-static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
-static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx);
+static void LoadILVariableLocalImpl(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
+static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
+static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
 static void set_gtype(ILVariableLocal * self, bc_GenericType* gt);
 
 ILVariableLocal* NewILVariableLocal(bc_StringView namev) {
@@ -28,7 +28,7 @@ ILVariableLocal* NewILVariableLocal(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->Type != VARIABLE_LOCAL_UNDEFINED_T);
 	if(self->Type == VARIABLE_LOCAL_SCOPE_T) {
@@ -57,14 +57,14 @@ void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, CallCont
 	}
 }
 
-void LoadILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(self->Type != VARIABLE_LOCAL_UNDEFINED_T) {
 		return;
 	}
 	LoadILVariableLocalImpl(self, env, cctx);
 }
 
-bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	LoadILVariableLocal(self, env, cctx);
 	assert(self->Type != VARIABLE_LOCAL_UNDEFINED_T);
 	return self->GType;
@@ -81,11 +81,11 @@ void DeleteILVariableLocal(ILVariableLocal* self) {
 }
 //private
 static void DeleteILVariableLocal_typeargs(bc_VectorItem item) {
-	ILTypeArgument* e = (ILTypeArgument*)item;
-	DeleteILTypeArgument(e);
+	bc_ILTypeArgument* e = (bc_ILTypeArgument*)item;
+	bc_DeleteILTypeArgument(e);
 }
 
-static void LoadILVariableLocalImpl(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocalImpl(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	//NOTE:変数宣言の後にその変数を使用する場合、
 	//factorはload時点でシンボルエントリーを取得しようとするが、
 	//stmtはgenerate時点でシンボルテーブルへ書き込むので、
@@ -102,12 +102,12 @@ static void LoadILVariableLocalImpl(ILVariableLocal * self, bc_Enviroment * env,
 	}
 }
 
-static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	//対応するフィールドを検索
 	self->Type = VARIABLE_LOCAL_FIELD_T;
 	//NOTE:トップレベルではここが空なので、
 	//定義されていない変数とみなせる？
-	bc_Type* tp = GetTypeCContext(cctx);
+	bc_Type* tp = bc_GetTypeCContext(cctx);
 	if(tp->Tag == TYPE_INTERFACE_T/* この条件は構文規則からして満たさないはず */) {
 		bc_Panic(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T, bc_Ref2Str(self->Name));
 		return;
@@ -133,16 +133,16 @@ static void LoadILVariableLocal_field(ILVariableLocal * self, bc_Enviroment * en
 		LoadILVariableLocal_Property(self, env, cctx);
 		return;
 	//フィールドが見つかったなら可視性を確認する
-	} else if(!bc_IsAccessibleFieldClass(GetClassCContext(cctx), f)) {
-		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, bc_Ref2Str(GetClassCContext(cctx)->Name), bc_Ref2Str(f->Name));
+	} else if(!bc_IsAccessibleFieldClass(bc_GetClassCContext(cctx), f)) {
+		bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T, bc_Ref2Str(bc_GetClassCContext(cctx)->Name), bc_Ref2Str(f->Name));
 		return;
 	}
 	set_gtype(self, f->GType);
 }
 
-static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment * env, CallContext* cctx) {
+static void LoadILVariableLocal_Property(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	int temp = -1;
-	bc_Type* tp = GetTypeCContext(cctx);
+	bc_Type* tp = bc_GetTypeCContext(cctx);
 	bc_Property* p = bc_FindTreePropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
 	if(temp == -1) {
 		p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);

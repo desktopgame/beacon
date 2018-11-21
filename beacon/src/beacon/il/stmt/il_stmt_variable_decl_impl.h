@@ -26,7 +26,7 @@ typedef struct ILVariableDecl {
  * @param self
  * @return
  */
-ILStatement* WrapILVariableDecl(ILVariableDecl* self);
+bc_ILStatement* WrapILVariableDecl(ILVariableDecl* self);
 
 /**
  * 型宣言を表す要素を作成します.
@@ -41,7 +41,7 @@ ILVariableDecl* NewILVariableDecl(bc_StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 型宣言を表す要素を出力します.
@@ -49,7 +49,7 @@ void GenerateILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, CallContex
  * @param env
  * @param cctx
  */
-void LoadILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, CallContext* cctx);
+void LoadILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 型宣言を表す要素を開放します.

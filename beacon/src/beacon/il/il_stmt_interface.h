@@ -17,7 +17,7 @@
 /**
  * 文の種類を表す列挙型.
  */
-typedef enum ILStatementTag {
+typedef enum bc_ILStatementTag {
 	ILSTMT_PROC_T,
 	ILSTMT_IF_T,
 	ILSTMT_WHILE_T,
@@ -35,7 +35,7 @@ typedef enum ILStatementTag {
 	ILSTMT_YIELD_RETURN_T,
 	ILSTMT_YIELD_BREAK_T,
 	ILSTMT_INJECT_JNI_T,
-} ILStatementTag;
+} bc_ILStatementTag;
 
 //詳細は il_stmt_impl.h を参照してください。
 struct ILProc;
@@ -57,8 +57,8 @@ struct ILInjectJNI;
 /**
  * 文を表す要素です.
  */
-typedef struct ILStatement {
-	ILStatementTag Type;
+typedef struct bc_ILStatement {
+	bc_ILStatementTag Type;
 	int Lineno;
 	union {
 		struct ILProc* Proc;
@@ -77,10 +77,10 @@ typedef struct ILStatement {
 		ILStatementYieldBreak YieldBreak;
 		struct ILInjectJNI* InjectJNI;
 	} Kind;
-} ILStatement;
+} bc_ILStatement;
 
-#define NewILStatement(type) (MallocILStmt(type, __FILE__, __LINE__))
-ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno);
+#define bc_NewILStatement(type) (bc_MallocILStmt(type, __FILE__, __LINE__))
+bc_ILStatement* bc_MallocILStmt(bc_ILStatementTag type, const char* filename, int lineno);
 
 /**
  * 文を生成します.
@@ -88,7 +88,7 @@ ILStatement* MallocILStmt(ILStatementTag type, const char* filename, int lineno)
  * @param env
  * @param cctx
  */
-void GenerateILStmt(ILStatement* self, bc_Enviroment* env, CallContext* cctx);
+void bc_GenerateILStmt(bc_ILStatement* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * ステートメントを読み込んでエラーがあれば記録します.
@@ -96,11 +96,11 @@ void GenerateILStmt(ILStatement* self, bc_Enviroment* env, CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILStmt(ILStatement * self, bc_Enviroment* env, CallContext* cctx);
+void bc_LoadILStmt(bc_ILStatement * self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 文を開放します.
  * @param self
  */
-void DeleteILStmt(ILStatement* self);
+void bc_DeleteILStmt(bc_ILStatement* self);
 #endif // !SIGNAL_IL_IL_STMT_INTERFACE_H

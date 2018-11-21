@@ -32,8 +32,8 @@ typedef enum ILCallType {
  * 関数呼び出し演算子を表す構造体.
  */
 typedef struct ILCallOp {
-	ILFactor* Parent;
-	ILFactor* Receiver;
+	bc_ILFactor* Parent;
+	bc_ILFactor* Receiver;
 	//Vector* type_argument_list;
 	bc_Vector* Arguments;
 	ILCallType Type;
@@ -44,17 +44,17 @@ typedef struct ILCallOp {
 	} Kind;
 } ILCallOp;
 
-ILFactor* WrapCallOp(ILCallOp* self);
+bc_ILFactor* WrapCallOp(ILCallOp* self);
 
 ILCallOp* NewILCallOp();
 
-void LoadCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
+void LoadCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
+struct bc_GenericType* EvalILCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 char* ILCallOpToString(ILCallOp* self, bc_Enviroment* env);
 
-void GenerateILCallOp(ILCallOp* self, bc_Enviroment* env, CallContext* cctx);
+void GenerateILCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 void DeleteILCallOp(ILCallOp* self);
 

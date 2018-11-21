@@ -21,7 +21,7 @@ struct bc_OperatorOverload;
 struct bc_GenericType;
 struct bc_FQCNCache;
 
-typedef enum CallContextTag {
+typedef enum bc_CallContextTag {
 	//プログラムのトップレベル
 	CALL_TOP_T,
 	//メソッド
@@ -34,12 +34,12 @@ typedef enum CallContextTag {
 	CALL_CTOR_ARGS_T,
 
 	CALL_DECL_T
-} CallContextTag;
+} bc_CallContextTag;
 
-typedef struct CallContext {
+typedef struct bc_CallContext {
 	bc_Vector* CallStack;
-	ControlStructure Control;
-	CallContextTag Tag;
+	bc_ControlStructure Control;
+	bc_CallContextTag Tag;
 	struct bc_Namespace* Scope;
 	struct bc_Type* Ty;
 	union {
@@ -47,33 +47,33 @@ typedef struct CallContext {
 		struct bc_Constructor* Ctor;
 		struct bc_OperatorOverload* OpOv;
 	} Kind;
-} CallContext;
+} bc_CallContext;
 
-#define NewCallContext(tag) (MallocCContext(tag, __FILE__, __LINE__))
-CallContext* MallocCContext(CallFrameTag tag, const char* filename, int lineno);
+#define bc_NewCallContext(tag) (bc_MallocCContext(tag, __FILE__, __LINE__))
+bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename, int lineno);
 
-#define PushCallContext(self, tag) (PushImplCallContext(self, tag, __FILE__, __LINE__))
-CallFrame* PushImplCallContext(CallContext* self, CallFrameTag tag, const char* filename, int lineno);
+#define bc_PushCallContext(self, tag) (bc_PushImplCallContext(self, tag, __FILE__, __LINE__))
+bc_CallFrame* bc_PushImplCallContext(bc_CallContext* self, bc_CallFrameTag tag, const char* filename, int lineno);
 
-CallFrame* TopCallContext(CallContext* self);
+bc_CallFrame* bc_TopCallContext(bc_CallContext* self);
 
-void PopCallContext(CallContext* self);
+void bc_PopCallContext(bc_CallContext* self);
 
-struct bc_Namespace* GetNamespaceCContext(CallContext* self);
+struct bc_Namespace* bc_GetNamespaceCContext(bc_CallContext* self);
 
-struct bc_Method* GetMethodCContext(CallContext* self);
+struct bc_Method* bc_GetMethodCContext(bc_CallContext* self);
 
-struct bc_Type* GetTypeCContext(CallContext* self);
+struct bc_Type* bc_GetTypeCContext(bc_CallContext* self);
 
-struct bc_Class* GetClassCContext(CallContext* self);
+struct bc_Class* bc_GetClassCContext(bc_CallContext* self);
 
-struct bc_GenericType* GetReceiverCContext(CallContext* self);
+struct bc_GenericType* bc_GetReceiverCContext(bc_CallContext* self);
 
-struct bc_Type* GetEvalTypeCContext(CallContext* self, struct bc_FQCNCache* fqcn);
+struct bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, struct bc_FQCNCache* fqcn);
 
-bc_Vector* GetTypeArgsCContext(CallContext* self);
+bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self);
 
-bool IsStaticCContext(CallContext* self);
+bool bc_IsStaticCContext(bc_CallContext* self);
 
-void DeleteCallContext(CallContext* self);
+void bc_DeleteCallContext(bc_CallContext* self);
 #endif

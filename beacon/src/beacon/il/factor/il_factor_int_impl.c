@@ -9,8 +9,8 @@
 #if defined(_MSC_VER)
 #pragma warning(disable:4996)
 #endif
-ILFactor * WrapILInt(ILInt * self) {
-	ILFactor* ret = NewILFactor(ILFACTOR_INT_T);
+bc_ILFactor * WrapILInt(ILInt * self) {
+	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_INT_T);
 	ret->Kind.Int = self;
 	return ret;
 }
@@ -22,7 +22,7 @@ ILInt * MallocILInt(int32_t i, const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILInt(ILInt * self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILInt(ILInt * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	assert(self->Count == 0);
 	int index = bc_AddCIntEnviroment(env, self->Value);
 	bc_AddOpcodeBuf(env->Bytecode, OP_ICONST);
@@ -30,10 +30,10 @@ void GenerateILInt(ILInt * self, bc_Enviroment* env, CallContext* cctx) {
 	self->Count++;
 }
 
-void LoadILInt(ILInt * self, bc_Enviroment * env, CallContext* cctx) {
+void LoadILInt(ILInt * self, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
-bc_GenericType* EvalILInt(ILInt * self, bc_Enviroment * env, CallContext* cctx) {
+bc_GenericType* EvalILInt(ILInt * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return BC_GENERIC_INT;
 }
 

@@ -7,21 +7,21 @@
 #include "../../env/type_interface.h"
 #include "../../env/namespace.h"
 
-static void check_method_return(ILReturnEmpty self, bc_Enviroment * env, CallContext* cctx);
+static void check_method_return(ILReturnEmpty self, bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, CallContext* cctx) {
+void GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, OP_RETURN);
 }
 
-void LoadILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, CallContext* cctx) {
+void LoadILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx) {
 	check_method_return(self, env, cctx);
 }
 //private
-static void check_method_return(ILReturnEmpty self, bc_Enviroment * env, CallContext* cctx) {
+static void check_method_return(ILReturnEmpty self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}
-	bc_Method* m = GetMethodCContext(cctx);
+	bc_Method* m = bc_GetMethodCContext(cctx);
 	//戻り値が Void ではないのに値を返さない
 	if(m->ReturnGType->CoreType != BC_TYPE_VOID) {
 		bc_Panic(BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T,
