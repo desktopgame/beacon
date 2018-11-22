@@ -14,19 +14,19 @@
 #include "../il_stmt_interface.h"
 struct bc_SymbolEntry;
 
-typedef struct ILInjectJNI {
+typedef struct bc_ILInjectJNI {
 	bc_StringView Name;
 	bc_ILFactor* Value;
 	struct bc_SymbolEntry* Symbol;
-} ILInjectJNI;
+} bc_ILInjectJNI;
 
-bc_ILStatement* WrapILInjectJNI(ILInjectJNI* self);
+bc_ILStatement* bc_WrapILInjectJNI(bc_ILInjectJNI* self);
 
-ILInjectJNI* NewILInjectJNI(bc_StringView namev);
+bc_ILInjectJNI* bc_NewILInjectJNI(bc_StringView namev);
 
-void GenerateILInjectJNI(ILInjectJNI* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILInjectJNI(bc_ILInjectJNI* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInjectJNI(ILInjectJNI * self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILInjectJNI(bc_ILInjectJNI * self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILInjectJni(ILInjectJNI* self);
+void bc_DeleteILInjectJni(bc_ILInjectJNI* self);
 #endif

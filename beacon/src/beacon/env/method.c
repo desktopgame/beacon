@@ -265,12 +265,12 @@ static void method_count(bc_ILStatement* s, int* yield_ret, int* ret) {
 		case ILSTMT_IF_T:
 		{
 			//if() { ... }
-			ILIf* sif = s->Kind.If;
+			bc_ILIf* sif = s->Kind.If;
 			for(int i=0; i<sif->Body->Length; i++) {
 				method_count((bc_ILStatement*)bc_AtVector(sif->Body, i), yield_ret, ret);
 			}
 			for(int i=0; i<sif->ElifList->Length; i++) {
-				ILElif* seif = (ILElif*)bc_AtVector(sif->ElifList, i);
+				bc_ILElif* seif = (bc_ILElif*)bc_AtVector(sif->ElifList, i);
 				bc_Vector* body = seif->Body;
 				for(int j=0; j<body->Length; j++) {
 					method_count((bc_ILStatement*)bc_AtVector(body, j), yield_ret, ret);
@@ -291,7 +291,7 @@ static void method_count(bc_ILStatement* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_WHILE_T:
 		{
-			ILWhile* whi = s->Kind.While;
+			bc_ILWhile* whi = s->Kind.While;
 			for(int i=0; i<whi->Statements->Length; i++) {
 				bc_ILStatement* e = bc_AtVector(whi->Statements, i);
 				method_count(e, yield_ret, ret);
@@ -304,14 +304,14 @@ static void method_count(bc_ILStatement* s, int* yield_ret, int* ret) {
 			break;
 		case ILSTMT_TRY_T:
 		{
-			ILTry* tr = s->Kind.Try;
+			bc_ILTry* tr = s->Kind.Try;
 			for(int i=0; i<tr->Statements->Length; i++) {
 				bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(tr->Statements, i);
 				method_count(e, yield_ret, ret);
 			}
 			bc_Vector* catches = tr->Catches;
 			for(int i=0; i<catches->Length; i++) {
-				ILCatch* ce = (ILCatch*)bc_AtVector(catches, i);
+				bc_ILCatch* ce = (bc_ILCatch*)bc_AtVector(catches, i);
 				for(int j=0; j<ce->Statements->Length; j++) {
 					bc_ILStatement* e = (bc_ILStatement*)bc_AtVector(ce->Statements, j);
 					method_count(e, yield_ret, ret);

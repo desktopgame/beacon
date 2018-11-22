@@ -12,18 +12,18 @@
 #include "../il_stmt_interface.h"
 #include "../il_factor_interface.h"
 
-typedef struct ILYieldReturn {
+typedef struct bc_ILYieldReturn {
 	bc_ILFactor* Value;
-} ILYieldReturn;
+} bc_ILYieldReturn;
 
-bc_ILStatement* WrapILYieldReturn(ILYieldReturn* self);
+bc_ILStatement* bc_WrapILYieldReturn(bc_ILYieldReturn* self);
 
-#define NewILYieldReturn() (MallocILYieldReturn(__FILE__, __LINE__))
-ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno);
+#define bc_NewILYieldReturn() (bc_MallocILYieldReturn(__FILE__, __LINE__))
+bc_ILYieldReturn* bc_MallocILYieldReturn(const char* filename, int lineno);
 
-void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILYieldReturn(bc_ILYieldReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILYieldReturn(bc_ILYieldReturn * self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILYieldReturn(ILYieldReturn* self);
+void bc_DeleteILYieldReturn(bc_ILYieldReturn* self);
 #endif

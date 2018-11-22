@@ -3,27 +3,27 @@
 #include <stdlib.h>
 #include "../../util/mem.h"
 
-bc_ILStatement * WrapILProc(ILProc * self) {
+bc_ILStatement * bc_WrapILProc(bc_ILProc * self) {
 	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_PROC_T);
 	ret->Kind.Proc = self;
 	return ret;
 }
 
-ILProc * NewILProc() {
-	ILProc* ret = (ILProc*)MEM_MALLOC(sizeof(ILProc));
+bc_ILProc * bc_NewILProc() {
+	bc_ILProc* ret = (bc_ILProc*)MEM_MALLOC(sizeof(bc_ILProc));
 	ret->Factor = NULL;
 	return ret;
 }
 
-void GenerateILProc(ILProc * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILProc(bc_ILProc * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_GenerateILFactor(self->Factor, env, cctx);
 }
 
-void LoadILProc(ILProc * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILProc(bc_ILProc * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_LoadILFactor(self->Factor, env, cctx);
 }
 
-void DeleteILProc(ILProc * self) {
+void bc_DeleteILProc(bc_ILProc * self) {
 	bc_DeleteILFactor(self->Factor);
 	MEM_FREE(self);
 }

@@ -16,22 +16,22 @@ struct bc_Enviroment;
 /**
  * 値の返却を表す要素.
  */
-typedef struct ILReturn {
+typedef struct bc_ILReturn {
 	bc_ILFactor* Factor;
-} ILReturn;
+} bc_ILReturn;
 
 /**
  * 式を返却する文をスーパーセットにラップします.
  * @param self
  * @return
  */
-bc_ILStatement* WrapILReturn(ILReturn* self);
+bc_ILStatement* bc_WrapILReturn(bc_ILReturn* self);
 
 /**
  * 式を返却する文を作成します.
  * @return
  */
-ILReturn* NewILReturn();
+bc_ILReturn* bc_NewILReturn();
 
 /**
  * 式を返却する文を生成します.
@@ -39,7 +39,7 @@ ILReturn* NewILReturn();
  * @param env
  * @param cctx
  */
-void GenerateILReturn(ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILReturn(bc_ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式を返却する文を読み込みます.
@@ -47,11 +47,11 @@ void GenerateILReturn(ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILReturn(ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILReturn(bc_ILReturn* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式を返却する文を開放します.
  * @param self
  */
-void DeleteILReturn(ILReturn* self);
+void bc_DeleteILReturn(bc_ILReturn* self);
 #endif // !SIGNAL_IL_IL_STMT_RETURN_H

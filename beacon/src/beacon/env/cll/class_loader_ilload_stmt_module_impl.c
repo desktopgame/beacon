@@ -7,22 +7,22 @@
 #include "../class_loader.h"
 //proto
 static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource);
-static ILInferencedTypeInit* CLIL_inferenced_type_init(bc_ClassLoader* self, bc_AST* asource);
-static ILVariableDecl* CLIL_variable_decl(bc_ClassLoader* self, bc_AST* asource);
-static ILVariableInit* CLIL_variable_init(bc_ClassLoader* self, bc_AST* asource);
-static ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource);
-static ILIf* CLIL_if_elif_list(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILInferencedTypeInit* CLIL_inferenced_type_init(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILVariableDecl* CLIL_variable_decl(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILVariableInit* CLIL_variable_init(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILIf* CLIL_if_elif_list(bc_ClassLoader* self, bc_AST* asource);
 static void CLIL_elif_list(bc_ClassLoader* self, bc_Vector* list, bc_AST* asource);
-static ILIf* CLIL_if_else(bc_ClassLoader* self, bc_AST* asource);
-static ILIf* CLIL_if_elif_list_else(bc_ClassLoader* self, bc_AST* asource);
-static ILWhile* CLIL_while(bc_ClassLoader* self, bc_AST* asource);
-static ILReturn* CLIL_return(bc_ClassLoader* self, bc_AST* asource);
-static ILTry* CLIL_try(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILIf* CLIL_if_else(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILIf* CLIL_if_elif_list_else(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILWhile* CLIL_while(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILReturn* CLIL_return(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILTry* CLIL_try(bc_ClassLoader* self, bc_AST* asource);
 static void CLIL_catch_list(bc_ClassLoader* self, bc_Vector* dest, bc_AST* asource);
-static ILThrow* CLIL_throw(bc_ClassLoader* self, bc_AST* asource);
-static ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource);
-static ILDefer* CLIL_defer(bc_ClassLoader* self, bc_AST* asource);
-static ILYieldReturn* CLIL_yield_return(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILThrow* CLIL_throw(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILDefer* CLIL_defer(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILYieldReturn* CLIL_yield_return(bc_ClassLoader* self, bc_AST* asource);
 
 bc_ILStatement* CLILStmt(bc_ClassLoader* self, bc_AST* source) {
 	bc_ILStatement* ret = CLILBodyImpl(self, source);
@@ -61,63 +61,63 @@ static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 		{
 			bc_AST* afact = bc_FirstAST(asource);
 			bc_ILFactor* ilfact = CLILFactor(self, afact);
-			ILProc* ilproc = NewILProc();
+			bc_ILProc* ilproc = bc_NewILProc();
 				ilproc->Factor = ilfact;
 			assert(ilfact != NULL);
-			return WrapILProc(ilproc);
+			return bc_WrapILProc(ilproc);
 		}
 		case AST_STMT_VARIABLE_DECL_T:
 		{
-			ILVariableDecl* ilvardecl = CLIL_variable_decl(self, asource);
-			return WrapILVariableDecl(ilvardecl);
+			bc_ILVariableDecl* ilvardecl = CLIL_variable_decl(self, asource);
+			return bc_WrapILVariableDecl(ilvardecl);
 		}
 		case AST_STMT_VARIABLE_INIT_T:
 		{
-			ILVariableInit* ilvarinit = CLIL_variable_init(self, asource);
-			return WrapILVariableInit(ilvarinit);
+			bc_ILVariableInit* ilvarinit = CLIL_variable_init(self, asource);
+			return bc_WrapILVariableInit(ilvarinit);
 		}
 		case AST_INFERENCED_TYPE_INIT_T:
 		{
-			ILInferencedTypeInit* ilinfer = CLIL_inferenced_type_init(self, asource);
-			return WrapILInferencedTypeInit(ilinfer);
+			bc_ILInferencedTypeInit* ilinfer = CLIL_inferenced_type_init(self, asource);
+			return bc_WrapILInferencedTypeInit(ilinfer);
 		}
 		case AST_IF_T:
 		{
-			ILIf* ilif = CLIL_if(self, asource);
-			return WrapILIf(ilif);
+			bc_ILIf* ilif = CLIL_if(self, asource);
+			return bc_WrapILIf(ilif);
 		}
 		case AST_IF_ELIF_LIST_T:
 		{
-			ILIf* ilif = CLIL_if_elif_list(self, asource);
-			return WrapILIf(ilif);
+			bc_ILIf* ilif = CLIL_if_elif_list(self, asource);
+			return bc_WrapILIf(ilif);
 		}
 		case AST_IF_ELSE_T:
 		{
-			ILIf* ilif = CLIL_if_else(self, asource);
-			return WrapILIf(ilif);
+			bc_ILIf* ilif = CLIL_if_else(self, asource);
+			return bc_WrapILIf(ilif);
 		}
 		case AST_IF_ELIF_LIST_ELSE_T:
 		{
-			ILIf* ilif = CLIL_if_elif_list_else(self, asource);
-			return WrapILIf(ilif);
+			bc_ILIf* ilif = CLIL_if_elif_list_else(self, asource);
+			return bc_WrapILIf(ilif);
 		}
 		case AST_WHILE_T:
 		{
-			ILWhile* ilwh = CLIL_while(self, asource);
-			return WrapILWhile(ilwh);
+			bc_ILWhile* ilwh = CLIL_while(self, asource);
+			return bc_WrapILWhile(ilwh);
 		}
 		case AST_BREAK_T:
 		{
-			return WrapILBreak();
+			return bc_WrapILBreak();
 		}
 		case AST_CONTINUE_T:
 		{
-			return WrapILContinue();
+			return bc_WrapILContinue();
 		}
 		case AST_RETURN_T:
 		{
-			ILReturn* ilret = CLIL_return(self, asource);
-			return WrapILReturn(ilret);
+			bc_ILReturn* ilret = CLIL_return(self, asource);
+			return bc_WrapILReturn(ilret);
 		}
 		case AST_RETURN_EMPTY_T:
 		{
@@ -127,27 +127,27 @@ static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 		}
 		case AST_STMT_TRY_T:
 		{
-			ILTry* iltry = CLIL_try(self, asource);
-			return WrapILTry(iltry);
+			bc_ILTry* iltry = CLIL_try(self, asource);
+			return bc_WrapILTry(iltry);
 		}
 		case AST_STMT_THROW_T:
 		{
-			ILThrow* ilthrow = CLIL_throw(self, asource);
-			return WrapILThrow(ilthrow);
+			bc_ILThrow* ilthrow = CLIL_throw(self, asource);
+			return bc_WrapILThrow(ilthrow);
 		}
 		case AST_STMT_ASSERT_T:
 		{
-			ILAssert* ilas = CLIL_assert(self, asource);
-			return WrapILAssert(ilas);
+			bc_ILAssert* ilas = CLIL_assert(self, asource);
+			return bc_WrapILAssert(ilas);
 		}
 		case AST_STMT_DEFER_T:
 		{
-			ILDefer* ildef = CLIL_defer(self, asource);
-			return WrapILDefer(ildef);
+			bc_ILDefer* ildef = CLIL_defer(self, asource);
+			return bc_WrapILDefer(ildef);
 		}
 		case AST_YIELD_RETURN_T:
 		{
-			return WrapILYieldReturn(CLIL_yield_return(self, asource));
+			return bc_WrapILYieldReturn(CLIL_yield_return(self, asource));
 		}
 		case AST_YIELD_BREAK_T:
 		{
@@ -157,11 +157,11 @@ static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 		}
 		case AST_INJECT_JNI_VALUE_T:
 		{
-			ILInjectJNI* jni = NewILInjectJNI(asource->Attr.StringVValue);
+			bc_ILInjectJNI* jni = bc_NewILInjectJNI(asource->Attr.StringVValue);
 			bc_AST* afact = bc_FirstAST(asource);
 			jni->Value = CLILFactor(self, afact);
 			jni->Value->Lineno = 0;
-			return WrapILInjectJNI(jni);
+			return bc_WrapILInjectJNI(jni);
 		}
 		default:
 			break;
@@ -169,36 +169,36 @@ static bc_ILStatement* CLILBodyImpl(bc_ClassLoader* self, bc_AST* asource) {
 	return NULL;
 }
 
-static ILInferencedTypeInit * CLIL_inferenced_type_init(bc_ClassLoader * self, bc_AST* asource) {
+static bc_ILInferencedTypeInit * CLIL_inferenced_type_init(bc_ClassLoader * self, bc_AST* asource) {
 	bc_AST* aname = bc_FirstAST(asource);
 	bc_AST* afact = bc_SecondAST(asource);
-	ILInferencedTypeInit* ret = NewILInferencedTypeInit(aname->Attr.StringVValue);
+	bc_ILInferencedTypeInit* ret = bc_NewILInferencedTypeInit(aname->Attr.StringVValue);
 	ret->Value = CLILFactor(self, afact);
 	return ret;
 }
 
-static ILVariableDecl* CLIL_variable_decl(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILVariableDecl* CLIL_variable_decl(bc_ClassLoader* self, bc_AST* asource) {
 	bc_AST* afqcn = bc_FirstAST(asource);
 	bc_AST* aname = bc_SecondAST(asource);
-	ILVariableDecl* ret = NewILVariableDecl(aname->Attr.StringVValue);
+	bc_ILVariableDecl* ret = bc_NewILVariableDecl(aname->Attr.StringVValue);
 	ret->Name = aname->Attr.StringVValue;
 	CLILGenericCache(bc_FirstAST(afqcn), ret->GCache);
 	return ret;
 }
 
-static ILVariableInit* CLIL_variable_init(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILVariableInit* CLIL_variable_init(bc_ClassLoader* self, bc_AST* asource) {
 	bc_AST* afqcn = bc_FirstAST(asource);
 	bc_AST* aident = bc_SecondAST(asource);
 	bc_AST* afact = bc_AtAST(asource, 2);
-	ILVariableInit* ret = NewILVariableInit(aident->Attr.StringVValue);
+	bc_ILVariableInit* ret = bc_NewILVariableInit(aident->Attr.StringVValue);
 	CLILGenericCache(afqcn, ret->GCache);
 	ret->Value = CLILFactor(self, afact);
 	return ret;
 }
 
-static ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource) {
 	assert(asource->Tag == AST_IF_T);
-	ILIf* ret = NewILIf();
+	bc_ILIf* ret = bc_NewILIf();
 	bc_AST* acond = bc_FirstAST(asource);
 	bc_AST* abody = bc_SecondAST(asource);
 	bc_ILFactor* ilcond = CLILFactor(self, acond);
@@ -207,35 +207,35 @@ static ILIf* CLIL_if(bc_ClassLoader* self, bc_AST* asource) {
 	return ret;
 }
 
-static ILIf* CLIL_if_elif_list(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILIf* CLIL_if_elif_list(bc_ClassLoader* self, bc_AST* asource) {
 	bc_AST* aif = bc_FirstAST(asource);
 	bc_AST* aelif_list = bc_SecondAST(asource);
-	ILIf* ilif = CLIL_if(self, aif);
+	bc_ILIf* ilif = CLIL_if(self, aif);
 	CLIL_elif_list(self, ilif->ElifList, aelif_list);
 	return ilif;
 }
 
-static ILIf* CLIL_if_else(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILIf* CLIL_if_else(bc_ClassLoader* self, bc_AST* asource) {
 	bc_AST* aif = bc_FirstAST(asource);
 	bc_AST* aelse = bc_SecondAST(asource);
 	bc_AST* abody = bc_FirstAST(aelse);
-	ILIf* ilif = CLIL_if(self, aif);
+	bc_ILIf* ilif = CLIL_if(self, aif);
 	CLILBody(self, ilif->Else->Body, abody);
 	return ilif;
 }
 
-static ILIf* CLIL_if_elif_list_else(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILIf* CLIL_if_elif_list_else(bc_ClassLoader* self, bc_AST* asource) {
 	bc_AST* aif_eliflist = bc_FirstAST(asource);
 	bc_AST* aelse = bc_SecondAST(asource);
-	ILIf* ilif = CLIL_if_elif_list(self, aif_eliflist);
+	bc_ILIf* ilif = CLIL_if_elif_list(self, aif_eliflist);
 	CLILBody(self, ilif->Else->Body, bc_FirstAST(aelse));
 	return ilif;
 }
 
-static ILWhile * CLIL_while(bc_ClassLoader * self, bc_AST* asource) {
+static bc_ILWhile * CLIL_while(bc_ClassLoader * self, bc_AST* asource) {
 	bc_AST* acond = bc_FirstAST(asource);
 	bc_AST* abody = bc_SecondAST(asource);
-	ILWhile* ilwhile = NewILWhile();
+	bc_ILWhile* ilwhile = bc_NewILWhile();
 	ilwhile->Condition = CLILFactor(self, acond);
 	CLILBody(self, ilwhile->Statements, abody);
 	return ilwhile;
@@ -249,26 +249,26 @@ static void CLIL_elif_list(bc_ClassLoader* self, bc_Vector* list, bc_AST* asourc
 	} else if (asource->Tag == AST_ELIF_T) {
 		bc_AST* acond = bc_FirstAST(asource);
 		bc_AST* abody = bc_SecondAST(asource);
-		ILElif* ilelif = NewILElif();
+		bc_ILElif* ilelif = bc_NewILElif();
 		ilelif->Condition = CLILFactor(self, acond);
 		CLILBody(self, ilelif->Body, abody);
-		PushILElifList(list, ilelif);
+		bc_PushILElifList(list, ilelif);
 	}
 }
 
-static ILReturn* CLIL_return(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILReturn* CLIL_return(bc_ClassLoader* self, bc_AST* asource) {
 	assert(asource->Tag == AST_RETURN_T);
 	bc_AST* afact = bc_FirstAST(asource);
 	bc_ILFactor* ilfact = CLILFactor(self, afact);
-	ILReturn* ret = NewILReturn();
+	bc_ILReturn* ret = bc_NewILReturn();
 	ret->Factor = ilfact;
 	return ret;
 }
 
-static ILTry* CLIL_try(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILTry* CLIL_try(bc_ClassLoader* self, bc_AST* asource) {
 	bc_AST* abody = bc_FirstAST(asource);
 	bc_AST* acatch_list = bc_SecondAST(asource);
-	ILTry* ret = NewILTry();
+	bc_ILTry* ret = bc_NewILTry();
 	CLILBody(self, ret->Statements, abody);
 	CLIL_catch_list(self, ret->Catches, acatch_list);
 	return ret;
@@ -279,7 +279,7 @@ static void CLIL_catch_list(bc_ClassLoader* self, bc_Vector* dest, bc_AST* asour
 		bc_AST* atypename = bc_FirstAST(asource);
 		bc_AST* aname = bc_SecondAST(asource);
 		bc_AST* abody = bc_AtAST(asource, 2);
-		ILCatch* ilcatch = NewILCatch(aname->Attr.StringVValue);
+		bc_ILCatch* ilcatch = bc_NewILCatch(aname->Attr.StringVValue);
 		CLILGenericCache(bc_FirstAST(atypename), ilcatch->GCache);
 		CLILBody(self, ilcatch->Statements, abody);
 		bc_PushVector(dest, ilcatch);
@@ -291,14 +291,14 @@ static void CLIL_catch_list(bc_ClassLoader* self, bc_Vector* dest, bc_AST* asour
 	}
 }
 
-static ILThrow* CLIL_throw(bc_ClassLoader* self, bc_AST* asource) {
-	ILThrow* ret = NewILThrow();
+static bc_ILThrow* CLIL_throw(bc_ClassLoader* self, bc_AST* asource) {
+	bc_ILThrow* ret = bc_NewILThrow();
 	ret->Factor = CLILFactor(self, bc_FirstAST(asource));
 	return ret;
 }
 
-static ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource) {
-	ILAssert* ret = NewILAssert();
+static bc_ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource) {
+	bc_ILAssert* ret = bc_NewILAssert();
 	bc_AST* afact = bc_FirstAST(asource);
 	bc_AST* amsg = bc_SecondAST(asource);
 	ret->Condition = CLILFactor(self, afact);
@@ -310,16 +310,16 @@ static ILAssert* CLIL_assert(bc_ClassLoader* self, bc_AST* asource) {
 	return ret;
 }
 
-static ILDefer* CLIL_defer(bc_ClassLoader* self, bc_AST* asource) {
+static bc_ILDefer* CLIL_defer(bc_ClassLoader* self, bc_AST* asource) {
 	assert(asource->Tag == AST_STMT_DEFER_T);
 	bc_AST* astmt = bc_FirstAST(asource);
-	ILDefer* ret = NewILDefer();
+	bc_ILDefer* ret = bc_NewILDefer();
 	ret->Task = CLILStmt(self, astmt);
 	return ret;
 }
 
-static ILYieldReturn* CLIL_yield_return(bc_ClassLoader* self, bc_AST* asource) {
-	ILYieldReturn* ret = NewILYieldReturn();
+static bc_ILYieldReturn* CLIL_yield_return(bc_ClassLoader* self, bc_AST* asource) {
+	bc_ILYieldReturn* ret = bc_NewILYieldReturn();
 	ret->Value = CLILFactor(self, bc_FirstAST(asource));
 	return ret;
 }

@@ -8,36 +8,36 @@
 #include "../../env/namespace.h"
 #include <stdio.h>
 
-static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env, bc_CallContext* cctx);
+static void check_IsYieldMethod_return(bc_ILYieldReturn * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-bc_ILStatement* WrapILYieldReturn(ILYieldReturn* self) {
+bc_ILStatement* bc_WrapILYieldReturn(bc_ILYieldReturn* self) {
 	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_YIELD_RETURN_T);
 	ret->Type = ILSTMT_YIELD_RETURN_T;
 	ret->Kind.YieldReturn = self;
 	return ret;
 }
 
-ILYieldReturn* MallocILYieldReturn(const char* filename, int lineno) {
-	ILYieldReturn* ret = (ILYieldReturn*)bc_MXMalloc(sizeof(ILYieldReturn), filename, lineno);
+bc_ILYieldReturn* bc_MallocILYieldReturn(const char* filename, int lineno) {
+	bc_ILYieldReturn* ret = (bc_ILYieldReturn*)bc_MXMalloc(sizeof(bc_ILYieldReturn), filename, lineno);
 	ret->Value = NULL;
 	return ret;
 }
 
-void GenerateILYieldReturn(ILYieldReturn* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILYieldReturn(bc_ILYieldReturn* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenerateILFactor(self->Value, env, cctx);
 	bc_AddOpcodeBuf(env->Bytecode, OP_CORO_NEXT);
 }
 
-void LoadILYieldReturn(ILYieldReturn * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILYieldReturn(bc_ILYieldReturn * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	check_IsYieldMethod_return(self, env, cctx);
 }
 
-void DeleteILYieldReturn(ILYieldReturn* self) {
+void bc_DeleteILYieldReturn(bc_ILYieldReturn* self) {
 	bc_DeleteILFactor(self->Value);
 	MEM_FREE(self);
 }
 //private
-static void check_IsYieldMethod_return(ILYieldReturn * self, bc_Enviroment * env, bc_CallContext* cctx) {
+static void check_IsYieldMethod_return(bc_ILYieldReturn * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}

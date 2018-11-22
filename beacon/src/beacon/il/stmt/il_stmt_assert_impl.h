@@ -14,19 +14,19 @@
 struct bc_Enviroment;
 struct bc_ILStatement;
 
-typedef struct ILAssert {
+typedef struct bc_ILAssert {
 	bc_ILFactor* Condition;
 	bc_ILFactor* Message;
 	struct bc_ILStatement* Parent;
-} ILAssert;
+} bc_ILAssert;
 
-bc_ILStatement* WrapILAssert(ILAssert* self);
+bc_ILStatement* bc_WrapILAssert(bc_ILAssert* self);
 
-ILAssert* NewILAssert();
+bc_ILAssert* bc_NewILAssert();
 
-void GenerateILAssert(ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILAssert(bc_ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILAssert(ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILAssert(bc_ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILAssert(ILAssert* self);
+void bc_DeleteILAssert(bc_ILAssert* self);
 #endif

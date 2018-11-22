@@ -192,11 +192,11 @@ static void load_toplevel(bc_ClassLoader* self) {
 		return;
 	}
 	//var $world = new beacon::lang::World();
-	ILInferencedTypeInit* createWorldStmt = NewILInferencedTypeInit(bc_InternString("$world"));
+	bc_ILInferencedTypeInit* createWorldStmt = bc_NewILInferencedTypeInit(bc_InternString("$world"));
 	ILNewInstance* newWorldInstance = NewILNewInstance();
 	newWorldInstance->FQCNCache->Name = bc_InternString("World");
 	createWorldStmt->Value = WrapILNewInstance(newWorldInstance);
-	bc_ILStatement* body = WrapILInferencedTypeInit(createWorldStmt);
+	bc_ILStatement* body = bc_WrapILInferencedTypeInit(createWorldStmt);
 	//これをやらないと -1 のまま
 	body->Lineno = 0;
 	createWorldStmt->Value->Lineno = 0;

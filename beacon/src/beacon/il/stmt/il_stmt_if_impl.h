@@ -16,17 +16,17 @@
 /**
  * elif (...) { ... } を表す要素.
  */
-typedef struct ILElif {
+typedef struct bc_ILElif {
 	bc_ILFactor* Condition;
 	bc_Vector* Body;
-} ILElif;
+} bc_ILElif;
 
 /**
  * } else { ... } を表す要素.
  */
-typedef struct ILElse {
+typedef struct bc_ILElse {
 	bc_Vector* Body;
-} ILElse;
+} bc_ILElse;
 
 /**
  * if (...) {
@@ -34,48 +34,48 @@ typedef struct ILElse {
  * }
  * を表す要素.
  */
-typedef struct ILIf {
+typedef struct bc_ILIf {
 	bc_ILFactor* Condition;
 	bc_Vector* Body;
 	bc_Vector* ElifList;
-	ILElse* Else;
-} ILIf;
+	bc_ILElse* Else;
+} bc_ILIf;
 
 /**
  * if をスーパーセットにラップします.
  * @param self
  * @return
  */
-bc_ILStatement* WrapILIf(ILIf* self);
+bc_ILStatement* bc_WrapILIf(bc_ILIf* self);
 
 /**
  * if を表す要素を作成します.
  * @return
  */
-ILIf* NewILIf();
+bc_ILIf* bc_NewILIf();
 
 /**
  * elif を表す要素を作成します.
  * @return
  */
-ILElif* NewILElif();
+bc_ILElif* bc_NewILElif();
 
 /**
  * elif の一覧を表す要素を作成します.
  * @return
  */
-bc_Vector* NewILElifList();
+bc_Vector* bc_NewILElifList();
 
 /**
  * else を表す要素を作成します.
  * @return
  */
-ILElse* NewILElse();
+bc_ILElse* bc_NewILElse();
 
 /**
  * elif を一覧に加えます.
  */
-void PushILElifList(bc_Vector* self, ILElif* child);
+void bc_PushILElifList(bc_Vector* self, bc_ILElif* child);
 
 /**
  * if とその子要素を生成します.
@@ -83,7 +83,7 @@ void PushILElifList(bc_Vector* self, ILElif* child);
  * @param env
  * @param cctx
  */
-void GenerateILIf(ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILIf(bc_ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * if とその子要素を読み込みます.
@@ -91,29 +91,29 @@ void GenerateILIf(ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
  * @param env
  * @param cctx
  */
-void LoadILIf(ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILIf(bc_ILIf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * if を表す要素を開放します.
  * @param self
  */
-void DeleteILIf(ILIf* self);
+void bc_DeleteILIf(bc_ILIf* self);
 
 /**
  * elif を表す要素を開放します.
  * @param self
  */
-void DeleteILElif(ILElif* self);
+void bc_DeleteILElif(bc_ILElif* self);
 
 /**
  * elifの一覧 を表す要素を開放します.
  * @param self
  */
-void DeleteILElifList(bc_Vector* self);
+void bc_DeleteILElifList(bc_Vector* self);
 
 /**
  * else を表す要素を開放します.
  * @param self
  */
-void DeleteILElse(ILElse* self);
+void bc_DeleteILElse(bc_ILElse* self);
 #endif // !SIGNAL_IL_IL_STMT_IF_IMPL_H

@@ -9,22 +9,22 @@
 #include <stdio.h>
 #include <assert.h>
 
-bc_ILStatement * WrapILVariableInit(ILVariableInit * self) {
-	bc_ILStatement* ret = (bc_ILStatement*)MEM_MALLOC(sizeof(ILVariableInit));
+bc_ILStatement * bc_WrapILVariableInit(bc_ILVariableInit * self) {
+	bc_ILStatement* ret = (bc_ILStatement*)MEM_MALLOC(sizeof(bc_ILVariableInit));
 	ret->Type = ILSTMT_VARIABLE_INIT_T;
 	ret->Kind.VariableInit = self;
 	return ret;
 }
 
-ILVariableInit * NewILVariableInit(bc_StringView namev) {
-	ILVariableInit* ret = (ILVariableInit*)MEM_MALLOC(sizeof(ILVariableInit));
+bc_ILVariableInit * bc_NewILVariableInit(bc_StringView namev) {
+	bc_ILVariableInit* ret = (bc_ILVariableInit*)MEM_MALLOC(sizeof(bc_ILVariableInit));
 	ret->Name = namev;
 	ret->Value = NULL;
 	ret->GCache = bc_NewGenericCache();
 	return ret;
 }
 
-void GenerateILVariableInit(ILVariableInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILVariableInit(bc_ILVariableInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_GenerateILFactor(self->Value, env, cctx);
 	//宣言型と代入型が異なる場合
 	bc_GenericType* ga = bc_EvalILFactor(self->Value, env, cctx);
@@ -47,7 +47,7 @@ void GenerateILVariableInit(ILVariableInit * self, bc_Enviroment * env, bc_CallC
 	bc_AddOpcodeBuf(env->Bytecode, self->Symbol->Index);
 }
 
-void LoadILVariableInit(ILVariableInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILVariableInit(bc_ILVariableInit * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_LoadILFactor(self->Value, env, cctx);
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
@@ -71,7 +71,7 @@ void LoadILVariableInit(ILVariableInit * self, bc_Enviroment * env, bc_CallConte
 	assert(e->GType != NULL);
 }
 
-void DeleteILVariableInit(ILVariableInit * self) {
+void bc_DeleteILVariableInit(bc_ILVariableInit * self) {
 	bc_DeleteILFactor(self->Value);
 	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);

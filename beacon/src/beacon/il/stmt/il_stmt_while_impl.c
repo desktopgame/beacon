@@ -10,20 +10,20 @@
 static void ILWhile_stmt_delete(bc_VectorItem item);
 static void check_condition_type(bc_ILFactor* fact, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_ILStatement * WrapILWhile(ILWhile * self) {
+bc_ILStatement * bc_WrapILWhile(bc_ILWhile * self) {
 	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_WHILE_T);
 	ret->Kind.While = self;
 	return ret;
 }
 
-ILWhile * NewILWhile() {
-	ILWhile* ret = (ILWhile*)MEM_MALLOC(sizeof(ILWhile));
+bc_ILWhile * bc_NewILWhile() {
+	bc_ILWhile* ret = (bc_ILWhile*)MEM_MALLOC(sizeof(bc_ILWhile));
 	ret->Statements = bc_NewVector();
 	ret->Condition = NULL;
 	return ret;
 }
 
-void GenerateILWhile(ILWhile * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILWhile(bc_ILWhile * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	int prev = bc_AddNOPOpcodeBuf(env->Bytecode);
 	bc_Label* prevLab = bc_AddLabelOpcodeBuf(env->Bytecode, prev);
@@ -49,13 +49,13 @@ void GenerateILWhile(ILWhile * self, bc_Enviroment * env, bc_CallContext* cctx) 
 	env->Symboles->ScopeDepth--;
 }
 
-void DeleteILWhile(ILWhile * self) {
+void bc_DeleteILWhile(bc_ILWhile * self) {
 	bc_DeleteVector(self->Statements, ILWhile_stmt_delete);
 	bc_DeleteILFactor(self->Condition);
 	MEM_FREE(self);
 }
 
-void LoadILWhile(ILWhile* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILWhile(bc_ILWhile* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	env->Symboles->ScopeDepth++;
 	bc_LoadILFactor(self->Condition, env, cctx);
 	for(int i=0; i<self->Statements->Length; i++) {

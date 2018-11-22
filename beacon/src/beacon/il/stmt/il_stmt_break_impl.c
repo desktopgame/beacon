@@ -3,12 +3,12 @@
 #include "../../util/text.h"
 #include <stdio.h>
 
-bc_ILStatement * WrapILBreak() {
+bc_ILStatement * bc_WrapILBreak() {
 	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_BREAK_T);
 	return ret;
 }
 
-void GenerateILBreak(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILBreak(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Control.WhileStartTable->Length == 0) {
 		bc_Panic(BCERROR_BREAK_AT_NOT_LOOP_T);
 		return;
@@ -18,8 +18,8 @@ void GenerateILBreak(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, lab);
 }
 
-void LoadILBreak(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILBreak(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
-void DeleteILBreak(void * empty) {
+void bc_DeleteILBreak(void * empty) {
 }

@@ -38,21 +38,21 @@ typedef enum bc_ILStatementTag {
 } bc_ILStatementTag;
 
 //詳細は il_stmt_impl.h を参照してください。
-struct ILProc;
-struct ILIf;
-struct ILWhile;
-struct ILVariableDecl;
-struct ILVariableInit;
-struct ILReturn;
+struct bc_ILProc;
+struct bc_ILIf;
+struct bc_ILWhile;
+struct bc_ILVariableDecl;
+struct bc_ILVariableInit;
+struct bc_ILReturn;
 typedef void* ILReturnEmpty;
-struct ILInferencedTypeInit;
-struct ILTry;
-struct ILThrow;
-struct ILAssert;
-struct ILDefer;
-struct ILYieldReturn;
+struct bc_ILInferencedTypeInit;
+struct bc_ILTry;
+struct bc_ILThrow;
+struct bc_ILAssert;
+struct bc_ILDefer;
+struct bc_ILYieldReturn;
 typedef void* ILStatementYieldBreak;
-struct ILInjectJNI;
+struct bc_ILInjectJNI;
 
 /**
  * 文を表す要素です.
@@ -61,21 +61,21 @@ typedef struct bc_ILStatement {
 	bc_ILStatementTag Type;
 	int Lineno;
 	union {
-		struct ILProc* Proc;
-		struct ILIf* If;
-		struct ILWhile* While;
-		struct ILVariableDecl* VariableDecl;
-		struct ILVariableInit* VariableInit;
-		struct ILReturn* Return;
+		struct bc_ILProc* Proc;
+		struct bc_ILIf* If;
+		struct bc_ILWhile* While;
+		struct bc_ILVariableDecl* VariableDecl;
+		struct bc_ILVariableInit* VariableInit;
+		struct bc_ILReturn* Return;
 		ILReturnEmpty ReturnEmpty;
-		struct ILInferencedTypeInit* InferencedTypeInit;
-		struct ILTry* Try;
-		struct ILThrow* Throw;
-		struct ILAssert* Assert;
-		struct ILDefer* Defer;
-		struct ILYieldReturn* YieldReturn;
+		struct bc_ILInferencedTypeInit* InferencedTypeInit;
+		struct bc_ILTry* Try;
+		struct bc_ILThrow* Throw;
+		struct bc_ILAssert* Assert;
+		struct bc_ILDefer* Defer;
+		struct bc_ILYieldReturn* YieldReturn;
 		ILStatementYieldBreak YieldBreak;
-		struct ILInjectJNI* InjectJNI;
+		struct bc_ILInjectJNI* InjectJNI;
 	} Kind;
 } bc_ILStatement;
 

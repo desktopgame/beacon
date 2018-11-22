@@ -8,24 +8,24 @@
 #include "../../env/class_loader.h"
 #include "../../env/import_manager.h"
 
-bc_ILStatement * WrapILVariableDecl(ILVariableDecl * self) {
+bc_ILStatement * bc_WrapILVariableDecl(bc_ILVariableDecl * self) {
 	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_VARIABLE_DECL_T);
 	ret->Kind.VariableDecl = self;
 	return ret;
 }
 
-ILVariableDecl * NewILVariableDecl(bc_StringView namev) {
-	ILVariableDecl* ret = (ILVariableDecl*)MEM_MALLOC(sizeof(ILVariableDecl));
+bc_ILVariableDecl * bc_NewILVariableDecl(bc_StringView namev) {
+	bc_ILVariableDecl* ret = (bc_ILVariableDecl*)MEM_MALLOC(sizeof(bc_ILVariableDecl));
 	ret->Name = namev;
 	ret->GCache = bc_NewGenericCache();
 	return ret;
 }
 
-void GenerateILVariableDecl(ILVariableDecl * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILVariableDecl(bc_ILVariableDecl * self, bc_Enviroment * env, bc_CallContext* cctx) {
 
 }
 
-void LoadILVariableDecl(ILVariableDecl * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILVariableDecl(bc_ILVariableDecl * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(bc_IsContainsSymbol(env->Symboles, self->Name)) {
 		bc_Panic(BCERROR_OVERWRAP_VARIABLE_NAME_T,
 			bc_Ref2Str(self->Name)
@@ -42,7 +42,7 @@ void LoadILVariableDecl(ILVariableDecl * self, bc_Enviroment* env, bc_CallContex
 	}
 }
 
-void DeleteILVariableDecl(ILVariableDecl * self) {
+void bc_DeleteILVariableDecl(bc_ILVariableDecl * self) {
 	if (self == NULL) {
 		return;
 	}

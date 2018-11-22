@@ -14,17 +14,17 @@
 
 struct bc_Enviroment;
 
-typedef struct ILThrow {
+typedef struct bc_ILThrow {
 	bc_ILFactor* Factor;
-} ILThrow;
+} bc_ILThrow;
 
-bc_ILStatement* WrapILThrow(ILThrow* self);
+bc_ILStatement* bc_WrapILThrow(bc_ILThrow* self);
 
-ILThrow* NewILThrow();
+bc_ILThrow* bc_NewILThrow();
 
-void GenerateILThrow(ILThrow* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILThrow(bc_ILThrow* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILThrow(ILThrow* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILThrow(bc_ILThrow* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILThrow(ILThrow* self);
+void bc_DeleteILThrow(bc_ILThrow* self);
 #endif

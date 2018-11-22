@@ -16,32 +16,32 @@
 
 struct bc_Enviroment;
 
-typedef struct ILTry {
+typedef struct bc_ILTry {
 	bc_Vector* Statements;
 	bc_Vector* Catches;
-} ILTry;
+} bc_ILTry;
 
-typedef struct ILCatch {
+typedef struct bc_ILCatch {
 	bc_GenericCache* GCache;
 	bc_StringView Name;
 	bc_Vector* Statements;
-} ILCatch;
+} bc_ILCatch;
 
-bc_ILStatement* WrapILTry(ILTry* self);
+bc_ILStatement* bc_WrapILTry(bc_ILTry* self);
 
-ILTry* NewILTry();
+bc_ILTry* bc_NewILTry();
 
-ILCatch* NewILCatch(bc_StringView namev);
+bc_ILCatch* bc_NewILCatch(bc_StringView namev);
 
-void GenerateILTry(ILTry* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILTry(bc_ILTry* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILCatch(ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILCatch(bc_ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILTry(ILTry* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILTry(bc_ILTry* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILCatch(ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILCatch(bc_ILCatch* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILCatch(ILCatch* self);
+void bc_DeleteILCatch(bc_ILCatch* self);
 
-void DeleteILTry(ILTry* self);
+void bc_DeleteILTry(bc_ILTry* self);
 #endif

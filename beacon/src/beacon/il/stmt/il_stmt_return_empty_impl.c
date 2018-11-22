@@ -9,11 +9,11 @@
 
 static void check_method_return(ILReturnEmpty self, bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, OP_RETURN);
 }
 
-void LoadILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx) {
 	check_method_return(self, env, cctx);
 }
 //private

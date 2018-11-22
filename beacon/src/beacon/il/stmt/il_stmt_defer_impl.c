@@ -2,23 +2,23 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
-bc_ILStatement* WrapILDefer(ILDefer* self) {
+bc_ILStatement* bc_WrapILDefer(bc_ILDefer* self) {
 	bc_ILStatement* ret = bc_NewILStatement(ILSTMT_DEFER_T);
 	ret->Kind.Defer = self;
 	return ret;
 }
 
-ILDefer* NewILDefer() {
-	ILDefer* ret = (ILDefer*)MEM_MALLOC(sizeof(ILDefer));
+bc_ILDefer* bc_NewILDefer() {
+	bc_ILDefer* ret = (bc_ILDefer*)MEM_MALLOC(sizeof(bc_ILDefer));
 	ret->Task = NULL;
 	return ret;
 }
 
-void LoadILDefer(ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILDefer(bc_ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_LoadILStmt(self->Task, env, cctx);
 }
 
-void GenerateILDefer(ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILDefer(bc_ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Label* lb = bc_AddLabelOpcodeBuf(env->Bytecode, 0);
 	bc_Label* lb2 = bc_AddLabelOpcodeBuf(env->Bytecode, 0);
 	bc_AddOpcodeBuf(env->Bytecode, OP_DEFER_REGISTER);
@@ -31,7 +31,7 @@ void GenerateILDefer(ILDefer* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	lb->Cursor = bc_AddNOPOpcodeBuf(env->Bytecode);
 }
 
-void DeleteILDefer(ILDefer* self) {
+void bc_DeleteILDefer(bc_ILDefer* self) {
 	bc_DeleteILStmt(self->Task);
 	MEM_FREE(self);
 }

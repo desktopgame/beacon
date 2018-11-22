@@ -12,11 +12,11 @@
 #define BEACON_IL_IL_STMT_CONTINUE_H
 #include "../il_stmt_interface.h"
 
-bc_ILStatement* WrapILContinue();
+bc_ILStatement* bc_WrapILContinue();
 
-void GenerateILContinue(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILContinue(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILContinue(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILContinue(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILContinue(void* empty);
+void bc_DeleteILContinue(void* empty);
 #endif // !SIGNAL_IL_IL_STMT_CONTINUE_H

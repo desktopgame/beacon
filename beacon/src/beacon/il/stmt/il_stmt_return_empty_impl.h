@@ -17,7 +17,7 @@
  * @param env
  * @param cctx
  */
-void GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 式を返却する文を読み込みます.
@@ -25,5 +25,5 @@ void GenerateILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContex
  * @param env
  * @param cctx
  */
-void LoadILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILReturnEmpty(ILReturnEmpty self, bc_Enviroment* env, bc_CallContext* cctx);
 #endif

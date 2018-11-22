@@ -17,23 +17,23 @@ struct bc_Enviroment;
 /**
  * 型宣言を表す要素.
  */
-typedef struct ILVariableDecl {
+typedef struct bc_ILVariableDecl {
 	bc_GenericCache* GCache;
 	bc_StringView Name;
-} ILVariableDecl;
+} bc_ILVariableDecl;
 /**
  * 型宣言を表す要素をスーパーセットにラップします.
  * @param self
  * @return
  */
-bc_ILStatement* WrapILVariableDecl(ILVariableDecl* self);
+bc_ILStatement* bc_WrapILVariableDecl(bc_ILVariableDecl* self);
 
 /**
  * 型宣言を表す要素を作成します.
  * @param namev
  * @return
  */
-ILVariableDecl* NewILVariableDecl(bc_StringView namev);
+bc_ILVariableDecl* bc_NewILVariableDecl(bc_StringView namev);
 
 /**
  * 型宣言を表す要素を出力します.
@@ -41,7 +41,7 @@ ILVariableDecl* NewILVariableDecl(bc_StringView namev);
  * @param env
  * @param cctx
  */
-void GenerateILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILVariableDecl(bc_ILVariableDecl* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 型宣言を表す要素を出力します.
@@ -49,11 +49,11 @@ void GenerateILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, bc_CallCon
  * @param env
  * @param cctx
  */
-void LoadILVariableDecl(ILVariableDecl* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILVariableDecl(bc_ILVariableDecl* self, bc_Enviroment* env, bc_CallContext* cctx);
 
 /**
  * 型宣言を表す要素を開放します.
  * @param self
  */
-void DeleteILVariableDecl(ILVariableDecl* self);
+void bc_DeleteILVariableDecl(bc_ILVariableDecl* self);
 #endif // !SIGNAL_IL_IL_STMT_VARIABLE_DECL_H
