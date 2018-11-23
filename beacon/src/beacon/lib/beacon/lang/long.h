@@ -25,4 +25,15 @@ typedef struct bc_Long {
  * @return
  */
 struct bc_Object* bc_NewLong(long value);
+
+/**
+ * beacon::lang::Longクラスを初期化します.
+ */
+void bc_InitLong();
+
+/**
+ * beacon::lang::Intを返します.
+ * @return
+ */
+struct bc_Type* bc_GetLongType();
 #endif
