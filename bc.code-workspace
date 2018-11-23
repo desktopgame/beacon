@@ -5,8 +5,6 @@
 		}
 	],
 	"settings": {
-		"clang-format.executable": "{workspaceRoot}/beacon/src/.clang-format",
-		"editor.formatOnSave": true,
 		"files.associations": {
 			"parameter.h": "c",
 			"type_interface.h": "c",
@@ -154,10 +152,43 @@
 			"debride": true,
 			"ruby-lint": true
 		},
-		"editor.tabSize": 8,
-		"editor.rulers": [
-			80
-		],
-		"editor.insertSpaces": true
+		//"C_Cpp.clang_format_path": "${workspaceRoot}/beacon/src/.clang-format",
+		"C_Cpp.clang_format_sortIncludes": true,
+		"C_Cpp.clang_format_style": "file",
+		"editor.tabSize": 4,
+		"editor.insertSpaces": false,
+		"[c]": {
+			"editor.formatOnSave": true,
+			"editor.tabSize": 8,
+			"editor.rulers": [
+				80
+			],
+			"editor.insertSpaces": true,
+		},
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/bin": true,
+			"**/*.exe": true,
+			"**/*.o": true,
+			"**/*.a": true,
+			"**/CMakeCache.txt": true,
+			"**/CMakeFiles": true,
+			"**/cmake_install.cmake": true,
+			"**/CTestTestfile.cmake": true,
+			"**/Makefile": true,
+			"**/nbproject": true,
+			"**/Testing": true,
+			"**/*.obj": true,
+			"**/*.ilk": true,
+			"**/*.pdb": true,
+			"**/*.tlog": true,
+			"**/*.idb": true,
+			"**/*.dll": true,
+			"**.vs": true
+		},
 	}
 }
