@@ -35,18 +35,18 @@ bc_ILVariable * bc_MallocILVariable(const char* filename, int lineno) {
 void bc_GenerateILVariable(bc_ILVariable * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILVariable_check(self, env, cctx);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
-		GenerateILVariableLocal(self->Kind.Local, env, cctx);
+		bc_GenerateILVariableLocal(self->Kind.Local, env, cctx);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
-		GenerateILVariableStatic(self->Kind.Static, env, cctx);
+		bc_GenerateILVariableStatic(self->Kind.Static, env, cctx);
 	}
 }
 
 void bc_LoadILVariable(bc_ILVariable * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	ILVariable_check(self, env, cctx);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
-		LoadILVariableLocal(self->Kind.Local, env, cctx);
+		bc_LoadILVariableLocal(self->Kind.Local, env, cctx);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
-		LoadILVariableStatic(self->Kind.Static, env, cctx);
+		bc_LoadILVariableStatic(self->Kind.Static, env, cctx);
 	}
 }
 
@@ -54,18 +54,18 @@ bc_GenericType* bc_EvalILVariable(bc_ILVariable * self, bc_Enviroment * env, bc_
 	ILVariable_check(self, env, cctx);
 	bc_GenericType* ret = NULL;
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
-		ret = EvalILVariableLocal(self->Kind.Local, env, cctx);
+		ret = bc_EvalILVariableLocal(self->Kind.Local, env, cctx);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
-		ret = EvalILVariableStatic(self->Kind.Static, env, cctx);
+		ret = bc_EvalILVariableStatic(self->Kind.Static, env, cctx);
 	}
 	return ret;
 }
 
 char* bc_ILVariableToString(bc_ILVariable* self, bc_Enviroment* env) {
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
-		return ILVariableLocalToString(self->Kind.Local, env);
+		return bc_ILVariableLocalToString(self->Kind.Local, env);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
-		return ILVariableStaticToString(self->Kind.Static, env);
+		return bc_ILVariableStaticToString(self->Kind.Static, env);
 	}
 	return NULL;
 }
@@ -73,9 +73,9 @@ char* bc_ILVariableToString(bc_ILVariable* self, bc_Enviroment* env) {
 void bc_DeleteILVariable(bc_ILVariable * self) {
 	//MEM_FREE(self->name);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
-		DeleteILVariableLocal(self->Kind.Local);
+		bc_DeleteILVariableLocal(self->Kind.Local);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
-		DeleteILVariableStatic(self->Kind.Static);
+		bc_DeleteILVariableStatic(self->Kind.Static);
 	}
 	bc_DeleteFQCNCache(self->FQCN);
 	bc_DeleteVector(self->TypeArgs, DeleteILFactor_typeargs);
@@ -108,7 +108,7 @@ static void ILVariable_check_instance(bc_ILVariable* self, bc_Enviroment* env, b
 		ILVariable_check_static(self, env, cctx);
 	//ただのローカル変数の場合
 	} else {
-		ILVariableLocal* lc = NewILVariableLocal(self->FQCN->Name);
+		bc_ILVariableLocal* lc = bc_NewILVariableLocal(self->FQCN->Name);
 		self->Type = ILVARIABLE_TYPE_LOCAL_T;
 		//値を入れ替え
 		lc->TypeArgs = self->TypeArgs;
@@ -118,7 +118,7 @@ static void ILVariable_check_instance(bc_ILVariable* self, bc_Enviroment* env, b
 }
 
 static void ILVariable_check_static(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	ILVariableStatic* st = NewILVariableStatic();
+	bc_ILVariableStatic* st = bc_NewILVariableStatic();
 	self->Type = ILVARIABLE_TYPE_STATIC_T;
 	//値を入れ替え
 	st->FQCN = self->FQCN;

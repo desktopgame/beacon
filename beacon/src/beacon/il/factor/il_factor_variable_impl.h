@@ -44,8 +44,8 @@ typedef struct bc_ILVariable {
 	int Index;
 	bc_ILVariableType Type;
 	union {
-		ILVariableLocal* Local;
-		ILVariableStatic* Static;
+		bc_ILVariableLocal* Local;
+		bc_ILVariableStatic* Static;
 	} Kind;
 } bc_ILVariable;
 

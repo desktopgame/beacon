@@ -18,47 +18,47 @@ struct bc_GenericType;
 struct bc_Field;
 struct bc_Property;
 
-typedef enum VariableLocalType {
+typedef enum bc_VariableLocalType {
 	VARIABLE_LOCAL_SCOPE_T,
 	VARIABLE_LOCAL_FIELD_T,
 	VARIABLE_LOCAL_PROPERTY_T,
 	VARIABLE_LOCAL_UNDEFINED_T,
-} VariableLocalType;
+} bc_VariableLocalType;
 
-typedef struct FieldWithIndex {
+typedef struct bc_FieldWithIndex {
 	struct bc_Field* Field;
 	int Index;
-} FieldWithIndex;
+} bc_FieldWithIndex;
 
-typedef struct PropertyWithIndex {
+typedef struct bc_PropertyWithIndex {
 	struct bc_Property* Property;
 	int Index;
-} PropertyWithIndex;
+} bc_PropertyWithIndex;
 
 /**
  * ローカル変数を表す構造体.
  */
-typedef struct ILVariableLocal {
+typedef struct bc_ILVariableLocal {
 	bc_StringView Name;
-	VariableLocalType Type;
+	bc_VariableLocalType Type;
 	struct bc_GenericType* GType;
 	union {
 		struct bc_SymbolEntry* Entry;
-		FieldWithIndex FieldI;
-		PropertyWithIndex PropertyI;
+		bc_FieldWithIndex FieldI;
+		bc_PropertyWithIndex PropertyI;
 	} Kind;
 	bc_Vector* TypeArgs;
-} ILVariableLocal;
+} bc_ILVariableLocal;
 
-ILVariableLocal* NewILVariableLocal(bc_StringView namev);
+bc_ILVariableLocal* bc_NewILVariableLocal(bc_StringView namev);
 
-void GenerateILVariableLocal(ILVariableLocal* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILVariableLocal(bc_ILVariableLocal* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
+void bc_LoadILVariableLocal(bc_ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILVariableLocal(ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILVariableLocal(bc_ILVariableLocal * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-char* ILVariableLocalToString(ILVariableLocal * self, bc_Enviroment * env);
+char* bc_ILVariableLocalToString(bc_ILVariableLocal * self, bc_Enviroment * env);
 
-void DeleteILVariableLocal(ILVariableLocal* self);
+void bc_DeleteILVariableLocal(bc_ILVariableLocal* self);
 #endif

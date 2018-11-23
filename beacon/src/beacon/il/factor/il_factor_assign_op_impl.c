@@ -306,7 +306,7 @@ static void generate_assign_to_variable(bc_ILAssignOp* self, bc_Enviroment* env,
 
 static void generate_assign_to_variable_local(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_ILVariable* ilvar = self->Left->Kind.Variable;
-	ILVariableLocal* illoc = ilvar->Kind.Local;
+	bc_ILVariableLocal* illoc = ilvar->Kind.Local;
 	//src のような名前がローカル変数を示す場合
 	if(illoc->Type == VARIABLE_LOCAL_SCOPE_T) {
 		#if defined(DEBUG)

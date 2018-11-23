@@ -14,20 +14,20 @@
 struct bc_Enviroment;
 struct bc_GenericType;
 
-typedef struct ILVariableStatic {
+typedef struct bc_ILVariableStatic {
 	bc_FQCNCache* FQCN;
 	bc_Vector* TypeArgs;
-} ILVariableStatic;
+} bc_ILVariableStatic;
 
-ILVariableStatic* NewILVariableStatic();
+bc_ILVariableStatic* bc_NewILVariableStatic();
 
-void GenerateILVariableStatic(ILVariableStatic* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILVariableStatic(bc_ILVariableStatic* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
+void bc_LoadILVariableStatic(bc_ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILVariableStatic(ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILVariableStatic(bc_ILVariableStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-char* ILVariableStaticToString(ILVariableStatic * self, bc_Enviroment * env);
+char* bc_ILVariableStaticToString(bc_ILVariableStatic * self, bc_Enviroment * env);
 
-void DeleteILVariableStatic(ILVariableStatic* self);
+void bc_DeleteILVariableStatic(bc_ILVariableStatic* self);
 #endif
