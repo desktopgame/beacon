@@ -38,9 +38,9 @@ typedef struct bc_ILCallOp {
 	bc_Vector* Arguments;
 	bc_ILCallType Type;
 	union {
-		ILInvoke* Invoke;
-		ILInvokeStatic* InvokeStatic;
-		ILInvokeBound* InvokeBound;
+		bc_ILInvoke* Invoke;
+		bc_ILInvokeStatic* InvokeStatic;
+		bc_ILInvokeBound* InvokeBound;
 	} Kind;
 } bc_ILCallOp;
 

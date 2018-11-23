@@ -9,14 +9,14 @@
 #include "../../../util/vector.h"
 
 //proto
-static void resolve_non_default(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx);
-static void resolve_default(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx);
-static void ILInvokeStatic_check(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx);
+static void resolve_non_default(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx);
+static void resolve_default(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILInvokeStatic_check(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx);
 static void ILInvokeStatic_args_delete(bc_VectorItem item);
 static void ILInvokeStatic_typeargs_delete(bc_VectorItem item);
 
-ILInvokeStatic* NewILInvokeStatic(bc_StringView namev) {
-	ILInvokeStatic* ret = (ILInvokeStatic*)MEM_MALLOC(sizeof(ILInvokeStatic));
+bc_ILInvokeStatic* bc_NewILInvokeStatic(bc_StringView namev) {
+	bc_ILInvokeStatic* ret = (bc_ILInvokeStatic*)MEM_MALLOC(sizeof(bc_ILInvokeStatic));
 	ret->Arguments = NULL;
 	ret->FQCN = NULL;
 	ret->TypeArgs = NULL;
@@ -27,7 +27,7 @@ ILInvokeStatic* NewILInvokeStatic(bc_StringView namev) {
 	return ret;
 }
 
-void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILInvokeStatic(bc_ILInvokeStatic* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	for(int i=0; i<self->TypeArgs->Length; i++) {
 		bc_ILTypeArgument* e = (bc_ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
 		assert(e->GType != NULL);
@@ -46,11 +46,11 @@ void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, bc_CallCon
 	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Index);
 }
 
-void LoadILInvokeStatic(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILInvokeStatic(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILInvokeStatic_check(self, env, cctx);
 }
 
-bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILInvokeStatic(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILInvokeStatic_check(self, env, cctx);
 	//メソッドを解決できなかった場合
 	if(bc_GetLastPanic()) {
@@ -67,7 +67,7 @@ bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment* env, bc
 	return NULL;
 }
 
-char* ILInvokeStaticToString(ILInvokeStatic* self, bc_Enviroment* env) {
+char* bc_ILInvokeStaticToString(bc_ILInvokeStatic* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
 	char* name = bc_FQCNCacheToString(self->FQCN);
 	bc_AppendsBuffer(sb, name);
@@ -79,7 +79,7 @@ char* ILInvokeStaticToString(ILInvokeStatic* self, bc_Enviroment* env) {
 	return bc_ReleaseBuffer(sb);
 }
 
-void DeleteILInvokeStatic(ILInvokeStatic* self) {
+void bc_DeleteILInvokeStatic(bc_ILInvokeStatic* self) {
 	bc_DeleteVector(self->Arguments, ILInvokeStatic_args_delete);
 	bc_DeleteVector(self->TypeArgs, ILInvokeStatic_typeargs_delete);
 	bc_DeleteFQCNCache(self->FQCN);
@@ -87,7 +87,7 @@ void DeleteILInvokeStatic(ILInvokeStatic* self) {
 }
 //private
 //FIXME:ILInvokeからのコピペ
-static void resolve_non_default(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
+static void resolve_non_default(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->Resolved != NULL) {
 		return;
 	}
@@ -98,7 +98,7 @@ static void resolve_non_default(ILInvokeStatic * self, bc_Enviroment* env, bc_Ca
 	self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
 
-static void resolve_default(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
+static void resolve_default(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->Resolved != NULL) {
 		return;
 	}
@@ -110,7 +110,7 @@ static void resolve_default(ILInvokeStatic * self, bc_Enviroment* env, bc_CallCo
 	bc_PopCallContext(cctx);
 }
 
-static void ILInvokeStatic_check(ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
+static void ILInvokeStatic_check(bc_ILInvokeStatic * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Type* ty =bc_GetEvalTypeCContext(cctx, self->FQCN);
 	if(ty == NULL) {
 		bc_Panic(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,

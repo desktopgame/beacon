@@ -15,8 +15,8 @@ static void assign_to_field(bc_ILAssignOp* self,bc_ILFactor* receiver, bc_ILFact
 static void assign_to_Property(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 static void assign_to_array(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 static void assign_by_call(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
-static void assign_by_invoke(ILInvoke* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx);
-static void assign_by_invoke_bound(ILInvokeBound* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx);
+static void assign_by_invoke(bc_ILInvoke* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx);
+static void assign_by_invoke_bound(bc_ILInvokeBound* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx);
 static void check_final(bc_ILFactor* receiver, bc_ILFactor* source, bc_StringView namev, bc_Enviroment* env, bc_CallContext* cctx);
 static bool can_assign_to_field(bc_Field* f, bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 static void generate_assign_to_variable(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
@@ -208,7 +208,7 @@ static void assign_by_call(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallConte
 	}
 }
 
-static void assign_by_invoke(ILInvoke* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx) {
+static void assign_by_invoke(bc_ILInvoke* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx) {
 	int temp = -1;
 	if(lhs->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
 		bc_Panic(BCERROR_ASSIGN_TO_INVOKE_T,
@@ -216,7 +216,7 @@ static void assign_by_invoke(ILInvoke* lhs, bc_ILFactor* rhs, bc_Enviroment* env
 		);
 		return;
 	}
-	FindSetILInvoke(lhs, rhs, env, cctx, &temp);
+	bc_FindSetILInvoke(lhs, rhs, env, cctx, &temp);
 	for(int i=0; i<lhs->args->Length; i++) {
 		bc_ILArgument* arg = bc_AtVector(lhs->args, i);
 		bc_GenerateILFactor(arg->Factor, env, cctx);
@@ -228,9 +228,9 @@ static void assign_by_invoke(ILInvoke* lhs, bc_ILFactor* rhs, bc_Enviroment* env
 	bc_AddOpcodeBuf(env->Bytecode, OP_NOP);
 }
 
-static void assign_by_invoke_bound(ILInvokeBound* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx) {
+static void assign_by_invoke_bound(bc_ILInvokeBound* lhs, bc_ILFactor* rhs, bc_Enviroment* env, bc_CallContext* cctx) {
 	int temp = -1;
-	FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
+	bc_FindSetILInvokeBound(lhs, rhs, env, cctx, &temp);
 	assert(lhs->Arguments->Length == 1);
 	for(int i=0; i<lhs->Arguments->Length; i++) {
 		bc_ILArgument* arg = bc_AtVector(lhs->Arguments, i);
@@ -238,7 +238,7 @@ static void assign_by_invoke_bound(ILInvokeBound* lhs, bc_ILFactor* rhs, bc_Envi
 	}
 	bc_GenerateILFactor(rhs, env, cctx);
 	//GenerateILFactor(lhs->receiver, env, cctx);
-	SubscriptDescriptor subs = lhs->Kind.Subscript;
+	bc_SubscriptDescriptor subs = lhs->Kind.Subscript;
 	if(subs.Tag == SUBSCRIPT_LOCAL_T) {
 		bc_AddOpcodeBuf(env->Bytecode, OP_LOAD);
 		bc_AddOpcodeBuf(env->Bytecode, subs.Index);

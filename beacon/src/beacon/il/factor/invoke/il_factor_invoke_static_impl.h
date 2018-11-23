@@ -16,7 +16,7 @@ struct bc_Enviroment;
 struct bc_GenericType;
 struct bc_Method;
 
-typedef struct ILInvokeStatic {
+typedef struct bc_ILInvokeStatic {
 	bc_StringView Name;
 	bc_FQCNCache* FQCN;
 	bc_Vector* Arguments;
@@ -24,17 +24,17 @@ typedef struct ILInvokeStatic {
 	struct bc_Method* Method;
 	int Index;
 	struct bc_GenericType* Resolved;
-} ILInvokeStatic;
+} bc_ILInvokeStatic;
 
-ILInvokeStatic* NewILInvokeStatic(bc_StringView namev);
+bc_ILInvokeStatic* bc_NewILInvokeStatic(bc_StringView namev);
 
-void GenerateILInvokeStatic(ILInvokeStatic* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILInvokeStatic(bc_ILInvokeStatic* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
+void bc_LoadILInvokeStatic(bc_ILInvokeStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInvokeStatic(ILInvokeStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILInvokeStatic(bc_ILInvokeStatic * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-char* ILInvokeStaticToString(ILInvokeStatic* self, bc_Enviroment* env);
+char* bc_ILInvokeStaticToString(bc_ILInvokeStatic* self, bc_Enviroment* env);
 
-void DeleteILInvokeStatic(ILInvokeStatic* self);
+void bc_DeleteILInvokeStatic(bc_ILInvokeStatic* self);
 #endif

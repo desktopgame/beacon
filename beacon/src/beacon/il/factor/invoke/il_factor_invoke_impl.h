@@ -17,13 +17,13 @@ struct bc_GenericType;
 struct bc_OperatorOverload;
 struct bc_Method;
 
-typedef enum InstanceInvokeTag {
+typedef enum bc_InstanceInvokeTag {
 	INSTANCE_INVOKE_METHOD_T,
 	INSTANCE_INVOKE_SUBSCRIPT_T,
 	INSTANCE_INVOKE_UNDEFINED_T
-} InstanceInvokeTag;
+} bc_InstanceInvokeTag;
 
-typedef struct ILInvoke {
+typedef struct bc_ILInvoke {
 	bc_ILFactor* receiver;
 	bc_Vector* args;
 	bc_Vector* type_args;
@@ -34,20 +34,20 @@ typedef struct ILInvoke {
 		struct bc_OperatorOverload* opov;
 	} u;
 	struct bc_GenericType* resolved;
-	InstanceInvokeTag tag;
-} ILInvoke;
+	bc_InstanceInvokeTag tag;
+} bc_ILInvoke;
 
-ILInvoke* NewILInvoke(bc_StringView namev);
+bc_ILInvoke* bc_NewILInvoke(bc_StringView namev);
 
-void GenerateILInvoke(ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILInvoke(bc_ILInvoke* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInvoke(ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx);
+void bc_LoadILInvoke(bc_ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInvoke(ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILInvoke(bc_ILInvoke * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-char* ILInvokeToString(ILInvoke* self, bc_Enviroment* env);
+char* bc_ILInvokeToString(bc_ILInvoke* self, bc_Enviroment* env);
 
-void DeleteILInvoke(ILInvoke* self);
+void bc_DeleteILInvoke(bc_ILInvoke* self);
 
-struct bc_OperatorOverload* FindSetILInvoke(ILInvoke* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* bc_FindSetILInvoke(bc_ILInvoke* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
 #endif

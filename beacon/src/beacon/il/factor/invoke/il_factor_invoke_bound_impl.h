@@ -19,36 +19,36 @@ struct bc_OperatorOverload;
 struct bc_Method;
 //binded? bound?
 
-typedef enum BoundInvokeTag {
+typedef enum bc_BoundInvokeTag {
 	BOUND_INVOKE_METHOD_T,
 	BOUND_INVOKE_SUBSCRIPT_T,
 	BOUND_INVOKE_UNDEFINED_T
-} BoundInvokeTag;
+} bc_BoundInvokeTag;
 
-typedef struct ILInvokeBound {
+typedef struct bc_ILInvokeBound {
 	bc_StringView Name;
 	bc_Vector* TypeArgs;
 	bc_Vector* Arguments;
 	union {
 		struct bc_Method* Method;
-		SubscriptDescriptor Subscript;
+		bc_SubscriptDescriptor Subscript;
 	} Kind;
 	int Index;
 	struct bc_GenericType* Resolved;
-	BoundInvokeTag Tag;
-} ILInvokeBound;
+	bc_BoundInvokeTag Tag;
+} bc_ILInvokeBound;
 
-ILInvokeBound* NewILInvokeBound(bc_StringView namev);
+bc_ILInvokeBound* bc_NewILInvokeBound(bc_StringView namev);
 
-void GenerateILInvokeBound(ILInvokeBound* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILInvokeBound(bc_ILInvokeBound* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, bc_CallContext* cctx);
+void bc_LoadILInvokeBound(bc_ILInvokeBound * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInvokeBound(ILInvokeBound * self, bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILInvokeBound(bc_ILInvokeBound * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-char* ILInvokeBoundToString(ILInvokeBound* self, bc_Enviroment* env);
+char* bc_ILInvokeBoundToString(bc_ILInvokeBound* self, bc_Enviroment* env);
 
-void DeleteILInvokeBound(ILInvokeBound* self);
+void bc_DeleteILInvokeBound(bc_ILInvokeBound* self);
 
-struct bc_OperatorOverload* FindSetILInvokeBound(ILInvokeBound* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
+struct bc_OperatorOverload* bc_FindSetILInvokeBound(bc_ILInvokeBound* self, bc_ILFactor* value, bc_Enviroment* env, bc_CallContext* cctx, int* outIndex);
 #endif

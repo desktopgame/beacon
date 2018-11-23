@@ -15,15 +15,15 @@ struct bc_SymbolEntry;
 struct bc_Field;
 struct bc_Property;
 
-typedef enum SubscriptTag {
+typedef enum bc_SubscriptTag {
 	SUBSCRIPT_LOCAL_T,
 	SUBSCRIPT_FIELD_T,
 	SUBSCRIPT_PROPERTY_T,
 	SUBSCRIPT_UNDEFINED_T
-} SubscriptTag;
+} bc_SubscriptTag;
 
-typedef struct SubscriptDescriptor {
-	SubscriptTag Tag;
+typedef struct bc_SubscriptDescriptor {
+	bc_SubscriptTag Tag;
 	struct bc_OperatorOverload* Operator;
 	int Index;
 	union {
@@ -31,7 +31,7 @@ typedef struct SubscriptDescriptor {
 		struct bc_Field* Field;
 		struct bc_Property* Property;
 	} Kind;
-} SubscriptDescriptor;
+} bc_SubscriptDescriptor;
 
-struct bc_GenericType* GetSubscriptReceiver(const SubscriptDescriptor* desc);
+struct bc_GenericType* bc_GetSubscriptReceiver(const bc_SubscriptDescriptor* desc);
 #endif
