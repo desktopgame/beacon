@@ -76,6 +76,7 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
         bc_InitInt();
         bc_InitDouble();
         bc_InitChar();
+        bc_InitLong();
         bc_InitString();
         bc_InitBool();
         bc_InitVoid();
