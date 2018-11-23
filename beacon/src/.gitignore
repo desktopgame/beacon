@@ -8,4 +8,5 @@ CMakeCache.txt
 CTestTestfile.cmake
 cmake_install.cmake
 Makefile
+nbproject
 *.info
