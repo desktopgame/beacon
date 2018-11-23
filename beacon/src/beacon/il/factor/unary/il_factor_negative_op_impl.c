@@ -9,19 +9,19 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno) {
-	ILNegativeOp* ret = (ILNegativeOp*)bc_MXMalloc(sizeof(ILNegativeOp), filename, lineno);
+bc_ILNegativeOp* bc_MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno) {
+	bc_ILNegativeOp* ret = (bc_ILNegativeOp*)bc_MXMalloc(sizeof(bc_ILNegativeOp), filename, lineno);
 	ret->Type = type;
 	ret->Parent = NULL;
 	ret->OperatorIndex = -1;
 	return ret;
 }
 
-bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILNegativeOp(bc_ILNegativeOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return bc_EvalILFactor(self->Parent->Arg, env, cctx);
 }
 
-void GenerateILNegativeOp(ILNegativeOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILNegativeOp(bc_ILNegativeOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* gt = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Arg, env, cctx);
@@ -39,7 +39,7 @@ void GenerateILNegativeOp(ILNegativeOp* self, bc_Enviroment* env, bc_CallContext
 	}
 }
 
-void LoadILNegativeOp(ILNegativeOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILNegativeOp(bc_ILNegativeOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* gt = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(bc_GENERIC2TYPE(gt) != BC_TYPE_INT &&
 	   bc_GENERIC2TYPE(gt) != BC_TYPE_DOUBLE) {
@@ -47,10 +47,10 @@ void LoadILNegativeOp(ILNegativeOp* self, bc_Enviroment* env, bc_CallContext* cc
 	}
 }
 
-void DeleteILNegativeOp(ILNegativeOp* self) {
+void bc_DeleteILNegativeOp(bc_ILNegativeOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILNegativeOpToString(ILNegativeOp* self, bc_Enviroment* env) {
+char* bc_ILNegativeOpToString(bc_ILNegativeOp* self, bc_Enviroment* env) {
 	return bc_ILUnaryOpToStringSimple(self->Parent, env);
 }

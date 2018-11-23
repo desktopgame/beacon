@@ -15,21 +15,21 @@ struct bc_ILUnaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 
-typedef struct ILChildaOp {
+typedef struct bc_ILChildaOp {
 	struct bc_ILUnaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILChildaOp;
+} bc_ILChildaOp;
 
-ILChildaOp* NewILChildaOp(bc_OperatorType type);
+bc_ILChildaOp* bc_NewILChildaOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILChildaOp(ILChildaOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILChildaOp(bc_ILChildaOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILChildaOp(bc_ILChildaOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILChildaOp(ILChildaOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILChildaOp(bc_ILChildaOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILChildaOp(ILChildaOp* self);
+void bc_DeleteILChildaOp(bc_ILChildaOp* self);
 
-char* ILChildaOpToString(ILChildaOp* self, struct bc_Enviroment* env);
+char* bc_ILChildaOpToString(bc_ILChildaOp* self, struct bc_Enviroment* env);
 #endif

@@ -15,21 +15,21 @@ struct bc_ILUnaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 
-typedef struct ILNotOp {
+typedef struct bc_ILNotOp {
 	struct bc_ILUnaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILNotOp;
+} bc_ILNotOp;
 
-ILNotOp* NewILNotOp(bc_OperatorType type);
+bc_ILNotOp* bc_NewILNotOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILNotOp(ILNotOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILNotOp(bc_ILNotOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILNotOp(ILNotOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILNotOp(bc_ILNotOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNotOp(ILNotOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILNotOp(bc_ILNotOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILNotOp(ILNotOp* self);
+void bc_DeleteILNotOp(bc_ILNotOp* self);
 
-char* ILNotOpToString(ILNotOp* self, struct bc_Enviroment* env);
+char* bc_ILNotOpToString(bc_ILNotOp* self, struct bc_Enviroment* env);
 #endif

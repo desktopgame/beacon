@@ -15,9 +15,9 @@
 #include "../../ast/operator_type.h"
 
 //struct opcode_buf;
-struct ILChildaOp;
-struct ILNegativeOp;
-struct ILNotOp;
+struct bc_ILChildaOp;
+struct bc_ILNegativeOp;
+struct bc_ILNotOp;
 
 /**
  * 単項演算子を表す要素.
@@ -27,9 +27,9 @@ typedef struct bc_ILUnaryOp {
 	bc_OperatorCategory Category;
 	bc_ILFactor* Arg;
 	union {
-		struct ILChildaOp* ChildaOp;
-		struct ILNegativeOp* NegativeOp;
-		struct ILNotOp* NotOp;
+		struct bc_ILChildaOp* ChildaOp;
+		struct bc_ILNegativeOp* NegativeOp;
+		struct bc_ILNotOp* NotOp;
 	} Kind;
 } bc_ILUnaryOp;
 

@@ -30,13 +30,13 @@ bc_ILUnaryOp * bc_NewILUnaryOp(bc_OperatorType type) {
 void bc_GenerateILUnaryOp(bc_ILUnaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
-			GenerateILNotOp(self->Kind.NotOp, env, cctx);
+			bc_GenerateILNotOp(self->Kind.NotOp, env, cctx);
 			break;
 		case OPERATOR_CHILDA_T:
-			GenerateILChildaOp(self->Kind.ChildaOp, env, cctx);
+			bc_GenerateILChildaOp(self->Kind.ChildaOp, env, cctx);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			GenerateILNegativeOp(self->Kind.NegativeOp, env, cctx);
+			bc_GenerateILNegativeOp(self->Kind.NegativeOp, env, cctx);
 			break;
 	}
 }
@@ -49,22 +49,22 @@ void bc_LoadILUnaryOp(bc_ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* 
 	//カテゴリーわけ
 	if(self->Type == OPERATOR_NOT_T) {
 		self->Category = OPERATOR_CNOT_T;
-		ILNotOp* not = NewILNotOp(self->Type);
+		bc_ILNotOp* not = bc_NewILNotOp(self->Type);
 		not->Parent = self;
 		self->Kind.NotOp = not;
-		LoadILNotOp(not, env, cctx);
+		bc_LoadILNotOp(not, env, cctx);
 	} else if(self->Type == OPERATOR_NEGATIVE_T) {
 		self->Category = OPERATOR_NEGATIVE_T;
-		ILNegativeOp* neg = NewILNegativeOp(self->Type);
+		bc_ILNegativeOp* neg = bc_NewILNegativeOp(self->Type);
 		neg->Parent = self;
 		self->Kind.NegativeOp = neg;
-		LoadILNegativeOp(neg, env, cctx);
+		bc_LoadILNegativeOp(neg, env, cctx);
 	} else if(self->Type == OPERATOR_CHILDA_T) {
 		self->Category = OPERATOR_CCHILDA_T;
-		ILChildaOp* childa = NewILChildaOp(self->Type);
+		bc_ILChildaOp* childa = bc_NewILChildaOp(self->Type);
 		childa->Parent = self;
 		self->Kind.ChildaOp = childa;
-		LoadILChildaOp(childa, env, cctx);
+		bc_LoadILChildaOp(childa, env, cctx);
 	} else {
 		assert(false);
 	}
@@ -75,13 +75,13 @@ bc_GenericType* bc_EvalILUnaryOp(bc_ILUnaryOp * self, bc_Enviroment * env, bc_Ca
 	bc_GenericType* ret = NULL;
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
-			ret = EvalILNotOp(self->Kind.NotOp, env, cctx);
+			ret = bc_EvalILNotOp(self->Kind.NotOp, env, cctx);
 			break;
 		case OPERATOR_CHILDA_T:
-			ret = EvalILChildaOp(self->Kind.ChildaOp, env, cctx);
+			ret = bc_EvalILChildaOp(self->Kind.ChildaOp, env, cctx);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			ret = EvalILNegativeOp(self->Kind.NegativeOp, env, cctx);
+			ret = bc_EvalILNegativeOp(self->Kind.NegativeOp, env, cctx);
 			break;
 	}
 	return ret;
@@ -91,13 +91,13 @@ char* bc_ILUnaryOpToString(bc_ILUnaryOp* self, bc_Enviroment* env) {
 	char* ret = NULL;
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
-			ret = ILNotOpToString(self->Kind.NotOp, env);
+			ret = bc_ILNotOpToString(self->Kind.NotOp, env);
 			break;
 		case OPERATOR_CHILDA_T:
-			ret = ILChildaOpToString(self->Kind.ChildaOp, env);
+			ret = bc_ILChildaOpToString(self->Kind.ChildaOp, env);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			ret = ILNegativeOpToString(self->Kind.NegativeOp, env);
+			ret = bc_ILNegativeOpToString(self->Kind.NegativeOp, env);
 			break;
 	}
 	return ret;
@@ -110,13 +110,13 @@ void bc_DeleteILUnaryOp(bc_ILUnaryOp * self) {
 	bc_DeleteILFactor(self->Arg);
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
-			DeleteILNotOp(self->Kind.NotOp);
+			bc_DeleteILNotOp(self->Kind.NotOp);
 			break;
 		case OPERATOR_CHILDA_T:
-			DeleteILChildaOp(self->Kind.ChildaOp);
+			bc_DeleteILChildaOp(self->Kind.ChildaOp);
 			break;
 		case OPERATOR_NEGATIVE_T:
-			DeleteILNegativeOp(self->Kind.NegativeOp);
+			bc_DeleteILNegativeOp(self->Kind.NegativeOp);
 			break;
 	}
 	MEM_FREE(self);

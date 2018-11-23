@@ -9,15 +9,15 @@
 #include "../../../env/operator_overload.h"
 #include "../il_factor_unary_op_impl.h"
 
-ILChildaOp* NewILChildaOp(bc_OperatorType type) {
-	ILChildaOp* ret = (ILChildaOp*)MEM_MALLOC(sizeof(ILChildaOp));
+bc_ILChildaOp* bc_NewILChildaOp(bc_OperatorType type) {
+	bc_ILChildaOp* ret = (bc_ILChildaOp*)MEM_MALLOC(sizeof(bc_ILChildaOp));
 	ret->Type = type;
 	ret->Parent = NULL;
 	ret->OperatorIndex = -1;
 	return ret;
 }
 
-bc_GenericType* EvalILChildaOp(ILChildaOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILChildaOp(bc_ILChildaOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(self->OperatorIndex == -1) {
 		//GenerateILFactor(self->Parent->Arg, env);
@@ -37,7 +37,7 @@ bc_GenericType* EvalILChildaOp(ILChildaOp * self, bc_Enviroment * env, bc_CallCo
 	}
 }
 
-void GenerateILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Arg, env, cctx);
 		bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
@@ -55,7 +55,7 @@ void GenerateILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cc
 	}
 }
 
-void LoadILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(bc_GENERIC2TYPE(gtype) != BC_TYPE_INT &&
 	   bc_GENERIC2TYPE(gtype) != BC_TYPE_BOOL) {
@@ -63,10 +63,10 @@ void LoadILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) 
 	}
 }
 
-void DeleteILChildaOp(ILChildaOp* self) {
+void bc_DeleteILChildaOp(bc_ILChildaOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILChildaOpToString(ILChildaOp* self, bc_Enviroment* env) {
+char* bc_ILChildaOpToString(bc_ILChildaOp* self, bc_Enviroment* env) {
 	return bc_ILUnaryOpToStringSimple(self->Parent, env);
 }

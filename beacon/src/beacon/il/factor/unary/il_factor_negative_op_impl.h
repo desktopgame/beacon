@@ -15,22 +15,22 @@ struct bc_ILUnaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 
-typedef struct ILNegativeOp {
+typedef struct bc_ILNegativeOp {
 	struct bc_ILUnaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILNegativeOp;
+} bc_ILNegativeOp;
 
-#define NewILNegativeOp(type) (MallocILNegativeOp(type, __FILE__, __LINE__))
-ILNegativeOp* MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno);
+#define bc_NewILNegativeOp(type) (bc_MallocILNegativeOp(type, __FILE__, __LINE__))
+bc_ILNegativeOp* bc_MallocILNegativeOp(bc_OperatorType type, const char* filename, int lineno);
 
-struct bc_GenericType* EvalILNegativeOp(ILNegativeOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILNegativeOp(bc_ILNegativeOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILNegativeOp(bc_ILNegativeOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNegativeOp(ILNegativeOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILNegativeOp(bc_ILNegativeOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILNegativeOp(ILNegativeOp* self);
+void bc_DeleteILNegativeOp(bc_ILNegativeOp* self);
 
-char* ILNegativeOpToString(ILNegativeOp* self, struct bc_Enviroment* env);
+char* bc_ILNegativeOpToString(bc_ILNegativeOp* self, struct bc_Enviroment* env);
 #endif
