@@ -14,21 +14,21 @@
 struct bc_ILBinaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
-typedef struct ILCompareOp {
+typedef struct bc_ILCompareOp {
 	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILCompareOp;
+} bc_ILCompareOp;
 
-ILCompareOp* NewILCompareOp(bc_OperatorType type);
+bc_ILCompareOp* bc_NewILCompareOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILCompareOp(ILCompareOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILCompareOp(bc_ILCompareOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILCompareOp(bc_ILCompareOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILCompareOp(ILCompareOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILCompareOp(bc_ILCompareOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILCompareOp(ILCompareOp* self);
+void bc_DeleteILCompareOp(bc_ILCompareOp* self);
 
-char* ILCompareOpToString(ILCompareOp* self, struct bc_Enviroment* env);
+char* bc_ILCompareOpToString(bc_ILCompareOp* self, struct bc_Enviroment* env);
 #endif

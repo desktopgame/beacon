@@ -12,15 +12,15 @@
 static bc_Opcode operator_to_iopcode(bc_OperatorType type);
 static bc_Opcode operator_to_bopcode(bc_OperatorType type);
 
-ILLogicOp* NewILLogicOp(bc_OperatorType type) {
-	ILLogicOp* ret = (ILLogicOp*)MEM_MALLOC(sizeof(ILLogicOp));
+bc_ILLogicOp* bc_NewILLogicOp(bc_OperatorType type) {
+	bc_ILLogicOp* ret = (bc_ILLogicOp*)MEM_MALLOC(sizeof(bc_ILLogicOp));
 	ret->Type = type;
 	ret->Parent = NULL;
 	ret->OperatorIndex = -1;
 	return ret;
 }
 
-bc_GenericType* EvalILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILLogicOp(bc_ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 		return bc_TYPE2GENERIC(BC_TYPE_INT);
 	} else if(bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
@@ -41,7 +41,7 @@ bc_GenericType* EvalILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContex
 	}
 }
 
-void GenerateILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILLogicOp(bc_ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Right, env, cctx);
 		bc_GenerateILFactor(self->Parent->Left, env, cctx);
@@ -60,18 +60,18 @@ void GenerateILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx
 	}
 }
 
-void LoadILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILLogicOp(bc_ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
 	   !bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
 	self->OperatorIndex = bc_GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
-void DeleteILLogicOp(ILLogicOp* self) {
+void bc_DeleteILLogicOp(bc_ILLogicOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILLogicOpToString(ILLogicOp* self, bc_Enviroment* env) {
+char* bc_ILLogicOpToString(bc_ILLogicOp* self, bc_Enviroment* env) {
 	return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }
 //static

@@ -14,21 +14,21 @@
 struct bc_GenericType;
 struct bc_Enviroment;
 struct bc_ILBinaryOp;
-typedef struct ILShiftOp {
+typedef struct bc_ILShiftOp {
 	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILShiftOp;
+} bc_ILShiftOp;
 
-ILShiftOp* NewILShiftOp(bc_OperatorType type);
+bc_ILShiftOp* bc_NewILShiftOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILShiftOp(ILShiftOp * self, struct bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILShiftOp(bc_ILShiftOp * self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILShiftOp(bc_ILShiftOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILShiftOp(ILShiftOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILShiftOp(bc_ILShiftOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILShiftOp(ILShiftOp* self);
+void bc_DeleteILShiftOp(bc_ILShiftOp* self);
 
-char* ILShiftOpToString(ILShiftOp* self, struct bc_Enviroment* env);
+char* bc_ILShiftOpToString(bc_ILShiftOp* self, struct bc_Enviroment* env);
 #endif

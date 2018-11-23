@@ -14,11 +14,11 @@
 #include "../../ast/operator_type.h"
 #include <stdbool.h>
 
-struct ILArithmeticOp;
-struct ILLogicOp;
-struct ILCompareOp;
-struct ILShiftOp;
-struct ILExcorOp;
+struct bc_ILArithmeticOp;
+struct bc_ILLogicOp;
+struct bc_ILCompareOp;
+struct bc_ILShiftOp;
+struct bc_ILExcorOp;
 
 /**
  * 二項演算子を表す要素.
@@ -30,11 +30,11 @@ typedef struct bc_ILBinaryOp {
 	bc_ILFactor* Right;
 	bool IsLoaded;
 	union {
-		struct ILArithmeticOp* ArithmeticOp;
-		struct ILLogicOp* LogicOp;
-		struct ILCompareOp* CompareOp;
-		struct ILShiftOp* ShiftOp;
-		struct ILExcorOp* ExcorOp;
+		struct bc_ILArithmeticOp* ArithmeticOp;
+		struct bc_ILLogicOp* LogicOp;
+		struct bc_ILCompareOp* CompareOp;
+		struct bc_ILShiftOp* ShiftOp;
+		struct bc_ILExcorOp* ExcorOp;
 	} Kind;
 } bc_ILBinaryOp;
 

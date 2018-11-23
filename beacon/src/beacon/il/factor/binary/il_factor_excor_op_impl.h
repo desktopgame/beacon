@@ -15,21 +15,21 @@ struct bc_ILBinaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 
-typedef struct ILExcorOp {
+typedef struct bc_ILExcorOp {
 	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILExcorOp;
+} bc_ILExcorOp;
 
-ILExcorOp* NewILExcorOp(bc_OperatorType type);
+bc_ILExcorOp* bc_NewILExcorOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILExcorOp(ILExcorOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILExcorOp(bc_ILExcorOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILExcorOp(bc_ILExcorOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILExcorOp(ILExcorOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILExcorOp(bc_ILExcorOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILExcorOp(ILExcorOp* self);
+void bc_DeleteILExcorOp(bc_ILExcorOp* self);
 
-char* ILExcorOpToString(ILExcorOp* self, struct bc_Enviroment* env);
+char* bc_ILExcorOpToString(bc_ILExcorOp* self, struct bc_Enviroment* env);
 #endif

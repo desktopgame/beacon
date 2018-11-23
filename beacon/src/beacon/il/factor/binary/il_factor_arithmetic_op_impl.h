@@ -14,22 +14,22 @@
 struct bc_ILBinaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
-typedef struct ILArithmeticOp {
+typedef struct bc_ILArithmeticOp {
 	struct bc_ILBinaryOp* Parent;
 	int OperatorIndex;
 	bc_OperatorType Type;
-} ILArithmeticOp;
+} bc_ILArithmeticOp;
 
-ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type);
+bc_ILArithmeticOp* bc_NewILArithmeticOp(bc_OperatorType type);
 
 
-struct bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILArithmeticOp(bc_ILArithmeticOp * self, struct bc_Enviroment * env, bc_CallContext* cctx);
 
-void GenerateILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILArithmeticOp(bc_ILArithmeticOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILArithmeticOp(ILArithmeticOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILArithmeticOp(bc_ILArithmeticOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILArithmeticOp(ILArithmeticOp* self);
+void bc_DeleteILArithmeticOp(bc_ILArithmeticOp* self);
 
-char* ILArithmeticOpToString(ILArithmeticOp* self, struct bc_Enviroment* env);
+char* bc_ILArithmeticOpToString(bc_ILArithmeticOp* self, struct bc_Enviroment* env);
 #endif

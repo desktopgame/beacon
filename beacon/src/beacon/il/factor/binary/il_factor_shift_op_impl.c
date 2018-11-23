@@ -12,15 +12,15 @@
 static bc_Opcode operator_to_iopcode(bc_OperatorType type);
 static bc_Opcode operator_to_dopcode(bc_OperatorType type);
 
-ILShiftOp* NewILShiftOp(bc_OperatorType type) {
-	ILShiftOp* ret = (ILShiftOp*)MEM_MALLOC(sizeof(ILShiftOp));
+bc_ILShiftOp* bc_NewILShiftOp(bc_OperatorType type) {
+	bc_ILShiftOp* ret = (bc_ILShiftOp*)MEM_MALLOC(sizeof(bc_ILShiftOp));
 	ret->Parent = NULL;
 	ret->Type = type;
 	ret->OperatorIndex = -1;
 	return ret;
 }
 
-bc_GenericType* EvalILShiftOp(ILShiftOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILShiftOp(bc_ILShiftOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* lgtype = bc_EvalILFactor(self->Parent->Left, env, cctx);
 	bc_GenericType* rgtype = bc_EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,7 +46,7 @@ bc_GenericType* EvalILShiftOp(ILShiftOp * self, bc_Enviroment* env, bc_CallConte
 	return bc_ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILShiftOp(ILShiftOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILShiftOp(bc_ILShiftOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Right, env, cctx);
 		bc_GenerateILFactor(self->Parent->Left, env, cctx);
@@ -66,17 +66,17 @@ void GenerateILShiftOp(ILShiftOp* self, bc_Enviroment* env, bc_CallContext* cctx
 	}
 }
 
-void LoadILShiftOp(ILShiftOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILShiftOp(bc_ILShiftOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(!bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 		self->OperatorIndex = bc_GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
-void DeleteILShiftOp(ILShiftOp* self) {
+void bc_DeleteILShiftOp(bc_ILShiftOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILShiftOpToString(ILShiftOp* self, bc_Enviroment* env) {
+char* bc_ILShiftOpToString(bc_ILShiftOp* self, bc_Enviroment* env) {
 	return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }
 //static

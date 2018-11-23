@@ -38,19 +38,19 @@ bc_ILBinaryOp * bc_NewILBinaryOp(bc_OperatorType type) {
 void bc_GenerateILBinaryOp(bc_ILBinaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			GenerateILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
+			bc_GenerateILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			GenerateILCompareOp(self->Kind.CompareOp, env, cctx);
+			bc_GenerateILCompareOp(self->Kind.CompareOp, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
-			GenerateILLogicOp(self->Kind.LogicOp, env, cctx);
+			bc_GenerateILLogicOp(self->Kind.LogicOp, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
-			GenerateILShiftOp(self->Kind.ShiftOp, env, cctx);
+			bc_GenerateILShiftOp(self->Kind.ShiftOp, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
-			GenerateILExcorOp(self->Kind.ExcorOp, env, cctx);
+			bc_GenerateILExcorOp(self->Kind.ExcorOp, env, cctx);
 			break;
 	}
 }
@@ -67,34 +67,34 @@ void bc_LoadILBinaryOp(bc_ILBinaryOp * self, bc_Enviroment * env, bc_CallContext
 	//カテゴリーわけ
 	if(bc_IsArithmeticOperator(self->Type)) {
 		self->Category = OPERATOR_CARITHMERIC_T;
-		ILArithmeticOp* arith = NewILArithmeticOp(self->Type);
+		bc_ILArithmeticOp* arith = bc_NewILArithmeticOp(self->Type);
 		arith->Parent = self;
 		self->Kind.ArithmeticOp = arith;
-		LoadILArithmeticOp(arith, env, cctx);
+		bc_LoadILArithmeticOp(arith, env, cctx);
 	} else if(bc_IsCompareOperator(self->Type)) {
 		self->Category = OPERATOR_CCOMPARE_T;
-		ILCompareOp* comp = NewILCompareOp(self->Type);
+		bc_ILCompareOp* comp = bc_NewILCompareOp(self->Type);
 		comp->Parent = self;
 		self->Kind.CompareOp = comp;
-		LoadILCompareOp(comp, env, cctx);
+		bc_LoadILCompareOp(comp, env, cctx);
 	} else if(bc_IsBitOperator(self->Type) || bc_IsLogicOperator(self->Type)) {
 		self->Category = OPERATOR_CLOGIC_T;
-		ILLogicOp* logic = NewILLogicOp(self->Type);
+		bc_ILLogicOp* logic = bc_NewILLogicOp(self->Type);
 		logic->Parent = self;
 		self->Kind.LogicOp = logic;
-		LoadILLogicOp(logic, env, cctx);
+		bc_LoadILLogicOp(logic, env, cctx);
 	} else if(bc_IsShiftOperator(self->Type)) {
 		self->Category = OPERATOR_CSHIFT_T;
-		ILShiftOp* shift = NewILShiftOp(self->Type);
+		bc_ILShiftOp* shift = bc_NewILShiftOp(self->Type);
 		shift->Parent = self;
 		self->Kind.ShiftOp = shift;
-		LoadILShiftOp(shift, env, cctx);
+		bc_LoadILShiftOp(shift, env, cctx);
 	} else if(self->Type == OPERATOR_EXCOR_T) {
 		self->Category = OPERATOR_CEXCOR_T;
-		ILExcorOp* excor = NewILExcorOp(self->Type);
+		bc_ILExcorOp* excor = bc_NewILExcorOp(self->Type);
 		excor->Parent = self;
 		self->Kind.ExcorOp = excor;
-		LoadILExcorOp(excor, env, cctx);
+		bc_LoadILExcorOp(excor, env, cctx);
 	} else {
 		assert(false);
 	}
@@ -105,19 +105,19 @@ bc_GenericType* bc_EvalILBinaryOp(bc_ILBinaryOp * self, bc_Enviroment * env, bc_
 	bc_GenericType* ret = NULL;
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			ret = EvalILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
+			ret = bc_EvalILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			ret = EvalILCompareOp(self->Kind.CompareOp, env, cctx);
+			ret = bc_EvalILCompareOp(self->Kind.CompareOp, env, cctx);
 			break;
 		case OPERATOR_CLOGIC_T:
-			ret = EvalILLogicOp(self->Kind.LogicOp, env, cctx);
+			ret = bc_EvalILLogicOp(self->Kind.LogicOp, env, cctx);
 			break;
 		case OPERATOR_CSHIFT_T:
-			ret = EvalILShiftOp(self->Kind.ShiftOp, env, cctx);
+			ret = bc_EvalILShiftOp(self->Kind.ShiftOp, env, cctx);
 			break;
 		case OPERATOR_CEXCOR_T:
-			ret = EvalILExcorOp(self->Kind.ExcorOp, env, cctx);
+			ret = bc_EvalILExcorOp(self->Kind.ExcorOp, env, cctx);
 			break;
 	}
 //	assert(ret != NULL);
@@ -128,19 +128,19 @@ char* bc_ILBinaryOpToString(bc_ILBinaryOp* self, bc_Enviroment* env) {
 	char* ret = NULL;
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			ret = ILArithmeticOpToString(self->Kind.ArithmeticOp, env);
+			ret = bc_ILArithmeticOpToString(self->Kind.ArithmeticOp, env);
 			break;
 		case OPERATOR_CLOGIC_T:
-			ret = ILLogicOpToString(self->Kind.LogicOp, env);
+			ret = bc_ILLogicOpToString(self->Kind.LogicOp, env);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			ret = ILCompareOpToString(self->Kind.CompareOp, env);
+			ret = bc_ILCompareOpToString(self->Kind.CompareOp, env);
 			break;
 		case OPERATOR_CSHIFT_T:
-			ret = ILShiftOpToString(self->Kind.ShiftOp, env);
+			ret = bc_ILShiftOpToString(self->Kind.ShiftOp, env);
 			break;
 		case OPERATOR_CEXCOR_T:
-			ret = ILExcorOpToString(self->Kind.ExcorOp, env);
+			ret = bc_ILExcorOpToString(self->Kind.ExcorOp, env);
 			break;
 	}
 	assert(ret != NULL);
@@ -150,19 +150,19 @@ char* bc_ILBinaryOpToString(bc_ILBinaryOp* self, bc_Enviroment* env) {
 void bc_DeleteILBinaryOp(bc_ILBinaryOp * self) {
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
-			DeleteILArithmeticOp(self->Kind.ArithmeticOp);
+			bc_DeleteILArithmeticOp(self->Kind.ArithmeticOp);
 			break;
 		case OPERATOR_CLOGIC_T:
-			DeleteILLogicOp(self->Kind.LogicOp);
+			bc_DeleteILLogicOp(self->Kind.LogicOp);
 			break;
 		case OPERATOR_CCOMPARE_T:
-			DeleteILCompareOp(self->Kind.CompareOp);
+			bc_DeleteILCompareOp(self->Kind.CompareOp);
 			break;
 		case OPERATOR_CSHIFT_T:
-			DeleteILShiftOp(self->Kind.ShiftOp);
+			bc_DeleteILShiftOp(self->Kind.ShiftOp);
 			break;
 		case OPERATOR_CEXCOR_T:
-			DeleteILExcorOp(self->Kind.ExcorOp);
+			bc_DeleteILExcorOp(self->Kind.ExcorOp);
 			break;
 	}
 	bc_DeleteILFactor(self->Left);

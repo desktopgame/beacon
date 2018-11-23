@@ -15,21 +15,21 @@
 struct bc_ILBinaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
-typedef struct ILLogicOp {
+typedef struct bc_ILLogicOp {
 	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
-} ILLogicOp;
+} bc_ILLogicOp;
 
-ILLogicOp* NewILLogicOp(bc_OperatorType type);
+bc_ILLogicOp* bc_NewILLogicOp(bc_OperatorType type);
 
-struct bc_GenericType* EvalILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILLogicOp(bc_ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILLogicOp(bc_ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILLogicOp(ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILLogicOp(bc_ILLogicOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILLogicOp(ILLogicOp* self);
+void bc_DeleteILLogicOp(bc_ILLogicOp* self);
 
-char* ILLogicOpToString(ILLogicOp* self, struct bc_Enviroment* env);
+char* bc_ILLogicOpToString(bc_ILLogicOp* self, struct bc_Enviroment* env);
 #endif

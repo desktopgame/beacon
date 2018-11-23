@@ -13,15 +13,15 @@
 static bc_Opcode operator_to_iopcode(bc_OperatorType type);
 static bc_Opcode operator_to_dopcode(bc_OperatorType type);
 
-ILArithmeticOp* NewILArithmeticOp(bc_OperatorType type) {
-	ILArithmeticOp* ret = (ILArithmeticOp*)MEM_MALLOC(sizeof(ILArithmeticOp));
+bc_ILArithmeticOp* bc_NewILArithmeticOp(bc_OperatorType type) {
+	bc_ILArithmeticOp* ret = (bc_ILArithmeticOp*)MEM_MALLOC(sizeof(bc_ILArithmeticOp));
 	ret->Type = type;
 	ret->Parent = NULL;
 	ret->OperatorIndex = -1;
 	return ret;
 }
 
-bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILArithmeticOp(bc_ILArithmeticOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* lgtype = bc_EvalILFactor(self->Parent->Left, env, cctx);
 	bc_GenericType* rgtype = bc_EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
@@ -46,7 +46,7 @@ bc_GenericType* EvalILArithmeticOp(ILArithmeticOp * self, bc_Enviroment* env, bc
 	return bc_ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
-void GenerateILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILArithmeticOp(bc_ILArithmeticOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	//演算子オーバーロードが見つからない
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Right, env, cctx);
@@ -66,18 +66,18 @@ void GenerateILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, bc_CallCon
 	}
 }
 
-void LoadILArithmeticOp(ILArithmeticOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILArithmeticOp(bc_ILArithmeticOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
 	   !bc_IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
 		self->OperatorIndex = bc_GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
-void DeleteILArithmeticOp(ILArithmeticOp* self) {
+void bc_DeleteILArithmeticOp(bc_ILArithmeticOp* self) {
 	MEM_FREE(self);
 }
 
-char* ILArithmeticOpToString(ILArithmeticOp* self, bc_Enviroment* env) {
+char* bc_ILArithmeticOpToString(bc_ILArithmeticOp* self, bc_Enviroment* env) {
 	return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }
 //static
