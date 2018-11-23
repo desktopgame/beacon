@@ -45,6 +45,7 @@ typedef struct bc_Method {
         bc_Vector* TypeParameters;
         bc_AccessLevel Access;
         bc_ModifierType Modifier;
+        int Index;
         union {
                 bc_ScriptMethod* Script;
                 bc_NativeMethod* Native;

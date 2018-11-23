@@ -45,6 +45,7 @@ bc_Method* bc_MallocMethod(bc_StringView name, const char* filename,
                            int lineno) {
         bc_Method* ret =
             (bc_Method*)bc_MXMalloc(sizeof(bc_Method), filename, lineno);
+        ret->Index = -1;
         ret->Name = name;
         ret->Parameters = bc_MallocVector(filename, lineno);
         ret->Type = METHOD_TYPE_SCRIPT_T;

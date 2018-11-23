@@ -168,8 +168,10 @@ void bc_AddPropertyClass(bc_Class* self, bc_Property* p) {
 void bc_AddMethodClass(bc_Class* self, bc_Method * m) {
 	assert(m != NULL);
 	if (bc_IsStaticModifier(m->Modifier)) {
+		m->Index = self->StaticMethods->Length;
 		bc_PushVector(self->StaticMethods, m);
 	} else {
+		m->Index = self->Methods->Length;
 		bc_PushVector(self->Methods, m);
 	}
 }

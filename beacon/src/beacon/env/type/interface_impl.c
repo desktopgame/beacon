@@ -40,6 +40,7 @@ bc_Interface* bc_NewInterface(bc_StringView namev) {
 }
 
 void bc_AddMethodInterface(bc_Interface* self, bc_Method * m) {
+	m->Index = self->Methods->Length;
 	bc_PushVector(self->Methods, m);
 }
 
