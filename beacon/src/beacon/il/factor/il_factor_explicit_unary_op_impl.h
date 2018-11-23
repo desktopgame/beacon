@@ -15,21 +15,21 @@ struct bc_ILFactor;
 struct bc_Enviroment;
 struct bc_GenericType;
 
-typedef struct ILExplicitUnaryOp {
+typedef struct bc_ILExplicitUnaryOp {
 	struct bc_ILFactor* Receiver;
 	bc_OperatorType Type;
 	int Index;
-} ILExplicitUnaryOp;
+} bc_ILExplicitUnaryOp;
 
-struct bc_ILFactor* WrapILExplicitUnaryOp(ILExplicitUnaryOp* self);
+struct bc_ILFactor* bc_WrapILExplicitUnaryOp(bc_ILExplicitUnaryOp* self);
 
-ILExplicitUnaryOp* NewILExplicitUnaryOp(bc_OperatorType type);
+bc_ILExplicitUnaryOp* bc_NewILExplicitUnaryOp(bc_OperatorType type);
 
-void GenerateILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILExplicitUnaryOp(bc_ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILExplicitUnaryOp(bc_ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILExplicitUnaryOp(ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILExplicitUnaryOp(bc_ILExplicitUnaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILExplicitUnaryOp(ILExplicitUnaryOp* self);
+void bc_DeleteILExplicitUnaryOp(bc_ILExplicitUnaryOp* self);
 #endif

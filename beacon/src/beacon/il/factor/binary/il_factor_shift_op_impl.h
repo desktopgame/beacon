@@ -13,9 +13,9 @@
 #include "../../call_context.h"
 struct bc_GenericType;
 struct bc_Enviroment;
-struct ILBinaryOp;
+struct bc_ILBinaryOp;
 typedef struct ILShiftOp {
-	struct ILBinaryOp* Parent;
+	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
 } ILShiftOp;

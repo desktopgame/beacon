@@ -15,11 +15,11 @@
 struct bc_Enviroment;
 struct bc_Type;
 
-void GenerateILNull(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILNull(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNull(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILNull(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILNull(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILNull(void* empty, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILNullToString(void* empty, bc_Enviroment* env);
+char* bc_ILNullToString(void* empty, bc_Enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_NULL_H

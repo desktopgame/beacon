@@ -16,22 +16,22 @@
 /**
  * 文字を表す要素.
  */
-typedef struct ILChar {
+typedef struct bc_ILChar {
 	char Value;
-} ILChar;
+} bc_ILChar;
 
-bc_ILFactor* WrapILChar(ILChar* self);
+bc_ILFactor* bc_WrapILChar(bc_ILChar* self);
 
-ILChar* NewILChar(char c);
+bc_ILChar* bc_NewILChar(char c);
 
-void GenerateILChar(ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILChar(bc_ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILChar(ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILChar(bc_ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILChar(ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILChar(bc_ILChar* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILCharToString(ILChar* self, bc_Enviroment* env);
+char* bc_ILCharToString(bc_ILChar* self, bc_Enviroment* env);
 
-void DeleteILChar(ILChar* self);
+void bc_DeleteILChar(bc_ILChar* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_CHAR_H

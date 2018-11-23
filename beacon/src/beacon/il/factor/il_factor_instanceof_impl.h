@@ -14,22 +14,22 @@ struct bc_GenericCache;
 struct bc_GenericType;
 struct bc_FQCNCache;
 
-typedef struct ILInstanceOf {
+typedef struct bc_ILInstanceOf {
 	bc_ILFactor* Source;
 	struct bc_GenericCache* GCache;
-} ILInstanceOf;
+} bc_ILInstanceOf;
 
-bc_ILFactor* WrapILInstanceOf(ILInstanceOf* self);
+bc_ILFactor* bc_WrapILInstanceOf(bc_ILInstanceOf* self);
 
-ILInstanceOf* NewILInstanceOf();
+bc_ILInstanceOf* bc_NewILInstanceOf();
 
-void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILInstanceOf(bc_ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILInstanceOf(bc_ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILInstanceOf(bc_ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env);
+char* bc_ILInstanceOfToString(bc_ILInstanceOf* self, bc_Enviroment* env);
 
-void DeleteILInstanceOf(ILInstanceOf* self);
+void bc_DeleteILInstanceOf(bc_ILInstanceOf* self);
 #endif

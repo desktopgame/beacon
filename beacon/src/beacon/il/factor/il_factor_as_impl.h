@@ -14,37 +14,37 @@
 #include "../../env/generic_cache.h"
 #include "../../env/generic_type.h"
 
-typedef enum CastMode {
+typedef enum bc_CastMode {
 	CAST_DOWN_T,
 	CAST_UP_T,
 	CAST_UNKNOWN_T,
-} CastMode;
+} bc_CastMode;
 
 /**
  * as演算子を表す構造体.
  */
-typedef struct ILAs {
+typedef struct bc_ILAs {
 	bc_ILFactor* Source;
 	bc_GenericCache* GCache;
 	bc_GenericType* GType;
-	CastMode Mode;
-} ILAs;
+	bc_CastMode Mode;
+} bc_ILAs;
 
 struct bc_Enviroment;
 struct bc_Type;
 struct bc_Field;
 
-bc_ILFactor* WrapILAs(ILAs* self);
+bc_ILFactor* bc_WrapILAs(bc_ILAs* self);
 
-ILAs* NewILAs();
+bc_ILAs* bc_NewILAs();
 
-void GenerateILAs(ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILAs(bc_ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILAs(ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILAs(bc_ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILAs(ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILAs(bc_ILAs* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILAs(ILAs* self);
+void bc_DeleteILAs(bc_ILAs* self);
 
-char* ILAsToString(ILAs* self, bc_Enviroment* env);
+char* bc_ILAsToString(bc_ILAs* self, bc_Enviroment* env);
 #endif // !SIGNAL_IL_IL_FACTOR_AS_H

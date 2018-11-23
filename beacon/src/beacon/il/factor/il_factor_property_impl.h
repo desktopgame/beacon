@@ -15,23 +15,23 @@
 struct bc_Enviroment;
 struct bc_GenericType;
 
-typedef struct ILPropertyAccess {
+typedef struct bc_ILPropertyAccess {
 	bc_ILFactor* Source;
 	bc_StringView Name;
 	int Index;
 	bc_Property* Property;
-} ILPropertyAccess;
+} bc_ILPropertyAccess;
 
-#define NewILPropertyAccess() (MallocILPropertyAccess(__FILE__, __LINE__))
-ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno);
+#define bc_NewILPropertyAccess() (bc_MallocILPropertyAccess(__FILE__, __LINE__))
+bc_ILPropertyAccess* bc_MallocILPropertyAccess(const char* filename, int lineno);
 
-void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILPropertyAccess(bc_ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILProperty(bc_ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILProperty(bc_ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env);
+char* bc_ILPropertyToString(bc_ILPropertyAccess* self, bc_Enviroment* env);
 
-void DeleteILPropertyAccess(ILPropertyAccess* self);
+void bc_DeleteILPropertyAccess(bc_ILPropertyAccess* self);
 #endif

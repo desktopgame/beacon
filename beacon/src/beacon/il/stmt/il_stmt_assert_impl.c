@@ -40,8 +40,8 @@ void bc_LoadILAssert(bc_ILAssert* self, bc_Enviroment* env, bc_CallContext* cctx
 	bc_LoadILFactor(self->Condition, env, cctx);
 	if(self->Message == NULL) {
 		char* str = bc_ILFactorToString(self->Condition, env);
-		ILString* ilstr = NewILString(bc_InternString(str));
-		self->Message = WrapILString(ilstr);
+		bc_ILString* ilstr = bc_NewILString(bc_InternString(str));
+		self->Message = bc_WrapILString(ilstr);
 		assert(ilstr->Value != 0);
 		MEM_FREE(str);
 		self->Message->Lineno = self->Parent->Lineno;

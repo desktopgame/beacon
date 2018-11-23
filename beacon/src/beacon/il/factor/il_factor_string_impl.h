@@ -17,22 +17,22 @@
 /**
  * 文字列を表す要素.
  */
-typedef struct ILString {
+typedef struct bc_ILString {
 	bc_StringView Value;
-} ILString;
+} bc_ILString;
 
-bc_ILFactor* WrapILString(ILString* self);
+bc_ILFactor* bc_WrapILString(bc_ILString* self);
 
-ILString* NewILString(bc_StringView valuev);
+bc_ILString* bc_NewILString(bc_StringView valuev);
 
-void GenerateILString(ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILString(bc_ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILString(ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILString(bc_ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILString(ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILString(bc_ILString* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILStringToString(ILString* self, bc_Enviroment* env);
+char* bc_ILStringToString(bc_ILString* self, bc_Enviroment* env);
 
-void DeleteILString(ILString* self);
+void bc_DeleteILString(bc_ILString* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_STRING_H

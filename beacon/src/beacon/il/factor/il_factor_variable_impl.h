@@ -29,39 +29,39 @@ struct bc_Field;
  * variable Namespace::Class variable<|T|> Namespace::Class<|T|>
  * </code>
  */
-typedef enum ILVariableType {
+typedef enum bc_ILVariableType {
 	ILVARIABLE_TYPE_LOCAL_T,
 	ILVARIABLE_TYPE_STATIC_T,
 	ILVARIABLE_TYPE_UNDEFINED_T
-} ILVariableType;
+} bc_ILVariableType;
 
 /**
  * 変数を表す要素.
  */
-typedef struct ILVariable {
+typedef struct bc_ILVariable {
 	bc_FQCNCache* FQCN;
 	bc_Vector* TypeArgs;
 	int Index;
-	ILVariableType Type;
+	bc_ILVariableType Type;
 	union {
 		ILVariableLocal* Local;
 		ILVariableStatic* Static;
 	} Kind;
-} ILVariable;
+} bc_ILVariable;
 
-bc_ILFactor* WrapILVariable(ILVariable* self);
+bc_ILFactor* bc_WrapILVariable(bc_ILVariable* self);
 
-#define NewILVariable() (MallocILVariable(__FILE__, __LINE__))
-ILVariable* MallocILVariable(const char* filename, int lineno);
+#define bc_NewILVariable() (bc_MallocILVariable(__FILE__, __LINE__))
+bc_ILVariable* bc_MallocILVariable(const char* filename, int lineno);
 
-void GenerateILVariable(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILVariable(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILVariable(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILVariable(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILVariable(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILVariable(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILVariableToString(ILVariable* self, bc_Enviroment* env);
+char* bc_ILVariableToString(bc_ILVariable* self, bc_Enviroment* env);
 
-void DeleteILVariable(ILVariable* self);
+void bc_DeleteILVariable(bc_ILVariable* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_VARIABLE_H

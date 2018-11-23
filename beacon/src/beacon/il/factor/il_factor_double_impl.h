@@ -16,22 +16,22 @@
 /**
  * 浮動小数リテラルを表す要素.
  */
-typedef struct ILDouble {
+typedef struct bc_ILDouble {
 	double Value;
-} ILDouble;
+} bc_ILDouble;
 
-bc_ILFactor* WrapILDouble(ILDouble* self);
+bc_ILFactor* bc_WrapILDouble(bc_ILDouble* self);
 
-ILDouble* NewILDouble(double d);
+bc_ILDouble* bc_NewILDouble(double d);
 
-void GenerateILDouble(ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILDouble(bc_ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILDouble(ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILDouble(bc_ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILDouble(ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILDouble(bc_ILDouble* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILDoubleToString(ILDouble* self, bc_Enviroment* env);
+char* bc_ILDoubleToString(bc_ILDouble* self, bc_Enviroment* env);
 
-void DeleteILDouble(ILDouble* self);
+void bc_DeleteILDouble(bc_ILDouble* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_DOUBLE_H

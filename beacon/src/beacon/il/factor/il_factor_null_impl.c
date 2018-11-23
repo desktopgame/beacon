@@ -6,20 +6,20 @@
 
 static bc_GenericType* gSelf = NULL;
 
-void GenerateILNull(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILNull(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, OP_NULL);
 }
 
-void LoadILNull(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILNull(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 }
 
-bc_GenericType* EvalILNull(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILNull(void * empty, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(gSelf == NULL) {
 		gSelf =  bc_NewGenericType(BC_TYPE_NULL);
 	}
 	return gSelf;
 }
 
-char* ILNullToString(void* empty, bc_Enviroment* env) {
+char* bc_ILNullToString(void* empty, bc_Enviroment* env) {
 	return bc_Strdup("null");
 }

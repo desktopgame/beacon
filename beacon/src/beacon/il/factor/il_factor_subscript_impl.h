@@ -13,25 +13,25 @@
 
 struct bc_OperatorOverload;
 
-typedef struct ILSubscript {
+typedef struct bc_ILSubscript {
 	bc_ILFactor* Receiver;
 	bc_ILFactor* Position;
 	int OperatorIndex;
 	struct bc_OperatorOverload* Operator;
-} ILSubscript;
+} bc_ILSubscript;
 
-bc_ILFactor* WrapILSubscript(ILSubscript* self);
+bc_ILFactor* bc_WrapILSubscript(bc_ILSubscript* self);
 
-#define NewILSubscript() (MallocILSubscript(__FILE__, __LINE__))
-ILSubscript* MallocILSubscript(const char* filename, int lineno);
+#define bc_NewILSubscript() (bc_MallocILSubscript(__FILE__, __LINE__))
+bc_ILSubscript* bc_MallocILSubscript(const char* filename, int lineno);
 
-void GenerateILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILSubscript(bc_ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILSubscript(bc_ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILSubscript(ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILSubscript(bc_ILSubscript* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILSubscriptToString(ILSubscript* self, bc_Enviroment* env);
+char* bc_ILSubscriptToString(bc_ILSubscript* self, bc_Enviroment* env);
 
-void DeleteILSubscript(ILSubscript* self);
+void bc_DeleteILSubscript(bc_ILSubscript* self);
 #endif

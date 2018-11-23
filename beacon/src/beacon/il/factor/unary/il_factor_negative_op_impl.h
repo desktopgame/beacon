@@ -11,12 +11,12 @@
 #define BEACON_IL_FACTOR_UNARY_IL_FACTOR_NEGATIVE_OP_IMPL_H
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
-struct ILUnaryOp;
+struct bc_ILUnaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 
 typedef struct ILNegativeOp {
-	struct ILUnaryOp* Parent;
+	struct bc_ILUnaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
 } ILNegativeOp;

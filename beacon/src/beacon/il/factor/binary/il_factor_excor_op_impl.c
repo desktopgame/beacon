@@ -21,10 +21,10 @@ bc_GenericType* EvalILExcorOp(ILExcorOp * self, bc_Enviroment* env, bc_CallConte
 	bc_GenericType* rgtype = bc_EvalILFactor(self->Parent->Right, env, cctx);
 	assert(lgtype != NULL);
 	assert(rgtype != NULL);
-	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+	if(bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 		return bc_TYPE2GENERIC(BC_TYPE_INT);
 	}
-	if(IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
+	if(bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
 		return bc_TYPE2GENERIC(BC_TYPE_BOOL);
 	}
 	//プリミティブ型同士でないのに
@@ -36,7 +36,7 @@ bc_GenericType* EvalILExcorOp(ILExcorOp * self, bc_Enviroment* env, bc_CallConte
 		return NULL;
 	}
 	bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
-	return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
+	return bc_ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 }
 
 void GenerateILExcorOp(ILExcorOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
@@ -44,9 +44,9 @@ void GenerateILExcorOp(ILExcorOp* self, bc_Enviroment* env, bc_CallContext* cctx
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Right, env, cctx);
 		bc_GenerateILFactor(self->Parent->Left, env, cctx);
-		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+		if(bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, OP_IEXCOR);
-		} else if(IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
+		} else if(bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, OP_BEXCOR);
 		} else {
 			assert(false);
@@ -60,9 +60,9 @@ void GenerateILExcorOp(ILExcorOp* self, bc_Enviroment* env, bc_CallContext* cctx
 }
 
 void LoadILExcorOp(ILExcorOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	if(!IsIntIntBinaryOp(self->Parent, env, cctx) &&
-	   !IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
-	self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);
+	if(!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+	   !bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
+	self->OperatorIndex = bc_GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -71,5 +71,5 @@ void DeleteILExcorOp(ILExcorOp* self) {
 }
 
 char* ILExcorOpToString(ILExcorOp* self, bc_Enviroment* env) {
-	return ILBinaryOpToString_simple(self->Parent, env);
+	return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }

@@ -21,41 +21,41 @@ struct bc_GenericType;
 /**
  * 関数呼び出し演算子の種類を表す列挙型.
  */
-typedef enum ILCallType {
+typedef enum bc_ILCallType {
 	ILCALL_TYPE_INVOKE_T,
 	ILCALL_TYPE_INVOKE_STATIC_T,
 	ILCALL_TYPE_INVOKE_BOUND_T,
 	ILCALL_TYPE_UNDEFINED_T,
-} ILCallType;
+} bc_ILCallType;
 
 /**
  * 関数呼び出し演算子を表す構造体.
  */
-typedef struct ILCallOp {
+typedef struct bc_ILCallOp {
 	bc_ILFactor* Parent;
 	bc_ILFactor* Receiver;
 	//Vector* type_argument_list;
 	bc_Vector* Arguments;
-	ILCallType Type;
+	bc_ILCallType Type;
 	union {
 		ILInvoke* Invoke;
 		ILInvokeStatic* InvokeStatic;
 		ILInvokeBound* InvokeBound;
 	} Kind;
-} ILCallOp;
+} bc_ILCallOp;
 
-bc_ILFactor* WrapCallOp(ILCallOp* self);
+bc_ILFactor* bc_WrapCallOp(bc_ILCallOp* self);
 
-ILCallOp* NewILCallOp();
+bc_ILCallOp* bc_NewILCallOp();
 
-void LoadCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadCallOp(bc_ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILCallOp(bc_ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILCallOpToString(ILCallOp* self, bc_Enviroment* env);
+char* bc_ILCallOpToString(bc_ILCallOp* self, bc_Enviroment* env);
 
-void GenerateILCallOp(ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILCallOp(bc_ILCallOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILCallOp(ILCallOp* self);
+void bc_DeleteILCallOp(bc_ILCallOp* self);
 
 #endif

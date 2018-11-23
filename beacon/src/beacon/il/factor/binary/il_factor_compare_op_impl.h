@@ -11,11 +11,11 @@
 #define BEACON_IL_FACTOR_BINARY_IL_FACTOR_COMPARE_OP_IMPL_H
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
-struct ILBinaryOp;
+struct bc_ILBinaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 typedef struct ILCompareOp {
-	struct ILBinaryOp* Parent;
+	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
 } ILCompareOp;

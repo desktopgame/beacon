@@ -25,67 +25,67 @@ void bc_GenerateILFactor(bc_ILFactor * self, bc_Enviroment* env, bc_CallContext*
 	bc_SetPanicLine(self->Lineno);
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
-			GenerateILInt(self->Kind.Int, env, cctx);
+			bc_GenerateILInt(self->Kind.Int, env, cctx);
 			break;
 		case ILFACTOR_DOUBLE_T:
-			GenerateILDouble(self->Kind.Double, env, cctx);
+			bc_GenerateILDouble(self->Kind.Double, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
-			GenerateILChar(self->Kind.Char, env, cctx);
+			bc_GenerateILChar(self->Kind.Char, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
-			GenerateILString(self->Kind.String, env, cctx);
+			bc_GenerateILString(self->Kind.String, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			GenerateILVariable(self->Kind.Variable, env, cctx);
+			bc_GenerateILVariable(self->Kind.Variable, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			GenerateILUnaryOp(self->Kind.UnaryOp, env, cctx);
+			bc_GenerateILUnaryOp(self->Kind.UnaryOp, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			GenerateILBinaryOp(self->Kind.BinaryOp, env, cctx);
+			bc_GenerateILBinaryOp(self->Kind.BinaryOp, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			GenerateILAssignOp(self->Kind.AssignOp, env, cctx);
+			bc_GenerateILAssignOp(self->Kind.AssignOp, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
-			GenerateILThis(self->Kind.This, env, cctx);
+			bc_GenerateILThis(self->Kind.This, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
-			GenerateILSuper(self->Kind.Super, env, cctx);
+			bc_GenerateILSuper(self->Kind.Super, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			GenerateILNewInstance(self->Kind.NewInstance, env, cctx);
+			bc_GenerateILNewInstance(self->Kind.NewInstance, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
-			GenerateILBool(self->Kind.Bool, env, cctx);
+			bc_GenerateILBool(self->Kind.Bool, env, cctx);
 			break;
 		case ILFACTOR_NULL_T:
-			GenerateILNull(NULL, env, cctx);
+			bc_GenerateILNull(NULL, env, cctx);
 			break;
 		case ILFACTOR_AS_T:
-			GenerateILAs(self->Kind.As, env, cctx);
+			bc_GenerateILAs(self->Kind.As, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			GenerateILCallOp(self->Kind.Call, env, cctx);
+			bc_GenerateILCallOp(self->Kind.Call, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			GenerateILMemberOp(self->Kind.MemberOp, env, cctx);
+			bc_GenerateILMemberOp(self->Kind.MemberOp, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			GenerateILInstanceOf(self->Kind.InstanceOf, env, cctx);
+			bc_GenerateILInstanceOf(self->Kind.InstanceOf, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			GenerateILExplicitUnaryOp(self->Kind.ExpUnaryOp, env, cctx);
+			bc_GenerateILExplicitUnaryOp(self->Kind.ExpUnaryOp, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			GenerateILExplicitBinaryOp(self->Kind.ExpBinaryOp, env, cctx);
+			bc_GenerateILExplicitBinaryOp(self->Kind.ExpBinaryOp, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			GenerateILPropertyAccess(self->Kind.PropertyAccess, env, cctx);
+			bc_GenerateILPropertyAccess(self->Kind.PropertyAccess, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			GenerateILSubscript(self->Kind.Subscript, env, cctx);
+			bc_GenerateILSubscript(self->Kind.Subscript, env, cctx);
 			break;
 		default:
 			break;
@@ -102,67 +102,67 @@ void bc_LoadILFactor(bc_ILFactor * self, bc_Enviroment * env, bc_CallContext* cc
 	bc_SetPanicLine(self->Lineno);
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
-			LoadILInt(self->Kind.Int, env, cctx);
+			bc_LoadILInt(self->Kind.Int, env, cctx);
 			break;
 		case ILFACTOR_DOUBLE_T:
-			LoadILDouble(self->Kind.Double, env, cctx);
+			bc_LoadILDouble(self->Kind.Double, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
-			LoadILChar(self->Kind.Char, env, cctx);
+			bc_LoadILChar(self->Kind.Char, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
-			LoadILString(self->Kind.String, env, cctx);
+			bc_LoadILString(self->Kind.String, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			LoadILVariable(self->Kind.Variable, env, cctx);
+			bc_LoadILVariable(self->Kind.Variable, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			LoadILUnaryOp(self->Kind.UnaryOp, env, cctx);
+			bc_LoadILUnaryOp(self->Kind.UnaryOp, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			LoadILBinaryOp(self->Kind.BinaryOp, env, cctx);
+			bc_LoadILBinaryOp(self->Kind.BinaryOp, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			LoadILAssignOp(self->Kind.AssignOp, env, cctx);
+			bc_LoadILAssignOp(self->Kind.AssignOp, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
-			LoadILThis(self->Kind.This, env, cctx);
+			bc_LoadILThis(self->Kind.This, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
-			LoadILSuper(self->Kind.Super, env, cctx);
+			bc_LoadILSuper(self->Kind.Super, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			LoadILNewInstance(self->Kind.NewInstance, env, cctx);
+			bc_LoadILNewInstance(self->Kind.NewInstance, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
 			//ILBool_load(self->Kind.Bool, depth);
 			break;
 		case ILFACTOR_NULL_T:
-			LoadILNull(NULL, env, cctx);
+			bc_LoadILNull(NULL, env, cctx);
 			break;
 		case ILFACTOR_AS_T:
-			LoadILAs(self->Kind.As, env, cctx);
+			bc_LoadILAs(self->Kind.As, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			LoadCallOp(self->Kind.Call, env, cctx);
+			bc_LoadCallOp(self->Kind.Call, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			LoadILMemberOp(self->Kind.MemberOp, env, cctx);
+			bc_LoadILMemberOp(self->Kind.MemberOp, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			LoadILInstanceOf(self->Kind.InstanceOf, env, cctx);
+			bc_LoadILInstanceOf(self->Kind.InstanceOf, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			LoadILExplicitUnaryOp(self->Kind.ExpUnaryOp, env, cctx);
+			bc_LoadILExplicitUnaryOp(self->Kind.ExpUnaryOp, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			LoadILExplicitBinaryOp(self->Kind.ExpBinaryOp, env, cctx);
+			bc_LoadILExplicitBinaryOp(self->Kind.ExpBinaryOp, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			LoadILProperty(self->Kind.PropertyAccess, env, cctx);
+			bc_LoadILProperty(self->Kind.PropertyAccess, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			LoadILSubscript(self->Kind.Subscript, env, cctx);
+			bc_LoadILSubscript(self->Kind.Subscript, env, cctx);
 			break;
 		default:
 			break;
@@ -178,67 +178,67 @@ bc_GenericType* bc_EvalILFactor(bc_ILFactor * self, bc_Enviroment * env, bc_Call
 	bc_GenericType* ret = NULL;
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
-			ret = EvalILInt(self->Kind.Int, env, cctx);
+			ret = bc_EvalILInt(self->Kind.Int, env, cctx);
 			break;
 		case ILFACTOR_DOUBLE_T:
-			ret = EvalILDouble(self->Kind.Double, env, cctx);
+			ret = bc_EvalILDouble(self->Kind.Double, env, cctx);
 			break;
 		case ILFACTOR_CHAR_T:
-			ret = EvalILChar(self->Kind.Char, env, cctx);
+			ret = bc_EvalILChar(self->Kind.Char, env, cctx);
 			break;
 		case ILFACTOR_STRING_T:
-			ret = EvalILString(self->Kind.String, env, cctx);
+			ret = bc_EvalILString(self->Kind.String, env, cctx);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			ret = EvalILVariable(self->Kind.Variable, env, cctx);
+			ret = bc_EvalILVariable(self->Kind.Variable, env, cctx);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			ret = EvalILUnaryOp(self->Kind.UnaryOp, env, cctx);
+			ret = bc_EvalILUnaryOp(self->Kind.UnaryOp, env, cctx);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			ret = EvalILBinaryOp(self->Kind.BinaryOp, env, cctx);
+			ret = bc_EvalILBinaryOp(self->Kind.BinaryOp, env, cctx);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			ret = EvalILAssignOp(self->Kind.AssignOp, env, cctx);
+			ret = bc_EvalILAssignOp(self->Kind.AssignOp, env, cctx);
 			break;
 		case ILFACTOR_THIS_T:
-			ret = EvalILThis(self->Kind.This, env, cctx);
+			ret = bc_EvalILThis(self->Kind.This, env, cctx);
 			break;
 		case ILFACTOR_SUPER_T:
-			ret = EvalILSuper(self->Kind.Super, env, cctx);
+			ret = bc_EvalILSuper(self->Kind.Super, env, cctx);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			ret = EvalILNewInstance(self->Kind.NewInstance, env, cctx);
+			ret = bc_EvalILNewInstance(self->Kind.NewInstance, env, cctx);
 			break;
 		case ILFACTOR_BOOL_T:
-			ret = EvalILBool(self->Kind.Bool,env, cctx);
+			ret = bc_EvalILBool(self->Kind.Bool,env, cctx);
 			break;
 		case ILFACTOR_NULL_T:
-			ret = EvalILNull(NULL, env, cctx);
+			ret = bc_EvalILNull(NULL, env, cctx);
 			break;
 		case ILFACTOR_AS_T:
-			ret = EvalILAs(self->Kind.As, env, cctx);
+			ret = bc_EvalILAs(self->Kind.As, env, cctx);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			ret = EvalILCallOp(self->Kind.Call, env, cctx);
+			ret = bc_EvalILCallOp(self->Kind.Call, env, cctx);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			ret = EvalILMemberOp(self->Kind.MemberOp, env, cctx);
+			ret = bc_EvalILMemberOp(self->Kind.MemberOp, env, cctx);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			ret = EvalILInstanceOf(self->Kind.InstanceOf, env, cctx);
+			ret = bc_EvalILInstanceOf(self->Kind.InstanceOf, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			ret = EvalILExplicitUnaryOp(self->Kind.ExpUnaryOp, env, cctx);
+			ret = bc_EvalILExplicitUnaryOp(self->Kind.ExpUnaryOp, env, cctx);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			ret = EvalILExplicitBinaryOp(self->Kind.ExpBinaryOp, env, cctx);
+			ret = bc_EvalILExplicitBinaryOp(self->Kind.ExpBinaryOp, env, cctx);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			ret = EvalILProperty(self->Kind.PropertyAccess, env, cctx);
+			ret = bc_EvalILProperty(self->Kind.PropertyAccess, env, cctx);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			ret = EvalILSubscript(self->Kind.Subscript, env, cctx);
+			ret = bc_EvalILSubscript(self->Kind.Subscript, env, cctx);
 			break;
 		default:
 			assert(false);
@@ -254,48 +254,48 @@ char* bc_ILFactorToString(bc_ILFactor* self, bc_Enviroment* env) {
 	}
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
-			return ILIntToString(self->Kind.Int, env);
+			return bc_ILIntToString(self->Kind.Int, env);
 		case ILFACTOR_DOUBLE_T:
-			return ILDoubleToString(self->Kind.Double, env);
+			return bc_ILDoubleToString(self->Kind.Double, env);
 		case ILFACTOR_CHAR_T:
-			return ILCharToString(self->Kind.Char, env);
+			return bc_ILCharToString(self->Kind.Char, env);
 		case ILFACTOR_STRING_T:
-			return ILStringToString(self->Kind.String, env);
+			return bc_ILStringToString(self->Kind.String, env);
 		case ILFACTOR_VARIABLE_T:
-			return ILVariableToString(self->Kind.Variable, env);
+			return bc_ILVariableToString(self->Kind.Variable, env);
 		case ILFACTOR_UNARY_OP_T:
-			return ILUnaryOpToString(self->Kind.UnaryOp, env);
+			return bc_ILUnaryOpToString(self->Kind.UnaryOp, env);
 		case ILFACTOR_BINARY_OP_T:
-			return ILBinaryOpToString(self->Kind.BinaryOp, env);
+			return bc_ILBinaryOpToString(self->Kind.BinaryOp, env);
 		case ILFACTOR_ASSIGN_T:
 			return NULL;
 		case ILFACTOR_THIS_T:
-			return ILThisToString(self->Kind.This, env);
+			return bc_ILThisToString(self->Kind.This, env);
 		case ILFACTOR_SUPER_T:
-			return ILSuperToString(self->Kind.Super, env);
+			return bc_ILSuperToString(self->Kind.Super, env);
 		case ILFACTOR_NEW_INSTANCE_T:
-			return ILNewInstanceToString(self->Kind.NewInstance, env);
+			return bc_ILNewInstanceToString(self->Kind.NewInstance, env);
 		case ILFACTOR_BOOL_T:
-			return ILBoolToString(self->Kind.Bool, env);
+			return bc_ILBoolToString(self->Kind.Bool, env);
 		case ILFACTOR_NULL_T:
-			return ILNullToString(self->Kind.Null, env);
+			return bc_ILNullToString(self->Kind.Null, env);
 		case ILFACTOR_AS_T:
-			return ILAsToString(self->Kind.As, env);
+			return bc_ILAsToString(self->Kind.As, env);
 		case ILFACTOR_CALL_OP_T:
-			return ILCallOpToString(self->Kind.Call, env);
+			return bc_ILCallOpToString(self->Kind.Call, env);
 		case ILFACTOR_MEMBER_OP_T:
-			return ILMemberOpToString(self->Kind.MemberOp, env);
+			return bc_ILMemberOpToString(self->Kind.MemberOp, env);
 		case ILFACTOR_INSTANCEOF_T:
-			return ILInstanceOfToString(self->Kind.InstanceOf, env);
+			return bc_ILInstanceOfToString(self->Kind.InstanceOf, env);
 		//あとで
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
 			return NULL;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
 			return NULL;
 		case ILFACTOR_PROPERTY_T:
-			return ILPropertyToString(self->Kind.PropertyAccess, env);
+			return bc_ILPropertyToString(self->Kind.PropertyAccess, env);
 		case ILFACTOR_SUBSCRIPT_T:
-			return ILSubscriptToString(self->Kind.Subscript, env);
+			return bc_ILSubscriptToString(self->Kind.Subscript, env);
 		default:
 			break;
 	}
@@ -343,66 +343,66 @@ void bc_DeleteILFactor(bc_ILFactor * self) {
 	}
 	switch (self->Type) {
 		case ILFACTOR_INT_T:
-			DeleteILInt(self->Kind.Int);
+			bc_DeleteILInt(self->Kind.Int);
 			break;
 		case ILFACTOR_DOUBLE_T:
-			DeleteILDouble(self->Kind.Double);
+			bc_DeleteILDouble(self->Kind.Double);
 			break;
 		case ILFACTOR_CHAR_T:
-			DeleteILChar(self->Kind.Char);
+			bc_DeleteILChar(self->Kind.Char);
 			break;
 		case ILFACTOR_STRING_T:
-			DeleteILString(self->Kind.String);
+			bc_DeleteILString(self->Kind.String);
 			break;
 		case ILFACTOR_VARIABLE_T:
-			DeleteILVariable(self->Kind.Variable);
+			bc_DeleteILVariable(self->Kind.Variable);
 			break;
 		case ILFACTOR_UNARY_OP_T:
-			DeleteILUnaryOp(self->Kind.UnaryOp);
+			bc_DeleteILUnaryOp(self->Kind.UnaryOp);
 			break;
 		case ILFACTOR_BINARY_OP_T:
-			DeleteILBinaryOp(self->Kind.BinaryOp);
+			bc_DeleteILBinaryOp(self->Kind.BinaryOp);
 			break;
 		case ILFACTOR_ASSIGN_T:
-			DeleteILAssignOp(self->Kind.AssignOp);
+			bc_DeleteILAssignOp(self->Kind.AssignOp);
 			break;
 		case ILFACTOR_THIS_T:
-			DeleteILThis(self->Kind.This);
+			bc_DeleteILThis(self->Kind.This);
 			break;
 		case ILFACTOR_SUPER_T:
-			DeleteILSuper(self->Kind.Super);
+			bc_DeleteILSuper(self->Kind.Super);
 			break;
 		case ILFACTOR_NEW_INSTANCE_T:
-			DeleteILNewInstance(self->Kind.NewInstance);
+			bc_DeleteILNewInstance(self->Kind.NewInstance);
 			break;
 		case ILFACTOR_BOOL_T:
-			DeleteILBool(self->Kind.Bool);
+			bc_DeleteILBool(self->Kind.Bool);
 			break;
 		case ILFACTOR_NULL_T:
 			break;
 		case ILFACTOR_AS_T:
-			DeleteILAs(self->Kind.As);
+			bc_DeleteILAs(self->Kind.As);
 			break;
 		case ILFACTOR_CALL_OP_T:
-			DeleteILCallOp(self->Kind.Call);
+			bc_DeleteILCallOp(self->Kind.Call);
 			break;
 		case ILFACTOR_MEMBER_OP_T:
-			DeleteILMemberOp(self->Kind.MemberOp);
+			bc_DeleteILMemberOp(self->Kind.MemberOp);
 			break;
 		case ILFACTOR_INSTANCEOF_T:
-			DeleteILInstanceOf(self->Kind.InstanceOf);
+			bc_DeleteILInstanceOf(self->Kind.InstanceOf);
 			break;
 		case ILFACTOR_EXPLICIT_UNARY_OP_T:
-			DeleteILExplicitUnaryOp(self->Kind.ExpUnaryOp);
+			bc_DeleteILExplicitUnaryOp(self->Kind.ExpUnaryOp);
 			break;
 		case ILFACTOR_EXPLICIT_BINARY_OP_T:
-			DeleteILExplicitBinaryOp(self->Kind.ExpBinaryOp);
+			bc_DeleteILExplicitBinaryOp(self->Kind.ExpBinaryOp);
 			break;
 		case ILFACTOR_PROPERTY_T:
-			DeleteILPropertyAccess(self->Kind.PropertyAccess);
+			bc_DeleteILPropertyAccess(self->Kind.PropertyAccess);
 			break;
 		case ILFACTOR_SUBSCRIPT_T:
-			DeleteILSubscript(self->Kind.Subscript);
+			bc_DeleteILSubscript(self->Kind.Subscript);
 			break;
 		default:
 			break;

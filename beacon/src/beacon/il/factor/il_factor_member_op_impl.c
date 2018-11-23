@@ -14,21 +14,21 @@
 #include "../../il/il_factor_impl.h"
 
 //proto
-static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bool* swap);
-static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type, bool* swap);
-static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
-static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
+static void ILMemberOp_check(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bool* swap);
+static void ILMemberOp_check_static(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type, bool* swap);
+static void ILMemberOp_check_prop(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
+static void ILMemberOp_check_static_prop(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap);
 static void ILMemberOp_typearg_delete(bc_VectorItem item);
 
-bc_ILFactor* WrapILMemberOp(ILMemberOp* self) {
+bc_ILFactor* bc_WrapILMemberOp(bc_ILMemberOp* self) {
 	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_MEMBER_OP_T);
 	ret->Kind.MemberOp = self;
 	self->Parent = ret;
 	return ret;
 }
 
-ILMemberOp* NewILMemberOp(bc_StringView namev) {
-	ILMemberOp* ret = (ILMemberOp*)MEM_MALLOC(sizeof(ILMemberOp));
+bc_ILMemberOp* bc_NewILMemberOp(bc_StringView namev) {
+	bc_ILMemberOp* ret = (bc_ILMemberOp*)MEM_MALLOC(sizeof(bc_ILMemberOp));
 	ret->Source = NULL;
 	ret->TypeArgs = bc_NewVector();
 	ret->Name = namev;
@@ -37,20 +37,20 @@ ILMemberOp* NewILMemberOp(bc_StringView namev) {
 	return ret;
 }
 
-void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bool swap;
 	bc_LoadILFactor(self->Source, env, cctx);
 	ILMemberOp_check(self, env, cctx, &swap);
 }
 
-void GenerateILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(!bc_IsStaticModifier(self->Field->Modifier)) {
 		bc_GenerateILFactor(self->Source, env, cctx);
 	}
 	bc_GenerateGetField(env->Bytecode, self->Field, self->Index);
 }
 
-bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	//ILMemberOp_checkは、
 	//フィールドアクセスとプロパティアクセスを区別して、
 	//プロパティなら木構造を入れ替える
@@ -71,7 +71,7 @@ bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallCont
 	return bc_AtVector(a->TypeArgs, self->Field->GType->VirtualTypeIndex);
 }
 
-char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env) {
+char* bc_ILMemberOpToString(bc_ILMemberOp* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
 	char* name = bc_ILFactorToString(self->Source, env);
 	bc_AppendsBuffer(sb, name);
@@ -81,13 +81,13 @@ char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env) {
 	return bc_ReleaseBuffer(sb);
 }
 
-void DeleteILMemberOp(ILMemberOp* self) {
+void bc_DeleteILMemberOp(bc_ILMemberOp* self) {
 	bc_DeleteILFactor(self->Source);
 	bc_DeleteVector(self->TypeArgs, ILMemberOp_typearg_delete);
 	MEM_FREE(self);
 }
 //private
-static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bool* swap) {
+static void ILMemberOp_check(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bool* swap) {
 	(*swap) = false;
 	if(self->Index != -1) {
 		return;
@@ -121,9 +121,9 @@ static void ILMemberOp_check(ILMemberOp* self, bc_Enviroment* env, bc_CallContex
 	}
 }
 
-static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type, bool* swap) {
+static void ILMemberOp_check_static(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type, bool* swap) {
 	bc_ILFactor* fact = self->Source;
-	ILVariable* ilvar = fact->Kind.Variable;
+	bc_ILVariable* ilvar = fact->Kind.Variable;
 	#if defined(DEBUG)
 	const char* ilvarname = bc_Ref2Str(ilvar->Kind.Static->FQCN->Name);
 	#endif
@@ -143,14 +143,14 @@ static void ILMemberOp_check_static(ILMemberOp* self, bc_Enviroment* env, bc_Cal
 	}
 }
 
-static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
+static void ILMemberOp_check_prop(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	#if defined(DEBUG)
 	const char* name = bc_Ref2Str(self->Name);
 	#endif
 	bc_Type* ctype = receiver_type->CoreType;
 	bc_Property* p = bc_FindTreePropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
-	ILPropertyAccess* factp = NewILPropertyAccess();
+	bc_ILPropertyAccess* factp = bc_NewILPropertyAccess();
 	factp->Source = self->Source;
 	factp->Name = self->Name;
 	factp->Property = p;
@@ -168,15 +168,15 @@ static void ILMemberOp_check_prop(ILMemberOp* self, bc_Enviroment* env, bc_CallC
 		bc_DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	}
-	DeleteILMemberOp(self);
+	bc_DeleteILMemberOp(self);
 	(*swap) = true;
 }
 
-static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
+static void ILMemberOp_check_static_prop(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_GenericType* receiver_type,bool* swap) {
 	int temp = -1;
 	bc_Type* ctype = receiver_type->CoreType;
 	bc_Property* p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
-	ILPropertyAccess* factp = NewILPropertyAccess();
+	bc_ILPropertyAccess* factp = bc_NewILPropertyAccess();
 	factp->Source = self->Source;
 	factp->Name = self->Name;
 	factp->Property = p;
@@ -190,7 +190,7 @@ static void ILMemberOp_check_static_prop(ILMemberOp* self, bc_Enviroment* env, b
 		bc_DeleteILFactor(factp->Source);
 		factp->Source = NULL;
 	}
-	DeleteILMemberOp(self);
+	bc_DeleteILMemberOp(self);
 	assert(temp != -1);
 	(*swap) = true;
 	assert(temp != -1);

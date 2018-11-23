@@ -18,16 +18,16 @@
 #include "binary/il_factor_shift_op_impl.h"
 #include "binary/il_factor_excor_op_impl.h"
 
-static bool type_test(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_Type* t);
+static bool type_test(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_Type* t);
 
-bc_ILFactor * WrapILBinaryOp(ILBinaryOp * self) {
+bc_ILFactor * bc_WrapILBinaryOp(bc_ILBinaryOp * self) {
 	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_BINARY_OP_T);
 	ret->Kind.BinaryOp = self;
 	return ret;
 }
 
-ILBinaryOp * NewILBinaryOp(bc_OperatorType type) {
-	ILBinaryOp* ret = (ILBinaryOp*)MEM_MALLOC(sizeof(ILBinaryOp));
+bc_ILBinaryOp * bc_NewILBinaryOp(bc_OperatorType type) {
+	bc_ILBinaryOp* ret = (bc_ILBinaryOp*)MEM_MALLOC(sizeof(bc_ILBinaryOp));
 	ret->Type = type;
 	ret->Left = NULL;
 	ret->Right = NULL;
@@ -35,7 +35,7 @@ ILBinaryOp * NewILBinaryOp(bc_OperatorType type) {
 	return ret;
 }
 
-void GenerateILBinaryOp(ILBinaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILBinaryOp(bc_ILBinaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
 			GenerateILArithmeticOp(self->Kind.ArithmeticOp, env, cctx);
@@ -55,7 +55,7 @@ void GenerateILBinaryOp(ILBinaryOp * self, bc_Enviroment* env, bc_CallContext* c
 	}
 }
 
-void LoadILBinaryOp(ILBinaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILBinaryOp(bc_ILBinaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(self->IsLoaded) {
 		return;
 	}
@@ -100,8 +100,8 @@ void LoadILBinaryOp(ILBinaryOp * self, bc_Enviroment * env, bc_CallContext* cctx
 	}
 }
 
-bc_GenericType* EvalILBinaryOp(ILBinaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
-	LoadILBinaryOp(self, env, cctx);
+bc_GenericType* bc_EvalILBinaryOp(bc_ILBinaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_LoadILBinaryOp(self, env, cctx);
 	bc_GenericType* ret = NULL;
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
@@ -124,7 +124,7 @@ bc_GenericType* EvalILBinaryOp(ILBinaryOp * self, bc_Enviroment * env, bc_CallCo
 	return ret;
 }
 
-char* ILBinaryOpToString(ILBinaryOp* self, bc_Enviroment* env) {
+char* bc_ILBinaryOpToString(bc_ILBinaryOp* self, bc_Enviroment* env) {
 	char* ret = NULL;
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
@@ -147,7 +147,7 @@ char* ILBinaryOpToString(ILBinaryOp* self, bc_Enviroment* env) {
 	return ret;
 }
 
-void DeleteILBinaryOp(ILBinaryOp * self) {
+void bc_DeleteILBinaryOp(bc_ILBinaryOp * self) {
 	switch(self->Category) {
 		case OPERATOR_CARITHMERIC_T:
 			DeleteILArithmeticOp(self->Kind.ArithmeticOp);
@@ -170,7 +170,7 @@ void DeleteILBinaryOp(ILBinaryOp * self) {
 	MEM_FREE(self);
 }
 
-char* ILBinaryOpToString_simple(ILBinaryOp* self, bc_Enviroment* env) {
+char* bc_ILBinaryOpToStringSimple(bc_ILBinaryOp* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
 	char* a = bc_ILFactorToString(self->Left, env);
 	char* b = bc_ILFactorToString(self->Right, env);
@@ -182,31 +182,31 @@ char* ILBinaryOpToString_simple(ILBinaryOp* self, bc_Enviroment* env) {
 	return bc_ReleaseBuffer(sb);
 }
 
-bool IsIntIntBinaryOp(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bool bc_IsIntIntBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return type_test(self, env, cctx, BC_TYPE_INT);
 }
 
-bool IsDoubleDoubleBinaryOp(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bool bc_IsDoubleDoubleBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return type_test(self, env, cctx, BC_TYPE_DOUBLE);
 }
 
-bool IsBoolBoolBinaryOp(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bool bc_IsBoolBoolBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return type_test(self, env, cctx, BC_TYPE_BOOL);
 }
 
-bool IsCharCharBinaryOp(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bool bc_IsCharCharBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return type_test(self, env, cctx, BC_TYPE_CHAR);
 }
 
-int GetIndexILBinaryOp(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	if(IsIntIntBinaryOp(self, env, cctx) ||
-	  IsDoubleDoubleBinaryOp(self, env, cctx)) {
+int bc_GetIndexILBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	if(bc_IsIntIntBinaryOp(self, env, cctx) ||
+	  bc_IsDoubleDoubleBinaryOp(self, env, cctx)) {
 		  return -1;
 	}
-	return GetIndexILBinaryOp2(self->Left, self->Right, self->Type, env, cctx);
+	return bc_GetIndexILBinaryOp2(self->Left, self->Right, self->Type, env, cctx);
 }
 
-int GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx) {
+int bc_GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Vector* args = bc_NewVector();
 	bc_GenericType* lgtype = bc_EvalILFactor(receiver, env, cctx);
 	bc_GenericType* rgtype = bc_EvalILFactor(arg, env, cctx);
@@ -225,7 +225,7 @@ int GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg, bc_OperatorType
 	return temp;
 }
 
-bc_GenericType* ApplyILBinaryOp(ILBinaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_ApplyILBinaryOp(bc_ILBinaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* lgtype = bc_EvalILFactor(self->Left, env, cctx);
 	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;
@@ -235,7 +235,7 @@ bc_GenericType* ApplyILBinaryOp(ILBinaryOp* self, bc_GenericType* gtype, bc_Envi
 }
 
 //private
-static bool type_test(ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_Type* t) {
+static bool type_test(bc_ILBinaryOp* self, bc_Enviroment* env, bc_CallContext* cctx, bc_Type* t) {
 	bc_GenericType* lgtype = bc_EvalILFactor(self->Left, env, cctx);
 	bc_GenericType* rgtype = bc_EvalILFactor(self->Right, env, cctx);
 	return bc_GENERIC2TYPE(lgtype) == t &&

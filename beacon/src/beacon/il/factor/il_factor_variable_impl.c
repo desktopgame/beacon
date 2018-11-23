@@ -13,26 +13,26 @@
 #include <string.h>
 
 //proto
-static void ILVariable_check(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
-static void ILVariable_check_instance(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
-static void ILVariable_check_static(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILVariable_check(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILVariable_check_instance(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
+static void ILVariable_check_static(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx);
 static void DeleteILFactor_typeargs(bc_VectorItem item);
 
-bc_ILFactor * WrapILVariable(ILVariable * self) {
+bc_ILFactor * bc_WrapILVariable(bc_ILVariable * self) {
 	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_VARIABLE_T);
 	ret->Kind.Variable = self;
 	return ret;
 }
 
-ILVariable * MallocILVariable(const char* filename, int lineno) {
-	ILVariable* ret = (ILVariable*)bc_MXMalloc(sizeof(ILVariable), filename, lineno);
+bc_ILVariable * bc_MallocILVariable(const char* filename, int lineno) {
+	bc_ILVariable* ret = (bc_ILVariable*)bc_MXMalloc(sizeof(bc_ILVariable), filename, lineno);
 	ret->FQCN = bc_MallocFQCNCache(filename, lineno);
 	ret->TypeArgs = bc_MallocVector(filename, lineno);
 	ret->Type = ILVARIABLE_TYPE_UNDEFINED_T;
 	return ret;
 }
 
-void GenerateILVariable(ILVariable * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILVariable(bc_ILVariable * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILVariable_check(self, env, cctx);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		GenerateILVariableLocal(self->Kind.Local, env, cctx);
@@ -41,7 +41,7 @@ void GenerateILVariable(ILVariable * self, bc_Enviroment* env, bc_CallContext* c
 	}
 }
 
-void LoadILVariable(ILVariable * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILVariable(bc_ILVariable * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	ILVariable_check(self, env, cctx);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		LoadILVariableLocal(self->Kind.Local, env, cctx);
@@ -50,7 +50,7 @@ void LoadILVariable(ILVariable * self, bc_Enviroment * env, bc_CallContext* cctx
 	}
 }
 
-bc_GenericType* EvalILVariable(ILVariable * self, bc_Enviroment * env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILVariable(bc_ILVariable * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	ILVariable_check(self, env, cctx);
 	bc_GenericType* ret = NULL;
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
@@ -61,7 +61,7 @@ bc_GenericType* EvalILVariable(ILVariable * self, bc_Enviroment * env, bc_CallCo
 	return ret;
 }
 
-char* ILVariableToString(ILVariable* self, bc_Enviroment* env) {
+char* bc_ILVariableToString(bc_ILVariable* self, bc_Enviroment* env) {
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		return ILVariableLocalToString(self->Kind.Local, env);
 	} else if(self->Type == ILVARIABLE_TYPE_STATIC_T) {
@@ -70,7 +70,7 @@ char* ILVariableToString(ILVariable* self, bc_Enviroment* env) {
 	return NULL;
 }
 
-void DeleteILVariable(ILVariable * self) {
+void bc_DeleteILVariable(bc_ILVariable * self) {
 	//MEM_FREE(self->name);
 	if(self->Type == ILVARIABLE_TYPE_LOCAL_T) {
 		DeleteILVariableLocal(self->Kind.Local);
@@ -83,7 +83,7 @@ void DeleteILVariable(ILVariable * self) {
 }
 
 //private
-static void ILVariable_check(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
+static void ILVariable_check(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	if(self->Type != ILVARIABLE_TYPE_UNDEFINED_T) {
 		return;
 	}
@@ -97,7 +97,7 @@ static void ILVariable_check(ILVariable* self, bc_Enviroment* env, bc_CallContex
 	}
 }
 
-static void ILVariable_check_instance(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
+static void ILVariable_check_instance(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Namespace* cur = bc_GetNamespaceCContext(cctx);
 	bc_Class* ctype = bc_FindClassFromNamespace(cur, self->FQCN->Name);
 	if(ctype == NULL) {
@@ -117,7 +117,7 @@ static void ILVariable_check_instance(ILVariable* self, bc_Enviroment* env, bc_C
 	}
 }
 
-static void ILVariable_check_static(ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
+static void ILVariable_check_static(bc_ILVariable* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	ILVariableStatic* st = NewILVariableStatic();
 	self->Type = ILVARIABLE_TYPE_STATIC_T;
 	//値を入れ替え

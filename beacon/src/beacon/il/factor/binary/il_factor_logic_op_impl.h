@@ -12,11 +12,11 @@
 #include "../../../ast/operator_type.h"
 #include "../../call_context.h"
 
-struct ILBinaryOp;
+struct bc_ILBinaryOp;
 struct bc_GenericType;
 struct bc_Enviroment;
 typedef struct ILLogicOp {
-	struct ILBinaryOp* Parent;
+	struct bc_ILBinaryOp* Parent;
 	bc_OperatorType Type;
 	int OperatorIndex;
 } ILLogicOp;

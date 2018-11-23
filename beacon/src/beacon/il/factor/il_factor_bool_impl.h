@@ -18,20 +18,20 @@ struct bc_Type;
 /**
  * boolリテラルを表す要素.
  */
-typedef struct ILBool {
+typedef struct bc_ILBool {
 	bool Value;
-} ILBool;
+} bc_ILBool;
 
-bc_ILFactor* WrapILBool(ILBool* self);
+bc_ILFactor* bc_WrapILBool(bc_ILBool* self);
 
-ILBool* NewILBool(bool b);
+bc_ILBool* bc_NewILBool(bool b);
 
-void GenerateILBool(ILBool* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILBool(bc_ILBool* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILBool(ILBool* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILBool(bc_ILBool* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILBoolToString(ILBool* self, bc_Enviroment* env);
+char* bc_ILBoolToString(bc_ILBool* self, bc_Enviroment* env);
 
-void DeleteILBool(ILBool* self);
+void bc_DeleteILBool(bc_ILBool* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_BOOL_H

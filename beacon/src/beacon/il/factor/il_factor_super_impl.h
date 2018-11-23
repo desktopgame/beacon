@@ -19,19 +19,19 @@ struct bc_Type;
  * superを表す要素.
  */
 
-typedef struct ILSuper {
+typedef struct bc_ILSuper {
 	bc_GenericType* Resolved;
-} ILSuper;
+} bc_ILSuper;
 
-ILSuper* NewILSuper();
+bc_ILSuper* bc_NewILSuper();
 
-void GenerateILSuper(ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILSuper(bc_ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILSuper(ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILSuper(bc_ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILSuper(ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILSuper(bc_ILSuper* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILSuperToString(ILSuper* self, struct bc_Enviroment* env);
+char* bc_ILSuperToString(bc_ILSuper* self, struct bc_Enviroment* env);
 
-void DeleteILSuper(ILSuper* self);
+void bc_DeleteILSuper(bc_ILSuper* self);
 #endif // !SIGNAL_IL_IL_FACTOR_SUPER_H

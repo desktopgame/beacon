@@ -11,14 +11,14 @@
 #include "unary/il_factor_negative_op_impl.h"
 #include "unary/il_factor_not_op_impl.h"
 
-bc_ILFactor * WrapILUnaryOp(ILUnaryOp * self) {
+bc_ILFactor * bc_WrapILUnaryOp(bc_ILUnaryOp * self) {
 	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_UNARY_OP_T);
 	ret->Kind.UnaryOp = self;
 	return ret;
 }
 
-ILUnaryOp * NewILUnaryOp(bc_OperatorType type) {
-	ILUnaryOp* ret = (ILUnaryOp*)MEM_MALLOC(sizeof(ILUnaryOp));
+bc_ILUnaryOp * bc_NewILUnaryOp(bc_OperatorType type) {
+	bc_ILUnaryOp* ret = (bc_ILUnaryOp*)MEM_MALLOC(sizeof(bc_ILUnaryOp));
 	ret->Type = type;
 	ret->Arg = NULL;
 	if(type == OPERATOR_NOT_T) ret->Kind.NotOp = NULL;
@@ -27,7 +27,7 @@ ILUnaryOp * NewILUnaryOp(bc_OperatorType type) {
 	return ret;
 }
 
-void GenerateILUnaryOp(ILUnaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILUnaryOp(bc_ILUnaryOp * self, bc_Enviroment* env, bc_CallContext* cctx) {
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
 			GenerateILNotOp(self->Kind.NotOp, env, cctx);
@@ -41,7 +41,7 @@ void GenerateILUnaryOp(ILUnaryOp * self, bc_Enviroment* env, bc_CallContext* cct
 	}
 }
 
-void LoadILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILUnaryOp(bc_ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(self->Type == OPERATOR_NOT_T && self->Kind.NotOp != NULL) return;
 	if(self->Type == OPERATOR_CHILDA_T && self->Kind.ChildaOp != NULL) return;
 	if(self->Type == OPERATOR_NEGATIVE_T && self->Kind.NegativeOp != NULL) return;
@@ -70,8 +70,8 @@ void LoadILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) 
 	}
 }
 
-bc_GenericType* EvalILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
-	LoadILUnaryOp(self, env, cctx);
+bc_GenericType* bc_EvalILUnaryOp(bc_ILUnaryOp * self, bc_Enviroment * env, bc_CallContext* cctx) {
+	bc_LoadILUnaryOp(self, env, cctx);
 	bc_GenericType* ret = NULL;
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
@@ -87,7 +87,7 @@ bc_GenericType* EvalILUnaryOp(ILUnaryOp * self, bc_Enviroment * env, bc_CallCont
 	return ret;
 }
 
-char* ILUnaryOpToString(ILUnaryOp* self, bc_Enviroment* env) {
+char* bc_ILUnaryOpToString(bc_ILUnaryOp* self, bc_Enviroment* env) {
 	char* ret = NULL;
 	switch(self->Type) {
 		case OPERATOR_NOT_T:
@@ -103,7 +103,7 @@ char* ILUnaryOpToString(ILUnaryOp* self, bc_Enviroment* env) {
 	return ret;
 }
 
-void DeleteILUnaryOp(ILUnaryOp * self) {
+void bc_DeleteILUnaryOp(bc_ILUnaryOp * self) {
 	if(self == NULL) {
 		return;
 	}
@@ -122,7 +122,7 @@ void DeleteILUnaryOp(ILUnaryOp * self) {
 	MEM_FREE(self);
 }
 
-char* ILUnaryOpToString_simple(ILUnaryOp* self, bc_Enviroment* env) {
+char* bc_ILUnaryOpToStringSimple(bc_ILUnaryOp* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
 	char* a = bc_ILFactorToString(self->Arg, env);
 	bc_AppendfBuffer(sb, "%s", bc_OperatorToString(self->Type));
@@ -131,11 +131,11 @@ char* ILUnaryOpToString_simple(ILUnaryOp* self, bc_Enviroment* env) {
 	return bc_ReleaseBuffer(sb);
 }
 
-int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	return GetIndexILUnaryOp2(self->Arg, self->Type, env, cctx);
+int bc_GetIndexILUnaryOp(bc_ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
+	return bc_GetIndexILUnaryOp2(self->Arg, self->Type, env, cctx);
 }
 
-int GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx) {
+int bc_GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_Vector* args = bc_NewVector();
 	bc_GenericType* gtype = bc_EvalILFactor(receiver, env, cctx);
 	if(gtype->VirtualTypeIndex != -1) {
@@ -148,7 +148,7 @@ int GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype, bc_Envirome
 	return temp;
 }
 
-bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_ApplyILUnaryOp(bc_ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* lgtype = bc_EvalILFactor(self->Arg, env, cctx);
 	bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
 	cfr->Kind.InstanceInvoke.Receiver = lgtype;

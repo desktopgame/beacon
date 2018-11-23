@@ -22,7 +22,7 @@ struct ILNotOp;
 /**
  * 単項演算子を表す要素.
  */
-typedef struct ILUnaryOp {
+typedef struct bc_ILUnaryOp {
 	bc_OperatorType Type;
 	bc_OperatorCategory Category;
 	bc_ILFactor* Arg;
@@ -31,27 +31,27 @@ typedef struct ILUnaryOp {
 		struct ILNegativeOp* NegativeOp;
 		struct ILNotOp* NotOp;
 	} Kind;
-} ILUnaryOp;
+} bc_ILUnaryOp;
 
-bc_ILFactor* WrapILUnaryOp(ILUnaryOp* self);
+bc_ILFactor* bc_WrapILUnaryOp(bc_ILUnaryOp* self);
 
-ILUnaryOp* NewILUnaryOp(bc_OperatorType type);
+bc_ILUnaryOp* bc_NewILUnaryOp(bc_OperatorType type);
 
-void GenerateILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILUnaryOp(bc_ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILUnaryOp(bc_ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILUnaryOp(bc_ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILUnaryOpToString(ILUnaryOp* self, bc_Enviroment* env);
+char* bc_ILUnaryOpToString(bc_ILUnaryOp* self, bc_Enviroment* env);
 
-void DeleteILUnaryOp(ILUnaryOp* self);
+void bc_DeleteILUnaryOp(bc_ILUnaryOp* self);
 
-char* ILUnaryOpToString_simple(ILUnaryOp* self, bc_Enviroment* env);
+char* bc_ILUnaryOpToStringSimple(bc_ILUnaryOp* self, bc_Enviroment* env);
 
-int GetIndexILUnaryOp(ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+int bc_GetIndexILUnaryOp(bc_ILUnaryOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-int GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx);
+int bc_GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* ApplyILUnaryOp(ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_ApplyILUnaryOp(bc_ILUnaryOp* self, bc_GenericType* gtype, bc_Enviroment* env, bc_CallContext* cctx);
 #endif // !SIGNAL_IL_IL_FACTOR_UNARY_OP_H

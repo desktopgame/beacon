@@ -21,7 +21,7 @@ struct bc_Constructor;
 /**
  * コンストラクタの呼び出しを表す要素.
  */
-typedef struct ILNewInstance {
+typedef struct bc_ILNewInstance {
 	bc_Vector* Arguments;
 	bc_FQCNCache* FQCNCache;
 	bc_Vector* TypeArgs;
@@ -29,20 +29,20 @@ typedef struct ILNewInstance {
 	bc_GenericType* InstanceGType;
 	struct bc_Constructor* Constructor;
 	int ConstructorIndex;
-} ILNewInstance;
+} bc_ILNewInstance;
 
-bc_ILFactor* WrapILNewInstance(ILNewInstance* self);
+bc_ILFactor* bc_WrapILNewInstance(bc_ILNewInstance* self);
 
-ILNewInstance* NewILNewInstance();
+bc_ILNewInstance* bc_NewILNewInstance();
 
-void GenerateILNewInstance(ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILNewInstance(bc_ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILNewInstance(ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILNewInstance(bc_ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILNewInstance(ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILNewInstance(bc_ILNewInstance* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILNewInstanceToString(ILNewInstance* self, bc_Enviroment* env);
+char* bc_ILNewInstanceToString(bc_ILNewInstance* self, bc_Enviroment* env);
 
-void DeleteILNewInstance(ILNewInstance* self);
+void bc_DeleteILNewInstance(bc_ILNewInstance* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_NEW_INSTANCE_H

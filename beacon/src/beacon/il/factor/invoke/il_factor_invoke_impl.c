@@ -146,7 +146,7 @@ static void ILInvoke_check(ILInvoke * self, bc_Enviroment * env, bc_CallContext*
 		return;
 	}
 	if(self->receiver->Type == ILFACTOR_VARIABLE_T) {
-		ILVariable* ilvar = self->receiver->Kind.Variable;
+		bc_ILVariable* ilvar = self->receiver->Kind.Variable;
 		assert(ilvar->Type != ILVARIABLE_TYPE_STATIC_T);
 	}
 	//レシーバの型を評価

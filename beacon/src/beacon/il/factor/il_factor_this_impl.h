@@ -17,19 +17,19 @@ struct bc_Type;
 /**
  * thisを表す要素.
  */
-typedef struct ILThis {
+typedef struct bc_ILThis {
 	bc_GenericType* Resolved;
-} ILThis;
+} bc_ILThis;
 
-ILThis* NewILThis();
+bc_ILThis* bc_NewILThis();
 
-void GenerateILThis(ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILThis(bc_ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILThis(ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILThis(bc_ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILThis(ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILThis(bc_ILThis* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILThisToString(ILThis* self, struct bc_Enviroment* env);
+char* bc_ILThisToString(bc_ILThis* self, struct bc_Enviroment* env);
 
-void DeleteILThis(ILThis* self);
+void bc_DeleteILThis(bc_ILThis* self);
 #endif // !SIGNAL_IL_IL_FACTOR_THIS_H

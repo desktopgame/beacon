@@ -21,9 +21,9 @@ ILLogicOp* NewILLogicOp(bc_OperatorType type) {
 }
 
 bc_GenericType* EvalILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+	if(bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 		return bc_TYPE2GENERIC(BC_TYPE_INT);
-	} else if(IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
+	} else if(bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
 		return bc_TYPE2GENERIC(BC_TYPE_BOOL);
 	} else {
 		bc_GenericType* lgtype = bc_EvalILFactor(self->Parent->Left, env, cctx);
@@ -37,7 +37,7 @@ bc_GenericType* EvalILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContex
 			return NULL;
 		}
 		bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)), self->OperatorIndex);
-		return ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
+		return bc_ApplyILBinaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 	}
 }
 
@@ -45,9 +45,9 @@ void GenerateILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Right, env, cctx);
 		bc_GenerateILFactor(self->Parent->Left, env, cctx);
-		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+		if(bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_iopcode(self->Type));
-		} else if(IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
+		} else if(bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_bopcode(self->Type));
 		} else {
 			assert(false);
@@ -61,9 +61,9 @@ void GenerateILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx
 }
 
 void LoadILLogicOp(ILLogicOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	if(!IsIntIntBinaryOp(self->Parent, env, cctx) &&
-	   !IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
-	self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);
+	if(!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+	   !bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
+	self->OperatorIndex = bc_GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -72,7 +72,7 @@ void DeleteILLogicOp(ILLogicOp* self) {
 }
 
 char* ILLogicOpToString(ILLogicOp* self, bc_Enviroment* env) {
-	return ILBinaryOpToString_simple(self->Parent, env);
+	return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }
 //static
 static bc_Opcode operator_to_iopcode(bc_OperatorType type) {

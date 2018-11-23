@@ -11,20 +11,20 @@
 #define BEACON_IL_IL_FACTOR_ASSIGN_OP_IMPL_H
 #include "../il_factor_interface.h"
 struct bc_GenericType;
-typedef struct ILAssignOp {
+typedef struct bc_ILAssignOp {
 	bc_ILFactor* Left;
 	bc_ILFactor* Right;
-} ILAssignOp;
+} bc_ILAssignOp;
 
-bc_ILFactor* WrapILAssignOp(ILAssignOp* self);
+bc_ILFactor* bc_WrapILAssignOp(bc_ILAssignOp* self);
 
-ILAssignOp* NewILAssignOp();
+bc_ILAssignOp* bc_NewILAssignOp();
 
-void LoadILAssignOp(ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILAssignOp(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILAssignOp(ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILAssignOp(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILAssignOp(ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILAssignOp(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILAssignOp(ILAssignOp* self);
+void bc_DeleteILAssignOp(bc_ILAssignOp* self);
 #endif

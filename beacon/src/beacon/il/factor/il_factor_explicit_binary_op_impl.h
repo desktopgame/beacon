@@ -15,22 +15,22 @@ struct bc_ILFactor;
 struct bc_Enviroment;
 struct bc_GenericType;
 
-typedef struct ILExplicitBinaryOp {
+typedef struct bc_ILExplicitBinaryOp {
 	struct bc_ILFactor* Receiver;
 	struct bc_ILFactor* Arg;
 	bc_OperatorType Type;
 	int Index;
-} ILExplicitBinaryOp;
+} bc_ILExplicitBinaryOp;
 
-struct bc_ILFactor* WrapILExplicitBinaryOp(ILExplicitBinaryOp* self);
+struct bc_ILFactor* bc_WrapILExplicitBinaryOp(bc_ILExplicitBinaryOp* self);
 
-ILExplicitBinaryOp* NewILExplicitBinaryOp(bc_OperatorType type);
+bc_ILExplicitBinaryOp* bc_NewILExplicitBinaryOp(bc_OperatorType type);
 
-void GenerateILExplicitBinaryOp(ILExplicitBinaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILExplicitBinaryOp(bc_ILExplicitBinaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILExplicitBinaryOp(ILExplicitBinaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILExplicitBinaryOp(bc_ILExplicitBinaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-struct bc_GenericType* EvalILExplicitBinaryOp(ILExplicitBinaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
+struct bc_GenericType* bc_EvalILExplicitBinaryOp(bc_ILExplicitBinaryOp* self, struct bc_Enviroment* env, bc_CallContext* cctx);
 
-void DeleteILExplicitBinaryOp(ILExplicitBinaryOp* self);
+void bc_DeleteILExplicitBinaryOp(bc_ILExplicitBinaryOp* self);
 #endif

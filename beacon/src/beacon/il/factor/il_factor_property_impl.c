@@ -8,8 +8,8 @@
 #include <assert.h>
 
 
-ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno) {
-	ILPropertyAccess* ret = bc_MXMalloc(sizeof(ILPropertyAccess), filename, lineno);
+bc_ILPropertyAccess* bc_MallocILPropertyAccess(const char* filename, int lineno) {
+	bc_ILPropertyAccess* ret = bc_MXMalloc(sizeof(bc_ILPropertyAccess), filename, lineno);
 	ret->Source = NULL;
 	ret->Index = -1;
 	ret->Name = BC_ZERO_VIEW;
@@ -17,12 +17,12 @@ ILPropertyAccess* MallocILPropertyAccess(const char* filename, int lineno) {
 	return ret;
 }
 
-void GenerateILPropertyAccess(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILPropertyAccess(bc_ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenerateILFactor(self->Source, env, cctx);
 	bc_GenerateGetProperty(env->Bytecode, self->Property, self->Index);
 }
 
-void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILProperty(bc_ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* receiver = bc_EvalILFactor(self->Source, env, cctx);
 	bc_Type* receiverT = bc_GENERIC2TYPE(receiver);
 	int temp = -1;
@@ -37,11 +37,11 @@ void LoadILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* 
 	}
 }
 
-bc_GenericType* EvalILProperty(ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILProperty(bc_ILPropertyAccess* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return self->Property->GType;
 }
 
-char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env) {
+char* bc_ILPropertyToString(bc_ILPropertyAccess* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
 	char* name = bc_ILFactorToString(self->Source, env);
 	bc_AppendsBuffer(sb, name);
@@ -51,7 +51,7 @@ char* ILPropertyToString(ILPropertyAccess* self, bc_Enviroment* env) {
 	return bc_ReleaseBuffer(sb);
 }
 
-void DeleteILPropertyAccess(ILPropertyAccess* self) {
+void bc_DeleteILPropertyAccess(bc_ILPropertyAccess* self) {
 	bc_DeleteILFactor(self->Source);
 	MEM_FREE(self);
 }

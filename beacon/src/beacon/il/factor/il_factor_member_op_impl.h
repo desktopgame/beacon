@@ -21,27 +21,27 @@ struct bc_Field;
 /**
  * メンバアクセスを表す要素.
  */
-typedef struct ILMemberOp {
+typedef struct bc_ILMemberOp {
 	bc_ILFactor* Parent;
 	bc_ILFactor* Source;
 	bc_StringView Name;
 	bc_Vector* TypeArgs;
 	int Index;
 	struct bc_Field* Field;
-} ILMemberOp;
+} bc_ILMemberOp;
 
-bc_ILFactor* WrapILMemberOp(ILMemberOp* self);
+bc_ILFactor* bc_WrapILMemberOp(bc_ILMemberOp* self);
 
-ILMemberOp* NewILMemberOp(bc_StringView namev);
+bc_ILMemberOp* bc_NewILMemberOp(bc_StringView namev);
 
-void LoadILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void GenerateILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILMemberOp(ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILMemberOpToString(ILMemberOp* self, bc_Enviroment* env);
+char* bc_ILMemberOpToString(bc_ILMemberOp* self, bc_Enviroment* env);
 
-void DeleteILMemberOp(ILMemberOp* self);
+void bc_DeleteILMemberOp(bc_ILMemberOp* self);
 
 #endif

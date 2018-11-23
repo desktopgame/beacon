@@ -17,24 +17,24 @@
 /**
  * 整数リテラルを表す要素.
  */
-typedef struct ILInt {
+typedef struct bc_ILInt {
 	int32_t Value;
 	int Count;
-} ILInt;
+} bc_ILInt;
 
-bc_ILFactor* WrapILInt(ILInt* self);
+bc_ILFactor* bc_WrapILInt(bc_ILInt* self);
 
-#define NewILInt(i) (MallocILInt(i, __FILE__, __LINE__))
-ILInt* MallocILInt(int32_t i, const char* filename, int lineno);
+#define bc_NewILInt(i) (bc_MallocILInt(i, __FILE__, __LINE__))
+bc_ILInt* bc_MallocILInt(int32_t i, const char* filename, int lineno);
 
-void GenerateILInt(ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_GenerateILInt(bc_ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-void LoadILInt(ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
+void bc_LoadILInt(bc_ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-bc_GenericType* EvalILInt(ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
+bc_GenericType* bc_EvalILInt(bc_ILInt* self, bc_Enviroment* env, bc_CallContext* cctx);
 
-char* ILIntToString(ILInt* self, bc_Enviroment* env);
+char* bc_ILIntToString(bc_ILInt* self, bc_Enviroment* env);
 
-void DeleteILInt(ILInt* self);
+void bc_DeleteILInt(bc_ILInt* self);
 
 #endif // !SIGNAL_IL_IL_FACTOR_INT_H

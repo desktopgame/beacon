@@ -8,24 +8,24 @@
 #include "../../util/mem.h"
 #include "../../util/text.h"
 
-bc_ILFactor* WrapILInstanceOf(ILInstanceOf* self) {
+bc_ILFactor* bc_WrapILInstanceOf(bc_ILInstanceOf* self) {
 	bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_INSTANCEOF_T);
 	ret->Kind.InstanceOf = self;
 	return ret;
 }
 
-ILInstanceOf* NewILInstanceOf() {
-	ILInstanceOf* ret = (ILInstanceOf*)MEM_MALLOC(sizeof(ILInstanceOf));
+bc_ILInstanceOf* bc_NewILInstanceOf() {
+	bc_ILInstanceOf* ret = (bc_ILInstanceOf*)MEM_MALLOC(sizeof(bc_ILInstanceOf));
 	ret->Source = NULL;
 	ret->GCache = bc_NewGenericCache();
 	return ret;
 }
 
-void LoadILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_LoadILInstanceOf(bc_ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_LoadILFactor(self->Source, env, cctx);
 }
 
-void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_GenerateILInstanceOf(bc_ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	bc_GenericType* gtype = bc_ResolveImportManager(NULL, self->GCache, cctx);
 	bc_Type* type = gtype->CoreType;
 	bc_GenerateILFactor(self->Source, env, cctx);
@@ -34,11 +34,11 @@ void GenerateILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext
 	bc_AddOpcodeBuf(env->Bytecode, OP_INSTANCEOF);
 }
 
-bc_GenericType* EvalILInstanceOf(ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILInstanceOf(bc_ILInstanceOf* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	return BC_TYPE_BOOL->GenericSelf;
 }
 
-char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env) {
+char* bc_ILInstanceOfToString(bc_ILInstanceOf* self, bc_Enviroment* env) {
 	bc_Buffer* sb = bc_NewBuffer();
 	char* a = bc_ILFactorToString(self->Source, env);
 	char* b = bc_GenericCacheToString(self->GCache);
@@ -50,7 +50,7 @@ char* ILInstanceOfToString(ILInstanceOf* self, bc_Enviroment* env) {
 	return bc_ReleaseBuffer(sb);
 }
 
-void DeleteILInstanceOf(ILInstanceOf* self) {
+void bc_DeleteILInstanceOf(bc_ILInstanceOf* self) {
 	bc_DeleteILFactor(self->Source);
 	bc_DeleteGenericCache(self->GCache);
 	MEM_FREE(self);

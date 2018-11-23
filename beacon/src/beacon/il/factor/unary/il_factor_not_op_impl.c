@@ -44,7 +44,7 @@ void LoadILNotOp(ILNotOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
 	 bc_LoadILFactor(self->Parent->Arg, env, cctx);
 	bc_GenericType* gt = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(bc_GENERIC2TYPE(gt) != BC_TYPE_BOOL) {
-		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
+		self->OperatorIndex = bc_GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -53,5 +53,5 @@ void DeleteILNotOp(ILNotOp* self) {
 }
 
 char* ILNotOpToString(ILNotOp* self, bc_Enviroment* env) {
-	return ILUnaryOpToString_simple(self->Parent, env);
+	return bc_ILUnaryOpToStringSimple(self->Parent, env);
 }

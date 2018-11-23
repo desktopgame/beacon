@@ -43,7 +43,7 @@ void LoadILNegativeOp(ILNegativeOp* self, bc_Enviroment* env, bc_CallContext* cc
 	bc_GenericType* gt = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(bc_GENERIC2TYPE(gt) != BC_TYPE_INT &&
 	   bc_GENERIC2TYPE(gt) != BC_TYPE_DOUBLE) {
-		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
+		self->OperatorIndex = bc_GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -52,5 +52,5 @@ void DeleteILNegativeOp(ILNegativeOp* self) {
 }
 
 char* ILNegativeOpToString(ILNegativeOp* self, bc_Enviroment* env) {
-	return ILUnaryOpToString_simple(self->Parent, env);
+	return bc_ILUnaryOpToStringSimple(self->Parent, env);
 }

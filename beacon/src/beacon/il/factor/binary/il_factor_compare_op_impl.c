@@ -32,11 +32,11 @@ void GenerateILCompareOp(ILCompareOp* self, bc_Enviroment* env, bc_CallContext* 
 	if(self->OperatorIndex == -1) {
 		bc_GenerateILFactor(self->Parent->Right, env, cctx);
 		bc_GenerateILFactor(self->Parent->Left, env, cctx);
-		if(IsIntIntBinaryOp(self->Parent, env, cctx)) {
+		if(bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_iopcode(self->Type));
-		} else if(IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
+		} else if(bc_IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_dopcode(self->Type));
-		} else if(IsCharCharBinaryOp(self->Parent, env, cctx)) {
+		} else if(bc_IsCharCharBinaryOp(self->Parent, env, cctx)) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)operator_to_copcode(self->Type));
 		} else {
 			bc_Panic(BCERROR_UNDEFINED_COMPARE_OPERATOR_T,
@@ -53,10 +53,10 @@ void GenerateILCompareOp(ILCompareOp* self, bc_Enviroment* env, bc_CallContext* 
 }
 
 void LoadILCompareOp(ILCompareOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	if(!IsIntIntBinaryOp(self->Parent, env, cctx) &&
-	   !IsDoubleDoubleBinaryOp(self->Parent, env, cctx) &&
-	   !IsCharCharBinaryOp(self->Parent, env, cctx)) {
-	self->OperatorIndex = GetIndexILBinaryOp(self->Parent, env, cctx);
+	if(!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+	   !bc_IsDoubleDoubleBinaryOp(self->Parent, env, cctx) &&
+	   !bc_IsCharCharBinaryOp(self->Parent, env, cctx)) {
+	self->OperatorIndex = bc_GetIndexILBinaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -65,7 +65,7 @@ void DeleteILCompareOp(ILCompareOp* self) {
 }
 
 char* ILCompareOpToString(ILCompareOp* self, bc_Enviroment* env) {
-	return ILBinaryOpToString_simple(self->Parent, env);
+	return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }
 //static
 static bc_Opcode operator_to_iopcode(bc_OperatorType type) {

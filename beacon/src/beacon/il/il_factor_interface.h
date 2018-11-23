@@ -57,29 +57,29 @@ typedef enum bc_ILFactorType {
 //ここでは関数呼び出しを前方宣言し、
 //関数呼び出しを表す構造体では実引数の一覧を ILFactor型で定義します。
 //詳細は il_factor_impl.h を参照してください。
-struct ILInt;
-struct ILDouble;
-struct ILChar;
-struct ILString;
-struct ILVariable;
-struct ILUnaryOp;
-struct ILBinaryOp;
-struct ILAssignOp;
-struct ILThis;
-struct ILSuper;
-struct ILNewInstance;
-struct ILBool;
+struct bc_ILInt;
+struct bc_ILDouble;
+struct bc_ILChar;
+struct bc_ILString;
+struct bc_ILVariable;
+struct bc_ILUnaryOp;
+struct bc_ILBinaryOp;
+struct bc_ILAssignOp;
+struct bc_ILThis;
+struct bc_ILSuper;
+struct bc_ILNewInstance;
+struct bc_ILBool;
 //struct ILFactor_null;
-struct ILAs;
+struct bc_ILAs;
 //struct ILFactor_inc;
 //struct ILFactor_dec;
-struct ILCallOp;
-struct ILMemberOp;
-struct ILInstanceOf;
-struct ILExplicitBinaryOp;
-struct ILExplicitUnaryOp;
-struct ILPropertyAccess;
-struct ILSubscript;
+struct bc_ILCallOp;
+struct bc_ILMemberOp;
+struct bc_ILInstanceOf;
+struct bc_ILExplicitBinaryOp;
+struct bc_ILExplicitUnaryOp;
+struct bc_ILPropertyAccess;
+struct bc_ILSubscript;
 
 /**
  * 計算可能な要素.
@@ -88,30 +88,30 @@ typedef struct bc_ILFactor {
 	bc_ILFactorType Type;
 	int Lineno;
 	union {
-		struct ILInt* Int;
-		struct ILDouble* Double;
-		struct ILChar* Char;
-		struct ILString* String;
-		struct ILVariable* Variable;
-		struct ILUnaryOp* UnaryOp;
-		struct ILAssignOp* AssignOp;
-		struct ILBinaryOp* BinaryOp;
-		struct ILThis* This;
-		struct ILSuper* Super;
-		struct ILNewInstance* NewInstance;
+		struct bc_ILInt* Int;
+		struct bc_ILDouble* Double;
+		struct bc_ILChar* Char;
+		struct bc_ILString* String;
+		struct bc_ILVariable* Variable;
+		struct bc_ILUnaryOp* UnaryOp;
+		struct bc_ILAssignOp* AssignOp;
+		struct bc_ILBinaryOp* BinaryOp;
+		struct bc_ILThis* This;
+		struct bc_ILSuper* Super;
+		struct bc_ILNewInstance* NewInstance;
 		struct ILFactor_cAST* Cast;
-		struct ILBool* Bool;
+		struct bc_ILBool* Bool;
 		void* Null;
-		struct ILAs* As;
+		struct bc_ILAs* As;
 		//struct ILFactor_inc* inc_;
 		//struct ILFactor_dec* dec_;
-		struct ILCallOp* Call;
-		struct ILMemberOp* MemberOp;
-		struct ILInstanceOf* InstanceOf;
-		struct ILExplicitBinaryOp* ExpBinaryOp;
-		struct ILExplicitUnaryOp* ExpUnaryOp;
-		struct ILPropertyAccess* PropertyAccess;
-		struct ILSubscript* Subscript;
+		struct bc_ILCallOp* Call;
+		struct bc_ILMemberOp* MemberOp;
+		struct bc_ILInstanceOf* InstanceOf;
+		struct bc_ILExplicitBinaryOp* ExpBinaryOp;
+		struct bc_ILExplicitUnaryOp* ExpUnaryOp;
+		struct bc_ILPropertyAccess* PropertyAccess;
+		struct bc_ILSubscript* Subscript;
 	} Kind;
 } bc_ILFactor;
 

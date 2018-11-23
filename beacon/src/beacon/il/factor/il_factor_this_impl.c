@@ -9,35 +9,35 @@
 #include "../../error.h"
 #include <assert.h>
 
-static void check_context(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx);
+static void check_context(bc_ILThis * self, bc_Enviroment * env, bc_CallContext* cctx);
 
-ILThis* NewILThis() {
-	ILThis* ret = (ILThis*)MEM_MALLOC(sizeof(ILThis));
+bc_ILThis* bc_NewILThis() {
+	bc_ILThis* ret = (bc_ILThis*)MEM_MALLOC(sizeof(bc_ILThis));
 	ret->Resolved = NULL;
 	return ret;
 }
 
-void GenerateILThis(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_GenerateILThis(bc_ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
 }
 
-void LoadILThis(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
+void bc_LoadILThis(bc_ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	check_context(self, env, cctx);
 }
 
-bc_GenericType* EvalILThis(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
+bc_GenericType* bc_EvalILThis(bc_ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	return bc_GetTypeCContext(cctx)->GenericSelf;
 }
 
-char* ILThisToString(ILThis* self, bc_Enviroment* env) {
+char* bc_ILThisToString(bc_ILThis* self, bc_Enviroment* env) {
 	return bc_Strdup("this");
 }
 
-void DeleteILThis(ILThis * self) {
+void bc_DeleteILThis(bc_ILThis * self) {
 	MEM_FREE(self);
 }
 //private
-static void check_context(ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
+static void check_context(bc_ILThis * self, bc_Enviroment * env, bc_CallContext* cctx) {
 	if(cctx->Tag != CALL_METHOD_T) {
 		return;
 	}

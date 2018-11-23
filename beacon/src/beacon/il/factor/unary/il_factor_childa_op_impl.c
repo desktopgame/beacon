@@ -33,7 +33,7 @@ bc_GenericType* EvalILChildaOp(ILChildaOp * self, bc_Enviroment * env, bc_CallCo
 		//演算子オーバーロードもない
 		assert(self->OperatorIndex != -1);
 		bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype)), self->OperatorIndex);
-		return ApplyILUnaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
+		return bc_ApplyILUnaryOp(self->Parent, operator_ov->ReturnGType, env, cctx);
 	}
 }
 
@@ -59,7 +59,7 @@ void LoadILChildaOp(ILChildaOp* self, bc_Enviroment* env, bc_CallContext* cctx) 
 	bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
 	if(bc_GENERIC2TYPE(gtype) != BC_TYPE_INT &&
 	   bc_GENERIC2TYPE(gtype) != BC_TYPE_BOOL) {
-		self->OperatorIndex = GetIndexILUnaryOp(self->Parent, env, cctx);
+		self->OperatorIndex = bc_GetIndexILUnaryOp(self->Parent, env, cctx);
 	}
 }
 
@@ -68,5 +68,5 @@ void DeleteILChildaOp(ILChildaOp* self) {
 }
 
 char* ILChildaOpToString(ILChildaOp* self, bc_Enviroment* env) {
-	return ILUnaryOpToString_simple(self->Parent, env);
+	return bc_ILUnaryOpToStringSimple(self->Parent, env);
 }
