@@ -4,8 +4,9 @@
 			"path": "."
 		}
 	],
-	
 	"settings": {
+		"clang-format.executable": "{workspaceRoot}/beacon/src/.clang-format",
+		"editor.formatOnSave": true,
 		"files.associations": {
 			"parameter.h": "c",
 			"type_interface.h": "c",
@@ -153,6 +154,10 @@
 			"debride": true,
 			"ruby-lint": true
 		},
-		"editor.rulers": [80]
+		"editor.tabSize": 8,
+		"editor.rulers": [
+			80
+		],
+		"editor.insertSpaces": true
 	}
 }
