@@ -165,6 +165,14 @@
 			],
 			"editor.insertSpaces": true,
 		},
+		"[cpp]": {
+			"editor.formatOnSave": true,
+			"editor.tabSize": 8,
+			"editor.rulers": [
+				80
+			],
+			"editor.insertSpaces": true,
+		},
 		"files.exclude": {
 			"**/.git": true,
 			"**/.svn": true,
