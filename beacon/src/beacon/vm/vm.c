@@ -773,7 +773,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                             self->TypeArgs);
                                 }
                                 //		DumpEnviromentOp(ctor->env,
-                                //sub->level);
+                                // sub->level);
                                 // DumpOpcodeBuf(ctor->env->Bytecode,
                                 // sub->level);
                                 bc_ExecuteVM(sub, ctor->Env);
@@ -899,7 +899,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     propIndex);
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
-                                sub->Receiver = pro->Parent;
+                                sub->Receiver = BC_MEMBER_TYPE(pro);
                                 bc_PushVector(sub->ValueStack, assignValue);
                                 bc_PushVector(sub->ValueStack, assignTarget);
                                 bc_ExecuteVM(sub, pro->Set->Env);
@@ -920,7 +920,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     propIndex);
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
-                                sub->Receiver = pro->Parent;
+                                sub->Receiver = BC_MEMBER_TYPE(pro);
                                 bc_PushVector(sub->ValueStack, sourceObject);
                                 bc_ExecuteVM(sub, pro->Get->Env);
                                 //戻り値をスタックに残す

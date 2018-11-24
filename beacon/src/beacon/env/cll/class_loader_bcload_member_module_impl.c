@@ -181,17 +181,17 @@ bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         // VectorItem e = AtVector(ilprops, i);
         // ILProperty* ilprop = e;
         bc_Property* prop = bc_NewProperty(ilprop->Name);
-        prop->Access = ilprop->Access;
-        prop->Modifier = ilprop->Modifier;
+        BC_MEMBER_ACCESS(prop) = ilprop->Access;
+        BC_MEMBER_MODIFIER(prop) = ilprop->Modifier;
         prop->Set->Access = ilprop->Set->Access;
         prop->Get->Access = ilprop->Get->Access;
-        prop->Parent = tp;
+        BC_MEMBER_TYPE(prop) = tp;
         prop->GType = bc_ResolveImportManager(scope, ilprop->GCache, cctx);
         prop->IsShort = ilprop->Set->IsShort && ilprop->Get->IsShort;
         bc_AddPropertyType(tp, prop);
-        if (bc_IsAbstractModifier(prop->Modifier) ||
-            bc_IsOverrideModifier(prop->Modifier) ||
-            bc_IsNativeModifier(prop->Modifier)) {
+        if (bc_IsAbstractModifier(BC_MEMBER_MODIFIER(prop)) ||
+            bc_IsOverrideModifier(BC_MEMBER_MODIFIER(prop)) ||
+            bc_IsNativeModifier(BC_MEMBER_MODIFIER(prop))) {
                 bc_Panic(BCERROR_NATIVE_FIELD_T, bc_Ref2Str(prop->Name));
                 bc_DeleteCallContext(cctx);
                 return false;
@@ -233,7 +233,7 @@ bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         // setterのオペコードを生成
         bc_SymbolEntry* valueE = bc_EntrySymbolTable(
             set->Env->Symboles, pr->GType, bc_InternString("value"));
-        if (!bc_IsStaticModifier(pr->Modifier)) {
+        if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(pr))) {
                 bc_AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
                 bc_AddOpcodeBuf(set->Env->Bytecode, 0);
         }
@@ -241,7 +241,7 @@ bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         bc_AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
         CLBC_body(self, set_stmt_list, set->Env, cctx, scope);
         // getterのオペコードを生成
-        if (!bc_IsStaticModifier(pr->Modifier)) {
+        if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(pr))) {
                 bc_AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
                 bc_AddOpcodeBuf(get->Env->Bytecode, 0);
         }

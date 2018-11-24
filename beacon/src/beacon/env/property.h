@@ -12,6 +12,7 @@
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
+#include "member.h"
 #include "property_body.h"
 struct bc_GenericType;
 struct bc_Type;
@@ -19,12 +20,10 @@ struct bc_Field;
 struct bc_Object;
 
 typedef struct bc_Property {
-        bc_ModifierType Modifier;
+        bc_Member Super;
         bc_StringView Name;
-        struct bc_Type* Parent;
         struct bc_Field* SourceRef;
         struct bc_GenericType* GType;
-        bc_AccessLevel Access;
         bc_PropertyBody* Set;
         bc_PropertyBody* Get;
         bool IsShort;

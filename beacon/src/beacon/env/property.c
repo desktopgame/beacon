@@ -6,13 +6,13 @@ bc_Property* bc_MallocProperty(bc_StringView namev, const char* filename,
         bc_Property* ret = bc_MXMalloc(sizeof(bc_Property), filename, lineno);
         ret->Name = namev;
         ret->GType = NULL;
-        ret->Parent = NULL;
         ret->Set = bc_NewPropertyBody(PROPERTY_SET_T);
         ret->Get = bc_NewPropertyBody(PROPERTY_GET_T);
         ret->IsShort = false;
         ret->SourceRef = NULL;
         ret->Set->Parent = ret;
         ret->Get->Parent = ret;
+        bc_InitMember((bc_Member*)ret);
         return ret;
 }
 void bc_DeleteProperty(bc_Property* self) {
