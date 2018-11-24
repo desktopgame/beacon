@@ -118,14 +118,14 @@ static void resolve_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
                 return;
         }
         bc_CallFrame* cfr =
-            bc_PushCallContext(cctx, NULL, self->Arguments, self->TypeArgs);
+            bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         /*
     cfr->Kind.StaticInvoke.Args = self->Arguments;
     cfr->Kind.StaticInvoke.TypeArgs = self->TypeArgs;
     */
         bc_GenericType* rgtp = self->Method->ReturnGType;
         self->Resolved = bc_ApplyGenericType(rgtp, cctx);
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
 }
 
 static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
@@ -150,7 +150,7 @@ static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
                 bc_LoadILFactor(ilarg->Factor, env, cctx);
         }
         bc_CallFrame* cfr =
-            bc_PushCallContext(cctx, NULL, self->Arguments, self->TypeArgs);
+            bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         /*
     cfr->Kind.StaticInvoke.Args = self->Arguments;
     cfr->Kind.StaticInvoke.TypeArgs = self->TypeArgs;*/
@@ -162,7 +162,7 @@ static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
                 bc_Panic(BCERROR_INVOKE_STATIC_UNDEFINED_METHOD_T,
                          bc_Ref2Str(cls->Name), bc_Ref2Str(self->Name));
         }
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
 }
 
 static void ILInvokeStatic_args_delete(bc_VectorItem item) {

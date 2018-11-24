@@ -161,11 +161,11 @@ int bc_GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype,
 bc_GenericType* bc_ApplyILUnaryOp(bc_ILUnaryOp* self, bc_GenericType* gtype,
                                   bc_Enviroment* env, bc_CallContext* cctx) {
         bc_GenericType* lgtype = bc_EvalILFactor(self->Arg, env, cctx);
-        bc_CallFrame* cfr = bc_PushCallContext(cctx, lgtype, NULL, NULL);
+        bc_CallFrame* cfr = bc_PushCallFrame(cctx, lgtype, NULL, NULL);
         /*
         cfr->Kind.InstanceInvoke.Receiver = lgtype;
         */
         bc_GenericType* ret = bc_ApplyGenericType(gtype, cctx);
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
         return ret;
 }

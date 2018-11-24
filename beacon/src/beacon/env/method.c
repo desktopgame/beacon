@@ -73,7 +73,7 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
                 if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(self))) {
                         bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
                         bc_AssignVector(a->VariableTable, 0, receiver_obj);
-                        cfr = bc_PushCallContext(
+                        cfr = bc_PushCallFrame(
                             bc_GetScriptThreadContext(), receiver_obj->GType,
                             aArgs = method_vm_args(self, fr, a),
                             aTArgs = method_vm_typeargs(self, fr, a));
@@ -85,7 +85,7 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
                         method_vm_typeargs(self, fr, a);
                         */
                 } else {
-                        cfr = bc_PushCallContext(
+                        cfr = bc_PushCallFrame(
                             bc_GetScriptThreadContext(), NULL,
                             aArgs = method_vm_args(self, fr, a),
                             aTArgs = method_vm_typeargs(self, fr, a));
@@ -106,7 +106,7 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
                 }
                 bc_DeleteVector(aArgs, bc_VectorDeleterOfNull);
                 bc_DeleteVector(aTArgs, bc_VectorDeleterOfNull);
-                bc_PopCallContext(bc_GetScriptThreadContext());
+                bc_PopCallFrame(bc_GetScriptThreadContext());
                 bc_DeleteFrame(a);
         }
 }
@@ -131,12 +131,12 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
                 bc_GenericType* subGT = subP->GType;
 
                 bc_CallFrame* cfr =
-                    bc_PushCallContext(cctx, bl, NULL, bl->TypeArgs);
+                    bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
                 /*
             cfr->Kind.Resolve.GType = bl;
             */
                 bc_GenericType* superGT2 = bc_ApplyGenericType(superGT, cctx);
-                bc_PopCallContext(cctx);
+                bc_PopCallFrame(cctx);
                 //		assert(!GenericType_equals(superGT, superGT2));
 
                 //		GenericType_diff(superGT, superGT2);
@@ -146,7 +146,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
         }
         bc_GenericType* superRet = superM->ReturnGType;
         bc_GenericType* subRet = subM->ReturnGType;
-        bc_CallFrame* cfr = bc_PushCallContext(cctx, bl, NULL, bl->TypeArgs);
+        bc_CallFrame* cfr = bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
         /*
         cfr->Kind.Resolve.GType = bl;
         */
@@ -154,7 +154,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
         //	GenericType_diff(superRet, superRet2);
         //	assert(!GenericType_equals(superRet, superRet2));
         int ret = bc_DistanceGenericType(superRet2, subRet, cctx);
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
         return ret != -1;
 }
 
@@ -266,7 +266,7 @@ bool bc_IsYieldMethod(bc_Method* self, bc_Vector* stmt_list, bool* error) {
 bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, bc_ClassLoader* cll,
                                          bc_Vector* stmt_list) {
         bc_CallContext* lCctx = bc_NewCallContext(CALL_CTOR_T);
-        bc_CallFrame* lCfr = bc_PushCallContext(lCctx, self->ReturnGType, NULL,
+        bc_CallFrame* lCfr = bc_PushCallFrame(lCctx, self->ReturnGType, NULL,
                                                 self->ReturnGType->TypeArgs);
         /*
 lCfr->Kind.Resolve.GType = self->ReturnGType;
@@ -291,7 +291,7 @@ lCfr->Kind.Resolve.GType = self->ReturnGType;
                                    stmt_list, &op_len));
         bc_AddConstructorClass(
             iterImplC, create_delegate_ctor(self, iterImplT, cll, op_len));
-        bc_PopCallContext(lCctx);
+        bc_PopCallFrame(lCctx);
         bc_DeleteCallContext(lCctx);
         return iterImplT;
 }

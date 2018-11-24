@@ -63,18 +63,18 @@ bc_CallContext* bc_NewNameContext(bc_Namespace* scope, bc_Type* type) {
         return ret;
 }
 
-bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_GenericType* receiver,
+bc_CallFrame* bc_PushCallFrame(bc_CallContext* self, bc_GenericType* receiver,
                                  bc_Vector* args, bc_Vector* type_args) {
         bc_CallFrame* fr = bc_NewCallFrame(receiver, args, type_args);
         bc_PushVector(self->CallStack, fr);
         return fr;
 }
 
-bc_CallFrame* bc_TopCallContext(bc_CallContext* self) {
+bc_CallFrame* bc_TopCallFrame(bc_CallContext* self) {
         return bc_TopVector(self->CallStack);
 }
 
-void bc_PopCallContext(bc_CallContext* self) {
+void bc_PopCallFrame(bc_CallContext* self) {
         bc_CallFrame* fr = bc_PopVector(self->CallStack);
         bc_DeleteCallFrame(fr);
 }

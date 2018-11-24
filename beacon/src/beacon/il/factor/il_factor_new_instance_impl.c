@@ -151,7 +151,7 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
         //使用するコンストラクタを取得
         bc_Class* cls = BC_TYPE2CLASS(ty);
         int temp = -1;
-        bc_CallFrame* cfr = bc_PushCallContext(cctx, cls->Parent->GenericSelf,
+        bc_CallFrame* cfr = bc_PushCallFrame(cctx, cls->Parent->GenericSelf,
                                                NULL, self->TypeArgs);
         /*
 cfr->Kind.Resolve.GType = cls->Parent->GenericSelf;
@@ -161,7 +161,7 @@ cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
         self->Constructor =
             bc_ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
         self->ConstructorIndex = temp;
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
         if (temp == -1) {
                 bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
                          bc_Ref2Str(cls->Name));

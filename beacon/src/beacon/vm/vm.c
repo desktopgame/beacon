@@ -673,7 +673,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //また、現在のVMから実引数をポップ
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = tp;
-                                bc_CallFrame* cfr = bc_PushCallContext(
+                                bc_CallFrame* cfr = bc_PushCallFrame(
                                     bc_GetScriptThreadContext(), NULL,
                                     bc_NewVector(), bc_NewVector());
                                 /*
@@ -716,7 +716,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                                 bc_VectorDeleterOfNull);
                                 bc_DeleteVector(cfr->TypeArgs,
                                                 bc_VectorDeleterOfNull);
-                                bc_PopCallContext(bc_GetScriptThreadContext());
+                                bc_PopCallFrame(bc_GetScriptThreadContext());
                                 //コンストラクタを実行した場合、
                                 // Objectがスタックのトップに残っているはず
                                 bc_VectorItem returnV =
@@ -749,7 +749,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->ObjectSize = allocSize;
                                 sub->Receiver = tp;
-                                bc_CallFrame* cfr = bc_PushCallContext(
+                                bc_CallFrame* cfr = bc_PushCallFrame(
                                     bc_GetScriptThreadContext(), NULL,
                                     bc_NewVector(), bc_NewVector());
                                 /*
@@ -782,7 +782,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                                 bc_VectorDeleterOfNull);
                                 bc_DeleteVector(cfr->TypeArgs,
                                                 bc_VectorDeleterOfNull);
-                                bc_PopCallContext(bc_GetScriptThreadContext());
+                                bc_PopCallFrame(bc_GetScriptThreadContext());
                                 //コンストラクタを実行した場合、
                                 // Objectがスタックのトップに残っているはず
                                 bc_VectorItem returnV =

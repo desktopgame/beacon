@@ -149,7 +149,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
         const char* nstr = bc_Ref2Str(self->Name);
         const char* str = bc_Ref2Str(bc_GetTypeName(ctype));
 #endif
-        bc_CallFrame* cfr = bc_PushCallContext(cctx, cctx->Ty->GenericSelf,
+        bc_CallFrame* cfr = bc_PushCallFrame(cctx, cctx->Ty->GenericSelf,
                                                self->Arguments, self->TypeArgs);
         /*
     cfr->Kind.SelfInvoke.Args = self->Arguments;
@@ -162,7 +162,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
         self->Index = temp;
         BC_ERROR();
         if (self->Index != -1) {
-                bc_PopCallContext(cctx);
+                bc_PopCallFrame(cctx);
                 return;
         }
         //添字アクセスとして解決する
@@ -210,7 +210,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
                          bc_Ref2Str(bc_GetTypeName(ctype)),
                          bc_Ref2Str(self->Name));
         }
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
 }
 
 static void ILInvokeBound_args_delete(bc_VectorItem item) {
@@ -323,14 +323,14 @@ static bc_GenericType* EvalILInvokeBoundImpl(bc_ILInvokeBound* self,
         }
         bc_CallFrame* cfr = NULL;
         if (self->Tag == BOUND_INVOKE_METHOD_T) {
-                cfr = bc_PushCallContext(cctx, cctx->Ty->GenericSelf,
+                cfr = bc_PushCallFrame(cctx, cctx->Ty->GenericSelf,
                                          self->Arguments, self->TypeArgs);
                 /*
 cfr->Kind.SelfInvoke.Args = self->Arguments;
 cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
 */
         } else {
-                cfr = bc_PushCallContext(
+                cfr = bc_PushCallFrame(
                     cctx,
                     bc_ApplyGenericType(
                         bc_GetSubscriptReceiver(&self->Kind.Subscript), cctx),
@@ -346,15 +346,15 @@ cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
             GENERIC_TYPE_TAG_NONE_T) {
                 resolve_non_default(self, env, cctx);
                 assert(self->Resolved != NULL);
-                bc_PopCallContext(cctx);
+                bc_PopCallFrame(cctx);
                 return self->Resolved;
         } else {
                 resolve_default(self, env, cctx);
                 assert(self->Resolved != NULL);
-                bc_PopCallContext(cctx);
+                bc_PopCallFrame(cctx);
                 return self->Resolved;
         }
-        bc_PopCallContext(cctx);
+        bc_PopCallFrame(cctx);
         assert(self->Resolved != NULL);
         return self->Resolved;
 }
