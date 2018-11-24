@@ -214,9 +214,8 @@ static void load_toplevel(bc_ClassLoader* self) {
         body->Lineno = 0;
         createWorldStmt->Value->Lineno = 0;
         // worldをselfにする
-        bc_CallContext* cctx = bc_NewCallContext(CALL_TOP_T);
-        cctx->Ty = bc_FindTypeFromNamespace(bc_GetLangNamespace(),
-                                            bc_InternString("World"));
+        bc_CallContext* cctx = bc_NewTopContext(bc_FindTypeFromNamespace(
+            bc_GetLangNamespace(), bc_InternString("World")));
         bc_LoadILStmt(body, self->Env, cctx);
         bc_GenerateILStmt(body, self->Env, cctx);
         //$worldをthisにする
