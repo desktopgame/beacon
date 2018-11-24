@@ -4,9 +4,9 @@
 #include "../env/type_interface.h"
 
 void bc_GenerateGetField(bc_OpcodeBuf* buf, bc_Field* fi, int index) {
-        if (bc_IsStaticModifier(fi->Modifier)) {
+        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(fi))) {
                 bc_AddOpcodeBuf(buf, OP_GET_STATIC);
-                bc_AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
+                bc_AddOpcodeBuf(buf, BC_MEMBER_TYPE(fi)->AbsoluteIndex);
                 bc_AddOpcodeBuf(buf, index);
         } else {
                 bc_AddOpcodeBuf(buf, OP_GET_FIELD);
@@ -32,9 +32,9 @@ void bc_GenerateGetProperty(bc_OpcodeBuf* buf, bc_Property* prop, int index) {
 }
 
 void bc_GeneratePutField(bc_OpcodeBuf* buf, bc_Field* fi, int index) {
-        if (bc_IsStaticModifier(fi->Modifier)) {
+        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(fi))) {
                 bc_AddOpcodeBuf(buf, OP_PUT_STATIC);
-                bc_AddOpcodeBuf(buf, fi->Parent->AbsoluteIndex);
+                bc_AddOpcodeBuf(buf, BC_MEMBER_TYPE(fi)->AbsoluteIndex);
                 bc_AddOpcodeBuf(buf, index);
         } else {
                 bc_AddOpcodeBuf(buf, OP_PUT_FIELD);

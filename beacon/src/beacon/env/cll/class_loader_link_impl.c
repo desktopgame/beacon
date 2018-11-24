@@ -351,8 +351,8 @@ static void CLBC_check_class(bc_ClassLoader * self, bc_ILType * iltype, bc_Type*
 		bc_Field* fi = bc_AtVector(cls->Fields, i);
 		//インスタンス定数が
 		//フィールドでもコンストラクタでも初期化されない
-		if(!bc_IsStaticModifier(fi->Modifier) &&
-			bc_IsFinalModifier(fi->Modifier) &&
+		if(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(fi)) &&
+			bc_IsFinalModifier(BC_MEMBER_MODIFIER(fi)) &&
 			!fi->IsNotInitializedAtCtor) {
 			bc_Panic(BCERROR_NOT_INITIAL_FIELD_NOT_INITIALIZED_AT_CTOR_T,
 				bc_Ref2Str(bc_GetTypeName(tp)),

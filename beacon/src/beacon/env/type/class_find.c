@@ -101,14 +101,14 @@ bool bc_IsContainsSFieldClass(bc_Class* self, bc_Field* f) {
 
 bool bc_IsAccessibleFieldClass(bc_Class* self, bc_Field* f) {
 	assert(f != NULL);
-	if(f->Access == ACCESS_PUBLIC_T) {
+	if(BC_MEMBER_ACCESS(f) == ACCESS_PUBLIC_T) {
 		return true;
 	}
-	if(f->Access == ACCESS_PRIVATE_T) {
-		return self == BC_TYPE2CLASS(f->Parent);
+	if(BC_MEMBER_ACCESS(f) == ACCESS_PRIVATE_T) {
+		return self == BC_TYPE2CLASS(BC_MEMBER_TYPE(f));
 	}
 	bc_Type* ty = self->Parent;
-	bc_Class* fcl = BC_TYPE2CLASS(f->Parent);
+	bc_Class* fcl = BC_TYPE2CLASS(BC_MEMBER_TYPE(f));
 	while(true) {
 		bc_Class* c = BC_TYPE2CLASS(ty);
 		if(c == fcl) {

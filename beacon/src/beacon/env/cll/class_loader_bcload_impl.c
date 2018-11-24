@@ -171,12 +171,12 @@ static void CLBC_enum(bc_ClassLoader * self, bc_ILType * iltype, bc_Namespace * 
 	for (int i = 0; i < ilenum->Items->Length; i++) {
 		bc_StringView str = (bc_StringView)bc_AtVector(ilenum->Items, i);
 		bc_Field* f = bc_NewField(str);
-		f->Modifier = MODIFIER_STATIC_T;
-		f->Access = ACCESS_PUBLIC_T;
+		BC_MEMBER_MODIFIER(f) = MODIFIER_STATIC_T;
+		BC_MEMBER_ACCESS(f) = ACCESS_PUBLIC_T;
 		f->StaticValue = NULL;
 		f->GType = BC_TYPE_INT->GenericSelf;
 		//virtual_type_nongeneric_init(&f->vtype, GENERIC_INT);
-		f->Parent = tp;
+		BC_MEMBER_TYPE(f) = tp;
 		//f->static_value->paint = PAINT_MARKED_T;
 		bc_AddFieldClass(cls, f);
 	}

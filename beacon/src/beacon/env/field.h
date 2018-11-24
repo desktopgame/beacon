@@ -10,6 +10,7 @@
 #pragma once
 #ifndef BEACON_ENV_FIELD_H
 #define BEACON_ENV_FIELD_H
+#include "member.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
@@ -23,12 +24,10 @@ struct bc_ILFactor;
  * フィールドを表す構造体.
  */
 typedef struct bc_Field {
+        bc_Member Super;
         bc_StringView Name;
-        struct bc_Type* Parent;
         struct bc_GenericType* GType;
         struct bc_Object* StaticValue;
-        bc_AccessLevel Access;
-        bc_ModifierType Modifier;
         struct bc_ILFactor* InitialValue;
         struct bc_Enviroment* InitialValueEnv;
         bool IsNotInitializedAtCtor;

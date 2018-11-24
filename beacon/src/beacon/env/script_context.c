@@ -137,7 +137,7 @@ void bc_EachStaticScriptContext(bc_ScriptContext* self, bc_StaticEach act) {
                 for (int j = 0; j < cls->StaticFields->Length; j++) {
                         bc_Field* f =
                             (bc_Field*)bc_AtVector(cls->StaticFields, j);
-                        if (bc_IsStaticModifier(f->Modifier)) {
+                        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
                                 act(f);
                         }
                 }

@@ -44,7 +44,7 @@ void bc_GenerateILVariableLocal(bc_ILVariableLocal* self, bc_Enviroment* env, bc
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Kind.Entry->Index);
 	} else if(self->Type == VARIABLE_LOCAL_FIELD_T) {
 		bc_Field* f = self->Kind.FieldI.Field;
-		if(!bc_IsStaticModifier(f->Modifier)) {
+		if(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
 			bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		bc_GenerateGetField(env->Bytecode, f, self->Kind.FieldI.Index);

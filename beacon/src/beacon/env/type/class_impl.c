@@ -110,7 +110,7 @@ void bc_AllocFieldsClass(bc_Class* self, bc_Object * o, bc_Frame* fr) {
 		bc_Field* f = (bc_Field*)bc_AtVector(self->Fields, i);
 		bc_Object* a = bc_GetDefaultObject(f->GType);
 		//静的フィールドは別の場所に確保
-		if (bc_IsStaticModifier(f->Modifier)) {
+		if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
 			continue;
 		}
 		he->CollectBlocking++;
@@ -135,7 +135,7 @@ void bc_FreeClassFields(bc_Class* self, bc_Object * o) {
 
 void bc_AddFieldClass(bc_Class* self, bc_Field* f) {
 	assert(f != NULL);
-	if (bc_IsStaticModifier(f->Modifier)) {
+	if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
 		bc_PushVector(self->StaticFields, f);
 	} else {
 		bc_PushVector(self->Fields, f);
@@ -155,10 +155,10 @@ void bc_AddPropertyClass(bc_Class* self, bc_Property* p) {
 	#endif
 	if(p->IsShort) {
 		bc_Field* f = bc_NewField(bc_ConcatIntern("$propery.", p->Name));
-		f->Access = ACCESS_PRIVATE_T;
+		BC_MEMBER_ACCESS(f) = ACCESS_PRIVATE_T;
 		f->GType = p->GType;
-		f->Modifier = p->Modifier;
-		f->Parent = self->Parent;
+		BC_MEMBER_MODIFIER(f) = p->Modifier;
+		BC_MEMBER_TYPE(f) = self->Parent;
 		f->StaticValue = bc_GetNullObject();
 		p->SourceRef = f;
 		bc_AddFieldClass(self, f);
@@ -371,7 +371,7 @@ bc_Object * bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args, b
 void bc_LinkAllClass(bc_Class* self) {
 	for (int i = 0; i < self->Fields->Length; i++) {
 		bc_Field* f = (bc_Field*)bc_AtVector(self->Fields, i);
-		f->Parent = self->Parent;
+		BC_MEMBER_TYPE(f) = self->Parent;
 	}
 	for (int i = 0; i < self->Methods->Length; i++) {
 		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);

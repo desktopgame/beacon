@@ -44,7 +44,7 @@ void bc_LoadILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* 
 }
 
 void bc_GenerateILMemberOp(bc_ILMemberOp* self, bc_Enviroment* env, bc_CallContext* cctx) {
-	if(!bc_IsStaticModifier(self->Field->Modifier)) {
+	if(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(self->Field))) {
 		bc_GenerateILFactor(self->Source, env, cctx);
 	}
 	bc_GenerateGetField(env->Bytecode, self->Field, self->Index);

@@ -104,7 +104,7 @@ static void assign_by_namebase(bc_ILAssignOp* self, bc_Enviroment* env, bc_CallC
 			return;
 		}
 		//finalなので書き込めない
-		if(bc_IsFinalModifier(sf->Modifier)) {
+		if(bc_IsFinalModifier(BC_MEMBER_MODIFIER(sf))) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				bc_Ref2Str(bc_GetTypeName(cls->Parent)),
 				bc_Ref2Str(sf->Name)
@@ -260,7 +260,7 @@ static bool can_assign_to_field(bc_Field* f, bc_ILAssignOp* self, bc_Enviroment*
 		return true;
 	} else {
 		bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_FIELD_T,
-			bc_Ref2Str(bc_GetTypeName(f->Parent)),
+			bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(f))),
 			bc_Ref2Str(f->Name)
 		);
 		return false;
@@ -276,7 +276,7 @@ static void check_final(bc_ILFactor* receiver, bc_ILFactor* source, bc_StringVie
 	//コンストラクタ以外の場所では finalフィールドは初期化できない
 	if(cctx->Tag != CALL_CTOR_T) {
 		//finalなので書き込めない
-		if(bc_IsFinalModifier(f->Modifier)) {
+		if(bc_IsFinalModifier(BC_MEMBER_MODIFIER(f))) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				bc_Ref2Str(bc_GetTypeName(cls->Parent)),
 				bc_Ref2Str(f->Name)
@@ -284,8 +284,8 @@ static void check_final(bc_ILFactor* receiver, bc_ILFactor* source, bc_StringVie
 		}
 	} else {
 		//コンストラクタであっても static final の場合は書き込めない
-		if(bc_IsFinalModifier(f->Modifier) &&
-		   bc_IsStaticModifier(f->Modifier)) {
+		if(bc_IsFinalModifier(BC_MEMBER_MODIFIER(f)) &&
+		   bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
 			bc_Panic(BCERROR_ASSIGN_TO_FINAL_FIELD_T,
 				bc_Ref2Str(bc_GetTypeName(cls->Parent)),
 				bc_Ref2Str(f->Name)
@@ -333,15 +333,15 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self, bc_Enviroment
 		assert(temp != -1);
 		//フィールドはstaticでないが
 		//現在のコンテキストはstaticなので this にアクセスできない
-		if(!bc_IsStaticModifier(f->Modifier) &&
+		if(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(f)) &&
 		    bc_IsStaticCContext(cctx)) {
 			bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-				bc_Ref2Str(bc_GetTypeName(f->Parent)),
+				bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(f))),
 				bc_Ref2Str(f->Name)
 			);
 			return;
 		}
-		if(!bc_IsStaticModifier(f->Modifier)) {
+		if(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
 			bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
 		}
 		bc_GenerateILFactor(self->Right, env, cctx);
