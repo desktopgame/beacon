@@ -575,14 +575,14 @@ bool CLBC_operator_overload_decl(bc_ClassLoader* self, bc_ILType* iltype,
                                  bc_Namespace* scope) {
         //演算子オーバーロード一覧から取り出す
         bc_OperatorOverload* opov = bc_NewOperatorOverload(ilopov->Type);
-        opov->Access = ilopov->Access;
+        BC_MEMBER_ACCESS(opov) = ilopov->Access;
         // CallContextの設定
         bc_CallContext* cctx = bc_NewCallContext(CALL_OPOV_T);
         cctx->Scope = scope;
         cctx->Ty = tp;
         cctx->Kind.OpOv = opov;
         //戻り値読み込み
-        opov->Parent = tp;
+        BC_MEMBER_TYPE(opov) = tp;
         opov->ReturnGType =
             bc_ResolveImportManager(scope, ilopov->ReturnGCache, cctx);
         //パラメータ読み込み
@@ -867,7 +867,7 @@ static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, bc_ILType* iltype,
                                         bc_Type* tp,
                                         bc_OperatorOverload* opov) {
         //アクセスレベルを確認する
-        if (opov->Access != ACCESS_PUBLIC_T) {
+        if (BC_MEMBER_ACCESS(opov) != ACCESS_PUBLIC_T) {
                 bc_Panic(BCERROR_PRIVATE_OPERATOR_T, bc_GetTypeName(tp));
                 return true;
         }
@@ -916,7 +916,7 @@ static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, bc_ILType* iltype,
         //- の戻り値がクラスと異なる
         //(IntならInt, Vector2ならVector2)
         if (opov->Type == OPERATOR_NEGATIVE_T &&
-            opov->ReturnGType->CoreType != opov->Parent) {
+            opov->ReturnGType->CoreType != BC_MEMBER_TYPE(opov)) {
                 bc_Panic(BCERROR_RETURN_TYPE_NOT_EQUAL_NEGATIVE_OPERATOR_T,
                          bc_Ref2Str(bc_GetTypeName(tp)),
                          bc_OperatorToString(opov->Type));

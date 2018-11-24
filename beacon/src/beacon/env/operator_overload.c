@@ -17,11 +17,11 @@ static void delete_parameter(bc_VectorItem item);
 bc_OperatorOverload* bc_NewOperatorOverload(bc_OperatorType type) {
         bc_OperatorOverload* ret =
             (bc_OperatorOverload*)MEM_MALLOC(sizeof(bc_OperatorOverload));
-        ret->Parent = NULL;
         ret->Parameters = bc_NewVector();
         ret->Type = type;
         ret->Env = NULL;
         ret->ReturnGType = NULL;
+        bc_InitMember((bc_Member*)ret);
         return ret;
 }
 

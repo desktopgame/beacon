@@ -12,6 +12,7 @@
 #include "../ast/access_level.h"
 #include "../ast/operator_type.h"
 #include "../util/vector.h"
+#include "member.h"
 struct bc_Type;
 struct bc_Enviroment;
 struct bc_GenericType;
@@ -20,12 +21,11 @@ struct bc_Frame;
  * 演算子オーバーロードを表す構造体.
  */
 typedef struct bc_OperatorOverload {
-        struct bc_Type* Parent;
+        bc_Member Super;
         struct bc_GenericType* ReturnGType;
         bc_OperatorType Type;
         bc_Vector* Parameters;
         struct bc_Enviroment* Env;
-        bc_AccessLevel Access;
 } bc_OperatorOverload;
 
 /**
