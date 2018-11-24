@@ -379,7 +379,7 @@ void bc_LinkAllClass(bc_Class* self) {
 	}
 	for (int i = 0; i < self->Constructors->Length; i++) {
 		bc_Constructor* ctor = (bc_Constructor*)bc_AtVector(self->Constructors, i);
-		ctor->Parent = self->Parent;
+		BC_MEMBER_TYPE(ctor) = self->Parent;
 	}
 }
 

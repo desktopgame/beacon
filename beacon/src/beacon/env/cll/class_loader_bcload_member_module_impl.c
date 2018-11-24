@@ -441,8 +441,8 @@ bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_ILC
 	//実行時のメソッド情報を作成する
 	bc_Constructor* cons = bc_NewConstructor();
 	bc_Vector* parameter_list = cons->Parameters;
-	cons->Access = ilcons->Access;
-	cons->Parent = tp;
+	BC_MEMBER_ACCESS(cons) = ilcons->Access;
+	BC_MEMBER_TYPE(cons) = tp;
 	bc_CallContext* cctx = bc_NewCallContext(CALL_CTOR_T);
 	cctx->Scope = scope;
 	cctx->Ty = tp;

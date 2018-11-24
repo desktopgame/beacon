@@ -246,7 +246,7 @@ bc_Constructor* bc_MetaScopedRFindConstructor(bc_Class* context, bc_Vector* ctor
 	for (int i = 0; i < ctor_vec->Length; i++) {
 		bc_VectorItem ve = bc_AtVector(ctor_vec, i);
 		bc_Constructor* ctor = (bc_Constructor*)ve;
-		bc_Class* cls = BC_TYPE2CLASS(ctor->Parent);
+		bc_Class* cls = BC_TYPE2CLASS(BC_MEMBER_TYPE(ctor));
 		//引数の個数が違うので無視
 		if (ctor->Parameters->Length != gargs->Length) {
 			continue;
@@ -309,14 +309,14 @@ bool bc_IsMetaConstructorAccessValid(bc_Constructor* ctor, bc_CallContext* cctx)
 	bc_Class* context = bc_GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
-		ctor->Access == ACCESS_PRIVATE_T &&
-		BC_TYPE2CLASS(ctor->Parent) != context) {
+		BC_MEMBER_ACCESS(ctor) == ACCESS_PRIVATE_T &&
+		BC_TYPE2CLASS(BC_MEMBER_TYPE(ctor)) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
-		ctor->Access == ACCESS_PROTECTED_T &&
-		bc_DistanceClass(BC_TYPE2CLASS(ctor->Parent), context) < 0) {
+		BC_MEMBER_ACCESS(ctor) == ACCESS_PROTECTED_T &&
+		bc_DistanceClass(BC_TYPE2CLASS(BC_MEMBER_TYPE(ctor)), context) < 0) {
 		return false;
 	}
 	return true;

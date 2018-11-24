@@ -54,7 +54,7 @@ void bc_GenerateILNewInstance(bc_ILNewInstance * self, bc_Enviroment * env, bc_C
 	}
 	//クラスとコンストラクタのインデックスをプッシュ
 	bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-	bc_AddOpcodeBuf(env->Bytecode, self->Constructor->Parent->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, BC_MEMBER_TYPE(self->Constructor)->AbsoluteIndex);
 	bc_AddOpcodeBuf(env->Bytecode, self->ConstructorIndex);
 }
 
@@ -64,8 +64,8 @@ void bc_LoadILNewInstance(bc_ILNewInstance * self, bc_Enviroment * env, bc_CallC
 		return;
 	}
 	//抽象クラスはインスタンス化できない
-	if(bc_IsAbstractType(self->Constructor->Parent)) {
-		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, bc_Ref2Str(bc_GetTypeName(self->Constructor->Parent)));
+	if(bc_IsAbstractType(BC_MEMBER_TYPE(self->Constructor))) {
+		bc_Panic(BCERROR_CONSTRUCT_ABSTRACT_TYPE_T, bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(self->Constructor))));
 	}
 }
 
@@ -76,13 +76,13 @@ bc_GenericType* bc_EvalILNewInstance(bc_ILNewInstance * self, bc_Enviroment * en
 	}
 	//型引数がないのでそのまま
 	if (self->TypeArgs->Length == 0) {
-		bc_GenericType* ret = bc_RefGenericType(self->Constructor->Parent);
+		bc_GenericType* ret = bc_RefGenericType(BC_MEMBER_TYPE(self->Constructor));
 		return ret;
 	}
 	//FQCNCache typename_group
 	if (self->InstanceGType == NULL) {
 		bc_Namespace* scope = NULL;
-		bc_GenericType* a = bc_NewGenericType(self->Constructor->Parent);
+		bc_GenericType* a = bc_NewGenericType(BC_MEMBER_TYPE(self->Constructor));
 		for (int i = 0; i < self->TypeArgs->Length; i++) {
 			bc_ILTypeArgument* e = (bc_ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
 			bc_GenericType* arg = bc_ResolveImportManager(bc_GetNamespaceCContext(cctx), e->GCache, cctx);

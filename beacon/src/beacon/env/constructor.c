@@ -15,10 +15,9 @@ static void delete_parameter(bc_VectorItem item);
 bc_Constructor* bc_NewConstructor() {
         bc_Constructor* ret =
             (bc_Constructor*)MEM_MALLOC(sizeof(bc_Constructor));
-        ret->Parent = NULL;
         ret->Env = NULL;
         ret->Parameters = bc_NewVector();
-        ret->Access = ACCESS_PUBLIC_T;
+        bc_InitMember((bc_Member*)ret);
         return ret;
 }
 

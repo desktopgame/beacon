@@ -12,6 +12,7 @@
 #define BEACON_ENV_CONSTRUCTOR_H
 #include "../ast/access_level.h"
 #include "../util/vector.h"
+#include "member.h"
 struct bc_Type;
 struct bc_Class;
 struct bc_Enviroment;
@@ -21,10 +22,9 @@ struct bc_Frame;
  * コンストラクタを表す構造体.
  */
 typedef struct bc_Constructor {
-        struct bc_Type* Parent;
+        bc_Member Super;
         struct bc_Enviroment* Env;
         bc_Vector* Parameters;
-        bc_AccessLevel Access;
 } bc_Constructor;
 
 /**
