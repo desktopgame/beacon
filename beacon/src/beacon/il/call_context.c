@@ -7,16 +7,14 @@
 #include "../env/type_interface.h"
 #include "../util/mem.h"
 
-bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename,
-                                  int lineno) {
-        bc_CallContext* ret =
-            bc_MXMalloc(sizeof(bc_CallContext), filename, lineno);
+bc_CallContext* bc_NewCallContext(bc_CallContextTag tag) {
+        bc_CallContext* ret = MEM_MALLOC(sizeof(bc_CallContext));
 #if defined(_MSC_VER)
         bc_ControlStructure cs = {0};
 #else
         bc_ControlStructure cs = {};
 #endif
-        ret->CallStack = bc_MallocVector(filename, lineno);
+        ret->CallStack = bc_NewVector();
         ret->Scope = NULL;
         ret->Ty = NULL;
         ret->Tag = tag;
@@ -25,8 +23,9 @@ bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename,
         return ret;
 }
 
-bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_CallFrameTag tag) {
-        bc_CallFrame* fr = bc_NewCallFrame(tag);
+bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_GenericType* receiver,
+                                 bc_Vector* args, bc_Vector* type_args) {
+        bc_CallFrame* fr = bc_NewCallFrame(receiver, args, type_args);
         bc_PushVector(self->CallStack, fr);
         return fr;
 }
@@ -68,14 +67,7 @@ bc_Class* bc_GetClassCContext(bc_CallContext* self) {
 
 bc_GenericType* bc_GetReceiverCContext(bc_CallContext* self) {
         bc_CallFrame* cfr = bc_TopVector(self->CallStack);
-        if (cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
-                return cfr->Kind.InstanceInvoke.Receiver;
-        } else if (cfr->Tag == FRAME_SELF_INVOKE_T) {
-                return self->Ty->GenericSelf;
-        } else if (cfr->Tag == FRAME_RESOLVE_T) {
-                return cfr->Kind.Resolve.GType;
-        }
-        return NULL;
+        return cfr->Receiver;
 }
 
 bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
@@ -88,16 +80,7 @@ bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
 
 bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self) {
         bc_CallFrame* cfr = bc_TopVector(self->CallStack);
-        if (cfr->Tag == FRAME_INSTANCE_INVOKE_T) {
-                return cfr->Kind.InstanceInvoke.TypeArgs;
-        } else if (cfr->Tag == FRAME_STATIC_INVOKE_T) {
-                return cfr->Kind.StaticInvoke.TypeArgs;
-        } else if (cfr->Tag == FRAME_SELF_INVOKE_T) {
-                return cfr->Kind.SelfInvoke.TypeArgs;
-        } else if (cfr->Tag == FRAME_RESOLVE_T) {
-                return cfr->Kind.Resolve.TypeArgs;
-        }
-        return NULL;
+        return cfr->TypeArgs;
 }
 
 bool bc_IsStaticCContext(bc_CallContext* self) {

@@ -49,11 +49,11 @@ typedef struct bc_CallContext {
         } Kind;
 } bc_CallContext;
 
-#define bc_NewCallContext(tag) (bc_MallocCContext(tag, __FILE__, __LINE__))
-bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename,
-                                  int lineno);
+bc_CallContext* bc_NewCallContext(bc_CallContextTag tag);
 
-bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_CallFrameTag tag);
+bc_CallFrame* bc_PushCallContext(bc_CallContext* self,
+                                 struct bc_GenericType* receiver,
+                                 bc_Vector* args, bc_Vector* type_args);
 
 bc_CallFrame* bc_TopCallContext(bc_CallContext* self);
 

@@ -73,20 +73,28 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
                 if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(self))) {
                         bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
                         bc_AssignVector(a->VariableTable, 0, receiver_obj);
-                        cfr = bc_PushCallContext(bc_GetScriptThreadContext(),
-                                                 FRAME_INSTANCE_INVOKE_T);
-                        cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
-                        aArgs = cfr->Kind.InstanceInvoke.Args =
-                            method_vm_args(self, fr, a);
-                        aTArgs = cfr->Kind.InstanceInvoke.TypeArgs =
-                            method_vm_typeargs(self, fr, a);
+                        cfr = bc_PushCallContext(
+                            bc_GetScriptThreadContext(), receiver_obj->GType,
+                            aArgs = method_vm_args(self, fr, a),
+                            aTArgs = method_vm_typeargs(self, fr, a));
+                        /*
+                    cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
+                    aArgs = cfr->Kind.InstanceInvoke.Args =
+                        method_vm_args(self, fr, a);
+                    aTArgs = cfr->Kind.InstanceInvoke.TypeArgs =
+                        method_vm_typeargs(self, fr, a);
+                        */
                 } else {
-                        cfr = bc_PushCallContext(bc_GetScriptThreadContext(),
-                                                 FRAME_STATIC_INVOKE_T);
+                        cfr = bc_PushCallContext(
+                            bc_GetScriptThreadContext(), NULL,
+                            aArgs = method_vm_args(self, fr, a),
+                            aTArgs = method_vm_typeargs(self, fr, a));
+                        /*
                         aArgs = cfr->Kind.StaticInvoke.Args =
                             method_vm_args(self, fr, a);
                         aTArgs = cfr->Kind.StaticInvoke.TypeArgs =
                             method_vm_typeargs(self, fr, a);
+                        */
                 }
                 bc_ExecuteNativeMethod(self->Kind.Native, self, a, env);
                 //戻り値を残す
@@ -122,8 +130,11 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
                 bc_GenericType* superGT = superP->GType;
                 bc_GenericType* subGT = subP->GType;
 
-                bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_RESOLVE_T);
-                cfr->Kind.Resolve.GType = bl;
+                bc_CallFrame* cfr =
+                    bc_PushCallContext(cctx, bl, NULL, bl->TypeArgs);
+                /*
+            cfr->Kind.Resolve.GType = bl;
+            */
                 bc_GenericType* superGT2 = bc_ApplyGenericType(superGT, cctx);
                 bc_PopCallContext(cctx);
                 //		assert(!GenericType_equals(superGT, superGT2));
@@ -135,8 +146,10 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
         }
         bc_GenericType* superRet = superM->ReturnGType;
         bc_GenericType* subRet = subM->ReturnGType;
-        bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_RESOLVE_T);
+        bc_CallFrame* cfr = bc_PushCallContext(cctx, bl, NULL, bl->TypeArgs);
+        /*
         cfr->Kind.Resolve.GType = bl;
+        */
         bc_GenericType* superRet2 = bc_ApplyGenericType(superRet, cctx);
         //	GenericType_diff(superRet, superRet2);
         //	assert(!GenericType_equals(superRet, superRet2));
@@ -253,8 +266,11 @@ bool bc_IsYieldMethod(bc_Method* self, bc_Vector* stmt_list, bool* error) {
 bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, bc_ClassLoader* cll,
                                          bc_Vector* stmt_list) {
         bc_CallContext* lCctx = bc_NewCallContext(CALL_CTOR_T);
-        bc_CallFrame* lCfr = bc_PushCallContext(lCctx, FRAME_RESOLVE_T);
-        lCfr->Kind.Resolve.GType = self->ReturnGType;
+        bc_CallFrame* lCfr = bc_PushCallContext(lCctx, self->ReturnGType, NULL,
+                                                self->ReturnGType->TypeArgs);
+        /*
+lCfr->Kind.Resolve.GType = self->ReturnGType;
+*/
         bc_StringView iterName = bc_GetMethodUniqueName(self);
         bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(),
                                                   bc_InternString("Iterator"));

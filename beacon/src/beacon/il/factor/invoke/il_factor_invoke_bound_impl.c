@@ -149,9 +149,12 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
         const char* nstr = bc_Ref2Str(self->Name);
         const char* str = bc_Ref2Str(bc_GetTypeName(ctype));
 #endif
-        bc_CallFrame* cfr = bc_PushCallContext(cctx, FRAME_SELF_INVOKE_T);
-        cfr->Kind.SelfInvoke.Args = self->Arguments;
-        cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
+        bc_CallFrame* cfr = bc_PushCallContext(cctx, cctx->Ty->GenericSelf,
+                                               self->Arguments, self->TypeArgs);
+        /*
+    cfr->Kind.SelfInvoke.Args = self->Arguments;
+    cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
+    */
         self->Tag = BOUND_INVOKE_METHOD_T;
         self->Kind.Method =
             bc_ILFindMethodClass(BC_TYPE2CLASS(ctype), self->Name,
@@ -320,15 +323,23 @@ static bc_GenericType* EvalILInvokeBoundImpl(bc_ILInvokeBound* self,
         }
         bc_CallFrame* cfr = NULL;
         if (self->Tag == BOUND_INVOKE_METHOD_T) {
-                cfr = bc_PushCallContext(cctx, FRAME_SELF_INVOKE_T);
-                cfr->Kind.SelfInvoke.Args = self->Arguments;
-                cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
+                cfr = bc_PushCallContext(cctx, cctx->Ty->GenericSelf,
+                                         self->Arguments, self->TypeArgs);
+                /*
+cfr->Kind.SelfInvoke.Args = self->Arguments;
+cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
+*/
         } else {
-                cfr = bc_PushCallContext(cctx, FRAME_INSTANCE_INVOKE_T);
-                cfr->Kind.InstanceInvoke.Receiver = bc_ApplyGenericType(
-                    bc_GetSubscriptReceiver(&self->Kind.Subscript), cctx);
-                cfr->Kind.InstanceInvoke.Args = self->Arguments;
-                cfr->Kind.InstanceInvoke.TypeArgs = self->TypeArgs;
+                cfr = bc_PushCallContext(
+                    cctx,
+                    bc_ApplyGenericType(
+                        bc_GetSubscriptReceiver(&self->Kind.Subscript), cctx),
+                    self->Arguments, self->TypeArgs);
+                /*
+            cfr->Kind.InstanceInvoke.Receiver = ;
+            cfr->Kind.InstanceInvoke.Args = self->Arguments;
+            cfr->Kind.InstanceInvoke.TypeArgs = self->TypeArgs;
+            */
         }
 
         if (ILInvokeBound_return_gtype(self, cctx)->Tag !=

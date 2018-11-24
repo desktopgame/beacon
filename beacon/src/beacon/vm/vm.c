@@ -674,11 +674,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = tp;
                                 bc_CallFrame* cfr = bc_PushCallContext(
-                                    bc_GetScriptThreadContext(),
-                                    FRAME_STATIC_INVOKE_T);
-                                cfr->Kind.StaticInvoke.Args = bc_NewVector();
-                                cfr->Kind.StaticInvoke.TypeArgs =
-                                    bc_NewVector();
+                                    bc_GetScriptThreadContext(), NULL,
+                                    bc_NewVector(), bc_NewVector());
+                                /*
+                            cfr->Kind.StaticInvoke.Args = bc_NewVector();
+                            cfr->Kind.StaticInvoke.TypeArgs =
+                                bc_NewVector();*/
                                 for (int i = 0; i < ctor->Parameters->Length;
                                      i++) {
                                         bc_VectorItem e =
@@ -687,7 +688,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                         bc_PushVector(sub->ValueStack,
                                                       NON_NULL(e));
                                         bc_AssignVector(
-                                            cfr->Kind.StaticInvoke.Args,
+                                            cfr->Args,
                                             (ctor->Parameters->Length - i),
                                             o->GType);
                                 }
@@ -700,7 +701,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                                         (typeparams - i) - 1,
                                                         e);
                                         bc_AssignVector(
-                                            cfr->Kind.StaticInvoke.TypeArgs,
+                                            cfr->TypeArgs,
                                             (cls->TypeParameters->Length - i),
                                             e);
                                 }
@@ -711,9 +712,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 // DumpOpcodeBuf(ctor->env->Bytecode,
                                 // sub->level);
                                 bc_ExecuteVM(sub, ctor->Env);
-                                bc_DeleteVector(cfr->Kind.StaticInvoke.Args,
+                                bc_DeleteVector(cfr->Args,
                                                 bc_VectorDeleterOfNull);
-                                bc_DeleteVector(cfr->Kind.StaticInvoke.TypeArgs,
+                                bc_DeleteVector(cfr->TypeArgs,
                                                 bc_VectorDeleterOfNull);
                                 bc_PopCallContext(bc_GetScriptThreadContext());
                                 //コンストラクタを実行した場合、
@@ -749,11 +750,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 sub->ObjectSize = allocSize;
                                 sub->Receiver = tp;
                                 bc_CallFrame* cfr = bc_PushCallContext(
-                                    bc_GetScriptThreadContext(),
-                                    FRAME_STATIC_INVOKE_T);
-                                cfr->Kind.StaticInvoke.Args = bc_NewVector();
-                                cfr->Kind.StaticInvoke.TypeArgs =
-                                    bc_NewVector();
+                                    bc_GetScriptThreadContext(), NULL,
+                                    bc_NewVector(), bc_NewVector());
+                                /*
+                            cfr->Kind.StaticInvoke.Args = bc_NewVector();
+                            cfr->Kind.StaticInvoke.TypeArgs =
+                                bc_NewVector();*/
                                 //チェインコンストラクタに渡された実引数をプッシュ
                                 for (int i = 0; i < ctor->Parameters->Length;
                                      i++) {
@@ -762,24 +764,23 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                         bc_PushVector(sub->ValueStack,
                                                       NON_NULL(o));
                                         bc_AssignVector(
-                                            cfr->Kind.StaticInvoke.Args,
+                                            cfr->Args,
                                             (ctor->Parameters->Length - i),
                                             o->GType);
                                 }
                                 for (int i = 0; i < self->TypeArgs->Length;
                                      i++) {
-                                        bc_PushVector(
-                                            cfr->Kind.StaticInvoke.TypeArgs,
-                                            self->TypeArgs);
+                                        bc_PushVector(cfr->TypeArgs,
+                                                      self->TypeArgs);
                                 }
                                 //		DumpEnviromentOp(ctor->env,
                                 // sub->level);
                                 // DumpOpcodeBuf(ctor->env->Bytecode,
                                 // sub->level);
                                 bc_ExecuteVM(sub, ctor->Env);
-                                bc_DeleteVector(cfr->Kind.StaticInvoke.Args,
+                                bc_DeleteVector(cfr->Args,
                                                 bc_VectorDeleterOfNull);
-                                bc_DeleteVector(cfr->Kind.StaticInvoke.TypeArgs,
+                                bc_DeleteVector(cfr->TypeArgs,
                                                 bc_VectorDeleterOfNull);
                                 bc_PopCallContext(bc_GetScriptThreadContext());
                                 //コンストラクタを実行した場合、

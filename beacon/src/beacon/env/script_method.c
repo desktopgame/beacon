@@ -32,15 +32,19 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod* self, bc_Method* parent,
                 bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
                 bc_PushVector(sub->ValueStack, receiver_obj);
                 cfr = bc_PushCallContext(bc_GetScriptThreadContext(),
-                                         FRAME_INSTANCE_INVOKE_T);
-                cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
-                cfr->Kind.InstanceInvoke.Args = aArgs;
-                cfr->Kind.InstanceInvoke.TypeArgs = aTArgs;
+                                         receiver_obj->GType, aArgs, aTArgs);
+                /*
+cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
+cfr->Kind.InstanceInvoke.Args = aArgs;
+cfr->Kind.InstanceInvoke.TypeArgs = aTArgs;
+*/
         } else {
-                cfr = bc_PushCallContext(bc_GetScriptThreadContext(),
-                                         FRAME_STATIC_INVOKE_T);
-                cfr->Kind.StaticInvoke.Args = aArgs;
-                cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
+                cfr = bc_PushCallContext(bc_GetScriptThreadContext(), NULL,
+                                         aArgs, aTArgs);
+                /*
+cfr->Kind.StaticInvoke.Args = aArgs;
+cfr->Kind.StaticInvoke.TypeArgs = aTArgs;
+*/
         }
         for (int i = 0; i < parent->Parameters->Length; i++) {
                 bc_Object* arg = bc_CopyObject(bc_PopVector(fr->ValueStack));

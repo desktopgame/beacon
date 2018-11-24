@@ -6,6 +6,7 @@
 	],
 	"settings": {
 		"files.associations": {
+			"*.c": "c",
 			"parameter.h": "c",
 			"type_interface.h": "c",
 			"string.h": "c",
@@ -142,7 +143,8 @@
 			"numeric_map.h": "c",
 			"constructor.h": "c",
 			"bc_int.h": "c",
-			"string_pool.h": "c"
+			"string_pool.h": "c",
+			"fqcn_cache.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
