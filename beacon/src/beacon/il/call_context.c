@@ -1,5 +1,6 @@
 #include "call_context.h"
 #include "../env/TYPE_IMPL.h"
+#include "../env/constructor.h"
 #include "../env/fqcn_cache.h"
 #include "../env/generic_type.h"
 #include "../env/method.h"
@@ -35,6 +36,14 @@ bc_CallContext* bc_NewMethodContext(bc_Method* method) {
         ret->Scope = BC_MEMBER_TYPE(method)->Location;
         ret->Ty = BC_MEMBER_TYPE(method);
         ret->Kind.Method = method;
+        return ret;
+}
+
+bc_CallContext* bc_NewConstructorContext(bc_Constructor* ctor) {
+        bc_CallContext* ret = bc_NewCallContext(CALL_CTOR_T);
+        ret->Scope = BC_MEMBER_TYPE(ctor)->Location;
+        ret->Ty = BC_MEMBER_TYPE(ctor);
+        ret->Kind.Ctor = ctor;
         return ret;
 }
 

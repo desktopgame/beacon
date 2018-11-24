@@ -474,10 +474,7 @@ bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         bc_Vector* parameter_list = cons->Parameters;
         BC_MEMBER_ACCESS(cons) = ilcons->Access;
         BC_MEMBER_TYPE(cons) = tp;
-        bc_CallContext* cctx = bc_NewCallContext(CALL_CTOR_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
-        cctx->Kind.Ctor = cons;
+        bc_CallContext* cctx = bc_NewConstructorContext(cons);
         // NOTE:ここでは戻り値の型,引数の型を設定しません
         //     class_loader_sgload_complete参照
         for (int i = 0; i < ilparams->Length; i++) {
@@ -502,10 +499,7 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         // cons->parameter_list); まずは仮引数の一覧にインデックスを割り振る
         bc_Enviroment* env = bc_NewEnviroment();
         env->ContextRef = self;
-        bc_CallContext* cctx = bc_NewCallContext(CALL_CTOR_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
-        cctx->Kind.Ctor = cons;
+        bc_CallContext* cctx = bc_NewConstructorContext(cons);
         for (int i = 0; i < cons->Parameters->Length; i++) {
                 bc_ILParameter* ilparam =
                     (bc_ILParameter*)bc_AtVector(ilcons->Parameters, i);

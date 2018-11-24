@@ -55,6 +55,8 @@ bc_CallContext* bc_NewTopContext(struct bc_Type* worldType);
 
 bc_CallContext* bc_NewMethodContext(struct bc_Method* method);
 
+bc_CallContext* bc_NewConstructorContext(struct bc_Constructor* ctor);
+
 bc_CallFrame* bc_PushCallContext(bc_CallContext* self,
                                  struct bc_GenericType* receiver,
                                  bc_Vector* args, bc_Vector* type_args);
