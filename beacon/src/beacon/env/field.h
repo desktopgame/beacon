@@ -10,10 +10,10 @@
 #pragma once
 #ifndef BEACON_ENV_FIELD_H
 #define BEACON_ENV_FIELD_H
-#include "member.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
+#include "member.h"
 //#include "virtual_type.h"
 struct bc_Type;
 struct bc_GenericType;

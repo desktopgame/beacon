@@ -32,7 +32,7 @@ bc_TypeParameter* bc_DupTypeParameter(bc_ILTypeParameter* src) {
                         break;
         }
         //	TypeParameter_rule_list_dup(src->rule_vec, ret->rule_vec,
-        //cache);
+        // cache);
         return ret;
 }
 

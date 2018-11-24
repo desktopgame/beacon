@@ -301,7 +301,7 @@ bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector* args,
         //	Vector* v = meta_find_constructors(self, args, env, ilctx);
         //	(*outIndex) = -1;
         //	return class_find_constructor_impl(v, args, env, ilctx,
-        //outIndex);
+        // outIndex);
         bc_Constructor* ctor = bc_MetaScopedILFindConstructor(
             self, self->Constructors, args, env, cctx, outIndex);
         return ctor;
@@ -387,7 +387,7 @@ bc_Method* bc_ILFindSMethodClass(bc_Class* self, bc_StringView namev,
         bc_Method* ret = bc_MetaILFindMethod(self->StaticMethods, namev, args,
                                              env, cctx, &temp);
         //	temp += (CountAllSMethodClass(self) -
-        //self->StaticMethods->Length);
+        // self->StaticMethods->Length);
         (*outIndex) = temp;
         return ret;
 }
@@ -400,7 +400,7 @@ bc_Method* bc_GFindSMethodClass(bc_Class* self, bc_StringView namev,
         bc_Method* ret =
             bc_MetaGFindMethod(self->StaticMethods, namev, gargs, &temp);
         //	temp += (CountAllSMethodClass(self) -
-        //self->StaticMethods->Length);
+        // self->StaticMethods->Length);
         (*outIndex) = temp;
         return ret;
 }

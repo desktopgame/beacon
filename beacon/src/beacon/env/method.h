@@ -11,7 +11,6 @@
 #ifndef BEACON_ENV_METHOD_H
 #define BEACON_ENV_METHOD_H
 #include <stdbool.h>
-#include "member.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"

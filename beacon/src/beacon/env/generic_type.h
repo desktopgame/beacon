@@ -56,7 +56,7 @@ typedef struct bc_GenericType {
 } bc_GenericType;
 
 //#define GenericType_validate(self) assert((self)->CoreType != NULL ||
-//self->VirtualTypeIndex != -1)
+// self->VirtualTypeIndex != -1)
 
 /**
  * 新しい型変数つきの型宣言を作成します.
