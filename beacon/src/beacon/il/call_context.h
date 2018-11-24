@@ -53,10 +53,7 @@ typedef struct bc_CallContext {
 bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename,
                                   int lineno);
 
-#define bc_PushCallContext(self, tag) \
-        (bc_PushImplCallContext(self, tag, __FILE__, __LINE__))
-bc_CallFrame* bc_PushImplCallContext(bc_CallContext* self, bc_CallFrameTag tag,
-                                     const char* filename, int lineno);
+bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_CallFrameTag tag);
 
 bc_CallFrame* bc_TopCallContext(bc_CallContext* self);
 

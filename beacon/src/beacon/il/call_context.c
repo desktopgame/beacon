@@ -25,9 +25,8 @@ bc_CallContext* bc_MallocCContext(bc_CallFrameTag tag, const char* filename,
         return ret;
 }
 
-bc_CallFrame* bc_PushImplCallContext(bc_CallContext* self, bc_CallFrameTag tag,
-                                     const char* filename, int lineno) {
-        bc_CallFrame* fr = bc_MallocCallFrame(tag, filename, lineno);
+bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_CallFrameTag tag) {
+        bc_CallFrame* fr = bc_NewCallFrame(tag);
         bc_PushVector(self->CallStack, fr);
         return fr;
 }
