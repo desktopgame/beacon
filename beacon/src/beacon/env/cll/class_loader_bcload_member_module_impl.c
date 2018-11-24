@@ -297,14 +297,12 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         method->Type = bc_IsNativeModifier(ilmethod->Modifier)
                            ? METHOD_TYPE_NATIVE_T
                            : METHOD_TYPE_SCRIPT_T;
+        BC_MEMBER_TYPE(method) = tp;
         BC_MEMBER_ACCESS(method) = ilmethod->Access;
         BC_MEMBER_MODIFIER(method) = ilmethod->Modifier;
         bc_DupTypeParameterList(ilmethod->TypeParameters,
                                 method->TypeParameters);
-        bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
-        cctx->Kind.Method = method;
+        bc_CallContext* cctx = bc_NewMethodContext(method);
         //インターフェースなら空
         if (tp->Tag == TYPE_INTERFACE_T ||
             bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method))) {
@@ -377,7 +375,6 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                 bc_DeleteCallContext(cctx);
                 return false;
         }
-        BC_MEMBER_TYPE(method) = tp;
         method->ReturnGType =
             bc_ResolveImportManager(scope, ilmethod->ReturnGCache, cctx);
         // ILパラメータを実行時パラメータへ変換
@@ -412,10 +409,7 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
         //まずは仮引数の一覧にインデックスを割り振る
         bc_Enviroment* env = bc_NewEnviroment();
         env->ContextRef = self;
-        bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
-        cctx->Kind.Method = me;
+        bc_CallContext* cctx = bc_NewMethodContext(mt);
         //引数を保存
         for (int i = 0; i < ilmethod->Parameters->Length; i++) {
                 bc_ILParameter* ilparam =

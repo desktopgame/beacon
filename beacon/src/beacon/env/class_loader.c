@@ -247,21 +247,18 @@ static void load_toplevel_function(bc_ClassLoader* self) {
         for (int i = 0; i < funcs->Length; i++) {
                 bc_ILFunction* ilfunc = bc_AtVector(funcs, i);
                 bc_Method* m = bc_NewMethod(ilfunc->Name);
+                BC_MEMBER_TYPE(m) = worldT;
+                BC_MEMBER_ACCESS(m) = ACCESS_PRIVATE_T;
                 bc_DupTypeParameterList(ilfunc->TypeParameters,
                                         m->TypeParameters);
                 bc_ScriptMethod* sm = bc_NewScriptMethod();
                 bc_Enviroment* env = bc_NewEnviroment();
                 // CallContextの設定
-                bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-                cctx->Scope = bc_GetLangNamespace();
-                cctx->Ty = worldT;
-                cctx->Kind.Method = m;
+                bc_CallContext* cctx = bc_NewMethodContext(m);
                 bc_Namespace* loc = bc_GetNamespaceCContext(cctx);
                 env->ContextRef = self;
                 sm->Env = env;
-                BC_MEMBER_ACCESS(m) = ACCESS_PRIVATE_T;
                 m->Kind.Script = sm;
-                BC_MEMBER_TYPE(m) = worldT;
                 //戻り値を指定
                 m->ReturnGType =
                     bc_ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);
@@ -296,10 +293,7 @@ static void load_toplevel_function(bc_ClassLoader* self) {
                 bc_ILFunction* ilfunc = bc_AtVector(funcs, i);
                 bc_Method* m = bc_AtVector(BC_TYPE2CLASS(worldT)->Methods, i);
                 bc_ScriptMethod* sm = m->Kind.Script;
-                bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-                cctx->Scope = bc_GetLangNamespace();
-                cctx->Ty = worldT;
-                cctx->Kind.Method = m;
+                bc_CallContext* cctx = bc_NewMethodContext(m);
                 CLBC_corutine(self, m, sm->Env, ilfunc->Parameters,
                               ilfunc->Statements, cctx, bc_GetLangNamespace());
                 bc_DeleteCallContext(cctx);

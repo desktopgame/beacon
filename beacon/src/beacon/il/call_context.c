@@ -30,6 +30,14 @@ bc_CallContext* bc_NewTopContext(bc_Type* worldType) {
         return ret;
 }
 
+bc_CallContext* bc_NewMethodContext(bc_Method* method) {
+        bc_CallContext* ret = bc_NewCallContext(CALL_METHOD_T);
+        ret->Scope = BC_MEMBER_TYPE(method)->Location;
+        ret->Ty = BC_MEMBER_TYPE(method);
+        ret->Kind.Method = method;
+        return ret;
+}
+
 bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_GenericType* receiver,
                                  bc_Vector* args, bc_Vector* type_args) {
         bc_CallFrame* fr = bc_NewCallFrame(receiver, args, type_args);

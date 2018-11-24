@@ -446,10 +446,7 @@ static bc_Method* create_has_next(bc_Method* self, bc_Type* ty,
         mt->Type = METHOD_TYPE_SCRIPT_T;
         bc_ScriptMethod* smt = bc_NewScriptMethod();
         bc_Enviroment* envSmt = bc_NewEnviroment();
-        bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-        cctx->Scope = BC_MEMBER_TYPE(self)->Location;
-        cctx->Ty = BC_MEMBER_TYPE(self);
-        cctx->Kind.Method = self;
+        bc_CallContext* cctx = bc_NewMethodContext(self);
         envSmt->ContextRef = cll;
 
         // iterate(int,int)のint,intを受け取る
@@ -490,15 +487,13 @@ static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,
                               int* out_op_len) {
         bc_Method* mt = bc_NewMethod(bc_InternString("current"));
         mt->ReturnGType = a;
+        BC_MEMBER_TYPE(mt) = ty;
         BC_MEMBER_MODIFIER(mt) = MODIFIER_NONE_T;
         BC_MEMBER_ACCESS(mt) = ACCESS_PUBLIC_T;
         mt->Type = METHOD_TYPE_SCRIPT_T;
         bc_ScriptMethod* smt = bc_NewScriptMethod();
         bc_Enviroment* envSmt = bc_NewEnviroment();
-        bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-        cctx->Scope = BC_MEMBER_TYPE(self)->Location;
-        cctx->Ty = BC_MEMBER_TYPE(self);
-        cctx->Kind.Method = mt;
+        bc_CallContext* cctx = bc_NewMethodContext(mt);
 
         bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)OP_STORE);
         bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)0);
@@ -506,12 +501,8 @@ static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,
         bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)OP_CORO_CURRENT);
 
         envSmt->ContextRef = cll;
-        cctx->Scope = BC_MEMBER_TYPE(self)->Location;
-        cctx->Ty = BC_MEMBER_TYPE(self);
-        cctx->Kind.Method = self;
         smt->Env = envSmt;
         mt->Kind.Script = smt;
-        BC_MEMBER_TYPE(mt) = ty;
         bc_DeleteCallContext(cctx);
         // DumpEnviromentOp(envSmt, 0);
         return mt;
