@@ -56,6 +56,13 @@ bc_CallContext* bc_NewOperatorOverloadContext(bc_OperatorOverload* opov) {
         return ret;
 }
 
+bc_CallContext* bc_NewNameContext(bc_Namespace* scope, bc_Type* type) {
+        bc_CallContext* ret = bc_NewCallContext(CALL_DECL_T);
+        ret->Scope = scope;
+        ret->Ty = type;
+        return ret;
+}
+
 bc_CallFrame* bc_PushCallContext(bc_CallContext* self, bc_GenericType* receiver,
                                  bc_Vector* args, bc_Vector* type_args) {
         bc_CallFrame* fr = bc_NewCallFrame(receiver, args, type_args);

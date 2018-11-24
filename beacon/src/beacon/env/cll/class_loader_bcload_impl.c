@@ -268,7 +268,7 @@ static void CLBC_attach_native_method(bc_ClassLoader* self, bc_ILType* ilclass,
                                       bc_Method* me) {
         //	native_method.h で、実行時にリンクするようにしたので不要
         //	me->u.NativeMethod->ref =
-        //NewNativeMethodRef(class_loader_sgload_debug_NativeMethod);
+        // NewNativeMethodRef(class_loader_sgload_debug_NativeMethod);
 }
 
 static void CLBC_debug_native_method(bc_Method* parent, bc_Frame* fr,
@@ -327,9 +327,7 @@ static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent,
         bc_InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
         bc_DupTypeParameterList(iltype->Kind.Class->TypeParameters,
                                 cls->TypeParameters);
-        bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
-        cctx->Scope = parent;
-        cctx->Ty = tp;
+        bc_CallContext* cctx = bc_NewNameContext(parent, tp);
         for (int i = 0; i < iltype->Kind.Class->Extends->Length; i++) {
                 bc_GenericCache* e = (bc_GenericCache*)bc_AtVector(
                     iltype->Kind.Class->Extends, i);
@@ -402,9 +400,7 @@ static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
         bc_InitGenericSelf(tp, iltype->Kind.Interface->TypeParameters->Length);
         bc_DupTypeParameterList(iltype->Kind.Interface->TypeParameters,
                                 inter->TypeParameters);
-        bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
-        cctx->Scope = parent;
-        cctx->Ty = tp;
+        bc_CallContext* cctx = bc_NewNameContext(parent, tp);
         for (int i = 0; i < iltype->Kind.Interface->Extends->Length; i++) {
                 bc_GenericCache* e = (bc_GenericCache*)bc_AtVector(
                     iltype->Kind.Interface->Extends, i);

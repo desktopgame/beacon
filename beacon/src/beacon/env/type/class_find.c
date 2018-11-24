@@ -560,7 +560,8 @@ bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m,
         assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(m)));
         (*outM) = NULL;
         bool ret = false;
-        bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
+        bc_CallContext* cctx =
+            bc_NewNameContext(BC_MEMBER_TYPE(m)->Location, BC_MEMBER_TYPE(m));
         cctx->Scope = BC_MEMBER_TYPE(m)->Location;
         cctx->Ty = BC_MEMBER_TYPE(m);
         for (int i = 0; i < method_list->Length; i++) {

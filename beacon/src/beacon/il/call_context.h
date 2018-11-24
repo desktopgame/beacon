@@ -59,6 +59,9 @@ bc_CallContext* bc_NewConstructorContext(struct bc_Constructor* ctor);
 
 bc_CallContext* bc_NewOperatorOverloadContext(struct bc_OperatorOverload* opov);
 
+bc_CallContext* bc_NewNameContext(struct bc_Namespace* scope,
+                                  struct bc_Type* type);
+
 bc_CallFrame* bc_PushCallContext(bc_CallContext* self,
                                  struct bc_GenericType* receiver,
                                  bc_Vector* args, bc_Vector* type_args);

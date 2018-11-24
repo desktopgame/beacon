@@ -144,9 +144,7 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
 void CLBC_fields_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                       bc_Vector* ilfields, bc_Namespace* scope) {
         bc_CL_ERROR(self);
-        bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
+        bc_CallContext* cctx = bc_NewNameContext(scope, tp);
         for (int i = 0; i < ilfields->Length; i++) {
                 if (!CLBC_field_decl(self, iltype, tp, bc_AtVector(ilfields, i),
                                      scope, cctx)) {
@@ -252,9 +250,7 @@ bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
 void CLBC_properties_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                           bc_Vector* ilprops, bc_Namespace* scope) {
         bc_CL_ERROR(self);
-        bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
+        bc_CallContext* cctx = bc_NewNameContext(scope, tp);
         for (int i = 0; i < ilprops->Length; i++) {
                 if (!CLBC_Property_decl(self, iltype, tp,
                                         bc_AtVector(ilprops, i), scope, cctx)) {
@@ -268,9 +264,7 @@ void CLBC_properties_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                           bc_Vector* ilprops, bc_Vector* sgprops,
                           bc_Namespace* scope) {
         bc_CL_ERROR(self);
-        bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
+        bc_CallContext* cctx = bc_NewNameContext(scope, tp);
         for (int i = 0; i < sgprops->Length; i++) {
                 if (!CLBC_Property_impl(self, iltype, tp,
                                         bc_AtVector(ilprops, i),
