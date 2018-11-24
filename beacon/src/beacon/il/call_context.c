@@ -103,7 +103,7 @@ bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self) {
 
 bool bc_IsStaticCContext(bc_CallContext* self) {
         return self->Tag == CALL_METHOD_T &&
-               bc_IsStaticModifier(self->Kind.Method->Modifier);
+               bc_IsStaticModifier(BC_MEMBER_MODIFIER(self->Kind.Method));
 }
 
 void bc_DeleteCallContext(bc_CallContext* self) {

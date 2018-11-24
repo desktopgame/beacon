@@ -260,9 +260,9 @@ static void load_toplevel_function(bc_ClassLoader* self) {
                 bc_Namespace* loc = bc_GetNamespaceCContext(cctx);
                 env->ContextRef = self;
                 sm->Env = env;
-                m->Access = ACCESS_PRIVATE_T;
+                BC_MEMBER_ACCESS(m) = ACCESS_PRIVATE_T;
                 m->Kind.Script = sm;
-                m->Parent = worldT;
+                BC_MEMBER_TYPE(m) = worldT;
                 //戻り値を指定
                 m->ReturnGType =
                     bc_ResolveImportManager(loc, ilfunc->ReturnGCache, cctx);

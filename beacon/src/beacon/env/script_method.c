@@ -25,10 +25,10 @@ void bc_ExecuteScriptMethod(bc_ScriptMethod* self, bc_Method* parent,
 #endif
         bc_Frame* sub = bc_SubFrame(fr);
         bc_CallFrame* cfr = NULL;
-        sub->Receiver = parent->Parent;
+        sub->Receiver = BC_MEMBER_TYPE(parent);
         bc_Vector* aArgs = bc_NewVector();
         bc_Vector* aTArgs = bc_NewVector();
-        if (!bc_IsStaticModifier(parent->Modifier)) {
+        if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(parent))) {
                 bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
                 bc_PushVector(sub->ValueStack, receiver_obj);
                 cfr = bc_PushCallContext(bc_GetScriptThreadContext(),

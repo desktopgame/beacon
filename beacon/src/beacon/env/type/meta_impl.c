@@ -292,14 +292,14 @@ bool bc_IsMetaMethodAccessValid(bc_Method* m, bc_CallContext* cctx) {
 	bc_Class* context = bc_GetClassCContext(cctx);
 	//privateメソッドなのに現在のコンテキストではない
 	if(context != NULL &&
-		m->Access == ACCESS_PRIVATE_T &&
-		BC_TYPE2CLASS(m->Parent) != context) {
+		BC_MEMBER_ACCESS(m) == ACCESS_PRIVATE_T &&
+		BC_TYPE2CLASS(BC_MEMBER_TYPE(m)) != context) {
 		return false;
 	}
 	//protectedメソッドなのにそのサブクラスではない
 	if(context != NULL &&
-		m->Access == ACCESS_PROTECTED_T &&
-		bc_DistanceClass(BC_TYPE2CLASS(m->Parent), context) < 0) {
+		BC_MEMBER_ACCESS(m) == ACCESS_PROTECTED_T &&
+		bc_DistanceClass(BC_TYPE2CLASS(BC_MEMBER_TYPE(m)), context) < 0) {
 		return false;
 	}
 	return true;

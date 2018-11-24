@@ -509,12 +509,12 @@ bc_Vector* bc_FindTreeMethodClass(bc_Class* self, bc_Method* m) {
 }
 
 bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m, bc_Method** outM) {
-	assert(!bc_IsStaticModifier(m->Modifier));
+	assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(m)));
 	(*outM) = NULL;
 	bool ret = false;
 	bc_CallContext* cctx = bc_NewCallContext(CALL_DECL_T);
-	cctx->Scope = m->Parent->Location;
-	cctx->Ty = m->Parent;
+	cctx->Scope = BC_MEMBER_TYPE(m)->Location;
+	cctx->Ty = BC_MEMBER_TYPE(m);
 	for(int i=0; i<method_list->Length; i++) {
 		bc_Method* mE = bc_AtVector(method_list, i);
 		if(bc_IsOverridedMethod(m, mE, cctx)) {

@@ -49,11 +49,9 @@ bc_Method* bc_MallocMethod(bc_StringView name, const char* filename,
         ret->Name = name;
         ret->Parameters = bc_MallocVector(filename, lineno);
         ret->Type = METHOD_TYPE_SCRIPT_T;
-        ret->Access = ACCESS_PUBLIC_T;
-        ret->Modifier = MODIFIER_NONE_T;
-        ret->Parent = NULL;
         ret->TypeParameters = bc_MallocVector(filename, lineno);
         ret->ReturnGType = NULL;
+        bc_InitMember((bc_Member*)ret);
         return ret;
 }
 
@@ -72,7 +70,7 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
                 bc_Vector* aArgs = NULL;
                 bc_Vector* aTArgs = NULL;
                 //レシーバも
-                if (!bc_IsStaticModifier(self->Modifier)) {
+                if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(self))) {
                         bc_Object* receiver_obj = bc_PopVector(fr->ValueStack);
                         bc_AssignVector(a->VariableTable, 0, receiver_obj);
                         cfr = bc_PushCallContext(bc_GetScriptThreadContext(),
@@ -112,7 +110,8 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
             superM->Parameters->Length != subM->Parameters->Length) {
                 return false;
         }
-        bc_GenericType* bl = bc_BaselineType(superM->Parent, subM->Parent);
+        bc_GenericType* bl =
+            bc_BaselineType(BC_MEMBER_TYPE(superM), BC_MEMBER_TYPE(subM));
         assert(bl != NULL);
         //全ての引数を比較
         for (int i = 0; i < superM->Parameters->Length; i++) {
@@ -213,7 +212,8 @@ bc_StringView bc_MangleMethod(bc_Method* self) {
 
 bc_StringView bc_GetMethodUniqueName(bc_Method* self) {
         bc_Buffer* ret = bc_NewBuffer();
-        bc_AppendsBuffer(ret, bc_Ref2Str(bc_GetTypeFullName(self->Parent)));
+        bc_AppendsBuffer(ret,
+                         bc_Ref2Str(bc_GetTypeFullName(BC_MEMBER_TYPE(self))));
         bc_AppendsBuffer(ret, bc_Ref2Str(bc_MangleMethod(self)));
         char* raw = bc_ReleaseBuffer(ret);
         bc_StringView sv = bc_InternString(raw);
@@ -425,14 +425,14 @@ static bc_Method* create_has_next(bc_Method* self, bc_Type* ty,
                                   int* out_op_len) {
         bc_Method* mt = bc_NewMethod(bc_InternString("moveNext"));
         mt->ReturnGType = BC_GENERIC_BOOL;
-        mt->Modifier = MODIFIER_NONE_T;
-        mt->Access = ACCESS_PUBLIC_T;
+        BC_MEMBER_MODIFIER(mt) = MODIFIER_NONE_T;
+        BC_MEMBER_ACCESS(mt) = ACCESS_PUBLIC_T;
         mt->Type = METHOD_TYPE_SCRIPT_T;
         bc_ScriptMethod* smt = bc_NewScriptMethod();
         bc_Enviroment* envSmt = bc_NewEnviroment();
         bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-        cctx->Scope = self->Parent->Location;
-        cctx->Ty = self->Parent;
+        cctx->Scope = BC_MEMBER_TYPE(self)->Location;
+        cctx->Ty = BC_MEMBER_TYPE(self);
         cctx->Kind.Method = self;
         envSmt->ContextRef = cll;
 
@@ -458,14 +458,14 @@ static bc_Method* create_has_next(bc_Method* self, bc_Type* ty,
                 bc_GenerateILStmt(e, envSmt, cctx);
         }
         bc_AddOpcodeBuf(envSmt->Bytecode, OP_CORO_EXIT);
-        if (bc_GetTypeName(self->Parent) == bc_InternString("Base")) {
+        if (bc_GetTypeName(BC_MEMBER_TYPE(self)) == bc_InternString("Base")) {
                 //	DumpEnviromentOp(envSmt, 0);
         }
         (*out_op_len) = envSmt->Bytecode->Instructions->Length;
         bc_DeleteCallContext(cctx);
         smt->Env = envSmt;
         mt->Kind.Script = smt;
-        mt->Parent = ty;
+        BC_MEMBER_TYPE(mt) = ty;
         return mt;
 }
 
@@ -474,14 +474,14 @@ static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,
                               int* out_op_len) {
         bc_Method* mt = bc_NewMethod(bc_InternString("current"));
         mt->ReturnGType = a;
-        mt->Modifier = MODIFIER_NONE_T;
-        mt->Access = ACCESS_PUBLIC_T;
+        BC_MEMBER_MODIFIER(mt) = MODIFIER_NONE_T;
+        BC_MEMBER_ACCESS(mt) = ACCESS_PUBLIC_T;
         mt->Type = METHOD_TYPE_SCRIPT_T;
         bc_ScriptMethod* smt = bc_NewScriptMethod();
         bc_Enviroment* envSmt = bc_NewEnviroment();
         bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
-        cctx->Scope = self->Parent->Location;
-        cctx->Ty = self->Parent;
+        cctx->Scope = BC_MEMBER_TYPE(self)->Location;
+        cctx->Ty = BC_MEMBER_TYPE(self);
         cctx->Kind.Method = mt;
 
         bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)OP_STORE);
@@ -490,12 +490,12 @@ static bc_Method* create_next(bc_Method* self, bc_Type* ty, bc_ClassLoader* cll,
         bc_AddOpcodeBuf(envSmt->Bytecode, (bc_VectorItem)OP_CORO_CURRENT);
 
         envSmt->ContextRef = cll;
-        cctx->Scope = self->Parent->Location;
-        cctx->Ty = self->Parent;
+        cctx->Scope = BC_MEMBER_TYPE(self)->Location;
+        cctx->Ty = BC_MEMBER_TYPE(self);
         cctx->Kind.Method = self;
         smt->Env = envSmt;
         mt->Kind.Script = smt;
-        mt->Parent = ty;
+        BC_MEMBER_TYPE(mt) = ty;
         bc_DeleteCallContext(cctx);
         // DumpEnviromentOp(envSmt, 0);
         return mt;

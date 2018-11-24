@@ -222,13 +222,13 @@ static void GenerateILInvoke_method(bc_ILInvoke* self, bc_Enviroment* env, bc_Ca
 		bc_GenerateILFactor(e->Factor, env, cctx);
 	}
 	bc_GenerateILFactor(self->receiver, env, cctx);
-	if(self->u.m->Parent->Tag == TYPE_INTERFACE_T) {
+	if(BC_MEMBER_TYPE(self->u.m)->Tag == TYPE_INTERFACE_T) {
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKEINTERFACE);
-		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->u.m->Parent->AbsoluteIndex);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)BC_MEMBER_TYPE(self->u.m)->AbsoluteIndex);
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->index);
 	} else {
-		assert(!bc_IsStaticModifier(self->u.m->Modifier));
-		if(self->u.m->Access == ACCESS_PRIVATE_T) {
+		assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(self->u.m)));
+		if(BC_MEMBER_ACCESS(self->u.m) == ACCESS_PRIVATE_T) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKESPECIAL);
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->index);
 		} else {

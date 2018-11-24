@@ -167,7 +167,7 @@ void bc_AddPropertyClass(bc_Class* self, bc_Property* p) {
 
 void bc_AddMethodClass(bc_Class* self, bc_Method * m) {
 	assert(m != NULL);
-	if (bc_IsStaticModifier(m->Modifier)) {
+	if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(m))) {
 		m->Index = self->StaticMethods->Length;
 		bc_PushVector(self->StaticMethods, m);
 	} else {
@@ -375,7 +375,7 @@ void bc_LinkAllClass(bc_Class* self) {
 	}
 	for (int i = 0; i < self->Methods->Length; i++) {
 		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);
-		m->Parent = self->Parent;
+		BC_MEMBER_TYPE(m) = self->Parent;
 	}
 	for (int i = 0; i < self->Constructors->Length; i++) {
 		bc_Constructor* ctor = (bc_Constructor*)bc_AtVector(self->Constructors, i);
@@ -417,8 +417,8 @@ void bc_DeleteClass(bc_Class* self) {
 static void create_vtable_top(bc_Class* self) {
 	for (int i = 0; i < self->Methods->Length; i++) {
 		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);
-		if(m->Access != ACCESS_PRIVATE_T &&
-		   !bc_IsStaticModifier(m->Modifier)) {
+		if(BC_MEMBER_ACCESS(m) != ACCESS_PRIVATE_T &&
+		   !bc_IsStaticModifier(BC_MEMBER_MODIFIER(m))) {
 			bc_AddVTable(self->VT, m);
 		}
 	}
@@ -435,8 +435,8 @@ static void create_vtable_override(bc_Class* self) {
 	bc_CopyVTable(self->SuperClass->CoreType->Kind.Class->VT, self->VT);
 	for (int i = 0; i < self->Methods->Length; i++) {
 		bc_Method* m = (bc_Method*)bc_AtVector(self->Methods, i);
-		if(m->Access != ACCESS_PRIVATE_T &&
-		   !bc_IsStaticModifier(m->Modifier)) {
+		if(BC_MEMBER_ACCESS(m) != ACCESS_PRIVATE_T &&
+		   !bc_IsStaticModifier(BC_MEMBER_MODIFIER(m))) {
 			bc_ReplaceVTable(self->VT, m, cctx);
 		}
 	}
@@ -466,7 +466,7 @@ static void create_vtable_interface(bc_Class* self) {
 			if(!self->IsAbstract && classVTM == NULL) {
 				bc_PushVector(self->VTTable, newVT);
 				bc_Panic(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
-					bc_Ref2Str(bc_GetTypeName(interVTM->Parent)),
+					bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(interVTM))),
 					bc_Ref2Str(interVTM->Name)
 				);
 				bc_DeleteVector(tbl, bc_VectorDeleterOfNull);

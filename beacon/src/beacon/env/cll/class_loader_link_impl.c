@@ -121,7 +121,7 @@ static void CLBC_interface_decl(bc_ClassLoader * self, bc_ILType * iltype, bc_Ty
 	//privateなメンバーは定義できない
 	for(int i=0; i<tp->Kind.Interface->Methods->Length; i++) {
 		bc_Method* e = bc_AtVector(tp->Kind.Interface->Methods, i);
-		if(e->Access == ACCESS_PRIVATE_T) {
+		if(BC_MEMBER_ACCESS(e) == ACCESS_PRIVATE_T) {
 			bc_Panic(
 				BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
 				bc_Ref2Str(bc_GetTypeName(tp)),

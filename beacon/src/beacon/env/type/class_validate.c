@@ -109,7 +109,7 @@ bool bc_IsImplementAbstractClassValidClass(bc_Class* cls, bc_Method** out) {
 		#if defined(DEBUG)
 		const char* mename = bc_Ref2Str(me->Name);
 		#endif
-		if(!bc_IsAbstractModifier(me->Modifier)) { continue; }
+		if(!bc_IsAbstractModifier(BC_MEMBER_MODIFIER(me))) { continue; }
 		bc_Vector* methods = bc_FindTreeMethodClass(cls, me);
 		if(methods->Length == 0 || methods_is_all_abstract(methods)) {
 		   (*out) = me;
@@ -225,9 +225,9 @@ static bool methods_is_all_abstract(bc_Vector* v) {
 	for(int i=0; i<v->Length; i++) {
 		bc_Method* e = bc_AtVector(v, i);
 		#if defined(DEBUG)
-		const char* tyname = bc_Ref2Str(bc_GetTypeName(e->Parent));
+		const char* tyname = bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(e)));
 		#endif
-		if(!bc_IsAbstractModifier(e->Modifier)) {
+		if(!bc_IsAbstractModifier(BC_MEMBER_MODIFIER(e))) {
 			return false;
 		}
 	}

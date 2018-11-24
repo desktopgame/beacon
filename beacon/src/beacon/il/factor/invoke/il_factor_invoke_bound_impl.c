@@ -202,13 +202,13 @@ static void GenerateILInvokeBound_method(bc_ILInvokeBound* self, bc_Enviroment* 
 			return;
 		}
 	}
-	if(bc_IsStaticModifier(self->Kind.Method->Modifier)) {
+	if(bc_IsStaticModifier(BC_MEMBER_MODIFIER(self->Kind.Method))) {
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKESTATIC);
-		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Kind.Method->Parent->AbsoluteIndex);
+		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)BC_MEMBER_TYPE(self->Kind.Method)->AbsoluteIndex);
 		bc_AddOpcodeBuf(env->Bytecode,(bc_VectorItem) self->Index);
 	} else {
 		bc_AddOpcodeBuf(env->Bytecode,(bc_VectorItem) OP_THIS);
-		if(self->Kind.Method->Access == ACCESS_PRIVATE_T) {
+		if(BC_MEMBER_ACCESS(self->Kind.Method) == ACCESS_PRIVATE_T) {
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKESPECIAL);
 			bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Index);
 		} else {

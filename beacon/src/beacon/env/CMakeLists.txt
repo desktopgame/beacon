@@ -14,6 +14,7 @@ add_library("lib__beacon_env" STATIC
     "vtable.c"
     "property.c"
     "operator_overload.c"
+    "member.c"
     "class_loader.c"
     "type_parameter.c"
     "script_context.c"

@@ -42,9 +42,9 @@ static void check_context(bc_ILThis * self, bc_Enviroment * env, bc_CallContext*
 		return;
 	}
 	bc_Method* met = bc_GetMethodCContext(cctx);
-	if(bc_IsStaticModifier(met->Modifier)) {
+	if(bc_IsStaticModifier(BC_MEMBER_MODIFIER(met))) {
 		bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
-			bc_Ref2Str(bc_GetTypeName(met->Parent)),
+			bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(met))),
 			bc_Ref2Str(met->Name)
 		);
 	}

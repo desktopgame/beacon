@@ -11,10 +11,12 @@
 #ifndef BEACON_ENV_METHOD_H
 #define BEACON_ENV_METHOD_H
 #include <stdbool.h>
+#include "member.h"
 #include "../ast/access_level.h"
 #include "../ast/modifier_type.h"
 #include "../util/string_pool.h"
 #include "../util/vector.h"
+#include "member.h"
 #include "native_method.h"
 #include "script_method.h"
 struct bc_Type;
@@ -37,14 +39,12 @@ typedef enum bc_MethodType {
  * メソッドを表す構造体.
  */
 typedef struct bc_Method {
+        bc_Member Super;
         bc_StringView Name;
         bc_MethodType Type;
-        struct bc_Type* Parent;
         struct bc_GenericType* ReturnGType;
         bc_Vector* Parameters;
         bc_Vector* TypeParameters;
-        bc_AccessLevel Access;
-        bc_ModifierType Modifier;
         int Index;
         union {
                 bc_ScriptMethod* Script;

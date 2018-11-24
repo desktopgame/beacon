@@ -269,8 +269,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 	bc_Method* method = bc_NewMethod(ilmethod->Name);
 	bc_Vector* parameter_list = method->Parameters;
 	method->Type = bc_IsNativeModifier(ilmethod->Modifier) ? METHOD_TYPE_NATIVE_T : METHOD_TYPE_SCRIPT_T;
-	method->Access = ilmethod->Access;
-	method->Modifier = ilmethod->Modifier;
+	BC_MEMBER_ACCESS(method) = ilmethod->Access;
+	BC_MEMBER_MODIFIER(method) = ilmethod->Modifier;
 	bc_DupTypeParameterList(ilmethod->TypeParameters, method->TypeParameters);
 	bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
 	cctx->Scope = scope;
@@ -278,11 +278,11 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 	cctx->Kind.Method = method;
 	//インターフェースなら空
 	if (tp->Tag == TYPE_INTERFACE_T ||
-	   bc_IsAbstractModifier(method->Modifier)) {
+	   bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method))) {
 		method->Type = METHOD_TYPE_ABSTRACT_T;
 		method->Kind.Script = NULL;
 	} else {
-		if(bc_IsNativeModifier(method->Modifier)) {
+		if(bc_IsNativeModifier(BC_MEMBER_MODIFIER(method))) {
 			method->Kind.Native = bc_NewNativeMethod();
 		} else {
 			method->Kind.Script = bc_NewScriptMethod();
@@ -290,7 +290,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 	}
 	//メソッドが抽象メソッドだが、
 	//インターフェイスでも抽象クラスでもない
-	if(bc_IsAbstractModifier(method->Modifier) &&
+	if(bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) &&
 	  (tp->Tag == TYPE_CLASS_T &&
 	  !BC_TYPE2CLASS(tp)->IsAbstract)) {
 		bc_Panic(BCERROR_ABSTRACT_METHOD_BY_T, bc_Ref2Str(method->Name));
@@ -302,7 +302,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 	//ネイティブメソッドでも抽象メソッドでもない
 	if(tp->Tag == TYPE_CLASS_T &&
 	   ilmethod->IsNoStmt &&
-		(!bc_IsAbstractModifier(method->Modifier) && !bc_IsNativeModifier(method->Modifier))
+		(!bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) && !bc_IsNativeModifier(BC_MEMBER_MODIFIER(method)))
 	) {
 		bc_Panic(BCERROR_EMPTY_STMT_METHOD_T, bc_Ref2Str(method->Name));
 		bc_DeleteMethod(method);
@@ -312,7 +312,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 	//ネイティブメソッドもしくは抽象メソッドなのに本文が書かれている
 	if(tp->Tag == TYPE_CLASS_T &&
 	   !ilmethod->IsNoStmt &&
-		(bc_IsAbstractModifier(method->Modifier) || bc_IsNativeModifier(method->Modifier))
+		(bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) || bc_IsNativeModifier(BC_MEMBER_MODIFIER(method)))
 	) {
 		bc_Panic(BCERROR_NOT_EMPTY_STMT_METHOD_T, bc_Ref2Str(method->Name));
 		bc_DeleteMethod(method);
@@ -320,8 +320,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 		return false;
 	}
 	//メソッドの修飾子が static override
-	if(bc_IsStaticModifier(method->Modifier) &&
-	   bc_IsOverrideModifier(method->Modifier)) {
+	if(bc_IsStaticModifier(BC_MEMBER_MODIFIER(method)) &&
+	   bc_IsOverrideModifier(BC_MEMBER_MODIFIER(method))) {
 		bc_Panic(BCERROR_STATIC_OVERRIDE_METHOD_T,
 			bc_Ref2Str(bc_GetTypeName(tp)),
 			bc_Ref2Str(method->Name)
@@ -331,8 +331,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 		return false;
 	}
 	//.. abstract override
-	if(bc_IsAbstractModifier(method->Modifier) &&
-	   bc_IsOverrideModifier(method->Modifier)) {
+	if(bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) &&
+	   bc_IsOverrideModifier(BC_MEMBER_MODIFIER(method))) {
 		bc_Panic(BCERROR_ABSTRACT_OVERRIDE_METHOD_T,
 			bc_Ref2Str(bc_GetTypeName(tp)),
 			bc_Ref2Str(method->Name)
@@ -342,8 +342,8 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 		return false;
 	}
 	//.. abstract static
-	if(bc_IsAbstractModifier(method->Modifier) &&
-	   bc_IsStaticModifier(method->Modifier)) {
+	if(bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) &&
+	   bc_IsStaticModifier(BC_MEMBER_MODIFIER(method))) {
 		bc_Panic(BCERROR_ABSTRACT_STATIC_METHOD_T,
 			bc_Ref2Str(bc_GetTypeName(tp)),
 			bc_Ref2Str(method->Name)
@@ -352,7 +352,7 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp, bc_I
 		bc_DeleteCallContext(cctx);
 		return false;
 	}
-	method->Parent = tp;
+	BC_MEMBER_TYPE(method) = tp;
 	method->ReturnGType = bc_ResolveImportManager(scope, ilmethod->ReturnGCache, cctx);
 	//ILパラメータを実行時パラメータへ変換
 	//NOTE:ここでは戻り値の型,引数の型を設定しません
@@ -402,7 +402,7 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_ILType* ilty
 	}
 	//インスタンスメソッドなら
 	//0番目を this で埋める
-	if (!bc_IsStaticModifier(me->Modifier)) {
+	if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(me))) {
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
 		bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)0);
 	}

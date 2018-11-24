@@ -42,7 +42,7 @@ void bc_GenerateILInvokeStatic(bc_ILInvokeStatic* self, bc_Enviroment* env, bc_C
 		}
 	}
 	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_INVOKESTATIC);
-	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Method->Parent->AbsoluteIndex);
+	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)BC_MEMBER_TYPE(self->Method)->AbsoluteIndex);
 	bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)self->Index);
 }
 

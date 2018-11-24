@@ -105,7 +105,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
 }
 
 static void bc_array_nativeInit(bc_Method* parent, bc_Frame* fr, bc_Enviroment* env) {
-	bc_Type* tp = parent->Parent;
+	bc_Type* tp = BC_MEMBER_TYPE(parent);
 	//Array#lengthを取り出す
 	int temp = 0;
 	bc_Field* lengthField = bc_FindFieldClass(tp->Kind.Class, bc_InternString("length"), &temp);

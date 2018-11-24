@@ -18,14 +18,14 @@ void bc_CopyVTable(bc_VTable* src, bc_VTable* dst) {
 }
 
 void bc_AddVTable(bc_VTable* self, bc_Method* m) {
-        if (bc_IsStaticModifier(m->Modifier)) {
+        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(m))) {
                 return;
         }
         bc_PushVector(self->Elements, m);
 }
 
 void bc_ReplaceVTable(bc_VTable* self, bc_Method* m, bc_CallContext* cctx) {
-        if (bc_IsStaticModifier(m->Modifier)) {
+        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(m))) {
                 return;
         }
 #if defined(DEBUG)
