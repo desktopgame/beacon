@@ -5,6 +5,7 @@
 #include "../env/generic_type.h"
 #include "../env/method.h"
 #include "../env/namespace.h"
+#include "../env/operator_overload.h"
 #include "../env/type_interface.h"
 #include "../util/mem.h"
 
@@ -44,6 +45,14 @@ bc_CallContext* bc_NewConstructorContext(bc_Constructor* ctor) {
         ret->Scope = BC_MEMBER_TYPE(ctor)->Location;
         ret->Ty = BC_MEMBER_TYPE(ctor);
         ret->Kind.Ctor = ctor;
+        return ret;
+}
+
+bc_CallContext* bc_NewOperatorOverloadContext(bc_OperatorOverload* opov) {
+        bc_CallContext* ret = bc_NewCallContext(CALL_OPOV_T);
+        ret->Scope = BC_MEMBER_TYPE(opov)->Location;
+        ret->Ty = BC_MEMBER_TYPE(opov);
+        ret->Kind.OpOv = opov;
         return ret;
 }
 

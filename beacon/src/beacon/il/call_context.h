@@ -57,6 +57,8 @@ bc_CallContext* bc_NewMethodContext(struct bc_Method* method);
 
 bc_CallContext* bc_NewConstructorContext(struct bc_Constructor* ctor);
 
+bc_CallContext* bc_NewOperatorOverloadContext(struct bc_OperatorOverload* opov);
+
 bc_CallFrame* bc_PushCallContext(bc_CallContext* self,
                                  struct bc_GenericType* receiver,
                                  bc_Vector* args, bc_Vector* type_args);

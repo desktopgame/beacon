@@ -564,13 +564,10 @@ bool CLBC_operator_overload_decl(bc_ClassLoader* self, bc_ILType* iltype,
         //演算子オーバーロード一覧から取り出す
         bc_OperatorOverload* opov = bc_NewOperatorOverload(ilopov->Type);
         BC_MEMBER_ACCESS(opov) = ilopov->Access;
-        // CallContextの設定
-        bc_CallContext* cctx = bc_NewCallContext(CALL_OPOV_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
-        cctx->Kind.OpOv = opov;
-        //戻り値読み込み
         BC_MEMBER_TYPE(opov) = tp;
+        // CallContextの設定
+        bc_CallContext* cctx = bc_NewOperatorOverloadContext(opov);
+        //戻り値読み込み
         opov->ReturnGType =
             bc_ResolveImportManager(scope, ilopov->ReturnGCache, cctx);
         //パラメータ読み込み
@@ -599,10 +596,7 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, bc_ILType* iltype,
         // FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
         //まずは仮引数の一覧にインデックスを割り振る
         bc_Enviroment* env = bc_NewEnviroment();
-        bc_CallContext* cctx = bc_NewCallContext(CALL_OPOV_T);
-        cctx->Scope = scope;
-        cctx->Ty = tp;
-        cctx->Kind.OpOv = opov;
+        bc_CallContext* cctx = bc_NewOperatorOverloadContext(opov);
         // ccpush_method(me);
         env->ContextRef = self;
         for (int i = 0; i < ilopov->Parameters->Length; i++) {
