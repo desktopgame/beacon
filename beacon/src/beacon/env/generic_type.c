@@ -216,8 +216,8 @@ void bc_GenerateGenericType(bc_GenericType* self, bc_Enviroment* env) {
 // Hash<String,List<Int>>
 bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
                                     bc_CallContext* cctx) {
-        return bc_ExpandGenericType(self, bc_GetReceiverCContext(cctx),
-                                    bc_GetTypeArgsCContext(cctx),
+        return bc_ExpandGenericType(self, bc_GetCompileTimeReceiver(cctx),
+                                    bc_GetCompileTimeTypeArguments(cctx),
                                     PHASE_COMPILE_TIME);
 }
 
@@ -436,7 +436,7 @@ static bc_Vector* apply_by_hierarchy(bc_GenericType* impl_baseline,
 static bc_GenericType* typeargs_at(bc_CallContext* cctx, bc_Frame* fr,
                                    int index) {
         if (fr == NULL) {
-                bc_Vector* type_args = bc_GetTypeArgsCContext(cctx);
+                bc_Vector* type_args = bc_GetCompileTimeTypeArguments(cctx);
                 bc_ILTypeArgument* a = bc_AtVector(type_args, index);
                 return a->GType;
         } else {
@@ -449,7 +449,7 @@ static bc_GenericType* typeargs_at(bc_CallContext* cctx, bc_Frame* fr,
 static bc_GenericType* receiver_at(bc_CallContext* cctx, bc_Frame* fr,
                                    int index) {
         if (fr == NULL) {
-                bc_GenericType* tp = bc_GetReceiverCContext(cctx);
+                bc_GenericType* tp = bc_GetCompileTimeReceiver(cctx);
                 bc_GenericType* instanced = bc_AtVector(tp->TypeArgs, index);
                 return instanced;
         } else {

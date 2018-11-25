@@ -137,7 +137,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
                 return;
         }
         //対応するメソッドを検索
-        bc_Type* ctype = bc_GetTypeCContext(cctx);
+        bc_Type* ctype = bc_GetTypeByContext(cctx);
         int temp = -1;
         bc_ResolveILTypeArgument(self->TypeArgs, cctx);
         for (int i = 0; i < self->Arguments->Length; i++) {
@@ -177,7 +177,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         //フィールドとして解決する
         bc_Field* fi =
-            bc_FindFieldClass(bc_GetClassCContext(cctx), self->Name, &temp);
+            bc_FindFieldClass(bc_GetClassByContext(cctx), self->Name, &temp);
         if (receiver_gtype == NULL && fi != NULL) {
                 receiver_gtype = fi->GType;
                 self->Kind.Subscript.Tag = SUBSCRIPT_FIELD_T;
@@ -186,7 +186,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         //プロパティとして解決する
         bc_Property* prop =
-            bc_FindPropertyClass(bc_GetClassCContext(cctx), self->Name, &temp);
+            bc_FindPropertyClass(bc_GetClassByContext(cctx), self->Name, &temp);
         if (receiver_gtype == NULL && prop != NULL) {
                 receiver_gtype = prop->GType;
                 self->Kind.Subscript.Tag = SUBSCRIPT_PROPERTY_T;

@@ -108,14 +108,14 @@ static void assign_by_namebase(bc_ILAssignOp* self, bc_Enviroment* env,
         // staticなフィールドへの代入
         if (ilvar->Type == ILVARIABLE_TYPE_STATIC_T) {
                 bc_Class* cls = BC_TYPE2CLASS(
-                    bc_GetEvalTypeCContext(cctx, ilvar->Kind.Static->FQCN));
+                    bc_ResolveContext(cctx, ilvar->Kind.Static->FQCN));
                 int temp = -1;
                 bc_Field* sf = bc_FindSFieldClass(cls, ilmem->Name, &temp);
                 assert(temp != -1);
                 bc_GenerateILFactor(self->Right, env, cctx);
                 bc_GeneratePutField(env->Bytecode, sf, temp);
                 //指定の静的フィールドにアクセスできない
-                if (!bc_IsAccessibleFieldClass(bc_GetClassCContext(cctx), sf)) {
+                if (!bc_IsAccessibleFieldClass(bc_GetClassByContext(cctx), sf)) {
                         bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
                                  bc_Ref2Str(bc_GetTypeName(cls->Parent)),
                                  bc_Ref2Str(sf->Name));
@@ -154,7 +154,7 @@ static void assign_to_field(bc_ILAssignOp* self, bc_ILFactor* receiver,
                 return;
         }
         //指定のインスタンスフィールドにアクセスできない
-        if (!bc_IsAccessibleFieldClass(bc_GetClassCContext(cctx), f)) {
+        if (!bc_IsAccessibleFieldClass(bc_GetClassByContext(cctx), f)) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
                          bc_Ref2Str(bc_GetTypeName(cls->Parent)),
                          bc_Ref2Str(f->Name));
@@ -170,13 +170,13 @@ static void assign_to_Property(bc_ILAssignOp* self, bc_Enviroment* env,
             bc_IsStaticModifier(BC_MEMBER_MODIFIER(prop->Property));
         BC_ERROR();
         //プロパティへアクセスできない
-        if (!bc_IsAccessiblePropertyClass(bc_GetClassCContext(cctx), pp)) {
+        if (!bc_IsAccessiblePropertyClass(bc_GetClassByContext(cctx), pp)) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
                          bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(pp))),
                          bc_Ref2Str(pp->Name));
                 return;
         }
-        if (!bc_IsAccessiblePropertyAccessorClass(bc_GetClassCContext(cctx),
+        if (!bc_IsAccessiblePropertyAccessorClass(bc_GetClassByContext(cctx),
                                                   pp->Set)) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
                          bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(pp))),
@@ -355,17 +355,17 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self,
                 // src のような名前がフィールドを示す場合
         } else if (illoc->Type == VARIABLE_LOCAL_FIELD_T) {
                 int temp = -1;
-                bc_Field* f = bc_FindTreeFieldClass(bc_GetClassCContext(cctx),
+                bc_Field* f = bc_FindTreeFieldClass(bc_GetClassByContext(cctx),
                                                     illoc->Name, &temp);
                 if (temp == -1) {
-                        f = bc_FindTreeSFieldClass(bc_GetClassCContext(cctx),
+                        f = bc_FindTreeSFieldClass(bc_GetClassByContext(cctx),
                                                    illoc->Name, &temp);
                 }
                 assert(temp != -1);
                 //フィールドはstaticでないが
                 //現在のコンテキストはstaticなので this にアクセスできない
                 if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(f)) &&
-                    bc_IsStaticCContext(cctx)) {
+                    bc_IsStaticContext(cctx)) {
                         bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
                                  bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(f))),
                                  bc_Ref2Str(f->Name));
@@ -381,12 +381,12 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self,
         } else if (illoc->Type == VARIABLE_LOCAL_PROPERTY_T) {
                 int temp = -1;
                 bc_Property* p = bc_FindTreePropertyClass(
-                    bc_GetClassCContext(cctx), illoc->Name, &temp);
+                    bc_GetClassByContext(cctx), illoc->Name, &temp);
                 assert(temp != -1);
                 //フィールドはstaticでないが
                 //現在のコンテキストはstaticなので this にアクセスできない
                 if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(p)) &&
-                    bc_IsStaticCContext(cctx)) {
+                    bc_IsStaticContext(cctx)) {
                         bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
                                  bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(p))),
                                  bc_Ref2Str(p->Name));

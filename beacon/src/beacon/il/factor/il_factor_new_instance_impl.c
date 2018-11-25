@@ -98,7 +98,7 @@ bc_GenericType* bc_EvalILNewInstance(bc_ILNewInstance* self, bc_Enviroment* env,
                         bc_ILTypeArgument* e =
                             (bc_ILTypeArgument*)bc_AtVector(self->TypeArgs, i);
                         bc_GenericType* arg = bc_ResolveImportManager(
-                            bc_GetNamespaceCContext(cctx), e->GCache, cctx);
+                            bc_GetNamespaceByContext(cctx), e->GCache, cctx);
                         bc_AddArgsGenericType(a, arg);
                 }
                 self->InstanceGType = a;
@@ -142,7 +142,7 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
         }
 #endif
         //コンストラクタで生成するオブジェクトの肩を取得
-        bc_Type* ty = bc_GetEvalTypeCContext(cctx, self->FQCNCache);
+        bc_Type* ty = bc_ResolveContext(cctx, self->FQCNCache);
         if (ty == NULL) {
                 bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CLASS_T,
                          bc_Ref2Str(self->FQCNCache->Name));

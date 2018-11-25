@@ -120,7 +120,7 @@ static void LoadILVariableLocal_field(bc_ILVariableLocal* self,
         self->Type = VARIABLE_LOCAL_FIELD_T;
         // NOTE:トップレベルではここが空なので、
         //定義されていない変数とみなせる？
-        bc_Type* tp = bc_GetTypeCContext(cctx);
+        bc_Type* tp = bc_GetTypeByContext(cctx);
         if (tp->Tag ==
             TYPE_INTERFACE_T /* この条件は構文規則からして満たさないはず */) {
                 bc_Panic(BCERROR_REF_UNDEFINED_LOCAL_VARIABLE_T,
@@ -150,9 +150,9 @@ static void LoadILVariableLocal_field(bc_ILVariableLocal* self,
                 LoadILVariableLocal_Property(self, env, cctx);
                 return;
                 //フィールドが見つかったなら可視性を確認する
-        } else if (!bc_IsAccessibleFieldClass(bc_GetClassCContext(cctx), f)) {
+        } else if (!bc_IsAccessibleFieldClass(bc_GetClassByContext(cctx), f)) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
-                         bc_Ref2Str(bc_GetClassCContext(cctx)->Name),
+                         bc_Ref2Str(bc_GetClassByContext(cctx)->Name),
                          bc_Ref2Str(f->Name));
                 return;
         }
@@ -163,7 +163,7 @@ static void LoadILVariableLocal_Property(bc_ILVariableLocal* self,
                                          bc_Enviroment* env,
                                          bc_CallContext* cctx) {
         int temp = -1;
-        bc_Type* tp = bc_GetTypeCContext(cctx);
+        bc_Type* tp = bc_GetTypeByContext(cctx);
         bc_Property* p =
             bc_FindTreePropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
         if (temp == -1) {

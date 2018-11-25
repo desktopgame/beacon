@@ -46,7 +46,7 @@ static void check_IsYieldMethod_return(bc_ILYieldReturn* self,
         if (cctx->Tag != CALL_METHOD_T) {
                 return;
         }
-        bc_Method* m = bc_GetMethodCContext(cctx);
+        bc_Method* m = bc_GetMethodByContext(cctx);
         bc_GenericType* arg = bc_AtVector(m->ReturnGType->TypeArgs, 0);
         //戻り値の型に互換性がない
         if (bc_DistanceGenericType(arg, bc_EvalILFactor(self->Value, env, cctx),

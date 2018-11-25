@@ -79,21 +79,21 @@ void bc_PopCallFrame(bc_CallContext* self) {
         bc_DeleteCallFrame(fr);
 }
 
-bc_Namespace* bc_GetNamespaceCContext(bc_CallContext* self) {
+bc_Namespace* bc_GetNamespaceByContext(bc_CallContext* self) {
         if (self->Scope != NULL) {
                 return self->Scope;
         }
         return bc_GetLangNamespace();
 }
 
-bc_Method* bc_GetMethodCContext(bc_CallContext* self) {
+bc_Method* bc_GetMethodByContext(bc_CallContext* self) {
         if (self->Tag != CALL_METHOD_T) {
                 return NULL;
         }
         return self->Kind.Method;
 }
 
-bc_Type* bc_GetTypeCContext(bc_CallContext* self) {
+bc_Type* bc_GetTypeByContext(bc_CallContext* self) {
         if (self->Tag == CALL_TOP_T) {
                 return bc_FindTypeFromNamespace(bc_GetLangNamespace(),
                                                 bc_InternString("World"));
@@ -101,19 +101,19 @@ bc_Type* bc_GetTypeCContext(bc_CallContext* self) {
         return self->Ty;
 }
 
-bc_Class* bc_GetClassCContext(bc_CallContext* self) {
-        return BC_TYPE2CLASS(bc_GetTypeCContext(self));
+bc_Class* bc_GetClassByContext(bc_CallContext* self) {
+        return BC_TYPE2CLASS(bc_GetTypeByContext(self));
 }
 
-bc_GenericType* bc_GetReceiverCContext(bc_CallContext* self) {
+bc_GenericType* bc_GetCompileTimeReceiver(bc_CallContext* self) {
         if (self->CallStack->Length == 0) {
-                return bc_GetTypeCContext(self)->GenericSelf;
+                return bc_GetTypeByContext(self)->GenericSelf;
         }
         bc_CallFrame* cfr = bc_TopVector(self->CallStack);
         return cfr->Receiver;
 }
 
-bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
+bc_Type* bc_ResolveContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
         bc_Type* tp = bc_GetTypeFQCN(fqcn, self->Scope);
         if (tp == NULL) {
                 tp = bc_GetTypeFQCN(fqcn, bc_GetLangNamespace());
@@ -121,15 +121,15 @@ bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
         return tp;
 }
 
-bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self) {
+bc_Vector* bc_GetCompileTimeTypeArguments(bc_CallContext* self) {
         if (self->CallStack->Length == 0) {
-                return bc_GetTypeCContext(self)->GenericSelf->TypeArgs;
+                return bc_GetTypeByContext(self)->GenericSelf->TypeArgs;
         }
         bc_CallFrame* cfr = bc_TopVector(self->CallStack);
         return cfr->TypeArgs;
 }
 
-bool bc_IsStaticCContext(bc_CallContext* self) {
+bool bc_IsStaticContext(bc_CallContext* self) {
         return self->Tag == CALL_METHOD_T &&
                bc_IsStaticModifier(BC_MEMBER_MODIFIER(self->Kind.Method));
 }

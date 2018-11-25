@@ -255,7 +255,7 @@ static void load_toplevel_function(bc_ClassLoader* self) {
                 bc_Enviroment* env = bc_NewEnviroment();
                 // CallContextの設定
                 bc_CallContext* cctx = bc_NewMethodContext(m);
-                bc_Namespace* loc = bc_GetNamespaceCContext(cctx);
+                bc_Namespace* loc = bc_GetNamespaceByContext(cctx);
                 env->ContextRef = self;
                 sm->Env = env;
                 m->Kind.Script = sm;

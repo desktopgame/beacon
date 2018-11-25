@@ -39,7 +39,7 @@ void bc_LoadILAs(bc_ILAs* self, bc_Enviroment* env, bc_CallContext* cctx) {
                 return;
         }
         bc_LoadILFactor(self->Source, env, cctx);
-        self->GType = bc_ResolveImportManager(bc_GetNamespaceCContext(cctx),
+        self->GType = bc_ResolveImportManager(bc_GetNamespaceByContext(cctx),
                                               self->GCache, cctx);
         bc_GenericType* a = bc_EvalILFactor(self->Source, env, cctx);
         //キャスト元がインターフェイスなら常にアップキャスト

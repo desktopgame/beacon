@@ -30,7 +30,7 @@ void bc_LoadILSuper(bc_ILSuper* self, bc_Enviroment* env,
 
 bc_GenericType* bc_EvalILSuper(bc_ILSuper* self, bc_Enviroment* env,
                                bc_CallContext* cctx) {
-        bc_Type* t = bc_GetTypeCContext(cctx);
+        bc_Type* t = bc_GetTypeByContext(cctx);
         return t->Kind.Class->SuperClass;
 }
 
@@ -46,7 +46,7 @@ static void check_context(bc_ILSuper* self, bc_Enviroment* env,
         if (cctx->Tag != CALL_METHOD_T) {
                 return;
         }
-        bc_Method* met = bc_GetMethodCContext(cctx);
+        bc_Method* met = bc_GetMethodByContext(cctx);
         if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(met))) {
                 bc_Panic(BCERROR_ACCESS_TO_SUPER_AT_STATIC_METHOD_T,
                          bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(met))),

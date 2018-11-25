@@ -318,7 +318,7 @@ bc_OperatorOverload* bc_MetaGFindOperator(bc_Vector* opov_vec,
 }
 
 bool bc_IsMetaMethodAccessValid(bc_Method* m, bc_CallContext* cctx) {
-        bc_Class* context = bc_GetClassCContext(cctx);
+        bc_Class* context = bc_GetClassByContext(cctx);
         // privateメソッドなのに現在のコンテキストではない
         if (context != NULL && BC_MEMBER_ACCESS(m) == ACCESS_PRIVATE_T &&
             BC_TYPE2CLASS(BC_MEMBER_TYPE(m)) != context) {
@@ -334,7 +334,7 @@ bool bc_IsMetaMethodAccessValid(bc_Method* m, bc_CallContext* cctx) {
 
 bool bc_IsMetaConstructorAccessValid(bc_Constructor* ctor,
                                      bc_CallContext* cctx) {
-        bc_Class* context = bc_GetClassCContext(cctx);
+        bc_Class* context = bc_GetClassByContext(cctx);
         // privateメソッドなのに現在のコンテキストではない
         if (context != NULL && BC_MEMBER_ACCESS(ctor) == ACCESS_PRIVATE_T &&
             BC_TYPE2CLASS(BC_MEMBER_TYPE(ctor)) != context) {

@@ -107,7 +107,7 @@ static void ILVariable_check(bc_ILVariable* self, bc_Enviroment* env,
 
 static void ILVariable_check_instance(bc_ILVariable* self, bc_Enviroment* env,
                                       bc_CallContext* cctx) {
-        bc_Namespace* cur = bc_GetNamespaceCContext(cctx);
+        bc_Namespace* cur = bc_GetNamespaceByContext(cctx);
         bc_Class* ctype = bc_FindClassFromNamespace(cur, self->FQCN->Name);
         if (ctype == NULL) {
                 ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(),

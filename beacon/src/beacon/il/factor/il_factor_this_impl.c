@@ -29,7 +29,7 @@ void bc_LoadILThis(bc_ILThis* self, bc_Enviroment* env, bc_CallContext* cctx) {
 
 bc_GenericType* bc_EvalILThis(bc_ILThis* self, bc_Enviroment* env,
                               bc_CallContext* cctx) {
-        return bc_GetTypeCContext(cctx)->GenericSelf;
+        return bc_GetTypeByContext(cctx)->GenericSelf;
 }
 
 char* bc_ILThisToString(bc_ILThis* self, bc_Enviroment* env) {
@@ -43,7 +43,7 @@ static void check_context(bc_ILThis* self, bc_Enviroment* env,
         if (cctx->Tag != CALL_METHOD_T) {
                 return;
         }
-        bc_Method* met = bc_GetMethodCContext(cctx);
+        bc_Method* met = bc_GetMethodByContext(cctx);
         if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(met))) {
                 bc_Panic(BCERROR_ACCESS_TO_THIS_AT_STATIC_METHOD_T,
                          bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(met))),

@@ -76,14 +76,14 @@ bc_GenericType* bc_ResolveImportManager(bc_Namespace* scope,
         }
         bc_GenericType* parameterized = bc_NewGenericType(NULL);
         // T, Eなど
-        bc_Method* mt = bc_GetMethodCContext(cctx);
+        bc_Method* mt = bc_GetMethodByContext(cctx);
         if (parameterized->VirtualTypeIndex == -1 && mt != NULL) {
                 parameterized->Tag = GENERIC_TYPE_TAG_METHOD_T;
                 parameterized->VirtualTypeIndex =
                     bc_GetGenericIndexForMethod(mt, fqcn->FQCN->Name);
                 parameterized->Kind.Method = mt;
         }
-        bc_Type* ty = bc_GetTypeCContext(cctx);
+        bc_Type* ty = bc_GetTypeByContext(cctx);
         if (parameterized->VirtualTypeIndex == -1 && ty != NULL) {
                 parameterized->Tag = GENERIC_TYPE_TAG_CLASS_T;
                 parameterized->VirtualTypeIndex =
@@ -117,7 +117,7 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope,
         // V = class_tag 1
         bc_GenericType* parameterized = bc_NewGenericType(NULL);
         //まずはメソッドの型変数を調べる
-        bc_Method* mt = bc_GetMethodCContext(cctx);
+        bc_Method* mt = bc_GetMethodByContext(cctx);
         if (parameterized->VirtualTypeIndex == -1 && mt != NULL) {
 #if defined(DEBUG)
                 const char* methodname = bc_Ref2Str(mt->Name);
@@ -128,7 +128,7 @@ bc_GenericType* bc_ResolvefImportManager(bc_Namespace* scope,
                 parameterized->Kind.Method = mt;
         }
         //次にクラスの型変数を調べる
-        bc_Type* ty = bc_GetTypeCContext(cctx);
+        bc_Type* ty = bc_GetTypeByContext(cctx);
         if (parameterized->VirtualTypeIndex == -1 && ty != NULL) {
 #if defined(DEBUG)
                 const char* typename_ = bc_Ref2Str(bc_GetTypeName(ty));

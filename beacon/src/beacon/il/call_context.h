@@ -70,22 +70,22 @@ bc_CallFrame* bc_TopCallFrame(bc_CallContext* self);
 
 void bc_PopCallFrame(bc_CallContext* self);
 
-struct bc_Namespace* bc_GetNamespaceCContext(bc_CallContext* self);
+struct bc_Namespace* bc_GetNamespaceByContext(bc_CallContext* self);
 
-struct bc_Method* bc_GetMethodCContext(bc_CallContext* self);
+struct bc_Method* bc_GetMethodByContext(bc_CallContext* self);
 
-struct bc_Type* bc_GetTypeCContext(bc_CallContext* self);
+struct bc_Type* bc_GetTypeByContext(bc_CallContext* self);
 
-struct bc_Class* bc_GetClassCContext(bc_CallContext* self);
+struct bc_Class* bc_GetClassByContext(bc_CallContext* self);
 
-struct bc_GenericType* bc_GetReceiverCContext(bc_CallContext* self);
+struct bc_GenericType* bc_GetCompileTimeReceiver(bc_CallContext* self);
 
-struct bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self,
+struct bc_Type* bc_ResolveContext(bc_CallContext* self,
                                        struct bc_FQCNCache* fqcn);
 
-bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self);
+bc_Vector* bc_GetCompileTimeTypeArguments(bc_CallContext* self);
 
-bool bc_IsStaticCContext(bc_CallContext* self);
+bool bc_IsStaticContext(bc_CallContext* self);
 
 void bc_DeleteCallContext(bc_CallContext* self);
 #endif

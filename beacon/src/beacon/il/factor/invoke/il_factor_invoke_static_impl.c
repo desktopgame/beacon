@@ -126,7 +126,7 @@ static void resolve_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
 
 static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
                                  bc_CallContext* cctx) {
-        bc_Type* ty = bc_GetEvalTypeCContext(cctx, self->FQCN);
+        bc_Type* ty = bc_ResolveContext(cctx, self->FQCN);
         if (ty == NULL) {
                 bc_Panic(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
                          bc_Ref2Str(self->FQCN->Name), bc_Ref2Str(self->Name));

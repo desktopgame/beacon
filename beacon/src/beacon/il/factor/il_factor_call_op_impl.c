@@ -172,7 +172,7 @@ static void ILMemberOp_check_namebase(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
 #if defined(DEBUG)
                 const char* clname = bc_Ref2Str(ilvar->FQCN->Name);
 #endif
-                bc_Namespace* cur = bc_GetNamespaceCContext(cctx);
+                bc_Namespace* cur = bc_GetNamespaceByContext(cctx);
                 bc_Class* ctype =
                     bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
                 if (ctype == NULL) {

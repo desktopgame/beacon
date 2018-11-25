@@ -127,10 +127,10 @@ static void ILMemberOp_check(bc_ILMemberOp* self, bc_Enviroment* env,
         } else {
 #if defined(DEBUG)
                 const char* clname =
-                    bc_Ref2Str(bc_GetClassCContext(cctx)->Name);
+                    bc_Ref2Str(bc_GetClassByContext(cctx)->Name);
 #endif
                 //フィールドの可視性を確認
-                if (!bc_IsAccessibleFieldClass(bc_GetClassCContext(cctx),
+                if (!bc_IsAccessibleFieldClass(bc_GetClassByContext(cctx),
                                                self->Field)) {
                         bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
                                  bc_Ref2Str(bc_GetTypeName(ctype)),
@@ -191,7 +191,7 @@ static void ILMemberOp_check_prop(bc_ILMemberOp* self, bc_Enviroment* env,
                          bc_Ref2Str(self->Name));
                 bc_DeleteILFactor(factp->Source);
                 factp->Source = NULL;
-        } else if (!bc_IsAccessiblePropertyClass(bc_GetClassCContext(cctx),
+        } else if (!bc_IsAccessiblePropertyClass(bc_GetClassByContext(cctx),
                                                  p)) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T,
                          bc_Ref2Str(bc_GetTypeName(ctype)),
@@ -221,7 +221,7 @@ static void ILMemberOp_check_static_prop(bc_ILMemberOp* self,
         self->Parent->Type = ILFACTOR_PROPERTY_T;
         self->Parent->Kind.PropertyAccess = factp;
         //プロパティの可視性を確認
-        if (!bc_IsAccessiblePropertyClass(bc_GetClassCContext(cctx), p)) {
+        if (!bc_IsAccessiblePropertyClass(bc_GetClassByContext(cctx), p)) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T,
                          bc_Ref2Str(bc_GetTypeName(ctype)),
                          bc_Ref2Str(p->Name));

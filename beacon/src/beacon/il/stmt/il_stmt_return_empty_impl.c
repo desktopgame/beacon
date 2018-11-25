@@ -25,7 +25,7 @@ static void check_method_return(ILReturnEmpty self, bc_Enviroment* env,
         if (cctx->Tag != CALL_METHOD_T) {
                 return;
         }
-        bc_Method* m = bc_GetMethodCContext(cctx);
+        bc_Method* m = bc_GetMethodByContext(cctx);
         //戻り値が Void ではないのに値を返さない
         if (m->ReturnGType->CoreType != BC_TYPE_VOID) {
                 bc_Panic(BCERROR_NOT_RETURN_VALUE_NOT_VOID_METHOD_T,
