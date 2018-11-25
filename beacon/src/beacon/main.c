@@ -7,6 +7,7 @@
 #include <unistd.h>
 #endif
 
+#include <glib.h>
 #include <stdio.h>
 #include <string.h>
 #include "cl.h"
