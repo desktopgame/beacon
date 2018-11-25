@@ -52,6 +52,10 @@ static void vm_delete_defctx(bc_VectorItem e);
 static bool throw_npe(bc_Frame* self, bc_Object* o);
 static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc);
 static bc_StringView gVMError = BC_ZERO_VIEW;
+static bool validate(bc_Frame* self, int source_len, int* pcDest);
+static void terminate(bc_Frame* self);
+static void uncaught(bc_Frame* self, bc_Enviroment* env, int pc);
+static void mark_exception(bc_Frame* self, bc_Object* exc);
 
 // Stack Top
 #define STI(a) stack_topi(a)
@@ -90,25 +94,6 @@ void bc_ResumeVM(bc_Frame* self, bc_Enviroment* env, int pos) {
         self->DeferList = NULL;
 }
 
-void bc_NativeThrowVM(bc_Frame* self, bc_Object* exc) {
-        self->Exception = exc;
-
-        bc_ThrowVM(self, exc);
-        bc_ScriptThread* th =
-            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
-        //空ならプログラムを終了
-        if (bc_IsEmptyVector(th->TraceStack)) {
-                bc_TerminateVM(self);
-                //どこかでキャッチしようとしている
-        } else {
-                int temp = 0;
-                bc_ValidateVM(self,
-                              self->ContextRef->Bytecode->Instructions->Length,
-                              &temp);
-                self->NativeThrowPos = temp;
-        }
-}
-
 void bc_ThrowVM(bc_Frame* self, bc_Object* exc) {
         bc_Frame* temp = self;
         do {
@@ -131,62 +116,6 @@ void bc_CatchVM(bc_Frame* self) {
         }
 }
 
-bool bc_ValidateVM(bc_Frame* self, int source_len, int* pcDest) {
-        bc_ScriptThread* th =
-            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
-        bc_VMTrace* trace = (bc_VMTrace*)bc_TopVector(th->TraceStack);
-        self->IsValidate = true;
-        //汚染
-        bc_Frame* p = self->Parent;
-        while (p != NULL) {
-                p->IsValidate = true;
-                p = p->Parent;
-        }
-        //ここなので catch節 へ向かう
-        if (trace->SnapShot == self) {
-                //ここでジャンプレベルを確認するのは
-                //例えば
-                // try { throw ... } catch { ... }
-                //と、
-                // try { throwFunc() ... } catch { ... }
-                //では、
-                //プログラムカウンタの位置が異なるためです。
-                //
-                if (trace->JumpLevel > 0) {
-                        *pcDest = trace->PC + 1;
-                } else
-                        *pcDest = trace->PC;
-                self->IsValidate = false;
-                return true;
-                //ここではないので終了
-        } else {
-                trace->JumpLevel++;
-                *pcDest = source_len;
-                return false;
-        }
-}
-
-void bc_TerminateVM(bc_Frame* self) {
-        bc_GetMainScriptThread()->IsVMCrushByException = true;
-        bc_Frame* temp = self;
-        do {
-                temp->IsTerminate = true;
-                temp = temp->Parent;
-        } while (temp != NULL);
-}
-
-void bc_UncaughtVM(bc_Frame* self, bc_Enviroment* env, int pc) {
-        char* message = create_error_message(self, env, pc);
-        bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
-        if (sctx->IsPrintError) {
-                fprintf(stderr, "%s", message);
-        }
-        gVMError = bc_InternString(message);
-        MEM_FREE(message);
-        bc_CatchVM(bc_GetRootFrame(self));
-        bc_CollectHeap(bc_GetHeap());
-}
-
 bc_StringView bc_GetVMErrorMessage() { return gVMError; }
 
 // private
@@ -202,7 +131,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                 //それを子要素自身で処理できなかった場合には、
                 //自分で処理を試みます。
                 if (self->IsValidate) {
-                        if (!bc_ValidateVM(self, source_len, &IDX)) {
+                        if (!validate(self, source_len, &IDX)) {
                                 break;
                         }
                 }
@@ -538,10 +467,10 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     bc_GetCurrentScriptContext());
                                 //空ならプログラムを終了
                                 if (bc_IsEmptyVector(th->TraceStack)) {
-                                        bc_TerminateVM(self);
+                                        terminate(self);
                                         //どこかでキャッチしようとしている
                                 } else {
-                                        bc_ValidateVM(self, source_len, &IDX);
+                                        validate(self, source_len, &IDX);
                                 }
                                 break;
                         }
@@ -1453,7 +1382,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                 //キャッチされなかった例外によって終了する
                 bc_ScriptThread* thr = bc_GetMainScriptThread();
                 if (self->IsTerminate && !thr->IsVMDump) {
-                        bc_UncaughtVM(self, env, IDX);
+                        uncaught(self, env, IDX);
                         thr->IsVMDump = true;
                         break;
                 }
@@ -1522,7 +1451,7 @@ static bool stack_popb(bc_Frame* self) {
 
 static bool throw_npe(bc_Frame* self, bc_Object* o) {
         if (bc_IsNullValue(o)) {
-                bc_NativeThrowVM(
+                mark_exception(
                     self, bc_NewSimplefException(self, "NullPointerException"));
                 return true;
         }
@@ -1578,4 +1507,108 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
                 bc_AppendsBuffer(sbuf, block);
         }
         return bc_ReleaseBuffer(sbuf);
+}
+
+/**
+ * 現在のスレッドのトレース・スタックのトップに
+ * 記録されたVMと自身が一致しているなら、
+ * 自身に含まれる catch節 へジャンプします。
+ * 異なるなら自身を終了して親の validate を trueにします。
+ * validate が true のVM は、
+ * 通常のインストラクションを実行する前にこの関数を呼び出します。
+ * @param self
+ * @param source_len
+ * @param pcDest
+ * @return このVMで処理できるなら true.
+ */
+static bool validate(bc_Frame* self, int source_len, int* pcDest) {
+        bc_ScriptThread* th =
+            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
+        bc_VMTrace* trace = (bc_VMTrace*)bc_TopVector(th->TraceStack);
+        self->IsValidate = true;
+        //汚染
+        bc_Frame* p = self->Parent;
+        while (p != NULL) {
+                p->IsValidate = true;
+                p = p->Parent;
+        }
+        //ここなので catch節 へ向かう
+        if (trace->SnapShot == self) {
+                //ここでジャンプレベルを確認するのは
+                //例えば
+                // try { throw ... } catch { ... }
+                //と、
+                // try { throwFunc() ... } catch { ... }
+                //では、
+                //プログラムカウンタの位置が異なるためです。
+                //
+                if (trace->JumpLevel > 0) {
+                        *pcDest = trace->PC + 1;
+                } else
+                        *pcDest = trace->PC;
+                self->IsValidate = false;
+                return true;
+                //ここではないので終了
+        } else {
+                trace->JumpLevel++;
+                *pcDest = source_len;
+                return false;
+        }
+}
+
+/**
+ * selfを起点としてたどれるVM全ての terminate を true にします.
+ * 実行中のVMはこのフラグによって終了します。
+ * @param self
+ */
+static void terminate(bc_Frame* self) {
+        bc_GetMainScriptThread()->IsVMCrushByException = true;
+        bc_Frame* temp = self;
+        do {
+                temp->IsTerminate = true;
+                temp = temp->Parent;
+        } while (temp != NULL);
+}
+
+/**
+ * 捕捉されなかった例外によってこのVMが終了するとき、
+ * コールスタックの深いところから先に呼び出されます.
+ * ここでどの関数呼び出しでエラーが発生したかを出力します。
+ * @param self
+ * @param env
+ * @param pc
+ */
+static void uncaught(bc_Frame* self, bc_Enviroment* env, int pc) {
+        char* message = create_error_message(self, env, pc);
+        bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
+        if (sctx->IsPrintError) {
+                fprintf(stderr, "%s", message);
+        }
+        gVMError = bc_InternString(message);
+        MEM_FREE(message);
+        bc_CatchVM(bc_GetRootFrame(self));
+        bc_CollectHeap(bc_GetHeap());
+}
+
+/**
+ * selfより上の全てのフレームに例外を伝播します.
+ * @param self
+ * @param exc
+ */
+static void mark_exception(bc_Frame* self, bc_Object* exc) {
+        self->Exception = exc;
+
+        bc_ThrowVM(self, exc);
+        bc_ScriptThread* th =
+            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
+        //空ならプログラムを終了
+        if (bc_IsEmptyVector(th->TraceStack)) {
+                terminate(self);
+                //どこかでキャッチしようとしている
+        } else {
+                int temp = 0;
+                validate(self, self->ContextRef->Bytecode->Instructions->Length,
+                         &temp);
+                self->NativeThrowPos = temp;
+        }
 }

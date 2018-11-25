@@ -36,51 +36,14 @@ void bc_ResumeVM(bc_Frame* self, bc_Enviroment* env, int pos);
  * @param self
  * @param exc
  */
-void bc_NativeThrowVM(bc_Frame* self, struct bc_Object* exc);
-
-/**
- * selfより上の全てのフレームに例外を伝播します.
- * @param self
- * @param exc
- */
 void bc_ThrowVM(bc_Frame* self, struct bc_Object* exc);
 
 /**
  * selfを起点としてたどれるVM全ての例外フラグをクリアします.
+ * 例外オブジェクトは非保護状態になります。
  * @param self NULLのときは何もしません。
  */
 void bc_CatchVM(bc_Frame* self);
-
-/**
- * 現在のスレッドのトレース・スタックのトップに
- * 記録されたVMと自身が一致しているなら、
- * 自身に含まれる catch節 へジャンプします。
- * 異なるなら自身を終了して親の validate を trueにします。
- * validate が true のVM は、
- * 通常のインストラクションを実行する前にこの関数を呼び出します。
- * @param self
- * @param source_len
- * @param pcDest
- * @return このVMで処理できるなら true.
- */
-bool bc_ValidateVM(bc_Frame* self, int source_len, int* pcDest);
-
-/**
- * selfを起点としてたどれるVM全ての terminate を true にします.
- * 実行中のVMはこのフラグによって終了します。
- * @param self
- */
-void bc_TerminateVM(bc_Frame* self);
-
-/**
- * 捕捉されなかった例外によってこのVMが終了するとき、
- * コールスタックの深いところから先に呼び出されます.
- * ここでどの関数呼び出しでエラーが発生したかを出力します。
- * @param self
- * @param env
- * @param pc
- */
-void bc_UncaughtVM(bc_Frame* self, bc_Enviroment* env, int pc);
 
 /**
  * VMがキャッチされなかった例外によって終了した時、

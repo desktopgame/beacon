@@ -173,7 +173,7 @@ static void bc_array_nativeCopy(bc_Method* parent, bc_Frame* fr,
         int cpyLen = bc_ObjectToInt(length);
         //添え字がマイナス
         if (bc_ObjectToInt(srcOffset) < 0 || bc_ObjectToInt(dstOffset) < 0) {
-                bc_NativeThrowVM(fr, bc_NewSimplefException(
+                bc_ThrowVM(fr, bc_NewSimplefException(
                                          fr, "index must be positive: %d - %d",
                                          bc_ObjectToInt(srcOffset),
                                          bc_ObjectToInt(dstOffset)));
@@ -182,7 +182,7 @@ static void bc_array_nativeCopy(bc_Method* parent, bc_Frame* fr,
         //添え字がはみ出している
         if ((bc_ObjectToInt(srcOffset) + cpyLen) > srcLen ||
             (bc_ObjectToInt(dstOffset) + cpyLen) > dstLen) {
-                bc_NativeThrowVM(
+                bc_ThrowVM(
                     fr,
                     bc_NewSimplefException(
                         fr, "index must be less than size of array: %d - %d",
