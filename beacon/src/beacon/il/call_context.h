@@ -21,6 +21,9 @@ struct bc_OperatorOverload;
 struct bc_GenericType;
 struct bc_FQCNCache;
 
+/**
+ * 現在の呼び出しコンテキストのタグ。
+ */
 typedef enum bc_CallContextTag {
         //プログラムのトップレベル
         CALL_TOP_T,
@@ -36,6 +39,9 @@ typedef enum bc_CallContextTag {
         CALL_DECL_T
 } bc_CallContextTag;
 
+/**
+ * 現在の呼び出し階層を表すコンテキスト。
+ */
 typedef struct bc_CallContext {
         bc_Vector* CallStack;
         bc_ControlStructure Control;
@@ -49,43 +55,131 @@ typedef struct bc_CallContext {
         } Kind;
 } bc_CallContext;
 
+/**
+ * 新しい呼び出しコンテキストを生成します。
+ * @param tag
+ * @return
+ */
 bc_CallContext* bc_NewCallContext(bc_CallContextTag tag);
 
+/**
+ * トップレベルを表すコンテキストを生成します。
+ * @param worldType
+ * @return
+ */
 bc_CallContext* bc_NewTopContext(struct bc_Type* worldType);
 
+/**
+ * メソッドを表すコンテキストを生成します。
+ * @param method
+ * @return
+ */
 bc_CallContext* bc_NewMethodContext(struct bc_Method* method);
 
+/**
+ * コンストラクタを表すコンテキストを生成します。
+ * @param ctor
+ * @return
+ */
 bc_CallContext* bc_NewConstructorContext(struct bc_Constructor* ctor);
 
+/**
+ * オペレータオーバーロードを表すコンテキストを生成します。
+ * @param opov
+ * @return
+ */
 bc_CallContext* bc_NewOperatorOverloadContext(struct bc_OperatorOverload* opov);
 
+/**
+ * @param scope
+ * @param type
+ * @return
+ */
 bc_CallContext* bc_NewNameContext(struct bc_Namespace* scope,
                                   struct bc_Type* type);
 
+/**
+ * 新しい呼び出しフレームを追加します。
+ * @param self
+ * @param receiver
+ * @param args
+ * @param type_args
+ * @return
+ */
 bc_CallFrame* bc_PushCallFrame(bc_CallContext* self,
-                                 struct bc_GenericType* receiver,
-                                 bc_Vector* args, bc_Vector* type_args);
-
+                               struct bc_GenericType* receiver, bc_Vector* args,
+                               bc_Vector* type_args);
+/**
+ * 最後のフレームを返します。
+ * @param self
+ * @return
+ */
 bc_CallFrame* bc_TopCallFrame(bc_CallContext* self);
 
+/**
+ * 最後のフレームを削除します。
+ * @param self
+ */
 void bc_PopCallFrame(bc_CallContext* self);
 
+/**
+ * 現在のコンテキストにおける名前空間を返します。
+ * @param self
+ * @return
+ */
 struct bc_Namespace* bc_GetNamespaceByContext(bc_CallContext* self);
 
+/**
+ * 現在のコンテキストにおけるメソッドを返します。
+ * @param self
+ * @return
+ */
 struct bc_Method* bc_GetMethodByContext(bc_CallContext* self);
 
+/**
+ * 現在のコンテキストにおけるタイプを返します。
+ * @param self
+ * @return
+ */
 struct bc_Type* bc_GetTypeByContext(bc_CallContext* self);
 
+/**
+ * 現在のコンテキストにおけるクラスを返します。
+ * @param self
+ * @return
+ */
 struct bc_Class* bc_GetClassByContext(bc_CallContext* self);
-
+/**
+ * 現在のコンテキストにおけるレシーバーを返します。
+ * @param self
+ * @return
+ */
 struct bc_GenericType* bc_GetCompileTimeReceiver(bc_CallContext* self);
 
+/**
+ * 現在のコンテキストにで型を解決します。
+ * @param self
+ * @return
+ */
 struct bc_Type* bc_ResolveContext(bc_CallContext* self,
-                                       struct bc_FQCNCache* fqcn);
-
+                                  struct bc_FQCNCache* fqcn);
+/**
+ * 現在のコンテキストにおける型引数を返します。
+ * @param self
+ * @return
+ */
 bc_Vector* bc_GetCompileTimeTypeArguments(bc_CallContext* self);
 
+/**
+ * 現在のコンテキストがインスタンスに基づく呼び出しでないなら true.
+ * @param self
+ * @return
+ */
 bool bc_IsStaticContext(bc_CallContext* self);
 
+/**
+ * 呼び出しコンテキストを削除します。
+ * @param self
+ */
 void bc_DeleteCallContext(bc_CallContext* self);
 #endif
