@@ -19,11 +19,9 @@ add_test(
 )
 include_directories(${JNI_INCLUDE_DIR} ${JNI_NATIVE_INCLUDE_DIR} ${GLIB_INCLUDE_DIR} ${GLIB_NATIVE_INCLUDE_DIR})
 link_directories (${GLIB_LIBRARY_DIR})
-add_subdirectory("nbproject")
 add_subdirectory("beacon")
 add_executable(a.out "beacon/main.c")
 target_link_libraries(a.out
-    "lib__nbproject_private"
     "lib__beacon_util"
     "lib__beacon_parse"
     "lib__beacon_shared_jni"

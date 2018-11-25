@@ -121,7 +121,7 @@ def each_recursive(path, depth)
     #全てのファイルを開く
     Dir.open(path).each do |file|
         next if(file == "." || file == "..")
-        next if(file == "lcov" || file == "auto" || file == "script" || file == "Testing")
+        next if(file == "lcov" || file == "auto" || file == "script" || file == "Testing" || file == "nbproject")
         file = path + "/" + file
         puts ("  " + file)
         if(FileTest.directory?(file)) then
