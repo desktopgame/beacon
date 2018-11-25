@@ -91,9 +91,10 @@ bc_GenericType* bc_MallocGenericType(struct bc_Type* CoreType,
 /**
  * ジェネリックタイプを複製します.
  * @param self
+ * @param recursive
  * @return
  */
-bc_GenericType* bc_CloneGenericType(bc_GenericType* self);
+bc_GenericType* bc_CloneGenericType(bc_GenericType* self, bool recursive);
 
 /**
  * 現在のスクリプトコンテキストでどこからも参照されていない
@@ -173,6 +174,18 @@ bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
 bc_GenericType* bc_RApplyGenericType(bc_GenericType* self,
                                      struct bc_CallContext* cctx,
                                      struct bc_Frame* fr);
+
+/**
+ * 再帰的に型変数を展開して返します。
+ * @param self
+ * @param cctx
+ * @param receiver
+ * @param type_args
+ * @return
+ */
+bc_GenericType* bc_ExpandGenericType(bc_GenericType* self,
+                                     struct bc_GenericType* receiver,
+                                     bc_Vector* type_args);
 
 /**
  * GenericType を type へ変換します.

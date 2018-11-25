@@ -64,7 +64,7 @@ bc_CallContext* bc_NewNameContext(bc_Namespace* scope, bc_Type* type) {
 }
 
 bc_CallFrame* bc_PushCallFrame(bc_CallContext* self, bc_GenericType* receiver,
-                                 bc_Vector* args, bc_Vector* type_args) {
+                               bc_Vector* args, bc_Vector* type_args) {
         bc_CallFrame* fr = bc_NewCallFrame(receiver, args, type_args);
         bc_PushVector(self->CallStack, fr);
         return fr;
@@ -106,6 +106,9 @@ bc_Class* bc_GetClassCContext(bc_CallContext* self) {
 }
 
 bc_GenericType* bc_GetReceiverCContext(bc_CallContext* self) {
+        if (self->CallStack->Length == 0) {
+                return bc_GetTypeCContext(self)->GenericSelf;
+        }
         bc_CallFrame* cfr = bc_TopVector(self->CallStack);
         return cfr->Receiver;
 }
@@ -119,6 +122,9 @@ bc_Type* bc_GetEvalTypeCContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
 }
 
 bc_Vector* bc_GetTypeArgsCContext(bc_CallContext* self) {
+        if (self->CallStack->Length == 0) {
+                return bc_GetTypeCContext(self)->GenericSelf->TypeArgs;
+        }
         bc_CallFrame* cfr = bc_TopVector(self->CallStack);
         return cfr->TypeArgs;
 }

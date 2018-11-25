@@ -127,13 +127,13 @@ static void resolve_non_default(bc_ILInvoke* self, bc_Enviroment* env,
                 //メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
                 bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
                     receivergType->TypeArgs, rgtp->VirtualTypeIndex);
-                self->resolved = bc_CloneGenericType(instanced_type);
+                self->resolved = bc_CloneGenericType(instanced_type, true);
                 self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
         } else if (rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
                 //メソッドに渡された型引数を参照する
                 bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
                     self->type_args, rgtp->VirtualTypeIndex);
-                self->resolved = bc_CloneGenericType(instanced_type);
+                self->resolved = bc_CloneGenericType(instanced_type, true);
                 self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
         }
 }

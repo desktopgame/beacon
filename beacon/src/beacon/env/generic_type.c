@@ -64,12 +64,16 @@ bc_GenericType* bc_MallocGenericType(struct bc_Type* CoreType,
         return ret;
 }
 
-bc_GenericType* bc_CloneGenericType(bc_GenericType* self) {
+bc_GenericType* bc_CloneGenericType(bc_GenericType* self, bool recursive) {
         bc_GenericType* a = bc_NewGenericType(self->CoreType);
-        for (int i = 0; i < self->TypeArgs->Length; i++) {
-                bc_GenericType* e = bc_AtVector(self->TypeArgs, i);
-                bc_AddArgsGenericType(a, bc_CloneGenericType(e));
+        //再帰的に複製する場合
+        if (recursive) {
+                for (int i = 0; i < self->TypeArgs->Length; i++) {
+                        bc_GenericType* e = bc_AtVector(self->TypeArgs, i);
+                        bc_AddArgsGenericType(a, bc_CloneGenericType(e, true));
+                }
         }
+        //属性を複製
         a->Tag = self->Tag;
         a->VirtualTypeIndex = self->VirtualTypeIndex;
         if (a->Tag == GENERIC_TYPE_TAG_CLASS_T) {
@@ -207,12 +211,59 @@ void bc_GenerateGenericType(bc_GenericType* self, bc_Enviroment* env) {
 // Hash<String,List<Int>>
 bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
                                     bc_CallContext* cctx) {
-        return apply_impl(self, cctx, NULL);
+        return bc_ExpandGenericType(self, bc_GetReceiverCContext(cctx),
+                                    bc_GetTypeArgsCContext(cctx));
 }
 
 bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_CallContext* cctx,
                                      bc_Frame* fr) {
         return apply_impl(self, cctx, fr);
+}
+
+bc_GenericType* bc_ExpandGenericType(bc_GenericType* self,
+                                     bc_GenericType* receiver,
+                                     bc_Vector* type_args) {
+        int count = 0;
+        //型変数なら変換
+        bc_GenericType* ret = NULL;
+        if (self->VirtualTypeIndex != -1) {
+                count++;
+                if (self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
+                        if (self->IsCtorParameter) {
+                                assert(type_args != NULL);
+                                ret = bc_CloneGenericType(
+                                    ((bc_ILTypeArgument*)bc_AtVector(
+                                         type_args, self->VirtualTypeIndex))
+                                        ->GType,
+                                    true);
+                        } else {
+                                assert(receiver->TypeArgs != NULL);
+                                ret = bc_CloneGenericType(
+                                    bc_AtVector(receiver->TypeArgs,
+                                                self->VirtualTypeIndex),
+                                    true);
+                        }
+                } else if (self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
+                        assert(type_args != NULL);
+                        ret = bc_CloneGenericType(
+                            ((bc_ILTypeArgument*)bc_AtVector(
+                                 type_args, self->VirtualTypeIndex))
+                                ->GType,
+                            true);
+                }
+        } else {
+                ret = bc_NewGenericType(self->CoreType);
+                ret->Tag = self->Tag;
+                ret->VirtualTypeIndex = self->VirtualTypeIndex;
+        }
+        assert(ret != NULL);
+        //型変数を再帰的に展開
+        for (int i = 0; i < self->TypeArgs->Length; i++) {
+                bc_AddArgsGenericType(
+                    ret, bc_ExpandGenericType(bc_AtVector(self->TypeArgs, i),
+                                              receiver, type_args));
+        }
+        return ret;
 }
 
 struct bc_Type* bc_GenericTypeToType(bc_GenericType* self) {
@@ -229,15 +280,20 @@ static bc_GenericType* apply_impl(bc_GenericType* self, bc_CallContext* cctx,
                 count++;
                 if (self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
                         if (self->IsCtorParameter) {
-                                ret = bc_CloneGenericType(typeargs_at(
-                                    cctx, fr, self->VirtualTypeIndex));
+                                ret = bc_CloneGenericType(
+                                    typeargs_at(cctx, fr,
+                                                self->VirtualTypeIndex),
+                                    true);
                         } else {
-                                ret = bc_CloneGenericType(receiver_at(
-                                    cctx, fr, self->VirtualTypeIndex));
+                                ret = bc_CloneGenericType(
+                                    receiver_at(cctx, fr,
+                                                self->VirtualTypeIndex),
+                                    true);
                         }
                 } else if (self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
                         ret = bc_CloneGenericType(
-                            typeargs_at(cctx, fr, self->VirtualTypeIndex));
+                            typeargs_at(cctx, fr, self->VirtualTypeIndex),
+                            true);
                 }
         } else {
                 ret = bc_NewGenericType(self->CoreType);
