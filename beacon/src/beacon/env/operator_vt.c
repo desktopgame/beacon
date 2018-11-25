@@ -24,7 +24,7 @@ void bc_ReplaceOperatorVt(bc_OperatorVT* self, bc_OperatorOverload* opov) {
                         bc_Parameter* param_a = bc_AtVector(e->Parameters, 0);
                         bc_Parameter* param_b =
                             bc_AtVector(opov->Parameters, 0);
-                        if (bc_DistanceGenericType(param_a->GType,
+                        if (bc_CdistanceGenericType(param_a->GType,
                                                    param_b->GType, NULL) == 0) {
                                 bc_AssignVector(self->Operators, i, opov);
                                 return;

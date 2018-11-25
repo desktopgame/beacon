@@ -183,7 +183,7 @@ static void assign_to_Property(bc_ILAssignOp* self, bc_Enviroment* env,
                          bc_Ref2Str(pp->Name));
                 return;
         }
-        if (bc_DistanceGenericType(prop->Property->GType,
+        if (bc_CdistanceGenericType(prop->Property->GType,
                                    bc_EvalILFactor(self->Right, env, cctx),
                                    cctx) < 0) {
                 bc_Panic(
@@ -281,7 +281,7 @@ static void assign_by_invoke_bound(bc_ILInvokeBound* lhs, bc_ILFactor* rhs,
 static bool can_assign_to_field(bc_Field* f, bc_ILAssignOp* self,
                                 bc_Enviroment* env, bc_CallContext* cctx) {
         bc_GenericType* gt = bc_EvalILFactor(self->Right, env, cctx);
-        int dist = bc_DistanceGenericType(f->GType, gt, cctx);
+        int dist = bc_CdistanceGenericType(f->GType, gt, cctx);
         if (dist >= 0) {
                 return true;
         } else {
@@ -345,7 +345,7 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self,
                 bc_GenerateILFactor(self->Right, env, cctx);
                 bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
                 bc_AddOpcodeBuf(env->Bytecode, e->Index);
-                if (bc_DistanceGenericType(
+                if (bc_CdistanceGenericType(
                         e->GType, bc_EvalILFactor(self->Right, env, cctx),
                         cctx) < 0) {
                         bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,

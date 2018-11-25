@@ -121,7 +121,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
                     bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
                 bc_GenericType* superGT2 = bc_CapplyGenericType(superGT, cctx);
                 bc_PopCallFrame(cctx);
-                if (bc_DistanceGenericType(superGT2, subGT, cctx) != 0) {
+                if (bc_CdistanceGenericType(superGT2, subGT, cctx) != 0) {
                         return false;
                 }
         }
@@ -129,7 +129,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
         bc_GenericType* subRet = subM->ReturnGType;
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
         bc_GenericType* superRet2 = bc_CapplyGenericType(superRet, cctx);
-        int ret = bc_DistanceGenericType(superRet2, subRet, cctx);
+        int ret = bc_CdistanceGenericType(superRet2, subRet, cctx);
         bc_PopCallFrame(cctx);
         return ret != -1;
 }

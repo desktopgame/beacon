@@ -590,7 +590,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 // bc_Printfln("");
                                 // PrintGenericType(v->GType);
                                 // bc_Printfln("");
-                                int dist = bc_DistanceGenericType(
+                                int dist = bc_CdistanceGenericType(
                                     gtype, v->GType,
                                     bc_GetScriptThreadContext());
                                 bc_Object* b = bc_GetBoolObject(dist >= 0);
@@ -1021,7 +1021,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                         }
                                         break;
                                 }
-                                if (bc_DistanceGenericType(
+                                if (bc_CdistanceGenericType(
                                         o->GType, a,
                                         bc_GetScriptThreadContext()) < 0) {
                                         bc_PushVector(self->ValueStack,

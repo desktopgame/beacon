@@ -69,7 +69,7 @@ bool bc_IsImplementInterfacePropertyValidClass(bc_Class* cls,
                                                 bc_VectorDeleterOfNull);
                                 return false;
                         } else {
-                                if (bc_DistanceGenericType(
+                                if (bc_CdistanceGenericType(
                                         decl->GType, impl->GType, NULL) != 0) {
                                         (*out) = decl;
                                         bc_DeleteVector(gimpl_list,

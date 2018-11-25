@@ -28,7 +28,7 @@ void bc_LoadILThrow(bc_ILThrow* self, bc_Enviroment* env,
                     bc_CallContext* cctx) {
         bc_LoadILFactor(self->Factor, env, cctx);
         bc_GenericType* tgt = bc_EvalILFactor(self->Factor, env, cctx);
-        if (bc_DistanceGenericType(BC_GENERIC_EXCEPTION, tgt, cctx) < 0) {
+        if (bc_CdistanceGenericType(BC_GENERIC_EXCEPTION, tgt, cctx) < 0) {
                 if (tgt->CoreType != NULL) {
                         bc_Panic(BCERROR_THROWN_NOT_EXCEPTION_TYPE_T,
                                  bc_Ref2Str(bc_GetTypeName(tgt->CoreType)));

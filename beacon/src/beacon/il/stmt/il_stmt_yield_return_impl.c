@@ -49,7 +49,7 @@ static void check_IsYieldMethod_return(bc_ILYieldReturn* self,
         bc_Method* m = bc_GetMethodByContext(cctx);
         bc_GenericType* arg = bc_AtVector(m->ReturnGType->TypeArgs, 0);
         //戻り値の型に互換性がない
-        if (bc_DistanceGenericType(arg, bc_EvalILFactor(self->Value, env, cctx),
+        if (bc_CdistanceGenericType(arg, bc_EvalILFactor(self->Value, env, cctx),
                                    cctx) < 0) {
                 bc_Panic(BCERROR_YIELD_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_T,
                          bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(m))),

@@ -55,7 +55,7 @@ static void check_method_return(bc_ILReturn* self, bc_Enviroment* env,
         //戻り値の型に互換性がない
         bc_GenericType* retT = bc_EvalILFactor(self->Factor, env, cctx);
         if (retT->CoreType != BC_TYPE_NULL &&
-            bc_DistanceGenericType(m->ReturnGType, retT, cctx) < 0) {
+            bc_CdistanceGenericType(m->ReturnGType, retT, cctx) < 0) {
                 bc_Panic(
                     BCERROR_RETURN_VALUE_TYPE_IS_NOT_COMPATIBLE_NOT_VOID_METHOD_T,
                     bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(m))),

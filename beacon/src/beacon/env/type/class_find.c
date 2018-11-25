@@ -477,7 +477,7 @@ bc_OperatorOverload* bc_GFindOperatorOverloadClass(
                         bc_Parameter* param = bc_AtVector(params, j);
                         bc_GenericType* arg = bc_AtVector(args, j);
                         int dist =
-                            bc_DistanceGenericType(param->GType, arg, cctx);
+                            bc_CdistanceGenericType(param->GType, arg, cctx);
                         if (dist == -1) {
                                 nomatch = true;
                                 break;

@@ -36,7 +36,7 @@ int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env,
                         bc_GenericType* a =
                             bc_CapplyGenericType(param->GType, cctx);
                         // PrintGenericType2(param->gtype, a);
-                        dist = bc_DistanceGenericType(
+                        dist = bc_CdistanceGenericType(
                             a,
                             //	ApplyGenericType(argType,
                             // ilctx), 	param->gtype,
@@ -75,7 +75,7 @@ int bc_MetaGCalcScore(bc_Vector* params, bc_Vector* gargs) {
                 if (argType->CoreType != BC_TYPE_NULL) {
                         bc_GenericType* a =
                             bc_CapplyGenericType(param->GType, NULL);
-                        dist = bc_DistanceGenericType(
+                        dist = bc_CdistanceGenericType(
                             a,
                             //	ApplyGenericType(argType, ilctx),
                             //	param->gtype,
@@ -110,7 +110,7 @@ int bc_MetaRCalcScore(bc_Vector* params, bc_Vector* args, bc_Vector* typeargs,
                 if (argType->CoreType != BC_TYPE_NULL) {
                         bc_GenericType* a =
                             bc_RapplyGenericType(param->GType, fr);
-                        dist = bc_RDistanceGenericType(a, argType, fr);
+                        dist = bc_RdistanceGenericType(a, argType, fr);
                 }
                 score += dist;
                 //継承関係のないパラメータ

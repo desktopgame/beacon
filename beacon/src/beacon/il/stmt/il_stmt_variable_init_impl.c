@@ -40,7 +40,7 @@ void bc_GenerateILVariableInit(bc_ILVariableInit* self, bc_Enviroment* env,
                 bc_Panic(BCERROR_VOID_ASSIGN_T);
                 return;
         }
-        int dist = bc_DistanceGenericType(gb, ga, cctx);
+        int dist = bc_CdistanceGenericType(gb, ga, cctx);
         if (dist < 0) {
                 bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
                          bc_Ref2Str(self->Name));
