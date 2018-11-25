@@ -25,7 +25,7 @@ set(JNI_INCLUDE_DIR "/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents
 set(JNI_NATIVE_INCLUDE_DIR "/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin" CACHE FILEPATH "Path to jni native include")
 set(GLIB_INCLUDE_DIR "/usr/local/Cellar/glib/2.58.1/include/glib-2.0" CACHE FILEPATH "Path to glib include")
 set(GLIB_NATIVE_INCLUDE_DIR "/usr/local/Cellar/glib/2.58.1/lib/glib-2.0/include" CACHE FILEPATH "Path to glib native include")
-set(GLIB_LIBRARY_DIR "" CACHE FILEPATH "Path to glib library")
+set(GLIB_LIBRARY_DIR "/usr/local/Cellar/glib/2.58.1/lib" CACHE FILEPATH "Path to glib library")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
 set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
