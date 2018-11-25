@@ -221,9 +221,10 @@ bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
                                     PHASE_COMPILE_TIME);
 }
 
-bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_CallContext* cctx,
-                                     bc_Frame* fr) {
-        return apply_impl(self, cctx, fr);
+bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_Frame* fr) {
+        return bc_ExpandGenericType(self, bc_GetRuntimeReceiver(fr),
+                                    bc_GetRuntimeTypeArguments(fr),
+                                    PHASE_RUN_TIME);
 }
 
 bc_GenericType* bc_ExpandGenericType(bc_GenericType* self,

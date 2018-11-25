@@ -179,9 +179,7 @@ bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
  * @param fr
  * @return
  */
-bc_GenericType* bc_RApplyGenericType(bc_GenericType* self,
-                                     struct bc_CallContext* cctx,
-                                     struct bc_Frame* fr);
+bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct bc_Frame* fr);
 
 /**
  * 再帰的に型変数を展開して返します。

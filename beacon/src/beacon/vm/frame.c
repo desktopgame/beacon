@@ -1,5 +1,6 @@
 #include "frame.h"
 #include "../env/field.h"
+#include "../env/generic_type.h"
 #include "../env/heap.h"
 #include "../env/object.h"
 #include "../env/script_context.h"
@@ -49,6 +50,12 @@ void bc_MarkAllFrame(bc_Frame* self) {
         //全ての子要素を巡回してマーキング
         mark_recursive(self);
 }
+
+bc_GenericType* bc_GetRuntimeReceiver(bc_Frame* self) {
+        return bc_AtVector(self->VariableTable, 0);
+}
+
+bc_Vector* bc_GetRuntimeTypeArguments(bc_Frame* self) { return self->TypeArgs; }
 
 void bc_DeleteFrame(bc_Frame* self) {
         remove_from_parent(self);

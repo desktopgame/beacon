@@ -134,6 +134,20 @@ bc_Frame* bc_SubFrame(bc_Frame* parent);
 void bc_MarkAllFrame(bc_Frame* self);
 
 /**
+ * 実行時の現在のレシーバを返します。
+ * @param self
+ * @return
+ */
+struct bc_GenericType* bc_GetRuntimeReceiver(bc_Frame* self);
+
+/**
+ * 実行時の現在の型引数を返します。
+ * @param self
+ * @return
+ */
+bc_Vector* bc_GetRuntimeTypeArguments(bc_Frame* self);
+
+/**
  * 仮想マシンを開放します.
  * @param self
  */

@@ -36,11 +36,12 @@ int bc_MetaILCalcScore(bc_Vector* params, bc_Vector* ilargs, bc_Enviroment* env,
                         bc_GenericType* a =
                             bc_ApplyGenericType(param->GType, cctx);
                         // PrintGenericType2(param->gtype, a);
-                        dist = bc_DistanceGenericType(a,
-                                                      //	ApplyGenericType(argType,
-                                                      //ilctx), 	param->gtype,
-                                                      argType, cctx
-                                                      //	ilctx
+                        dist = bc_DistanceGenericType(
+                            a,
+                            //	ApplyGenericType(argType,
+                            // ilctx), 	param->gtype,
+                            argType, cctx
+                            //	ilctx
                         );
                 }
                 score += dist;
@@ -108,7 +109,7 @@ int bc_MetaRCalcScore(bc_Vector* params, bc_Vector* args, bc_Vector* typeargs,
                 bc_GenericType* argType = arg->GType;
                 if (argType->CoreType != BC_TYPE_NULL) {
                         bc_GenericType* a =
-                            bc_RApplyGenericType(param->GType, NULL, fr);
+                            bc_RApplyGenericType(param->GType, fr);
                         dist = bc_RDistanceGenericType(a, argType, fr);
                 }
                 score += dist;
