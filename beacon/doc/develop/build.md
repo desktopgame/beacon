@@ -1,19 +1,15 @@
 # ビルド
-下記の二つの方法があります。  
-どちらの場合でも **jdk1.8.0_151.jdk** が必要です。
+beaconのビルド方法について示します。
+
+## 必要なもの
+- [jdk1.8.0_151.jdk](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Glib](https://developer.gnome.org/glib/)
 
 ## Mac環境
-- clangコンパイラーをダウンロードする
-- [Branch:master] から [master] を選択する
-- このページの [Clone or Download] から [Download ZIP] を実行する
-- 次のコマンドを実行する
 ````
-cd beacon/src
---
-↓のどっちか
-cmake -D CMAKE_BUILD_TYPE=Release -D JNI_INCLUDE_DIR=jni.hのパス -D JNI_NATIVE_INCLUDE_DIR=jni_md.hのパス .
-cmake -D CMAKE_BUILD_TYPE=Debug -D JNI_INCLUDE_DIR=jni.hのパス -D JNI_NATIVE_INCLUDE_DIR=jni_md.hのパス .
---
+git clone https://github.com/desktopgame/beacon.git
+cd beacon/beacon/src
+cmake .
 make
 ````
 ## visual-studio を使う方法
