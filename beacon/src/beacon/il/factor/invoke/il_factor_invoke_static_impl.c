@@ -9,14 +9,14 @@
 #include "../../il_type_argument.h"
 
 // proto
-static void resolve_non_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                                bc_CallContext* cctx);
-static void resolve_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
+static void resolve_virtual(bc_ILInvokeStatic* self, bc_Enviroment* env,
                             bc_CallContext* cctx);
-static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                                 bc_CallContext* cctx);
-static void ILInvokeStatic_args_delete(bc_VectorItem item);
-static void ILInvokeStatic_typeargs_delete(bc_VectorItem item);
+static void resolve_apply(bc_ILInvokeStatic* self, bc_Enviroment* env,
+                          bc_CallContext* cctx);
+static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
+                        bc_CallContext* cctx);
+static void delete_args(bc_VectorItem item);
+static void delete_typeargs(bc_VectorItem item);
 
 bc_ILInvokeStatic* bc_NewILInvokeStatic(bc_StringView namev) {
         bc_ILInvokeStatic* ret =
@@ -57,23 +57,25 @@ void bc_GenerateILInvokeStatic(bc_ILInvokeStatic* self, bc_Enviroment* env,
 
 void bc_LoadILInvokeStatic(bc_ILInvokeStatic* self, bc_Enviroment* env,
                            bc_CallContext* cctx) {
-        ILInvokeStatic_check(self, env, cctx);
+        find_method(self, env, cctx);
 }
 
 bc_GenericType* bc_EvalILInvokeStatic(bc_ILInvokeStatic* self,
                                       bc_Enviroment* env,
                                       bc_CallContext* cctx) {
-        ILInvokeStatic_check(self, env, cctx);
+        find_method(self, env, cctx);
         //メソッドを解決できなかった場合
         if (bc_GetLastPanic()) {
                 return NULL;
         }
         bc_GenericType* rgtp = self->Method->ReturnGType;
+        //戻り値がジェネリックなら...Tなど
         if (rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
-                resolve_non_default(self, env, cctx);
+                resolve_virtual(self, env, cctx);
                 return self->Resolved;
+                //戻り値がジェネリックでないなら...List[T]など
         } else {
-                resolve_default(self, env, cctx);
+                resolve_apply(self, env, cctx);
                 return self->Resolved;
         }
         return NULL;
@@ -92,40 +94,25 @@ char* bc_ILInvokeStaticToString(bc_ILInvokeStatic* self, bc_Enviroment* env) {
 }
 
 void bc_DeleteILInvokeStatic(bc_ILInvokeStatic* self) {
-        bc_DeleteVector(self->Arguments, ILInvokeStatic_args_delete);
-        bc_DeleteVector(self->TypeArgs, ILInvokeStatic_typeargs_delete);
+        bc_DeleteVector(self->Arguments, delete_args);
+        bc_DeleteVector(self->TypeArgs, delete_typeargs);
         bc_DeleteFQCNCache(self->FQCN);
         MEM_FREE(self);
 }
 // private
+static void delete_args(bc_VectorItem item) {
+        bc_ILArgument* e = (bc_ILArgument*)item;
+        bc_DeleteILArgument(e);
+}
+
+static void delete_typeargs(bc_VectorItem item) {
+        bc_ILTypeArgument* e = (bc_ILTypeArgument*)item;
+        bc_DeleteILTypeArgument(e);
+}
+
 // FIXME:ILInvokeからのコピペ
-static void resolve_non_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                                bc_CallContext* cctx) {
-        if (self->Resolved != NULL) {
-                return;
-        }
-        bc_GenericType* rgtp = self->Method->ReturnGType;
-        bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-            self->TypeArgs, rgtp->VirtualTypeIndex);
-        self->Resolved = bc_NewGenericType(instanced_type->CoreType);
-        self->Resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
-        self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
-}
-
-static void resolve_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                            bc_CallContext* cctx) {
-        if (self->Resolved != NULL) {
-                return;
-        }
-        bc_CallFrame* cfr =
-            bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
-        bc_GenericType* rgtp = self->Method->ReturnGType;
-        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
-        bc_PopCallFrame(cctx);
-}
-
-static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                                 bc_CallContext* cctx) {
+static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
+                        bc_CallContext* cctx) {
         bc_Type* ty = bc_ResolveContext(cctx, self->FQCN);
         if (ty == NULL) {
                 bc_Panic(BCERROR_UNDEFINED_TYPE_STATIC_INVOKE_T,
@@ -133,10 +120,6 @@ static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
                 return;
         }
         bc_Class* cls = BC_TYPE2CLASS(ty);
-#if defined(DEBUG)
-        const char* classname = bc_Ref2Str(cls->Name);
-        const char* methodname = bc_Ref2Str(self->Name);
-#endif
         int temp = -1;
         bc_ResolveILTypeArgument(self->TypeArgs, cctx);
         //環境を設定
@@ -158,12 +141,27 @@ static void ILInvokeStatic_check(bc_ILInvokeStatic* self, bc_Enviroment* env,
         bc_PopCallFrame(cctx);
 }
 
-static void ILInvokeStatic_args_delete(bc_VectorItem item) {
-        bc_ILArgument* e = (bc_ILArgument*)item;
-        bc_DeleteILArgument(e);
+static void resolve_virtual(bc_ILInvokeStatic* self, bc_Enviroment* env,
+                            bc_CallContext* cctx) {
+        if (self->Resolved != NULL) {
+                return;
+        }
+        bc_GenericType* rgtp = self->Method->ReturnGType;
+        bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
+            self->TypeArgs, rgtp->VirtualTypeIndex);
+        self->Resolved = bc_NewGenericType(instanced_type->CoreType);
+        self->Resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
+        self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
 }
 
-static void ILInvokeStatic_typeargs_delete(bc_VectorItem item) {
-        bc_ILTypeArgument* e = (bc_ILTypeArgument*)item;
-        bc_DeleteILTypeArgument(e);
+static void resolve_apply(bc_ILInvokeStatic* self, bc_Enviroment* env,
+                          bc_CallContext* cctx) {
+        if (self->Resolved != NULL) {
+                return;
+        }
+        bc_CallFrame* cfr =
+            bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
+        bc_GenericType* rgtp = self->Method->ReturnGType;
+        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
+        bc_PopCallFrame(cctx);
 }
