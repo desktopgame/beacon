@@ -57,7 +57,7 @@ bc_GenericType* bc_MallocGenericType(struct bc_Type* CoreType,
         ret->TypeArgs = bc_NewVector();
         ret->VirtualTypeIndex = -1;
         ret->Tag = GENERIC_TYPE_TAG_NONE_T;
-        ret->IsCtor = false;
+        ret->IsCtorParameter = false;
         //現在のスクリプトコンテキストに登録
         bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
         bc_PushVector(ctx->AllGenericList, ret);
@@ -160,7 +160,7 @@ void bc_PrintGenericType(bc_GenericType* self) {
         } else {
                 printf("%s", bc_Ref2Str(bc_GetTypeName(self->CoreType)));
         }
-        if (self->IsCtor) {
+        if (self->IsCtorParameter) {
                 printf("!!");
         }
         if (self->TypeArgs->Length == 0) {
@@ -228,7 +228,7 @@ static bc_GenericType* apply_impl(bc_GenericType* self, bc_CallContext* cctx,
         if (self->VirtualTypeIndex != -1) {
                 count++;
                 if (self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                        if (self->IsCtor) {
+                        if (self->IsCtorParameter) {
                                 ret = bc_CloneGenericType(typeargs_at(
                                     cctx, fr, self->VirtualTypeIndex));
                         } else {

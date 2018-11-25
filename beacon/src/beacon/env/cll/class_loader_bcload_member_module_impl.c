@@ -719,7 +719,7 @@ static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope,
 static void CLBC_parameter_list_ctor(bc_Vector* param_list) {
         for (int i = 0; i < param_list->Length; i++) {
                 bc_Parameter* param = bc_AtVector(param_list, i);
-                param->GType->IsCtor = true;
+                param->GType->IsCtorParameter = true;
         }
 }
 
