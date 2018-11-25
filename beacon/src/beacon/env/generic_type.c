@@ -247,44 +247,6 @@ struct bc_Type* bc_GenericTypeToType(bc_GenericType* self) {
 }
 
 // private
-static bc_GenericType* apply_impl(bc_GenericType* self, bc_CallContext* cctx,
-                                  bc_Frame* fr) {
-        int count = 0;
-        //型変数なら変換
-        bc_GenericType* ret = NULL;
-        if (self->VirtualTypeIndex != -1) {
-                count++;
-                if (self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                        if (self->IsCtorParameter) {
-                                ret = bc_CloneGenericType(
-                                    typeargs_at(cctx, fr,
-                                                self->VirtualTypeIndex),
-                                    true);
-                        } else {
-                                ret = bc_CloneGenericType(
-                                    receiver_at(cctx, fr,
-                                                self->VirtualTypeIndex),
-                                    true);
-                        }
-                } else if (self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-                        ret = bc_CloneGenericType(
-                            typeargs_at(cctx, fr, self->VirtualTypeIndex),
-                            true);
-                }
-        } else {
-                ret = bc_NewGenericType(self->CoreType);
-                ret->Tag = self->Tag;
-                ret->VirtualTypeIndex = self->VirtualTypeIndex;
-        }
-        assert(ret != NULL);
-        for (int i = 0; i < self->TypeArgs->Length; i++) {
-                bc_AddArgsGenericType(
-                    ret,
-                    bc_ApplyGenericType(bc_AtVector(self->TypeArgs, i), cctx));
-        }
-        return ret;
-}
-
 static int distance_impl(bc_GenericType* self, bc_GenericType* other,
                          bc_Frame* fr, bc_CallContext* cctx) {
         if (fr != NULL) {
@@ -431,52 +393,6 @@ static bc_Vector* apply_by_hierarchy(bc_GenericType* impl_baseline,
                 bc_PushVector(gargs, e);
         }
         return gargs;
-}
-
-static bc_GenericType* typeargs_at(bc_CallContext* cctx, bc_Frame* fr,
-                                   int index) {
-        if (fr == NULL) {
-                bc_Vector* type_args = bc_GetCompileTimeTypeArguments(cctx);
-                bc_ILTypeArgument* a = bc_AtVector(type_args, index);
-                return a->GType;
-        } else {
-                bc_GenericType* a = bc_AtVector(fr->TypeArgs, index);
-                return a;
-        }
-        return NULL;
-}
-
-static bc_GenericType* receiver_at(bc_CallContext* cctx, bc_Frame* fr,
-                                   int index) {
-        if (fr == NULL) {
-                bc_GenericType* tp = bc_GetCompileTimeReceiver(cctx);
-                bc_GenericType* instanced = bc_AtVector(tp->TypeArgs, index);
-                return instanced;
-        } else {
-                bc_Object* a = bc_AtVector(fr->VariableTable, 0);
-                printf("receiver at: ");
-                bc_PrintGenericType(a->GType);
-                bc_Println();
-                return bc_AtVector(a->GType->TypeArgs, index);
-        }
-        return NULL;
-}
-
-static bc_GenericType* get_generic(bc_GenericType* a) {
-        /*
-        if(a->VirtualTypeIndex == -1) {
-                return a;
-        }
-        if(a->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                GenericType* receiver = ccat_receiver(a->VirtualTypeIndex);
-                a = receiver;
-        } else if(a->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-                GenericType* at = AtVector(cctop_type_args(),
-        a->VirtualTypeIndex); a = at;
-        }
-        return a;
-        */
-        return NULL;
 }
 
 static void delete_self(bc_VectorItem item) {
