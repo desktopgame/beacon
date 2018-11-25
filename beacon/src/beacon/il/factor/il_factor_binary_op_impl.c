@@ -246,9 +246,6 @@ bc_GenericType* bc_ApplyILBinaryOp(bc_ILBinaryOp* self, bc_GenericType* gtype,
                                    bc_Enviroment* env, bc_CallContext* cctx) {
         bc_GenericType* lgtype = bc_EvalILFactor(self->Left, env, cctx);
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, lgtype, NULL, NULL);
-        /*
-        cfr->Kind.InstanceInvoke.Receiver = lgtype;
-        */
         bc_GenericType* ret = bc_ApplyGenericType(gtype, cctx);
         bc_PopCallFrame(cctx);
         return ret;

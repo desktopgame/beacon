@@ -77,24 +77,11 @@ void bc_ExecuteMethod(bc_Method* self, bc_Frame* fr, bc_Enviroment* env) {
                             bc_GetScriptThreadContext(), receiver_obj->GType,
                             aArgs = method_vm_args(self, fr, a),
                             aTArgs = method_vm_typeargs(self, fr, a));
-                        /*
-                    cfr->Kind.InstanceInvoke.Receiver = receiver_obj->GType;
-                    aArgs = cfr->Kind.InstanceInvoke.Args =
-                        method_vm_args(self, fr, a);
-                    aTArgs = cfr->Kind.InstanceInvoke.TypeArgs =
-                        method_vm_typeargs(self, fr, a);
-                        */
                 } else {
                         cfr = bc_PushCallFrame(
                             bc_GetScriptThreadContext(), NULL,
                             aArgs = method_vm_args(self, fr, a),
                             aTArgs = method_vm_typeargs(self, fr, a));
-                        /*
-                        aArgs = cfr->Kind.StaticInvoke.Args =
-                            method_vm_args(self, fr, a);
-                        aTArgs = cfr->Kind.StaticInvoke.TypeArgs =
-                            method_vm_typeargs(self, fr, a);
-                        */
                 }
                 bc_ExecuteNativeMethod(self->Kind.Native, self, a, env);
                 //戻り値を残す
@@ -132,14 +119,8 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
 
                 bc_CallFrame* cfr =
                     bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
-                /*
-            cfr->Kind.Resolve.GType = bl;
-            */
                 bc_GenericType* superGT2 = bc_ApplyGenericType(superGT, cctx);
                 bc_PopCallFrame(cctx);
-                //		assert(!GenericType_equals(superGT, superGT2));
-
-                //		GenericType_diff(superGT, superGT2);
                 if (bc_DistanceGenericType(superGT2, subGT, cctx) != 0) {
                         return false;
                 }
@@ -147,12 +128,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
         bc_GenericType* superRet = superM->ReturnGType;
         bc_GenericType* subRet = subM->ReturnGType;
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
-        /*
-        cfr->Kind.Resolve.GType = bl;
-        */
         bc_GenericType* superRet2 = bc_ApplyGenericType(superRet, cctx);
-        //	GenericType_diff(superRet, superRet2);
-        //	assert(!GenericType_equals(superRet, superRet2));
         int ret = bc_DistanceGenericType(superRet2, subRet, cctx);
         bc_PopCallFrame(cctx);
         return ret != -1;
@@ -267,10 +243,7 @@ bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, bc_ClassLoader* cll,
                                          bc_Vector* stmt_list) {
         bc_CallContext* lCctx = bc_NewCallContext(CALL_CTOR_T);
         bc_CallFrame* lCfr = bc_PushCallFrame(lCctx, self->ReturnGType, NULL,
-                                                self->ReturnGType->TypeArgs);
-        /*
-lCfr->Kind.Resolve.GType = self->ReturnGType;
-*/
+                                              self->ReturnGType->TypeArgs);
         bc_StringView iterName = bc_GetMethodUniqueName(self);
         bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(),
                                                   bc_InternString("Iterator"));

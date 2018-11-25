@@ -53,13 +53,7 @@ void bc_LoadILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
         }
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, bc_EvalILFactor(self->receiver, env, cctx),
-                               self->args, self->type_args);
-        /*
-cfr->Kind.InstanceInvoke.Args = self->args;
-cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
-cfr->Kind.InstanceInvoke.Receiver =
-bc_EvalILFactor(self->receiver, env, cctx);
-*/
+                             self->args, self->type_args);
         bc_LoadILFactor(self->receiver, env, cctx);
         ILInvoke_check(self, env, cctx);
         bc_PopCallFrame(cctx);
@@ -155,13 +149,8 @@ static void resolve_default(bc_ILInvoke* self, bc_Enviroment* env,
         //	virtual_type returnvType = self->m->return_vtype;
         //内側に型変数が含まれているかもしれないので、
         //それをここで展開する。
-        bc_CallFrame* cfr = bc_PushCallFrame(cctx, receivergType, self->args,
-                                               self->type_args);
-        /*
-cfr->Kind.InstanceInvoke.Receiver = receivergType;
-cfr->Kind.InstanceInvoke.Args = self->args;
-cfr->Kind.InstanceInvoke.TypeArgs = self->type_args;
-*/
+        bc_CallFrame* cfr =
+            bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
         self->resolved = bc_ApplyGenericType(rgtp, cctx);
         bc_PopCallFrame(cctx);
 }

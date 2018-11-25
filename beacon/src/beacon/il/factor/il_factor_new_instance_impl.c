@@ -152,11 +152,7 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
         bc_Class* cls = BC_TYPE2CLASS(ty);
         int temp = -1;
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, cls->Parent->GenericSelf,
-                                               NULL, self->TypeArgs);
-        /*
-cfr->Kind.Resolve.GType = cls->Parent->GenericSelf;
-cfr->Kind.Resolve.TypeArgs = self->TypeArgs;
-*/
+                                             NULL, self->TypeArgs);
         bc_ResolveILTypeArgument(self->TypeArgs, cctx);
         self->Constructor =
             bc_ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);

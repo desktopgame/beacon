@@ -150,7 +150,7 @@ static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
         const char* str = bc_Ref2Str(bc_GetTypeName(ctype));
 #endif
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, cctx->Ty->GenericSelf,
-                                               self->Arguments, self->TypeArgs);
+                                             self->Arguments, self->TypeArgs);
         /*
     cfr->Kind.SelfInvoke.Args = self->Arguments;
     cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
@@ -324,22 +324,13 @@ static bc_GenericType* EvalILInvokeBoundImpl(bc_ILInvokeBound* self,
         bc_CallFrame* cfr = NULL;
         if (self->Tag == BOUND_INVOKE_METHOD_T) {
                 cfr = bc_PushCallFrame(cctx, cctx->Ty->GenericSelf,
-                                         self->Arguments, self->TypeArgs);
-                /*
-cfr->Kind.SelfInvoke.Args = self->Arguments;
-cfr->Kind.SelfInvoke.TypeArgs = self->TypeArgs;
-*/
+                                       self->Arguments, self->TypeArgs);
         } else {
                 cfr = bc_PushCallFrame(
                     cctx,
                     bc_ApplyGenericType(
                         bc_GetSubscriptReceiver(&self->Kind.Subscript), cctx),
                     self->Arguments, self->TypeArgs);
-                /*
-            cfr->Kind.InstanceInvoke.Receiver = ;
-            cfr->Kind.InstanceInvoke.Args = self->Arguments;
-            cfr->Kind.InstanceInvoke.TypeArgs = self->TypeArgs;
-            */
         }
 
         if (ILInvokeBound_return_gtype(self, cctx)->Tag !=

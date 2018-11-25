@@ -676,10 +676,6 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_CallFrame* cfr = bc_PushCallFrame(
                                     bc_GetScriptThreadContext(), NULL,
                                     bc_NewVector(), bc_NewVector());
-                                /*
-                            cfr->Kind.StaticInvoke.Args = bc_NewVector();
-                            cfr->Kind.StaticInvoke.TypeArgs =
-                                bc_NewVector();*/
                                 for (int i = 0; i < ctor->Parameters->Length;
                                      i++) {
                                         bc_VectorItem e =
@@ -752,10 +748,6 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_CallFrame* cfr = bc_PushCallFrame(
                                     bc_GetScriptThreadContext(), NULL,
                                     bc_NewVector(), bc_NewVector());
-                                /*
-                            cfr->Kind.StaticInvoke.Args = bc_NewVector();
-                            cfr->Kind.StaticInvoke.TypeArgs =
-                                bc_NewVector();*/
                                 //チェインコンストラクタに渡された実引数をプッシュ
                                 for (int i = 0; i < ctor->Parameters->Length;
                                      i++) {
