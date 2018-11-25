@@ -15,18 +15,18 @@
 #include "../../il_type_argument.h"
 
 // proto
-static void resolve_non_default(bc_ILInvoke* self, bc_Enviroment* env,
-                                bc_CallContext* cctx);
-static void resolve_default(bc_ILInvoke* self, bc_Enviroment* env,
+static void resolve_virtual(bc_ILInvoke* self, bc_Enviroment* env,
                             bc_CallContext* cctx);
-static void ILInvoke_args_delete(bc_VectorItem item);
-static void ILInvoke_check(bc_ILInvoke* self, bc_Enviroment* env,
-                           bc_CallContext* cctx);
-static bc_GenericType* ILInvoke_return_gtype(bc_ILInvoke* self);
-static void GenerateILInvoke_method(bc_ILInvoke* self, bc_Enviroment* env,
-                                    bc_CallContext* cctx);
-static void GenerateILInvoke_subscript(bc_ILInvoke* self, bc_Enviroment* env,
-                                       bc_CallContext* cctx);
+static void resolve_apply(bc_ILInvoke* self, bc_Enviroment* env,
+                          bc_CallContext* cctx);
+static void delete_args(bc_VectorItem item);
+static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
+                        bc_CallContext* cctx);
+static bc_GenericType* get_return_gtype(bc_ILInvoke* self);
+static void generate_method(bc_ILInvoke* self, bc_Enviroment* env,
+                            bc_CallContext* cctx);
+static void generate_subscript(bc_ILInvoke* self, bc_Enviroment* env,
+                               bc_CallContext* cctx);
 
 bc_ILInvoke* bc_NewILInvoke(bc_StringView namev) {
         bc_ILInvoke* ret = (bc_ILInvoke*)MEM_MALLOC(sizeof(bc_ILInvoke));
@@ -42,8 +42,8 @@ bc_ILInvoke* bc_NewILInvoke(bc_StringView namev) {
 
 void bc_GenerateILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
                          bc_CallContext* cctx) {
-        GenerateILInvoke_method(self, env, cctx);
-        GenerateILInvoke_subscript(self, env, cctx);
+        generate_method(self, env, cctx);
+        generate_subscript(self, env, cctx);
 }
 
 void bc_LoadILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
@@ -55,25 +55,25 @@ void bc_LoadILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
             bc_PushCallFrame(cctx, bc_EvalILFactor(self->receiver, env, cctx),
                              self->args, self->type_args);
         bc_LoadILFactor(self->receiver, env, cctx);
-        ILInvoke_check(self, env, cctx);
+        find_method(self, env, cctx);
         bc_PopCallFrame(cctx);
 }
 
 bc_GenericType* bc_EvalILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
                                 bc_CallContext* cctx) {
-        ILInvoke_check(self, env, cctx);
+        find_method(self, env, cctx);
         if (bc_GetLastPanic()) {
                 return NULL;
         }
-        bc_GenericType* rgtp = ILInvoke_return_gtype(self);
+        bc_GenericType* rgtp = get_return_gtype(self);
         bc_GenericType* ret = NULL;
-        //型変数をそのまま返す場合
+        //戻り値がジェネリックなら...Tなど
         if (rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
-                resolve_non_default(self, env, cctx);
+                resolve_virtual(self, env, cctx);
                 ret = self->resolved;
-                //型変数ではない型を返す
+                //戻り値がジェネリックでないなら...List[T]など
         } else {
-                resolve_default(self, env, cctx);
+                resolve_apply(self, env, cctx);
                 ret = self->resolved;
         }
         return ret;
@@ -92,7 +92,7 @@ char* bc_ILInvokeToString(bc_ILInvoke* self, bc_Enviroment* env) {
 }
 
 void bc_DeleteILInvoke(bc_ILInvoke* self) {
-        bc_DeleteVector(self->args, ILInvoke_args_delete);
+        bc_DeleteVector(self->args, delete_args);
         bc_DeleteVector(self->type_args, bc_VectorDeleterOfNull);
         bc_DeleteILFactor(self->receiver);
         // generic_DeleteType(self->resolved);
@@ -114,120 +114,13 @@ bc_OperatorOverload* bc_FindSetILInvoke(bc_ILInvoke* self, bc_ILFactor* value,
         return opov;
 }
 // private
-static void resolve_non_default(bc_ILInvoke* self, bc_Enviroment* env,
-                                bc_CallContext* cctx) {
-        if (self->resolved != NULL) {
-                return;
-        }
-        bc_GenericType* receivergType =
-            bc_EvalILFactor(self->receiver, env, cctx);
-        bc_GenericType* rgtp = ILInvoke_return_gtype(self);
-        if (rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                //レシーバの実体化された型の中で、
-                //メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
-                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-                    receivergType->TypeArgs, rgtp->VirtualTypeIndex);
-                self->resolved = bc_CloneGenericType(instanced_type, true);
-                self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
-        } else if (rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-                //メソッドに渡された型引数を参照する
-                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-                    self->type_args, rgtp->VirtualTypeIndex);
-                self->resolved = bc_CloneGenericType(instanced_type, true);
-                self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
-        }
-}
-
-static void resolve_default(bc_ILInvoke* self, bc_Enviroment* env,
-                            bc_CallContext* cctx) {
-        if (self->resolved != NULL) {
-                return;
-        }
-        bc_GenericType* receivergType =
-            bc_EvalILFactor(self->receiver, env, cctx);
-        bc_GenericType* rgtp = ILInvoke_return_gtype(self);
-        //	virtual_type returnvType = self->m->return_vtype;
-        //内側に型変数が含まれているかもしれないので、
-        //それをここで展開する。
-        bc_CallFrame* cfr =
-            bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
-        self->resolved = bc_CapplyGenericType(rgtp, cctx);
-        bc_PopCallFrame(cctx);
-}
-
-static void ILInvoke_check(bc_ILInvoke* self, bc_Enviroment* env,
-                           bc_CallContext* cctx) {
-        //レシーバの読み込み
-        bc_LoadILFactor(self->receiver, env, cctx);
-        if (bc_GetLastPanic()) {
-                return;
-        }
-        if (self->receiver->Type == ILFACTOR_VARIABLE_T) {
-                bc_ILVariable* ilvar = self->receiver->Kind.Variable;
-                assert(ilvar->Type != ILVARIABLE_TYPE_STATIC_T);
-        }
-        //レシーバの型を評価
-        bc_GenericType* gtype = bc_EvalILFactor(self->receiver, env, cctx);
-        if (bc_GetLastPanic()) {
-                return;
-        }
-        bc_ResolveILTypeArgument(self->type_args, cctx);
-        bc_Type* ctype = gtype->CoreType;
-#if defined(DEBUG)
-        const char* cname = bc_Ref2Str(bc_GetTypeName(ctype));
-#endif
-        //ジェネリックな変数に対しても
-        // Objectクラスのメソッドは呼び出せる
-        if (ctype == NULL) {
-                ctype = BC_TYPE_OBJECT;
-        }
-        //メソッドを検索
-        assert(ctype != NULL);
-        int temp = -1;
-        self->tag = INSTANCE_INVOKE_METHOD_T;
-        self->u.m = bc_ILFindMethodType(ctype, self->namev, self->args, env,
-                                        cctx, &temp);
-        self->index = temp;
-        if (temp != -1) {
-                return;
-        }
-        //メソッドが見つからなかったら
-        // subscript(添字アクセス)として解決する
-        if (self->args->Length != 1) {
-                // hoge(1) = 0;
-                //の形式なら引数は一つのはず
-                bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
-                         bc_Ref2Str(bc_GetTypeName(ctype)),
-                         bc_Ref2Str(self->namev));
-                return;
-        }
-        self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
-        self->u.opov = bc_ArgFindOperatorOverloadClass(
-            BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env,
-            cctx, &temp);
-        self->index = temp;
-        if (temp == -1) {
-                bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
-                         bc_Ref2Str(bc_GetTypeName(ctype)),
-                         bc_Ref2Str(self->namev));
-                return;
-        }
-}
-
-static void ILInvoke_args_delete(bc_VectorItem item) {
+static void delete_args(bc_VectorItem item) {
         bc_ILArgument* e = (bc_ILArgument*)item;
         bc_DeleteILArgument(e);
 }
 
-static bc_GenericType* ILInvoke_return_gtype(bc_ILInvoke* self) {
-        assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
-        return self->tag == INSTANCE_INVOKE_METHOD_T
-                   ? self->u.m->ReturnGType
-                   : self->u.opov->ReturnGType;
-}
-
-static void GenerateILInvoke_method(bc_ILInvoke* self, bc_Enviroment* env,
-                                    bc_CallContext* cctx) {
+static void generate_method(bc_ILInvoke* self, bc_Enviroment* env,
+                            bc_CallContext* cctx) {
         assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
         if (self->tag != INSTANCE_INVOKE_METHOD_T) {
                 return;
@@ -267,8 +160,8 @@ static void GenerateILInvoke_method(bc_ILInvoke* self, bc_Enviroment* env,
         }
 }
 
-static void GenerateILInvoke_subscript(bc_ILInvoke* self, bc_Enviroment* env,
-                                       bc_CallContext* cctx) {
+static void generate_subscript(bc_ILInvoke* self, bc_Enviroment* env,
+                               bc_CallContext* cctx) {
         assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
         if (self->tag != INSTANCE_INVOKE_SUBSCRIPT_T) {
                 return;
@@ -287,4 +180,109 @@ static void GenerateILInvoke_subscript(bc_ILInvoke* self, bc_Enviroment* env,
         bc_GenerateILFactor(self->receiver, env, cctx);
         bc_AddOpcodeBuf(env->Bytecode, OP_INVOKEOPERATOR);
         bc_AddOpcodeBuf(env->Bytecode, self->index);
+}
+
+static bc_GenericType* get_return_gtype(bc_ILInvoke* self) {
+        assert(self->tag != INSTANCE_INVOKE_UNDEFINED_T);
+        return self->tag == INSTANCE_INVOKE_METHOD_T
+                   ? self->u.m->ReturnGType
+                   : self->u.opov->ReturnGType;
+}
+
+static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
+                        bc_CallContext* cctx) {
+        //レシーバの読み込み
+        bc_LoadILFactor(self->receiver, env, cctx);
+        if (bc_GetLastPanic()) {
+                return;
+        }
+        if (self->receiver->Type == ILFACTOR_VARIABLE_T) {
+                bc_ILVariable* ilvar = self->receiver->Kind.Variable;
+                assert(ilvar->Type != ILVARIABLE_TYPE_STATIC_T);
+        }
+        //レシーバの型を評価
+        bc_GenericType* gtype = bc_EvalILFactor(self->receiver, env, cctx);
+        if (bc_GetLastPanic()) {
+                return;
+        }
+        bc_ResolveILTypeArgument(self->type_args, cctx);
+        bc_Type* ctype = gtype->CoreType;
+
+        //ジェネリックな変数に対しても
+        // Objectクラスのメソッドは呼び出せる
+        if (ctype == NULL) {
+                ctype = BC_TYPE_OBJECT;
+        }
+        //メソッドを検索
+        assert(ctype != NULL);
+        int temp = -1;
+        self->tag = INSTANCE_INVOKE_METHOD_T;
+        self->u.m = bc_ILFindMethodType(ctype, self->namev, self->args, env,
+                                        cctx, &temp);
+        self->index = temp;
+        if (temp != -1) {
+                return;
+        }
+        //メソッドが見つからなかったら
+        // subscript(添字アクセス)として解決する
+        if (self->args->Length != 1) {
+                // hoge(1) = 0;
+                //の形式なら引数は一つのはず
+                bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
+                         bc_Ref2Str(bc_GetTypeName(ctype)),
+                         bc_Ref2Str(self->namev));
+                return;
+        }
+        self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
+        self->u.opov = bc_ArgFindOperatorOverloadClass(
+            BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env,
+            cctx, &temp);
+        self->index = temp;
+        if (temp == -1) {
+                bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
+                         bc_Ref2Str(bc_GetTypeName(ctype)),
+                         bc_Ref2Str(self->namev));
+                return;
+        }
+}
+
+static void resolve_virtual(bc_ILInvoke* self, bc_Enviroment* env,
+                            bc_CallContext* cctx) {
+        if (self->resolved != NULL) {
+                return;
+        }
+        bc_GenericType* receivergType =
+            bc_EvalILFactor(self->receiver, env, cctx);
+        bc_GenericType* rgtp = get_return_gtype(self);
+        if (rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
+                //レシーバの実体化された型の中で、
+                //メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
+                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
+                    receivergType->TypeArgs, rgtp->VirtualTypeIndex);
+                self->resolved = bc_CloneGenericType(instanced_type, true);
+                self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
+        } else if (rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
+                //メソッドに渡された型引数を参照する
+                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
+                    self->type_args, rgtp->VirtualTypeIndex);
+                self->resolved = bc_CloneGenericType(instanced_type, true);
+                self->resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
+        }
+}
+
+static void resolve_apply(bc_ILInvoke* self, bc_Enviroment* env,
+                          bc_CallContext* cctx) {
+        if (self->resolved != NULL) {
+                return;
+        }
+        bc_GenericType* receivergType =
+            bc_EvalILFactor(self->receiver, env, cctx);
+        bc_GenericType* rgtp = get_return_gtype(self);
+        //	virtual_type returnvType = self->m->return_vtype;
+        //内側に型変数が含まれているかもしれないので、
+        //それをここで展開する。
+        bc_CallFrame* cfr =
+            bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
+        self->resolved = bc_CapplyGenericType(rgtp, cctx);
+        bc_PopCallFrame(cctx);
 }
