@@ -164,22 +164,20 @@ void bc_PrintGenericType(bc_GenericType* self);
 void bc_GenerateGenericType(bc_GenericType* self, struct bc_Enviroment* env);
 
 /**
- * 現在のコンテキストで self の型変数を解決します.
- * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
+ * コンパイル時にジェネリック型を解決します。
  * @param self
  * @param cctx
  * @return
  */
-bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
-                                    struct bc_CallContext* cctx);
+bc_GenericType* bc_CapplyGenericType(bc_GenericType* self,
+                                     struct bc_CallContext* cctx);
 /**
- * 現在のコンテキストで self の型変数を解決します.
- * T ではなく T を内包する型(List<T>) などが戻り値になる時に使用されます。
+ * 実行時にジェネリック型を解決します。
  * @param self
  * @param fr
  * @return
  */
-bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, struct bc_Frame* fr);
+bc_GenericType* bc_RapplyGenericType(bc_GenericType* self, struct bc_Frame* fr);
 
 /**
  * 再帰的に型変数を展開して返します。

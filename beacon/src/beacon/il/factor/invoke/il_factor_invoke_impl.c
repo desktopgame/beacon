@@ -151,7 +151,7 @@ static void resolve_default(bc_ILInvoke* self, bc_Enviroment* env,
         //それをここで展開する。
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
-        self->resolved = bc_ApplyGenericType(rgtp, cctx);
+        self->resolved = bc_CapplyGenericType(rgtp, cctx);
         bc_PopCallFrame(cctx);
 }
 

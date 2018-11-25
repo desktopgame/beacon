@@ -998,7 +998,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o = bc_PopVector(self->ValueStack);
                                 bc_GenericType* a =
                                     bc_PopVector(self->TypeArgs);
-                                a = bc_ApplyGenericType(
+                                a = bc_CapplyGenericType(
                                     a, bc_GetScriptThreadContext());
                                 if (a->CoreType->Tag == TYPE_INTERFACE_T) {
                                         bc_Interface* inter = BC_TYPE2INTERFACE(
@@ -1037,7 +1037,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o = bc_PopVector(self->ValueStack);
                                 bc_GenericType* a =
                                     bc_PopVector(self->TypeArgs);
-                                a = bc_ApplyGenericType(
+                                a = bc_CapplyGenericType(
                                     a, bc_GetScriptThreadContext());
                                 assert(a->CoreType != NULL);
                                 if (a->CoreType->Tag == TYPE_CLASS_T) {

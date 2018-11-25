@@ -120,7 +120,7 @@ static void resolve_default(bc_ILInvokeStatic* self, bc_Enviroment* env,
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         bc_GenericType* rgtp = self->Method->ReturnGType;
-        self->Resolved = bc_ApplyGenericType(rgtp, cctx);
+        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
         bc_PopCallFrame(cctx);
 }
 

@@ -119,7 +119,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
 
                 bc_CallFrame* cfr =
                     bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
-                bc_GenericType* superGT2 = bc_ApplyGenericType(superGT, cctx);
+                bc_GenericType* superGT2 = bc_CapplyGenericType(superGT, cctx);
                 bc_PopCallFrame(cctx);
                 if (bc_DistanceGenericType(superGT2, subGT, cctx) != 0) {
                         return false;
@@ -128,7 +128,7 @@ bool bc_IsOverridedMethod(bc_Method* superM, bc_Method* subM,
         bc_GenericType* superRet = superM->ReturnGType;
         bc_GenericType* subRet = subM->ReturnGType;
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, bl, NULL, bl->TypeArgs);
-        bc_GenericType* superRet2 = bc_ApplyGenericType(superRet, cctx);
+        bc_GenericType* superRet2 = bc_CapplyGenericType(superRet, cctx);
         int ret = bc_DistanceGenericType(superRet2, subRet, cctx);
         bc_PopCallFrame(cctx);
         return ret != -1;
@@ -249,7 +249,7 @@ bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, bc_ClassLoader* cll,
                                                   bc_InternString("Iterator"));
         //イテレータの実装クラスを登録
         bc_GenericType* iterImplGT =
-            bc_ApplyGenericType(self->ReturnGType, lCctx);
+            bc_CapplyGenericType(self->ReturnGType, lCctx);
         bc_Class* iterImplC = bc_NewClassProxy(iterImplGT, iterName);
         bc_Type* iterImplT = bc_WrapClass(iterImplC);
         bc_AddTypeNamespace(bc_GetPlaceholderNamespace(), iterImplT);

@@ -214,14 +214,14 @@ void bc_GenerateGenericType(bc_GenericType* self, bc_Enviroment* env) {
 }
 
 // Hash<String,List<Int>>
-bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
+bc_GenericType* bc_CapplyGenericType(bc_GenericType* self,
                                     bc_CallContext* cctx) {
         return bc_ExpandGenericType(self, bc_GetCompileTimeReceiver(cctx),
                                     bc_GetCompileTimeTypeArguments(cctx),
                                     PHASE_COMPILE_TIME);
 }
 
-bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_Frame* fr) {
+bc_GenericType* bc_RapplyGenericType(bc_GenericType* self, bc_Frame* fr) {
         return bc_ExpandGenericType(self, bc_GetRuntimeReceiver(fr),
                                     bc_GetRuntimeTypeArguments(fr),
                                     PHASE_RUN_TIME);

@@ -128,7 +128,7 @@ static void resolve_default(bc_ILInvokeBound* self, bc_Enviroment* env,
                 return;
         }
         bc_GenericType* rgtp = ILInvokeBound_return_gtype(self, cctx);
-        self->Resolved = bc_ApplyGenericType(rgtp, cctx);
+        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
 }
 
 static void ILInvokeBound_check(bc_ILInvokeBound* self, bc_Enviroment* env,
@@ -305,7 +305,7 @@ static void GenerateILInvokeBound_subscript(bc_ILInvokeBound* self,
 static bc_GenericType* ILInvokeBound_return_gtype(bc_ILInvokeBound* self,
                                                   bc_CallContext* cctx) {
         assert(self->Tag != BOUND_INVOKE_UNDEFINED_T);
-        return bc_ApplyGenericType(
+        return bc_CapplyGenericType(
             self->Tag == BOUND_INVOKE_METHOD_T
                 ? self->Kind.Method->ReturnGType
                 : self->Kind.Subscript.Operator->ReturnGType,
@@ -328,7 +328,7 @@ static bc_GenericType* EvalILInvokeBoundImpl(bc_ILInvokeBound* self,
         } else {
                 cfr = bc_PushCallFrame(
                     cctx,
-                    bc_ApplyGenericType(
+                    bc_CapplyGenericType(
                         bc_GetSubscriptReceiver(&self->Kind.Subscript), cctx),
                     self->Arguments, self->TypeArgs);
         }

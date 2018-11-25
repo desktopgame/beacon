@@ -50,7 +50,7 @@ void bc_LoadILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
 
 bc_GenericType* bc_EvalILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
                                    bc_CallContext* cctx) {
-        return bc_ApplyGenericType(self->Operator->ReturnGType, cctx);
+        return bc_CapplyGenericType(self->Operator->ReturnGType, cctx);
 }
 
 char* bc_ILSubscriptToString(bc_ILSubscript* self, bc_Enviroment* env) {
