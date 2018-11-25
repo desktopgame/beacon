@@ -36,6 +36,9 @@ static void delete_self(bc_VectorItem item);
 static void delete_recursive_self(bc_VectorItem item);
 static void recursive_mark(bc_GenericType* a);
 static bc_GenericType* get_generic(bc_GenericType* a);
+static bc_GenericType* expand_generic_once(bc_GenericType* self,
+                                           bc_GenericType* receiver,
+                                           bc_Vector* type_args);
 /*
 GenericType * NewGenericType(Type* CoreType) {
 
@@ -223,40 +226,7 @@ bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_CallContext* cctx,
 bc_GenericType* bc_ExpandGenericType(bc_GenericType* self,
                                      bc_GenericType* receiver,
                                      bc_Vector* type_args) {
-        int count = 0;
-        //型変数なら変換
-        bc_GenericType* ret = NULL;
-        if (self->VirtualTypeIndex != -1) {
-                count++;
-                if (self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                        if (self->IsCtorParameter) {
-                                assert(type_args != NULL);
-                                ret = bc_CloneGenericType(
-                                    ((bc_ILTypeArgument*)bc_AtVector(
-                                         type_args, self->VirtualTypeIndex))
-                                        ->GType,
-                                    true);
-                        } else {
-                                assert(receiver->TypeArgs != NULL);
-                                ret = bc_CloneGenericType(
-                                    bc_AtVector(receiver->TypeArgs,
-                                                self->VirtualTypeIndex),
-                                    true);
-                        }
-                } else if (self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-                        assert(type_args != NULL);
-                        ret = bc_CloneGenericType(
-                            ((bc_ILTypeArgument*)bc_AtVector(
-                                 type_args, self->VirtualTypeIndex))
-                                ->GType,
-                            true);
-                }
-        } else {
-                ret = bc_NewGenericType(self->CoreType);
-                ret->Tag = self->Tag;
-                ret->VirtualTypeIndex = self->VirtualTypeIndex;
-        }
-        assert(ret != NULL);
+        bc_GenericType* ret = expand_generic_once(self, receiver, type_args);
         //型変数を再帰的に展開
         for (int i = 0; i < self->TypeArgs->Length; i++) {
                 bc_AddArgsGenericType(
@@ -523,4 +493,42 @@ static void recursive_mark(bc_GenericType* a) {
         for (int i = 0; i < a->TypeArgs->Length; i++) {
                 recursive_mark((bc_GenericType*)bc_AtVector(a->TypeArgs, i));
         }
+}
+
+static bc_GenericType* expand_generic_once(bc_GenericType* self,
+                                           bc_GenericType* receiver,
+                                           bc_Vector* type_args) {
+        bc_GenericType* ret = NULL;
+        //型引数がない場合
+        if (self->VirtualTypeIndex == -1) {
+                ret = bc_NewGenericType(self->CoreType);
+                ret->Tag = self->Tag;
+                ret->VirtualTypeIndex = self->VirtualTypeIndex;
+                return ret;
+        }
+        //ある
+        if (self->Tag == GENERIC_TYPE_TAG_CLASS_T) {
+                if (self->IsCtorParameter) {
+                        assert(type_args != NULL);
+                        ret = bc_CloneGenericType(
+                            ((bc_ILTypeArgument*)bc_AtVector(
+                                 type_args, self->VirtualTypeIndex))
+                                ->GType,
+                            true);
+                } else {
+                        assert(receiver->TypeArgs != NULL);
+                        ret = bc_CloneGenericType(
+                            bc_AtVector(receiver->TypeArgs,
+                                        self->VirtualTypeIndex),
+                            true);
+                }
+        } else if (self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
+                assert(type_args != NULL);
+                ret =
+                    bc_CloneGenericType(((bc_ILTypeArgument*)bc_AtVector(
+                                             type_args, self->VirtualTypeIndex))
+                                            ->GType,
+                                        true);
+        }
+        return ret;
 }
