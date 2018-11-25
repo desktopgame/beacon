@@ -38,7 +38,9 @@ static void recursive_mark(bc_GenericType* a);
 static bc_GenericType* get_generic(bc_GenericType* a);
 static bc_GenericType* expand_generic_once(bc_GenericType* self,
                                            bc_GenericType* receiver,
-                                           bc_Vector* type_args);
+                                           bc_Vector* type_args,
+                                           bc_ExecutePhase phase);
+static bc_GenericType* void_to_generic(void* value, bc_ExecutePhase phase);
 /*
 GenericType * NewGenericType(Type* CoreType) {
 
@@ -215,7 +217,8 @@ void bc_GenerateGenericType(bc_GenericType* self, bc_Enviroment* env) {
 bc_GenericType* bc_ApplyGenericType(bc_GenericType* self,
                                     bc_CallContext* cctx) {
         return bc_ExpandGenericType(self, bc_GetReceiverCContext(cctx),
-                                    bc_GetTypeArgsCContext(cctx));
+                                    bc_GetTypeArgsCContext(cctx),
+                                    PHASE_COMPILE_TIME);
 }
 
 bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_CallContext* cctx,
@@ -225,13 +228,15 @@ bc_GenericType* bc_RApplyGenericType(bc_GenericType* self, bc_CallContext* cctx,
 
 bc_GenericType* bc_ExpandGenericType(bc_GenericType* self,
                                      bc_GenericType* receiver,
-                                     bc_Vector* type_args) {
-        bc_GenericType* ret = expand_generic_once(self, receiver, type_args);
+                                     bc_Vector* type_args,
+                                     bc_ExecutePhase phase) {
+        bc_GenericType* ret =
+            expand_generic_once(self, receiver, type_args, phase);
         //型変数を再帰的に展開
         for (int i = 0; i < self->TypeArgs->Length; i++) {
                 bc_AddArgsGenericType(
                     ret, bc_ExpandGenericType(bc_AtVector(self->TypeArgs, i),
-                                              receiver, type_args));
+                                              receiver, type_args, phase));
         }
         return ret;
 }
@@ -497,7 +502,8 @@ static void recursive_mark(bc_GenericType* a) {
 
 static bc_GenericType* expand_generic_once(bc_GenericType* self,
                                            bc_GenericType* receiver,
-                                           bc_Vector* type_args) {
+                                           bc_Vector* type_args,
+                                           bc_ExecutePhase phase) {
         bc_GenericType* ret = NULL;
         //型引数がない場合
         if (self->VirtualTypeIndex == -1) {
@@ -511,9 +517,9 @@ static bc_GenericType* expand_generic_once(bc_GenericType* self,
                 if (self->IsCtorParameter) {
                         assert(type_args != NULL);
                         ret = bc_CloneGenericType(
-                            ((bc_ILTypeArgument*)bc_AtVector(
-                                 type_args, self->VirtualTypeIndex))
-                                ->GType,
+                            void_to_generic(
+                                bc_AtVector(type_args, self->VirtualTypeIndex),
+                                phase),
                             true);
                 } else {
                         assert(receiver->TypeArgs != NULL);
@@ -524,11 +530,20 @@ static bc_GenericType* expand_generic_once(bc_GenericType* self,
                 }
         } else if (self->Tag == GENERIC_TYPE_TAG_METHOD_T) {
                 assert(type_args != NULL);
-                ret =
-                    bc_CloneGenericType(((bc_ILTypeArgument*)bc_AtVector(
-                                             type_args, self->VirtualTypeIndex))
-                                            ->GType,
-                                        true);
+                ret = bc_CloneGenericType(
+                    void_to_generic(
+                        bc_AtVector(type_args, self->VirtualTypeIndex), phase),
+                    true);
         }
         return ret;
+}
+
+static bc_GenericType* void_to_generic(void* value, bc_ExecutePhase phase) {
+        switch (phase) {
+                case PHASE_COMPILE_TIME:
+                        return ((bc_ILTypeArgument*)value)->GType;
+                case PHASE_RUN_TIME:
+                        return ((bc_Object*)value)->GType;
+        }
+        return NULL;
 }

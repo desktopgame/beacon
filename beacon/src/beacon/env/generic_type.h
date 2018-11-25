@@ -60,6 +60,14 @@ typedef struct bc_GenericType {
         bool IsCtorParameter;
 } bc_GenericType;
 
+/**
+ * beaocnが現在実行中のどの段階であるかを示す列挙。
+ */
+typedef enum bc_ExecutePhase {
+        PHASE_COMPILE_TIME,
+        PHASE_RUN_TIME,
+} bc_ExecutePhase;
+
 //#define GenericType_validate(self) assert((self)->CoreType != NULL ||
 // self->VirtualTypeIndex != -1)
 
@@ -181,11 +189,13 @@ bc_GenericType* bc_RApplyGenericType(bc_GenericType* self,
  * @param cctx
  * @param receiver
  * @param type_args
+ * @param phase
  * @return
  */
 bc_GenericType* bc_ExpandGenericType(bc_GenericType* self,
                                      struct bc_GenericType* receiver,
-                                     bc_Vector* type_args);
+                                     bc_Vector* type_args,
+                                     bc_ExecutePhase phase);
 
 /**
  * GenericType を type へ変換します.
