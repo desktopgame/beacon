@@ -16,11 +16,11 @@
 %}
 %union {
 	char char_value;
-	StringView stringv_value;
-	AST* ast_value;
-	AssignOperatorType assign_otype_value;
-	ConstructorChainType chain_type_value;
-	AccessLevel access_level_value;
+	bc_StringView stringv_value;
+	bc_AST* ast_value;
+	bc_AssignOperatorType assign_otype_value;
+	bc_ConstructorChainType chain_type_value;
+	bc_AccessLevel access_level_value;
 }
 
 
@@ -156,27 +156,27 @@ init_decl
 	: /* empty */
 	| import_list
 	{
-		CompileEntryAST($1);
+		bc_CompileEntryAST($1);
 	}
 	;
 body_decl
 	: stmt
 	{
-		CompileEntryAST($1);
+		bc_CompileEntryAST($1);
 	}
 	| namespace_decl
 	{
-		CompileEntryAST($1);
+		bc_CompileEntryAST($1);
 	}
 	| function_define
 	{
-		CompileEntryAST($1);
+		bc_CompileEntryAST($1);
 	}
 	;
 namespace_decl
 	: NAMESPACE namespace_path namespace_body
 	{
-		$$ = NewASTNamespaceDecl($2, $3);
+		$$ = bc_NewASTNamespaceDecl($2, $3);
 	}
 	;
 
@@ -190,7 +190,7 @@ namespace_body
 namespace_member_decl
 	: NAMESPACE namespace_path namespace_body
 	{
-		$$ = NewASTNamespaceNamespaceDecl($2, $3);
+		$$ = bc_NewASTNamespaceNamespaceDecl($2, $3);
 	}
 	| abstract_class_decl
 	| class_decl
@@ -205,14 +205,14 @@ namespace_member_decl_list
 	}
 	| namespace_member_decl_list namespace_member_decl
 	{
-		$$ = NewASTNamespaceMemberDeclList($1, $2);
+		$$ = bc_NewASTNamespaceMemberDeclList($1, $2);
 	}
 	;
 
 namespace_member_decl_optional
 	: /* empty */
 	{
-		$$ = NewASTBlank();
+		$$ = bc_NewASTBlank();
 	}
 	| namespace_member_decl_list
 	;
@@ -220,11 +220,11 @@ namespace_member_decl_optional
 namespace_path
 	: IDENT
 	{
-		$$ = NewASTNamespacePath($1);
+		$$ = bc_NewASTNamespacePath($1);
 	}
 	| namespace_path COLO_COLO IDENT
 	{
-		$$ = NewASTNamespacePathList($1, $3);
+		$$ = bc_NewASTNamespacePathList($1, $3);
 	}
 	;
 
@@ -232,28 +232,28 @@ import_list
 	: import
 	| import_list import
 	{
-		$$ = NewASTImportDeclList($2, $1);
+		$$ = bc_NewASTImportDeclList($2, $1);
 	}
 	;
 
 import
 	: IMPORT STRING_LITERAL
 	{
-		$$ = NewASTImportDecl(NewASTImportPath($2));
+		$$ = bc_NewASTImportDecl(bc_NewASTImportPath($2));
 	}
 	;
 
 parameterized_typename
 	: IDENT type_parameter_group
 	{
-		$$ = NewASTParameterizedTypename($1, $2);
+		$$ = bc_NewASTParameterizedTypename($1, $2);
 	}
 	;
 
 type_parameter_group
 	: /* empty */
 	{
-		$$ = NewASTBlank();
+		$$ = bc_NewASTBlank();
 	}
 	| LSB GetParameterListType RSB
 	{
@@ -268,63 +268,63 @@ GetParameterListType
 	}
 	| GetParameterListType COMMA type_parameter
 	{
-		$$ = NewASTTypeParameterList($3, $1);
+		$$ = bc_NewASTTypeParameterList($3, $1);
 	}
 	;
 
 type_parameter
 	: IDENT
 	{
-		$$ = NewASTTypeParameter($1, NewASTBlank());
+		$$ = bc_NewASTTypeParameter($1, bc_NewASTBlank());
 	}
 	;
 abstract_class_decl
 	: ABSTRACT CLASS parameterized_typename LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTAbstractClassDecl($3, NewASTBlank(), $5);
+		$$ = bc_NewASTAbstractClassDecl($3, bc_NewASTBlank(), $5);
 	}
 	| ABSTRACT CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTAbstractClassDecl($3, $5, $7);
+		$$ = bc_NewASTAbstractClassDecl($3, $5, $7);
 	}
 	;
 class_decl
 	: CLASS parameterized_typename LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTClassDecl($2, NewASTBlank(), $4);
+		$$ = bc_NewASTClassDecl($2, bc_NewASTBlank(), $4);
 	}
 	| CLASS parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTClassDecl($2, $4, $6);
+		$$ = bc_NewASTClassDecl($2, $4, $6);
 	}
 	;
 
 enum_decl
 	: ENUM IDENT LCB ident_list RCB
 	{
-		$$ = NewASTEnumDecl($2, $4);
+		$$ = bc_NewASTEnumDecl($2, $4);
 	}
 	| ENUM IDENT LCB ident_list COMMA RCB
 	{
-		$$ = NewASTEnumDecl($2, $4);
+		$$ = bc_NewASTEnumDecl($2, $4);
 	}
 	;
 
 interface_decl
 	: INTERFACE parameterized_typename LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTInterfaceDecl($2, NewASTBlank(), $4);
+		$$ = bc_NewASTInterfaceDecl($2, bc_NewASTBlank(), $4);
 	}
 	| INTERFACE parameterized_typename COLON typename_list LCB access_member_tree_opt RCB
 	{
-		$$ = NewASTInterfaceDecl($2, $4, $6);
+		$$ = bc_NewASTInterfaceDecl($2, $4, $6);
 	}
 	;
 
 access_member_tree_opt
 	: /* empty */
 	{
-		$$ = NewASTBlank();
+		$$ = bc_NewASTBlank();
 	}
 	| access_member_tree
 	;
@@ -333,25 +333,25 @@ access_member_tree
 	: access_member_list
 	| access_member_tree access_member_list
 	{
-		$$ = NewASTAccessMemberTree($1, $2);
+		$$ = bc_NewASTAccessMemberTree($1, $2);
 	}
 	;
 
 access_member_list
 	: access_level_T COLON member_define_list
 	{
-		$$ = NewASTAccessMemberList($1, $3);
+		$$ = bc_NewASTAccessMemberList($1, $3);
 	}
 	;
 
 member_define_list
 	: member_define
 	{
-		$$ = NewASTMemberDecl($1);
+		$$ = bc_NewASTMemberDecl($1);
 	}
 	| member_define_list member_define
 	{
-		$$ = NewASTMemberDeclList($1, NewASTMemberDecl($2));
+		$$ = bc_NewASTMemberDeclList($1, bc_NewASTMemberDecl($2));
 	}
 	;
 
@@ -366,22 +366,22 @@ member_define
 constructor_define
 	: DEF NEW LRB parameter_list RRB constructor_chain_optional scope_optional
 	{
-		$$ = NewASTConstructorDecl($4, $6, $7);
+		$$ = bc_NewASTConstructorDecl($4, $6, $7);
 	}
 	| DEF NEW LRB RRB constructor_chain_optional scope_optional
 	{
-		$$ = NewASTConstructorDecl(NewASTBlank(), $5, $6);
+		$$ = bc_NewASTConstructorDecl(bc_NewASTBlank(), $5, $6);
 	}
 	;
 
 constructor_chain
 	: COLON constructor_chain_type_T LRB argument_list RRB
 	{
-		$$ = NewASTConstructorChain($2, $4);
+		$$ = bc_NewASTConstructorChain($2, $4);
 	}
 	| COLON constructor_chain_type_T LRB RRB
 	{
-		$$ = NewASTConstructorChain($2, NewASTBlank());
+		$$ = bc_NewASTConstructorChain($2, bc_NewASTBlank());
 	}
 	;
 
@@ -399,7 +399,7 @@ constructor_chain_type_T
 constructor_chain_optional
 	: /* empty */
 	{
-		$$ = NewASTBlank();
+		$$ = bc_NewASTBlank();
 	}
 	| constructor_chain
 	;
@@ -407,202 +407,202 @@ constructor_chain_optional
 function_define
 	: DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTFunctionDecl($2, $3, $5, $9, $8);
+		$$ = bc_NewASTFunctionDecl($2, $3, $5, $9, $8);
 	}
 	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTFunctionDeclEmptyParams($2, $3, $8, $7);
+		$$ = bc_NewASTFunctionDeclEmptyParams($2, $3, $8, $7);
 	}
 	;
 
 method_define
 	: DEF modifier_type_T_list IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTMethodDecl($2, $3, $4, $6, $10, $9);
+		$$ = bc_NewASTMethodDecl($2, $3, $4, $6, $10, $9);
 	}
 	| DEF modifier_type_T_list IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTMethodDeclEmptyParams($2, $3, $4, $9, $8);
+		$$ = bc_NewASTMethodDeclEmptyParams($2, $3, $4, $9, $8);
 	}
 	| DEF IDENT type_parameter_group LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTMethodDecl(NewASTModifier(MODIFIER_NONE_T), $2, $3, $5, $9, $8);
+		$$ = bc_NewASTMethodDecl(bc_NewASTModifier(MODIFIER_NONE_T), $2, $3, $5, $9, $8);
 	}
 	| DEF IDENT type_parameter_group LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTMethodDeclEmptyParams(NewASTModifier(MODIFIER_NONE_T), $2, $3, $8, $7);
+		$$ = bc_NewASTMethodDeclEmptyParams(bc_NewASTModifier(MODIFIER_NONE_T), $2, $3, $8, $7);
 	}
 	;
 
 operator_define
 	: OPERATOR ADD LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_ADD_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_ADD_T, $4, $8, $7);
 	}
 	| OPERATOR SUB LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_SUB_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_SUB_T, $4, $8, $7);
 	}
 	| OPERATOR MUL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_MUL_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_MUL_T, $4, $8, $7);
 	}
 	| OPERATOR DIV LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_DIV_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_DIV_T, $4, $8, $7);
 	}
 	| OPERATOR MOD LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_MOD_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_MOD_T, $4, $8, $7);
 	}
 	| OPERATOR GT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_GT_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_GT_T, $4, $8, $7);
 	}
 	| OPERATOR GE LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_GE_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_GE_T, $4, $8, $7);
 	}
 	| OPERATOR LT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_LT_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_LT_T, $4, $8, $7);
 	}
 	| OPERATOR LE LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_LE_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_LE_T, $4, $8, $7);
 	}
 	//== !=
 	| OPERATOR EQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_EQ_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_EQ_T, $4, $8, $7);
 	}
 	| OPERATOR NOTEQUAL LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_NOT_EQ_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_NOT_EQ_T, $4, $8, $7);
 	}
 	//| &
 	| OPERATOR BIT_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_BIT_OR_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_BIT_OR_T, $4, $8, $7);
 	}
 	| OPERATOR BIT_AND LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_BIT_AND_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_BIT_AND_T, $4, $8, $7);
 	}
 	//|| &&
 	| OPERATOR LOGIC_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_LOGIC_OR_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_LOGIC_OR_T, $4, $8, $7);
 	}
 	| OPERATOR LOGIC_AND LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_LOGIC_AND_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_LOGIC_AND_T, $4, $8, $7);
 	}
 	//<< >>
 	| OPERATOR LSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_LSHIFT_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_LSHIFT_T, $4, $8, $7);
 	}
 	| OPERATOR RSHIFT LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_RSHIFT_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_RSHIFT_T, $4, $8, $7);
 	}
 	//^
 	| OPERATOR EXC_OR LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_EXCOR_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_EXCOR_T, $4, $8, $7);
 	}
 	//!
 	| OPERATOR NOT LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_NOT_T, NewASTBlank(), $7, $6);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_NOT_T, bc_NewASTBlank(), $7, $6);
 	}
 	//~
 	| OPERATOR CHILDA LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_CHILDA_T, NewASTBlank(), $7, $6);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_CHILDA_T, bc_NewASTBlank(), $7, $6);
 	}
 	| OPERATOR SUB LRB RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_NEGATIVE_T, NewASTBlank(), $7, $6);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_NEGATIVE_T, bc_NewASTBlank(), $7, $6);
 	}
 	//[]
 	| OPERATOR SUBSCRIPT_GET LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_SUB_SCRIPT_GET_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_SUB_SCRIPT_GET_T, $4, $8, $7);
 	}
 	//[]=
 	| OPERATOR SUBSCRIPT_SET LRB parameter_list RRB ARROW typename_T scope_optional
 	{
-		$$ = NewASTOperatorOverload(OPERATOR_SUB_SCRIPT_SET_T, $4, $8, $7);
+		$$ = bc_NewASTOperatorOverload(OPERATOR_SUB_SCRIPT_SET_T, $4, $8, $7);
 	}
 	;
 
 field_define
 	: modifier_type_T_list typename_T IDENT SEMI
 	{
-		$$ = NewASTFieldDecl($1, $2, $3, NewASTBlank());
+		$$ = bc_NewASTFieldDecl($1, $2, $3, bc_NewASTBlank());
 	}
 	| typename_T IDENT SEMI
 	{
-		$$ = NewASTFieldDecl(NewASTModifier(MODIFIER_NONE_T), $1, $2, NewASTBlank());
+		$$ = bc_NewASTFieldDecl(bc_NewASTModifier(MODIFIER_NONE_T), $1, $2, bc_NewASTBlank());
 	}
 	| modifier_type_T_list typename_T IDENT ASSIGN expression SEMI
 	{
-		$$ = NewASTFieldDecl($1, $2, $3, $5);
+		$$ = bc_NewASTFieldDecl($1, $2, $3, $5);
 	}
 	| typename_T IDENT ASSIGN expression SEMI
 	{
-		$$ = NewASTFieldDecl(NewASTModifier(MODIFIER_NONE_T), $1, $2, $4);
+		$$ = bc_NewASTFieldDecl(bc_NewASTModifier(MODIFIER_NONE_T), $1, $2, $4);
 	}
 	;
 
 prop_set
 	: DEFSET SEMI
 	{
-		$$ = NewASTPropSet(NewASTBlank(), NewASTBlank());
+		$$ = bc_NewASTPropSet(bc_NewASTBlank(), bc_NewASTBlank());
 	}
 	| DEFSET scope
 	{
-		$$ = NewASTPropSet(NewASTBlank(), $2);
+		$$ = bc_NewASTPropSet(bc_NewASTBlank(), $2);
 	}
 	| access_level_T DEFSET SEMI
 	{
-		$$ = NewASTPropSet(NewASTAccess($1), NewASTBlank());
+		$$ = bc_NewASTPropSet(bc_NewASTAccess($1), bc_NewASTBlank());
 	}
 	| access_level_T DEFSET scope
 	{
-		$$ = NewASTPropSet(NewASTAccess($1), NewASTBlank());
+		$$ = bc_NewASTPropSet(bc_NewASTAccess($1), bc_NewASTBlank());
 	}
 	;
 
 prop_get
 	: DEFGET SEMI
 	{
-		$$ = NewASTPropGet(NewASTBlank(), NewASTBlank());
+		$$ = bc_NewASTPropGet(bc_NewASTBlank(), bc_NewASTBlank());
 	}
 	| DEFGET scope
 	{
-		$$ = NewASTPropGet(NewASTBlank(), $2);
+		$$ = bc_NewASTPropGet(bc_NewASTBlank(), $2);
 	}
 	| access_level_T DEFGET SEMI
 	{
-		$$ = NewASTPropGet(NewASTAccess($1), NewASTBlank());
+		$$ = bc_NewASTPropGet(bc_NewASTAccess($1), bc_NewASTBlank());
 	}
 	| access_level_T DEFGET scope
 	{
-		$$ = NewASTPropGet(NewASTAccess($1), NewASTBlank());
+		$$ = bc_NewASTPropGet(bc_NewASTAccess($1), bc_NewASTBlank());
 	}
 	;
 
 prop_define
 	: PROPERTY modifier_type_T_list typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = NewASTPropDecl($2, $3, $4, $6, $7);
+		$$ = bc_NewASTPropDecl($2, $3, $4, $6, $7);
 	}
 	| PROPERTY typename_T IDENT LCB prop_set prop_get RCB
 	{
-		$$ = NewASTPropDecl(NewASTModifier(MODIFIER_NONE_T), $2, $3, $5, $6);
+		$$ = bc_NewASTPropDecl(bc_NewASTModifier(MODIFIER_NONE_T), $2, $3, $5, $6);
 	}
 	;
 
@@ -613,26 +613,26 @@ modifier_type_T_list
 	}
 	| modifier_type_T_list modifier_type_T
 	{
-		$$ = NewASTModifierList($2, $1);
+		$$ = bc_NewASTModifierList($2, $1);
 	}
 	;
 
 modifier_type_T
 	: STATIC
 	{
-		$$ = NewASTModifier(MODIFIER_STATIC_T);
+		$$ = bc_NewASTModifier(MODIFIER_STATIC_T);
 	}
 	| NATIVE
 	{
-		$$ = NewASTModifier(MODIFIER_NATIVE_T);
+		$$ = bc_NewASTModifier(MODIFIER_NATIVE_T);
 	}
 	| ABSTRACT
 	{
-		$$ = NewASTModifier(MODIFIER_ABSTRACT_T);
+		$$ = bc_NewASTModifier(MODIFIER_ABSTRACT_T);
 	}
 	| FINAL
 	{
-		$$ = NewASTModifier(MODIFIER_FINAL_T);
+		$$ = bc_NewASTModifier(MODIFIER_FINAL_T);
 	}
 	;
 
@@ -654,40 +654,40 @@ access_level_T
 ident_list
 	: IDENT
 	{
-		$$ = NewASTIdentifier($1);
+		$$ = bc_NewASTIdentifier($1);
 	}
 	| ident_list COMMA IDENT
 	{
-		$$ = NewASTIdentifierList($3, $1);
+		$$ = bc_NewASTIdentifierList($3, $1);
 	}
 	;
 
 parameter_list
 	: typename_T IDENT
 	{
-		$$ = NewASTParameter($1, $2);
+		$$ = bc_NewASTParameter($1, $2);
 	}
 	| parameter_list COMMA typename_T IDENT
 	{
-		$$ = NewASTParameterList($3, $4, $1);
+		$$ = bc_NewASTParameterList($3, $4, $1);
 	}
 	;
 
 argument_list
 	: expression
 	{
-		$$ = NewASTArgument($1);
+		$$ = bc_NewASTArgument($1);
 	}
 	| argument_list COMMA expression
 	{
-		$$ = NewASTArgumentList(NewASTArgument($3), $1);
+		$$ = bc_NewASTArgumentList(bc_NewASTArgument($3), $1);
 	}
 	;
 
 typename_group
 	: /* empty */
 	{
-		$$ = NewASTBlank();
+		$$ = bc_NewASTBlank();
 	}
 	| LSB typename_list RSB
 	{
@@ -702,25 +702,25 @@ typename_list
 	}
 	| typename_list COMMA typename_T
 	{
-		$$ = NewASTTypenameList($3, $1);
+		$$ = bc_NewASTTypenameList($3, $1);
 	}
 	;
 
 typename_T
 	: fqcn_part typename_group
 	{
-		$$ = NewASTTypename($1, $2);
+		$$ = bc_NewASTTypename($1, $2);
 	}
 	;
 
 fqcn_part
 	: IDENT
 	{
-		$$ = NewASTFQCNPart($1);
+		$$ = bc_NewASTFQCNPart($1);
 	}
 	| fqcn_part COLO_COLO IDENT
 	{
-		$$ = NewASTFQCNPartList(NewASTFQCNPart($3), $1);
+		$$ = bc_NewASTFQCNPartList(bc_NewASTFQCNPart($3), $1);
 	}
 	;
 
@@ -737,263 +737,263 @@ expression
 expression_nobrace
 	: ADD expression %prec POSITIVE
 	{
-		$$ = NewASTUnary(AST_POS_T, $2);
+		$$ = bc_NewASTUnary(AST_POS_T, $2);
 	}
 	| SUB expression %prec NEGATIVE
 	{
-		$$ = NewASTUnary(AST_NEG_T, $2);
+		$$ = bc_NewASTUnary(AST_NEG_T, $2);
 	}
 	| expression ADD expression
 	{
-		$$ = NewASTBinary(AST_ADD_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_ADD_T, $1, $3);
 	}
 	| expression SUB expression
 	{
-		$$ = NewASTBinary(AST_SUB_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_SUB_T, $1, $3);
 	}
 	| expression MUL expression
 	{
-		$$ = NewASTBinary(AST_MUL_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_MUL_T, $1, $3);
 	}
 	| expression DIV expression
 	{
-		$$ = NewASTBinary(AST_DIV_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_DIV_T, $1, $3);
 	}
 	| expression MOD expression
 	{
-		$$ = NewASTBinary(AST_MOD_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_MOD_T, $1, $3);
 	}
 	| expression BIT_OR expression
 	{
-		$$ = NewASTBinary(AST_BIT_OR_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_BIT_OR_T, $1, $3);
 	}
 	| expression EQUAL expression
 	{
-		$$ = NewASTBinary(AST_EQUAL_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_EQUAL_T, $1, $3);
 	}
 	| expression NOTEQUAL expression
 	{
-		$$ = NewASTBinary(AST_NOT_TEQUAL_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_NOT_TEQUAL_T, $1, $3);
 	}
 	| expression BIT_AND expression
 	{
-		$$ = NewASTBinary(AST_BIT_AND_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_BIT_AND_T, $1, $3);
 	}
 	| expression EXC_OR expression
 	{
-		$$ = NewASTBinary(AST_EXC_OR_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_EXC_OR_T, $1, $3);
 	}
 	| expression LOGIC_OR expression
 	{
-		$$ = NewASTBinary(AST_LOGIC_OR_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_LOGIC_OR_T, $1, $3);
 	}
 	| expression LOGIC_AND expression
 	{
-		$$ = NewASTBinary(AST_LOGIC_AND_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_LOGIC_AND_T, $1, $3);
 	}
 	| lhs ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_AS_TSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_AS_TSIGN_T, $1, $3);
 	}
 	| lhs ADD_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_ADD_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_ADD_ASSIGN_T, $1, $3);
 	}
 	| lhs SUB_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_SUB_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_SUB_ASSIGN_T, $1, $3);
 	}
 	| lhs MUL_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_MUL_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_MUL_ASSIGN_T, $1, $3);
 	}
 	| lhs DIV_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_DIV_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_DIV_ASSIGN_T, $1, $3);
 	}
 	| lhs MOD_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_MOD_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_MOD_ASSIGN_T, $1, $3);
 	}
 	| lhs AND_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_AND_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_AND_ASSIGN_T, $1, $3);
 	}
 	| lhs OR_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_OR_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_OR_ASSIGN_T, $1, $3);
 	}
 	| lhs EXC_OR_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_EXC_OR_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_EXC_OR_ASSIGN_T, $1, $3);
 	}
 	| lhs LSHIFT_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_LSHIFT_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_LSHIFT_ASSIGN_T, $1, $3);
 	}
 	| lhs RSHIFT_ASSIGN expression
 	{
-		$$ = NewASTBinary(AST_RSHIFT_ASSIGN_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_RSHIFT_ASSIGN_T, $1, $3);
 	}
 	| expression GT expression
 	{
-		$$ = NewASTBinary(AST_GT_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_GT_T, $1, $3);
 	}
 	| expression GE expression
 	{
-		$$ = NewASTBinary(AST_GE_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_GE_T, $1, $3);
 	}
 	| expression LT expression
 	{
-		$$ = NewASTBinary(AST_LT_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_LT_T, $1, $3);
 	}
 	| expression LE expression
 	{
-		$$ = NewASTBinary(AST_LE_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_LE_T, $1, $3);
 	}
 	| expression LSHIFT expression
 	{
-		$$ = NewASTBinary(AST_LSHIFT_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_LSHIFT_T, $1, $3);
 	}
 	| expression RSHIFT expression
 	{
-		$$ = NewASTBinary(AST_RSHIFT_T, $1, $3);
+		$$ = bc_NewASTBinary(AST_RSHIFT_T, $1, $3);
 	}
 
 	| expression DOT ADD LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_ADD_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_ADD_T, $5);
 	}
 	| expression DOT SUB LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_SUB_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_SUB_T, $5);
 	}
 	| expression DOT MUL LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_MUL_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_MUL_T, $5);
 	}
 	| expression DOT DIV LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_DIV_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_DIV_T, $5);
 	}
 	| expression DOT MOD LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_MOD_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_MOD_T, $5);
 	}
 	| expression DOT GT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_GT_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_GT_T, $5);
 	}
 	| expression DOT GE LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_GE_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_GE_T, $5);
 	}
 	| expression DOT LT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_LT_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_LT_T, $5);
 	}
 	| expression DOT LE LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_LE_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_LE_T, $5);
 	}
 	| expression DOT EQUAL LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_EQ_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_EQ_T, $5);
 	}
 	| expression DOT NOTEQUAL LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_NOT_EQ_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_NOT_EQ_T, $5);
 	}
 	| expression DOT BIT_OR LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_BIT_OR_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_BIT_OR_T, $5);
 	}
 	| expression DOT BIT_AND LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_BIT_AND_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_BIT_AND_T, $5);
 	}
 	| expression DOT LOGIC_OR LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_LOGIC_OR_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_LOGIC_OR_T, $5);
 	}
 	| expression DOT LOGIC_AND LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_LOGIC_AND_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_LOGIC_AND_T, $5);
 	}
 	| expression DOT LSHIFT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_LSHIFT_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_LSHIFT_T, $5);
 	}
 	| expression DOT RSHIFT LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_RSHIFT_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_RSHIFT_T, $5);
 	}
 	| expression DOT EXC_OR LRB expression RRB
 	{
-		$$ = NewASTExplicitBiOperator($1, OPERATOR_EXCOR_T, $5);
+		$$ = bc_NewASTExplicitBiOperator($1, OPERATOR_EXCOR_T, $5);
 	}
 	| expression DOT NOT LRB RRB
 	{
-		$$ = NewASTExplicitUOperator($1, OPERATOR_NOT_T);
+		$$ = bc_NewASTExplicitUOperator($1, OPERATOR_NOT_T);
 	}
 	| expression DOT CHILDA LRB RRB
 	{
-		$$ = NewASTExplicitUOperator($1, OPERATOR_CHILDA_T);
+		$$ = bc_NewASTExplicitUOperator($1, OPERATOR_CHILDA_T);
 	}
 	| expression DOT SUB LRB RRB
 	{
-		$$ = NewASTExplicitUOperator($1, OPERATOR_NEGATIVE_T);
+		$$ = bc_NewASTExplicitUOperator($1, OPERATOR_NEGATIVE_T);
 	}
 	| expression INSTANCEOF typename_T
 	{
-		$$ = NewASTInstanceTof($1, $3);
+		$$ = bc_NewASTInstanceTof($1, $3);
 	}
 	| expression AS typename_T
 	{
-		$$ = NewASTAs($1, $3);
+		$$ = bc_NewASTAs($1, $3);
 	}
 	| CHILDA expression
 	{
-		$$ = NewASTUnary(AST_CHILDA_T, $2);
+		$$ = bc_NewASTUnary(AST_CHILDA_T, $2);
 	}
 	| NOT expression
 	{
-		$$ = NewASTUnary(AST_NOT_T, $2);
+		$$ = bc_NewASTUnary(AST_NOT_T, $2);
 	}
 	| NEW fqcn_part typename_group LRB argument_list RRB
 	{
-		$$ = NewASTNewInstance($2, $3, $5);
+		$$ = bc_NewASTNewInstance($2, $3, $5);
 	}
 	| NEW fqcn_part typename_group LRB RRB
 	{
-		$$ = NewASTNewInstance($2, $3, NewASTBlank());
+		$$ = bc_NewASTNewInstance($2, $3, bc_NewASTBlank());
 	}
 	| THIS_TOK
 	{
-		$$ = NewASTThis();
+		$$ = bc_NewASTThis();
 	}
 	| SUPER_TOK
 	{
-		$$ = NewASTSuper();
+		$$ = bc_NewASTSuper();
 	}
 	| lhs
 	;
 lhs
 	: fqcn_part typename_group
 	{
-		$$ = NewASTVariable($1, $2);
+		$$ = bc_NewASTVariable($1, $2);
 	}
 	| expression DOT IDENT typename_group
 	{
-		$$ = NewASTFieldAccess($1, $3, $4);
+		$$ = bc_NewASTFieldAccess($1, $3, $4);
 	}
 	| expression_nobrace LRB argument_list RRB %prec FUNCCALL
 	{
-		$$ = NewASTOpCall($1, $3);
+		$$ = bc_NewASTOpCall($1, $3);
 	}
 	| expression_nobrace LRB RRB %prec FUNCCALL
 	{
-		$$ = NewASTOpCall($1, NewASTBlank());
+		$$ = bc_NewASTOpCall($1, bc_NewASTBlank());
 	}
 	;
 primary
@@ -1003,15 +1003,15 @@ primary
 	| STRING_LITERAL
 	| TRUE_TOK
 	{
-		$$ = NewASTTrue();
+		$$ = bc_NewASTTrue();
 	}
 	| FALSE_TOK
 	{
-		$$ = NewASTFalse();
+		$$ = bc_NewASTFalse();
 	}
 	| NULL_TOK
 	{
-		$$ = NewASTNull();
+		$$ = bc_NewASTNull();
 	}
 	;
 
@@ -1020,17 +1020,17 @@ primary
 stmt_list
 	: stmt
 	{
-		$$ = NewASTStmt($1);
+		$$ = bc_NewASTStmt($1);
 	}
 	| stmt_list stmt
 	{
-		$$ = NewASTStmtList($1, $2);
+		$$ = bc_NewASTStmtList($1, $2);
 	}
 	;
 stmt
 	: expression stmt_term
 	{
-		$$ = NewASTProc($1);
+		$$ = bc_NewASTProc($1);
 	}
 	| variable_decl_stmt
 	| variable_init_stmt
@@ -1050,90 +1050,90 @@ stmt
 variable_decl_stmt
 	: typename_T IDENT SEMI
 	{
-		$$ = NewASTVariableDecl($1, $2);
+		$$ = bc_NewASTVariableDecl($1, $2);
 	}
 	;
 variable_init_stmt
 	: typename_T IDENT ASSIGN expression stmt_term
 	{
-		$$ = NewASTVariableInit($1, $2, $4);
+		$$ = bc_NewASTVariableInit($1, $2, $4);
 	}
 	;
 inferenced_type_init_stmt
 	: VAR IDENT ASSIGN expression stmt_term
 	{
-		$$ = NewASTInferencedTypeInit($2, $4);
+		$$ = bc_NewASTInferencedTypeInit($2, $4);
 	}
 	;
 if_stmt
 	: IF expression scope
 	{
-		$$ = NewASTIf($2, $3);
+		$$ = bc_NewASTIf($2, $3);
 	}
 	| IF expression scope ELSE scope
 	{
-		$$ = NewASTIfElse($2, $3, $5);
+		$$ = bc_NewASTIfElse($2, $3, $5);
 	}
 	| IF expression scope elif_list
 	{
-		$$ = NewASTIfElifList($2, $3, $4);
+		$$ = bc_NewASTIfElifList($2, $3, $4);
 	}
 	| IF expression scope elif_list ELSE scope
 	{
-		$$ = NewASTIfElifListElse($2, $3, $4, $6);
+		$$ = bc_NewASTIfElifListElse($2, $3, $4, $6);
 	}
 	;
 elif_list
 	: elif
 	| elif_list elif
 	{
-		$$ = NewASTElifList($1, $2);
+		$$ = bc_NewASTElifList($1, $2);
 	}
 	;
 elif
 	: ELIF expression scope
 	{
-		$$ = NewASTElif($2, $3);
+		$$ = bc_NewASTElif($2, $3);
 	}
 	;
 while_stmt
 	: WHILE expression scope_optional
 	{
-		$$ = NewASTWhile($2, $3);
+		$$ = bc_NewASTWhile($2, $3);
 	}
 	;
 break_stmt
 	: BREAK stmt_term
 	{
-		$$ = NewASTBreak();
+		$$ = bc_NewASTBreak();
 	}
 	;
 continue_stmt
 	: CONTINUE stmt_term
 	{
-		$$ = NewASTContinue();
+		$$ = bc_NewASTContinue();
 	}
 	;
 return_stmt
 	: RETURN expression stmt_term
 	{
-		$$ = NewASTReturn($2);
+		$$ = bc_NewASTReturn($2);
 	}
 	| RETURN stmt_term
 	{
-		$$ = NewASTReturnEmpty();
+		$$ = bc_NewASTReturnEmpty();
 	}
 	;
 throw_stmt
 	: THROW expression stmt_term
 	{
-		$$ = NewASTThrow($2);
+		$$ = bc_NewASTThrow($2);
 	}
 	;
 try_stmt
 	: TRY scope catch_stmt_list
 	{
-		$$ = NewASTTry($2, $3);
+		$$ = bc_NewASTTry($2, $3);
 	}
 	;
 catch_stmt_list
@@ -1143,57 +1143,57 @@ catch_stmt_list
 	}
 	| catch_stmt_list catch_stmt
 	{
-		$$ = NewASTCatchList($2, $1);
+		$$ = bc_NewASTCatchList($2, $1);
 	}
 	;
 catch_stmt
 	: CATCH LRB typename_T IDENT RRB scope
 	{
-		$$ = NewASTCatch($3, $4, $6);
+		$$ = bc_NewASTCatch($3, $4, $6);
 	}
 	;
 assert_stmt
 	: ASSER_T expression COLON expression stmt_term
 	{
-		$$ = NewASTAssert($2, $4);
+		$$ = bc_NewASTAssert($2, $4);
 	}
 	| ASSER_T expression stmt_term
 	{
-		$$ = NewASTAssert($2, NewASTBlank());
+		$$ = bc_NewASTAssert($2, bc_NewASTBlank());
 	}
 	;
 defer_stmt
 	: DEFER stmt
 	{
-		$$ = NewASTDefer($2);
+		$$ = bc_NewASTDefer($2);
 	}
 	;
 yield_return_stmt
 	: YIELD RETURN expression stmt_term
 	{
-		$$ = NewASTYieldReturn($3);
+		$$ = bc_NewASTYieldReturn($3);
 	}
 	;
 yield_break_stmt
 	: YIELD BREAK stmt_term
 	{
-		$$ = NewASTYieldBreak();
+		$$ = bc_NewASTYieldBreak();
 	}
 	;
 scope
 	: LCB stmt_list RCB
 	{
-		$$ = NewASTScope($2);
+		$$ = bc_NewASTScope($2);
 	}
 	| LCB RCB
 	{
-		$$ = NewASTScopeEmpty();
+		$$ = bc_NewASTScopeEmpty();
 	}
 	;
 scope_optional
 	: SEMI
 	{
-		$$ = NewASTBlank();
+		$$ = bc_NewASTBlank();
 	}
 	| scope
 	;

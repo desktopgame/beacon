@@ -42,7 +42,7 @@ int yywrap(void) {
 #endif SIGNAL_YYWRAP_PART
 
 int yyerror(char * err_str) {
-	Parser* p = GetCurrentParser();
+	bc_Parser* p = bc_GetCurrentParser();
 	p->Result = PARSE_SYNTAX_ERROR_T;
 	p->ErrorLineIndex = yylloc.last_line;
 	p->ErrorColumnIndex = yylloc.last_column;
@@ -100,7 +100,7 @@ static int string_input(char *buf, int max_size) {
 
 static int my_yyinput(char *buf, int max_size) {
 	int result;
-	Parser* p = GetCurrentParser();
+	bc_Parser* p = bc_GetCurrentParser();
 	switch (p->InputType) {
 		case YINPUT_FILE_T:
 			result = file_input(buf, max_size);
@@ -254,26 +254,26 @@ static void update_loc() {
 <INITIAL>"->"				{ return (ARROW); }
 
 <INITIAL>"0" {
-	yylval.ast_value = NewASTInt(0);
+	yylval.ast_value = bc_NewASTInt(0);
 	return INT;
 }
 
 <INITIAL>"\n" {
-	GetCurrentParser()->Lineno++;
+	bc_GetCurrentParser()->Lineno++;
 }
 
 <INITIAL>[1-9][0-9]* {
-	yylval.ast_value = NewASTInt(atoi(yytext));
+	yylval.ast_value = bc_NewASTInt(atoi(yytext));
 	return INT;
 }
 
 <INITIAL>[0-9]+\.[0-9]+ {
-	yylval.ast_value = NewASTDouble(atof(yytext));
+	yylval.ast_value = bc_NewASTDouble(atof(yytext));
 	return DOUBLE;
 }
 
 <INITIAL>[A-Za-z_][A-Za-z_0-9]* {
-	yylval.stringv_value = InternString(yytext);
+	yylval.stringv_value = bc_InternString(yytext);
 	return IDENT;
 }
 
@@ -281,20 +281,20 @@ static void update_loc() {
 }
 
 <INITIAL>\" {
-	ClearParserBuffer(GetCurrentParser());
+	bc_ClearParserBuffer(bc_GetCurrentParser());
     BEGIN STRING_LITERAL_STATE;
 }
 <INITIAL>"/*"     BEGIN ML_COMMENT;
 <INITIAL>"//"     BEGIN L_COMMENT;
 <ML_COMMENT>\n     {
-	GetCurrentParser()->Lineno++;
+	bc_GetCurrentParser()->Lineno++;
 }
 <ML_COMMENT>"*/"     {
     BEGIN INITIAL;
 }
 <ML_COMMENT>.      ;
 <L_COMMENT>\n  {
-	GetCurrentParser()->Lineno++;
+	bc_GetCurrentParser()->Lineno++;
 	BEGIN INITIAL;
 }
 <L_COMMENT><<EOF>>   {
@@ -302,49 +302,49 @@ static void update_loc() {
 }
 <L_COMMENT>.   ;
 <INITIAL>\'\\r\' {
-	yylval.ast_value = NewASTChar('\r');
+	yylval.ast_value = bc_NewASTChar('\r');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\n\' {
-	yylval.ast_value = NewASTChar('\n');
+	yylval.ast_value = bc_NewASTChar('\n');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\t\' {
-	yylval.ast_value = NewASTChar('\t');
+	yylval.ast_value = bc_NewASTChar('\t');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'\\b\' {
-	yylval.ast_value = NewASTChar('\b');
+	yylval.ast_value = bc_NewASTChar('\b');
 	return CHAR_LITERAL;
 }
 <INITIAL>\'.\' {
-	yylval.ast_value = NewASTChar(yytext[1]);
+	yylval.ast_value = bc_NewASTChar(yytext[1]);
 	return CHAR_LITERAL;
 }
 <STRING_LITERAL_STATE>\" {
-	yylval.ast_value = ReduceParserBuffer(GetCurrentParser());
+	yylval.ast_value = bc_ReduceParserBuffer(bc_GetCurrentParser());
     BEGIN INITIAL;
 	return STRING_LITERAL;
 }
 <STRING_LITERAL_STATE>\\\"	{
-	AppendParserBuffer(GetCurrentParser(), '"');
+	bc_AppendParserBuffer(bc_GetCurrentParser(), '"');
 }
 <STRING_LITERAL_STATE>\\\'	{
-	AppendParserBuffer(GetCurrentParser(), '\'');
+	bc_AppendParserBuffer(bc_GetCurrentParser(), '\'');
 }
 <STRING_LITERAL_STATE>\\r	{
-	AppendParserBuffer(GetCurrentParser(), '\r');
+	bc_AppendParserBuffer(bc_GetCurrentParser(), '\r');
 }
 <STRING_LITERAL_STATE>\\n	{
-	AppendParserBuffer(GetCurrentParser(), '\n');
+	bc_AppendParserBuffer(bc_GetCurrentParser(), '\n');
 }
 <STRING_LITERAL_STATE>\\t	{
-	AppendParserBuffer(GetCurrentParser(), '\t');
+	bc_AppendParserBuffer(bc_GetCurrentParser(), '\t');
 }
 <STRING_LITERAL_STATE>\\\\	{
-	AppendParserBuffer(GetCurrentParser(), '\\');
+	bc_AppendParserBuffer(bc_GetCurrentParser(), '\\');
 }
 <STRING_LITERAL_STATE>.	{
-	AppendParserBuffer(GetCurrentParser(), yytext[0]);
+	bc_AppendParserBuffer(bc_GetCurrentParser(), yytext[0]);
 }
 %%
