@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../env/object.h"
+#include "../il/il_argument.h"
 #include "../il/il_type_argument.h"
 #include "../util/mem.h"
 #include "../util/text.h"

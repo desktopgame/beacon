@@ -68,6 +68,14 @@ typedef enum bc_ExecutePhase {
         PHASE_RUN_TIME,
 } bc_ExecutePhase;
 
+/**
+ * 引数の種類です。
+ */
+typedef enum bc_ParameterKind {
+        PARAMETER_INSTANCE,
+        PARAMETER_TYPE,
+} bc_ParameterKind;
+
 //#define GenericType_validate(self) assert((self)->CoreType != NULL ||
 // self->VirtualTypeIndex != -1)
 
