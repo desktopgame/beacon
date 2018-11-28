@@ -29,6 +29,7 @@ set(GLIB_LIBRARY_DIR "/usr/local/Cellar/glib/2.58.1/lib" CACHE PATH "Path to gli
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
 set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
 set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
+set(BC_EXECUTABLE "beacon" CACHE STRING "executable file name")
 enable_testing()
 add_test(
     NAME test
@@ -91,10 +92,10 @@ def create_cmake(cmake_path, dir, files, depth)
         end
         #実行ファイルをビルド
         if depth == 0 then
-            exe = sprintf("add_executable(a.out \"beacon/main.c\")")
+            exe = sprintf("add_executable(${BC_EXECUTABLE} \"beacon/main.c\")")
             fp.puts(exe)
             #ライブラリのリンク
-            link = sprintf("target_link_libraries(a.out\n")
+            link = sprintf("target_link_libraries(${BC_EXECUTABLE}\n")
             @all.each {|e| link << sprintf("    \"%s\"\n", e)}
             link << ")\n"
             fp.puts(link)
