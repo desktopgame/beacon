@@ -9,10 +9,6 @@
 #include "../../il_type_argument.h"
 
 // proto
-static void resolve_virtual(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                            bc_CallContext* cctx);
-static void resolve_apply(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                          bc_CallContext* cctx);
 static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
                         bc_CallContext* cctx);
 static void delete_args(bc_VectorItem item);
@@ -68,16 +64,13 @@ bc_GenericType* bc_EvalILInvokeStatic(bc_ILInvokeStatic* self,
         if (bc_GetLastPanic()) {
                 return NULL;
         }
+        if (self->Resolved != NULL) {
+                return self->Resolved;
+        }
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         bc_GenericType* rgtp = self->Method->ReturnGType;
-        //戻り値がジェネリックなら...Tなど
-        if (rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
-                resolve_virtual(self, env, cctx);
-                //戻り値がジェネリックでないなら...List[T]など
-        } else {
-                resolve_apply(self, env, cctx);
-        }
+        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
         bc_PopCallFrame(cctx);
         return self->Resolved;
 }
@@ -140,22 +133,4 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
                          bc_Ref2Str(cls->Name), bc_Ref2Str(self->Name));
         }
         bc_PopCallFrame(cctx);
-}
-
-static void resolve_virtual(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                            bc_CallContext* cctx) {
-        if (self->Resolved != NULL) {
-                return;
-        }
-        bc_GenericType* rgtp = self->Method->ReturnGType;
-        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
-}
-
-static void resolve_apply(bc_ILInvokeStatic* self, bc_Enviroment* env,
-                          bc_CallContext* cctx) {
-        if (self->Resolved != NULL) {
-                return;
-        }
-        bc_GenericType* rgtp = self->Method->ReturnGType;
-        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
 }
