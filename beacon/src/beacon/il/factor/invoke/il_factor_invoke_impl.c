@@ -15,10 +15,6 @@
 #include "../../il_type_argument.h"
 
 // proto
-static void resolve_virtual(bc_ILInvoke* self, bc_Enviroment* env,
-                            bc_CallContext* cctx);
-static void resolve_apply(bc_ILInvoke* self, bc_Enviroment* env,
-                          bc_CallContext* cctx);
 static void delete_args(bc_VectorItem item);
 static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                         bc_CallContext* cctx);
@@ -65,6 +61,9 @@ bc_GenericType* bc_EvalILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
         if (bc_GetLastPanic()) {
                 return NULL;
         }
+        if (self->resolved != NULL) {
+                return self->resolved;
+        }
         bc_GenericType* rgtp = get_return_gtype(self);
         bc_GenericType* ret = NULL;
         bc_GenericType* receivergType =
@@ -73,17 +72,9 @@ bc_GenericType* bc_EvalILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
         //それをここで展開する。
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
-        //戻り値がジェネリックなら...Tなど
-        if (rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
-                resolve_virtual(self, env, cctx);
-                ret = self->resolved;
-                //戻り値がジェネリックでないなら...List[T]など
-        } else {
-                resolve_apply(self, env, cctx);
-                ret = self->resolved;
-        }
+        self->resolved = bc_CapplyGenericType(rgtp, cctx);
         bc_PopCallFrame(cctx);
-        return ret;
+        return self->resolved;
 }
 
 char* bc_ILInvokeToString(bc_ILInvoke* self, bc_Enviroment* env) {
@@ -251,22 +242,4 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                          bc_Ref2Str(self->namev));
                 return;
         }
-}
-
-static void resolve_virtual(bc_ILInvoke* self, bc_Enviroment* env,
-                            bc_CallContext* cctx) {
-        if (self->resolved != NULL) {
-                return;
-        }
-        bc_GenericType* rgtp = get_return_gtype(self);
-        self->resolved = bc_CapplyGenericType(rgtp, cctx);
-}
-
-static void resolve_apply(bc_ILInvoke* self, bc_Enviroment* env,
-                          bc_CallContext* cctx) {
-        if (self->resolved != NULL) {
-                return;
-        }
-        bc_GenericType* rgtp = get_return_gtype(self);
-        self->resolved = bc_CapplyGenericType(rgtp, cctx);
 }

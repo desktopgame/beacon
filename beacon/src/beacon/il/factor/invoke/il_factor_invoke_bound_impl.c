@@ -204,6 +204,9 @@ static bc_GenericType* eval_impl(bc_ILInvokeBound* self, bc_Enviroment* env,
         if (bc_GetLastPanic()) {
                 return NULL;
         }
+        if (self->Resolved != NULL) {
+                return self->Resolved;
+        }
         //新しいフレーム追加
         bc_CallFrame* cfr = push_new_frame(self, env, cctx);
         self->Resolved =
