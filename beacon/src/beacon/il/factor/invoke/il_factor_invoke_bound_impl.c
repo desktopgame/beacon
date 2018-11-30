@@ -341,17 +341,7 @@ static void resolve_pending(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         bc_Type* tp = NULL;
         bc_GenericType* rgtp = get_return_gtype(self, cctx);
-        if (rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                self->Resolved = bc_NewGenericType(NULL);
-                self->Resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
-                self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
-        } else if (rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-                //メソッドに渡された型引数を参照する
-                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-                    self->TypeArgs, rgtp->VirtualTypeIndex);
-                self->Resolved = bc_NewGenericType(instanced_type->CoreType);
-                self->Resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
-        }
+        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
 }
 
 static void resolve_apply(bc_ILInvokeBound* self, bc_Enviroment* env,
