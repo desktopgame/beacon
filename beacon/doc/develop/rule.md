@@ -12,6 +12,7 @@ beaconのプログラムにおける命名規則
 
 ## 新しいもの
 ### 構造体名について
+- プレフィックスとして `bc_` を使用する
 - 単語の頭は大文字にする
 - 最初の一文字も大文字にする
 - 略語の場合はどちらも大文字
@@ -22,19 +23,20 @@ beaconのプログラムにおける命名規則
 
 例えば
 ````
-string_builder -> StringBuilder
-namespace_ -> Namespace
-class_ -> Class
+string_builder -> bc_StringBuilder
+namespace_ -> bc_Namespace
+class_ -> bc_Class
 ````
 
 ### 関数名について
+- プレフィックスとして `bc_` を使用する
 - ある構造体をレシーバのように扱う場合、その構造体自体の名前か略語を含める
-    - string_builder_append -> AppendBuffer
+    - string_builder_append -> bc_AppendBuffer
 - オブジェクト指向的に扱われる関数は注意が必要
     - ルートの関数は簡潔に
-        - il_factor_eval -> EvalILFactor
+        - il_factor_eval -> bc_EvalILFactor
     - ルートから呼び出される子関数は冗長に
-        - il_factor_int_eval -> EvalILFactorInt
+        - il_factor_int_eval -> bc_EvalILFactorInt
 - Win32APIを見る限り、動詞が先に来ることが多い
     - `Get`MapMode
     - `Get`ViewportExtEx
@@ -48,6 +50,11 @@ class_ -> Class
         - DestroyXXX っていうのもある
     - `Find`FirstFile
     - `Find`NextFile
+- 名称の対称性を守る
+    - `Open` <--> `Close`
+    - `Push` <--> `Pop`
+    - `New` <--> `Delete`
+    - `Init` <--> `Destroy`
 
 ### 方針
 機械的に一気に変換するのは難しそうなので、  
