@@ -68,17 +68,18 @@ bc_GenericType* bc_EvalILInvokeStatic(bc_ILInvokeStatic* self,
         if (bc_GetLastPanic()) {
                 return NULL;
         }
+        bc_CallFrame* cfr =
+            bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         bc_GenericType* rgtp = self->Method->ReturnGType;
         //戻り値がジェネリックなら...Tなど
         if (rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
                 resolve_virtual(self, env, cctx);
-                return self->Resolved;
                 //戻り値がジェネリックでないなら...List[T]など
         } else {
                 resolve_apply(self, env, cctx);
-                return self->Resolved;
         }
-        return NULL;
+        bc_PopCallFrame(cctx);
+        return self->Resolved;
 }
 
 char* bc_ILInvokeStaticToString(bc_ILInvokeStatic* self, bc_Enviroment* env) {
@@ -147,11 +148,7 @@ static void resolve_virtual(bc_ILInvokeStatic* self, bc_Enviroment* env,
                 return;
         }
         bc_GenericType* rgtp = self->Method->ReturnGType;
-        bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-            self->TypeArgs, rgtp->VirtualTypeIndex);
-        self->Resolved = bc_NewGenericType(instanced_type->CoreType);
-        self->Resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
-        self->Resolved->VirtualTypeIndex = rgtp->VirtualTypeIndex;
+        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
 }
 
 static void resolve_apply(bc_ILInvokeStatic* self, bc_Enviroment* env,
@@ -159,9 +156,6 @@ static void resolve_apply(bc_ILInvokeStatic* self, bc_Enviroment* env,
         if (self->Resolved != NULL) {
                 return;
         }
-        bc_CallFrame* cfr =
-            bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         bc_GenericType* rgtp = self->Method->ReturnGType;
         self->Resolved = bc_CapplyGenericType(rgtp, cctx);
-        bc_PopCallFrame(cctx);
 }
