@@ -14,7 +14,7 @@ e.lines {|i| puts "    " + i}
 
 puts "test..."
 Dir.chdir("../bin") do
-    o, e, s = Open3.capture3("./a.out --test")
+    o, e, s = Open3.capture3("./beacon --test")
     e.lines {|i| puts "::" + i}
     o.lines {|i| puts "    " + i}
 end
