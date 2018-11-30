@@ -67,6 +67,12 @@ bc_GenericType* bc_EvalILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
         }
         bc_GenericType* rgtp = get_return_gtype(self);
         bc_GenericType* ret = NULL;
+        bc_GenericType* receivergType =
+            bc_EvalILFactor(self->receiver, env, cctx);
+        //内側に型変数が含まれているかもしれないので、
+        //それをここで展開する。
+        bc_CallFrame* cfr =
+            bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
         //戻り値がジェネリックなら...Tなど
         if (rgtp->Tag != GENERIC_TYPE_TAG_NONE_T) {
                 resolve_virtual(self, env, cctx);
@@ -76,6 +82,7 @@ bc_GenericType* bc_EvalILInvoke(bc_ILInvoke* self, bc_Enviroment* env,
                 resolve_apply(self, env, cctx);
                 ret = self->resolved;
         }
+        bc_PopCallFrame(cctx);
         return ret;
 }
 
@@ -251,23 +258,8 @@ static void resolve_virtual(bc_ILInvoke* self, bc_Enviroment* env,
         if (self->resolved != NULL) {
                 return;
         }
-        bc_GenericType* receivergType =
-            bc_EvalILFactor(self->receiver, env, cctx);
         bc_GenericType* rgtp = get_return_gtype(self);
-        if (rgtp->Tag == GENERIC_TYPE_TAG_CLASS_T) {
-                //レシーバの実体化された型の中で、
-                //メソッドの戻り値 'T' が表す位置に対応する実際の型を取り出す。
-                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-                    receivergType->TypeArgs, rgtp->VirtualTypeIndex);
-                self->resolved = bc_CloneGenericType(instanced_type, true);
-                self->resolved->Tag = GENERIC_TYPE_TAG_CLASS_T;
-        } else if (rgtp->Tag == GENERIC_TYPE_TAG_METHOD_T) {
-                //メソッドに渡された型引数を参照する
-                bc_GenericType* instanced_type = (bc_GenericType*)bc_AtVector(
-                    self->type_args, rgtp->VirtualTypeIndex);
-                self->resolved = bc_CloneGenericType(instanced_type, true);
-                self->resolved->Tag = GENERIC_TYPE_TAG_METHOD_T;
-        }
+        self->resolved = bc_CapplyGenericType(rgtp, cctx);
 }
 
 static void resolve_apply(bc_ILInvoke* self, bc_Enviroment* env,
@@ -275,14 +267,6 @@ static void resolve_apply(bc_ILInvoke* self, bc_Enviroment* env,
         if (self->resolved != NULL) {
                 return;
         }
-        bc_GenericType* receivergType =
-            bc_EvalILFactor(self->receiver, env, cctx);
         bc_GenericType* rgtp = get_return_gtype(self);
-        //	virtual_type returnvType = self->m->return_vtype;
-        //内側に型変数が含まれているかもしれないので、
-        //それをここで展開する。
-        bc_CallFrame* cfr =
-            bc_PushCallFrame(cctx, receivergType, self->args, self->type_args);
         self->resolved = bc_CapplyGenericType(rgtp, cctx);
-        bc_PopCallFrame(cctx);
 }
