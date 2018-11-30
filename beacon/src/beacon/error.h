@@ -22,6 +22,7 @@
  */
 typedef enum BCErrorID {
         BCERROR_NONE_T = 0,
+        BCERROR_PROGRAM_BUG_T,
         BCERROR_GENERIC_T,
         BCERROR_PARSE_T,
         BCERROR_REQUIRE_NOT_FOUND_T,

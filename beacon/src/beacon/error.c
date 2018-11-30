@@ -56,6 +56,9 @@ char* bc_Vfpanic(BCErrorID id, va_list ap) {
         switch (id) {
                 case BCERROR_NONE_T:
                         break;
+                case BCERROR_PROGRAM_BUG_T:
+                        fmt = "program bug: %s";
+                        break;
                 case BCERROR_GENERIC_T:
                         fmt = "%s";
                         break;
