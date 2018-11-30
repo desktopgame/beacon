@@ -14,10 +14,6 @@
 
 // proto
 static void delete_typeargs(bc_VectorItem item);
-static void resolve_pending(bc_ILInvokeBound* self, bc_Enviroment* env,
-                            bc_CallContext* cctx);
-static void resolve_apply(bc_ILInvokeBound* self, bc_Enviroment* env,
-                          bc_CallContext* cctx);
 static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
                         bc_CallContext* cctx);
 static void delete_args(bc_VectorItem item);
@@ -210,19 +206,8 @@ static bc_GenericType* eval_impl(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         //新しいフレーム追加
         bc_CallFrame* cfr = push_new_frame(self, env, cctx);
-        //戻り値がジェネリックなら...Tなど
-        if (get_return_gtype(self, cctx)->Tag != GENERIC_TYPE_TAG_NONE_T) {
-                resolve_pending(self, env, cctx);
-                assert(self->Resolved != NULL);
-                bc_PopCallFrame(cctx);
-                return self->Resolved;
-                //戻り値がジェネリックでないなら...List[T]など
-        } else {
-                resolve_apply(self, env, cctx);
-                assert(self->Resolved != NULL);
-                bc_PopCallFrame(cctx);
-                return self->Resolved;
-        }
+        self->Resolved =
+            bc_CapplyGenericType(get_return_gtype(self, cctx), cctx);
         bc_PopCallFrame(cctx);
         assert(self->Resolved != NULL);
         return self->Resolved;
@@ -332,23 +317,4 @@ static bc_CallFrame* push_new_frame(bc_ILInvokeBound* self, bc_Enviroment* env,
                     self->Arguments, self->TypeArgs);
         }
         return cfr;
-}
-
-static void resolve_pending(bc_ILInvokeBound* self, bc_Enviroment* env,
-                            bc_CallContext* cctx) {
-        if (self->Resolved != NULL) {
-                return;
-        }
-        bc_Type* tp = NULL;
-        bc_GenericType* rgtp = get_return_gtype(self, cctx);
-        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
-}
-
-static void resolve_apply(bc_ILInvokeBound* self, bc_Enviroment* env,
-                          bc_CallContext* cctx) {
-        if (self->Resolved != NULL) {
-                return;
-        }
-        bc_GenericType* rgtp = get_return_gtype(self, cctx);
-        self->Resolved = bc_CapplyGenericType(rgtp, cctx);
 }
