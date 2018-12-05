@@ -19,14 +19,13 @@
 static bc_GenericType* apply_impl(bc_GenericType* self, bc_CallContext* cctx,
                                   bc_Frame* fr);
 static int distance_impl(bc_GenericType* self, bc_GenericType* other,
-                         bc_Frame* fr, bc_CallContext* cctx);
+                         bc_ExecutePhase phase);
 static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other,
-                              bc_Frame* fr, bc_CallContext* cctx);
+                              bc_ExecutePhase phase);
 static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other,
-                          bc_Frame* fr, bc_CallContext* cctx);
+                          bc_ExecutePhase phase);
 static int distance_interface(int dist, bc_GenericType* self,
-                              bc_GenericType* other, bc_Frame* fr,
-                              bc_CallContext* cctx);
+                              bc_GenericType* other, bc_ExecutePhase phase);
 static bc_Vector* apply_by_hierarchy(bc_GenericType* impl_baseline,
                                      bc_GenericType* impl);
 static bc_GenericType* typeargs_at(bc_CallContext* cctx, bc_Frame* fr,
@@ -133,12 +132,12 @@ void bc_AddArgsGenericType(bc_GenericType* self, bc_GenericType* a) {
 
 int bc_CdistanceGenericType(bc_GenericType* self, bc_GenericType* other,
                             bc_CallContext* cctx) {
-        return distance_impl(self, other, NULL, cctx);
+        return distance_impl(self, other, PHASE_COMPILE_TIME);
 }
 
 int bc_RdistanceGenericType(bc_GenericType* self, bc_GenericType* other,
                             bc_Frame* fr) {
-        return distance_impl(self, other, fr, NULL);
+        return distance_impl(self, other, PHASE_RUN_TIME);
 }
 
 bc_GenericType* bc_DistanceGenericType(bc_GenericType* self,
@@ -257,9 +256,9 @@ struct bc_Type* bc_GenericTypeToType(bc_GenericType* self) {
 
 // private
 static int distance_impl(bc_GenericType* self, bc_GenericType* other,
-                         bc_Frame* fr, bc_CallContext* cctx) {
-        if (fr != NULL) {
-                return distance_nogeneric(self, other, fr, cctx);
+                         bc_ExecutePhase phase) {
+        if (phase == PHASE_RUN_TIME) {
+                return distance_nogeneric(self, other, phase);
         }
         //要求されている型は T
         if (self->CoreType == NULL) {
@@ -287,12 +286,12 @@ static int distance_impl(bc_GenericType* self, bc_GenericType* other,
                 }
                 //どちらも具体的な型
         } else {
-                return distance_nogeneric(self, other, fr, cctx);
+                return distance_nogeneric(self, other, phase);
         }
 }
 
 static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other,
-                              bc_Frame* fr, bc_CallContext* cctx) {
+                              bc_ExecutePhase phase) {
         assert(self->CoreType != NULL);
         assert(other->CoreType != NULL);
         int dist = bc_DistanceType(self->CoreType, other->CoreType);
@@ -310,15 +309,15 @@ static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other,
                 return 1;
         }
         if (self->CoreType->Tag == TYPE_CLASS_T) {
-                return distance_class(dist, self, other, fr, cctx);
+                return distance_class(dist, self, other, phase);
         } else if (self->CoreType->Tag == TYPE_INTERFACE_T) {
-                return distance_interface(dist, self, other, fr, cctx);
+                return distance_interface(dist, self, other, phase);
         }
         return dist;
 }
 
 static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other,
-                          bc_Frame* fr, bc_CallContext* cctx) {
+                          bc_ExecutePhase phase) {
         // otherからselfまで辿る
         bc_Class* baseline = self->CoreType->Kind.Class;
         bc_Class* ptr = other->CoreType->Kind.Class;
@@ -332,7 +331,7 @@ static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other,
         for (int i = 0; i < self->TypeArgs->Length; i++) {
                 bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
                 bc_GenericType* b = bc_AtVector(target->TypeArgs, i);
-                int calc = distance_impl(a, b, fr, cctx);
+                int calc = distance_impl(a, b, phase);
                 if (calc == -1 || calc > 0) {
                         dist = -1;
                         break;
@@ -342,8 +341,7 @@ static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other,
 }
 
 static int distance_interface(int dist, bc_GenericType* self,
-                              bc_GenericType* other, bc_Frame* fr,
-                              bc_CallContext* cctx) {
+                              bc_GenericType* other, bc_ExecutePhase phase) {
         if (other->CoreType->Tag == TYPE_CLASS_T) {
                 //クラスからインターフェイスを探す
                 bc_GenericType* impl_baseline = NULL;
@@ -357,7 +355,7 @@ static int distance_interface(int dist, bc_GenericType* self,
                 for (int i = 0; i < self->TypeArgs->Length; i++) {
                         bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
                         bc_GenericType* b = bc_AtVector(gargs, i);
-                        int calc = distance_impl(a, b, fr, cctx);
+                        int calc = distance_impl(a, b, phase);
                         if (calc == -1 || calc > 0) {
                                 dist = -1;
                                 break;
@@ -375,7 +373,7 @@ static int distance_interface(int dist, bc_GenericType* self,
                 for (int i = 0; i < self->TypeArgs->Length; i++) {
                         bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
                         bc_GenericType* b = bc_AtVector(impl->TypeArgs, i);
-                        int calc = distance_impl(a, b, fr, cctx);
+                        int calc = distance_impl(a, b, phase);
                         if (calc == -1 || calc > 0) {
                                 dist = -1;
                                 break;
