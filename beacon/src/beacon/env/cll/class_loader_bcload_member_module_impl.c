@@ -348,31 +348,38 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                 return false;
         }
         //メソッドの修飾子が static override
-        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(method)) &&
-            bc_IsOverrideModifier(BC_MEMBER_MODIFIER(method))) {
-                bc_Panic(BCERROR_STATIC_OVERRIDE_METHOD_T,
-                         bc_Ref2Str(bc_GetTypeName(tp)),
-                         bc_Ref2Str(method->Name));
+        if (bc_IsPairIncludeModifier(BC_MEMBER_MODIFIER(method),
+                                     MODIFIER_STATIC_T, MODIFIER_OVERRIDE_T)) {
+                bc_Panic(
+                    BCERROR_INVALID_MODIFIER_PAIR_METHOD_T,
+                    bc_Ref2Str(bc_ModifierTypeToString(MODIFIER_STATIC_T)),
+                    bc_Ref2Str(bc_ModifierTypeToString(MODIFIER_OVERRIDE_T)),
+                    bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(method->Name));
                 bc_DeleteMethod(method);
                 bc_DeleteCallContext(cctx);
                 return false;
         }
         //.. abstract override
-        if (bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) &&
-            bc_IsOverrideModifier(BC_MEMBER_MODIFIER(method))) {
-                bc_Panic(BCERROR_ABSTRACT_OVERRIDE_METHOD_T,
-                         bc_Ref2Str(bc_GetTypeName(tp)),
-                         bc_Ref2Str(method->Name));
+        if (bc_IsPairIncludeModifier(BC_MEMBER_MODIFIER(method),
+                                     MODIFIER_ABSTRACT_T,
+                                     MODIFIER_OVERRIDE_T)) {
+                bc_Panic(
+                    BCERROR_INVALID_MODIFIER_PAIR_METHOD_T,
+                    bc_Ref2Str(bc_ModifierTypeToString(MODIFIER_ABSTRACT_T)),
+                    bc_Ref2Str(bc_ModifierTypeToString(MODIFIER_OVERRIDE_T)),
+                    bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(method->Name));
                 bc_DeleteMethod(method);
                 bc_DeleteCallContext(cctx);
                 return false;
         }
         //.. abstract static
-        if (bc_IsAbstractModifier(BC_MEMBER_MODIFIER(method)) &&
-            bc_IsStaticModifier(BC_MEMBER_MODIFIER(method))) {
-                bc_Panic(BCERROR_ABSTRACT_STATIC_METHOD_T,
-                         bc_Ref2Str(bc_GetTypeName(tp)),
-                         bc_Ref2Str(method->Name));
+        if (bc_IsPairIncludeModifier(BC_MEMBER_MODIFIER(method),
+                                     MODIFIER_ABSTRACT_T, MODIFIER_STATIC_T)) {
+                bc_Panic(
+                    BCERROR_INVALID_MODIFIER_PAIR_METHOD_T,
+                    bc_Ref2Str(bc_ModifierTypeToString(MODIFIER_ABSTRACT_T)),
+                    bc_Ref2Str(bc_ModifierTypeToString(MODIFIER_STATIC_T)),
+                    bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(method->Name));
                 bc_DeleteMethod(method);
                 bc_DeleteCallContext(cctx);
                 return false;

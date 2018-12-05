@@ -81,3 +81,24 @@ bc_StringView bc_ModifierTypeToString(bc_ModifierType type) {
                         return bc_InternString("final");
         }
 }
+
+bool bc_IsPairIncludeModifier(bc_ModifierType self, bc_ModifierType primary,
+                              bc_ModifierType other) {
+        return (self & primary) > 0 && (self & other) > 0;
+}
+
+bool bc_IsBothIncludeModifier(bc_ModifierType self, bc_ModifierType primary,
+                              int count, bc_ModifierType others[],
+                              int* outIndex) {
+        (*outIndex) = -1;
+        if ((self & primary) == 0) {
+                return false;
+        }
+        for (int i = 0; i < count; i++) {
+                if ((self & others[i]) > 0) {
+                        (*outIndex) = i;
+                        return true;
+                }
+        }
+        return false;
+}

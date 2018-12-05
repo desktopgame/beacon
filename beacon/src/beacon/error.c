@@ -97,19 +97,9 @@ char* bc_Vfpanic(BCErrorID id, va_list ap) {
                         fmt = "`%s` modifier is can't use for property: %s#%s";
                         break;
 
-                case BCERROR_STATIC_OVERRIDE_METHOD_T:
+                case BCERROR_INVALID_MODIFIER_PAIR_METHOD_T:
                         fmt =
-                            "`static` and `override` modifier is can't use "
-                            "with: %s#%s";
-                        break;
-                case BCERROR_ABSTRACT_OVERRIDE_METHOD_T:
-                        fmt =
-                            "`abstract` and `override` modifier is can't use "
-                            "with: %s#%s";
-                        break;
-                case BCERROR_ABSTRACT_STATIC_METHOD_T:
-                        fmt =
-                            "`abstract` and `static` modifier is can't use "
+                            "`%s` and `%s` modifier is can't use "
                             "with: %s#%s";
                         break;
 

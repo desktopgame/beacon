@@ -75,6 +75,28 @@ bool bc_IsIncludeModifier(bc_ModifierType self, int count,
                           bc_ModifierType list[], int* outIndex);
 
 /**
+ * primary と other を同時に使用しているなら true.
+ * @param self
+ * @param primary
+ * @param other
+ * @return
+ */
+bool bc_IsPairIncludeModifier(bc_ModifierType self, bc_ModifierType primary,
+                              bc_ModifierType other);
+
+/**
+ * primaryとothersの中の任意の一つを同時に使用しているなら true.
+ * @param self
+ * @param primary
+ * @param others
+ * @param outIndex
+ * @return
+ */
+bool bc_IsBothIncludeModifier(bc_ModifierType self, bc_ModifierType primary,
+                              int count, bc_ModifierType others[],
+                              int* outIndex);
+
+/**
  * 修飾子を文字列へ変換します。
  * @param type
  * @return
