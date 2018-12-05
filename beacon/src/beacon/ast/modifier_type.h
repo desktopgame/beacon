@@ -10,7 +10,9 @@
 #pragma once
 #ifndef BEACON_AST_MODIFIER_TYPE_H
 #define BEACON_AST_MODIFIER_TYPE_H
+#include <stdarg.h>
 #include <stdbool.h>
+#include "../util/string_pool.h"
 /**
  * アクセス修飾子を表す列挙型.
  */
@@ -62,4 +64,20 @@ bool bc_IsFinalModifier(bc_ModifierType type);
  * @param type
  */
 void bc_PrintModifier(bc_ModifierType type);
+
+/**
+ * 引数に列挙する修飾子を全て含むなら true.
+ * @param self
+ * @param ...
+ * @return
+ */
+bool bc_IsIncludeModifier(bc_ModifierType self, int count,
+                          bc_ModifierType list[], int* outIndex);
+
+/**
+ * 修飾子を文字列へ変換します。
+ * @param type
+ * @return
+ */
+bc_StringView bc_ModifierTypeToString(bc_ModifierType type);
 #endif  // !SIGNAL_AST_MODIFIER_TYPE_H

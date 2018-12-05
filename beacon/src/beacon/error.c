@@ -90,16 +90,11 @@ char* bc_Vfpanic(BCErrorID id, va_list ap) {
                         fmt = "overwrap of Property name: %s @%s";
                         break;
 
-                case BCERROR_NATIVE_FIELD_T:
-                        fmt = "`native` modifier is can't use for field: %s#%s";
+                case BCERROR_INVALID_MODIFIER_FIELD_T:
+                        fmt = "`%s` modifier is can't use for field: %s#%s";
                         break;
-                case BCERROR_ABSTRACT_FIELD_T:
-                        fmt =
-                            "`abstract` modifier is can't use for field: %s#%s";
-                        break;
-                case BCERROR_OVERRIDE_FIELD_T:
-                        fmt =
-                            "`override` modifier is can't use for field: %s#%s";
+                case BCERROR_INVALID_MODIFIER_PROPERTY_T:
+                        fmt = "`%s` modifier is can't use for property: %s#%s";
                         break;
 
                 case BCERROR_STATIC_OVERRIDE_METHOD_T:

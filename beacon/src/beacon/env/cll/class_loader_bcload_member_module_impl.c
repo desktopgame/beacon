@@ -67,22 +67,20 @@ bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         //フィールドの初期値
         fi->InitialValue = ilfi->InitialValue;
         ilfi->InitialValue = NULL;
-        //フィールドの修飾子に native が使用されている
-        if (bc_IsNativeModifier(BC_MEMBER_MODIFIER(fi))) {
-                bc_Panic(BCERROR_NATIVE_FIELD_T, bc_Ref2Str(bc_GetTypeName(tp)),
-                         bc_Ref2Str(fi->Name));
-                return false;
-        }
-        //.. abstractが使用されている
-        if (bc_IsAbstractModifier(BC_MEMBER_MODIFIER(fi))) {
-                bc_Panic(BCERROR_ABSTRACT_FIELD_T,
-                         bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(fi->Name));
-                return false;
-        }
-        //.. overrideが使用されている
-        if (bc_IsOverrideModifier(BC_MEMBER_MODIFIER(fi))) {
-                bc_Panic(BCERROR_OVERRIDE_FIELD_T,
-                         bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(fi->Name));
+        //フィールドの修飾子を検証
+        const int errorLength = 3;
+        bc_ModifierType errors[errorLength] = {
+            MODIFIER_NATIVE_T,
+            MODIFIER_ABSTRACT_T,
+            MODIFIER_OVERRIDE_T,
+        };
+        int errorIndex = -1;
+        if (bc_IsIncludeModifier(BC_MEMBER_MODIFIER(fi), errorLength, errors,
+                                 &errorIndex)) {
+                bc_Panic(
+                    BCERROR_INVALID_MODIFIER_FIELD_T,
+                    bc_Ref2Str(bc_ModifierTypeToString(errors[errorIndex])),
+                    bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(fi->Name));
                 return false;
         }
         // static finalなのに、
@@ -187,10 +185,20 @@ bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         prop->GType = bc_ResolveImportManager(scope, ilprop->GCache, cctx);
         prop->IsShort = ilprop->Set->IsShort && ilprop->Get->IsShort;
         bc_AddPropertyType(tp, prop);
-        if (bc_IsAbstractModifier(BC_MEMBER_MODIFIER(prop)) ||
-            bc_IsOverrideModifier(BC_MEMBER_MODIFIER(prop)) ||
-            bc_IsNativeModifier(BC_MEMBER_MODIFIER(prop))) {
-                bc_Panic(BCERROR_NATIVE_FIELD_T, bc_Ref2Str(prop->Name));
+        //プロパティの修飾子を検証
+        const int errorLength = 3;
+        bc_ModifierType errors[errorLength] = {
+            MODIFIER_NATIVE_T,
+            MODIFIER_ABSTRACT_T,
+            MODIFIER_OVERRIDE_T,
+        };
+        int errorIndex = -1;
+        if (bc_IsIncludeModifier(BC_MEMBER_MODIFIER(prop), errorLength, errors,
+                                 &errorIndex)) {
+                bc_Panic(
+                    BCERROR_INVALID_MODIFIER_FIELD_T,
+                    bc_Ref2Str(bc_ModifierTypeToString(errors[errorIndex])),
+                    bc_Ref2Str(bc_GetTypeName(tp)), bc_Ref2Str(prop->Name));
                 bc_DeleteCallContext(cctx);
                 return false;
         }
