@@ -292,6 +292,7 @@ static void attach_bp(bc_Slot* self) {
                 if (bc_ExistsFile(gDBF)) {
                         bc_DeleteFile(gDBF);
                 }
+                fprintf(stderr, "detected memory leak!\n");
                 abort();
         }
         gAll++;
