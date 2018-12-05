@@ -4,15 +4,21 @@ beaconがコンパイルをどのようにエラーを処理するかについ�
 # エラーの報告
 `error.h`にて定義されます。
 ````
-void ThrowBCError(bc_error_id id, ...);
-void bc_error_vthrow(bc_error_id id, va_list ap);
+void bc_Panic(BCErrorID id, ...);
+void bc_Vpanic(BCErrorID id, va_list ap);
 ````
 
 # エラーの検出
 エラーが起きると、内部的に保存されたフラグがオンになるので、  
 これをチェックして処理を中断することでトップレベルまで戻ります。
 ````
-bc_error_id bc_error_last();
+BCErrorID bc_GetLastPanic();
+````
+
+# 致命的なエラー
+復帰が見込めないエラーでは次の関数を呼び出します。
+````
+void bc_FatalError();
 ````
 
 # リリースビルド
