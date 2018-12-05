@@ -427,6 +427,8 @@ void bc_SetPanicColumn(int column) { gPanicColumn = column; }
 bc_StringView bc_GetPanicMessage() { return gLastMessage; }
 
 BCErrorID bc_GetLastPanic() { return gGlobalPanic; }
+
+void bc_FatalError() { abort(); }
 // private
 static void check_abort(bc_ScriptContext* sctx) {
         if (sctx->IsAbortOnError) {

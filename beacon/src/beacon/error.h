@@ -199,4 +199,9 @@ bc_StringView bc_GetPanicMessage();
  * @return
  */
 BCErrorID bc_GetLastPanic();
+
+/**
+ * 致命的なエラーによってインタプリタを終了します.
+ */
+void bc_FatalError();
 #endif
