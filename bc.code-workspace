@@ -199,5 +199,10 @@
 			"**/*.dll": true,
 			"**.vs": true
 		},
+		"todohighlight.keywords": [
+			"TODO",
+			"FIXME",
+			"NOTE"
+		],
 	}
 }
