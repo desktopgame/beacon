@@ -111,7 +111,7 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
         bc_GenerateILFactor(fi->InitialValue, env, cctx);
         //フィールドの型と互換性がない
         bc_GenericType* gf = bc_EvalILFactor(fi->InitialValue, env, cctx);
-        if (bc_CdistanceGenericType(fi->GType, gf, cctx) < 0) {
+        if (bc_CdistanceGenericType(fi->GType, gf) < 0) {
                 bc_PrintGenericType(fi->GType);
                 bc_Println();
                 bc_PrintGenericType(gf);

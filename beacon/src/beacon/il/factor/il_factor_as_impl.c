@@ -60,8 +60,8 @@ void bc_LoadILAs(bc_ILAs* self, bc_Enviroment* env, bc_CallContext* cctx) {
                 self->Mode = CAST_UP_T;
                 return;
         }
-        int downTo = bc_CdistanceGenericType(self->GType, a, cctx);
-        int upTo = bc_CdistanceGenericType(a, self->GType, cctx);
+        int downTo = bc_CdistanceGenericType(self->GType, a);
+        int upTo = bc_CdistanceGenericType(a, self->GType);
         //ダウンキャスト
         if (downTo >= 0) {
                 self->Mode = CAST_UP_T;

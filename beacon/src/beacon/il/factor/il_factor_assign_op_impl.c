@@ -115,7 +115,8 @@ static void assign_by_namebase(bc_ILAssignOp* self, bc_Enviroment* env,
                 bc_GenerateILFactor(self->Right, env, cctx);
                 bc_GeneratePutField(env->Bytecode, sf, temp);
                 //指定の静的フィールドにアクセスできない
-                if (!bc_IsAccessibleFieldClass(bc_GetClassByContext(cctx), sf)) {
+                if (!bc_IsAccessibleFieldClass(bc_GetClassByContext(cctx),
+                                               sf)) {
                         bc_Panic(BCERROR_CAN_T_ACCESS_FIELD_T,
                                  bc_Ref2Str(bc_GetTypeName(cls->Parent)),
                                  bc_Ref2Str(sf->Name));
@@ -184,8 +185,8 @@ static void assign_to_Property(bc_ILAssignOp* self, bc_Enviroment* env,
                 return;
         }
         if (bc_CdistanceGenericType(prop->Property->GType,
-                                   bc_EvalILFactor(self->Right, env, cctx),
-                                   cctx) < 0) {
+                                    bc_EvalILFactor(self->Right, env, cctx)) <
+            0) {
                 bc_Panic(
                     BCERROR_ASSIGN_NOT_COMPATIBLE_PROPERTY_T,
                     bc_Ref2Str(bc_GetTypeName(BC_MEMBER_TYPE(prop->Property))),
@@ -281,7 +282,7 @@ static void assign_by_invoke_bound(bc_ILInvokeBound* lhs, bc_ILFactor* rhs,
 static bool can_assign_to_field(bc_Field* f, bc_ILAssignOp* self,
                                 bc_Enviroment* env, bc_CallContext* cctx) {
         bc_GenericType* gt = bc_EvalILFactor(self->Right, env, cctx);
-        int dist = bc_CdistanceGenericType(f->GType, gt, cctx);
+        int dist = bc_CdistanceGenericType(f->GType, gt);
         if (dist >= 0) {
                 return true;
         } else {
@@ -346,8 +347,8 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self,
                 bc_AddOpcodeBuf(env->Bytecode, OP_STORE);
                 bc_AddOpcodeBuf(env->Bytecode, e->Index);
                 if (bc_CdistanceGenericType(
-                        e->GType, bc_EvalILFactor(self->Right, env, cctx),
-                        cctx) < 0) {
+                        e->GType, bc_EvalILFactor(self->Right, env, cctx)) <
+                    0) {
                         bc_Panic(BCERROR_ASSIGN_NOT_COMPATIBLE_LOCAL_T,
                                  bc_Ref2Str(ilvar->FQCN->Name));
                         return;

@@ -130,22 +130,12 @@ void bc_AddArgsGenericType(bc_GenericType* self, bc_GenericType* a) {
         bc_PushVector(self->TypeArgs, a);
 }
 
-int bc_CdistanceGenericType(bc_GenericType* self, bc_GenericType* other,
-                            bc_CallContext* cctx) {
+int bc_CdistanceGenericType(bc_GenericType* self, bc_GenericType* other) {
         return distance_impl(self, other, PHASE_COMPILE_TIME);
 }
 
-int bc_RdistanceGenericType(bc_GenericType* self, bc_GenericType* other,
-                            bc_Frame* fr) {
+int bc_RdistanceGenericType(bc_GenericType* self, bc_GenericType* other) {
         return distance_impl(self, other, PHASE_RUN_TIME);
-}
-
-bc_GenericType* bc_DistanceGenericType(bc_GenericType* self,
-                                       bc_GenericType* receiver,
-                                       bc_Vector* type_args,
-                                       bc_ExecutePhase phase) {
-        //
-        return NULL;
 }
 
 void bc_PrintGenericType(bc_GenericType* self) {

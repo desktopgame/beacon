@@ -137,39 +137,21 @@ void bc_AddArgsGenericType(bc_GenericType* self, bc_GenericType* a);
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
  * @param self
  * @param other
- * @param cctx
  * @return 同じなら 0
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int bc_CdistanceGenericType(bc_GenericType* self, bc_GenericType* other,
-                            struct bc_CallContext* cctx);
+int bc_CdistanceGenericType(bc_GenericType* self, bc_GenericType* other);
 /**
  * a と b の距離を返します.
  * メソッドを解決する時、もっともマッチするオーバーロードを見つけるために使用されます。
  * @param self
  * @param other
- * @param fr
  * @return 同じなら 0
  *         異なる継承階層なら -1
  *         サブタイプなら階層の数
  */
-int bc_RdistanceGenericType(bc_GenericType* self, bc_GenericType* other,
-                            struct bc_Frame* fr);
-
-/**
- * 二つのジェネリック型のマッチ率を返します。
- * @param self
- * @param cctx
- * @param receiver
- * @param type_args
- * @param phase
- * @return
- */
-bc_GenericType* bc_DistanceGenericType(bc_GenericType* self,
-                                       struct bc_GenericType* receiver,
-                                       bc_Vector* type_args,
-                                       bc_ExecutePhase phase);
+int bc_RdistanceGenericType(bc_GenericType* self, bc_GenericType* other);
 
 /**
  * 型変数と型を出力します.
