@@ -1,0 +1,8 @@
+var vec = new Vector[Int]();
+var iter = vec.iterate();
+dump(iter);
+
+//compile ok
+def dump(Object obj) -> Void {
+	obj.printLine();
+}

@@ -308,26 +308,35 @@ static int distance_nogeneric(bc_GenericType* self, bc_GenericType* other,
 
 static int distance_class(int dist, bc_GenericType* self, bc_GenericType* other,
                           bc_ExecutePhase phase) {
-        // otherからselfまで辿る
-        bc_Class* baseline = self->CoreType->Kind.Class;
-        bc_Class* ptr = other->CoreType->Kind.Class;
-        bc_GenericType* target = other;
-        while (baseline != ptr) {
-                target = ptr->SuperClass;
-                ptr = ptr->SuperClass->CoreType->Kind.Class;
-        }
-        assert(target != NULL);
-        assert(self->TypeArgs->Length == target->TypeArgs->Length);
-        for (int i = 0; i < self->TypeArgs->Length; i++) {
-                bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
-                bc_GenericType* b = bc_AtVector(target->TypeArgs, i);
-                int calc = distance_impl(a, b, phase);
-                if (calc == -1 || calc > 0) {
-                        dist = -1;
-                        break;
+        if (other->CoreType->Tag == TYPE_CLASS_T) {
+                // otherからselfまで辿る
+                bc_Class* baseline = self->CoreType->Kind.Class;
+                bc_Class* ptr = other->CoreType->Kind.Class;
+                bc_GenericType* target = other;
+                while (baseline != ptr) {
+                        target = ptr->SuperClass;
+                        ptr = ptr->SuperClass->CoreType->Kind.Class;
                 }
+                assert(target != NULL);
+                assert(self->TypeArgs->Length == target->TypeArgs->Length);
+                for (int i = 0; i < self->TypeArgs->Length; i++) {
+                        bc_GenericType* a = bc_AtVector(self->TypeArgs, i);
+                        bc_GenericType* b = bc_AtVector(target->TypeArgs, i);
+                        int calc = distance_impl(a, b, phase);
+                        if (calc == -1 || calc > 0) {
+                                dist = -1;
+                                break;
+                        }
+                }
+                return dist;
+        } else if (other->CoreType->Tag == TYPE_INTERFACE_T) {
+                if (self->CoreType == BC_TYPE_OBJECT) {
+                        return 0;
+                }
+                return -1;
+        } else {
+                bc_FatalError();
         }
-        return dist;
 }
 
 static int distance_interface(int dist, bc_GenericType* self,

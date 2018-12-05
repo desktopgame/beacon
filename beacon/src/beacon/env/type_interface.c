@@ -141,6 +141,13 @@ int bc_DistanceType(bc_Type* super, bc_Type* sub) {
                 int dist = bc_DistanceClass(super->Kind.Class, sub->Kind.Class);
                 return dist;
         }
+        if (super->Tag == TYPE_CLASS_T && sub->Tag == TYPE_INTERFACE_T) {
+                if (super == BC_TYPE_OBJECT) {
+                        return 0;
+                }
+                // TODO:ここで実装しているかどうかを調べる
+                return -1;
+        }
         return -1;
 }
 
