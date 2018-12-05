@@ -17,12 +17,12 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt);
 
 bool bc_EvalAST(const char* filename) {
         fprintf(stderr, "this command is deleted\n");
-        abort();
+        bc_FatalError();
         return false;
         /*
         if (!bc_ExistsFile(filename)) {
                 fprintf(stderr, "file is not found: %s", filename);
-                abort();
+                bc_FatalError();
                 return false;
         }
         parser* p = ParseFile(filename);
@@ -40,7 +40,7 @@ bool bc_EvalAST(const char* filename) {
 
 bool bc_EvalIL(const char* filename) {
         fprintf(stderr, "this command is deleted\n");
-        abort();
+        bc_FatalError();
         return false;
         /*
         ClassLoader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);

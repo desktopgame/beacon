@@ -77,7 +77,7 @@ void DeleteStorage(Storage* self) {
 static void* safe_malloc(size_t size) {
         void* ret = malloc(size);
         if(ret == NULL) {
-                abort();
+                bc_FatalError();
         }
         return ret;
 }

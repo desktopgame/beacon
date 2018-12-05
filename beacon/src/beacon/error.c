@@ -432,6 +432,6 @@ void bc_FatalError() { abort(); }
 // private
 static void check_abort(bc_ScriptContext* sctx) {
         if (sctx->IsAbortOnError) {
-                abort();
+                bc_FatalError();
         }
 }

@@ -653,7 +653,7 @@ bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,
         bool yield_err = false;
         if (bc_IsYieldMethod(mt, ilstmts, &yield_err)) {
                 if (yield_err) {
-                        abort();
+                        bc_FatalError();
                         return false;
                 }
                 //メソッド名からクラス名を作成して、

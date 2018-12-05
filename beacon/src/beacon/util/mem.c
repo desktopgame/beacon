@@ -132,7 +132,7 @@ void bc_DestroyMX() {
 void* bc_SafeMalloc(size_t size) {
         void* ret = malloc(size);
         if (ret == NULL) {
-                abort();
+                bc_FatalError();
         }
         memset(ret, 0, size);
         return ret;
@@ -141,7 +141,7 @@ void* bc_SafeMalloc(size_t size) {
 void* bc_SafeRealloc(void* block, size_t new_size) {
         void* ret = realloc(block, new_size);
         if (ret == NULL) {
-                abort();
+                bc_FatalError();
         }
         return ret;
 }
@@ -293,7 +293,7 @@ static void attach_bp(bc_Slot* self) {
                         bc_DeleteFile(gDBF);
                 }
                 fprintf(stderr, "detected memory leak!\n");
-                abort();
+                bc_FatalError();
         }
         gAll++;
 }

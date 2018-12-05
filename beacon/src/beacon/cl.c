@@ -1,6 +1,7 @@
 #include "cl.h"
 #include <stdio.h>
 #include "env/script_context.h"
+#include "error.h"
 #include "test.h"
 #include "vm/eval.h"
 
@@ -12,7 +13,7 @@ int bc_TestCmd(int argc, char* argv[]) {
         return ret;
 #else
         fprintf(stderr, "not supported operation\n");
-        abort();
+        bc_FatalError();
         return 0;
 #endif
 }

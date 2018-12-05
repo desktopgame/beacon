@@ -45,7 +45,7 @@ static void bc_system_nativeExit(bc_Method* parent, bc_Frame* fr,
 
 static void bc_system_nativeAbort(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env) {
-        abort();
+        bc_FatalError();
 }
 
 static void bc_system_nativeExec(bc_Method* parent, bc_Frame* fr,

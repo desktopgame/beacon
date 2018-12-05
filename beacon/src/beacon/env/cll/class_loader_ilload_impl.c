@@ -149,7 +149,7 @@ void ILLoadClassLoader(bc_ClassLoader* self, bc_AST* source_code) {
                         class_loader_ilload_function(self, child);
                 } else {
                         fprintf(stderr, "ast is not collected\n");
-                        abort();
+                        bc_FatalError();
                 }
         }
 }
