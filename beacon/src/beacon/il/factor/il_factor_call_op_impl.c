@@ -12,19 +12,19 @@
 
 // proto
 static void check_call_type(bc_ILCallOp* self, bc_Enviroment* env,
-                           bc_CallContext* cctx);
+                            bc_CallContext* cctx);
 static void check_call_namebase(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
-                                      bc_Enviroment* env, bc_CallContext* cctx);
+                                bc_Enviroment* env, bc_CallContext* cctx);
 static void check_call_static(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
-                                      bc_Enviroment* env, bc_CallContext* cctx);
+                              bc_Enviroment* env, bc_CallContext* cctx);
 static void check_call_instance(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
-                                    bc_ILVariable* ilvar, bc_Enviroment* env,
-                                    bc_CallContext* cctx);
+                                bc_ILVariable* ilvar, bc_Enviroment* env,
+                                bc_CallContext* cctx);
 static void check_call_bound(bc_ILCallOp* self, bc_Enviroment* env);
 static void check_member_access(bc_ILCallOp* self, bc_Enviroment* env,
-                             bc_CallContext* cctx);
+                                bc_CallContext* cctx);
 static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
-                              bc_CallContext* cctx);
+                                   bc_CallContext* cctx);
 
 static void delete_argument(bc_VectorItem item);
 static void delete_type_argument(bc_VectorItem item);
@@ -116,7 +116,7 @@ void bc_DeleteILCallOp(bc_ILCallOp* self) {
 
 // private
 static void check_call_type(bc_ILCallOp* self, bc_Enviroment* env,
-                           bc_CallContext* cctx) {
+                            bc_CallContext* cctx) {
         if (self->Type != ILCALL_TYPE_UNDEFINED_T) {
                 return;
         }
@@ -149,7 +149,7 @@ static void check_call_bound(bc_ILCallOp* self, bc_Enviroment* env) {
 }
 
 static void check_member_access(bc_ILCallOp* self, bc_Enviroment* env,
-                             bc_CallContext* cctx) {
+                                bc_CallContext* cctx) {
         bc_ILFactor* receiver = self->Receiver;
         bc_ILMemberOp* ilmem = receiver->Kind.MemberOp;
         // hoge.foo
@@ -161,35 +161,32 @@ static void check_member_access(bc_ILCallOp* self, bc_Enviroment* env,
 }
 
 static void check_call_namebase(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
-                                      bc_Enviroment* env,
-                                      bc_CallContext* cctx) {
+                                bc_Enviroment* env, bc_CallContext* cctx) {
         bc_ILVariable* ilvar = ilmem->Source->Kind.Variable;
         // Namespace::Class.foo()
         if (ilvar->FQCN->Scope->Length > 0) {
                 check_call_instance(self, ilmem, ilvar, env, cctx);
-                // hoge.foo()
-        } else {
+                return;
+        }
+        // hoge.foo()
 #if defined(DEBUG)
-                const char* clname = bc_Ref2Str(ilvar->FQCN->Name);
+        const char* clname = bc_Ref2Str(ilvar->FQCN->Name);
 #endif
-                bc_Namespace* cur = bc_GetNamespaceByContext(cctx);
-                bc_Class* ctype =
-                    bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
-                if (ctype == NULL) {
-                        ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(),
-                                                          ilvar->FQCN->Name);
-                }
-                if (ctype != NULL) {
-                        check_call_instance(self, ilmem, ilvar, env, cctx);
-                } else {
-                        check_call_static(self, ilmem, env, cctx);
-                }
+        bc_Namespace* cur = bc_GetNamespaceByContext(cctx);
+        bc_Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
+        if (ctype == NULL) {
+                ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(),
+                                                  ilvar->FQCN->Name);
+        }
+        if (ctype != NULL) {
+                check_call_instance(self, ilmem, ilvar, env, cctx);
+        } else {
+                check_call_static(self, ilmem, env, cctx);
         }
 }
 
 static void check_call_static(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
-                                      bc_Enviroment* env,
-                                      bc_CallContext* cctx) {
+                              bc_Enviroment* env, bc_CallContext* cctx) {
         //入れ替える
         bc_ILInvoke* iv = bc_NewILInvoke(ilmem->Name);
         iv->args = self->Arguments;
@@ -203,8 +200,8 @@ static void check_call_static(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
 }
 
 static void check_call_instance(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
-                                    bc_ILVariable* ilvar, bc_Enviroment* env,
-                                    bc_CallContext* cctx) {
+                                bc_ILVariable* ilvar, bc_Enviroment* env,
+                                bc_CallContext* cctx) {
         bc_ILInvokeStatic* st = bc_NewILInvokeStatic(ilmem->Name);
         self->Type = ILCALL_TYPE_INVOKE_STATIC_T;
         self->Kind.InvokeStatic = st;
@@ -218,7 +215,7 @@ static void check_call_instance(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
 }
 
 static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
-                              bc_CallContext* cctx) {
+                                   bc_CallContext* cctx) {
         bc_ILFactor* receiver = self->Receiver;
         bc_ILCallOp* call_left = receiver->Kind.Call;
         bc_ILInvoke* iv = bc_NewILInvoke(BC_ZERO_VIEW);
