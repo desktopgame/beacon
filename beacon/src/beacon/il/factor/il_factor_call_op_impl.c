@@ -227,7 +227,7 @@ static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
         bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
         iv->u.opov = bc_FindOperatorOverload(
             receiver_cl->OperatorOverloads, OPERATOR_SUB_SCRIPT_GET_T,
-            self->Arguments->Length, gargs, MATCH_PUBLIC_ONLY, &temp);
+            self->Arguments->Length, gargs, MATCH_PUBLIC_ONLY, cctx, &temp);
         iv->index = temp;
         assert(temp != -1);
         //入れ替える

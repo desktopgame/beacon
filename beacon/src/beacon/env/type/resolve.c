@@ -7,7 +7,8 @@
 // private
 static bool match_option(bc_AccessLevel access, bc_SearchOption option);
 static int calc_argument_distance(bc_Vector* parameters, int args_count,
-                                  bc_GenericType* args[], bc_Vector* type_args);
+                                  bc_GenericType* args[], bc_Vector* type_args,
+                                  bc_CallContext* cctx);
 
 void bc_EvaluateArguments(bc_Vector* args, bc_GenericType* result[],
                           bc_Enviroment* env, bc_CallContext* cctx) {
@@ -20,7 +21,8 @@ void bc_EvaluateArguments(bc_Vector* args, bc_GenericType* result[],
 
 bc_OperatorOverload* bc_FindOperatorOverload(
     bc_Vector* operator_overloads, bc_OperatorType type, int args_count,
-    bc_GenericType* args[], bc_SearchOption option, int* outIndex) {
+    bc_GenericType* args[], bc_SearchOption option, bc_CallContext* cctx,
+    int* outIndex) {
         (*outIndex) = -1;
         bc_OperatorOverload* ret = NULL;
         int maxDistance = 1024;
@@ -35,7 +37,7 @@ bc_OperatorOverload* bc_FindOperatorOverload(
                         continue;
                 }
                 int sumDistance = calc_argument_distance(
-                    e->Parameters, args_count, args, NULL);
+                    e->Parameters, args_count, args, NULL, cctx);
                 if (sumDistance == -1) {
                         continue;
                 }
@@ -50,7 +52,8 @@ bc_OperatorOverload* bc_FindOperatorOverload(
 
 bc_Method* bc_FindMethod(bc_Vector* methods, bc_StringView name, int args_count,
                          bc_GenericType* args[], bc_Vector* type_args,
-                         bc_SearchOption option, int* outIndex) {
+                         bc_SearchOption option, bc_CallContext* cctx,
+                         int* outIndex) {
         (*outIndex) = -1;
         bc_Method* ret = NULL;
         int maxDistance = 1024;
@@ -66,7 +69,7 @@ bc_Method* bc_FindMethod(bc_Vector* methods, bc_StringView name, int args_count,
                         continue;
                 }
                 int sumDistance = calc_argument_distance(
-                    e->Parameters, args_count, args, type_args);
+                    e->Parameters, args_count, args, type_args, cctx);
                 if (sumDistance == -1) {
                         continue;
                 }
@@ -96,14 +99,15 @@ static bool match_option(bc_AccessLevel access, bc_SearchOption option) {
 }
 
 static int calc_argument_distance(bc_Vector* parameters, int args_count,
-                                  bc_GenericType* args[],
-                                  bc_Vector* type_args) {
+                                  bc_GenericType* args[], bc_Vector* type_args,
+                                  bc_CallContext* cctx) {
         int sumDistance = 0;
         for (int i = 0; i < parameters->Length; i++) {
                 bc_Parameter* parameter = bc_AtVector(parameters, i);
                 bc_GenericType* argument = args[i];
-                int distance =
-                    bc_RdistanceGenericType(parameter->GType, argument);
+                bc_GenericType* paramGtype =
+                    bc_CapplyGenericType(parameter->GType, cctx);
+                int distance = bc_CdistanceGenericType(paramGtype, argument);
                 if (distance == -1) {
                         sumDistance = -1;
                         break;

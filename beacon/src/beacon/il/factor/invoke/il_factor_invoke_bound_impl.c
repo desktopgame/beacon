@@ -249,9 +249,34 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, cctx->Ty->GenericSelf,
                                              self->Arguments, self->TypeArgs);
         self->Tag = BOUND_INVOKE_METHOD_T;
+#if defined(DEBUG)
+        const char* namestr = bc_Ref2Str(self->Name);
+#endif
+        bc_GenericType* gargs[self->Arguments->Length];
+        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        if (temp == -1) {
+                self->Kind.Method =
+                    bc_FindMethod(BC_TYPE2CLASS(ctype)->VT->Elements,
+                                  self->Name, self->Arguments->Length, gargs,
+                                  self->TypeArgs, MATCH_ALL, cctx, &temp);
+        }
+        if (temp == -1) {
+                self->Kind.Method =
+                    bc_FindMethod(BC_TYPE2CLASS(ctype)->Methods, self->Name,
+                                  self->Arguments->Length, gargs,
+                                  self->TypeArgs, MATCH_ALL, cctx, &temp);
+        }
+        if (temp == -1) {
+                self->Kind.Method =
+                    bc_FindMethod(BC_TYPE2CLASS(ctype)->StaticMethods,
+                                  self->Name, self->Arguments->Length, gargs,
+                                  self->TypeArgs, MATCH_ALL, cctx, &temp);
+        }
+        /*
         self->Kind.Method =
             bc_ILFindMethodClass(BC_TYPE2CLASS(ctype), self->Name,
                                  self->Arguments, env, cctx, &temp);
+        */
         self->Index = temp;
         BC_ERROR();
         if (self->Index != -1) {
