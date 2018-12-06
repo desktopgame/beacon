@@ -272,11 +272,6 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
                                   self->Name, self->Arguments->Length, gargs,
                                   self->TypeArgs, MATCH_ALL, cctx, &temp);
         }
-        /*
-        self->Kind.Method =
-            bc_ILFindMethodClass(BC_TYPE2CLASS(ctype), self->Name,
-                                 self->Arguments, env, cctx, &temp);
-        */
         self->Index = temp;
         BC_ERROR();
         if (self->Index != -1) {
