@@ -18,6 +18,7 @@
 #include "../constructor.h"
 #include "../method.h"
 #include "../operator_overload.h"
+#include "resolve.h"
 struct bc_Type;
 struct bc_Class;
 struct bc_Constructor;

@@ -221,10 +221,13 @@ static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
         bc_ILInvoke* iv = bc_NewILInvoke(BC_ZERO_VIEW);
         bc_GenericType* receiver_gtype = bc_EvalILFactor(receiver, env, cctx);
         bc_Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
+        //オペレータオーバーロードを検索
         int temp;
-        iv->u.opov = bc_ArgFindOperatorOverloadClass(
-            receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments, env, cctx,
-            &temp);
+        bc_GenericType* gargs[self->Arguments->Length];
+        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        iv->u.opov = bc_FindOperatorOverload(
+            receiver_cl->OperatorOverloads, OPERATOR_SUB_SCRIPT_GET_T,
+            self->Arguments->Length, gargs, MATCH_PUBLIC_ONLY, &temp);
         iv->index = temp;
         assert(temp != -1);
         //入れ替える

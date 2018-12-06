@@ -15,6 +15,7 @@
 #include "../il/call_context.h"
 #include "../util/string_pool.h"
 #include "../util/vector.h"
+#include "type/resolve.h"
 
 #define BC_TYPE2CLASS(type) (bc_CastClassType(type))
 #define BC_TYPE2INTERFACE(type) (bc_CastInterfaceType(type))

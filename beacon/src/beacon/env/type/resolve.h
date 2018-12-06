@@ -1,9 +1,12 @@
 #ifndef BEACON_ENV_TYPE_RESOLVE_H
 #define BEACON_ENV_TYPE_RESOLVE_H
+#include "../../il/call_context.h"
 #include "../../util/string_pool.h"
 #include "../../util/vector.h"
+#include "../../vm/enviroment.h"
 #include "../generic_type.h"
-#include "../type_impl.h"
+#include "../method.h"
+#include "../operator_overload.h"
 
 typedef enum bc_SearchOption {
         MATCH_ALL,
@@ -11,8 +14,14 @@ typedef enum bc_SearchOption {
         MATCH_PUBLIC_OR_PROTECTED
 } bc_SearchOption;
 
-bc_Method* bc_FindMethod(bc_Vector* methods, bc_StringView name,
-                         bc_Vector* args, bc_Vector* type_args,
-                         bc_ExecutePhase phase, bc_SearchOption option,
-                         int* outIndex);
+void bc_EvaluateArguments(bc_Vector* args, bc_GenericType* result[],
+                          bc_Enviroment* env, bc_CallContext* cctx);
+
+bc_OperatorOverload* bc_FindOperatorOverload(
+    bc_Vector* operator_overloads, bc_OperatorType type, int args_count,
+    bc_GenericType* args[], bc_SearchOption option, int* outIndex);
+
+bc_Method* bc_FindMethod(bc_Vector* methods, bc_StringView name, int args_count,
+                         bc_GenericType* args[], bc_Vector* type_args,
+                         bc_SearchOption option, int* outIndex);
 #endif
