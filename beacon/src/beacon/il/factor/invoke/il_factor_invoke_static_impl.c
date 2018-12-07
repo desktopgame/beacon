@@ -124,8 +124,19 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
         }
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
-        self->Method = bc_ILFindSMethodClass(cls, self->Name, self->Arguments,
-                                             env, cctx, &temp);
+        bc_GenericType* gargs[self->Arguments->Length];
+        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        if (bc_GetLastPanic()) {
+                return;
+        }
+        bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
+                                  ? MATCH_ALL
+                                  : MATCH_PUBLIC_ONLY;
+        if (temp == -1) {
+                self->Method = bc_FindMethod(cls->StaticMethods, self->Name,
+                                             self->Arguments->Length, gargs,
+                                             self->TypeArgs, opt, cctx, &temp);
+        }
         self->Index = temp;
         //メソッドが見つからない
         if (temp == -1 || self->Method == NULL) {

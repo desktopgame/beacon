@@ -16,6 +16,9 @@ void bc_EvaluateArguments(bc_Vector* args, bc_GenericType* result[],
                 bc_ILArgument* e = bc_AtVector(args, i);
                 bc_GenericType* gtype = bc_EvalILFactor(e->Factor, env, cctx);
                 result[i] = gtype;
+                if (bc_GetLastPanic()) {
+                        break;
+                }
         }
 }
 
