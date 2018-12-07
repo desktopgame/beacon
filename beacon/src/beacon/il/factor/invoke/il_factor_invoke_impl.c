@@ -5,7 +5,9 @@
 #include "../../../env/generic_type.h"
 #include "../../../env/method.h"
 #include "../../../env/operator_overload.h"
+#include "../../../env/script_context.h"
 #include "../../../env/type/class_impl.h"
+#include "../../../env/type_impl.h"
 #include "../../../env/type_interface.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
@@ -215,8 +217,33 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
         assert(ctype != NULL);
         int temp = -1;
         self->tag = INSTANCE_INVOKE_METHOD_T;
-        self->u.m = bc_ILFindMethodType(ctype, self->namev, self->args, env,
-                                        cctx, &temp);
+        bc_GenericType* gargs[self->args->Length];
+        bc_EvaluateArguments(self->args, gargs, env, cctx);
+        if (ctype->Tag == TYPE_CLASS_T) {
+                bc_CreateVTableClass(BC_TYPE2CLASS(ctype));
+        }
+        bc_SearchOption opt =
+            ctype == bc_GetTypeByContext(cctx) ? MATCH_ALL : MATCH_PUBLIC_ONLY;
+        if (temp == -1 && ctype->Tag == TYPE_CLASS_T) {
+                self->u.m =
+                    bc_FindMethod(BC_TYPE2CLASS(ctype)->VT->Elements,
+                                  self->namev, self->args->Length, gargs,
+                                  self->type_args, opt, cctx, &temp);
+        }
+        if (temp == -1 && ctype->Tag == TYPE_CLASS_T) {
+                self->u.m =
+                    bc_FindMethod(BC_TYPE2CLASS(ctype)->Methods, self->namev,
+                                  self->args->Length, gargs, self->type_args,
+                                  opt, cctx, &temp);
+        }
+        if (temp == -1 && ctype->Tag == TYPE_INTERFACE_T) {
+                self->u.m = bc_FindMethod(BC_TYPE2INTERFACE(ctype)->Methods,
+                                          self->namev, self->args->Length,
+                                          gargs, self->type_args,
+                                          MATCH_PUBLIC_ONLY, cctx, &temp);
+        }
+        // self->u.m = bc_ILFindMethodType(ctype, self->namev, self->args, env,
+        //                                cctx, &temp);
         self->index = temp;
         if (temp != -1) {
                 return;
