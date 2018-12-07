@@ -772,8 +772,12 @@ static void CLBC_chain_auto(bc_ClassLoader* self, bc_ILType* iltype,
         int emptyTemp = 0;
         bc_CallContext* cctx = bc_NewCallContext(CALL_CTOR_ARGS_T);
         cctx->Ty = tp;
-        bc_Constructor* emptyTarget = bc_ILFindEmptyConstructorClass(
-            classz->SuperClass->CoreType->Kind.Class, env, cctx, &emptyTemp);
+        bc_Constructor* emptyTarget = bc_FindConstructor(
+            classz->SuperClass->CoreType->Kind.Class->Constructors, 0, NULL,
+            NULL, MATCH_PUBLIC_ONLY, cctx, &emptyTemp);
+        //        bc_Constructor* emptyTarget = bc_ILFindEmptyConstructorClass(
+        //           classz->SuperClass->CoreType->Kind.Class, env, cctx,
+        //           &emptyTemp);
         bc_DeleteCallContext(cctx);
         //連鎖を明示的に書いていないのに、
         //親クラスにも空のコンストラクタが存在しない=エラー

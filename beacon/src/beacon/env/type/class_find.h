@@ -198,34 +198,6 @@ struct bc_Property* bc_FindTreeSPropertyClass(bc_Class* self,
                                               int* outIndex);
 
 /**
- * もっとも一致するコンストラクタを返します.
- * @param self
- * @param args<il_argument*> 呼び出し側で開放してください.
- * @param env
- * @param cctx
- * @param outIndex
- * @return 無ければ空
- */
-struct bc_Constructor* bc_ILFindConstructorClass(bc_Class* self,
-                                                 bc_Vector* args,
-                                                 bc_Enviroment* env,
-                                                 bc_CallContext* cctx,
-                                                 int* outIndex);
-
-/**
- * 引数が一つもないコンストラクタを検索して返します.
- * @param self
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-struct bc_Constructor* bc_ILFindEmptyConstructorClass(bc_Class* self,
-                                                      bc_Enviroment* env,
-                                                      bc_CallContext* cctx,
-                                                      int* outIndex);
-
-/**
  * もっとも一致する静的メソッドを返します.
  * @param self
  * @param namev

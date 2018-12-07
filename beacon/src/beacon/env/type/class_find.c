@@ -288,29 +288,6 @@ bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, bc_StringView namev,
         return NULL;
 }
 
-bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector* args,
-                                          bc_Enviroment* env,
-                                          bc_CallContext* cctx, int* outIndex) {
-        //	Vector* v = meta_find_constructors(self, args, env, ilctx);
-        //	(*outIndex) = -1;
-        //	return class_find_constructor_impl(v, args, env, ilctx,
-        // outIndex);
-        bc_Constructor* ctor = bc_MetaScopedILFindConstructor(
-            self, self->Constructors, args, env, cctx, outIndex);
-        return ctor;
-}
-
-bc_Constructor* bc_ILFindEmptyConstructorClass(bc_Class* self,
-                                               bc_Enviroment* env,
-                                               bc_CallContext* cctx,
-                                               int* outIndex) {
-        bc_Vector* emptyArgs = bc_NewVector();
-        bc_Constructor* ret =
-            bc_ILFindConstructorClass(self, emptyArgs, env, cctx, outIndex);
-        bc_DeleteVector(emptyArgs, bc_VectorDeleterOfNull);
-        return ret;
-}
-
 bc_Method* bc_GetMethodClass(bc_Object* o, int index) {
         assert(index >= 0);
 #if defined(DEBUG)
