@@ -61,6 +61,7 @@ void bc_CloseScriptContext() {
 
 void bc_BootstrapScriptContext(bc_ScriptContext* self) {
         self->Heap->AcceptBlocking++;
+        self->IsLoadForBoot = true;
         //プリロード
         bc_Namespace* beacon =
             bc_CreateNamespaceAtRoot(bc_InternString("beacon"));
@@ -124,6 +125,7 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
                                   "beacon/lang/World.bc");
         //退避していたコンテキストを復帰
         self->Heap->AcceptBlocking--;
+        self->IsLoadForBoot = false;
 }
 
 void bc_EachStaticScriptContext(bc_ScriptContext* self, bc_StaticEach act) {
@@ -201,6 +203,7 @@ static bc_ScriptContext* malloc_script_context(void) {
         ret->True = NULL;
         ret->False = NULL;
         ret->Null = NULL;
+        ret->IsLoadForBoot = false;
 #if defined(_MSC_VER)
         char* path = bc_GetAbsolutePath("script-lib/beacon/lang");
         ret->IncludeList = bc_GetFiles(path);

@@ -45,6 +45,7 @@ typedef struct bc_ScriptContext {
         bc_NumericMap* IntegerCacheMap;
         bool IsPrintError;
         bool IsAbortOnError;
+        bool IsLoadForBoot;
         struct bc_Heap* Heap;
         struct bc_Object* True;
         struct bc_Object* False;
