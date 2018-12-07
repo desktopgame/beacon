@@ -4,6 +4,7 @@
 #include "../../util/string_pool.h"
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
+#include "../constructor.h"
 #include "../generic_type.h"
 #include "../method.h"
 #include "../operator_overload.h"
@@ -26,4 +27,9 @@ bc_Method* bc_FindMethod(bc_Vector* methods, bc_StringView name, int args_count,
                          bc_GenericType* args[], bc_Vector* type_args,
                          bc_SearchOption option, bc_CallContext* cctx,
                          int* outIndex);
+
+bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
+                                   bc_GenericType* args[], bc_Vector* type_args,
+                                   bc_SearchOption option, bc_CallContext* cctx,
+                                   int* outIndex);
 #endif

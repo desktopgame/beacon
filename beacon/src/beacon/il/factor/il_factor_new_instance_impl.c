@@ -154,8 +154,17 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, cls->Parent->GenericSelf,
                                              NULL, self->TypeArgs);
         bc_ResolveILTypeArgument(self->TypeArgs, cctx);
+        bc_GenericType* gargs[self->Arguments->Length];
+        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
+                                  ? MATCH_ALL
+                                  : MATCH_PUBLIC_ONLY;
         self->Constructor =
-            bc_ILFindConstructorClass(cls, self->Arguments, env, cctx, &temp);
+            bc_FindConstructor(cls->Constructors, self->Arguments->Length,
+                               gargs, self->TypeArgs, opt, cctx, &temp);
+        //        self->Constructor =
+        //            bc_ILFindConstructorClass(cls, self->Arguments, env, cctx,
+        //            &temp);
         self->ConstructorIndex = temp;
         bc_PopCallFrame(cctx);
         if (temp == -1) {

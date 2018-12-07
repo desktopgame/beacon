@@ -84,6 +84,37 @@ bc_Method* bc_FindMethod(bc_Vector* methods, bc_StringView name, int args_count,
         }
         return ret;
 }
+
+bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
+                                   bc_GenericType* args[], bc_Vector* type_args,
+                                   bc_SearchOption option, bc_CallContext* cctx,
+                                   int* outIndex) {
+        (*outIndex) = -1;
+        bc_Constructor* ret = NULL;
+        int maxDistance = 1024;
+        for (int i = 0; i < constructors->Length; i++) {
+                bc_Constructor* e = bc_AtVector(constructors, i);
+                //引数の数が違う
+                if (e->Parameters->Length != args_count) {
+                        continue;
+                }
+                //検索オプションにマッチしない
+                if (!match_option(BC_MEMBER_ACCESS(e), option)) {
+                        continue;
+                }
+                int sumDistance = calc_argument_distance(
+                    e->Parameters, args_count, args, type_args, cctx);
+                if (sumDistance == -1) {
+                        continue;
+                }
+                if (sumDistance < maxDistance) {
+                        maxDistance = sumDistance;
+                        ret = e;
+                        (*outIndex) = i;
+                }
+        }
+        return ret;
+}
 // private
 static bool match_option(bc_AccessLevel access, bc_SearchOption option) {
         if (option == MATCH_ALL) {
