@@ -820,10 +820,15 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
         }
         //連鎖先のコンストラクタを検索する
         bc_Constructor* chainTarget = NULL;
-        int temp = 0;
+        int temp = -1;
+        bc_GenericType* gargs[chain->Arguments->Length];
+        bc_EvaluateArguments(chain->Arguments, gargs, env, cctx);
         if (chain->Type == CHAIN_TYPE_THIS_T) {
-                chainTarget = bc_ILFindConstructorClass(
-                    classz, chain->Arguments, env, cctx, &temp);
+                chainTarget = bc_FindConstructor(
+                    classz->Constructors, chain->Arguments->Length, gargs, NULL,
+                    MATCH_ALL, cctx, &temp);
+                // chainTarget = bc_ILFindConstructorClass(
+                //    classz, chain->Arguments, env, cctx, &temp);
                 bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_CHAIN_THIS);
                 bc_AddOpcodeBuf(env->Bytecode,
                                 (bc_VectorItem)(tp->AbsoluteIndex));
@@ -831,9 +836,14 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
                 bc_AddOpcodeBuf(env->Bytecode,
                                 (bc_VectorItem)classz->Parent->AllocSize);
         } else if (chain->Type == CHAIN_TYPE_SUPER_T) {
-                chainTarget = bc_ILFindConstructorClass(
-                    classz->SuperClass->CoreType->Kind.Class, chain->Arguments,
-                    env, cctx, &temp);
+                chainTarget = bc_FindConstructor(
+                    BC_TYPE2CLASS(bc_GENERIC2TYPE(classz->SuperClass))
+                        ->Constructors,
+                    chain->Arguments->Length, gargs, NULL,
+                    MATCH_PUBLIC_OR_PROTECTED, cctx, &temp);
+                // chainTarget = bc_ILFindConstructorClass(
+                //   classz->SuperClass->CoreType->Kind.Class, chain->Arguments,
+                //  env, cctx, &temp);
                 bc_AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
                 bc_AddOpcodeBuf(env->Bytecode,
                                 classz->SuperClass->CoreType->AbsoluteIndex);

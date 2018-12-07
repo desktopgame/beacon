@@ -127,6 +127,7 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
         bc_GenericType* gargs[self->Arguments->Length];
         bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
         if (bc_GetLastPanic()) {
+                bc_PopCallFrame(cctx);
                 return;
         }
         bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
