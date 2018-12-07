@@ -288,13 +288,6 @@ bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, bc_StringView namev,
         return NULL;
 }
 
-bc_Constructor* bc_RFindConstructorClass(bc_Class* self, bc_Vector* args,
-                                         bc_Vector* typeargs, bc_Frame* fr,
-                                         int* outIndex) {
-        return bc_MetaScopedRFindConstructor(self, self->Constructors, args,
-                                             typeargs, fr, outIndex);
-}
-
 bc_Constructor* bc_ILFindConstructorClass(bc_Class* self, bc_Vector* args,
                                           bc_Enviroment* env,
                                           bc_CallContext* cctx, int* outIndex) {

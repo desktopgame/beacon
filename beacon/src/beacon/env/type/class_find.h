@@ -200,18 +200,6 @@ struct bc_Property* bc_FindTreeSPropertyClass(bc_Class* self,
 /**
  * もっとも一致するコンストラクタを返します.
  * @param self
- * @param args<Object*> 呼び出し側で開放してください.
- * @param typeargs
- * @param outIndex
- * @return 無ければ空
- */
-struct bc_Constructor* bc_RFindConstructorClass(bc_Class* self, bc_Vector* args,
-                                                bc_Vector* typeargs,
-                                                bc_Frame* fr, int* outIndex);
-
-/**
- * もっとも一致するコンストラクタを返します.
- * @param self
  * @param args<il_argument*> 呼び出し側で開放してください.
  * @param env
  * @param cctx
