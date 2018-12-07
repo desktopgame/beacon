@@ -351,10 +351,18 @@ int bc_CountAllSMethodClass(bc_Class* self) {
 
 bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
                                bc_Vector* type_args) {
+        //呼び出しフレームの生成
+        bc_CallContext* cctx = bc_NewCallContext(CALL_METHOD_T);
+        bc_PushCallFrame(cctx, bc_GetRuntimeReceiver(fr), args, type_args);
         //コンストラクタを検索
-        int temp = 0;
+        int temp = -1;
+        bc_GenericType* gargs[args->Length];
+        for (int i = 0; i < args->Length; i++) {
+                gargs[i] = ((bc_Object*)bc_AtVector(args, i))->GType;
+        }
         bc_Constructor* ctor =
-            bc_RFindConstructorClass(self, args, NULL, fr, &temp);
+            bc_FindConstructor(self->Constructors, args->Length, gargs,
+                               type_args, MATCH_ALL, cctx, &temp);
         assert(temp != -1);
         //コンストラクタを実行
         bc_Frame* sub = bc_SubFrame(fr);
@@ -375,6 +383,9 @@ bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
         h->CollectBlocking++;
         bc_DeleteFrame(sub);
         h->CollectBlocking--;
+        //呼び出しフレームの削除
+        bc_PopCallFrame(cctx);
+        bc_DeleteCallContext(cctx);
         return inst;
 }
 
