@@ -162,9 +162,6 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
         self->Constructor =
             bc_FindConstructor(cls->Constructors, self->Arguments->Length,
                                gargs, self->TypeArgs, opt, cctx, &temp);
-        //        self->Constructor =
-        //            bc_ILFindConstructorClass(cls, self->Arguments, env, cctx,
-        //            &temp);
         self->ConstructorIndex = temp;
         bc_PopCallFrame(cctx);
         if (temp == -1) {
