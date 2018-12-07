@@ -65,33 +65,6 @@ void bc_AddMethodInterface(bc_Interface* self, struct bc_Method* m);
 void bc_AddPropertyInterface(bc_Interface* self, struct bc_Property* p);
 
 /**
- * インターフェイスからメソッドを検索します.
- * @param self
- * @param namev
- * @param args
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_ILFindMethodInterface(bc_Interface* self,
-                                           bc_StringView namev, bc_Vector* args,
-                                           struct bc_Enviroment* env,
-                                           bc_CallContext* cctx, int* outIndex);
-
-/**
- * インターフェイスからメソッドを検索します.
- * @param self
- * @param namev
- * @param gargs
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_GFindMethodInterface(bc_Interface* self,
-                                          bc_StringView namev, bc_Vector* gargs,
-                                          int* outIndex);
-
-/**
  * 全てのインターフェイスに定義されたメソッドをフラットにして返します.
  * @param inter_list
  * @return

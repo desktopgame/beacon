@@ -226,39 +226,6 @@ struct bc_Constructor* bc_ILFindEmptyConstructorClass(bc_Class* self,
                                                       int* outIndex);
 
 /**
- * もっとも一致するメソッドを返します.
- * @param self
- * @param namev
- * @param env
- * @param cctx
- * @param args<il_argument*>
- * @param outIndex メソッドへのインデックス
- * @return
- */
-struct bc_Method* bc_ILFindMethodClass(bc_Class* self, bc_StringView namev,
-                                       bc_Vector* args, bc_Enviroment* env,
-                                       bc_CallContext* cctx, int* outIndex);
-
-/**
- * もっとも一致するメソッドを返します.
- * @param self
- * @param namev
- * @param gargs
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_GFindMethodClass(bc_Class* self, bc_StringView namev,
-                                      bc_Vector* gargs, int* outIndex);
-
-/**
- * equalsメソッドを検索します.
- * @param self
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_GFindEqMethodClass(bc_Class* self, int* outIndex);
-
-/**
  * もっとも一致する静的メソッドを返します.
  * @param self
  * @param namev
@@ -271,17 +238,6 @@ struct bc_Method* bc_GFindEqMethodClass(bc_Class* self, int* outIndex);
 struct bc_Method* bc_ILFindSMethodClass(bc_Class* self, bc_StringView namev,
                                         bc_Vector* args, bc_Enviroment* env,
                                         bc_CallContext* cctx, int* outIndex);
-
-/**
- * もっとも一致する静的メソッドを返します.
- * @param self
- * @param namev
- * @param gargs
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_GFindSMethodClass(bc_Class* self, bc_StringView namev,
-                                       bc_Vector* gargs, int* outIndex);
 
 /**
  * 指定位置のメソッドを返します.

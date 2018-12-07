@@ -57,59 +57,6 @@ int bc_MetaRCalcScore(bc_Vector* params, bc_Vector* args, bc_Vector* typeargs,
                       struct bc_Frame* fr);
 
 /**
- * もっとも一致するメソッドを返します.
- * @param method_vec
- * @param namev
- * @param ilargs
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-bc_Method* bc_MetaILFindMethod(bc_Vector* method_vec, bc_StringView namev,
-                               bc_Vector* ilargs, bc_Enviroment* env,
-                               bc_CallContext* cctx, int* outIndex);
-
-/**
- * もっとも一致するメソッドを返します.
- * @param method_vec
- * @param namev
- * @param gargs
- * @param outIndex
- * @return
- */
-bc_Method* bc_MetaGFindMethod(bc_Vector* method_vec, bc_StringView namev,
-                              bc_Vector* gargs, int* outIndex);
-
-/**
- * スコープに基づく方法でもっとも一致するメソッドを返します.
- * @param context
- * @param method_vec
- * @param namev
- * @param ilargs
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-bc_Method* bc_MetaScopedILFindMethod(struct bc_Class* context,
-                                     bc_Vector* method_vec, bc_StringView namev,
-                                     bc_Vector* ilargs, bc_Enviroment* env,
-                                     bc_CallContext* cctx, int* outIndex);
-/**
- * スコープに基づく方法でもっとも一致するメソッドを返します.
- * @param context
- * @param method_vec
- * @param namev
- * @param gargs
- * @param outIndex
- * @return
- */
-bc_Method* bc_MetaScopedGFindMethod(struct bc_Class* context,
-                                    bc_Vector* method_vec, bc_StringView namev,
-                                    bc_Vector* gargs, int* outIndex);
-
-/**
  * もっとも一致するコンストラクタを返します.
  * @param method_vec
  * @param name

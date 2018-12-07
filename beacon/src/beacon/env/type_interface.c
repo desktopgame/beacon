@@ -82,28 +82,6 @@ void bc_AddMethodType(bc_Type* self, bc_Method* m) {
         }
 }
 
-bc_Method* bc_ILFindMethodType(bc_Type* self, bc_StringView namev,
-                               bc_Vector* args, bc_Enviroment* env,
-                               bc_CallContext* cctx, int* outIndex) {
-        assert(self != NULL);
-        if (self->Tag == TYPE_CLASS_T) {
-                return bc_ILFindMethodClass(self->Kind.Class, namev, args, env,
-                                            cctx, outIndex);
-        } else if (self->Tag == TYPE_INTERFACE_T) {
-                return bc_ILFindMethodInterface(self->Kind.Interface, namev,
-                                                args, env, cctx, outIndex);
-        }
-        return NULL;
-}
-
-bc_Method* bc_ILFindSMethodType(bc_Type* self, bc_StringView namev,
-                                bc_Vector* args, bc_Enviroment* env,
-                                bc_CallContext* cctx, int* outIndex) {
-        assert(self->Tag == TYPE_CLASS_T);
-        return bc_ILFindSMethodClass(self->Kind.Class, namev, args, env, cctx,
-                                     outIndex);
-}
-
 bc_VTable* bc_GetVTableType(bc_Type* self) {
         if (self->Tag == TYPE_CLASS_T) {
                 bc_CreateVTableClass(self->Kind.Class);
