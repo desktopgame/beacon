@@ -242,8 +242,6 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                                           gargs, self->type_args,
                                           MATCH_PUBLIC_ONLY, cctx, &temp);
         }
-        // self->u.m = bc_ILFindMethodType(ctype, self->namev, self->args, env,
-        //                                cctx, &temp);
         self->index = temp;
         if (temp != -1) {
                 return;
