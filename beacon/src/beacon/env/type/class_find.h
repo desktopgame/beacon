@@ -195,15 +195,6 @@ struct bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self,
                                                         int index);
 
 /**
- * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
- * 静的メソッドの場合はエラーを発生させます。
- * @param method_list
- * @param m
- */
-bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m,
-                         bc_Method** outM);
-
-/**
  * 実装された全てのジェネリックインターフェイスを返します.
  * @param self
  * @return

@@ -277,27 +277,6 @@ bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self, int index) {
         return bc_AtVector(self->OVT->Operators, index);
 }
 
-bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m,
-                         bc_Method** outM) {
-        assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(m)));
-        (*outM) = NULL;
-        bool ret = false;
-        bc_CallContext* cctx =
-            bc_NewNameContext(BC_MEMBER_TYPE(m)->Location, BC_MEMBER_TYPE(m));
-        cctx->Scope = BC_MEMBER_TYPE(m)->Location;
-        cctx->Ty = BC_MEMBER_TYPE(m);
-        for (int i = 0; i < method_list->Length; i++) {
-                bc_Method* mE = bc_AtVector(method_list, i);
-                if (bc_IsOverridedMethod(m, mE, cctx)) {
-                        (*outM) = mE;
-                        ret = true;
-                        break;
-                }
-        }
-        bc_DeleteCallContext(cctx);
-        return ret;
-}
-
 bc_Vector* bc_GetGenericInterfaceListClass(bc_Class* self) {
         bc_Vector* ret = bc_NewVector();
         for (int i = 0; i < self->Implements->Length; i++) {
