@@ -121,7 +121,7 @@ static void bc_array_nativeInit(bc_Method* parent, bc_Frame* fr,
         // Array#lengthを取り出す
         int temp = 0;
         bc_Field* lengthField =
-            bc_FindFieldClass(tp->Kind.Class, bc_InternString("length"), &temp);
+            bc_ResolveField(tp->Kind.Class, bc_InternString("length"), &temp);
         assert(lengthField != NULL && temp != -1);
         //対応する位置のオブジェクトを取り出す
         bc_Array* self = (bc_Array*)bc_AtVector(fr->VariableTable, 0);
@@ -174,9 +174,9 @@ static void bc_array_nativeCopy(bc_Method* parent, bc_Frame* fr,
         //添え字がマイナス
         if (bc_ObjectToInt(srcOffset) < 0 || bc_ObjectToInt(dstOffset) < 0) {
                 bc_ThrowVM(fr, bc_NewSimplefException(
-                                         fr, "index must be positive: %d - %d",
-                                         bc_ObjectToInt(srcOffset),
-                                         bc_ObjectToInt(dstOffset)));
+                                   fr, "index must be positive: %d - %d",
+                                   bc_ObjectToInt(srcOffset),
+                                   bc_ObjectToInt(dstOffset)));
                 return;
         }
         //添え字がはみ出している
