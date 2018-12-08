@@ -156,8 +156,14 @@ bc_Property* bc_FindProperty(bc_Vector* properties, bc_StringView name,
 bc_Field* bc_ResolveField(struct bc_Class* classz, bc_StringView name,
                           int* outIndex);
 
+bc_Field* bc_ResolveStaticField(struct bc_Class* classz, bc_StringView name,
+                                int* outIndex);
+
 bc_Property* bc_ResolveProperty(struct bc_Class* classz, bc_StringView name,
                                 int* outIndex);
+
+bc_Property* bc_ResolveStaticProperty(struct bc_Class* classz,
+                                      bc_StringView name, int* outIndex);
 
 //
 // Lookup

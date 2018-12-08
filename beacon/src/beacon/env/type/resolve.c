@@ -14,6 +14,11 @@ static bc_Field* resolve_field_base(bc_Class* self, bc_StringView namev,
                                     int* outIndex);
 static bc_Property* resolve_property_base(bc_Class* self, bc_StringView namev,
                                           int* outIndex);
+static bc_Field* resolve_static_field_base(bc_Class* self, bc_StringView namev,
+                                           int* outIndex);
+static bc_Property* resolve_static_property_base(bc_Class* self,
+                                                 bc_StringView namev,
+                                                 int* outIndex);
 
 void bc_CevaluateArguments(bc_Vector* args, bc_GenericType* result[],
                            bc_Enviroment* env, bc_CallContext* cctx) {
@@ -174,11 +179,39 @@ bc_Field* bc_ResolveField(bc_Class* classz, bc_StringView name, int* outIndex) {
         return NULL;
 }
 
+bc_Field* bc_ResolveStaticField(bc_Class* classz, bc_StringView name,
+                                int* outIndex) {
+        bc_Class* pointee = classz;
+        do {
+                bc_Field* f =
+                    resolve_static_field_base(pointee, name, outIndex);
+                if (f != NULL) {
+                        return f;
+                }
+                pointee = bc_GetSuperClass(pointee);
+        } while (pointee != NULL);
+        return NULL;
+}
+
 bc_Property* bc_ResolveProperty(bc_Class* classz, bc_StringView name,
                                 int* outIndex) {
         bc_Class* pointee = classz;
         do {
                 bc_Property* p = resolve_property_base(pointee, name, outIndex);
+                if (p != NULL) {
+                        return p;
+                }
+                pointee = bc_GetSuperClass(pointee);
+        } while (pointee != NULL);
+        return NULL;
+}
+
+bc_Property* bc_ResolveStaticProperty(bc_Class* classz, bc_StringView name,
+                                      int* outIndex) {
+        bc_Class* pointee = classz;
+        do {
+                bc_Property* p =
+                    resolve_static_property_base(pointee, name, outIndex);
                 if (p != NULL) {
                         return p;
                 }
@@ -350,6 +383,21 @@ static bc_Field* resolve_field_base(bc_Class* self, bc_StringView namev,
         return NULL;
 }
 
+static bc_Field* resolve_static_field_base(bc_Class* self, bc_StringView namev,
+                                           int* outIndex) {
+        (*outIndex) = -1;
+        for (int i = 0; i < self->StaticFields->Length; i++) {
+                bc_Field* e = (bc_Field*)bc_AtVector(self->StaticFields, i);
+                if (namev == e->Name) {
+                        (*outIndex) = (bc_CountAllSFieldClass(self) -
+                                       self->StaticFields->Length) +
+                                      i;
+                        return e;
+                }
+        }
+        return NULL;
+}
+
 static bc_Property* resolve_property_base(bc_Class* self, bc_StringView namev,
                                           int* outIndex) {
         (*outIndex) = -1;
@@ -358,6 +406,23 @@ static bc_Property* resolve_property_base(bc_Class* self, bc_StringView namev,
                 if (namev == e->Name) {
                         (*outIndex) = (bc_CountAllPropertyClass(self) -
                                        self->Properties->Length) +
+                                      i;
+                        return e;
+                }
+        }
+        return NULL;
+}
+
+static bc_Property* resolve_static_property_base(bc_Class* self,
+                                                 bc_StringView namev,
+                                                 int* outIndex) {
+        (*outIndex) = -1;
+        for (int i = 0; i < self->StaticProperties->Length; i++) {
+                bc_Property* e =
+                    (bc_Property*)bc_AtVector(self->StaticProperties, i);
+                if (namev == e->Name) {
+                        (*outIndex) = (bc_CountAllSPropertyClass(self) -
+                                       self->StaticProperties->Length) +
                                       i;
                         return e;
                 }

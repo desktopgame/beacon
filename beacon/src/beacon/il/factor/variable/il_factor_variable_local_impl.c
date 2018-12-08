@@ -133,14 +133,12 @@ static void LoadILVariableLocal_field(bc_ILVariableLocal* self,
 #else
         bc_FieldWithIndex fwi = {};
 #endif
-        bc_Field* f =
-            bc_FindTreeFieldClass(BC_TYPE2CLASS(tp), self->Name, &temp);
+        bc_Field* f = bc_ResolveField(BC_TYPE2CLASS(tp), self->Name, &temp);
         fwi.Field = f;
         fwi.Index = temp;
         self->Type = VARIABLE_LOCAL_FIELD_T;
         if (temp == -1) {
-                f = bc_FindTreeSFieldClass(BC_TYPE2CLASS(tp), self->Name,
-                                           &temp);
+                f = bc_ResolveStaticField(BC_TYPE2CLASS(tp), self->Name, &temp);
                 fwi.Field = f;
                 fwi.Index = temp;
                 self->Type = VARIABLE_LOCAL_FIELD_T;
@@ -167,8 +165,8 @@ static void LoadILVariableLocal_Property(bc_ILVariableLocal* self,
         bc_Property* p =
             bc_ResolveProperty(BC_TYPE2CLASS(tp), self->Name, &temp);
         if (temp == -1) {
-                p = bc_FindProperty(BC_TYPE2CLASS(tp)->StaticProperties,
-                                    self->Name, MATCH_PUBLIC_ONLY, &temp);
+                p = bc_ResolveStaticProperty(BC_TYPE2CLASS(tp), self->Name,
+                                             &temp);
         }
         if (temp == -1) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T,

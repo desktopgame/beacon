@@ -14,71 +14,6 @@
 static bool IsContainsFieldClassImpl(bc_Vector* fields, bc_Field* f);
 static bool IsContainsPropertyClassImpl(bc_Vector* props, bc_Property* p);
 
-bc_Field* bc_FindFieldClass(bc_Class* self, bc_StringView namev,
-                            int* outIndex) {
-        (*outIndex) = -1;
-        for (int i = 0; i < self->Fields->Length; i++) {
-                bc_VectorItem e = bc_AtVector(self->Fields, i);
-                bc_Field* f = (bc_Field*)e;
-                if (namev == f->Name) {
-                        (*outIndex) = (bc_CountAllFieldClass(self) -
-                                       self->Fields->Length) +
-                                      i;
-                        return f;
-                }
-        }
-        return NULL;
-}
-
-bc_Field* bc_FindTreeFieldClass(bc_Class* self, bc_StringView namev,
-                                int* outIndex) {
-        bc_Class* pointee = self;
-        do {
-                bc_Field* f = bc_FindFieldClass(pointee, namev, outIndex);
-                if (f != NULL) {
-                        return f;
-                }
-                bc_GenericType* supergtype = pointee->SuperClass;
-                if (supergtype == NULL) {
-                        break;
-                }
-                pointee = supergtype->CoreType->Kind.Class;
-        } while (pointee != NULL);
-        return NULL;
-}
-
-bc_Field* bc_FindSFieldClass(bc_Class* self, bc_StringView namev,
-                             int* outIndex) {
-        (*outIndex) = -1;
-        for (int i = 0; i < self->StaticFields->Length; i++) {
-                bc_VectorItem e = bc_AtVector(self->StaticFields, i);
-                bc_Field* f = (bc_Field*)e;
-                if (namev == f->Name) {
-                        (*outIndex) = (bc_CountAllSFieldClass(self) -
-                                       self->StaticFields->Length) +
-                                      i;
-                        return f;
-                }
-        }
-        return NULL;
-}
-
-bc_Field* bc_FindTreeSFieldClass(bc_Class* self, bc_StringView namev,
-                                 int* outIndex) {
-        bc_Class* pointee = self;
-        do {
-                bc_Field* f = bc_FindSFieldClass(pointee, namev, outIndex);
-                if (f != NULL) {
-                        return f;
-                }
-                if (pointee->SuperClass == NULL) {
-                        break;
-                }
-                pointee = pointee->SuperClass->CoreType->Kind.Class;
-        } while (pointee != NULL);
-        return NULL;
-}
-
 bool bc_IsContainsFieldClass(bc_Class* self, bc_Field* f) {
         return IsContainsFieldClassImpl(self->Fields, f);
 }
@@ -171,9 +106,9 @@ int bc_GetFieldByPropertyClass(bc_Class* self, bc_Property* p) {
         int temp = -1;
         assert(p->SourceRef != NULL);
         if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(p))) {
-                bc_FindSFieldClass(self, p->SourceRef->Name, &temp);
+                bc_ResolveStaticField(self, p->SourceRef->Name, &temp);
         } else {
-                bc_FindFieldClass(self, p->SourceRef->Name, &temp);
+                bc_ResolveField(self, p->SourceRef->Name, &temp);
         }
         return temp;
 }

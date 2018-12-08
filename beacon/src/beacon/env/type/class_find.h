@@ -12,47 +12,6 @@
 #include "../../util/string_pool.h"
 #include "../../util/vector.h"
 #include "class_impl.h"
-/**
- * 指定の名前を持つフィールドを返します.
- * @param self
- * @param namev
- * @param outIndex
- * @return 無ければ NULL
- */
-struct bc_Field* bc_FindFieldClass(bc_Class* self, bc_StringView namev,
-                                   int* outIndex);
-
-/**
- * 指定の名前を持つフィールドを返します.
- * selfの中に見つけられなかった場合には親クラスも検索します。
- * @param self
- * @param namev
- * @param outIndex
- * @return
- */
-struct bc_Field* bc_FindTreeFieldClass(bc_Class* self, bc_StringView namev,
-                                       int* outIndex);
-
-/**
- * 指定の名前を持つ静的フィールドを返します.
- * @param self
- * @param namev
- * @param outIndex
- * @return 無ければ NULL
- */
-struct bc_Field* bc_FindSFieldClass(bc_Class* self, bc_StringView namev,
-                                    int* outIndex);
-
-/**
- * 指定の名前を持つ静的フィールドを返します.
- * selfの中に見つけられなかった場合には親クラスも検索します。
- * @param self
- * @param namev
- * @param outIndex
- * @return 無ければ NULL
- */
-struct bc_Field* bc_FindTreeSFieldClass(bc_Class* self, bc_StringView namev,
-                                        int* outIndex);
 
 /**
  * クラスに指定のフィールドが含まれるなら true.

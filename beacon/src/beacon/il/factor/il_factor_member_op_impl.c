@@ -118,8 +118,7 @@ static void ILMemberOp_check(bc_ILMemberOp* self, bc_Enviroment* env,
         bc_Type* ctype = gtype->CoreType;
         assert(ctype->Tag == TYPE_CLASS_T);
         int temp = -1;
-        self->Field =
-            bc_FindTreeFieldClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
+        self->Field = bc_ResolveField(BC_TYPE2CLASS(ctype), self->Name, &temp);
         self->Index = temp;
         //インスタンスフィールドではない場合プロパティを検索
         if (temp == -1) {
@@ -158,7 +157,7 @@ static void ILMemberOp_check_static(bc_ILMemberOp* self, bc_Enviroment* env,
         assert(ccT->Tag == TYPE_CLASS_T);
         int temp = -1;
         self->Field =
-            bc_FindTreeSFieldClass(BC_TYPE2CLASS(ccT), self->Name, &temp);
+            bc_ResolveStaticField(BC_TYPE2CLASS(ccT), self->Name, &temp);
         self->Index = temp;
         if (temp == -1) {
                 ILMemberOp_check_static_prop(self, env, cctx, receiver_type,
@@ -210,8 +209,8 @@ static void ILMemberOp_check_static_prop(bc_ILMemberOp* self,
                                          bool* swap) {
         int temp = -1;
         bc_Type* ctype = receiver_type->CoreType;
-        bc_Property* p = bc_FindProperty(BC_TYPE2CLASS(ctype)->StaticProperties,
-                                         self->Name, MATCH_PUBLIC_ONLY, &temp);
+        bc_Property* p =
+            bc_ResolveStaticProperty(BC_TYPE2CLASS(ctype), self->Name, &temp);
         bc_ILPropertyAccess* factp = bc_NewILPropertyAccess();
         factp->Source = self->Source;
         factp->Name = self->Name;

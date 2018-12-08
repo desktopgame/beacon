@@ -113,8 +113,7 @@ static void assign_by_namebase(bc_ILAssignOp* self, bc_Enviroment* env,
                 bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
                                           ? MATCH_ALL
                                           : MATCH_PUBLIC_ONLY;
-                bc_Field* sf =
-                    bc_FindField(cls->StaticFields, ilmem->Name, opt, &temp);
+                bc_Field* sf = bc_ResolveStaticField(cls, ilmem->Name, &temp);
                 assert(temp != -1);
                 bc_GenerateILFactor(self->Right, env, cctx);
                 bc_GeneratePutField(env->Bytecode, sf, temp);
@@ -149,7 +148,7 @@ static void assign_to_field(bc_ILAssignOp* self, bc_ILFactor* receiver,
         bc_GenericType* gt = bc_EvalILFactor(receiver, env, cctx);
         bc_Class* cls = BC_TYPE2CLASS(gt->CoreType);
         int temp = -1;
-        bc_Field* f = bc_FindTreeFieldClass(cls, namev, &temp);
+        bc_Field* f = bc_ResolveField(cls, namev, &temp);
         assert(temp != -1);
         bc_GenerateILFactor(receiver, env, cctx);
         bc_GenerateILFactor(source, env, cctx);
@@ -303,7 +302,7 @@ static void check_final(bc_ILFactor* receiver, bc_ILFactor* source,
         bc_GenericType* gt = bc_EvalILFactor(receiver, env, cctx);
         bc_Class* cls = BC_TYPE2CLASS(gt->CoreType);
         int temp = -1;
-        bc_Field* f = bc_FindTreeFieldClass(cls, namev, &temp);
+        bc_Field* f = bc_ResolveField(cls, namev, &temp);
         assert(temp != -1);
         //コンストラクタ以外の場所では finalフィールドは初期化できない
         if (cctx->Tag != CALL_CTOR_T) {
@@ -360,11 +359,11 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self,
                 // src のような名前がフィールドを示す場合
         } else if (illoc->Type == VARIABLE_LOCAL_FIELD_T) {
                 int temp = -1;
-                bc_Field* f = bc_FindTreeFieldClass(bc_GetClassByContext(cctx),
-                                                    illoc->Name, &temp);
+                bc_Field* f = bc_ResolveField(bc_GetClassByContext(cctx),
+                                              illoc->Name, &temp);
                 if (temp == -1) {
-                        f = bc_FindTreeSFieldClass(bc_GetClassByContext(cctx),
-                                                   illoc->Name, &temp);
+                        f = bc_ResolveStaticField(bc_GetClassByContext(cctx),
+                                                  illoc->Name, &temp);
                 }
                 assert(temp != -1);
                 //フィールドはstaticでないが
