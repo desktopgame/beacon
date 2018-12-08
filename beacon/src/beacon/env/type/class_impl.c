@@ -433,6 +433,13 @@ void bc_DeleteClass(bc_Class* self) {
         MEM_FREE(self);
 }
 
+bc_Class* bc_GetSuperClass(bc_Class* self) {
+        if (self->SuperClass == NULL) {
+                return NULL;
+        }
+        return self->SuperClass->CoreType->Kind.Class;
+}
+
 // private
 static void create_vtable_top(bc_Class* self) {
         for (int i = 0; i < self->Methods->Length; i++) {

@@ -10,6 +10,8 @@ static bool match_option(bc_AccessLevel access, bc_SearchOption option);
 static int calc_argument_distance(bc_Vector* parameters, int args_count,
                                   bc_GenericType* args[], bc_Vector* type_args,
                                   bc_CallContext* cctx);
+static bc_Field* resolve_field_base(bc_Class* self, bc_StringView namev,
+                                    int* outIndex);
 
 void bc_CevaluateArguments(bc_Vector* args, bc_GenericType* result[],
                            bc_Enviroment* env, bc_CallContext* cctx) {
@@ -126,22 +128,16 @@ bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
         return ret;
 }
 
-bc_Field* bc_FindField(bc_Vector* fields, bc_StringView name,
-                       bc_SearchOption option, int* outIndex) {
-        bc_Field* ret = NULL;
-        for (int i = 0; i < fields->Length; i++) {
-                bc_Field* e = bc_AtVector(fields, i);
-                if (e->Name != name) {
-                        continue;
+bc_Field* bc_ResolveField(bc_Class* classz, bc_StringView name, int* outIndex) {
+        bc_Class* pointee = classz;
+        do {
+                bc_Field* f = resolve_field_base(pointee, name, outIndex);
+                if (f != NULL) {
+                        return f;
                 }
-                //検索オプションにマッチしない
-                if (!match_option(BC_MEMBER_ACCESS(e), option)) {
-                        continue;
-                }
-                ret = e;
-                break;
-        }
-        return ret;
+                pointee = bc_GetSuperClass(pointee);
+        } while (pointee != NULL);
+        return NULL;
 }
 // private
 static bool match_option(bc_AccessLevel access, bc_SearchOption option) {
@@ -177,4 +173,19 @@ static int calc_argument_distance(bc_Vector* parameters, int args_count,
                 sumDistance += distance;
         }
         return sumDistance;
+}
+
+static bc_Field* resolve_field_base(bc_Class* self, bc_StringView namev,
+                                    int* outIndex) {
+        (*outIndex) = -1;
+        for (int i = 0; i < self->Fields->Length; i++) {
+                bc_Field* e = (bc_Field*)bc_AtVector(self->Fields, i);
+                if (namev == e->Name) {
+                        (*outIndex) = (bc_CountAllFieldClass(self) -
+                                       self->Fields->Length) +
+                                      i;
+                        return e;
+                }
+        }
+        return NULL;
 }

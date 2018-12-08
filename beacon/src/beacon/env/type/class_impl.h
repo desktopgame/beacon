@@ -258,4 +258,11 @@ void bc_UnlinkClass(bc_Class* self);
  * @param self
  */
 void bc_DeleteClass(bc_Class* self);
+
+/**
+ * 親クラスを返します。
+ * @param self
+ * @return
+ */
+bc_Class* bc_GetSuperClass(bc_Class* self);
 #endif  // !SIGNAL_ENV_CLASS_H

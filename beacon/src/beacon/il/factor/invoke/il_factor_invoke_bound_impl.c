@@ -290,7 +290,7 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         //フィールドとして解決する
         bc_Field* fi =
-            bc_FindFieldClass(bc_GetClassByContext(cctx), self->Name, &temp);
+            bc_ResolveField(bc_GetClassByContext(cctx), self->Name, &temp);
         if (receiver_gtype == NULL && fi != NULL) {
                 receiver_gtype = fi->GType;
                 self->Kind.Subscript.Tag = SUBSCRIPT_FIELD_T;

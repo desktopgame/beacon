@@ -9,6 +9,7 @@
 #include "../generic_type.h"
 #include "../method.h"
 #include "../operator_overload.h"
+#include "../type_interface.h"
 
 typedef enum bc_SearchOption {
         MATCH_ALL,
@@ -38,4 +39,7 @@ bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
 
 bc_Field* bc_FindField(bc_Vector* fields, bc_StringView name,
                        bc_SearchOption option, int* outIndex);
+
+bc_Field* bc_ResolveField(struct bc_Class* classz, bc_StringView name,
+                          int* outIndex);
 #endif
