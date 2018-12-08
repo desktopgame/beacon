@@ -210,8 +210,8 @@ static void ILMemberOp_check_static_prop(bc_ILMemberOp* self,
                                          bool* swap) {
         int temp = -1;
         bc_Type* ctype = receiver_type->CoreType;
-        bc_Property* p =
-            bc_FindTreeSPropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
+        bc_Property* p = bc_FindProperty(BC_TYPE2CLASS(ctype)->StaticProperties,
+                                         self->Name, MATCH_PUBLIC_ONLY, &temp);
         bc_ILPropertyAccess* factp = bc_NewILPropertyAccess();
         factp->Source = self->Source;
         factp->Name = self->Name;

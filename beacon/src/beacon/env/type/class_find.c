@@ -221,40 +221,6 @@ bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
                                    index);
 }
 
-bc_Property* bc_FindSPropertyClass(bc_Class* self, bc_StringView namev,
-                                   int* outIndex) {
-        (*outIndex) = -1;
-        for (int i = 0; i < self->StaticProperties->Length; i++) {
-                bc_VectorItem e = bc_AtVector(self->StaticProperties, i);
-                bc_Property* p = (bc_Property*)e;
-                if (namev == p->Name) {
-                        (*outIndex) = (bc_CountAllSPropertyClass(self) -
-                                       self->StaticProperties->Length) +
-                                      i;
-                        return p;
-                }
-        }
-        return NULL;
-}
-
-bc_Property* bc_FindTreeSPropertyClass(bc_Class* self, bc_StringView namev,
-                                       int* outIndex) {
-        bc_Class* pointee = self;
-        do {
-                bc_Property* p =
-                    bc_FindSPropertyClass(pointee, namev, outIndex);
-                if (p != NULL) {
-                        return p;
-                }
-                bc_GenericType* supergtype = pointee->SuperClass;
-                if (supergtype == NULL) {
-                        break;
-                }
-                pointee = supergtype->CoreType->Kind.Class;
-        } while (pointee != NULL);
-        return NULL;
-}
-
 bc_Method* bc_GetMethodClass(bc_Object* o, int index) {
         assert(index >= 0);
 #if defined(DEBUG)

@@ -154,28 +154,6 @@ struct bc_Property* bc_GetPropertyClass(bc_Class* self, int index);
 struct bc_Property* bc_GetSPropertyClass(bc_Class* self, int index);
 
 /**
- * 指定の名前の静的プロパティを検索します.
- * @param self
- * @param namev
- * @param outIndex
- * @return
- */
-struct bc_Property* bc_FindSPropertyClass(bc_Class* self, bc_StringView namev,
-                                          int* outIndex);
-
-/**
- * 指定の名前を持つ静的プロパティを返します.
- * selfの中に見つけられなかった場合には親クラスも検索します。
- * @param self
- * @param namev
- * @param outIndex
- * @return
- */
-struct bc_Property* bc_FindTreeSPropertyClass(bc_Class* self,
-                                              bc_StringView namev,
-                                              int* outIndex);
-
-/**
  * もっとも一致する静的メソッドを返します.
  * @param self
  * @param namev

@@ -167,8 +167,8 @@ static void LoadILVariableLocal_Property(bc_ILVariableLocal* self,
         bc_Property* p =
             bc_ResolveProperty(BC_TYPE2CLASS(tp), self->Name, &temp);
         if (temp == -1) {
-                p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name,
-                                              &temp);
+                p = bc_FindProperty(BC_TYPE2CLASS(tp)->StaticProperties,
+                                    self->Name, MATCH_PUBLIC_ONLY, &temp);
         }
         if (temp == -1) {
                 bc_Panic(BCERROR_CAN_T_ACCESS_PROPERTY_T,
