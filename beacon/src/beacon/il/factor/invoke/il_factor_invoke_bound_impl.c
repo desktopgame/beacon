@@ -299,7 +299,7 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         //プロパティとして解決する
         bc_Property* prop =
-            bc_FindPropertyClass(bc_GetClassByContext(cctx), self->Name, &temp);
+            bc_ResolveProperty(bc_GetClassByContext(cctx), self->Name, &temp);
         if (receiver_gtype == NULL && prop != NULL) {
                 receiver_gtype = prop->GType;
                 self->Kind.Subscript.Tag = SUBSCRIPT_PROPERTY_T;

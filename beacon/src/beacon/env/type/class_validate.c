@@ -62,7 +62,7 @@ bool bc_IsImplementInterfacePropertyValidClass(bc_Class* cls,
                         int temp = 0;
                         bc_Property* decl = bc_AtVector(inter->Properties, j);
                         bc_Property* impl =
-                            bc_FindPropertyClass(cls, decl->Name, &temp);
+                            bc_ResolveProperty(cls, decl->Name, &temp);
                         if (temp == -1) {
                                 (*out) = decl;
                                 bc_DeleteVector(gimpl_list,

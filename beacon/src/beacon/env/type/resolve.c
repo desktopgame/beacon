@@ -12,6 +12,8 @@ static int calc_argument_distance(bc_Vector* parameters, int args_count,
                                   bc_CallContext* cctx);
 static bc_Field* resolve_field_base(bc_Class* self, bc_StringView namev,
                                     int* outIndex);
+static bc_Property* resolve_property_base(bc_Class* self, bc_StringView namev,
+                                          int* outIndex);
 
 void bc_CevaluateArguments(bc_Vector* args, bc_GenericType* result[],
                            bc_Enviroment* env, bc_CallContext* cctx) {
@@ -128,12 +130,51 @@ bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
         return ret;
 }
 
+bc_Field* bc_FindField(bc_Vector* fields, bc_StringView name,
+                       bc_SearchOption option, int* outIndex) {
+        (*outIndex) = -1;
+        for (int i = 0; i < fields->Length; i++) {
+                bc_Field* e = (bc_Field*)bc_AtVector(fields, i);
+                if (name == e->Name) {
+                        (*outIndex) = i;
+                        return e;
+                }
+        }
+        return NULL;
+}
+
+bc_Property* bc_FindProperty(bc_Vector* properties, bc_StringView name,
+                             bc_SearchOption option, int* outIndex) {
+        (*outIndex) = -1;
+        for (int i = 0; i < properties->Length; i++) {
+                bc_Property* e = (bc_Property*)bc_AtVector(properties, i);
+                if (name == e->Name) {
+                        (*outIndex) = i;
+                        return e;
+                }
+        }
+        return NULL;
+}
+
 bc_Field* bc_ResolveField(bc_Class* classz, bc_StringView name, int* outIndex) {
         bc_Class* pointee = classz;
         do {
                 bc_Field* f = resolve_field_base(pointee, name, outIndex);
                 if (f != NULL) {
                         return f;
+                }
+                pointee = bc_GetSuperClass(pointee);
+        } while (pointee != NULL);
+        return NULL;
+}
+
+bc_Property* bc_ResolveProperty(bc_Class* classz, bc_StringView name,
+                                int* outIndex) {
+        bc_Class* pointee = classz;
+        do {
+                bc_Property* p = resolve_property_base(pointee, name, outIndex);
+                if (p != NULL) {
+                        return p;
                 }
                 pointee = bc_GetSuperClass(pointee);
         } while (pointee != NULL);
@@ -183,6 +224,21 @@ static bc_Field* resolve_field_base(bc_Class* self, bc_StringView namev,
                 if (namev == e->Name) {
                         (*outIndex) = (bc_CountAllFieldClass(self) -
                                        self->Fields->Length) +
+                                      i;
+                        return e;
+                }
+        }
+        return NULL;
+}
+
+static bc_Property* resolve_property_base(bc_Class* self, bc_StringView namev,
+                                          int* outIndex) {
+        (*outIndex) = -1;
+        for (int i = 0; i < self->Properties->Length; i++) {
+                bc_Property* e = (bc_Property*)bc_AtVector(self->Properties, i);
+                if (namev == e->Name) {
+                        (*outIndex) = (bc_CountAllPropertyClass(self) -
+                                       self->Properties->Length) +
                                       i;
                         return e;
                 }
