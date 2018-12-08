@@ -36,6 +36,9 @@ void bc_RevaluateArguments(bc_Vector* args, bc_GenericType* result[]) {
         }
 }
 
+//
+// Find
+//
 bc_OperatorOverload* bc_FindOperatorOverload(
     bc_Vector* operator_overloads, bc_OperatorType type, int args_count,
     bc_GenericType* args[], bc_SearchOption option, bc_CallContext* cctx,
@@ -156,6 +159,9 @@ bc_Property* bc_FindProperty(bc_Vector* properties, bc_StringView name,
         return NULL;
 }
 
+//
+// Resolve
+//
 bc_Field* bc_ResolveField(bc_Class* classz, bc_StringView name, int* outIndex) {
         bc_Class* pointee = classz;
         do {
@@ -180,6 +186,50 @@ bc_Property* bc_ResolveProperty(bc_Class* classz, bc_StringView name,
         } while (pointee != NULL);
         return NULL;
 }
+
+//
+// Other
+//
+bc_Vector* bc_GetOverideMethods(bc_Class* classz, bc_Method* method) {
+        assert(classz != NULL);
+        assert(method != NULL);
+        bc_Class* ptr = classz;
+        bc_Vector* ret = bc_NewVector();
+#if defined(DEBUG)
+        const char* ptrname = bc_Ref2Str(ptr->Name);
+#endif
+        do {
+                bc_Method* tmp = NULL;
+                if (bc_IsOverrideAny(ptr->Methods, method, &tmp)) {
+                        bc_PushVector(ret, tmp);
+                }
+                //親クラスへ
+                ptr = bc_GetSuperClass(ptr);
+        } while (ptr != NULL);
+        return ret;
+}
+
+bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
+                      bc_Method** outOverride) {
+        assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(super)));
+        (*outOverride) = NULL;
+        bool ret = false;
+        bc_CallContext* cctx = bc_NewNameContext(
+            BC_MEMBER_TYPE(super)->Location, BC_MEMBER_TYPE(super));
+        cctx->Scope = BC_MEMBER_TYPE(super)->Location;
+        cctx->Ty = BC_MEMBER_TYPE(super);
+        for (int i = 0; i < methods->Length; i++) {
+                bc_Method* mE = bc_AtVector(methods, i);
+                if (bc_IsOverridedMethod(super, mE, cctx)) {
+                        (*outOverride) = mE;
+                        ret = true;
+                        break;
+                }
+        }
+        bc_DeleteCallContext(cctx);
+        return ret;
+}
+
 // private
 static bool match_option(bc_AccessLevel access, bc_SearchOption option) {
         if (option == MATCH_ALL) {

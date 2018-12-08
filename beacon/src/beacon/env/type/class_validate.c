@@ -30,7 +30,7 @@ bool bc_IsImplementInterfaceMethodValidClass(bc_Class* cls, bc_Method** out) {
         }
         for (int i = 0; i < methods->Length; i++) {
                 bc_Method* m = bc_AtVector(methods, i);
-                bc_Vector* methods = bc_FindTreeMethodClass(cls, m);
+                bc_Vector* methods = bc_GetOverideMethods(cls, m);
                 if (methods->Length == 0 || methods_is_all_abstract(methods)) {
                         (*out) = m;
                         contains = false;
@@ -118,7 +118,7 @@ bool bc_IsImplementAbstractClassValidClass(bc_Class* cls, bc_Method** out) {
                 if (!bc_IsAbstractModifier(BC_MEMBER_MODIFIER(me))) {
                         continue;
                 }
-                bc_Vector* methods = bc_FindTreeMethodClass(cls, me);
+                bc_Vector* methods = bc_GetOverideMethods(cls, me);
                 if (methods->Length == 0 || methods_is_all_abstract(methods)) {
                         (*out) = me;
                         ret = false;

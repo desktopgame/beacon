@@ -277,29 +277,6 @@ bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self, int index) {
         return bc_AtVector(self->OVT->Operators, index);
 }
 
-bc_Vector* bc_FindTreeMethodClass(bc_Class* self, bc_Method* m) {
-        assert(self != NULL);
-        assert(m != NULL);
-        bc_Class* ptr = self;
-        bc_Vector* ret = bc_NewVector();
-#if defined(DEBUG)
-        const char* ptrname = bc_Ref2Str(ptr->Name);
-#endif
-        do {
-                bc_Method* tmp = NULL;
-                if (bc_IsContainsMethod(ptr->Methods, m, &tmp)) {
-                        bc_PushVector(ret, tmp);
-                }
-                //親クラスへ
-                if (ptr->SuperClass != NULL) {
-                        ptr = ptr->SuperClass->CoreType->Kind.Class;
-                } else {
-                        ptr = NULL;
-                }
-        } while (ptr != NULL);
-        return ret;
-}
-
 bool bc_IsContainsMethod(bc_Vector* method_list, bc_Method* m,
                          bc_Method** outM) {
         assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(m)));

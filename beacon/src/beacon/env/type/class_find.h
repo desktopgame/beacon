@@ -195,16 +195,6 @@ struct bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self,
                                                         int index);
 
 /**
- * 指定のクラスから Object クラスまで階層で m
- * と互換性のあるメソッドを検索して返します.
- * @param self
- * @param m
- * @param outM
- * @return
- */
-bc_Vector* bc_FindTreeMethodClass(bc_Class* self, bc_Method* m);
-
-/**
  * 指定のメソッド一覧に指定のメソッドが含まれるなら true.
  * 静的メソッドの場合はエラーを発生させます。
  * @param method_list
