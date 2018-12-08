@@ -239,8 +239,8 @@ int bc_GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg,
         gargs[0] = rgtype;
         //        bc_CevaluateArguments(args, gargs, env, cctx);
         bc_CreateOperatorVTClass(lclass);
-        bc_FindOperatorOverload(lclass->OVT->Operators, otype, args->Length,
-                                gargs, MATCH_PUBLIC_ONLY, cctx, &temp);
+        bc_ResolveOperatorOverload(lclass, otype, args->Length, gargs, cctx,
+                                   &temp);
         // bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
         bc_PopCallFrame(cctx);

@@ -153,6 +153,10 @@ bc_Property* bc_FindProperty(bc_Vector* properties, bc_StringView name,
 //
 // Resolve
 //
+bc_OperatorOverload* bc_ResolveOperatorOverload(
+    struct bc_Class* classz, bc_OperatorType type, int args_count,
+    bc_GenericType* args[], bc_CallContext* cctx, int* outIndex);
+
 bc_Field* bc_ResolveField(struct bc_Class* classz, bc_StringView name,
                           int* outIndex);
 

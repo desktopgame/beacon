@@ -43,10 +43,9 @@ void bc_LoadILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
         int temp = -1;
         bc_GenericType* gargs[args->Length];
         bc_CevaluateArguments(args, gargs, env, cctx);
-        bc_FindOperatorOverload(
-            BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype))->OVT->Operators,
-            OPERATOR_SUB_SCRIPT_GET_T, args->Length, gargs, MATCH_PUBLIC_ONLY,
-            cctx, &temp);
+        bc_ResolveOperatorOverload(
+            BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
+            OPERATOR_SUB_SCRIPT_GET_T, args->Length, gargs, cctx, &temp);
         // self->Operator = bc_GFindOperatorOverloadClass(
         //    BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
         //    OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);

@@ -93,11 +93,9 @@ bc_OperatorOverload* bc_FindSetILInvokeBound(bc_ILInvokeBound* self,
         gargs[0] = bc_AtVector(args, 0);
         gargs[1] = bc_AtVector(args, 1);
         // bc_CevaluateArguments(args, gargs, env, cctx);
-        bc_OperatorOverload* opov = bc_FindOperatorOverload(
-            BC_TYPE2CLASS(BC_MEMBER_TYPE(self->Kind.Subscript.Operator))
-                ->OVT->Operators,
-            OPERATOR_SUB_SCRIPT_SET_T, args->Length, gargs, MATCH_PUBLIC_ONLY,
-            cctx, outIndex);
+        bc_OperatorOverload* opov = bc_ResolveOperatorOverload(
+            BC_TYPE2CLASS(BC_MEMBER_TYPE(self->Kind.Subscript.Operator)),
+            OPERATOR_SUB_SCRIPT_SET_T, args->Length, gargs, cctx, outIndex);
         // bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(
         // BC_TYPE2CLASS(BC_MEMBER_TYPE(self->Kind.Subscript.Operator)),
         // OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
@@ -326,11 +324,10 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
                 self->Tag = BOUND_INVOKE_SUBSCRIPT_T;
                 bc_GenericType* gargs[self->Arguments->Length];
                 bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
-                self->Kind.Subscript.Operator = bc_FindOperatorOverload(
-                    BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype))
-                        ->OVT->Operators,
+                self->Kind.Subscript.Operator = bc_ResolveOperatorOverload(
+                    BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
                     OPERATOR_SUB_SCRIPT_GET_T, self->Arguments->Length, gargs,
-                    MATCH_PUBLIC_ONLY, cctx, &temp);
+                    cctx, &temp);
                 //                self->Kind.Subscript.Operator =
                 //                bc_ArgFindOperatorOverloadClass(
                 //                    BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),

@@ -115,10 +115,9 @@ bc_OperatorOverload* bc_FindSetILInvoke(bc_ILInvoke* self, bc_ILFactor* value,
         gargs[0] = bc_AtVector(args, 0);
         gargs[1] = bc_AtVector(args, 1);
         //        bc_CevaluateArguments(args, gargs, env, cctx);
-        bc_OperatorOverload* opov = bc_FindOperatorOverload(
-            BC_TYPE2CLASS(BC_MEMBER_TYPE(self->u.opov))->OVT->Operators,
-            OPERATOR_SUB_SCRIPT_SET_T, args->Length, gargs, MATCH_PUBLIC_ONLY,
-            cctx, outIndex);
+        bc_OperatorOverload* opov = bc_ResolveOperatorOverload(
+            BC_TYPE2CLASS(BC_MEMBER_TYPE(self->u.opov)),
+            OPERATOR_SUB_SCRIPT_SET_T, args->Length, gargs, cctx, outIndex);
         // bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(
         //    BC_TYPE2CLASS(BC_MEMBER_TYPE(self->u.opov)),
         //    OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
@@ -272,9 +271,9 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
         self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
         bc_GenericType* gargs_op[1];
         bc_CevaluateArguments(self->args, gargs_op, env, cctx);
-        self->u.opov = bc_FindOperatorOverload(
-            BC_TYPE2CLASS(ctype)->OVT->Operators, OPERATOR_SUB_SCRIPT_GET_T,
-            self->args->Length, gargs_op, MATCH_PUBLIC_ONLY, cctx, &temp);
+        self->u.opov = bc_ResolveOperatorOverload(
+            BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args->Length,
+            gargs_op, cctx, &temp);
         // self->u.opov = bc_ArgFindOperatorOverloadClass(
         //    BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env,
         //    cctx, &temp);
