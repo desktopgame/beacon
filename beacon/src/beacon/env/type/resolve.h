@@ -158,13 +158,8 @@ bc_Property* bc_ResolveProperty(struct bc_Class* classz, bc_StringView name,
                                 int* outIndex);
 
 //
-// Other
+// Lookup
 //
-bc_Vector* bc_GetOverideMethods(struct bc_Class* classz, bc_Method* method);
-
-bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
-                      bc_Method** outOverride);
-
 /**
  * @param self
  * @param index
@@ -199,4 +194,13 @@ bc_Method* bc_GetMethodClass(struct bc_Class* self, int index);
  * @return
  */
 bc_Method* bc_GetSMethodClass(struct bc_Class* self, int index);
+
+//
+// Other
+//
+bc_Vector* bc_GetOverideMethods(struct bc_Class* classz, bc_Method* method);
+
+bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
+                      bc_Method** outOverride);
+
 #endif

@@ -188,48 +188,8 @@ bc_Property* bc_ResolveProperty(bc_Class* classz, bc_StringView name,
 }
 
 //
-// Other
+// Lookup
 //
-bc_Vector* bc_GetOverideMethods(bc_Class* classz, bc_Method* method) {
-        assert(classz != NULL);
-        assert(method != NULL);
-        bc_Class* ptr = classz;
-        bc_Vector* ret = bc_NewVector();
-#if defined(DEBUG)
-        const char* ptrname = bc_Ref2Str(ptr->Name);
-#endif
-        do {
-                bc_Method* tmp = NULL;
-                if (bc_IsOverrideAny(ptr->Methods, method, &tmp)) {
-                        bc_PushVector(ret, tmp);
-                }
-                //親クラスへ
-                ptr = bc_GetSuperClass(ptr);
-        } while (ptr != NULL);
-        return ret;
-}
-
-bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
-                      bc_Method** outOverride) {
-        assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(super)));
-        (*outOverride) = NULL;
-        bool ret = false;
-        bc_CallContext* cctx = bc_NewNameContext(
-            BC_MEMBER_TYPE(super)->Location, BC_MEMBER_TYPE(super));
-        cctx->Scope = BC_MEMBER_TYPE(super)->Location;
-        cctx->Ty = BC_MEMBER_TYPE(super);
-        for (int i = 0; i < methods->Length; i++) {
-                bc_Method* mE = bc_AtVector(methods, i);
-                if (bc_IsOverridedMethod(super, mE, cctx)) {
-                        (*outOverride) = mE;
-                        ret = true;
-                        break;
-                }
-        }
-        bc_DeleteCallContext(cctx);
-        return ret;
-}
-
 bc_Property* bc_GetPropertyClass(bc_Class* self, int index) {
         assert(index >= 0);
         int all = bc_CountAllPropertyClass(self);
@@ -275,6 +235,49 @@ bc_Method* bc_GetSMethodClass(bc_Class* self, int index) {
         return GetSMethodClass(self->SuperClass->CoreType->Kind.Class, index);
         //*/
         return bc_AtVector(self->StaticMethods, index);
+}
+
+//
+// Other
+//
+bc_Vector* bc_GetOverideMethods(bc_Class* classz, bc_Method* method) {
+        assert(classz != NULL);
+        assert(method != NULL);
+        bc_Class* ptr = classz;
+        bc_Vector* ret = bc_NewVector();
+#if defined(DEBUG)
+        const char* ptrname = bc_Ref2Str(ptr->Name);
+#endif
+        do {
+                bc_Method* tmp = NULL;
+                if (bc_IsOverrideAny(ptr->Methods, method, &tmp)) {
+                        bc_PushVector(ret, tmp);
+                }
+                //親クラスへ
+                ptr = bc_GetSuperClass(ptr);
+        } while (ptr != NULL);
+        return ret;
+}
+
+bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
+                      bc_Method** outOverride) {
+        assert(!bc_IsStaticModifier(BC_MEMBER_MODIFIER(super)));
+        (*outOverride) = NULL;
+        bool ret = false;
+        bc_CallContext* cctx = bc_NewNameContext(
+            BC_MEMBER_TYPE(super)->Location, BC_MEMBER_TYPE(super));
+        cctx->Scope = BC_MEMBER_TYPE(super)->Location;
+        cctx->Ty = BC_MEMBER_TYPE(super);
+        for (int i = 0; i < methods->Length; i++) {
+                bc_Method* mE = bc_AtVector(methods, i);
+                if (bc_IsOverridedMethod(super, mE, cctx)) {
+                        (*outOverride) = mE;
+                        ret = true;
+                        break;
+                }
+        }
+        bc_DeleteCallContext(cctx);
+        return ret;
 }
 
 // private
