@@ -138,10 +138,6 @@ bc_Method* bc_GetImplMethodClass(bc_Class* self, bc_Type* interType,
         return bc_AtVector(vtAt->Elements, interMIndex);
 }
 
-bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self, int index) {
-        return bc_AtVector(self->OVT->Operators, index);
-}
-
 bc_Vector* bc_GetGenericInterfaceListClass(bc_Class* self) {
         bc_Vector* ret = bc_NewVector();
         for (int i = 0; i < self->Implements->Length; i++) {

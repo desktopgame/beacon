@@ -264,6 +264,13 @@ bc_Method* bc_LookupStaticMethod(struct bc_Class* self, int index);
  */
 bc_Constructor* bc_LookupConstructor(struct bc_Class* self, int index);
 
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+bc_OperatorOverload* bc_GetOperatorOverloadClass(struct bc_Class* self,
+                                                 int index);
 //
 // Other
 //

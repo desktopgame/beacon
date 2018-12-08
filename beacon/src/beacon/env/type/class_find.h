@@ -89,14 +89,6 @@ struct bc_Method* bc_GetImplMethodClass(bc_Class* self, bc_Type* interType,
                                         int interMIndex);
 
 /**
- * @param self
- * @param index
- * @return
- */
-struct bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self,
-                                                        int index);
-
-/**
  * 実装された全てのジェネリックインターフェイスを返します.
  * @param self
  * @return
