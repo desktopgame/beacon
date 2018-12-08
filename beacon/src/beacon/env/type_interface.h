@@ -128,36 +128,6 @@ void bc_AddPropertyType(bc_Type* self, struct bc_Property* p);
 void bc_AddMethodType(bc_Type* self, struct bc_Method* m);
 
 /**
- * この型からメソッドを検索します.
- * @param self
- * @param namev
- * @param args
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_ILFindMethodType(bc_Type* self, bc_StringView namev,
-                                      bc_Vector* args,
-                                      struct bc_Enviroment* env,
-                                      bc_CallContext* cctx, int* outIndex);
-
-/**
- * この型から静的メソッドを検索します.
- * @param self
- * @param namev
- * @param args
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-struct bc_Method* bc_ILFindSMethodType(bc_Type* self, bc_StringView namev,
-                                       bc_Vector* args,
-                                       struct bc_Enviroment* env,
-                                       bc_CallContext* cctx, int* outIndex);
-
-/**
  * 仮想関数の一覧を返します.
  * @param self
  * @return
