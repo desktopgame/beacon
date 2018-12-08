@@ -595,8 +595,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 const char* clsname = bc_Ref2Str(cls->Name);
 #endif
                                 bc_Constructor* ctor =
-                                    (bc_Constructor*)bc_AtVector(
-                                        cls->Constructors, constructorIndex);
+                                    bc_LookupConstructor(cls, constructorIndex);
                                 //新しいVMでコンストラクタを実行
                                 //また、現在のVMから実引数をポップ
                                 bc_Frame* sub = bc_SubFrame(self);

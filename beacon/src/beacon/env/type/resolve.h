@@ -153,6 +153,11 @@ bc_Property* bc_FindProperty(bc_Vector* properties, bc_StringView name,
 //
 // Resolve
 //
+bc_Constructor* bc_ResolveConstructor(bc_Vector* constructors, int args_count,
+                                      bc_GenericType* args[],
+                                      bc_Vector* type_args,
+                                      bc_CallContext* cctx, int* outIndex);
+
 bc_OperatorOverload* bc_ResolveOperatorOverload(
     struct bc_Class* classz, bc_OperatorType type, int args_count,
     bc_GenericType* args[], bc_CallContext* cctx, int* outIndex);
@@ -229,6 +234,13 @@ bc_Method* bc_LookupMethod(struct bc_Class* self, int index);
  * @return
  */
 bc_Method* bc_LookupStaticMethod(struct bc_Class* self, int index);
+
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Constructor* bc_LookupConstructor(struct bc_Class* self, int index);
 
 //
 // Other

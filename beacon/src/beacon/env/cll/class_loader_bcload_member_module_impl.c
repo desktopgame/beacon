@@ -772,9 +772,9 @@ static void CLBC_chain_auto(bc_ClassLoader* self, bc_ILType* iltype,
         int emptyTemp = 0;
         bc_CallContext* cctx = bc_NewCallContext(CALL_CTOR_ARGS_T);
         cctx->Ty = tp;
-        bc_Constructor* emptyTarget = bc_FindConstructor(
+        bc_Constructor* emptyTarget = bc_ResolveConstructor(
             classz->SuperClass->CoreType->Kind.Class->Constructors, 0, NULL,
-            NULL, MATCH_PUBLIC_ONLY, cctx, &emptyTemp);
+            NULL, cctx, &emptyTemp);
 
         bc_DeleteCallContext(cctx);
         //連鎖を明示的に書いていないのに、
@@ -826,9 +826,9 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
         bc_GenericType* gargs[chain->Arguments->Length];
         bc_CevaluateArguments(chain->Arguments, gargs, env, cctx);
         if (chain->Type == CHAIN_TYPE_THIS_T) {
-                chainTarget = bc_FindConstructor(
-                    classz->Constructors, chain->Arguments->Length, gargs, NULL,
-                    MATCH_ALL, cctx, &temp);
+                chainTarget = bc_ResolveConstructor(classz->Constructors,
+                                                    chain->Arguments->Length,
+                                                    gargs, NULL, cctx, &temp);
                 bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_CHAIN_THIS);
                 bc_AddOpcodeBuf(env->Bytecode,
                                 (bc_VectorItem)(tp->AbsoluteIndex));
@@ -836,11 +836,10 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
                 bc_AddOpcodeBuf(env->Bytecode,
                                 (bc_VectorItem)classz->Parent->AllocSize);
         } else if (chain->Type == CHAIN_TYPE_SUPER_T) {
-                chainTarget = bc_FindConstructor(
+                chainTarget = bc_ResolveConstructor(
                     BC_TYPE2CLASS(bc_GENERIC2TYPE(classz->SuperClass))
                         ->Constructors,
-                    chain->Arguments->Length, gargs, NULL,
-                    MATCH_PUBLIC_OR_PROTECTED, cctx, &temp);
+                    chain->Arguments->Length, gargs, NULL, cctx, &temp);
                 bc_AddOpcodeBuf(env->Bytecode, OP_CHAIN_SUPER);
                 bc_AddOpcodeBuf(env->Bytecode,
                                 classz->SuperClass->CoreType->AbsoluteIndex);

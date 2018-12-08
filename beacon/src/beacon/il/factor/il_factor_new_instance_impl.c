@@ -160,8 +160,8 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
                                   ? MATCH_ALL
                                   : MATCH_PUBLIC_ONLY;
         self->Constructor =
-            bc_FindConstructor(cls->Constructors, self->Arguments->Length,
-                               gargs, self->TypeArgs, opt, cctx, &temp);
+            bc_ResolveConstructor(cls->Constructors, self->Arguments->Length,
+                                  gargs, self->TypeArgs, cctx, &temp);
         self->ConstructorIndex = temp;
         bc_PopCallFrame(cctx);
         if (temp == -1) {
