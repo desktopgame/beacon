@@ -162,6 +162,21 @@ bc_OperatorOverload* bc_ResolveOperatorOverload(
     struct bc_Class* classz, bc_OperatorType type, int args_count,
     bc_GenericType* args[], bc_CallContext* cctx, int* outIndex);
 
+bc_Method* bc_ResolveMethod(struct bc_Class* classz, bc_StringView name,
+                            int args_count, bc_GenericType* args[],
+                            bc_Vector* type_args, bc_CallContext* cctx,
+                            int* outIndex);
+
+bc_Method* bc_ResolvePrivateMethod(struct bc_Class* classz, bc_StringView name,
+                                   int args_count, bc_GenericType* args[],
+                                   bc_Vector* type_args, bc_CallContext* cctx,
+                                   int* outIndex);
+
+bc_Method* bc_ResolveStaticMethod(struct bc_Class* classz, bc_StringView name,
+                                  int args_count, bc_GenericType* args[],
+                                  bc_Vector* type_args, bc_CallContext* cctx,
+                                  int* outIndex);
+
 bc_Field* bc_ResolveField(struct bc_Class* classz, bc_StringView name,
                           int* outIndex);
 
@@ -223,6 +238,13 @@ bc_Property* bc_LookupStaticProperty(struct bc_Class* self, int index);
  * @return
  */
 bc_Method* bc_LookupMethod(struct bc_Class* self, int index);
+
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Method* bc_LookupPrivateMethod(struct bc_Class* self, int index);
 
 /**
  * 指定位置のメソッドを返します.

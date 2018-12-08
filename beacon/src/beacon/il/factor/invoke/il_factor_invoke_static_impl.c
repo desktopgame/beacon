@@ -134,9 +134,9 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
                                   ? MATCH_ALL
                                   : MATCH_PUBLIC_ONLY;
         if (temp == -1) {
-                self->Method = bc_FindMethod(cls->StaticMethods, self->Name,
-                                             self->Arguments->Length, gargs,
-                                             self->TypeArgs, opt, cctx, &temp);
+                self->Method = bc_ResolveStaticMethod(
+                    cls, self->Name, self->Arguments->Length, gargs,
+                    self->TypeArgs, cctx, &temp);
         }
         self->Index = temp;
         //メソッドが見つからない

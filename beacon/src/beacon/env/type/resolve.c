@@ -174,11 +174,36 @@ bc_Constructor* bc_ResolveConstructor(bc_Vector* constructors, int args_count,
         return bc_FindConstructor(constructors, args_count, args, type_args,
                                   MATCH_ALL, cctx, outIndex);
 }
+
 bc_OperatorOverload* bc_ResolveOperatorOverload(
     struct bc_Class* classz, bc_OperatorType type, int args_count,
     bc_GenericType* args[], bc_CallContext* cctx, int* outIndex) {
         return bc_FindOperatorOverload(classz->OVT->Operators, type, args_count,
                                        args, MATCH_ALL, cctx, outIndex);
+}
+
+bc_Method* bc_ResolveMethod(bc_Class* classz, bc_StringView name,
+                            int args_count, bc_GenericType* args[],
+                            bc_Vector* type_args, bc_CallContext* cctx,
+                            int* outIndex) {
+        return bc_FindMethod(classz->VT->Elements, name, args_count, args,
+                             type_args, MATCH_ALL, cctx, outIndex);
+}
+
+bc_Method* bc_ResolvePrivateMethod(bc_Class* classz, bc_StringView name,
+                                   int args_count, bc_GenericType* args[],
+                                   bc_Vector* type_args, bc_CallContext* cctx,
+                                   int* outIndex) {
+        return bc_FindMethod(classz->Methods, name, args_count, args, type_args,
+                             MATCH_ALL, cctx, outIndex);
+}
+
+bc_Method* bc_ResolveStaticMethod(bc_Class* classz, bc_StringView name,
+                                  int args_count, bc_GenericType* args[],
+                                  bc_Vector* type_args, bc_CallContext* cctx,
+                                  int* outIndex) {
+        return bc_FindMethod(classz->StaticMethods, name, args_count, args,
+                             type_args, MATCH_ALL, cctx, outIndex);
 }
 
 bc_Field* bc_ResolveField(bc_Class* classz, bc_StringView name, int* outIndex) {
@@ -286,6 +311,10 @@ bc_Method* bc_LookupMethod(bc_Class* self, int index) {
 #endif
         bc_VTable* vx = (self->VT);
         return (bc_Method*)bc_AtVector(vx->Elements, index);
+}
+
+bc_Method* bc_LookupPrivateMethod(bc_Class* self, int index) {
+        return bc_AtVector(self->Methods, index);
 }
 
 bc_Method* bc_LookupStaticMethod(bc_Class* self, int index) {

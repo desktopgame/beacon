@@ -237,16 +237,35 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
         bc_SearchOption opt =
             ctype == bc_GetTypeByContext(cctx) ? MATCH_ALL : MATCH_PUBLIC_ONLY;
         if (temp == -1 && ctype->Tag == TYPE_CLASS_T) {
-                self->u.m =
-                    bc_FindMethod(BC_TYPE2CLASS(ctype)->VT->Elements,
-                                  self->namev, self->args->Length, gargs,
-                                  self->type_args, opt, cctx, &temp);
+                self->u.m = bc_ResolveMethod(BC_TYPE2CLASS(ctype), self->namev,
+                                             self->args->Length, gargs,
+                                             self->type_args, cctx, &temp);
         }
-        if (temp == -1 && ctype->Tag == TYPE_CLASS_T) {
-                self->u.m =
-                    bc_FindMethod(BC_TYPE2CLASS(ctype)->Methods, self->namev,
-                                  self->args->Length, gargs, self->type_args,
-                                  opt, cctx, &temp);
+        if (temp == -1 && ctype->Tag == TYPE_CLASS_T &&
+            ctype == bc_GetTypeByContext(cctx)) {
+                self->u.m = bc_ResolvePrivateMethod(
+                    BC_TYPE2CLASS(ctype), self->namev, self->args->Length,
+                    gargs, self->type_args, cctx, &temp);
+        }
+        if (temp != -1) {
+                bc_AccessLevel acc = BC_MEMBER_ACCESS(self->u.m);
+                //プライベートなのに同じクラスでない
+                if (acc == ACCESS_PRIVATE_T &&
+                    ctype != bc_GetTypeByContext(cctx)) {
+                        bc_Panic(BCERROR_CAN_T_ACCESS_METHOD_T,
+                                 bc_Ref2Str(BC_TYPE2CLASS(ctype)->Name),
+                                 bc_Ref2Str(self->namev));
+                        return;
+                        //プロテクテッドなのに同じクラスでない
+                } else if (acc == ACCESS_PROTECTED_T &&
+                           bc_DistanceClass(
+                               BC_TYPE2CLASS(ctype),
+                               BC_TYPE2CLASS(bc_GetTypeByContext(cctx))) < 0) {
+                        bc_Panic(BCERROR_CAN_T_ACCESS_METHOD_T,
+                                 bc_Ref2Str(BC_TYPE2CLASS(ctype)->Name),
+                                 bc_Ref2Str(self->namev));
+                        return;
+                }
         }
         if (temp == -1 && ctype->Tag == TYPE_INTERFACE_T) {
                 self->u.m = bc_FindMethod(BC_TYPE2INTERFACE(ctype)->Methods,

@@ -362,6 +362,9 @@ char* bc_Vfpanic(BCErrorID id, va_list ap) {
                 case BCERROR_CAN_T_ACCESS_PROPERTY_T:
                         fmt = "can't access Property: %s#%s";
                         break;
+                BCERROR_CAN_T_ACCESS_METHOD_T:
+                        fmt = "can't access Method: %s#%s";
+                        break;
                 case BCERROR_INVALID_ACCESS_LEVEL_OF_PROPERTY_T:
                         fmt =
                             "access level of Property accessor must be secure "

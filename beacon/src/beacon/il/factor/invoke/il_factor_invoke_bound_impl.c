@@ -269,22 +269,19 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         bc_GenericType* gargs[self->Arguments->Length];
         bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         if (temp == -1) {
-                self->Kind.Method =
-                    bc_FindMethod(BC_TYPE2CLASS(ctype)->VT->Elements,
-                                  self->Name, self->Arguments->Length, gargs,
-                                  self->TypeArgs, MATCH_ALL, cctx, &temp);
+                self->Kind.Method = bc_ResolveMethod(
+                    BC_TYPE2CLASS(ctype), self->Name, self->Arguments->Length,
+                    gargs, self->TypeArgs, cctx, &temp);
         }
         if (temp == -1) {
-                self->Kind.Method =
-                    bc_FindMethod(BC_TYPE2CLASS(ctype)->Methods, self->Name,
-                                  self->Arguments->Length, gargs,
-                                  self->TypeArgs, MATCH_ALL, cctx, &temp);
+                self->Kind.Method = bc_ResolvePrivateMethod(
+                    BC_TYPE2CLASS(ctype), self->Name, self->Arguments->Length,
+                    gargs, self->TypeArgs, cctx, &temp);
         }
         if (temp == -1) {
-                self->Kind.Method =
-                    bc_FindMethod(BC_TYPE2CLASS(ctype)->StaticMethods,
-                                  self->Name, self->Arguments->Length, gargs,
-                                  self->TypeArgs, MATCH_ALL, cctx, &temp);
+                self->Kind.Method = bc_ResolveStaticMethod(
+                    BC_TYPE2CLASS(ctype), self->Name, self->Arguments->Length,
+                    gargs, self->TypeArgs, cctx, &temp);
         }
         self->Index = temp;
         BC_ERROR();
