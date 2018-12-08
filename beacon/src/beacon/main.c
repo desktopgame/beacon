@@ -14,7 +14,6 @@
 #include "env/script_context.h"
 #include "il/il_print_layout.h"
 #include "test.h"
-#include "thread/native_thread.h"
 #include "util/mem.h"
 #include "util/string_pool.h"
 
@@ -63,7 +62,6 @@ int main(int argc, char *argv[]) {
         //_CrtSetBreakAlloc(36862);
 #endif
         bc_InitMX();
-        bc_InitNativeThread();
         bc_InitStringPool();
         bc_HideILPrintLayout(true);
         // mem_break(16066);
@@ -72,7 +70,6 @@ int main(int argc, char *argv[]) {
         //設定を元に戻す
         // DumpStringPool(stdout);
         bc_DestroyStringPool();
-        bc_DestroyNativeThread();
         bc_DestroyMX();
 #if defined(_MSC_VER) && defined(DEBUG)
         _CrtDumpMemoryLeaks();
