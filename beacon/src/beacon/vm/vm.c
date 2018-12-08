@@ -1037,7 +1037,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 if (throw_npe(self, o)) {
                                         break;
                                 }
-                                bc_Method* m = bc_GetMethodClass(o, index);
+                                bc_Method* m = bc_GetMethodClass(
+                                    BC_TYPE2CLASS(bc_GENERIC2TYPE(o->GType)),
+                                    index);
                                 bc_ExecuteMethod(m, self, env);
                                 break;
                         }

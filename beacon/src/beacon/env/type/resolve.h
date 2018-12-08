@@ -150,7 +150,7 @@ bc_Property* bc_GetSPropertyClass(struct bc_Class* self, int index);
  * @param index
  * @return
  */
-bc_Method* bc_GetMethodClass(struct bc_Object* o, int index);
+bc_Method* bc_GetMethodClass(struct bc_Class* self, int index);
 
 /**
  * 指定位置のメソッドを返します.

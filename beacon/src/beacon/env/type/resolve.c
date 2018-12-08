@@ -253,15 +253,12 @@ bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
                                    index);
 }
 
-bc_Method* bc_GetMethodClass(bc_Object* o, int index) {
+bc_Method* bc_GetMethodClass(bc_Class* self, int index) {
         assert(index >= 0);
 #if defined(DEBUG)
-        const char* name = bc_GetObjectName(o);
+        // const char* name = bc_GetObjectName(o);
 #endif
-        if (bc_IsNullValue(o)) {
-                o->VPtr = BC_TYPE2CLASS(BC_TYPE_OBJECT)->VT;
-        }
-        bc_VTable* vx = (o->VPtr);
+        bc_VTable* vx = (self->VT);
         return (bc_Method*)bc_AtVector(vx->Elements, index);
 }
 
