@@ -125,6 +125,24 @@ bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
         }
         return ret;
 }
+
+bc_Field* bc_FindField(bc_Vector* fields, bc_StringView name,
+                       bc_SearchOption option, int* outIndex) {
+        bc_Field* ret = NULL;
+        for (int i = 0; i < fields->Length; i++) {
+                bc_Field* e = bc_AtVector(fields, i);
+                if (e->Name != name) {
+                        continue;
+                }
+                //検索オプションにマッチしない
+                if (!match_option(BC_MEMBER_ACCESS(e), option)) {
+                        continue;
+                }
+                ret = e;
+                break;
+        }
+        return ret;
+}
 // private
 static bool match_option(bc_AccessLevel access, bc_SearchOption option) {
         if (option == MATCH_ALL) {

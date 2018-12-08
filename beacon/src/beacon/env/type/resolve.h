@@ -5,6 +5,7 @@
 #include "../../util/vector.h"
 #include "../../vm/enviroment.h"
 #include "../constructor.h"
+#include "../field.h"
 #include "../generic_type.h"
 #include "../method.h"
 #include "../operator_overload.h"
@@ -34,4 +35,7 @@ bc_Constructor* bc_FindConstructor(bc_Vector* constructors, int args_count,
                                    bc_GenericType* args[], bc_Vector* type_args,
                                    bc_SearchOption option, bc_CallContext* cctx,
                                    int* outIndex);
+
+bc_Field* bc_FindField(bc_Vector* fields, bc_StringView name,
+                       bc_SearchOption option, int* outIndex);
 #endif
