@@ -190,18 +190,17 @@ bc_Property* bc_ResolveProperty(bc_Class* classz, bc_StringView name,
 //
 // Lookup
 //
-bc_Property* bc_GetPropertyClass(bc_Class* self, int index) {
+bc_Property* bc_LookupProperty(bc_Class* self, int index) {
         assert(index >= 0);
         int all = bc_CountAllPropertyClass(self);
         if (index >= (all - self->Properties->Length) && index < all) {
                 return bc_AtVector(self->Properties,
                                    self->Properties->Length - (all - index));
         }
-        return bc_GetPropertyClass(self->SuperClass->CoreType->Kind.Class,
-                                   index);
+        return bc_LookupProperty(bc_GetSuperClass(self), index);
 }
 
-bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
+bc_Property* bc_LookupStaticProperty(bc_Class* self, int index) {
         assert(index >= 0);
         int all = bc_CountAllSPropertyClass(self);
         if (index >= (all - self->StaticProperties->Length) && index < all) {
@@ -209,11 +208,10 @@ bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
                     self->StaticProperties,
                     self->StaticProperties->Length - (all - index));
         }
-        return bc_GetPropertyClass(self->SuperClass->CoreType->Kind.Class,
-                                   index);
+        return bc_LookupStaticProperty(bc_GetSuperClass(self), index);
 }
 
-bc_Method* bc_GetMethodClass(bc_Class* self, int index) {
+bc_Method* bc_LookupMethod(bc_Class* self, int index) {
         assert(index >= 0);
 #if defined(DEBUG)
         // const char* name = bc_GetObjectName(o);
@@ -222,7 +220,7 @@ bc_Method* bc_GetMethodClass(bc_Class* self, int index) {
         return (bc_Method*)bc_AtVector(vx->Elements, index);
 }
 
-bc_Method* bc_GetSMethodClass(bc_Class* self, int index) {
+bc_Method* bc_LookupStaticMethod(bc_Class* self, int index) {
         assert(index >= 0);
         /*
         //Class* self = o->classz;

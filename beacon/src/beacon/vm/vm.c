@@ -814,7 +814,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 // assert(assignTarget->Tag == OBJECT_REF_T);
                                 int propIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_Property* pro = bc_GetPropertyClass(
+                                bc_Property* pro = bc_LookupProperty(
                                     BC_TYPE2CLASS(
                                         bc_GENERIC2TYPE(assignTarget->GType)),
                                     propIndex);
@@ -835,7 +835,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 }
                                 int propIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_Property* pro = bc_GetPropertyClass(
+                                bc_Property* pro = bc_LookupProperty(
                                     BC_TYPE2CLASS(
                                         bc_GENERIC2TYPE(sourceObject->GType)),
                                     propIndex);
@@ -865,7 +865,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     ctx->TypeList, absClsIndex);
                                 bc_Class* cls = tp->Kind.Class;
                                 bc_Property* p =
-                                    bc_GetSPropertyClass(cls, propIndex);
+                                    bc_LookupStaticProperty(cls, propIndex);
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = NULL;
@@ -885,7 +885,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     ctx->TypeList, absClsIndex);
                                 bc_Class* cls = tp->Kind.Class;
                                 bc_Property* p =
-                                    bc_GetSPropertyClass(cls, propIndex);
+                                    bc_LookupStaticProperty(cls, propIndex);
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = NULL;
@@ -1019,7 +1019,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Type* cls = (bc_Type*)bc_AtVector(
                                     ctx->TypeList, absClassIndex);
-                                bc_Method* m = bc_GetSMethodClass(
+                                bc_Method* m = bc_LookupStaticMethod(
                                     cls->Kind.Class, methodIndex);
 #if defined(DEBUG)
                                 const char* clsname =
@@ -1037,7 +1037,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 if (throw_npe(self, o)) {
                                         break;
                                 }
-                                bc_Method* m = bc_GetMethodClass(
+                                bc_Method* m = bc_LookupMethod(
                                     BC_TYPE2CLASS(bc_GENERIC2TYPE(o->GType)),
                                     index);
                                 bc_ExecuteMethod(m, self, env);

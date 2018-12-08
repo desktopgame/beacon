@@ -165,13 +165,13 @@ bc_Property* bc_ResolveProperty(struct bc_Class* classz, bc_StringView name,
  * @param index
  * @return
  */
-bc_Property* bc_GetPropertyClass(struct bc_Class* self, int index);
+bc_Property* bc_LookupProperty(struct bc_Class* self, int index);
 /**
  * @param self
  * @param index
  * @return
  */
-bc_Property* bc_GetSPropertyClass(struct bc_Class* self, int index);
+bc_Property* bc_LookupStaticProperty(struct bc_Class* self, int index);
 
 /**
  * 指定位置のメソッドを返します.
@@ -182,7 +182,7 @@ bc_Property* bc_GetSPropertyClass(struct bc_Class* self, int index);
  * @param index
  * @return
  */
-bc_Method* bc_GetMethodClass(struct bc_Class* self, int index);
+bc_Method* bc_LookupMethod(struct bc_Class* self, int index);
 
 /**
  * 指定位置のメソッドを返します.
@@ -193,7 +193,7 @@ bc_Method* bc_GetMethodClass(struct bc_Class* self, int index);
  * @param index
  * @return
  */
-bc_Method* bc_GetSMethodClass(struct bc_Class* self, int index);
+bc_Method* bc_LookupStaticMethod(struct bc_Class* self, int index);
 
 //
 // Other
