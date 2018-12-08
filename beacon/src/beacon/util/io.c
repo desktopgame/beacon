@@ -178,6 +178,16 @@ char* bc_ResolveScriptPath(const char* target) {
         return bc_ReleaseBuffer(sb);
 }
 
+char* bc_ResolveCurrentPath(const char* target) {
+        bc_Buffer* sb = bc_NewBuffer();
+        char full[256] = {0};
+        bc_GetCurrentPath(full, 256);
+        bc_AppendsBuffer(sb, full);
+        // bc_AppendsBuffer(sb, "script-lib/");
+        bc_AppendsBuffer(sb, target);
+        return bc_ReleaseBuffer(sb);
+}
+
 bc_Vector* bc_GetFiles(const char* dirname) {
 #if defined(_MSC_VER)
         //ワイルドカード指定ですべてのファイルを取得する

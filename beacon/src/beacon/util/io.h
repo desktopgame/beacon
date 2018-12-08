@@ -96,6 +96,12 @@ char* bc_GetAbsolutePath(const char* target);
  * @return
  */
 char* bc_ResolveScriptPath(const char* target);
+/**
+ * 指定のファイルをカレントディレクトリで解決してフルパスへ変換します.
+ * @param target
+ * @return
+ */
+char* bc_ResolveCurrentPath(const char* target);
 
 /**
  * dirnameの直下のファイル名一覧を返します.

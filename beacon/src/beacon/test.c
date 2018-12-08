@@ -139,16 +139,20 @@ static int test_semantics() {
         test_semanticsImpl(rundir, false, &runFN, &runRL);
         test_semanticsImpl(errdir, true, &errFN, &errRL);
         if (runRL) {
-                fprintf(stdout, "[RUN]FAIL. %s", runFN);
+                char* rp = bc_ResolveCurrentPath(runFN + 2);
+                fprintf(stdout, "[RUN]FAIL. %s", rp);
                 MEM_FREE(runFN);
+                MEM_FREE(rp);
         } else {
                 fprintf(stdout, "[RUN]SUCCEESS!");
                 MEM_FREE(runFN);
         }
         fprintf(stdout, "\n");
         if (errRL) {
-                fprintf(stdout, "[ERR]FAIL. %s", errFN);
+                char* ep = bc_ResolveCurrentPath(errFN + 2);
+                fprintf(stdout, "[ERR]FAIL. %s", ep);
                 MEM_FREE(errFN);
+                MEM_FREE(ep);
         } else {
                 fprintf(stdout, "[ERR]SUCCEESS!");
                 MEM_FREE(errFN);
