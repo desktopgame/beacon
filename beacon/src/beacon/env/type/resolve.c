@@ -230,6 +230,56 @@ bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
         return ret;
 }
 
+bc_Property* bc_GetPropertyClass(bc_Class* self, int index) {
+        assert(index >= 0);
+        int all = bc_CountAllPropertyClass(self);
+        if (index >= (all - self->Properties->Length) && index < all) {
+                return bc_AtVector(self->Properties,
+                                   self->Properties->Length - (all - index));
+        }
+        return bc_GetPropertyClass(self->SuperClass->CoreType->Kind.Class,
+                                   index);
+}
+
+bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
+        assert(index >= 0);
+        int all = bc_CountAllSPropertyClass(self);
+        if (index >= (all - self->StaticProperties->Length) && index < all) {
+                return bc_AtVector(
+                    self->StaticProperties,
+                    self->StaticProperties->Length - (all - index));
+        }
+        return bc_GetPropertyClass(self->SuperClass->CoreType->Kind.Class,
+                                   index);
+}
+
+bc_Method* bc_GetMethodClass(bc_Object* o, int index) {
+        assert(index >= 0);
+#if defined(DEBUG)
+        const char* name = bc_GetObjectName(o);
+#endif
+        if (bc_IsNullValue(o)) {
+                o->VPtr = BC_TYPE2CLASS(BC_TYPE_OBJECT)->VT;
+        }
+        bc_VTable* vx = (o->VPtr);
+        return (bc_Method*)bc_AtVector(vx->Elements, index);
+}
+
+bc_Method* bc_GetSMethodClass(bc_Class* self, int index) {
+        assert(index >= 0);
+        /*
+        //Class* self = o->classz;
+        int all = CountAllSMethodClass(self);
+        if (index >= (all - self->StaticMethods->Length) &&
+                index < all) {
+                return AtVector(self->StaticMethods, self->StaticMethods->Length
+        - (all - index));
+        }
+        return GetSMethodClass(self->SuperClass->CoreType->Kind.Class, index);
+        //*/
+        return bc_AtVector(self->StaticMethods, index);
+}
+
 // private
 static bool match_option(bc_AccessLevel access, bc_SearchOption option) {
         if (option == MATCH_ALL) {

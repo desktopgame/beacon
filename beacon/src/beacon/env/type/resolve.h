@@ -127,4 +127,39 @@ bc_Vector* bc_GetOverideMethods(struct bc_Class* classz, bc_Method* method);
 
 bool bc_IsOverrideAny(bc_Vector* methods, bc_Method* super,
                       bc_Method** outOverride);
+
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Property* bc_GetPropertyClass(struct bc_Class* self, int index);
+/**
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Property* bc_GetSPropertyClass(struct bc_Class* self, int index);
+
+/**
+ * 指定位置のメソッドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self
+ * までに現れる全てのメソッドの通し番号です。
+ * @param o
+ * @param index
+ * @return
+ */
+bc_Method* bc_GetMethodClass(struct bc_Object* o, int index);
+
+/**
+ * 指定位置のメソッドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self
+ * までに現れる全てのメソッドの通し番号です。
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Method* bc_GetSMethodClass(struct bc_Class* self, int index);
 #endif

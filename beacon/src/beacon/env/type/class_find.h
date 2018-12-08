@@ -141,41 +141,6 @@ bool bc_IsAccessiblePropertyAccessorClass(bc_Class* self,
 int bc_GetFieldByPropertyClass(bc_Class* self, struct bc_Property* p);
 
 /**
- * @param self
- * @param index
- * @return
- */
-struct bc_Property* bc_GetPropertyClass(bc_Class* self, int index);
-/**
- * @param self
- * @param index
- * @return
- */
-struct bc_Property* bc_GetSPropertyClass(bc_Class* self, int index);
-
-/**
- * 指定位置のメソッドを返します.
- * このクラスの上や下も含めて検索します。
- * つまりこの index は self の最上位クラスから self
- * までに現れる全てのメソッドの通し番号です。
- * @param o
- * @param index
- * @return
- */
-struct bc_Method* bc_GetMethodClass(struct bc_Object* o, int index);
-
-/**
- * 指定位置のメソッドを返します.
- * このクラスの上や下も含めて検索します。
- * つまりこの index は self の最上位クラスから self
- * までに現れる全てのメソッドの通し番号です。
- * @param self
- * @param index
- * @return
- */
-struct bc_Method* bc_GetSMethodClass(bc_Class* self, int index);
-
-/**
  * selfから、 interTypeの仮想関数テーブルの interIndex番目に属するメソッド
  * を実装するために定義されたメソッドを検索して返します。
  * @param self
