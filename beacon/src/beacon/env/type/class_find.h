@@ -246,27 +246,6 @@ struct bc_Method* bc_GetImplMethodClass(bc_Class* self, bc_Type* interType,
 
 /**
  * @param self
- * @param type
- * @param args
- * @param env
- * @param cctx
- * @param outIndex
- * @return
- */
-struct bc_OperatorOverload* bc_GFindOperatorOverloadClass(
-    bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env,
-    bc_CallContext* cctx, int* outIndex);
-
-struct bc_OperatorOverload* bc_ILFindOperatorOverloadClass(
-    bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env,
-    bc_CallContext* cctx, int* outIndex);
-
-struct bc_OperatorOverload* bc_ArgFindOperatorOverloadClass(
-    bc_Class* self, bc_OperatorType type, bc_Vector* args, bc_Enviroment* env,
-    bc_CallContext* cctx, int* outIndex);
-
-/**
- * @param self
  * @param index
  * @return
  */

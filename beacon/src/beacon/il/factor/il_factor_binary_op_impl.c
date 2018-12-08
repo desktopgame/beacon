@@ -228,17 +228,22 @@ int bc_GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg,
         bc_GenericType* lgtype = bc_EvalILFactor(receiver, env, cctx);
         bc_GenericType* rgtype = bc_EvalILFactor(arg, env, cctx);
 
-        if (lgtype->VirtualTypeIndex != -1) {
-                assert(false);
-        }
+        bc_PushCallFrame(cctx, lgtype, args, NULL);
         // PushVector(args, lgtype);
         bc_PushVector(args, rgtype);
         bc_Type* lctype = bc_GENERIC2TYPE(lgtype);
         assert(lctype->Tag == TYPE_CLASS_T);
         bc_Class* lclass = BC_TYPE2CLASS(lctype);
         int temp = 0;
-        bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
+        bc_GenericType* gargs[args->Length];
+        gargs[0] = rgtype;
+        //        bc_CevaluateArguments(args, gargs, env, cctx);
+        bc_CreateOperatorVTClass(lclass);
+        bc_FindOperatorOverload(lclass->OVT->Operators, otype, args->Length,
+                                gargs, MATCH_PUBLIC_ONLY, cctx, &temp);
+        // bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
+        bc_PopCallFrame(cctx);
         return temp;
 }
 

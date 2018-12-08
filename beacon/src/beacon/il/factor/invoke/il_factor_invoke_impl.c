@@ -104,13 +104,26 @@ bc_OperatorOverload* bc_FindSetILInvoke(bc_ILInvoke* self, bc_ILFactor* value,
                                         bc_CallContext* cctx, int* outIndex) {
         assert(self->tag == INSTANCE_INVOKE_SUBSCRIPT_T);
         bc_Vector* args = bc_NewVector();
-        bc_PushVector(args,
-                      ((bc_ILArgument*)bc_AtVector(self->args, 0))->Factor);
-        bc_PushVector(args, value);
-        bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(
-            BC_TYPE2CLASS(BC_MEMBER_TYPE(self->u.opov)),
-            OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
+        bc_PushCallFrame(cctx, BC_MEMBER_TYPE(self->u.opov)->GenericSelf, args,
+                         NULL);
+        bc_PushVector(
+            args, bc_EvalILFactor(
+                      ((bc_ILArgument*)bc_AtVector(self->args, 0))->Factor, env,
+                      cctx));
+        bc_PushVector(args, bc_EvalILFactor(value, env, cctx));
+        bc_GenericType* gargs[args->Length];
+        gargs[0] = bc_AtVector(args, 0);
+        gargs[1] = bc_AtVector(args, 1);
+        //        bc_CevaluateArguments(args, gargs, env, cctx);
+        bc_OperatorOverload* opov = bc_FindOperatorOverload(
+            BC_TYPE2CLASS(BC_MEMBER_TYPE(self->u.opov))->OVT->Operators,
+            OPERATOR_SUB_SCRIPT_SET_T, args->Length, gargs, MATCH_PUBLIC_ONLY,
+            cctx, outIndex);
+        // bc_OperatorOverload* opov = bc_ILFindOperatorOverloadClass(
+        //    BC_TYPE2CLASS(BC_MEMBER_TYPE(self->u.opov)),
+        //    OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
+        bc_PopCallFrame(cctx);
         return opov;
 }
 // private
@@ -257,9 +270,14 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                 return;
         }
         self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
-        self->u.opov = bc_ArgFindOperatorOverloadClass(
-            BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env,
-            cctx, &temp);
+        bc_GenericType* gargs_op[1];
+        bc_CevaluateArguments(self->args, gargs_op, env, cctx);
+        self->u.opov = bc_FindOperatorOverload(
+            BC_TYPE2CLASS(ctype)->OVT->Operators, OPERATOR_SUB_SCRIPT_GET_T,
+            self->args->Length, gargs_op, MATCH_PUBLIC_ONLY, cctx, &temp);
+        // self->u.opov = bc_ArgFindOperatorOverloadClass(
+        //    BC_TYPE2CLASS(ctype), OPERATOR_SUB_SCRIPT_GET_T, self->args, env,
+        //    cctx, &temp);
         self->index = temp;
         if (temp == -1) {
                 bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,

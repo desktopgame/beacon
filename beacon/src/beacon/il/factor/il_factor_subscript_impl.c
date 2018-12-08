@@ -41,9 +41,15 @@ void bc_LoadILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
         bc_Vector* args = bc_NewVector();
         bc_PushVector(args, arg_gtype);
         int temp = -1;
-        self->Operator = bc_GFindOperatorOverloadClass(
-            BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
-            OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
+        bc_GenericType* gargs[args->Length];
+        bc_CevaluateArguments(args, gargs, env, cctx);
+        bc_FindOperatorOverload(
+            BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype))->OVT->Operators,
+            OPERATOR_SUB_SCRIPT_GET_T, args->Length, gargs, MATCH_PUBLIC_ONLY,
+            cctx, &temp);
+        // self->Operator = bc_GFindOperatorOverloadClass(
+        //    BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
+        //    OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
         self->OperatorIndex = temp;
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
 }

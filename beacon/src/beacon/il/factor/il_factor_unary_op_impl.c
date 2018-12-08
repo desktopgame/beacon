@@ -153,7 +153,12 @@ int bc_GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype,
         }
         bc_Class* lclass = BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype));
         int temp = 0;
-        bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
+        bc_GenericType* gargs[args->Length];
+        // bc_CevaluateArguments(args, gargs, env, cctx);
+        bc_CreateOperatorVTClass(lclass);
+        bc_FindOperatorOverload(lclass->OVT->Operators, otype, args->Length,
+                                gargs, MATCH_PUBLIC_ONLY, cctx, &temp);
+        // bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
         return temp;
 }
