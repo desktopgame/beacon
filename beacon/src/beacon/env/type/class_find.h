@@ -154,20 +154,6 @@ struct bc_Property* bc_GetPropertyClass(bc_Class* self, int index);
 struct bc_Property* bc_GetSPropertyClass(bc_Class* self, int index);
 
 /**
- * もっとも一致する静的メソッドを返します.
- * @param self
- * @param namev
- * @param env
- * @param cctx
- * @param args<il_argument*>
- * @param outIndex メソッドへのインデックス
- * @return
- */
-struct bc_Method* bc_ILFindSMethodClass(bc_Class* self, bc_StringView namev,
-                                        bc_Vector* args, bc_Enviroment* env,
-                                        bc_CallContext* cctx, int* outIndex);
-
-/**
  * 指定位置のメソッドを返します.
  * このクラスの上や下も含めて検索します。
  * つまりこの index は self の最上位クラスから self
