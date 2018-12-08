@@ -79,26 +79,6 @@ bc_Field* bc_FindTreeSFieldClass(bc_Class* self, bc_StringView namev,
         return NULL;
 }
 
-bc_Field* bc_GetFieldClass(bc_Class* self, int index) {
-        assert(index >= 0);
-        int all = bc_CountAllFieldClass(self);
-        if (index >= (all - self->Fields->Length) && index < all) {
-                return bc_AtVector(self->Fields,
-                                   self->Fields->Length - (all - index));
-        }
-        return bc_GetFieldClass(self->SuperClass->CoreType->Kind.Class, index);
-}
-
-bc_Field* bc_GetSFieldClass(bc_Class* self, int index) {
-        assert(index >= 0);
-        int all = bc_CountAllSFieldClass(self);
-        if (index >= (all - self->StaticFields->Length) && index < all) {
-                return bc_AtVector(self->StaticFields,
-                                   self->StaticFields->Length - (all - index));
-        }
-        return bc_GetSFieldClass(self->SuperClass->CoreType->Kind.Class, index);
-}
-
 bool bc_IsContainsFieldClass(bc_Class* self, bc_Field* f) {
         return IsContainsFieldClassImpl(self->Fields, f);
 }

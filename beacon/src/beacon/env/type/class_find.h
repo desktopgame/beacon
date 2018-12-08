@@ -55,28 +55,6 @@ struct bc_Field* bc_FindTreeSFieldClass(bc_Class* self, bc_StringView namev,
                                         int* outIndex);
 
 /**
- * 指定位置のフィールドを返します.
- * このクラスの上や下も含めて検索します。
- * つまりこの index は self の最上位クラスから self
- * までに現れる全てのフィールドの通し番号です。
- * @param self
- * @param index
- * @return
- */
-struct bc_Field* bc_GetFieldClass(bc_Class* self, int index);
-
-/**
- * 指定位置の静的フィールドを返します.
- * このクラスの上や下も含めて検索します。
- * つまりこの index は self の最上位クラスから self
- * までに現れる全てのフィールドの通し番号です。
- * @param self
- * @param index
- * @return
- */
-struct bc_Field* bc_GetSFieldClass(bc_Class* self, int index);
-
-/**
  * クラスに指定のフィールドが含まれるなら true.
  * @param self
  * @param f

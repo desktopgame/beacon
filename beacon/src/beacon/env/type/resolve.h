@@ -160,6 +160,29 @@ bc_Property* bc_ResolveProperty(struct bc_Class* classz, bc_StringView name,
 //
 // Lookup
 //
+
+/**
+ * 指定位置のフィールドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self
+ * までに現れる全てのフィールドの通し番号です。
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Field* bc_LookupField(struct bc_Class* self, int index);
+
+/**
+ * 指定位置の静的フィールドを返します.
+ * このクラスの上や下も含めて検索します。
+ * つまりこの index は self の最上位クラスから self
+ * までに現れる全てのフィールドの通し番号です。
+ * @param self
+ * @param index
+ * @return
+ */
+bc_Field* bc_LookupStaticField(struct bc_Class* self, int index);
+
 /**
  * @param self
  * @param index

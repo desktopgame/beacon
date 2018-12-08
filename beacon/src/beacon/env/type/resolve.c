@@ -190,6 +190,27 @@ bc_Property* bc_ResolveProperty(bc_Class* classz, bc_StringView name,
 //
 // Lookup
 //
+bc_Field* bc_LookupField(bc_Class* self, int index) {
+        assert(index >= 0);
+        int all = bc_CountAllFieldClass(self);
+        if (index >= (all - self->Fields->Length) && index < all) {
+                return bc_AtVector(self->Fields,
+                                   self->Fields->Length - (all - index));
+        }
+        return bc_LookupField(self->SuperClass->CoreType->Kind.Class, index);
+}
+
+bc_Field* bc_LookupStaticField(bc_Class* self, int index) {
+        assert(index >= 0);
+        int all = bc_CountAllSFieldClass(self);
+        if (index >= (all - self->StaticFields->Length) && index < all) {
+                return bc_AtVector(self->StaticFields,
+                                   self->StaticFields->Length - (all - index));
+        }
+        return bc_LookupStaticField(self->SuperClass->CoreType->Kind.Class,
+                                    index);
+}
+
 bc_Property* bc_LookupProperty(bc_Class* self, int index) {
         assert(index >= 0);
         int all = bc_CountAllPropertyClass(self);

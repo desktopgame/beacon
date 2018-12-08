@@ -783,7 +783,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     ctx->TypeList, absClsIndex);
                                 bc_Class* cls = tp->Kind.Class;
                                 bc_Field* f =
-                                    bc_GetSFieldClass(cls, fieldIndex);
+                                    bc_LookupStaticField(cls, fieldIndex);
                                 bc_Object* sv =
                                     (bc_Object*)bc_PopVector(self->ValueStack);
                                 f->StaticValue = sv;
@@ -797,8 +797,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Type* cls = (bc_Type*)bc_AtVector(
                                     ctx->TypeList, absClsIndex);
-                                bc_Field* f = bc_GetSFieldClass(cls->Kind.Class,
-                                                                fieldIndex);
+                                bc_Field* f = bc_LookupStaticField(
+                                    cls->Kind.Class, fieldIndex);
                                 bc_PushVector(self->ValueStack,
                                               NON_NULL(f->StaticValue));
                                 break;
