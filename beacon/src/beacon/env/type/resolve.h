@@ -270,7 +270,7 @@ bc_Constructor* bc_LookupConstructor(struct bc_Class* self, int index);
  * @return
  */
 bc_OperatorOverload* bc_LookupOperatorOverload(struct bc_Class* self,
-                                                 int index);
+                                               int index);
 //
 // Other
 //

@@ -9,7 +9,7 @@
 #include "../property.h"
 #include "../property_body.h"
 #include "interface_impl.h"
-#include "meta_impl.h"
+#include "resolve.h"
 
 static bool IsContainsFieldClassImpl(bc_Vector* fields, bc_Field* f);
 static bool IsContainsPropertyClassImpl(bc_Vector* props, bc_Property* p);

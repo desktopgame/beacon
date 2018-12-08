@@ -22,7 +22,7 @@
 #include "../property.h"
 #include "../type_parameter.h"
 #include "class_find.h"
-#include "meta_impl.h"
+#include "resolve.h"
 
 // http://jumble-note.blogspot.jp/2012/09/c-vacopy.html
 #ifndef va_copy

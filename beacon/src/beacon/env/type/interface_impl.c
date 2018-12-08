@@ -9,7 +9,7 @@
 #include "../../util/text.h"
 #include "../generic_type.h"
 #include "../type_parameter.h"
-#include "meta_impl.h"
+#include "resolve.h"
 // proto
 bc_Vector* get_generic_interface_tree_impl(bc_Interface* self);
 static void delete_method(bc_VectorItem item);

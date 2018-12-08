@@ -11,7 +11,7 @@
 #include "../../env/operator_overload.h"
 #include "../../env/parameter.h"
 #include "../../env/property.h"
-#include "../../env/type/meta_impl.h"
+#include "../../env/type/resolve.h"
 #include "../../env/type_parameter.h"
 #include "../../il/il_TYPE_IMPL.h"
 #include "../../il/il_argument.h"
