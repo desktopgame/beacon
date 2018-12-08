@@ -13,27 +13,6 @@
 #include <stdbool.h>
 
 /**
- * 指定のファイルを解析して AST を出力します.
- * @param filename
- * @return 成功したなら true.
- */
-bool bc_EvalAST(const char* filename);
-
-/**
- * 指定のファイルを解析して IL を出力します.
- * @param filename
- * @return 成功したなら true.
- */
-bool bc_EvalIL(const char* filename);
-
-/**
- * 指定のファイルを解析してオペコードを出力します.
- * @param filename
- * @return 成功したなら true.
- */
-bool bc_EvalOp(const char* filename);
-
-/**
  * ファイルの中身を現在のコンテキストで実行します.
  * @param filename
  * @return 解析に成功したなら false

@@ -15,57 +15,6 @@
 // proto
 static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt);
 
-bool bc_EvalAST(const char* filename) {
-        fprintf(stderr, "this command is deleted\n");
-        bc_FatalError();
-        return false;
-        /*
-        if (!bc_ExistsFile(filename)) {
-                fprintf(stderr, "file is not found: %s", filename);
-                bc_FatalError();
-                return false;
-        }
-        parser* p = ParseFile(filename);
-        ast_print_tree(p->root);
-        if(p->result != PARSE_COMPLETE_T) {
-                printf("error: %s<%d>\n    %s\n", p->source_name, p->Lineno,
-        p->error_message); } else { printf("sucess!\n");
-        }
-        //パーサーを破棄
-        bool ret = p->result != PARSE_COMPLETE_T;
-        DestroyParser(p);
-        return ret;
-        //*/
-}
-
-bool bc_EvalIL(const char* filename) {
-        fprintf(stderr, "this command is deleted\n");
-        bc_FatalError();
-        return false;
-        /*
-        ClassLoader* cl = NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
-        LoadClassLoader(cl);
-
-        if(!GetLastBCError()) {
-                ILToplevel* il = cl->ILCode;
-                ILToplevel_dump(il, 0);
-        }
-        DeleteClassLoader(cl);
-        return true;
-        //*/
-}
-
-bool bc_EvalOp(const char* filename) {
-        bc_ClassLoader* cl = bc_NewClassLoader(filename, CONTENT_ENTRY_POINT_T);
-        bc_LoadClassLoader(cl);
-
-        if (!bc_GetLastPanic()) {
-                bc_DumpEnviromentOp(cl->Env, 0);
-        }
-        bc_DeleteClassLoader(cl);
-        return true;
-}
-
 bool bc_EvalFile(const char* filename) {
         bc_ClassLoader* cll =
             bc_NewClassLoader(filename, CONTENT_ENTRY_POINT_T);

@@ -19,27 +19,6 @@
 int bc_TestCmd(int argc, char* argv[]);
 
 /**
- * ASTをダンプします.
- * @param filename
- * @return
- */
-int bc_DumpASTCmd(const char* filename);
-
-/**
- * ASTをダンプします.
- * @param filename
- * @return
- */
-int bc_DumpILCmd(const char* filename);
-
-/**
- * オペコードをダンプします.
- * @param filename
- * @return
- */
-int bc_DumpOpCodeCmd(const char* filename);
-
-/**
  * 指定のファイルを実行します.
  * @param filename
  * @return

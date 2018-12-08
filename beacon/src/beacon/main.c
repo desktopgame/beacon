@@ -26,41 +26,26 @@
  */
 int main_cl(int argc, char *argv[]) {
         struct option longopts[] = {{"test", no_argument, NULL, 't'},
-                                    {"ast", required_argument, NULL, 'a'},
-                                    {"il", required_argument, NULL, 'i'},
                                     {"run", required_argument, NULL, 'r'},
-                                    {"op", required_argument, NULL, 'o'},
                                     {0, 0, 0, 0}};
         extern char *optarg;
         extern int optind, opterr;
         int opt = 0;
         int longindex = 0;
         int ret = 0;
-        while ((opt = getopt_long(argc, argv, "ta:i:r:o:", longopts,
-                                  &longindex)) != -1) {
+        while ((opt = getopt_long(argc, argv, "tr:", longopts, &longindex)) !=
+               -1) {
                 switch (opt) {
                         case 't':
                                 printf(":t :test\n");
                                 ret = bc_TestCmd(argc, argv);
                                 break;
-                        case 'a':
-                                printf(":a :ast\n");
-                                ret = bc_DumpASTCmd(optarg);
-                                break;
-                        case 'i':
-                                printf(":i :il\n");
-                                ret = bc_DumpILCmd(optarg);
-                                break;
                         case 'r':
                                 printf(":r :run\n");
                                 ret = bc_RunCmd(optarg);
                                 break;
-                        case 'o':
-                                printf(":o :op\n");
-                                ret = bc_DumpOpCodeCmd(optarg);
-                                break;
                         default:
-                                printf("error! :%c :%c", opt, optopt);
+                                printf("error! :%c :%c\n", opt, optopt);
                                 break;
                 }
         }

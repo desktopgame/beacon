@@ -18,25 +18,6 @@ int bc_TestCmd(int argc, char* argv[]) {
 #endif
 }
 
-int bc_DumpASTCmd(const char* filename) {
-        int ret = bc_EvalAST(filename);
-        return ret;
-}
-
-int bc_DumpILCmd(const char* filename) {
-        bc_OpenScriptContext();
-        int ret = bc_EvalIL(filename);
-        bc_CloseScriptContext();
-        return ret;
-}
-
-int bc_DumpOpCodeCmd(const char* filename) {
-        bc_OpenScriptContext();
-        int ret = bc_EvalOp(filename);
-        bc_CloseScriptContext();
-        return ret;
-}
-
 int bc_RunCmd(const char* filename) {
         bc_OpenScriptContext();
         int ret = bc_EvalFile(filename);
