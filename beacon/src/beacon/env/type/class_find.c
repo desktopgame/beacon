@@ -221,39 +221,6 @@ bc_Property* bc_GetSPropertyClass(bc_Class* self, int index) {
                                    index);
 }
 
-bc_Property* bc_FindPropertyClass(bc_Class* self, bc_StringView namev,
-                                  int* outIndex) {
-        (*outIndex) = -1;
-        for (int i = 0; i < self->Properties->Length; i++) {
-                bc_VectorItem e = bc_AtVector(self->Properties, i);
-                bc_Property* p = (bc_Property*)e;
-                if (namev == p->Name) {
-                        (*outIndex) = (bc_CountAllPropertyClass(self) -
-                                       self->Properties->Length) +
-                                      i;
-                        return p;
-                }
-        }
-        return NULL;
-}
-
-bc_Property* bc_FindTreePropertyClass(bc_Class* self, bc_StringView namev,
-                                      int* outIndex) {
-        bc_Class* pointee = self;
-        do {
-                bc_Property* p = bc_FindPropertyClass(pointee, namev, outIndex);
-                if (p != NULL) {
-                        return p;
-                }
-                bc_GenericType* supergtype = pointee->SuperClass;
-                if (supergtype == NULL) {
-                        break;
-                }
-                pointee = supergtype->CoreType->Kind.Class;
-        } while (pointee != NULL);
-        return NULL;
-}
-
 bc_Property* bc_FindSPropertyClass(bc_Class* self, bc_StringView namev,
                                    int* outIndex) {
         (*outIndex) = -1;

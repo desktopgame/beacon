@@ -29,7 +29,7 @@ void bc_LoadILProperty(bc_ILPropertyAccess* self, bc_Enviroment* env,
         bc_GenericType* receiver = bc_EvalILFactor(self->Source, env, cctx);
         bc_Type* receiverT = bc_GENERIC2TYPE(receiver);
         int temp = -1;
-        bc_FindTreePropertyClass(BC_TYPE2CLASS(receiverT), self->Property->Name,
+        bc_ResolveProperty(BC_TYPE2CLASS(receiverT), self->Property->Name,
                                  &temp);
         self->Index = temp;
         if (temp == -1) {

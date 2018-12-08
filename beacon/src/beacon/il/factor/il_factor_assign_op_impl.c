@@ -385,8 +385,8 @@ static void generate_assign_to_variable_local(bc_ILAssignOp* self,
                 // src のような名前がプロパティを示す場合
         } else if (illoc->Type == VARIABLE_LOCAL_PROPERTY_T) {
                 int temp = -1;
-                bc_Property* p = bc_FindTreePropertyClass(
-                    bc_GetClassByContext(cctx), illoc->Name, &temp);
+                bc_Property* p = bc_ResolveProperty(bc_GetClassByContext(cctx),
+                                                    illoc->Name, &temp);
                 assert(temp != -1);
                 //フィールドはstaticでないが
                 //現在のコンテキストはstaticなので this にアクセスできない

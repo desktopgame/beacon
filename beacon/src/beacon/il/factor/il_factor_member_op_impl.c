@@ -175,7 +175,7 @@ static void ILMemberOp_check_prop(bc_ILMemberOp* self, bc_Enviroment* env,
 #endif
         bc_Type* ctype = receiver_type->CoreType;
         bc_Property* p =
-            bc_FindTreePropertyClass(BC_TYPE2CLASS(ctype), self->Name, &temp);
+            bc_ResolveProperty(BC_TYPE2CLASS(ctype), self->Name, &temp);
         bc_ILPropertyAccess* factp = bc_NewILPropertyAccess();
         factp->Source = self->Source;
         factp->Name = self->Name;

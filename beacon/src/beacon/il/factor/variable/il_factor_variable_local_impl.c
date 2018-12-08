@@ -165,7 +165,7 @@ static void LoadILVariableLocal_Property(bc_ILVariableLocal* self,
         int temp = -1;
         bc_Type* tp = bc_GetTypeByContext(cctx);
         bc_Property* p =
-            bc_FindTreePropertyClass(BC_TYPE2CLASS(tp), self->Name, &temp);
+            bc_ResolveProperty(BC_TYPE2CLASS(tp), self->Name, &temp);
         if (temp == -1) {
                 p = bc_FindTreeSPropertyClass(BC_TYPE2CLASS(tp), self->Name,
                                               &temp);
