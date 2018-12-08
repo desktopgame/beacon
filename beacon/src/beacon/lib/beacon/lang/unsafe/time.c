@@ -74,8 +74,8 @@ static void bc_time_nativeToString(bc_Method* parent, bc_Frame* fr,
                                    bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         int temp;
-        bc_FindFieldClass(BC_TYPE2CLASS(bc_GetTimeType()),
-                          bc_InternString("rawTime"), &temp);
+        bc_ResolveField(BC_TYPE2CLASS(bc_GetTimeType()),
+                        bc_InternString("rawTime"), &temp);
         bc_Object* rawTime = (bc_Object*)bc_AtVector(self->Fields, temp);
         bc_PushVector(fr->ValueStack,
                       bc_NewString(ctime(&(((bc_Long*)rawTime)->Value))));

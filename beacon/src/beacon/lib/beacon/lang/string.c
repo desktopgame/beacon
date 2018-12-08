@@ -43,15 +43,14 @@ bc_Object* bc_NewString(const char* str) {
         bc_ShrinkBuffer(sb);
         // String#charArrayを埋める
         int temp = 0;
-        bc_FindFieldClass(strType->Kind.Class, bc_InternString("charArray"),
-                          &temp);
+        bc_ResolveField(strType->Kind.Class, bc_InternString("charArray"),
+                        &temp);
         bc_AssignVector(ret->Fields, temp, arr);
         bc_VectorItem* test = bc_AtVector(ret->Fields, temp);
         assert(test != NULL);
         // Array#lengthを埋める
         temp = 0;
-        bc_FindFieldClass(arrType->Kind.Class, bc_InternString("length"),
-                          &temp);
+        bc_ResolveField(arrType->Kind.Class, bc_InternString("length"), &temp);
         bc_AssignVector(arr->Fields, temp, bc_NewInteger(sb->Length));
         // C形式の文字列でも保存
         // AssignVector(ret->NativeSlotVec, 0, sb);
@@ -109,8 +108,8 @@ static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr,
         self->OnMessage = handle_obj_message;
         // String#charArrayを取得
         int temp = 0;
-        bc_FindFieldClass(BC_TYPE_STRING->Kind.Class,
-                          bc_InternString("charArray"), &temp);
+        bc_ResolveField(BC_TYPE_STRING->Kind.Class,
+                        bc_InternString("charArray"), &temp);
         bc_Array* charArr = (bc_Array*)bc_AtVector(self->Fields, temp);
         //これを char* へ変換
         bc_Buffer* sb = bc_NewBuffer();

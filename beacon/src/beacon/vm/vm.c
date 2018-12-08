@@ -1466,8 +1466,8 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
         bc_Type* exceptionT = bc_FindTypeFromNamespace(
             bc_GetLangNamespace(), bc_InternString("Exception"));
         int temp = -1;
-        bc_FindFieldClass(exceptionT->Kind.Class, bc_InternString("message"),
-                          &temp);
+        bc_ResolveField(exceptionT->Kind.Class, bc_InternString("message"),
+                        &temp);
         bc_Object* ex = self->Exception;
         bc_Object* msg = bc_AtVector(ex->Fields, temp);
         bc_Buffer* cstr = ((bc_String*)msg)->Buffer;
@@ -1483,17 +1483,17 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
             bc_GetLangNamespace(), bc_InternString("StackTraceElement"));
         // Exception#stackTraceを取得
         temp = -1;
-        bc_FindFieldClass(exceptionT->Kind.Class, bc_InternString("stackTrace"),
-                          &temp);
+        bc_ResolveField(exceptionT->Kind.Class, bc_InternString("stackTrace"),
+                        &temp);
         bc_Object* stackTraceObj = bc_AtVector(ex->Fields, temp);
         // StackTraceElement#fileName
         // StackTraceElement#lineIndex を取得
         int fileNameptr = -1;
         int lineIndexptr = -1;
-        bc_FindFieldClass(stackTraceElementT->Kind.Class,
-                          bc_InternString("fileName"), &fileNameptr);
-        bc_FindFieldClass(stackTraceElementT->Kind.Class,
-                          bc_InternString("lineIndex"), &lineIndexptr);
+        bc_ResolveField(stackTraceElementT->Kind.Class,
+                        bc_InternString("fileName"), &fileNameptr);
+        bc_ResolveField(stackTraceElementT->Kind.Class,
+                        bc_InternString("lineIndex"), &lineIndexptr);
         int stackLen = bc_GetArrayLength(stackTraceObj);
         for (int i = 0; i < stackLen; i++) {
                 bc_Object* e = bc_GetElementAt(stackTraceObj, i);
