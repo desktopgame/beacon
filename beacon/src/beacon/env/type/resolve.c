@@ -336,7 +336,7 @@ bc_Constructor* bc_LookupConstructor(bc_Class* self, int index) {
         return bc_AtVector(self->Constructors, index);
 }
 
-bc_OperatorOverload* bc_GetOperatorOverloadClass(bc_Class* self, int index) {
+bc_OperatorOverload* bc_LookupOperatorOverload(bc_Class* self, int index) {
         return bc_AtVector(self->OVT->Operators, index);
 }
 //

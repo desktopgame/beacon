@@ -36,7 +36,7 @@ bc_GenericType* bc_EvalILLogicOp(bc_ILLogicOp* self, bc_Enviroment* env,
                                  bc_OperatorToString(self->Type));
                         return NULL;
                 }
-                bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(
+                bc_OperatorOverload* operator_ov = bc_LookupOperatorOverload(
                     BC_TYPE2CLASS(bc_GENERIC2TYPE(lgtype)),
                     self->OperatorIndex);
                 return bc_ApplyILBinaryOp(self->Parent,

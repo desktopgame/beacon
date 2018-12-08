@@ -45,7 +45,7 @@ bc_GenericType* bc_EvalILExplicitBinaryOp(bc_ILExplicitBinaryOp* self,
                                           bc_Enviroment* env,
                                           bc_CallContext* cctx) {
         bc_GenericType* gt = bc_EvalILFactor(self->Receiver, env, cctx);
-        bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(
+        bc_OperatorOverload* operator_ov = bc_LookupOperatorOverload(
             BC_TYPE2CLASS(bc_GENERIC2TYPE(gt)), self->Index);
         return operator_ov->ReturnGType;
 }

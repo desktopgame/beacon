@@ -33,7 +33,7 @@ bc_GenericType* bc_EvalILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env,
                 //プリミティブ型同士でないのに
                 //演算子オーバーロードもない
                 assert(self->OperatorIndex != -1);
-                bc_OperatorOverload* operator_ov = bc_GetOperatorOverloadClass(
+                bc_OperatorOverload* operator_ov = bc_LookupOperatorOverload(
                     BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype)), self->OperatorIndex);
                 return bc_ApplyILUnaryOp(self->Parent, operator_ov->ReturnGType,
                                          env, cctx);
