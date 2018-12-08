@@ -824,7 +824,7 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
         bc_Constructor* chainTarget = NULL;
         int temp = -1;
         bc_GenericType* gargs[chain->Arguments->Length];
-        bc_EvaluateArguments(chain->Arguments, gargs, env, cctx);
+        bc_CevaluateArguments(chain->Arguments, gargs, env, cctx);
         if (chain->Type == CHAIN_TYPE_THIS_T) {
                 chainTarget = bc_FindConstructor(
                     classz->Constructors, chain->Arguments->Length, gargs, NULL,

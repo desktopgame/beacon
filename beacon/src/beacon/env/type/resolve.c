@@ -1,6 +1,7 @@
 #include "resolve.h"
 #include "../../il/il_argument.h"
 #include "../../il/il_type_argument.h"
+#include "../object.h"
 #include "../parameter.h"
 #include "../type_impl.h"
 #include "../type_parameter.h"
@@ -10,12 +11,21 @@ static int calc_argument_distance(bc_Vector* parameters, int args_count,
                                   bc_GenericType* args[], bc_Vector* type_args,
                                   bc_CallContext* cctx);
 
-void bc_EvaluateArguments(bc_Vector* args, bc_GenericType* result[],
-                          bc_Enviroment* env, bc_CallContext* cctx) {
+void bc_CevaluateArguments(bc_Vector* args, bc_GenericType* result[],
+                           bc_Enviroment* env, bc_CallContext* cctx) {
         for (int i = 0; i < args->Length; i++) {
                 bc_ILArgument* e = bc_AtVector(args, i);
                 bc_GenericType* gtype = bc_EvalILFactor(e->Factor, env, cctx);
                 result[i] = gtype;
+                if (bc_GetLastPanic()) {
+                        break;
+                }
+        }
+}
+
+void bc_RevaluateArguments(bc_Vector* args, bc_GenericType* result[]) {
+        for (int i = 0; i < args->Length; i++) {
+                result[i] = ((bc_Object*)bc_AtVector(args, i))->GType;
                 if (bc_GetLastPanic()) {
                         break;
                 }

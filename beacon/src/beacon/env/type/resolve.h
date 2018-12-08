@@ -15,8 +15,10 @@ typedef enum bc_SearchOption {
         MATCH_PUBLIC_OR_PROTECTED
 } bc_SearchOption;
 
-void bc_EvaluateArguments(bc_Vector* args, bc_GenericType* result[],
-                          bc_Enviroment* env, bc_CallContext* cctx);
+void bc_CevaluateArguments(bc_Vector* args, bc_GenericType* result[],
+                           bc_Enviroment* env, bc_CallContext* cctx);
+
+void bc_RevaluateArguments(bc_Vector* args, bc_GenericType* result[]);
 
 bc_OperatorOverload* bc_FindOperatorOverload(
     bc_Vector* operator_overloads, bc_OperatorType type, int args_count,

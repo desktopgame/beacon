@@ -224,7 +224,7 @@ static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
         //オペレータオーバーロードを検索
         int temp;
         bc_GenericType* gargs[self->Arguments->Length];
-        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         iv->u.opov = bc_FindOperatorOverload(
             receiver_cl->OperatorOverloads, OPERATOR_SUB_SCRIPT_GET_T,
             self->Arguments->Length, gargs, MATCH_PUBLIC_ONLY, cctx, &temp);

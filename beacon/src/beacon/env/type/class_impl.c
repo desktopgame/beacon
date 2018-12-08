@@ -357,9 +357,7 @@ bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
         //コンストラクタを検索
         int temp = -1;
         bc_GenericType* gargs[args->Length];
-        for (int i = 0; i < args->Length; i++) {
-                gargs[i] = ((bc_Object*)bc_AtVector(args, i))->GType;
-        }
+        bc_RevaluateArguments(args, gargs);
         bc_Constructor* ctor =
             bc_FindConstructor(self->Constructors, args->Length, gargs,
                                type_args, MATCH_ALL, cctx, &temp);

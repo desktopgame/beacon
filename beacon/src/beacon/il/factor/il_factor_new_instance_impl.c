@@ -155,7 +155,7 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
                                              NULL, self->TypeArgs);
         bc_ResolveILTypeArgument(self->TypeArgs, cctx);
         bc_GenericType* gargs[self->Arguments->Length];
-        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
                                   ? MATCH_ALL
                                   : MATCH_PUBLIC_ONLY;

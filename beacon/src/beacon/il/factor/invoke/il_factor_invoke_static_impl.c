@@ -125,7 +125,7 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
         bc_GenericType* gargs[self->Arguments->Length];
-        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         if (bc_GetLastPanic()) {
                 bc_PopCallFrame(cctx);
                 return;

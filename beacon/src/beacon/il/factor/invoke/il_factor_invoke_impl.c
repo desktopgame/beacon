@@ -218,7 +218,7 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
         int temp = -1;
         self->tag = INSTANCE_INVOKE_METHOD_T;
         bc_GenericType* gargs[self->args->Length];
-        bc_EvaluateArguments(self->args, gargs, env, cctx);
+        bc_CevaluateArguments(self->args, gargs, env, cctx);
         if (ctype->Tag == TYPE_CLASS_T) {
                 bc_CreateVTableClass(BC_TYPE2CLASS(ctype));
         }

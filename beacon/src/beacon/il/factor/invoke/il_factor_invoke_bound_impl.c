@@ -253,7 +253,7 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         const char* namestr = bc_Ref2Str(self->Name);
 #endif
         bc_GenericType* gargs[self->Arguments->Length];
-        bc_EvaluateArguments(self->Arguments, gargs, env, cctx);
+        bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         if (temp == -1) {
                 self->Kind.Method =
                     bc_FindMethod(BC_TYPE2CLASS(ctype)->VT->Elements,
