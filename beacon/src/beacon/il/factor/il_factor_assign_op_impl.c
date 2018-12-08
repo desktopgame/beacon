@@ -110,7 +110,11 @@ static void assign_by_namebase(bc_ILAssignOp* self, bc_Enviroment* env,
                 bc_Class* cls = BC_TYPE2CLASS(
                     bc_ResolveContext(cctx, ilvar->Kind.Static->FQCN));
                 int temp = -1;
-                bc_Field* sf = bc_FindSFieldClass(cls, ilmem->Name, &temp);
+                bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
+                                          ? MATCH_ALL
+                                          : MATCH_PUBLIC_ONLY;
+                bc_Field* sf =
+                    bc_FindField(cls->StaticFields, ilmem->Name, opt, &temp);
                 assert(temp != -1);
                 bc_GenerateILFactor(self->Right, env, cctx);
                 bc_GeneratePutField(env->Bytecode, sf, temp);
