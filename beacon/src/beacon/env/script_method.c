@@ -1,8 +1,8 @@
 #include "script_method.h"
 #include <stdlib.h>
-#include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../vm/script_thread.h"
 #include "../vm/vm.h"
 #include "method.h"
 #include "type_interface.h"

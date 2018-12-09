@@ -6,10 +6,10 @@
 #include "../env/script_context.h"
 #include "../error.h"
 #include "../parse/parser.h"
-#include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/string_buffer.h"
 #include "../util/text.h"
+#include "../vm/script_thread.h"
 #include "../vm/vm.h"
 
 // proto

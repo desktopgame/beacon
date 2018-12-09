@@ -19,7 +19,6 @@
 #include "../env/type_interface.h"
 #include "../lib/bc_library_interface.h"
 #include "../lib/beacon/lang/array.h"
-#include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/string_buffer.h"
 #include "../util/text.h"
@@ -28,6 +27,7 @@
 #include "frame.h"
 #include "label.h"
 #include "line_range.h"
+#include "script_thread.h"
 #include "vm_trace.h"
 #include "yield_context.h"
 #if defined(_MSC_VER)

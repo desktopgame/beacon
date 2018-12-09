@@ -1,11 +1,26 @@
 namespace beacon::lang {
 	class Thread {
 		public:
-		def new() {
+		def new(String name) {
+			this.name = name;
 			nativeInit();
 		}
 
+		def static getMainThread() -> Thread {
+			if(mainThread == null) {
+				mainThread = nativeGetMainThread();
+			}
+			return mainThread;
+		}
+
 		private:
-		def nativeInit() -> Void;
+		String name;
+		static Thread mainThread;
+
+		def native nativeInit() -> Void;
+
+		def static native nativeGetMainThread() -> Thread;
+
+		def static native nativeGetCurrentThread() -> Thread;
 	}
 }

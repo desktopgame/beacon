@@ -2,10 +2,10 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "../lib/bc_library_interface.h"
-#include "../thread/thread.h"
 #include "../util/io.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../vm/script_thread.h"
 #include "class_loader.h"
 #include "field.h"
 #include "generic_type.h"

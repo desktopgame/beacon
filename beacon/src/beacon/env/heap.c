@@ -2,9 +2,9 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "../env/generic_type.h"
-#include "../thread/thread.h"
 #include "../util/mem.h"
 #include "../util/text.h"
+#include "../vm/script_thread.h"
 #include "../vm/vm.h"
 #include "script_context.h"
 

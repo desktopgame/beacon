@@ -11,11 +11,11 @@
 #include "../../error.h"
 #include "../../lib/beacon/lang/string.h"
 #include "../../parse/parser.h"
-#include "../../thread/thread.h"
 #include "../../util/io.h"
 #include "../../util/mem.h"
 #include "../../vm/eval.h"
 #include "../../vm/frame.h"
+#include "../../vm/script_thread.h"
 #include "../../vm/symbol_entry.h"
 #include "../../vm/vm.h"
 

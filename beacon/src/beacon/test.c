@@ -9,7 +9,6 @@
 #include "env/script_context.h"
 #include "error.h"
 #include "parse/parser.h"
-#include "thread/thread.h"
 #include "util/file_entry.h"
 #include "util/io.h"
 #include "util/mem.h"
@@ -21,6 +20,7 @@
 #include "vm/enviroment.h"
 #include "vm/eval.h"
 #include "vm/opcode_buf.h"
+#include "vm/script_thread.h"
 #include "vm/vm.h"
 
 #if defined(_MSC_VER)

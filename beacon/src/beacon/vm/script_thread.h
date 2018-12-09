@@ -18,6 +18,7 @@ struct bc_ScriptContext;
 struct bc_Frame;
 struct bc_CallContext;
 struct bc_ScriptContext;
+struct bc_Object;
 /**
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
@@ -25,6 +26,7 @@ struct bc_ScriptContext;
 typedef struct bc_ScriptThread {
         bc_Vector* TraceStack;
         GThread* Thread;
+        struct bc_Object* Owner;
         bool IsVMCrushByException;
         bool IsVMDump;
         struct bc_Frame* FrameRef;
@@ -84,4 +86,27 @@ struct bc_CallContext* bc_GetScriptThreadContext();
  * メインスレッドを終了します.
  */
 void bc_DestroyScriptThread();
+
+/**
+ * スクリプトの生成/破棄をブロックします。
+ */
+void bc_LockScriptThread();
+
+/**
+ * 全てのスレッドの数を返します。
+ * @return
+ */
+int bc_GetScriptThreadCount();
+
+/**
+ * 指定のスレッドを返します。
+ * @param index
+ * @return
+ */
+bc_ScriptThread* bc_GetScriptThreadAt(int index);
+
+/**
+ * ブロックを解除します。
+ */
+void bc_UnlockScriptThread();
 #endif  // SIGNAL_THREAD_THREAD_H

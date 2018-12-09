@@ -1,4 +1,4 @@
-#include "thread.h"
+#include "script_thread.h"
 #include <assert.h>
 #include "../env/script_context.h"
 #include "../il/call_context.h"
@@ -76,6 +76,16 @@ void bc_DestroyScriptThread() {
         gAllThread = NULL;
         bc_unlock();
 }
+
+void bc_LockScriptThread() { bc_lock(); }
+
+int bc_GetScriptThreadCount() { return gAllThread->Length; }
+
+bc_ScriptThread* bc_GetScriptThreadAt(int index) {
+        return bc_AtVector(gAllThread, index);
+}
+
+void bc_UnlockScriptThread() { bc_unlock(); }
 // private
 static void ScriptThread_trace_delete(bc_VectorItem item) {
         bc_VMTrace* e = (bc_VMTrace*)item;
@@ -90,6 +100,7 @@ static bc_ScriptThread* bc_new_script_thread() {
         ret->CCtx = NULL;
         ret->Thread = NULL;
         ret->ScriptContext = NULL;
+        ret->Owner = NULL;
         return ret;
 }
 

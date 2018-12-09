@@ -23,8 +23,8 @@
 #include "../../il/il_parameter.h"
 #include "../../il/il_property.h"
 #include "../../il/il_stmt_interface.h"
-#include "../../thread/thread.h"
 #include "../../util/text.h"
+#include "../../vm/script_thread.h"
 #include "../../vm/symbol_entry.h"
 #include "class_loader_ilload_stmt_module_impl.h"
 
