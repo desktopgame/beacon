@@ -30,7 +30,8 @@ typedef struct bc_ScriptThread {
         bool IsVMCrushByException;
         bool IsVMDump;
         struct bc_Frame* FrameRef;
-        struct bc_ScriptContext* ScriptContext;
+        bc_Vector* ScriptContextRefAll;
+        int SelectedScriptContext;
         struct bc_CallContext* CCtx;
 } bc_ScriptThread;
 
@@ -109,4 +110,23 @@ bc_ScriptThread* bc_GetScriptThreadAt(int index);
  * ブロックを解除します。
  */
 void bc_UnlockScriptThread();
+
+/**
+ * 現在のスレッドにスクリプトコンテキストをアタッチします。
+ * @param script
+ */
+void bc_AttachScriptContext(struct bc_ScriptContext* script);
+
+/**
+ * 現在のスレッドにスクリプトコンテキストをデタッチします。
+ * @param script
+ */
+void bc_DetachScriptContext(struct bc_ScriptContext* script);
+
+/**
+ * 選択中のコンテキストを返します。
+ * @param self
+ * @return
+ */
+struct bc_ScriptContext* bc_SelectedScriptContext(bc_ScriptThread* self);
 #endif  // SIGNAL_THREAD_THREAD_H

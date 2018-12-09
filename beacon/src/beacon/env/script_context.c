@@ -32,28 +32,22 @@ bc_ScriptContext* bc_OpenScriptContext() {
                 gScriptContextVec = bc_NewVector();
         }
         bc_ScriptContext* sctx = malloc_script_context();
-        gScriptContext = sctx;
         bc_PushVector(gScriptContextVec, sctx);
         bc_BootstrapScriptContext(sctx);
         return sctx;
 }
 
 bc_ScriptContext* bc_GetCurrentScriptContext() {
-        assert(gScriptContext != NULL);
-        return bc_GetCurrentScriptThread()->ScriptContext;
+        return bc_SelectedScriptContext(bc_GetCurrentScriptThread());
 }
 
 void bc_CloseScriptContext() {
         bc_ScriptContext* sctx =
             (bc_ScriptContext*)bc_PopVector(gScriptContextVec);
         free_script_context(sctx);
-        gScriptContext = NULL;
         if (gScriptContextVec->Length == 0) {
                 bc_DeleteVector(gScriptContextVec, bc_VectorDeleterOfNull);
                 gScriptContextVec = NULL;
-        } else {
-                gScriptContext =
-                    (bc_ScriptContext*)bc_TopVector(gScriptContextVec);
         }
 }
 
@@ -195,7 +189,6 @@ static bc_ScriptContext* malloc_script_context(void) {
         ret->ClassLoaderMap = bc_NewTreeMap();
         ret->Heap = bc_NewHeap();
         ret->TypeList = bc_NewVector();
-        ret->ThreadList = bc_NewVector();
         ret->BootstrapClassLoader = NULL;
         ret->AllGenericList = bc_NewVector();
         ret->True = NULL;
@@ -207,7 +200,6 @@ static bc_ScriptContext* malloc_script_context(void) {
         ret->IncludeList = bc_GetFiles(path);
         MEM_FREE(path);
 #else
-        bc_GetCurrentScriptThread()->ScriptContext = ret;
         ret->IncludeList = bc_GetFiles("script-lib/beacon/lang");
 #endif
         ret->PositiveIntegerCacheList = bc_NewVector();
@@ -215,7 +207,8 @@ static bc_ScriptContext* malloc_script_context(void) {
         ret->IntegerCacheMap = bc_NewNumericMap();
         ret->IsPrintError = true;
         ret->IsAbortOnError = true;
-        bc_PushVector(ret->ThreadList, bc_GetMainScriptThread());
+        ret->ThreadRef = NULL;
+        bc_AttachScriptContext(ret);
         return ret;
 }
 
@@ -241,7 +234,6 @@ static void free_script_context(bc_ScriptContext* self) {
         int x = bc_CountActiveObject();
 
         bc_DeleteVector(self->TypeList, bc_VectorDeleterOfNull);
-        bc_DeleteVector(self->ThreadList, bc_VectorDeleterOfNull);
         bc_DeleteTreeMap(self->ClassLoaderMap, delete_class_loader);
         //ブートストラップクラスローダを意図的に起動していないなら、
         //ここはまだNULL
@@ -252,6 +244,7 @@ static void free_script_context(bc_ScriptContext* self) {
         int a = bc_CountActiveObject();
         bc_DeleteNumericMap(self->NamespaceMap, delete_namespace);
         bc_DeleteFiles(self->IncludeList);
+        bc_DetachScriptContext(self);
         MEM_FREE(self);
 }
 

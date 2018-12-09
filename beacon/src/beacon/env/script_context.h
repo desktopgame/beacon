@@ -19,6 +19,7 @@ struct bc_Heap;
 struct bc_Object;
 struct bc_ClassLoader;
 struct bc_Field;
+struct bc_ScriptThread;
 
 /**
  * 静的フィールドを訪問するための関数ポインタ.
@@ -31,9 +32,9 @@ typedef void (*bc_StaticEach)(struct bc_Field* item);
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct bc_ScriptContext {
+        struct bc_ScriptThread* ThreadRef;
         bc_NumericMap* NamespaceMap;
         bc_TreeMap* ClassLoaderMap;
-        bc_Vector* ThreadList;
         bc_Vector* IncludeList;
         struct bc_ClassLoader* BootstrapClassLoader;
         //通し番号でクラスを参照するためのベクター
