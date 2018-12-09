@@ -44,8 +44,7 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
         }
         //実行
         bc_Frame* fr = bc_NewFrame();
-        bc_SetScriptThreadFrameRef(
-            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext()), fr);
+        bc_SetScriptThreadFrameRef(bc_GetCurrentScriptThread(), fr);
         //エラーによって中断された場合のため、ここで戻す
         bc_Heap* he = bc_GetHeap();
         he->AcceptBlocking = 0;
@@ -61,8 +60,7 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
         bc_CatchVM(fr);
         bc_CollectHeap(bc_GetHeap());
         bc_DeleteFrame(fr);
-        bc_ReleaseScriptThreadFrameRef(
-            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext()));
+        bc_ReleaseScriptThreadFrameRef(bc_GetCurrentScriptThread());
 
         bool ret = bc_GetLastPanic();
         bc_DeleteClassLoader(cll);

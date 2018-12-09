@@ -40,7 +40,7 @@ bc_ScriptContext* bc_OpenScriptContext() {
 
 bc_ScriptContext* bc_GetCurrentScriptContext() {
         assert(gScriptContext != NULL);
-        return gScriptContext;
+        return bc_GetCurrentScriptThread()->ScriptContext;
 }
 
 void bc_CloseScriptContext() {
@@ -207,6 +207,7 @@ static bc_ScriptContext* malloc_script_context(void) {
         ret->IncludeList = bc_GetFiles(path);
         MEM_FREE(path);
 #else
+        bc_GetCurrentScriptThread()->ScriptContext = ret;
         ret->IncludeList = bc_GetFiles("script-lib/beacon/lang");
 #endif
         ret->PositiveIntegerCacheList = bc_NewVector();
@@ -222,8 +223,7 @@ static void free_script_context(bc_ScriptContext* self) {
         int aa = bc_CountActiveObject();
         assert(self->Heap->CollectBlocking == 0);
         //全ての例外フラグをクリア
-        bc_Frame* thv =
-            bc_GetScriptThreadFrameRef(bc_GetCurrentScriptThread(self));
+        bc_Frame* thv = bc_GetScriptThreadFrameRef(bc_GetCurrentScriptThread());
         bc_CatchVM(thv);
         bc_DeleteClassLoader(self->BootstrapClassLoader);
         if (self->Null != NULL) {

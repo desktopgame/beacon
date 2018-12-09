@@ -7,6 +7,8 @@ set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
 set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
 set(BC_EXECUTABLE "beacon" CACHE STRING "executable file name")
 set(BC_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/beacon CACHE PATH "Path to install")
+set(BC_IGNORE_COMPILE "CMakeCCompilerId.c" "feature_tests.c")
+set(BC_LINK_JAVA false CACHE bool "if call java from beacon, set a true.")
 
 find_package(PkgConfig REQUIRED)
 find_package(JNI)
@@ -51,12 +53,19 @@ install(
 #ここで全ての .c ファイルを収集する
 #また、テスト用に自動生成されるファイルは取り除く
 file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "**/*.c")
+if(NOT BC_LINK_JAVA)
+    list(APPEND BC_IGNORE_COMPILE "bridge.c")
+    set(JNI_LIBRARIES "")
+    set(JNI_CFLAGS_OTHER "")
+endif()
 foreach(e IN LISTS SOURCES)
-    if(${e} MATCHES "CMakeCCompilerId.c" OR
-       ${e} MATCHES "feature_tests.c")
-        message("remove test script: ${e}")
-        list(REMOVE_ITEM SOURCES ${e})
-    endif()
+    foreach(pat IN LISTS BC_IGNORE_COMPILE)
+        if(${e} MATCHES ${pat})
+            message("remove compile target: ${e}")
+            list(REMOVE_ITEM SOURCES ${e})
+            break()
+        endif()
+    endforeach()
 endforeach()
 #インクルードパス、リンカなど各種設定
 link_directories (

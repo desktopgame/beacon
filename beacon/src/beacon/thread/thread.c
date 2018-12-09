@@ -25,7 +25,7 @@ void bc_InitScriptThread() {
         bc_PushVector(gAllThread, g_sg_main_thread);
 }
 
-bc_ScriptThread* bc_GetCurrentScriptThread(bc_ScriptContext* sctx) {
+bc_ScriptThread* bc_GetCurrentScriptThread() {
         // ScriptContext* ctx = GetCurrentScriptContext();
         bc_lock();
         GThread* self = g_thread_self();
@@ -66,7 +66,7 @@ void bc_ReleaseScriptThreadFrameRef(bc_ScriptThread* self) {
 bc_ScriptThread* bc_GetMainScriptThread() { return g_sg_main_thread; }
 
 bc_CallContext* bc_GetScriptThreadContext() {
-        return bc_GetCurrentScriptThread(NULL)->CCtx;
+        return bc_GetCurrentScriptThread()->CCtx;
 }
 
 void bc_DestroyScriptThread() {
@@ -89,6 +89,7 @@ static bc_ScriptThread* bc_new_script_thread() {
         ret->FrameRef = NULL;
         ret->CCtx = NULL;
         ret->Thread = NULL;
+        ret->ScriptContext = NULL;
         return ret;
 }
 

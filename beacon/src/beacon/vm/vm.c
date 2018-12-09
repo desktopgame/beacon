@@ -463,8 +463,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* e =
                                     (bc_Object*)bc_PopVector(self->ValueStack);
                                 bc_ThrowVM(self, e);
-                                bc_ScriptThread* th = bc_GetCurrentScriptThread(
-                                    bc_GetCurrentScriptContext());
+                                bc_ScriptThread* th =
+                                    bc_GetCurrentScriptThread();
                                 //空ならプログラムを終了
                                 if (bc_IsEmptyVector(th->TraceStack)) {
                                         terminate(self);
@@ -475,8 +475,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_TRY_ENTER: {
-                                bc_ScriptThread* th = bc_GetCurrentScriptThread(
-                                    bc_GetCurrentScriptContext());
+                                bc_ScriptThread* th =
+                                    bc_GetCurrentScriptThread();
                                 bc_VMTrace* trace = bc_NewVMTrace(self);
                                 trace->PC = IDX;  // goto
                                 bc_PushVector(th->TraceStack, trace);
@@ -488,16 +488,16 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_TRY_EXIT: {
-                                bc_ScriptThread* th = bc_GetCurrentScriptThread(
-                                    bc_GetCurrentScriptContext());
+                                bc_ScriptThread* th =
+                                    bc_GetCurrentScriptThread();
                                 bc_VMTrace* trace =
                                     (bc_VMTrace*)bc_PopVector(th->TraceStack);
                                 bc_DeleteVMTrace(trace);
                                 break;
                         }
                         case OP_TRY_CLEAR: {
-                                bc_ScriptThread* th = bc_GetCurrentScriptThread(
-                                    bc_GetCurrentScriptContext());
+                                bc_ScriptThread* th =
+                                    bc_GetCurrentScriptThread();
                                 bc_CatchVM(self);
                                 bc_VMTrace* trace =
                                     (bc_VMTrace*)bc_PopVector(th->TraceStack);
@@ -1520,8 +1520,7 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
  * @return このVMで処理できるなら true.
  */
 static bool validate(bc_Frame* self, int source_len, int* pcDest) {
-        bc_ScriptThread* th =
-            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
+        bc_ScriptThread* th = bc_GetCurrentScriptThread();
         bc_VMTrace* trace = (bc_VMTrace*)bc_TopVector(th->TraceStack);
         self->IsValidate = true;
         //汚染
@@ -1597,8 +1596,7 @@ static void mark_exception(bc_Frame* self, bc_Object* exc) {
         self->Exception = exc;
 
         bc_ThrowVM(self, exc);
-        bc_ScriptThread* th =
-            bc_GetCurrentScriptThread(bc_GetCurrentScriptContext());
+        bc_ScriptThread* th = bc_GetCurrentScriptThread();
         //空ならプログラムを終了
         if (bc_IsEmptyVector(th->TraceStack)) {
                 terminate(self);
