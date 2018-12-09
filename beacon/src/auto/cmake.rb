@@ -121,6 +121,7 @@ def each_recursive(path, depth)
     cmake_dir = path + "/CMakeFiles"
     insta_path = path + "/cmake_install.cmake"
     makef_path = path + "/Makefile"
+    test_path = path + "/CMakeTestTestfile.cmake"
     puts ("open: " + path)
     puts ("make: " + cmake_path)
     #CMakeLists.txtが存在するなら削除する
@@ -139,9 +140,9 @@ def each_recursive(path, depth)
     if File.exist?(insta_path) then
         FileUtils.rm(insta_path)
     end
-    #makefileが存在するなら削除する
-    if File.exist?(makef_path) then
-        FileUtils.rm(makef_path)
+    #test_pathが存在するなら削除する
+    if File.exist?(test_path) then
+        FileUtils.rm(test_path)
     end
     #全てのファイルを開く
     Dir.open(path).each do |file|
