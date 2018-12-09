@@ -1,3 +1,4 @@
 *.out
 beacon
+!script-lib/beacon
 mdb.dat

@@ -1,0 +1,11 @@
+namespace beacon::lang {
+	class Thread {
+		public:
+		def new() {
+			nativeInit();
+		}
+
+		private:
+		def nativeInit() -> Void;
+	}
+}
