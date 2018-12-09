@@ -63,12 +63,14 @@ int main(int argc, char *argv[]) {
 #endif
         bc_InitMX();
         bc_InitStringPool();
+        bc_InitScriptThread();
         bc_HideILPrintLayout(true);
         // mem_break(16066);
         //コマンドライン引数を解析して実行
         int ret = main_cl(argc, argv);
         //設定を元に戻す
         // DumpStringPool(stdout);
+        bc_DestroyScriptThread();
         bc_DestroyStringPool();
         bc_DestroyMX();
 #if defined(_MSC_VER) && defined(DEBUG)

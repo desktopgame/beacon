@@ -30,7 +30,6 @@ static bc_ScriptContext* gScriptContext = NULL;
 bc_ScriptContext* bc_OpenScriptContext() {
         if (gScriptContextVec == NULL) {
                 gScriptContextVec = bc_NewVector();
-                bc_LaunchScriptThread();
         }
         bc_ScriptContext* sctx = malloc_script_context();
         gScriptContext = sctx;
@@ -50,7 +49,6 @@ void bc_CloseScriptContext() {
         free_script_context(sctx);
         gScriptContext = NULL;
         if (gScriptContextVec->Length == 0) {
-                bc_DestroyScriptThread();
                 bc_DeleteVector(gScriptContextVec, bc_VectorDeleterOfNull);
                 gScriptContextVec = NULL;
         } else {

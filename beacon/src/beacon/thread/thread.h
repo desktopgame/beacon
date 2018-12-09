@@ -11,6 +11,7 @@
 #ifndef BEACON_THREAD_THREAD_H
 #define BEACON_THREAD_THREAD_H
 //#include "../util/stack.h"
+#include <glib.h>
 #include <stdbool.h>
 #include "../util/vector.h"
 struct bc_ScriptContext;
@@ -22,6 +23,7 @@ struct bc_CallContext;
  */
 typedef struct bc_ScriptThread {
         bc_Vector* TraceStack;
+        GThread* Thread;
         bool IsVMCrushByException;
         bool IsVMDump;
         struct bc_Frame* FrameRef;
@@ -31,13 +33,7 @@ typedef struct bc_ScriptThread {
 /**
  * メインスレッドを作成します.
  */
-void bc_LaunchScriptThread();
-
-/**
- * 新しいスレッドを作成します.
- * @return
- */
-bc_ScriptThread* bc_NewScriptThread();
+void bc_InitScriptThread();
 
 /**
  * 現在のスレッドを返します.
@@ -45,18 +41,6 @@ bc_ScriptThread* bc_NewScriptThread();
  * @return
  */
 bc_ScriptThread* bc_GetCurrentScriptThread(struct bc_ScriptContext* sctx);
-
-/**
- * スレッドに記録された全てのトレースを解放します.
- * @param self
- */
-void bc_ClearScriptThread(bc_ScriptThread* self);
-
-/**
- * スレッドを解放します.
- * @param self
- */
-void bc_DeleteScriptThread(bc_ScriptThread* self);
 
 /**
  * このスレッドが "実行中のVMのルート" を渡します.
