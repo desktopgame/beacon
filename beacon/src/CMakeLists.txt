@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project(beacon C)
+#各種変数の設定
 set(CMAKE_CXX_COMPILER clang)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
+set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
+set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
+set(BC_EXECUTABLE "beacon" CACHE STRING "executable file name")
+set(BC_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/beacon CACHE PATH "Path to install")
 
 find_package(PkgConfig REQUIRED)
 find_package(JNI)
@@ -16,11 +22,9 @@ message(STATUS "GLIB_LIBRARIES=${GLIB_LIBRARIES}")
 message(STATUS "JNI_LIBRARY_DIRS=${JNI_LIBRARY_DIRS}")
 message(STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
 message(STATUS "JNI_LIBRARIES=${JNI_LIBRARIES}")
+message(STATUS "BC_INSTALL_DIR=${BC_INSTALL_DIR}")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
-set(CMAKE_C_FLAGS_DEBUG "-g -coverage -O0 -DDEBUG -MMD -Wall")
-set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
-set(BC_EXECUTABLE "beacon" CACHE STRING "executable file name")
+
 enable_testing()
 add_test(
     NAME test
@@ -28,7 +32,6 @@ add_test(
     #CONFIGURATIONS Debug
     WORKING_DIRECTORY .
 )
-set(BC_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/beacon CACHE PATH "Path to install")
 install(
     DIRECTORY ./../bin
     DESTINATION ${BC_INSTALL_DIR}
@@ -55,6 +58,7 @@ foreach(e IN LISTS SOURCES)
         list(REMOVE_ITEM SOURCES ${e})
     endif()
 endforeach()
+#インクルードパス、リンカなど各種設定
 link_directories (
     ${GLIB_LIBRARY_DIRS}
     ${JNI_LIBRARY_DIRS}
@@ -70,6 +74,6 @@ target_include_directories(
 target_link_libraries(
     ${BC_EXECUTABLE}
     PRIVATE
-    -ljvm
-    -lglib-2.0
+    ${GLIB_LIBRARIES}
+    ${JNI_LIBRARIES}
 )
