@@ -30,12 +30,6 @@ typedef struct bc_Heap {
 } bc_Heap;
 
 /**
- * ヒープを作成します.
- * @return
- */
-bc_Heap* bc_NewHeap();
-
-/**
  * 現在のスクリプトコンテキストでヒープを返します.
  * @return
  */

@@ -14,20 +14,13 @@ static void gc_clear(bc_Heap* self);
 static void gc_mark(bc_Heap* self);
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
+static bc_Heap* bc_new_heap();
 
 static bc_Heap* gHeap = NULL;
 
-bc_Heap* bc_NewHeap() {
-        bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
-        ret->Objects = bc_NewVector();
-        ret->AcceptBlocking = 0;
-        ret->CollectBlocking = 0;
-        return ret;
-}
-
 bc_Heap* bc_GetHeap() {
         if (gHeap == NULL) {
-                gHeap = bc_NewHeap();
+                gHeap = bc_new_heap();
         }
         return gHeap;
 }
@@ -125,4 +118,12 @@ static void gc_sweep(bc_Heap* self) {
 static void gc_delete(bc_VectorItem item) {
         bc_Object* e = (bc_Object*)item;
         bc_DeleteObject(e);
+}
+
+static bc_Heap* bc_new_heap() {
+        bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
+        ret->Objects = bc_NewVector();
+        ret->AcceptBlocking = 0;
+        ret->CollectBlocking = 0;
+        return ret;
 }
