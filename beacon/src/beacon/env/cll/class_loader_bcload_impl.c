@@ -149,7 +149,7 @@ static void CLBC_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
         bc_CL_ERROR(self);
         bc_Namespace* current = NULL;
         if (parent == NULL) {
-                current = bc_CreateNamespaceAtRoot(ilnamespace->Name);
+                current = bc_CreateNamespaceAtRoot(NULL, ilnamespace->Name);
         } else {
                 current = bc_AddNamespaceNamespace(parent, ilnamespace->Name);
         }

@@ -39,6 +39,7 @@ struct bc_ScriptContext;
 struct bc_Type;
 struct bc_Class;
 struct bc_Interface;
+struct bc_ScriptContext;
 /**
  * 名前空間を表す構造体.
  */
@@ -51,10 +52,12 @@ typedef struct bc_Namespace {
 
 /**
  * 指定の名前でトップレベルに新しい名前空間を定義します.
- * @param namev
+ * @param sctx
+ * @param name
  * @return 既に存在するならそれを返します.
  */
-bc_Namespace* bc_CreateNamespaceAtRoot(bc_StringView namev);
+bc_Namespace* bc_CreateNamespaceAtRoot(struct bc_ScriptContext* sctx,
+                                       bc_StringView name);
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.

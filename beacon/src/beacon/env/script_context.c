@@ -57,13 +57,13 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
         self->IsLoadForBoot = true;
         //プリロード
         bc_Namespace* beacon =
-            bc_CreateNamespaceAtRoot(bc_InternString("beacon"));
+            bc_CreateNamespaceAtRoot(NULL, bc_InternString("beacon"));
         bc_Namespace* lang =
             bc_AddNamespaceNamespace(beacon, bc_InternString("lang"));
         bc_Namespace* unsafe =
             bc_AddNamespaceNamespace(beacon, bc_InternString("unsafe"));
         bc_Namespace* placeholder =
-            bc_CreateNamespaceAtRoot(bc_InternString("$placeholder"));
+            bc_CreateNamespaceAtRoot(NULL, bc_InternString("$placeholder"));
         bc_InitObject();
         bc_InitArray();
         bc_InitException();

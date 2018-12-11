@@ -25,15 +25,18 @@ static void dump_impl(bc_Namespace* root, int depth);
 static void put_indent(int depth);
 static void dump_class(bc_NumericMap* root, bool isRoot, int depth);
 
-bc_Namespace* bc_CreateNamespaceAtRoot(bc_StringView namev) {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        if (ctx->NamespaceMap == NULL) {
-                ctx->NamespaceMap = bc_NewNumericMap();
+bc_Namespace* bc_CreateNamespaceAtRoot(bc_ScriptContext* sctx,
+                                       bc_StringView name) {
+        if (sctx == NULL) {
+                sctx = bc_GetCurrentScriptContext();
         }
-        bc_TreeItem item = bc_GetNumericMapValue(ctx->NamespaceMap, namev);
+        if (sctx->NamespaceMap == NULL) {
+                sctx->NamespaceMap = bc_NewNumericMap();
+        }
+        bc_TreeItem item = bc_GetNumericMapValue(sctx->NamespaceMap, name);
         if (item == NULL) {
-                bc_Namespace* newNamespace = malloc_namespace(namev);
-                bc_PutNumericMap(ctx->NamespaceMap, namev, newNamespace);
+                bc_Namespace* newNamespace = malloc_namespace(name);
+                bc_PutNumericMap(sctx->NamespaceMap, name, newNamespace);
                 return newNamespace;
         } else
                 return (bc_Namespace*)item;
