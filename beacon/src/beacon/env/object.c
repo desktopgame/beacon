@@ -92,6 +92,7 @@ void* bc_NewObject(size_t object_size) {
         ret->VPtr = BC_GENERIC_NULL->CoreType->Kind.Class->VT;
         ret->Fields = bc_NewVector();
         ret->Flags = OBJECT_FLG_NONE;
+        ret->Update = false;
         bc_AddHeap(bc_GetHeap(), ret);
         gObjectCount++;
         return mem;
@@ -126,31 +127,43 @@ bc_Object* bc_GetBoolObject(bool b) {
 
 bc_Object* bc_GetTrueObject() {
         bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        if (ctx->True == NULL) {
-                ctx->True = (bc_Object*)bc_NewBool(true);
-                ctx->True->Paint = PAINT_ONEXIT_T;
-        }
-        return ctx->True;
+        return bc_GetUniqueTrueObject(ctx);
 }
 
 bc_Object* bc_GetFalseObject() {
         bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        if (ctx->False == NULL) {
-                ctx->False = (bc_Object*)bc_NewBool(false);
-                ctx->False->Paint = PAINT_ONEXIT_T;
-        }
-        return ctx->False;
+        return bc_GetUniqueFalseObject(ctx);
 }
 
 bc_Object* bc_GetNullObject() {
         bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        if (ctx->Null == NULL) {
-                ctx->Null = bc_NewObject(sizeof(bc_Object));
-                ctx->Null->GType = bc_NewGenericType(BC_TYPE_NULL);
-                ctx->Null->VPtr = bc_GetVTableType(BC_TYPE_NULL);
-                ctx->Null->Paint = PAINT_ONEXIT_T;
+        return bc_GetUniqueNullObject(ctx);
+}
+
+bc_Object* bc_GetUniqueTrueObject(bc_ScriptContext* sctx) {
+        if (sctx->True == NULL) {
+                sctx->True = (bc_Object*)bc_NewBool(true);
+                sctx->True->Paint = PAINT_ONEXIT_T;
         }
-        return ctx->Null;
+        return sctx->True;
+}
+
+bc_Object* bc_GetUniqueFalseObject(bc_ScriptContext* sctx) {
+        if (sctx->False == NULL) {
+                sctx->False = (bc_Object*)bc_NewBool(false);
+                sctx->False->Paint = PAINT_ONEXIT_T;
+        }
+        return sctx->False;
+}
+
+bc_Object* bc_GetUniqueNullObject(bc_ScriptContext* sctx) {
+        if (sctx->Null == NULL) {
+                sctx->Null = bc_NewObject(sizeof(bc_Object));
+                sctx->Null->GType = bc_NewGenericType(BC_TYPE_NULL);
+                sctx->Null->VPtr = bc_GetVTableType(BC_TYPE_NULL);
+                sctx->Null->Paint = PAINT_ONEXIT_T;
+        }
+        return sctx->Null;
 }
 
 bc_Object* bc_CopyObject(bc_Object* self) {

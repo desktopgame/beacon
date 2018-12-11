@@ -27,9 +27,11 @@ void bc_InitScriptThread() {
         bc_unlock();
 }
 
-bc_ScriptThread* bc_CreateScriptThread() {
+bc_ScriptThread* bc_AddScriptThread() {
         bc_ScriptThread* th = bc_new_script_thread();
         bc_lock();
+        bc_AttachScriptContext(
+            th, bc_SelectedScriptContext(bc_GetMainScriptThread()));
         bc_PushVector(gAllThread, th);
         bc_unlock();
         return th;
@@ -99,8 +101,8 @@ bc_ScriptThread* bc_GetScriptThreadAt(int index) {
 
 void bc_UnlockScriptThread() { bc_unlock(); }
 
-void bc_AttachScriptContext(bc_ScriptContext* script) {
-        bc_ScriptThread* thr = bc_GetCurrentScriptThread();
+void bc_AttachScriptContext(bc_ScriptThread* self, bc_ScriptContext* script) {
+        bc_ScriptThread* thr = self;
         assert(thr != NULL);
         assert(script->ThreadRef == NULL);
         if (thr->SelectedScriptContext == -1) {

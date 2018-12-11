@@ -9,7 +9,6 @@
 
 // proto
 static void remove_from_parent(bc_Frame* self);
-static void mark_static(bc_Field* item);
 static void mark_recursive(bc_Frame* self);
 static void frame_mark_defer(bc_Frame* self);
 static void delete_defctx(bc_VectorItem e);
@@ -44,9 +43,6 @@ bc_Frame* bc_SubFrame(bc_Frame* parent) {
 }
 
 void bc_MarkAllFrame(bc_Frame* self) {
-        //全ての静的フィールドをマークする
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        bc_EachStaticScriptContext(ctx, mark_static);
         //全ての子要素を巡回してマーキング
         mark_recursive(self);
 }
@@ -80,15 +76,6 @@ static void remove_from_parent(bc_Frame* self) {
         if (self->Parent != NULL) {
                 int idx = bc_FindVector(self->Parent->Children, self);
                 bc_RemoveVector(self->Parent->Children, idx);
-        }
-}
-
-static void mark_static(bc_Field* item) {
-        //フィールドがintなどならここでマークしない
-        //静的定数フィールドに初期値が割り当てられていない場合
-        if (item->StaticValue != NULL &&
-            item->StaticValue->Paint != PAINT_ONEXIT_T) {
-                bc_MarkAllObject(item->StaticValue);
         }
 }
 

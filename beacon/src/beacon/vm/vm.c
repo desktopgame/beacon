@@ -748,6 +748,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 if (throw_npe(self, assignTarget)) {
                                         break;
                                 }
+                                assignTarget->Update = true;
                                 // assert(assignTarget->Tag == OBJECT_REF_T);
                                 int fieldIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);

@@ -42,9 +42,11 @@ typedef struct bc_ScriptThread {
 void bc_InitScriptThread();
 
 /**
+ * 新しいスクリプトスレッドを作成して追加します。
+ * スクリプトコンテキストは最初に作成された物を継承します。
  * @return
  */
-bc_ScriptThread* bc_CreateScriptThread();
+bc_ScriptThread* bc_AddScriptThread();
 
 /**
  * @param self
@@ -125,9 +127,11 @@ void bc_UnlockScriptThread();
 
 /**
  * 現在のスレッドにスクリプトコンテキストをアタッチします。
+ * @param self
  * @param script
  */
-void bc_AttachScriptContext(struct bc_ScriptContext* script);
+void bc_AttachScriptContext(bc_ScriptThread* self,
+                            struct bc_ScriptContext* script);
 
 /**
  * 現在のスレッドにスクリプトコンテキストをデタッチします。

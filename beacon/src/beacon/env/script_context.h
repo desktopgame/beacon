@@ -101,6 +101,12 @@ void bc_EachStaticScriptContext(bc_ScriptContext* self, bc_StaticEach act);
 void bc_ClearScriptContext(bc_ScriptContext* self);
 
 /**
+ * 全ての静的変数をマークします。
+ * @param self
+ */
+void bc_MarkStaticFields(bc_ScriptContext* self);
+
+/**
  * 指定の整数をキャッシュします.
  * @param self
  * @param i

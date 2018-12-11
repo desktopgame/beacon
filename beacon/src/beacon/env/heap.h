@@ -11,6 +11,7 @@
 #ifndef BEACON_ENV_HEAP_H
 #define BEACON_ENV_HEAP_H
 #include <stdbool.h>
+#include "../util/cache.h"
 #include "../util/vector.h"
 #include "object.h"
 
@@ -18,7 +19,7 @@
  * オブジェクトの一覧を格納します.
  */
 typedef struct bc_Heap {
-        bc_Vector* Objects;
+        bc_Cache* Objects;
         //この値が 1以上 なら、新しく確保されたオブジェクトは
         //ヒープに関連づけられません。
         //つまり、オブジェクトを自分で解放する必要があります。

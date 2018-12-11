@@ -15,6 +15,7 @@
 
 struct bc_GenericType;
 struct bc_VTable;
+struct bc_ScriptContext;
 /**
  * オブジェクトの種類を表すためのフラグ。
  */
@@ -72,6 +73,7 @@ typedef struct bc_Object {
         bc_ObjectPaint Paint;
         bc_ObjectFlags Flags;
         bc_Vector* Fields;
+        bool Update;
         void* (*OnMessage)(struct bc_Object* self, bc_ObjectMessage msg,
                            int argc, bc_ObjectMessageArgument argv[]);
 } bc_Object;
@@ -134,6 +136,27 @@ bc_Object* bc_GetFalseObject();
  * @return
  */
 bc_Object* bc_GetNullObject();
+
+/**
+ * trueを参照します.
+ * @param sctx
+ * @return
+ */
+bc_Object* bc_GetUniqueTrueObject(struct bc_ScriptContext* sctx);
+
+/**
+ * falseを参照します.
+ * @param sctx
+ * @return
+ */
+bc_Object* bc_GetUniqueFalseObject(struct bc_ScriptContext* sctx);
+
+/**
+ * nullを参照します.
+ * @param sctx
+ * @return
+ */
+bc_Object* bc_GetUniqueNullObject(struct bc_ScriptContext* sctx);
 
 /**
  * このオブジェクトを複製します.

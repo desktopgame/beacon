@@ -50,7 +50,7 @@ static void bc_thread_nativeInit(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Thread* th = (bc_Thread*)self;
-        bc_ScriptThread* thr = bc_CreateScriptThread();
+        bc_ScriptThread* thr = bc_AddScriptThread();
         bc_ConnectThread(self, thr);
 }
 

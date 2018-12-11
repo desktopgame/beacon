@@ -23,6 +23,7 @@ static void delete_namespace(bc_NumericMapKey key, bc_NumericMapItem item);
 static void clear_impl(bc_Field* item);
 static void delete_cache(bc_VectorItem item);
 static void delete_mcache(bc_NumericMapKey key, bc_NumericMapItem item);
+static void mark_static(bc_Field* item);
 
 static bc_Vector* gScriptContextVec = NULL;
 static bc_ScriptContext* gScriptContext = NULL;
@@ -144,6 +145,10 @@ void bc_ClearScriptContext(bc_ScriptContext* self) {
         bc_EachStaticScriptContext(self, clear_impl);
 }
 
+void bc_MarkStaticFields(bc_ScriptContext* self) {
+        bc_EachStaticScriptContext(self, mark_static);
+}
+
 bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
         bc_Heap* he = bc_GetHeap();
         bc_NumericMap* cell = bc_GetNumericMapCell(self->IntegerCacheMap, i);
@@ -209,7 +214,7 @@ static bc_ScriptContext* malloc_script_context(void) {
         ret->IsPrintError = true;
         ret->IsAbortOnError = true;
         ret->ThreadRef = NULL;
-        bc_AttachScriptContext(ret);
+        bc_AttachScriptContext(bc_GetCurrentScriptThread(), ret);
         return ret;
 }
 
@@ -272,4 +277,13 @@ static void delete_cache(bc_VectorItem item) {
 
 static void delete_mcache(bc_NumericMapKey key, bc_NumericMapItem item) {
         bc_DestroyObject((bc_Object*)item);
+}
+
+static void mark_static(bc_Field* item) {
+        //フィールドがintなどならここでマークしない
+        //静的定数フィールドに初期値が割り当てられていない場合
+        if (item->StaticValue != NULL &&
+            item->StaticValue->Paint != PAINT_ONEXIT_T) {
+                bc_MarkAllObject(item->StaticValue);
+        }
 }
