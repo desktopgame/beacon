@@ -52,7 +52,7 @@ void bc_CloseScriptContext() {
 }
 
 void bc_BootstrapScriptContext(bc_ScriptContext* self) {
-        self->Heap->AcceptBlocking++;
+        bc_GetHeap()->AcceptBlocking++;
         self->IsLoadForBoot = true;
         //プリロード
         bc_Namespace* beacon =
@@ -118,7 +118,7 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/World.bc");
         //退避していたコンテキストを復帰
-        self->Heap->AcceptBlocking--;
+        bc_GetHeap()->AcceptBlocking--;
         self->IsLoadForBoot = false;
 }
 
@@ -145,7 +145,7 @@ void bc_ClearScriptContext(bc_ScriptContext* self) {
 }
 
 bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
-        bc_Heap* he = self->Heap;
+        bc_Heap* he = bc_GetHeap();
         bc_NumericMap* cell = bc_GetNumericMapCell(self->IntegerCacheMap, i);
         he->AcceptBlocking++;
         if (cell == NULL) {
@@ -189,7 +189,6 @@ static bc_ScriptContext* malloc_script_context(void) {
             (bc_ScriptContext*)MEM_MALLOC(sizeof(bc_ScriptContext));
         ret->NamespaceMap = bc_NewNumericMap();
         ret->ClassLoaderMap = bc_NewTreeMap();
-        ret->Heap = bc_NewHeap();
         ret->TypeList = bc_NewVector();
         ret->BootstrapClassLoader = NULL;
         ret->AllGenericList = bc_NewVector();
@@ -216,17 +215,15 @@ static bc_ScriptContext* malloc_script_context(void) {
 
 static void free_script_context(bc_ScriptContext* self) {
         int aa = bc_CountActiveObject();
-        assert(self->Heap->CollectBlocking == 0);
         //全ての例外フラグをクリア
         bc_Frame* thv = bc_GetScriptThreadFrameRef(bc_GetCurrentScriptThread());
         bc_CatchVM(thv);
         bc_DeleteClassLoader(self->BootstrapClassLoader);
         if (self->Null != NULL) {
-                bc_IgnoreHeap(self->Heap, self->Null);
+                bc_IgnoreHeap(bc_GetHeap(), self->Null);
                 self->Null->Paint = PAINT_ONEXIT_T;
                 bc_DestroyObject(self->Null);
         }
-        bc_DeleteHeap(self->Heap);
         bc_DeleteVector(self->NegativeIntegerCacheList, delete_cache);
         bc_DeleteVector(self->PositiveIntegerCacheList, delete_cache);
         bc_DeleteNumericMap(self->IntegerCacheMap, delete_mcache);

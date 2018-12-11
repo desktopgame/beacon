@@ -43,10 +43,10 @@ void CLBC_import(bc_ClassLoader* self, bc_Vector* ilimports) {
 
 void CLBC_new_load(bc_ClassLoader* self, char* fullPath) {
         bc_CL_ERROR(self);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        ctx->Heap->AcceptBlocking++;
+        bc_Heap* he = bc_GetHeap();
+        he->AcceptBlocking++;
         CLBC_new_load_internal(self, fullPath);
-        ctx->Heap->AcceptBlocking--;
+        he->AcceptBlocking--;
 }
 
 bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {

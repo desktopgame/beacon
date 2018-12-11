@@ -47,7 +47,6 @@ typedef struct bc_ScriptContext {
         bool IsPrintError;
         bool IsAbortOnError;
         bool IsLoadForBoot;
-        struct bc_Heap* Heap;
         struct bc_Object* True;
         struct bc_Object* False;
         struct bc_Object* Null;

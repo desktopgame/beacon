@@ -15,6 +15,8 @@ static void gc_mark(bc_Heap* self);
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
 
+static bc_Heap* gHeap = NULL;
+
 bc_Heap* bc_NewHeap() {
         bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
         ret->Objects = bc_NewVector();
@@ -24,11 +26,10 @@ bc_Heap* bc_NewHeap() {
 }
 
 bc_Heap* bc_GetHeap() {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        if (ctx == NULL) {
-                return NULL;
+        if (gHeap == NULL) {
+                gHeap = bc_NewHeap();
         }
-        return ctx->Heap;
+        return gHeap;
 }
 
 void bc_AddHeap(bc_Heap* self, bc_Object* obj) {

@@ -13,6 +13,7 @@
 //#include "../util/stack.h"
 #include <glib.h>
 #include <stdbool.h>
+#include "../env/object.h"
 #include "../util/vector.h"
 struct bc_ScriptContext;
 struct bc_Frame;

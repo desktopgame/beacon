@@ -43,7 +43,7 @@ void bc_ConnectThread(bc_Object* self, bc_ScriptThread* thr) {
         assert(thr->Owner == NULL);
         bc_Thread* obj = (bc_Thread*)self;
         obj->ScriptThreadRef = thr;
-        thread->Owner = self;
+        thr->Owner = self;
 }
 // private
 static void bc_thread_nativeInit(bc_Method* parent, bc_Frame* fr,
