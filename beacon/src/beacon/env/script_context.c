@@ -73,12 +73,14 @@ void bc_BootstrapScriptContext(bc_ScriptContext* self) {
         bc_InitString();
         bc_InitBool();
         bc_InitVoid();
-        bc_InitConsole();
         bc_InitNull();
         bc_InitFile();
+        bc_InitConsole();
         bc_InitSystem();
         bc_InitLocaleType();
         bc_InitTime();
+        bc_InitThread();
+        bc_InitMonitor();
         //ブートストラップクラスローダー
         self->BootstrapClassLoader =
             bc_NewClassLoader("bootstrap", CONTENT_LIB_T);

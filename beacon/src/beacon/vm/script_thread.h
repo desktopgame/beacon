@@ -41,6 +41,17 @@ typedef struct bc_ScriptThread {
 void bc_InitScriptThread();
 
 /**
+ * @return
+ */
+bc_ScriptThread* bc_CreateScriptThread();
+
+/**
+ * @param self
+ * @param runnable
+ */
+void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* runnable);
+
+/**
  * 現在のスレッドを返します.
  * @return
  */

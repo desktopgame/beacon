@@ -146,7 +146,8 @@
 			"string_pool.h": "c",
 			"fqcn_cache.h": "c",
 			"resolve.h": "c",
-			"bridge.h": "c"
+			"bridge.h": "c",
+			"script_thread.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

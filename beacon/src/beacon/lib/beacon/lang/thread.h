@@ -4,7 +4,8 @@
 #include "../../bc_library_impl.h"
 
 typedef struct bc_Thread {
-        bc_ScriptThread* ScriptThread;
+        bc_Object Super;
+        bc_ScriptThread* ScriptThreadRef;
 } bc_Thread;
 
 /**
@@ -23,4 +24,11 @@ void bc_InitThread();
  * @return
  */
 struct bc_Type* bc_GetThreadType();
+
+/**
+ * 概念としてのスレッドと実際の beacon オブジェクトを接続します。
+ * @param self
+ * @param thr
+ */
+void bc_ConnectThread(bc_Object* self, bc_ScriptThread* thr);
 #endif

@@ -1,0 +1,6 @@
+namespace beacon::lang {
+	interface Runnable {
+		public:
+		def run() -> Void;
+	}
+}

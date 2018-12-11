@@ -22,7 +22,17 @@ void bc_InitScriptThread() {
         gAllThread = bc_NewVector();
         g_sg_main_thread = bc_new_script_thread();
         g_sg_main_thread->Thread = g_thread_self();
+        bc_lock();
         bc_PushVector(gAllThread, g_sg_main_thread);
+        bc_unlock();
+}
+
+bc_ScriptThread* bc_CreateScriptThread() {
+        bc_ScriptThread* th = bc_new_script_thread();
+        bc_lock();
+        bc_PushVector(gAllThread, th);
+        bc_unlock();
+        return th;
 }
 
 bc_ScriptThread* bc_GetCurrentScriptThread() {
@@ -40,6 +50,8 @@ bc_ScriptThread* bc_GetCurrentScriptThread() {
         bc_unlock();
         return ret;
 }
+
+void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* runnable) {}
 
 void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, bc_Frame* frame_ref) {
         // TODO:ここで同期をとる

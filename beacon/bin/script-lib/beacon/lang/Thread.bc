@@ -1,9 +1,14 @@
 namespace beacon::lang {
 	class Thread {
 		public:
-		def new(String name) {
+		def new(String name, Runnable runnable) {
 			this.name = name;
+			this.runnable = runnable;
 			nativeInit();
+		}
+
+		def start() -> Void {
+			nativeStart();
 		}
 
 		def static getMainThread() -> Thread {
@@ -15,9 +20,13 @@ namespace beacon::lang {
 
 		private:
 		String name;
+		Runnable runnable;
+
 		static Thread mainThread;
 
 		def native nativeInit() -> Void;
+
+		def native nativeStart() -> Void;
 
 		def static native nativeGetMainThread() -> Thread;
 
