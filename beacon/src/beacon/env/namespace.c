@@ -129,11 +129,15 @@ bc_Type* bc_GetCharTypeNamespace() { return bc_GetCharType(); }
 
 bc_Type* bc_GetStringTypeNamespace() { return bc_GetStringType(); }
 
-bc_Type* bc_GetBoolTypeNamespace() { return bc_GetBoolType(); }
+bc_Type* bc_GetBoolTypeNamespace(bc_ScriptContext* sctx) {
+        return bc_GetBoolType(sctx);
+}
 
 bc_Type* bc_GetVoidTypeNamespace() { return bc_GetVoidType(); }
 
-bc_Type* bc_GetNullTypeNamespace() { return bc_GetNullType(); }
+bc_Type* bc_GetNullTypeNamespace(bc_ScriptContext* sctx) {
+        return bc_GetNullType(sctx);
+}
 
 bc_Type* bc_GetExceptionTypeNamespace() { return bc_GetExceptionType(); }
 

@@ -58,9 +58,9 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
                 bc_Panic(BCERROR_GENERIC_T, "unexpected terminate");
         }
         bc_CatchVM(fr);
-        bc_CollectHeap(bc_GetHeap());
         bc_DeleteFrame(fr);
         bc_ReleaseScriptThreadFrameRef(bc_GetCurrentScriptThread());
+        bc_CollectHeap(bc_GetHeap());
 
         bool ret = bc_GetLastPanic();
         bc_DeleteClassLoader(cll);

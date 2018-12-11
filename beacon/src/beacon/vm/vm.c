@@ -539,7 +539,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //コンストラクタをさかのぼり、
                                 //トップレベルまで到達するとこの処理によって生成が行われます。
                                 // FIXME:???
-                                bc_Object* o = bc_NewObject(self->ObjectSize);
+                                bc_Object* o =
+                                    bc_NewObject(NULL, self->ObjectSize);
                                 assert(o->Paint != PAINT_ONEXIT_T);
                                 bc_PushVector(self->ValueStack, NON_NULL(o));
                                 //これを this とする

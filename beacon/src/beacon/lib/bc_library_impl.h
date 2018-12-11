@@ -14,6 +14,7 @@
 #include "../env/method.h"
 #include "../env/namespace.h"
 #include "../env/object.h"
+#include "../env/script_context.h"
 #include "../env/type/class_impl.h"
 #include "../env/type_interface.h"
 

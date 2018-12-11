@@ -124,9 +124,11 @@ static void gc_mark(bc_Heap* self) {
                 bc_ScriptContext* sctx = bc_SelectedScriptContext(th);
                 bc_MarkStaticFields(sctx);
                 //全てのスタック変数をマーク
+                // GC直後にフレームを解放した場合はNULLになる
                 bc_Frame* top = bc_GetScriptThreadFrameRef(th);
-                assert(top != NULL);
-                bc_MarkAllFrame(top);
+                if (top != NULL) {
+                        bc_MarkAllFrame(top);
+                }
                 // true, false, null
                 bc_GetUniqueTrueObject(sctx)->Paint = PAINT_MARKED_T;
                 bc_GetUniqueFalseObject(sctx)->Paint = PAINT_MARKED_T;

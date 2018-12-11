@@ -6,8 +6,9 @@ static void bc_bool_nativeBitOr(bc_Method* parent, bc_Frame* fr,
 static void bc_bool_nativeBitAnd(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env);
 
-bc_Object* bc_NewBool(bool value) {
-        bc_Bool* ret = bc_ConstructObject(sizeof(bc_Bool), BC_GENERIC_BOOL);
+bc_Object* bc_NewBool(bc_ScriptContext* sctx, bool value) {
+        bc_Bool* ret = bc_ConstructObject(
+            sctx, sizeof(bc_Bool), bc_GetBoolTypeNamespace(sctx)->GenericSelf);
         ret->Value = value;
         return (bc_Object*)ret;
 }
@@ -24,8 +25,11 @@ void bc_InitBool() {
                                    bc_bool_nativeBitAnd);
 }
 
-bc_Type* bc_GetBoolType() {
-        bc_Namespace* lang = bc_GetLangNamespace(NULL);
+bc_Type* bc_GetBoolType(bc_ScriptContext* sctx) {
+        if (sctx == NULL) {
+                sctx = bc_GetCurrentScriptContext();
+        }
+        bc_Namespace* lang = bc_GetLangNamespace(sctx);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Bool"));
 }
 // private

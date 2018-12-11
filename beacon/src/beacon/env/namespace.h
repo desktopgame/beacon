@@ -21,9 +21,9 @@ struct bc_ScriptContext;
 #define BC_TYPE_DOUBLE (bc_GetDoubleTypeNamespace())
 #define BC_TYPE_CHAR (bc_GetCharTypeNamespace())
 #define BC_TYPE_STRING (bc_GetStringTypeNamespace())
-#define BC_TYPE_BOOL (bc_GetBoolTypeNamespace())
+#define BC_TYPE_BOOL (bc_GetBoolTypeNamespace(NULL))
 #define BC_TYPE_VOID (bc_GetVoidTypeNamespace())
-#define BC_TYPE_NULL (bc_GetNullTypeNamespace())
+#define BC_TYPE_NULL (bc_GetNullTypeNamespace(NULL))
 #define BC_TYPE_EXCEPTION (bc_GetExceptionTypeNamespace())
 
 #define BC_GENERIC_OBJECT ((bc_GetObjectTypeNamespace()->GenericSelf))
@@ -31,9 +31,9 @@ struct bc_ScriptContext;
 #define BC_GENERIC_DOUBLE ((bc_GetDoubleTypeNamespace()->GenericSelf))
 #define BC_GENERIC_CHAR ((bc_GetCharTypeNamespace()->GenericSelf))
 #define BC_GENERIC_STRING ((bc_GetStringTypeNamespace()->GenericSelf))
-#define BC_GENERIC_BOOL ((bc_GetBoolTypeNamespace()->GenericSelf))
+#define BC_GENERIC_BOOL ((bc_GetBoolTypeNamespace(NULL)->GenericSelf))
 #define BC_GENERIC_VOID ((bc_GetVoidTypeNamespace()->GenericSelf))
-#define BC_GENERIC_NULL ((bc_GetNullTypeNamespace()->GenericSelf))
+#define BC_GENERIC_NULL ((bc_GetNullTypeNamespace(NULL)->GenericSelf))
 #define BC_GENERIC_EXCEPTION ((bc_GetExceptionTypeNamespace()->GenericSelf))
 
 struct bc_Type;
@@ -189,9 +189,10 @@ struct bc_Type* bc_GetStringTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで bool タイプを返します.
+ * @param sctx
  * @return
  */
-struct bc_Type* bc_GetBoolTypeNamespace();
+struct bc_Type* bc_GetBoolTypeNamespace(struct bc_ScriptContext* sctx);
 
 /**
  * 現在のスクリプトコンテキストで void タイプを返します.
@@ -201,9 +202,10 @@ struct bc_Type* bc_GetVoidTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで null タイプを返します.
+ * @param sctx
  * @return
  */
-struct bc_Type* bc_GetNullTypeNamespace();
+struct bc_Type* bc_GetNullTypeNamespace(struct bc_ScriptContext* sctx);
 
 /**
  * beacon::lang::Exception

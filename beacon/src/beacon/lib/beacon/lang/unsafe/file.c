@@ -29,8 +29,8 @@ static void bc_file_nativeClose(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env);
 
 bc_Object* bc_NewFile(FILE* fp) {
-        bc_File* file =
-            bc_ConstructObject(sizeof(bc_File), bc_GetFileType()->GenericSelf);
+        bc_File* file = bc_ConstructObject(NULL, sizeof(bc_File),
+                                           bc_GetFileType()->GenericSelf);
         assert(file->Super.Paint != PAINT_ONEXIT_T);
         file->Pointer = fp;
         return (bc_Object*)file;

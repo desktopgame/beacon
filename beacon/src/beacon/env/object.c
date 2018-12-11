@@ -64,7 +64,7 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc,
                                 return CopyObject(self);
                         }
                         */
-                        bc_Object* ret = bc_NewObject(sizeof(bc_Object));
+                        bc_Object* ret = bc_NewObject(NULL, sizeof(bc_Object));
                         bc_DeleteVector(ret->Fields, bc_VectorDeleterOfNull);
                         ret->GType = self->GType;
                         ret->VPtr = self->VPtr;
@@ -78,18 +78,19 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc,
         return NULL;
 }
 
-void* bc_NewObject(size_t object_size) {
+void* bc_NewObject(bc_ScriptContext* sctx, size_t object_size) {
         if (object_size < sizeof(bc_Object)) {
                 return NULL;
         }
         void* mem = MEM_MALLOC(object_size);
+        bc_GenericType* nullgt = bc_GetNullTypeNamespace(sctx)->GenericSelf;
         memset(mem, 0, object_size);
         bc_Object* ret = mem;
         ret->OnMessage = bc_HandleObjectMessage;
         // ret->NativeSlotVec = NULL;
-        ret->GType = BC_GENERIC_NULL;
+        ret->GType = nullgt;
         ret->Paint = PAINT_UNMARKED_T;
-        ret->VPtr = BC_GENERIC_NULL->CoreType->Kind.Class->VT;
+        ret->VPtr = nullgt->CoreType->Kind.Class->VT;
         ret->Fields = bc_NewVector();
         ret->Flags = OBJECT_FLG_NONE;
         ret->Update = false;
@@ -98,9 +99,10 @@ void* bc_NewObject(size_t object_size) {
         return mem;
 }
 
-void* bc_ConstructObject(size_t object_size, bc_GenericType* gtype) {
+void* bc_ConstructObject(bc_ScriptContext* sctx, size_t object_size,
+                         bc_GenericType* gtype) {
         assert(gtype != NULL);
-        void* mem = bc_NewObject(object_size);
+        void* mem = bc_NewObject(sctx, object_size);
         bc_Object* obj = mem;
         obj->GType = gtype;
         obj->VPtr = bc_GetVTableType(gtype->CoreType);
@@ -142,7 +144,7 @@ bc_Object* bc_GetNullObject() {
 
 bc_Object* bc_GetUniqueTrueObject(bc_ScriptContext* sctx) {
         if (sctx->True == NULL) {
-                sctx->True = (bc_Object*)bc_NewBool(true);
+                sctx->True = (bc_Object*)bc_NewBool(sctx, true);
                 sctx->True->Paint = PAINT_ONEXIT_T;
         }
         return sctx->True;
@@ -150,7 +152,7 @@ bc_Object* bc_GetUniqueTrueObject(bc_ScriptContext* sctx) {
 
 bc_Object* bc_GetUniqueFalseObject(bc_ScriptContext* sctx) {
         if (sctx->False == NULL) {
-                sctx->False = (bc_Object*)bc_NewBool(false);
+                sctx->False = (bc_Object*)bc_NewBool(sctx, false);
                 sctx->False->Paint = PAINT_ONEXIT_T;
         }
         return sctx->False;
@@ -158,7 +160,7 @@ bc_Object* bc_GetUniqueFalseObject(bc_ScriptContext* sctx) {
 
 bc_Object* bc_GetUniqueNullObject(bc_ScriptContext* sctx) {
         if (sctx->Null == NULL) {
-                sctx->Null = bc_NewObject(sizeof(bc_Object));
+                sctx->Null = bc_NewObject(sctx, sizeof(bc_Object));
                 sctx->Null->GType = bc_NewGenericType(BC_TYPE_NULL);
                 sctx->Null->VPtr = bc_GetVTableType(BC_TYPE_NULL);
                 sctx->Null->Paint = PAINT_ONEXIT_T;

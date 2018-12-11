@@ -11,6 +11,7 @@
 #ifndef BEACON_LIB_SIGNAL_LANG_NULL_H
 #define BEACON_LIB_SIGNAL_LANG_NULL_H
 struct bc_Type;
+struct bc_ScriptContext;
 /**
  * beacon::lang::Nullクラスを初期化します.
  */
@@ -18,7 +19,8 @@ void bc_InitNull();
 
 /**
  * beacon::lang::Null型を返します.
+ * @param sctx
  * @return
  */
-struct bc_Type* bc_GetNullType();
+struct bc_Type* bc_GetNullType(struct bc_ScriptContext* sctx);
 #endif  // !SIGNAL_LIB_SIGNAL_LANG_NULL_H

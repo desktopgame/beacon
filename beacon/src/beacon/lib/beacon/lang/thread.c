@@ -14,7 +14,7 @@ static void bc_thread_nativeGetCurrentThread(bc_Method* parent, bc_Frame* fr,
 static gpointer bc_thread_body(gpointer data);
 
 bc_Object* bc_NewThread(bc_ScriptThread* thread) {
-        bc_Thread* ret = bc_ConstructObject(sizeof(bc_Thread),
+        bc_Thread* ret = bc_ConstructObject(NULL, sizeof(bc_Thread),
                                             bc_GetThreadType()->GenericSelf);
         bc_ConnectThread((bc_Object*)ret, thread);
         return (bc_Object*)ret;

@@ -23,10 +23,11 @@ typedef struct bc_Bool {
 
 /**
  * 新しい真偽値オブジェクトを生成します。
+ * @param sctx
  * @param value
  * @return
  */
-struct bc_Object* bc_NewBool(bool value);
+struct bc_Object* bc_NewBool(struct bc_ScriptContext* sctx, bool value);
 
 /**
  * beacon::lang::Boolクラスを初期化します.
@@ -35,7 +36,8 @@ void bc_InitBool();
 
 /**
  * beacon::lang::Bool型を返します.
+ * @param sctx
  * @return
  */
-struct bc_Type* bc_GetBoolType();
+struct bc_Type* bc_GetBoolType(struct bc_ScriptContext* sctx);
 #endif  // !SIGNAL_LIB_SIGNAL_LANG_BOOL_H

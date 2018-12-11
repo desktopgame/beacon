@@ -12,7 +12,7 @@ static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr,
 
 bc_Object* bc_NewString(const char* str) {
         bc_Object* ret =
-            bc_ConstructObject(sizeof(bc_String), BC_GENERIC_STRING);
+            bc_ConstructObject(NULL, sizeof(bc_String), BC_GENERIC_STRING);
         ret->OnMessage = handle_obj_message;
         // ret->u.string_ = s;
         // ret->u.field_vec = NewVector();
