@@ -62,7 +62,6 @@ bc_Namespace* bc_AddNamespaceNamespace(bc_Namespace* self,
                 child = newNamespace;
                 bc_PutNumericMap(self->NamespaceMap, namev, child);
                 // PushVector(self->Namespacevec, child);
-                self->RefCount++;
         }
         return child;
 }
@@ -161,7 +160,6 @@ static bc_Namespace* malloc_namespace(bc_StringView namev) {
         ret->TypeMap = bc_NewNumericMap();
         ret->Parent = NULL;
         ret->Name = namev;
-        ret->RefCount = 0;
         return ret;
 }
 

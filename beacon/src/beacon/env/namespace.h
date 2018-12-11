@@ -47,7 +47,6 @@ typedef struct bc_Namespace {
         struct bc_Namespace* Parent;
         bc_NumericMap* NamespaceMap;
         bc_NumericMap* TypeMap;
-        uint32_t RefCount;
 } bc_Namespace;
 
 /**
