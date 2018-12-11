@@ -18,10 +18,19 @@ static bc_Heap* bc_new_heap();
 
 static bc_Heap* gHeap = NULL;
 
-bc_Heap* bc_GetHeap() {
+void bc_InitHeap() {
         if (gHeap == NULL) {
                 gHeap = bc_new_heap();
         }
+}
+
+void bc_DestroyHeap() {
+        bc_DeleteVector(gHeap->Objects, delete_object);
+        MEM_FREE(gHeap);
+}
+
+bc_Heap* bc_GetHeap() {
+        assert(gHeap != NULL);
         return gHeap;
 }
 
@@ -51,11 +60,6 @@ void bc_IgnoreHeap(bc_Heap* self, bc_Object* o) {
         if (i >= 0) {
                 bc_RemoveVector(self->Objects, i);
         }
-}
-
-void bc_DeleteHeap(bc_Heap* self) {
-        bc_DeleteVector(self->Objects, delete_object);
-        MEM_FREE(self);
 }
 
 void bc_DumpHeap(bc_Heap* self) {

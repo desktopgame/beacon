@@ -30,6 +30,16 @@ typedef struct bc_Heap {
 } bc_Heap;
 
 /**
+ * ヒープを初期化します。
+ */
+void bc_InitHeap();
+
+/**
+ * ヒープを破棄します。
+ */
+void bc_DestroyHeap();
+
+/**
  * 現在のスクリプトコンテキストでヒープを返します.
  * @return
  */
@@ -56,12 +66,6 @@ void bc_CollectHeap(bc_Heap* self);
  * @param o
  */
 void bc_IgnoreHeap(bc_Heap* self, bc_Object* o);
-
-/**
- * ヒープを開放します.
- * @param self
- */
-void bc_DeleteHeap(bc_Heap* self);
 
 /**
  * ヒープの中身をダンプします.
