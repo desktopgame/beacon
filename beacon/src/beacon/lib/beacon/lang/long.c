@@ -41,7 +41,7 @@ bc_Object* bc_NewLong(long value) {
 }
 
 void bc_InitLong() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* longType = bc_NewPreloadClass(bc_InternString("Long"));
         bc_Class* longClass = BC_TYPE2CLASS(longType);
         longType->AllocSize = sizeof(bc_Long);
@@ -70,7 +70,7 @@ void bc_InitLong() {
 }
 
 bc_Type* bc_GetLongType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Long"));
 }
 // private

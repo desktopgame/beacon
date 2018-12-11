@@ -175,7 +175,7 @@ static void check_call_namebase(bc_ILCallOp* self, bc_ILMemberOp* ilmem,
         bc_Namespace* cur = bc_GetNamespaceByContext(cctx);
         bc_Class* ctype = bc_FindClassFromNamespace(cur, ilvar->FQCN->Name);
         if (ctype == NULL) {
-                ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(),
+                ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(NULL),
                                                   ilvar->FQCN->Name);
         }
         if (ctype != NULL) {

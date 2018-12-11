@@ -215,7 +215,7 @@ static void load_toplevel(bc_ClassLoader* self) {
         createWorldStmt->Value->Lineno = 0;
         // worldをselfにする
         bc_CallContext* cctx = bc_NewTopContext(bc_FindTypeFromNamespace(
-            bc_GetLangNamespace(), bc_InternString("World")));
+            bc_GetLangNamespace(NULL), bc_InternString("World")));
         bc_LoadILStmt(body, self->Env, cctx);
         bc_GenerateILStmt(body, self->Env, cctx);
         //$worldをthisにする
@@ -235,7 +235,7 @@ static void load_toplevel_function(bc_ClassLoader* self) {
                 return;
         }
         bc_Vector* funcs = self->ILCode->FunctionList;
-        bc_Type* worldT = bc_FindTypeFromNamespace(bc_GetLangNamespace(),
+        bc_Type* worldT = bc_FindTypeFromNamespace(bc_GetLangNamespace(NULL),
                                                    bc_InternString("World"));
         //前回の実行で作成されたメソッドを解放
         bc_Vector* methods = BC_TYPE2CLASS(worldT)->Methods;
@@ -295,7 +295,8 @@ static void load_toplevel_function(bc_ClassLoader* self) {
                 bc_ScriptMethod* sm = m->Kind.Script;
                 bc_CallContext* cctx = bc_NewMethodContext(m);
                 CLBC_corutine(self, m, sm->Env, ilfunc->Parameters,
-                              ilfunc->Statements, cctx, bc_GetLangNamespace());
+                              ilfunc->Statements, cctx,
+                              bc_GetLangNamespace(NULL));
                 bc_DeleteCallContext(cctx);
         }
 }

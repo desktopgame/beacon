@@ -33,7 +33,7 @@ bc_Object* bc_NewDouble(double value) {
 }
 
 void bc_InitDouble() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* doubleType = bc_NewPreloadClass(bc_InternString("Double"));
         bc_Class* doubleClass = BC_TYPE2CLASS(doubleType);
         doubleType->AllocSize = sizeof(bc_Double);
@@ -58,7 +58,7 @@ void bc_InitDouble() {
 }
 
 bc_Type* bc_GetDoubleType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Double"));
 }
 // private

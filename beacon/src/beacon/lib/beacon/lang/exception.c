@@ -15,7 +15,7 @@ static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr,
                                     bc_Enviroment* env);
 
 void bc_InitException() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* exceptionType =
             bc_NewPreloadClass(bc_InternString("Exception"));
         bc_Class* exceptionClass = BC_TYPE2CLASS(exceptionType);
@@ -25,13 +25,13 @@ void bc_InitException() {
 }
 
 bc_Type* bc_GetExceptionType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Exception"));
 }
 // private
 static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr,
                                     bc_Enviroment* env) {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Class* stackTraceElementClass = bc_FindClassFromNamespace(
             lang, bc_InternString("StackTraceElement"));
         bc_Class* exceptionClass =

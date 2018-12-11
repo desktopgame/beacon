@@ -17,7 +17,7 @@ static void bc_console_read(bc_Method* parent, bc_Frame* fr,
                             bc_Enviroment* env);
 
 void bc_InitConsole() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* consoleType = bc_NewPreloadClass(bc_InternString("Console"));
         bc_Class* consoleClass = BC_TYPE2CLASS(consoleType);
         bc_AddTypeNamespace(lang, consoleType);
@@ -30,7 +30,7 @@ void bc_InitConsole() {
 }
 
 bc_Type* bc_GetConsoleType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Console"));
 }
 

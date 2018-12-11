@@ -212,7 +212,7 @@ bc_StringView bc_GetMethodUniqueName(bc_Method* self) {
 
 bool bc_IsCoroutineMethod(bc_Method* self) {
         bc_Type* iteratorT = bc_FindTypeFromNamespace(
-            bc_GetLangNamespace(), bc_InternString("Iterator"));
+            bc_GetLangNamespace(NULL), bc_InternString("Iterator"));
         return (iteratorT && self->ReturnGType->CoreType == iteratorT);
 }
 
@@ -245,14 +245,14 @@ bc_Type* bc_CreateIteratorTypeFromMethod(bc_Method* self, bc_ClassLoader* cll,
         bc_CallFrame* lCfr = bc_PushCallFrame(lCctx, self->ReturnGType, NULL,
                                               self->ReturnGType->TypeArgs);
         bc_StringView iterName = bc_GetMethodUniqueName(self);
-        bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(),
+        bc_Type* iterT = bc_FindTypeFromNamespace(bc_GetLangNamespace(NULL),
                                                   bc_InternString("Iterator"));
         //イテレータの実装クラスを登録
         bc_GenericType* iterImplGT =
             bc_CapplyGenericType(self->ReturnGType, lCctx);
         bc_Class* iterImplC = bc_NewClassProxy(iterImplGT, iterName);
         bc_Type* iterImplT = bc_WrapClass(iterImplC);
-        bc_AddTypeNamespace(bc_GetPlaceholderNamespace(), iterImplT);
+        bc_AddTypeNamespace(bc_GetPlaceholderNamespace(NULL), iterImplT);
         bc_InitGenericSelf(iterImplT, 0);
         //イテレータのコンストラクタ追加
         int op_len = 0;

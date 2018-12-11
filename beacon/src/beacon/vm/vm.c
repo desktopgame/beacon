@@ -1466,7 +1466,7 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
         }
         //例外のメッセージを取得
         bc_Type* exceptionT = bc_FindTypeFromNamespace(
-            bc_GetLangNamespace(), bc_InternString("Exception"));
+            bc_GetLangNamespace(NULL), bc_InternString("Exception"));
         int temp = -1;
         bc_ResolveField(exceptionT->Kind.Class, bc_InternString("message"),
                         &temp);
@@ -1482,7 +1482,7 @@ static char* create_error_message(bc_Frame* self, bc_Enviroment* env, int pc) {
         bc_AppendBuffer(sbuf, '\n');
         //スタックトレースの表示
         bc_Type* stackTraceElementT = bc_FindTypeFromNamespace(
-            bc_GetLangNamespace(), bc_InternString("StackTraceElement"));
+            bc_GetLangNamespace(NULL), bc_InternString("StackTraceElement"));
         // Exception#stackTraceを取得
         temp = -1;
         bc_ResolveField(exceptionT->Kind.Class, bc_InternString("stackTrace"),

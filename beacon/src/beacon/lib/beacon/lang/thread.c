@@ -21,7 +21,7 @@ bc_Object* bc_NewThread(bc_ScriptThread* thread) {
 }
 
 void bc_InitThread() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* threadType = bc_NewPreloadClass(bc_InternString("Thread"));
         bc_Class* threadClass = BC_TYPE2CLASS(threadType);
         threadType->AllocSize = sizeof(bc_Thread);
@@ -35,7 +35,7 @@ void bc_InitThread() {
 }
 
 bc_Type* bc_GetThreadType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Thread"));
 }
 

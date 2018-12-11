@@ -33,7 +33,7 @@ static void bc_time_nativeGetDayOfYear(bc_Method* parent, bc_Frame* fr,
                                        bc_Enviroment* env);
 
 void bc_InitTime() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         bc_Type* timeType = bc_NewPreloadClass(bc_InternString("Time"));
         bc_Class* timeClass = BC_TYPE2CLASS(timeType);
         bc_AddTypeNamespace(unsafe, timeType);
@@ -58,7 +58,7 @@ void bc_InitTime() {
 }
 
 bc_Type* bc_GetTimeType() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         return bc_FindTypeFromNamespace(unsafe, bc_InternString("Time"));
 }
 // private

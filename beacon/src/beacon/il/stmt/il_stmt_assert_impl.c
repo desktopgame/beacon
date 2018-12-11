@@ -32,7 +32,7 @@ void bc_GenerateILAssert(bc_ILAssert* self, bc_Enviroment* env,
         bc_GenerateILFactor(self->Message, env, cctx);
         bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
         bc_AddOpcodeBuf(env->Bytecode,
-                        bc_FindTypeFromNamespace(bc_GetLangNamespace(),
+                        bc_FindTypeFromNamespace(bc_GetLangNamespace(NULL),
                                                  bc_InternString("Exception"))
                             ->AbsoluteIndex);
         bc_AddOpcodeBuf(env->Bytecode, 0);

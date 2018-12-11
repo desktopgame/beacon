@@ -36,7 +36,7 @@ bc_Object* bc_NewArray(int size, bc_GenericType* element_type) {
 }
 
 void bc_InitArray() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* arrayType = bc_NewPreloadClass(bc_InternString("Array"));
         bc_Class* arrayClass = BC_TYPE2CLASS(arrayType);
         arrayType->AllocSize = sizeof(bc_Array);
@@ -50,7 +50,7 @@ void bc_InitArray() {
 }
 
 bc_Type* bc_GetArrayType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Array"));
 }
 

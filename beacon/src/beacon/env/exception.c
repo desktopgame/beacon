@@ -36,7 +36,7 @@ bc_Object* bc_NewSimplefException(bc_Frame* fr, const char* message, ...) {
 
 // private
 static bc_Class* exception_class() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Class* excClass =
             bc_FindClassFromNamespace(lang, bc_InternString("Exception"));
         assert(excClass != NULL);

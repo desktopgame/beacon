@@ -42,9 +42,12 @@ bc_Namespace* bc_CreateNamespaceAtRoot(bc_ScriptContext* sctx,
                 return (bc_Namespace*)item;
 }
 
-bc_Namespace* bc_FindNamespaceFromRoot(bc_StringView namev) {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
-        return bc_CFindNamespaceFromRoot(ctx, namev);
+bc_Namespace* bc_FindNamespaceFromRoot(bc_ScriptContext* sctx,
+                                       bc_StringView name) {
+        if (sctx == NULL) {
+                sctx = bc_GetCurrentScriptContext();
+        }
+        return bc_CFindNamespaceFromRoot(sctx, name);
 }
 
 bc_Namespace* bc_CFindNamespaceFromRoot(bc_ScriptContext* sctx,
@@ -98,22 +101,22 @@ bc_Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self,
         return bc_TypeToInterface(bc_FindTypeFromNamespace(self, namev));
 }
 
-bc_Namespace* bc_GetBeaconNamespace() {
-        return bc_FindNamespaceFromRoot(bc_InternString("beacon"));
+bc_Namespace* bc_GetBeaconNamespace(bc_ScriptContext* sctx) {
+        return bc_FindNamespaceFromRoot(sctx, bc_InternString("beacon"));
 }
 
-bc_Namespace* bc_GetLangNamespace() {
-        return bc_FindNamespaceFromNamespace(bc_GetBeaconNamespace(),
+bc_Namespace* bc_GetLangNamespace(bc_ScriptContext* sctx) {
+        return bc_FindNamespaceFromNamespace(bc_GetBeaconNamespace(sctx),
                                              bc_InternString("lang"));
 }
 
-bc_Namespace* bc_GetUnsafeNamespace() {
-        return bc_FindNamespaceFromNamespace(bc_GetBeaconNamespace(),
+bc_Namespace* bc_GetUnsafeNamespace(bc_ScriptContext* sctx) {
+        return bc_FindNamespaceFromNamespace(bc_GetBeaconNamespace(sctx),
                                              bc_InternString("unsafe"));
 }
 
-bc_Namespace* bc_GetPlaceholderNamespace() {
-        return bc_FindNamespaceFromRoot(bc_InternString("$placeholder"));
+bc_Namespace* bc_GetPlaceholderNamespace(bc_ScriptContext* sctx) {
+        return bc_FindNamespaceFromRoot(sctx, bc_InternString("$placeholder"));
 }
 
 bc_Type* bc_GetObjectTypeNamespace() { return bc_GetObjectType(); }

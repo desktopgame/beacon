@@ -45,7 +45,7 @@ bc_Object* bc_NewInteger(int value) {
 }
 
 void bc_InitInt() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* intType = bc_NewPreloadClass(bc_InternString("Int"));
         bc_Class* intClass = BC_TYPE2CLASS(intType);
         intType->AllocSize = sizeof(bc_Integer);
@@ -75,7 +75,7 @@ void bc_InitInt() {
 }
 
 bc_Type* bc_GetIntType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Int"));
 }
 // private

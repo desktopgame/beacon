@@ -39,7 +39,7 @@ bc_Object* bc_NewFile(FILE* fp) {
 FILE* bc_GetFilePointer(bc_Object* self) { return ((bc_File*)self)->Pointer; }
 
 void bc_InitFile() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         bc_Type* fileType = bc_NewPreloadClass(bc_InternString("File"));
         bc_Class* fileClass = BC_TYPE2CLASS(fileType);
         fileType->AllocSize = sizeof(bc_File);
@@ -60,7 +60,7 @@ void bc_InitFile() {
 }
 
 bc_Type* bc_GetFileType() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         return bc_FindTypeFromNamespace(unsafe, bc_InternString("File"));
 }
 // private

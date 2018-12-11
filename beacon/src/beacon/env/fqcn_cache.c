@@ -68,7 +68,7 @@ bc_Namespace* bc_GetScopeFQCN(bc_FQCNCache* self, bc_Namespace* current) {
         for (int i = 0; i < self->Scope->Length; i++) {
                 bc_StringView ev = (bc_StringView)bc_AtVector(self->Scope, i);
                 if (top == NULL) {
-                        top = bc_FindNamespaceFromRoot(ev);
+                        top = bc_FindNamespaceFromRoot(NULL, ev);
                 } else {
                         top = bc_FindNamespaceFromNamespace(top, ev);
                 }
@@ -81,7 +81,7 @@ bc_Type* bc_GetTypeFQCN(bc_FQCNCache* self, bc_Namespace* current) {
         // Console(X::Yを含まない)のような指定なら
         // signal::lang空間も探索する
         if (ret == NULL && self->Scope->Length == 0) {
-                ret = resolve_type(self, bc_GetLangNamespace());
+                ret = resolve_type(self, bc_GetLangNamespace(NULL));
         }
         return ret;
 }

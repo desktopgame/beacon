@@ -32,7 +32,7 @@ static void bc_locale_nativeGetFracDigits(bc_Method* parent, bc_Frame* fr,
                                           bc_Enviroment* env);
 
 void bc_InitLocaleType() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         bc_Type* localeType = bc_NewPreloadClass(bc_InternString("Locale"));
         bc_Class* localeClass = BC_TYPE2CLASS(localeType);
         bc_AddTypeNamespace(unsafe, localeType);
@@ -61,7 +61,7 @@ void bc_InitLocaleType() {
 }
 
 bc_Type* bc_GetLocaleType() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         return bc_FindTypeFromNamespace(unsafe, bc_InternString("Locale"));
 }
 // private

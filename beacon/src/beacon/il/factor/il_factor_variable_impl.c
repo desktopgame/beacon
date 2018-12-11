@@ -110,7 +110,7 @@ static void ILVariable_check_instance(bc_ILVariable* self, bc_Enviroment* env,
         bc_Namespace* cur = bc_GetNamespaceByContext(cctx);
         bc_Class* ctype = bc_FindClassFromNamespace(cur, self->FQCN->Name);
         if (ctype == NULL) {
-                ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(),
+                ctype = bc_FindClassFromNamespace(bc_GetLangNamespace(NULL),
                                                   self->FQCN->Name);
         }
         //現在の名前空間から参照できるクラスがある場合

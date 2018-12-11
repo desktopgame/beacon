@@ -18,7 +18,7 @@ static void bc_system_nativeExec(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env);
 
 void bc_InitSystem() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         bc_Type* systemType = bc_NewPreloadClass(bc_InternString("System"));
         bc_Class* systemClass = BC_TYPE2CLASS(systemType);
         bc_AddTypeNamespace(unsafe, systemType);
@@ -31,7 +31,7 @@ void bc_InitSystem() {
 }
 
 bc_Type* bc_GetSystemType() {
-        bc_Namespace* unsafe = bc_GetUnsafeNamespace();
+        bc_Namespace* unsafe = bc_GetUnsafeNamespace(NULL);
         return bc_FindTypeFromNamespace(unsafe, bc_InternString("System"));
 }
 

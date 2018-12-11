@@ -61,10 +61,12 @@ bc_Namespace* bc_CreateNamespaceAtRoot(struct bc_ScriptContext* sctx,
 
 /**
  * 指定の名前でトップレベルから名前空間を検索します.
- * @param namev
+ * @param sctx
+ * @param name
  * @return
  */
-bc_Namespace* bc_FindNamespaceFromRoot(bc_StringView namev);
+bc_Namespace* bc_FindNamespaceFromRoot(struct bc_ScriptContext* sctx,
+                                       bc_StringView name);
 
 /**
  * コンテキストを指定してトップレベルの名前空間を返します.
@@ -129,27 +131,31 @@ struct bc_Interface* bc_FindInterfaceFromNamespace(bc_Namespace* self,
 
 /**
  * beacon 名前空間を返します.
+ * @param sctx
  * @return
  */
-bc_Namespace* bc_GetBeaconNamespace();
+bc_Namespace* bc_GetBeaconNamespace(struct bc_ScriptContext* sctx);
 
 /**
  * beacon.lang 名前空間を返します.
+ * @param sctx
  * @return
  */
-bc_Namespace* bc_GetLangNamespace();
+bc_Namespace* bc_GetLangNamespace(struct bc_ScriptContext* sctx);
 
 /**
  * beacon.unsafe 名前空間を返します.
+ * @param sctx
  * @return
  */
-bc_Namespace* bc_GetUnsafeNamespace();
+bc_Namespace* bc_GetUnsafeNamespace(struct bc_ScriptContext* sctx);
 
 /**
  * $placeholder 名前空間を返します.
+ * @param sctx
  * @return
  */
-bc_Namespace* bc_GetPlaceholderNamespace();
+bc_Namespace* bc_GetPlaceholderNamespace(struct bc_ScriptContext* sctx);
 
 /**
  * 現在のスクリプトコンテキストで Object タイプを返します.

@@ -27,7 +27,7 @@ bc_CallContext* bc_NewCallContext(bc_CallContextTag tag) {
 
 bc_CallContext* bc_NewTopContext(bc_Type* worldType) {
         bc_CallContext* ret = bc_NewCallContext(CALL_TOP_T);
-        ret->Scope = bc_GetLangNamespace();
+        ret->Scope = bc_GetLangNamespace(NULL);
         ret->Ty = worldType;
         return ret;
 }
@@ -83,7 +83,7 @@ bc_Namespace* bc_GetNamespaceByContext(bc_CallContext* self) {
         if (self->Scope != NULL) {
                 return self->Scope;
         }
-        return bc_GetLangNamespace();
+        return bc_GetLangNamespace(NULL);
 }
 
 bc_Method* bc_GetMethodByContext(bc_CallContext* self) {
@@ -95,7 +95,7 @@ bc_Method* bc_GetMethodByContext(bc_CallContext* self) {
 
 bc_Type* bc_GetTypeByContext(bc_CallContext* self) {
         if (self->Tag == CALL_TOP_T) {
-                return bc_FindTypeFromNamespace(bc_GetLangNamespace(),
+                return bc_FindTypeFromNamespace(bc_GetLangNamespace(NULL),
                                                 bc_InternString("World"));
         }
         return self->Ty;
@@ -116,7 +116,7 @@ bc_GenericType* bc_GetCompileTimeReceiver(bc_CallContext* self) {
 bc_Type* bc_ResolveContext(bc_CallContext* self, bc_FQCNCache* fqcn) {
         bc_Type* tp = bc_GetTypeFQCN(fqcn, self->Scope);
         if (tp == NULL) {
-                tp = bc_GetTypeFQCN(fqcn, bc_GetLangNamespace());
+                tp = bc_GetTypeFQCN(fqcn, bc_GetLangNamespace(NULL));
         }
         return tp;
 }

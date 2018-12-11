@@ -13,7 +13,7 @@ bc_Object* bc_NewBool(bool value) {
 }
 
 void bc_InitBool() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* boolType = bc_NewPreloadClass(bc_InternString("Bool"));
         bc_Class* boolClass = BC_TYPE2CLASS(boolType);
         boolType->AllocSize = sizeof(bc_Bool);
@@ -25,7 +25,7 @@ void bc_InitBool() {
 }
 
 bc_Type* bc_GetBoolType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Bool"));
 }
 // private

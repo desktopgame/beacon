@@ -14,7 +14,7 @@ bc_Object* bc_NewChar(char value) {
 }
 
 void bc_InitChar() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* charType = bc_NewPreloadClass(bc_InternString("Char"));
         bc_Class* charClass = BC_TYPE2CLASS(charType);
         charType->AllocSize = sizeof(bc_Char);
@@ -25,7 +25,7 @@ void bc_InitChar() {
 }
 
 bc_Type* bc_GetCharType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Char"));
 }
 

@@ -23,7 +23,7 @@ bc_Object* bc_NewString(const char* str) {
         bc_Object* arr = bc_NewArray(strlen(str), BC_GENERIC_CHAR);
         // arr->Tag = OBJECT_ARRAY_T;
         bc_Type* arrType = bc_GetArrayType();
-        bc_Type* strType = bc_FindTypeFromNamespace(bc_GetLangNamespace(),
+        bc_Type* strType = bc_FindTypeFromNamespace(bc_GetLangNamespace(NULL),
                                                     bc_InternString("String"));
         // arr->GType = NewGenericType(arrType);
         // arr->VPtr = GetVTableType(arrType);
@@ -59,7 +59,7 @@ bc_Object* bc_NewString(const char* str) {
 }
 
 void bc_InitString() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         bc_Type* stringType = bc_NewPreloadClass(bc_InternString("String"));
         bc_Class* stringClass = BC_TYPE2CLASS(stringType);
         stringType->AllocSize = sizeof(bc_String);
@@ -75,7 +75,7 @@ bc_Buffer* bc_GetRawString(bc_Object* self) {
 }
 
 bc_Type* bc_GetStringType() {
-        bc_Namespace* lang = bc_GetLangNamespace();
+        bc_Namespace* lang = bc_GetLangNamespace(NULL);
         return bc_FindTypeFromNamespace(lang, bc_InternString("String"));
 }
 
