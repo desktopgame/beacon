@@ -12,12 +12,12 @@ set(BC_LINK_JAVA false CACHE bool "if call java from beacon, set a true.")
 
 #Windowsの場合
 if (WIN32)
-set(GLIB_LIBRARY_DIRS "" CACHE PATH "glib library dirs")
-set(GLIB_INCLUDE_DIRS "" CACHE PATH "glib include dirs")
-set(GLIB_LIBRARIES "" CACHE FILEPATH "glib libraries")
-set(JNI_LIBRARY_DIRS "" CACHE PATH "jni library dirs")
-set(JNI_INCLUDE_DIRS "" CACHE PATH "jni include dirs")
-set(JNI_LIBRARIES "" CACHE FILEPATH "jni libraries")
+    set(GLIB_LIBRARY_DIRS "" CACHE PATH "glib library dirs")
+    set(GLIB_INCLUDE_DIRS "" CACHE PATH "glib include dirs")
+    set(GLIB_LIBRARIES "" CACHE FILEPATH "glib libraries")
+    set(JNI_LIBRARY_DIRS "" CACHE PATH "jni library dirs")
+    set(JNI_INCLUDE_DIRS "" CACHE PATH "jni include dirs")
+    set(JNI_LIBRARIES "" CACHE FILEPATH "jni libraries")
 #それ以外
 else()
     find_package(PkgConfig REQUIRED)
