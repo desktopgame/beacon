@@ -124,10 +124,18 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
         }
         bc_CallFrame* cfr =
             bc_PushCallFrame(cctx, NULL, self->Arguments, self->TypeArgs);
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * self->Arguments->Length);
+#else
         bc_GenericType* gargs[self->Arguments->Length];
+#endif
         bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         if (bc_GetLastPanic()) {
                 bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+                MEM_FREE(gargs);
+#endif
                 return;
         }
         bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
@@ -145,4 +153,7 @@ static void find_method(bc_ILInvokeStatic* self, bc_Enviroment* env,
                          bc_Ref2Str(cls->Name), bc_Ref2Str(self->Name));
         }
         bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
 }

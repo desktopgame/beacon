@@ -111,7 +111,12 @@ bc_OperatorOverload* bc_FindSetILInvoke(bc_ILInvoke* self, bc_ILFactor* value,
                       ((bc_ILArgument*)bc_AtVector(self->args, 0))->Factor, env,
                       cctx));
         bc_PushVector(args, bc_EvalILFactor(value, env, cctx));
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * args->Length);
+#else
         bc_GenericType* gargs[args->Length];
+#endif
         gargs[0] = bc_AtVector(args, 0);
         gargs[1] = bc_AtVector(args, 1);
         //        bc_CevaluateArguments(args, gargs, env, cctx);
@@ -123,6 +128,9 @@ bc_OperatorOverload* bc_FindSetILInvoke(bc_ILInvoke* self, bc_ILFactor* value,
         //    OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
         bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
         return opov;
 }
 // private
@@ -229,7 +237,12 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
         assert(ctype != NULL);
         int temp = -1;
         self->tag = INSTANCE_INVOKE_METHOD_T;
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * self->args->Length);
+#else
         bc_GenericType* gargs[self->args->Length];
+#endif
         bc_CevaluateArguments(self->args, gargs, env, cctx);
         if (ctype->Tag == TYPE_CLASS_T) {
                 bc_CreateVTableClass(BC_TYPE2CLASS(ctype));
@@ -255,6 +268,9 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                         bc_Panic(BCERROR_CAN_T_ACCESS_METHOD_T,
                                  bc_Ref2Str(BC_TYPE2CLASS(ctype)->Name),
                                  bc_Ref2Str(self->namev));
+#if defined(_MSC_VER)
+                        MEM_FREE(gargs);
+#endif
                         return;
                         //プロテクテッドなのに同じクラスでない
                 } else if (acc == ACCESS_PROTECTED_T &&
@@ -264,6 +280,9 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                         bc_Panic(BCERROR_CAN_T_ACCESS_METHOD_T,
                                  bc_Ref2Str(BC_TYPE2CLASS(ctype)->Name),
                                  bc_Ref2Str(self->namev));
+#if defined(_MSC_VER)
+                        MEM_FREE(gargs);
+#endif
                         return;
                 }
         }
@@ -275,6 +294,9 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
         }
         self->index = temp;
         if (temp != -1) {
+#if defined(_MSC_VER)
+                MEM_FREE(gargs);
+#endif
                 return;
         }
         //メソッドが見つからなかったら
@@ -285,8 +307,14 @@ static void find_method(bc_ILInvoke* self, bc_Enviroment* env,
                 bc_Panic(BCERROR_INVOKE_INSTANCE_UNDEFINED_METHOD_T,
                          bc_Ref2Str(bc_GetTypeName(ctype)),
                          bc_Ref2Str(self->namev));
+#if defined(_MSC_VER)
+                MEM_FREE(gargs);
+#endif
                 return;
         }
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
         self->tag = INSTANCE_INVOKE_SUBSCRIPT_T;
         bc_GenericType* gargs_op[1];
         bc_CevaluateArguments(self->args, gargs_op, env, cctx);

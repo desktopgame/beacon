@@ -154,7 +154,12 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
         bc_CallFrame* cfr = bc_PushCallFrame(cctx, cls->Parent->GenericSelf,
                                              NULL, self->TypeArgs);
         bc_ResolveILTypeArgument(self->TypeArgs, cctx);
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * self->Arguments->Length);
+#else
         bc_GenericType* gargs[self->Arguments->Length];
+#endif
         bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         bc_SearchOption opt = cls->Parent == bc_GetTypeByContext(cctx)
                                   ? MATCH_ALL
@@ -168,6 +173,9 @@ static void ILNewInstance_find(bc_ILNewInstance* self, bc_Enviroment* env,
                 bc_Panic(BCERROR_NEW_INSTANCE_UNDEFINED_CTOR_T,
                          bc_Ref2Str(cls->Name));
         }
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
 }
 
 static void il_Factor_new_instace_delete_arg(bc_VectorItem item) {

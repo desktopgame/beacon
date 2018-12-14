@@ -356,7 +356,12 @@ bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
         bc_PushCallFrame(cctx, bc_GetRuntimeReceiver(fr), args, type_args);
         //コンストラクタを検索
         int temp = -1;
+#if defined(_MSC_VER)
+        bc_GenericType* gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * args->Length);
+#else
         bc_GenericType* gargs[args->Length];
+#endif
         bc_RevaluateArguments(args, gargs);
         bc_Constructor* ctor =
             bc_FindConstructor(self->Constructors, args->Length, gargs,
@@ -384,6 +389,9 @@ bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
         //呼び出しフレームの削除
         bc_PopCallFrame(cctx);
         bc_DeleteCallContext(cctx);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
         return inst;
 }
 

@@ -235,7 +235,12 @@ int bc_GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg,
         assert(lctype->Tag == TYPE_CLASS_T);
         bc_Class* lclass = BC_TYPE2CLASS(lctype);
         int temp = 0;
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * args->Length);
+#else
         bc_GenericType* gargs[args->Length];
+#endif
         gargs[0] = rgtype;
         //        bc_CevaluateArguments(args, gargs, env, cctx);
         bc_CreateOperatorVTClass(lclass);
@@ -244,6 +249,9 @@ int bc_GetIndexILBinaryOp2(bc_ILFactor* receiver, bc_ILFactor* arg,
         // bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
         bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
         return temp;
 }
 

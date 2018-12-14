@@ -89,7 +89,12 @@ bc_OperatorOverload* bc_FindSetILInvokeBound(bc_ILInvokeBound* self,
                       ((bc_ILArgument*)bc_AtVector(self->Arguments, 0))->Factor,
                       env, cctx));
         bc_PushVector(args, bc_EvalILFactor(value, env, cctx));
-        bc_GenericType* gargs[args->Length];
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * args->Length);
+#else
+		bc_GenericType* gargs[args->Length];
+#endif
         gargs[0] = bc_AtVector(args, 0);
         gargs[1] = bc_AtVector(args, 1);
         // bc_CevaluateArguments(args, gargs, env, cctx);
@@ -101,6 +106,9 @@ bc_OperatorOverload* bc_FindSetILInvokeBound(bc_ILInvokeBound* self,
         // OPERATOR_SUB_SCRIPT_SET_T, args, env, cctx, outIndex);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
         bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
         return opov;
 }
 
@@ -266,7 +274,12 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
 #if defined(DEBUG)
         const char* namestr = bc_Ref2Str(self->Name);
 #endif
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * self->Arguments->Length);
+#else
         bc_GenericType* gargs[self->Arguments->Length];
+#endif
         bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         if (temp == -1) {
                 self->Kind.Method = bc_ResolveMethod(
@@ -287,6 +300,9 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         BC_ERROR();
         if (self->Index != -1) {
                 bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+                MEM_FREE(gargs);
+#endif
                 return;
         }
         //添字アクセスとして解決する
@@ -319,11 +335,17 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
         }
         if (receiver_gtype != NULL) {
                 self->Tag = BOUND_INVOKE_SUBSCRIPT_T;
-                bc_GenericType* gargs[self->Arguments->Length];
-                bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
+#if defined(_MSC_VER)
+                bc_GenericType** gargs_sub = MEM_MALLOC(
+                    sizeof(bc_GenericType*) *
+                                                    self->Arguments->Length);
+#else
+                bc_GenericType* gargs_sub[self->Arguments->Length];
+#endif
+                bc_CevaluateArguments(self->Arguments, gargs_sub, env, cctx);
                 self->Kind.Subscript.Operator = bc_ResolveOperatorOverload(
                     BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
-                    OPERATOR_SUB_SCRIPT_GET_T, self->Arguments->Length, gargs,
+                    OPERATOR_SUB_SCRIPT_GET_T, self->Arguments->Length, gargs_sub,
                     cctx, &temp);
                 //                self->Kind.Subscript.Operator =
                 //                bc_ArgFindOperatorOverloadClass(
@@ -335,6 +357,9 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
                         bc_Panic(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
                                  bc_Ref2Str(self->Name));
                 }
+#if defined(_MSC_VER)
+                MEM_FREE(gargs_sub);
+#endif
         }
         if (self->Index == -1) {
                 bc_Panic(BCERROR_INVOKE_BOUND_UNDEFINED_METHOD_T,
@@ -342,6 +367,9 @@ static void find_method(bc_ILInvokeBound* self, bc_Enviroment* env,
                          bc_Ref2Str(self->Name));
         }
         bc_PopCallFrame(cctx);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
 }
 
 static bc_CallFrame* push_new_frame(bc_ILInvokeBound* self, bc_Enviroment* env,

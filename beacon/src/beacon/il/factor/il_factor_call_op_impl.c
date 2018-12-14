@@ -223,7 +223,12 @@ static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
         bc_Class* receiver_cl = BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype));
         //オペレータオーバーロードを検索
         int temp;
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * self->Arguments->Length);
+#else
         bc_GenericType* gargs[self->Arguments->Length];
+#endif
         bc_CevaluateArguments(self->Arguments, gargs, env, cctx);
         iv->u.opov = bc_ResolveOperatorOverload(
             receiver_cl, OPERATOR_SUB_SCRIPT_GET_T, self->Arguments->Length,
@@ -239,6 +244,9 @@ static void check_subscript_access(bc_ILCallOp* self, bc_Enviroment* env,
         self->Arguments = NULL;
         self->Type = ILCALL_TYPE_INVOKE_T;
         self->Kind.Invoke = iv;
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
 }
 
 static void delete_argument(bc_VectorItem item) {

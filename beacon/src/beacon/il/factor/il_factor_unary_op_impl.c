@@ -153,13 +153,21 @@ int bc_GetIndexILUnaryOp2(bc_ILFactor* receiver, bc_OperatorType otype,
         }
         bc_Class* lclass = BC_TYPE2CLASS(bc_GENERIC2TYPE(gtype));
         int temp = 0;
+#if defined(_MSC_VER)
+        bc_GenericType* gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * args->Length);
+#else
         bc_GenericType* gargs[args->Length];
+#endif
         // bc_CevaluateArguments(args, gargs, env, cctx);
         bc_CreateOperatorVTClass(lclass);
         bc_ResolveOperatorOverload(lclass, otype, args->Length, gargs, cctx,
                                    &temp);
         // bc_GFindOperatorOverloadClass(lclass, otype, args, env, cctx, &temp);
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
         return temp;
 }
 

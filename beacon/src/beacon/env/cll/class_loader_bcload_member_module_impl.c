@@ -24,6 +24,7 @@
 #include "../../il/il_property.h"
 #include "../../il/il_stmt_interface.h"
 #include "../../util/text.h"
+#include "../../util/mem.h"
 #include "../../vm/script_thread.h"
 #include "../../vm/symbol_entry.h"
 #include "class_loader_ilload_stmt_module_impl.h"
@@ -69,7 +70,7 @@ bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         ilfi->InitialValue = NULL;
         //フィールドの修飾子を検証
         const int errorLength = 3;
-        bc_ModifierType errors[errorLength] = {
+        bc_ModifierType errors[3] = {
             MODIFIER_NATIVE_T,
             MODIFIER_ABSTRACT_T,
             MODIFIER_OVERRIDE_T,
@@ -187,7 +188,7 @@ bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         bc_AddPropertyType(tp, prop);
         //プロパティの修飾子を検証
         const int errorLength = 3;
-        bc_ModifierType errors[errorLength] = {
+        bc_ModifierType errors[3] = {
             MODIFIER_NATIVE_T,
             MODIFIER_ABSTRACT_T,
             MODIFIER_OVERRIDE_T,
@@ -823,9 +824,17 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
         //連鎖先のコンストラクタを検索する
         bc_Constructor* chainTarget = NULL;
         int temp = -1;
+#if defined(_MSC_VER)
+        bc_GenericType* gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * chain->Arguments->Length);
+#else
         bc_GenericType* gargs[chain->Arguments->Length];
+#endif
         bc_CevaluateArguments(chain->Arguments, gargs, env, cctx);
         if (bc_GetLastPanic()) {
+#if defined(_MSC_VER)
+                MEM_FREE(gargs);
+#endif
                 return;
         }
         if (chain->Type == CHAIN_TYPE_THIS_T) {
@@ -853,6 +862,9 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
         if (chainTarget == NULL) {
                 bc_Panic(BCERROR_EXPLICIT_CHAIN_CTOR_NOT_FOUND_T,
                          bc_Ref2Str(bc_GetTypeName(tp)));
+#if defined(_MSC_VER)
+                MEM_FREE(gargs);
+#endif
                 return;
         }
         bc_DeleteCallContext(cctx);
@@ -861,6 +873,9 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
         //親クラスへのチェインなら即座にフィールドを確保
         bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_ALLOC_FIELD);
         bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)tp->AbsoluteIndex);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
 }
 
 static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, bc_ILType* iltype,

@@ -274,9 +274,16 @@ static bc_Slot* get_self(void* area) {
         if (area == NULL) {
                 return NULL;
         }
+#if defined(_MSC_VER)
+        unsigned char* rawarea =area;
+        unsigned char* rawfixed = (rawarea - POINTER_SIZE);
+        uintptr_t ptr = *((uintptr_t*)rawfixed);
+        return (bc_Slot*)ptr;
+#else
         void* fixed = (area - POINTER_SIZE);
         uintptr_t ptr = *((uintptr_t*)fixed);
         return (bc_Slot*)ptr;
+#endif
 }
 
 static void init_bp() {

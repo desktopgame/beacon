@@ -41,7 +41,12 @@ void bc_LoadILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
         bc_Vector* args = bc_NewVector();
         bc_PushVector(args, arg_gtype);
         int temp = -1;
+#if defined(_MSC_VER)
+        bc_GenericType** gargs =
+            MEM_MALLOC(sizeof(bc_GenericType*) * args->Length);
+#else
         bc_GenericType* gargs[args->Length];
+#endif
         bc_CevaluateArguments(args, gargs, env, cctx);
         bc_ResolveOperatorOverload(
             BC_TYPE2CLASS(bc_GENERIC2TYPE(receiver_gtype)),
@@ -51,6 +56,9 @@ void bc_LoadILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
         //    OPERATOR_SUB_SCRIPT_GET_T, args, env, cctx, &temp);
         self->OperatorIndex = temp;
         bc_DeleteVector(args, bc_VectorDeleterOfNull);
+#if defined(_MSC_VER)
+        MEM_FREE(gargs);
+#endif
 }
 
 bc_GenericType* bc_EvalILSubscript(bc_ILSubscript* self, bc_Enviroment* env,
