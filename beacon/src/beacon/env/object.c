@@ -82,6 +82,7 @@ void* bc_NewObject(bc_ScriptContext* sctx, size_t object_size) {
         if (object_size < sizeof(bc_Object)) {
                 return NULL;
         }
+        bc_LockHeap();
         void* mem = MEM_MALLOC(object_size);
         bc_GenericType* nullgt = bc_GetNullTypeNamespace(sctx)->GenericSelf;
         memset(mem, 0, object_size);
@@ -96,6 +97,7 @@ void* bc_NewObject(bc_ScriptContext* sctx, size_t object_size) {
         ret->Update = false;
         bc_AddHeap(bc_GetHeap(), ret);
         gObjectCount++;
+        bc_UnlockHeap();
         return mem;
 }
 

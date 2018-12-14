@@ -13,28 +13,24 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../config.h"
 #if defined(_MSC_VER)
 #include <crtdbg.h>
 #endif
 
 //#define bc_MXMalloc(size, file, line) (malloc(size))
 
-#if (defined(_MSC_VER) && defined(_DEBUG))
+#if (defined(_MSC_VER) && defined(BC_DEBUG))
 #define NON_NULL(m) (bc_NonNull(m))
 #define MEM_MALLOC(size) (_malloc_dbg(size, _NORMAL_BLOCK, __FILE__, __LINE__))
 #define MEM_FREE(size) (_free_dbg(size, _NORMAL_BLOCK))
 #define MEM_REALLOC(block, size) \
         (_realloc_dbg(block, size, _NORMAL_BLOCK, __FILE__, __LINE__))
-#elif defined(DEBUG)
+#else
 #define NON_NULL(m) (bc_NonNull(m))
 #define MEM_MALLOC(size) (bc_MXMalloc(size, __FILE__, __LINE__))
 #define MEM_FREE(size) (bc_MXFree(size, __FILE__, __LINE__))
 #define MEM_REALLOC(block, size) (bc_MXRealloc(block, size, __FILE__, __LINE__))
-#else
-#define NON_NULL(m) (bc_NonNull(m))
-#define MEM_MALLOC(size) (bc_SafeMalloc(size))
-#define MEM_FREE(size) (free(size))
-#define MEM_REALLOC(block, size) (bc_SafeRealloc(block, size))
 #endif
 
 typedef struct bc_Slot {
@@ -48,16 +44,12 @@ typedef struct bc_Slot {
 
 void bc_InitMX();
 
-#define bc_Malloc(size) (bc_MXMalloc(size, __FILE__, __LINE__))
 void* bc_MXMalloc(size_t size, const char* filename, int lineno);
 
-#define bc_Realloc(block, size) (bc_MXRealloc(block, size, __FILE__, __LINE__))
 void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno);
 
-#define bc_Free(block) (bc_MXFree(block, __FILE__, __LINE__))
 void bc_MXFree(void* block, const char* filename, int lineno);
 
-#define bc_Bind(block, size) (bc_MXBind(block, size, __FILE__, __LINE__))
 void* bc_MXBind(const void* block, size_t size, const char* filename,
                 int lineno);
 

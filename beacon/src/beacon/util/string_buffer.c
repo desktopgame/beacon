@@ -12,7 +12,7 @@ bc_Buffer* bc_MallocBuffer(const char* filename, int lineno) {
         ret->Length = 0;
         ret->Capacity = 16;
         ret->Text = (char*)bc_MXMalloc(sizeof(char) * 16, filename, lineno);
-        memset(ret->Text, '\0', 16);
+        // memset(ret->Text, '\0', 16);
         return ret;
 }
 
@@ -59,7 +59,7 @@ void bc_AppendsBuffer(bc_Buffer* self, const char* s) {
 }
 
 char* bc_ReleaseBuffer(bc_Buffer* self) {
-        bc_ShrinkBuffer(self);
+        // bc_ShrinkBuffer(self);
         char* ret = self->Text;
         self->Text = NULL;
         MEM_FREE(self);

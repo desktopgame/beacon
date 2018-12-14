@@ -17,7 +17,7 @@ bc_Cache* bc_NewCache(int capacity) {
 }
 
 void bc_StoreCache(bc_Cache* self, void* data) {
-        assert(data != NULL);
+        // assert(data != NULL);
         bc_Cache* iter = self;
         bc_Cache* last = iter;
         int count = 0;
@@ -43,6 +43,14 @@ void bc_EraseCache(bc_Cache* self, void* data) {
                         iter->Data = NULL;
                         break;
                 }
+                iter = iter->Next;
+        }
+}
+
+void bc_EraseCacheAll(bc_Cache* self) {
+        bc_Cache* iter = self;
+        while (iter != NULL) {
+                iter->Data = NULL;
                 iter = iter->Next;
         }
 }

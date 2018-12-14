@@ -149,6 +149,25 @@ void bc_MarkStaticFields(bc_ScriptContext* self) {
         bc_EachStaticScriptContext(self, mark_static);
 }
 
+void bc_CollectStaticFields(bc_ScriptContext* self, bc_Cache* cache) {
+        // FIXME:クロージャが使えないのでコピペ...
+        bc_ScriptContext* ctx = self;
+        for (int i = 0; i < ctx->TypeList->Length; i++) {
+                bc_Type* e = (bc_Type*)bc_AtVector(ctx->TypeList, i);
+                if (e->Tag != TYPE_CLASS_T) {
+                        continue;
+                }
+                bc_Class* cls = e->Kind.Class;
+                for (int j = 0; j < cls->StaticFields->Length; j++) {
+                        bc_Field* f =
+                            (bc_Field*)bc_AtVector(cls->StaticFields, j);
+                        if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
+                                bc_StoreCache(cache, f->StaticValue);
+                        }
+                }
+        }
+}
+
 bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
         bc_Heap* he = bc_GetHeap();
         bc_NumericMap* cell = bc_GetNumericMapCell(self->IntegerCacheMap, i);

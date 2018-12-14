@@ -11,9 +11,10 @@
 
 // proto
 static void delete_object(bc_VectorItem item);
+static void gc_collect_all_root(bc_Heap* self);
 static void gc_clear(bc_Heap* self);
 static void gc_mark(bc_Heap* self);
-static void gc_update(bc_Heap* self);
+static void gc_mark_barrier(bc_Heap* self);
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
 static bc_Heap* bc_new_heap();
@@ -60,9 +61,9 @@ void bc_AddHeap(bc_Heap* self, bc_Object* obj) {
                 obj->Paint = PAINT_ONEXIT_T;
                 return;
         }
-        bc_heap_lock();
+        bc_LockHeap();
         bc_StoreCache(self->Objects, obj);
-        bc_heap_unlock();
+        bc_UnlockHeap();
 }
 
 void bc_CollectHeap(bc_Heap* self) {
@@ -96,10 +97,33 @@ void bc_DumpHeap(bc_Heap* self) {
         }
 }
 
+void bc_LockHeap() { bc_heap_lock(); }
+
+void bc_UnlockHeap() { bc_heap_unlock(); }
+
 // private
 static void delete_object(bc_VectorItem item) {
         bc_Object* e = (bc_Object*)item;
         bc_DeleteObject(e);
+}
+
+static void gc_collect_all_root(bc_Heap* self) {
+        for (int i = 0; i < bc_GetScriptThreadCount(); i++) {
+                bc_ScriptThread* th = bc_GetScriptThreadAt(i);
+                //全ての静的フィールドをマーク
+                bc_ScriptContext* sctx = bc_SelectedScriptContext(th);
+                bc_CollectStaticFields(sctx, self->Roots);
+                //全てのスタック変数をマーク
+                // GC直後にフレームを解放した場合はNULLになる
+                bc_Frame* top = bc_GetScriptThreadFrameRef(th);
+                if (top != NULL) {
+                        bc_CollectAllFrame(top, self->Roots);
+                }
+                // true, false, null
+                bc_StoreCache(self->Roots, bc_GetUniqueTrueObject(sctx));
+                bc_StoreCache(self->Roots, bc_GetUniqueFalseObject(sctx));
+                bc_StoreCache(self->Roots, bc_GetUniqueNullObject(sctx));
+        }
 }
 
 static void gc_clear(bc_Heap* self) {
@@ -118,25 +142,15 @@ static void gc_clear(bc_Heap* self) {
 }
 
 static void gc_mark(bc_Heap* self) {
-        for (int i = 0; i < bc_GetScriptThreadCount(); i++) {
-                bc_ScriptThread* th = bc_GetScriptThreadAt(i);
-                //全ての静的フィールドをマーク
-                bc_ScriptContext* sctx = bc_SelectedScriptContext(th);
-                bc_MarkStaticFields(sctx);
-                //全てのスタック変数をマーク
-                // GC直後にフレームを解放した場合はNULLになる
-                bc_Frame* top = bc_GetScriptThreadFrameRef(th);
-                if (top != NULL) {
-                        bc_MarkAllFrame(top);
-                }
-                // true, false, null
-                bc_GetUniqueTrueObject(sctx)->Paint = PAINT_MARKED_T;
-                bc_GetUniqueFalseObject(sctx)->Paint = PAINT_MARKED_T;
-                bc_GetUniqueNullObject(sctx)->Paint = PAINT_MARKED_T;
+        bc_Cache* iter = self->Roots;
+        while (iter != NULL) {
+                bc_Object* e = iter->Data;
+                bc_MarkAllObject(e);
+                iter = iter->Next;
         }
 }
 
-static void gc_update(bc_Heap* self) {
+static void gc_mark_barrier(bc_Heap* self) {
         bc_Cache* iter = self->Objects;
         while (iter != NULL) {
                 bc_Object* e = iter->Data;
@@ -169,6 +183,7 @@ static void gc_sweep(bc_Heap* self) {
                 }
                 iter = iter->Next;
         }
+        bc_EraseCacheAll(self->Roots);
 }
 
 static void gc_delete(bc_VectorItem item) {
@@ -179,6 +194,7 @@ static void gc_delete(bc_VectorItem item) {
 static bc_Heap* bc_new_heap() {
         bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
         ret->Objects = bc_NewCache(100);
+        ret->Roots = bc_NewCache(100);
         ret->AcceptBlocking = 0;
         ret->CollectBlocking = 0;
         return ret;
@@ -189,17 +205,18 @@ static gpointer gc_run(gpointer data) {
         while (gGCContinue) {
                 // 待機
                 g_cond_wait(&gGCWait, &gGCMtx);
-                //ヒープを保護して最初のマーク
+                //ヒープを保護してルートを取得
                 bc_heap_lock();
-                gc_clear(self);
-                gc_mark(self);
+                gc_collect_all_root(self);
                 bc_heap_unlock();
-                //並列マーク
+                //ルートを全てマーク
                 gc_mark(self);
-                //更新されたもののみをマーク
+                //ライトバリアーを確認
                 bc_heap_lock();
-                gc_update(self);
+                gc_mark_barrier(self);
                 bc_heap_unlock();
+                //ライトバリアーを確認
+                gc_sweep(self);
         }
         return NULL;
 }

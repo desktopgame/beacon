@@ -15,6 +15,7 @@
 #include "enviroment.h"
 struct bc_Object;
 struct bc_Type;
+struct bc_Cache;
 /**
  * 実行時の情報を格納する構造体.
  */
@@ -128,10 +129,17 @@ bc_Frame* bc_NewFrame();
 bc_Frame* bc_SubFrame(bc_Frame* parent);
 
 /**
- * このVMの変数を全てマークします.
+ * このフレームの変数を全てマークします.
  * @param self
  */
 void bc_MarkAllFrame(bc_Frame* self);
+
+/**
+ * このフレームの全ての変数をキャッシュへ追加します。
+ * @param self
+ * @param cache
+ */
+void bc_CollectAllFrame(bc_Frame* self, struct bc_Cache* cache);
 
 /**
  * 実行時の現在のレシーバを返します。

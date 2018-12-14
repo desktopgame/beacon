@@ -37,6 +37,12 @@ void bc_StoreCache(bc_Cache* self, void* data);
 void bc_EraseCache(bc_Cache* self, void* data);
 
 /**
+ * 全ての要素を取り除きます。
+ * @param self
+ */
+void bc_EraseCacheAll(bc_Cache* self);
+
+/**
  * 全てのキャッシュを削除します。
  * @param self
  * @param deleter

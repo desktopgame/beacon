@@ -20,6 +20,7 @@ struct bc_Object;
 struct bc_ClassLoader;
 struct bc_Field;
 struct bc_ScriptThread;
+struct bc_Cache;
 
 /**
  * 静的フィールドを訪問するための関数ポインタ.
@@ -105,6 +106,13 @@ void bc_ClearScriptContext(bc_ScriptContext* self);
  * @param self
  */
 void bc_MarkStaticFields(bc_ScriptContext* self);
+
+/**
+ * 全ての政敵変数をキャッシュへ追加します。
+ * @param self
+ * @param cache
+ */
+void bc_CollectStaticFields(bc_ScriptContext* self, struct bc_Cache* cache);
 
 /**
  * 指定の整数をキャッシュします.

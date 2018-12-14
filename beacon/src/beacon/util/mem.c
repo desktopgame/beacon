@@ -1,5 +1,6 @@
 #include "mem.h"
 #include <assert.h>
+#include <glib.h>
 #include <stdint.h>
 #include <string.h>
 #include "io.h"
@@ -33,6 +34,9 @@ static int save_bp();
 static int collect_leaks_bp(bc_Slot* self);
 static void write_bp(FILE* fp, bc_Slot* self);
 static void load_bp();
+static void mem_lock();
+static void mem_unlock();
+static GRecMutex gMemMtx;
 
 #define INIT (0xCC)
 #define BORDER (0xCD)
@@ -56,6 +60,8 @@ void bc_InitMX() {
 }
 
 void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
+#ifdef BC_DEBUG
+        mem_lock();
         bc_Slot* slot = get_free_slot();
         void* area = bc_SafeMalloc(REAL_SIZE(size));
         slot->Size = size;
@@ -68,12 +74,19 @@ void* bc_MXMalloc(size_t size, const char* filename, int lineno) {
         location_slot(slot, filename, lineno);
         attach_bp(slot);
         gStack++;
+        mem_unlock();
         return get_aligned(slot);
+#else
+        return bc_SafeMalloc(size);
+#endif
 }
 
 void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno) {
+#ifdef BC_DEBUG
+        mem_lock();
         bc_Slot* c = get_owner_slot(block);
         if (c == NULL) {
+                mem_unlock();
                 return bc_SafeRealloc(block, size);
         }
         size_t old = c->Size;
@@ -86,16 +99,24 @@ void* bc_MXRealloc(void* block, size_t size, const char* filename, int lineno) {
         if (size > old) {
         }
         location_slot(c, filename, lineno);
+        mem_unlock();
         return get_aligned(c);
+#else
+        return bc_SafeRealloc(block, size);
+#endif
 }
 
 void bc_MXFree(void* block, const char* filename, int lineno) {
+#ifdef BC_DEBUG
+        mem_lock();
         if (block == NULL) {
+                mem_unlock();
                 return;
         }
         gStack--;
         bc_Slot* c = get_owner_slot(block);
         if (c == NULL) {
+                mem_unlock();
                 return;
         }
         c->Size = 0;
@@ -103,10 +124,16 @@ void bc_MXFree(void* block, const char* filename, int lineno) {
         c->UserArea = NULL;
         c->Count = -1;
         location_slot(c, filename, lineno);
+        mem_unlock();
+#else
+        free(block);
+#endif
 }
 
 void* bc_MXBind(const void* block, size_t size, const char* filename,
                 int lineno) {
+#ifdef BC_DEBUG
+        mem_lock();
         bc_Slot* slot = get_free_slot();
         slot->Size = size;
         slot->UserArea = bc_SafeMalloc(REAL_SIZE(size));
@@ -115,7 +142,11 @@ void* bc_MXBind(const void* block, size_t size, const char* filename,
         location_slot(slot, filename, lineno);
         attach_bp(slot);
         gStack++;
+        mem_unlock();
         return get_aligned(slot);
+#else
+        return block;
+#endif
 }
 
 void bc_DestroyMX() {
@@ -134,7 +165,7 @@ void* bc_SafeMalloc(size_t size) {
         if (ret == NULL) {
                 bc_FatalError();
         }
-        memset(ret, 0, size);
+        // memset(ret, 0, size);
         return ret;
 }
 
@@ -360,3 +391,7 @@ static void load_bp() {
         }
         fclose(fp);
 }
+
+static void mem_lock() { g_rec_mutex_lock(&gMemMtx); }
+
+static void mem_unlock() { g_rec_mutex_unlock(&gMemMtx); }

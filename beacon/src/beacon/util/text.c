@@ -21,7 +21,8 @@ char* bc_Strdup(const char* source) {
                 return NULL;
         }
         //\0を含める
-        return bc_Bind(source, (strlen(source) + 1) * sizeof(char));
+        return bc_MXBind(source, (strlen(source) + 1) * sizeof(char), __FILE__,
+                         __LINE__);
 }
 
 bool bc_IsBlankText(const char* str) {

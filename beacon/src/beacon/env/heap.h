@@ -20,6 +20,7 @@
  */
 typedef struct bc_Heap {
         bc_Cache* Objects;
+        bc_Cache* Roots;
         //この値が 1以上 なら、新しく確保されたオブジェクトは
         //ヒープに関連づけられません。
         //つまり、オブジェクトを自分で解放する必要があります。
@@ -73,4 +74,14 @@ void bc_IgnoreHeap(bc_Heap* self, bc_Object* o);
  * @param self
  */
 void bc_DumpHeap(bc_Heap* self);
+
+/**
+ * ヒープの変更をロックします。
+ */
+void bc_LockHeap();
+
+/**
+ * ヒープの変更をアンロックします。
+ */
+void bc_UnlockHeap();
 #endif  // !SIGNAL_ENV_HEAP_H
