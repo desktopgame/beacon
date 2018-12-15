@@ -137,6 +137,10 @@ void* bc_MXBind(const void* block, size_t size, const char* filename,
         bc_Slot* slot = get_free_slot();
         slot->Size = size;
         slot->UserArea = bc_SafeMalloc(REAL_SIZE(size));
+        memset(slot->UserArea, INIT, REAL_SIZE(size));
+        memset(slot->UserArea, BORDER, BORDER_SIZE);
+        memset(get_layout(slot, size + BORDER_SIZE + POINTER_SIZE), BORDER,
+               BORDER_SIZE);
         memcpy(get_aligned(slot), block, size);
         set_self(slot);
         location_slot(slot, filename, lineno);
@@ -146,6 +150,39 @@ void* bc_MXBind(const void* block, size_t size, const char* filename,
         return get_aligned(slot);
 #else
         return block;
+#endif
+}
+
+void bc_ValidateMX() {
+#ifdef BC_DEBUG
+        mem_lock();
+        bc_Slot* iter = gMXHead;
+        while (iter != NULL) {
+                unsigned char* raw = iter->UserArea;
+                if (raw == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                //先頭の境界を検査
+                for (int i = 0; i < BORDER_SIZE; i++) {
+                        unsigned char e = raw[i];
+                        if (e != BORDER) {
+                                abort();
+                        }
+                }
+                raw += BORDER_SIZE;
+                raw += POINTER_SIZE;
+                raw += iter->Size;
+                //末尾の境界を検査
+                for (int i = 0; i < BORDER_SIZE; i++) {
+                        unsigned char e = raw[i];
+                        if (e != BORDER) {
+                                abort();
+                        }
+                }
+                iter = iter->Next;
+        }
+        mem_unlock();
 #endif
 }
 
@@ -165,7 +202,7 @@ void* bc_SafeMalloc(size_t size) {
         if (ret == NULL) {
                 bc_FatalError();
         }
-        // memset(ret, 0, size);
+        memset(ret, 0, size);
         return ret;
 }
 
@@ -275,7 +312,7 @@ static bc_Slot* get_self(void* area) {
                 return NULL;
         }
 #if defined(_MSC_VER)
-        unsigned char* rawarea =area;
+        unsigned char* rawarea = area;
         unsigned char* rawfixed = (rawarea - POINTER_SIZE);
         uintptr_t ptr = *((uintptr_t*)rawfixed);
         return (bc_Slot*)ptr;

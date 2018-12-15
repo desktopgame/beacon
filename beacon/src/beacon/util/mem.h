@@ -53,6 +53,8 @@ void bc_MXFree(void* block, const char* filename, int lineno);
 void* bc_MXBind(const void* block, size_t size, const char* filename,
                 int lineno);
 
+void bc_ValidateMX();
+
 void bc_DestroyMX();
 
 /**
