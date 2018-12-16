@@ -21,6 +21,8 @@ static bc_Heap* bc_new_heap();
 static gpointer gc_run(gpointer data);
 static void sem_v_signal(GAsyncQueue* q);
 static void sem_p_wait(GAsyncQueue* q);
+static void bc_request_stw();
+static void bc_resume_stw();
 
 static bc_Heap* gHeap = NULL;
 // STWwait
@@ -97,20 +99,6 @@ void bc_DumpHeap(bc_Heap* self) {
                 printf("\n");
                 iter = iter->Next;
         }
-}
-
-void bc_RequestSTW() {
-        g_rw_lock_writer_lock(&gQSLock);
-        gRRR = true;
-        g_rw_lock_writer_unlock(&gQSLock);
-        sem_p_wait(gResQ);
-}
-
-void bc_ResumeSTW() {
-        g_rw_lock_writer_lock(&gQSLock);
-        gRRR = false;
-        g_rw_lock_writer_unlock(&gQSLock);
-        sem_v_signal(gReqQ);
 }
 
 void bc_CheckSTWRequest() {
@@ -236,15 +224,15 @@ static gpointer gc_run(gpointer data) {
         bc_Heap* self = bc_GetHeap();
         while (gGCContinue) {
                 //ヒープを保護してルートを取得
-                bc_RequestSTW();
+                bc_request_stw();
                 gc_collect_all_root(self);
-                bc_ResumeSTW();
+                bc_resume_stw();
                 //ルートを全てマーク
                 gc_mark(self);
                 //ライトバリアーを確認
-                bc_RequestSTW();
+                bc_request_stw();
                 gc_mark_barrier(self);
-                bc_ResumeSTW();
+                bc_resume_stw();
                 //ライトバリアーを確認
                 gc_sweep(self);
         }
@@ -256,3 +244,17 @@ static void sem_v_signal(GAsyncQueue* q) {
 }
 
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
+
+static void bc_request_stw() {
+        g_rw_lock_writer_lock(&gQSLock);
+        gRRR = true;
+        g_rw_lock_writer_unlock(&gQSLock);
+        sem_p_wait(gResQ);
+}
+
+static void bc_resume_stw() {
+        g_rw_lock_writer_lock(&gQSLock);
+        gRRR = false;
+        g_rw_lock_writer_unlock(&gQSLock);
+        sem_v_signal(gReqQ);
+}

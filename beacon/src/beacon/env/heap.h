@@ -76,18 +76,6 @@ void bc_IgnoreHeap(bc_Heap* self, bc_Object* o);
 void bc_DumpHeap(bc_Heap* self);
 
 /**
- * STWを要求します。
- * 必ずGCスレッドから呼び出されます。
- */
-void bc_RequestSTW();
-
-/**
- * STWから復帰します。
- * 必ずGCスレッドから呼び出されます。
- */
-void bc_ResumeSTW();
-
-/**
  * STWが要求されているならウェイトします。
  */
 void bc_CheckSTWRequest();
