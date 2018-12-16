@@ -83,9 +83,7 @@ void bc_ExecuteVM(bc_Frame* self, bc_Enviroment* env) {
 }
 
 void bc_ResumeVM(bc_Frame* self, bc_Enviroment* env, int pos) {
-        bc_LockRoot();
         self->DeferList = bc_NewVector();
-        bc_UnlockRoot();
         vm_run(self, env, pos, -1);
         while (self->DeferList->Length > 0) {
                 bc_DeferContext* defctx =
@@ -97,10 +95,8 @@ void bc_ResumeVM(bc_Frame* self, bc_Enviroment* env, int pos) {
                 self->VariableTable = save;
                 bc_DeleteDeferContext(defctx);
         }
-        bc_LockRoot();
         bc_DeleteVector(self->DeferList, bc_VectorDeleterOfNull);
         self->DeferList = NULL;
-        bc_UnlockRoot();
 }
 
 void bc_ThrowVM(bc_Frame* self, bc_Object* exc) {
@@ -1220,9 +1216,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_DeferContext* defctx = bc_NewDeferContext();
                                 defctx->Offset = offset;
                                 defctx->VariableTable = bind;
-                                bc_LockRoot();
                                 bc_PushVector(self->DeferList, defctx);
-                                bc_UnlockRoot();
                                 break;
                         }
                         case OP_BREAKPOINT: {
@@ -1280,10 +1274,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
 }
 
 static void pushv(bc_Frame* self, bc_Object* a) {
+        bc_CheckSTWRequest();
         bc_PushVector(self->ValueStack, NON_NULL(a));
 }
 
 static bc_Object* popv(bc_Frame* self) {
+        bc_CheckSTWRequest();
         return (bc_Object*)bc_PopVector(self->ValueStack);
 }
 
@@ -1292,10 +1288,12 @@ static bc_Object* topv(bc_Frame* self) {
 }
 
 static void setv(bc_Frame* self, int index, bc_Object* o) {
+        bc_CheckSTWRequest();
         bc_AssignVector(self->VariableTable, index, o);
 }
 
 static bc_Object* getv(bc_Frame* self, int index) {
+        bc_CheckSTWRequest();
         return (bc_Object*)bc_AtVector(self->VariableTable, index);
 }
 

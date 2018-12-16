@@ -76,22 +76,19 @@ void bc_IgnoreHeap(bc_Heap* self, bc_Object* o);
 void bc_DumpHeap(bc_Heap* self);
 
 /**
- * ヒープの変更をロックします。
+ * STWを要求します。
+ * 必ずGCスレッドから呼び出されます。
  */
-void bc_LockHeap();
+void bc_RequestSTW();
 
 /**
- * ヒープの変更をアンロックします。
+ * STWから復帰します。
+ * 必ずGCスレッドから呼び出されます。
  */
-void bc_UnlockHeap();
+void bc_ResumeSTW();
 
 /**
- * ルートの変更をロックします。
+ * STWが要求されているならウェイトします。
  */
-void bc_LockRoot();
-
-/**
- * ルートの変更をアンロックします。
- */
-void bc_UnlockRoot();
+void bc_CheckSTWRequest();
 #endif  // !SIGNAL_ENV_HEAP_H

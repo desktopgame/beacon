@@ -60,7 +60,7 @@ bc_GenericType* bc_GetRuntimeReceiver(bc_Frame* self) {
 bc_Vector* bc_GetRuntimeTypeArguments(bc_Frame* self) { return self->TypeArgs; }
 
 void bc_DeleteFrame(bc_Frame* self) {
-        bc_LockHeap();
+        bc_CheckSTWRequest();
         remove_from_parent(self);
         bc_ClearVector(self->ValueStack);
         bc_ClearVector(self->VariableTable);
@@ -69,7 +69,6 @@ void bc_DeleteFrame(bc_Frame* self) {
         bc_DeleteVector(self->Children, bc_VectorDeleterOfNull);
         bc_DeleteVector(self->TypeArgs, bc_VectorDeleterOfNull);
         bc_DeleteVector(self->DeferList, delete_defctx);
-        bc_UnlockHeap();
         bc_CollectHeap(bc_GetHeap());
         MEM_FREE(self);
 }
