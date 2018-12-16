@@ -5,7 +5,19 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "(lldb) Test",
+			"name": "(lldb) Test(External)",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/beacon/bin/beacon",
+			"args": ["--test"],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/beacon/bin",
+			"environment": [],
+			"externalConsole": true,
+			"MIMode": "lldb"
+		},
+		{
+			"name": "(lldb) Test(Builtin)",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/beacon/bin/beacon",
@@ -38,48 +50,5 @@
 			"environment": [],
 			"MIMode": "lldb",
 		},
-		{
-			"name": "(lldb) AST",
-			"type": "cppdbg",
-			"request": "launch",
-			"program": "${workspaceFolder}/beacon/bin/beacon",
-			"args": ["--ast", "main.bc"],
-			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}/beacon/bin",
-			"environment": [],
-			"MIMode": "lldb"
-		},
-		{
-			"name": "(lldb) IL",
-			"type": "cppdbg",
-			"request": "launch",
-			"program": "${workspaceFolder}/beacon/bin/beacon",
-			"args": ["--il", "main.bc"],
-			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}/beacon/bin",
-			"environment": [],
-			"MIMode": "lldb"
-		},
-		{
-			"name": "(lldb) Op",
-			"type": "cppdbg",
-			"request": "launch",
-			"program": "${workspaceFolder}/beacon/bin/beacon",
-			"args": ["--op", "main.bc"],
-			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}/beacon/bin",
-			"environment": [],
-			"MIMode": "lldb"
-		},
-		{
-			"name": "(lldb) Scratch",
-			"type": "cppdbg",
-			"request": "launch",
-			"program": "${workspaceFolder}/beacon/scratch/bin/beacon",
-			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}/beacon/scratch/bin",
-			"environment": [],
-			"MIMode": "lldb"
-		}
 	]
 }
