@@ -59,7 +59,7 @@ void bc_AppendsBuffer(bc_Buffer* self, const char* s) {
 }
 
 char* bc_ReleaseBuffer(bc_Buffer* self) {
-        // bc_ShrinkBuffer(self);
+        bc_ShrinkBuffer(self);
         char* ret = self->Text;
         self->Text = NULL;
         MEM_FREE(self);

@@ -149,7 +149,9 @@ void* bc_MXBind(const void* block, size_t size, const char* filename,
         mem_unlock();
         return get_aligned(slot);
 #else
-        return block;
+        void* mem = bc_SafeMalloc(size);
+        memcpy(mem, block, size);
+        return mem;
 #endif
 }
 

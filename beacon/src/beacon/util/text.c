@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../config.h"
 #include "io.h"
 #include "mem.h"
 #include "string_buffer.h"
@@ -20,9 +21,13 @@ char* bc_Strdup(const char* source) {
         if (source == NULL) {
                 return NULL;
         }
+#if BC_DEBUG
         //\0を含める
         return bc_MXBind(source, (strlen(source) + 1) * sizeof(char), __FILE__,
                          __LINE__);
+#else
+        return strdup(source);
+#endif
 }
 
 bool bc_IsBlankText(const char* str) {
