@@ -23,21 +23,11 @@ static void sem_v_signal(GAsyncQueue* q);
 static void sem_p_wait(GAsyncQueue* q);
 
 static bc_Heap* gHeap = NULL;
-// GCwait
-static GCond gGCCond;
-static GRecMutex gGCMtx;
-static volatile bool gGCTrigger = false;
 // STWwait
 static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
 static GRWLock gQSLock;
 static volatile bool gRRR = false;
-static GCond gSTWReqCond;
-static GRecMutex gSTWReqMtx;
-static GCond gSTWResCond;
-static GRecMutex gSTWResMtx;
-static volatile bool gSTWAccept = false;
-static volatile bool gSTWRequest = false;
 
 static GThread* gGCThread = NULL;
 static bool gGCContinue = true;
@@ -78,7 +68,6 @@ void bc_AddHeap(bc_Heap* self, bc_Object* obj) {
                 obj->Paint = PAINT_ONEXIT_T;
                 return;
         }
-        bc_CheckSTWRequest();
         bc_StoreCache(self->Objects, obj);
 }
 
@@ -87,10 +76,6 @@ void bc_CollectHeap(bc_Heap* self) {
                 return;
         }
         bc_CheckSTWRequest();
-        g_rec_mutex_lock(&gGCMtx);
-        gGCTrigger = true;
-        g_cond_signal(&gGCCond);
-        g_rec_mutex_unlock(&gGCMtx);
 }
 
 void bc_IgnoreHeap(bc_Heap* self, bc_Object* o) {
@@ -115,22 +100,6 @@ void bc_DumpHeap(bc_Heap* self) {
 }
 
 void bc_RequestSTW() {
-        /*
-        //フラグをオンにして、
-        // VMがこのフラグを見るまで待機します.
-        g_rec_mutex_lock(&gSTWReqMtx);
-        gSTWRequest = true;
-        gSTWAccept = false;
-        g_rec_mutex_unlock(&gSTWReqMtx);
-        g_rec_mutex_lock(&gSTWResMtx);
-        //フラグが確認されたらここを抜ける
-        assert(!gSTWAccept);
-        assert(gSTWRequest);
-        while (!gSTWAccept) {
-                g_cond_wait(&gSTWResCond, &gSTWResMtx);
-        }
-        g_rec_mutex_unlock(&gSTWResMtx);
-        */
         g_rw_lock_writer_lock(&gQSLock);
         gRRR = true;
         g_rw_lock_writer_unlock(&gQSLock);
@@ -142,13 +111,6 @@ void bc_ResumeSTW() {
         gRRR = false;
         g_rw_lock_writer_unlock(&gQSLock);
         sem_v_signal(gReqQ);
-        /*
-        g_rec_mutex_lock(&gSTWReqMtx);
-        gSTWAccept = false;
-        gSTWRequest = false;
-        g_cond_signal(&gSTWReqCond);
-        g_rec_mutex_unlock(&gSTWReqMtx);
-        */
 }
 
 void bc_CheckSTWRequest() {
@@ -165,22 +127,6 @@ void bc_CheckSTWRequest() {
         g_rw_lock_reader_unlock(&gQSLock);
         sem_v_signal(gResQ);
         sem_p_wait(gReqQ);
-        /*
-        //フラグが有効ならウェイトする
-        g_rec_mutex_lock(&gSTWReqMtx);
-        if (gSTWRequest) {
-                g_rec_mutex_lock(&gSTWResMtx);
-                gSTWAccept = true;
-                g_cond_signal(&gSTWResCond);
-                g_rec_mutex_unlock(&gSTWResMtx);
-                assert(gSTWRequest);
-                assert(gSTWAccept);
-                while (gSTWRequest) {
-                        g_cond_wait(&gSTWReqCond, &gSTWReqMtx);
-                }
-        }
-        g_rec_mutex_unlock(&gSTWReqMtx);
-        */
 }
 
 // private
@@ -226,6 +172,10 @@ static void gc_clear(bc_Heap* self) {
 static void gc_mark(bc_Heap* self) {
         bc_Cache* iter = self->Roots;
         while (iter != NULL) {
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
                 bc_Object* e = iter->Data;
                 bc_MarkAllObject(e);
                 iter = iter->Next;
@@ -285,12 +235,6 @@ static bc_Heap* bc_new_heap() {
 static gpointer gc_run(gpointer data) {
         bc_Heap* self = bc_GetHeap();
         while (gGCContinue) {
-                // 待機
-                g_rec_mutex_lock(&gGCMtx);
-                while (!gGCTrigger) {
-                        g_cond_wait(&gGCCond, &gGCMtx);
-                }
-                g_rec_mutex_unlock(&gGCMtx);
                 //ヒープを保護してルートを取得
                 bc_RequestSTW();
                 gc_collect_all_root(self);
