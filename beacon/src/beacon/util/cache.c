@@ -83,6 +83,7 @@ static bc_Cache* bc_reserve_cache(bc_Cache* tail, int count) {
                 return next;
         }
         while (count > 0) {
+                count--;
                 bc_Cache* temp = bc_malloc_cache();
                 iter->Next = temp;
                 iter = temp;
