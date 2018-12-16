@@ -84,4 +84,14 @@ void bc_LockHeap();
  * ヒープの変更をアンロックします。
  */
 void bc_UnlockHeap();
+
+/**
+ * ルートの変更をロックします。
+ */
+void bc_LockRoot();
+
+/**
+ * ルートの変更をアンロックします。
+ */
+void bc_UnlockRoot();
 #endif  // !SIGNAL_ENV_HEAP_H

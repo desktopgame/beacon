@@ -35,17 +35,22 @@
 #endif
 // proto
 static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos, int deferStart);
-static int stack_topi(bc_Frame* self);
-static double stack_topd(bc_Frame* self);
-static char stack_topc(bc_Frame* self);
-static char* stack_tops(bc_Frame* self);
-static bool stack_topb(bc_Frame* self);
+static void pushv(bc_Frame* self, bc_Object* a);
+static bc_Object* popv(bc_Frame* self);
+static bc_Object* topv(bc_Frame* self);
+static void setv(bc_Frame* self, int index, bc_Object* o);
+static bc_Object* getv(bc_Frame* self, int index);
+static int topvi(bc_Frame* self);
+static double topvd(bc_Frame* self);
+static char topvc(bc_Frame* self);
+static char* topvs(bc_Frame* self);
+static bool topvb(bc_Frame* self);
 
-static int stack_popi(bc_Frame* self);
-static double stack_popd(bc_Frame* self);
-static char stack_popc(bc_Frame* self);
-static char* stack_pops(bc_Frame* self);
-static bool stack_popb(bc_Frame* self);
+static int popvi(bc_Frame* self);
+static double popvd(bc_Frame* self);
+static char popvc(bc_Frame* self);
+static char* popvs(bc_Frame* self);
+static bool popvb(bc_Frame* self);
 static void remove_from_parent(bc_Frame* self);
 static void frame_markStatic(bc_Field* item);
 static void vm_delete_defctx(bc_VectorItem e);
@@ -58,18 +63,18 @@ static void uncaught(bc_Frame* self, bc_Enviroment* env, int pc);
 static void mark_exception(bc_Frame* self, bc_Object* exc);
 
 // Stack Top
-#define STI(a) stack_topi(a)
-#define STD(a) stack_topd(a)
-#define STC(a) stack_topc(a)
-#define STS(a) stack_tops(a)
-#define STB(a) stack_topb(a)
+#define STI(a) topvi(a)
+#define STD(a) topvd(a)
+#define STC(a) topvc(a)
+#define STS(a) topvs(a)
+#define STB(a) topvb(a)
 
 // Stack Pop
-#define SPI(a) stack_popi(a)
-#define SPD(a) stack_popd(a)
-#define SPC(a) stack_popc(a)
-#define SPS(a) stack_pops(a)
-#define SPB(a) stack_popb(a)
+#define SPI(a) popvi(a)
+#define SPD(a) popvd(a)
+#define SPC(a) popvc(a)
+#define SPS(a) popvs(a)
+#define SPB(a) popvb(a)
 
 // Reference Store
 
@@ -78,7 +83,9 @@ void bc_ExecuteVM(bc_Frame* self, bc_Enviroment* env) {
 }
 
 void bc_ResumeVM(bc_Frame* self, bc_Enviroment* env, int pos) {
+        bc_LockRoot();
         self->DeferList = bc_NewVector();
+        bc_UnlockRoot();
         vm_run(self, env, pos, -1);
         while (self->DeferList->Length > 0) {
                 bc_DeferContext* defctx =
@@ -90,8 +97,10 @@ void bc_ResumeVM(bc_Frame* self, bc_Enviroment* env, int pos) {
                 self->VariableTable = save;
                 bc_DeleteDeferContext(defctx);
         }
+        bc_LockRoot();
         bc_DeleteVector(self->DeferList, bc_VectorDeleterOfNull);
         self->DeferList = NULL;
+        bc_UnlockRoot();
 }
 
 void bc_ThrowVM(bc_Frame* self, bc_Object* exc) {
@@ -143,53 +152,44 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                 switch (b) {
                         // int & int
                         case OP_IADD:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) + SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) + SPI(self)));
                                 break;
                         case OP_ISUB:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) - SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) - SPI(self)));
                                 break;
                         case OP_IMUL:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) * SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) * SPI(self)));
                                 break;
                         case OP_IDIV: {
                                 int a = SPI(self);
                                 int b = SPI(self);
                                 assert(b != 0);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(a / b)));
+                                pushv(self, bc_GetIntObject(a / b));
                                 break;
                         }
                         case OP_IMOD:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) % SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) % SPI(self)));
                                 break;
                         case OP_IBIT_OR: {
                                 int a = SPI(self);
                                 int b = SPI(self);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(a | b)));
+                                pushv(self, bc_GetIntObject(a | b));
                                 break;
                         }
                         case OP_ILOGIC_OR: {
                                 int a = SPI(self);
                                 int b = SPI(self);
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetIntObject(a || b)));
+                                pushv(self, bc_GetIntObject(a || b));
                                 break;
                         }
                         case OP_IBIT_AND: {
                                 int a = SPI(self);
                                 int b = SPI(self);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(a & b)));
+                                pushv(self, bc_GetIntObject(a & b));
                                 break;
                         }
                         case OP_ILOGIC_AND: {
@@ -198,212 +198,164 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //短絡評価のせいだった
                                 int a = SPI(self);
                                 int b = SPI(self);
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetIntObject(a && b)));
+                                pushv(self, bc_GetIntObject(a && b));
                                 break;
                         }
                         case OP_IEQ:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPI(self) == SPI(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPI(self) == SPI(self)));
                                 break;
                         case OP_INOTEQ:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPI(self) != SPI(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPI(self) != SPI(self)));
                                 break;
                         case OP_IGT:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPI(self) > SPI(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPI(self) > SPI(self)));
                                 break;
                         case OP_IGE:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPI(self) >= SPI(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPI(self) >= SPI(self)));
                                 break;
                         case OP_ILT: {
-                                bc_Object* a_ = bc_PopVector(self->ValueStack);
-                                bc_Object* b_ = bc_PopVector(self->ValueStack);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  bc_ObjectToInt(a_) <
-                                                  bc_ObjectToInt(b_))));
-                                // PushVector(self->ValueStack,
-                                // GetBoolObject(SPI(self) < SPI(self)));
+                                bc_Object* a_ = popv(self);
+                                bc_Object* b_ = popv(self);
+                                pushv(self,
+                                      bc_GetBoolObject(bc_ObjectToInt(a_) <
+                                                       bc_ObjectToInt(b_)));
                                 break;
                         }
                         case OP_ILE:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPI(self) <= SPI(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPI(self) <= SPI(self)));
                                 break;
                         case OP_ILSH:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) << SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) << SPI(self)));
                                 break;
                         case OP_IRSH:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) >> SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) >> SPI(self)));
                                 break;
                         case OP_IEXCOR:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetIntObject(
-                                                  SPI(self) ^ SPI(self))));
+                                pushv(self,
+                                      bc_GetIntObject(SPI(self) ^ SPI(self)));
                                 break;
                         case OP_IFLIP:
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetIntObject(~SPI(self))));
+                                pushv(self, bc_GetIntObject(~SPI(self)));
                                 break;
                         case OP_CEQ:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPC(self) == SPC(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPC(self) == SPC(self)));
                                 break;
                         case OP_CNOTEQ:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPC(self) != SPC(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPC(self) != SPC(self)));
                                 break;
                         case OP_CGT:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPC(self) > SPC(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPC(self) > SPC(self)));
                                 break;
                         case OP_CGE:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPC(self) >= SPC(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPC(self) >= SPC(self)));
                                 break;
                         case OP_CLT:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPC(self) < SPC(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPC(self) < SPC(self)));
                                 break;
                         case OP_CLE:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPC(self) <= SPC(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPC(self) <= SPC(self)));
                                 break;
                                 // double & double
                         case OP_DADD:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_NewDouble(
-                                                  SPD(self) + SPD(self))));
+                                pushv(self,
+                                      bc_NewDouble(SPD(self) + SPD(self)));
                                 break;
                         case OP_DSUB:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_NewDouble(
-                                                  SPD(self) - SPD(self))));
+                                pushv(self,
+                                      bc_NewDouble(SPD(self) - SPD(self)));
                                 break;
                         case OP_DMUL:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_NewDouble(
-                                                  SPD(self) * SPD(self))));
+                                pushv(self,
+                                      bc_NewDouble(SPD(self) * SPD(self)));
                                 break;
                         case OP_DDIV:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_NewDouble(
-                                                  SPD(self) / SPD(self))));
+                                pushv(self,
+                                      bc_NewDouble(SPD(self) / SPD(self)));
                                 break;
                         case OP_DMOD:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_NewDouble(
-                                                  (double)((int)SPD(self) %
-                                                           (int)SPD(self)))));
+                                pushv(self,
+                                      bc_NewDouble((double)((int)SPD(self) %
+                                                            (int)SPD(self))));
                                 break;
                         case OP_DEQ:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPD(self) == SPD(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPD(self) == SPD(self)));
                                 break;
                         case OP_DNOTEQ:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPD(self) != SPD(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPD(self) != SPD(self)));
                                 break;
                         case OP_DGT:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPD(self) > SPD(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPD(self) > SPD(self)));
                                 break;
                         case OP_DGE:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPD(self) >= SPD(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPD(self) >= SPD(self)));
                                 break;
                         case OP_DLT:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPD(self) < SPD(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPD(self) < SPD(self)));
                                 break;
                         case OP_DLE:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPD(self) <= SPD(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPD(self) <= SPD(self)));
                                 break;
                         case OP_INEG:
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetIntObject(-SPI(self))));
+                                pushv(self, bc_GetIntObject(-SPI(self)));
                                 break;
                         case OP_DNEG:
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_NewDouble(-SPD(self))));
+                                pushv(self, bc_NewDouble(-SPD(self)));
                                 break;
                         case OP_BNOT: {
                                 bool a = SPB(self);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(!a)));
+                                pushv(self, bc_GetBoolObject(!a));
                                 break;
                         }
                                 // TODO:短絡評価していない
                         case OP_BBIT_OR: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetBoolObject(ab | bb)));
+                                pushv(self, bc_GetBoolObject(ab | bb));
                                 break;
                         }
                         case OP_BLOGIC_OR: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetBoolObject(ab || bb)));
+                                pushv(self, bc_GetBoolObject(ab || bb));
                                 break;
                         }
                         case OP_BBIT_AND: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetBoolObject(ab & bb)));
+                                pushv(self, bc_GetBoolObject(ab & bb));
                                 break;
                         }
                         case OP_BLOGIC_AND: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetBoolObject(ab && bb)));
+                                pushv(self, bc_GetBoolObject(ab && bb));
                                 break;
                         }
                         case OP_BEXCOR:
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(bc_GetBoolObject(
-                                                  SPB(self) ^ SPB(self))));
+                                pushv(self,
+                                      bc_GetBoolObject(SPB(self) ^ SPB(self)));
                                 break;
                         case OP_BFLIP:
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    NON_NULL(bc_GetBoolObject(~SPB(self))));
+                                pushv(self, bc_GetBoolObject(~SPB(self)));
                                 break;
                                 // push const
                         case OP_ICONST: {
@@ -412,7 +364,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o =
                                     (bc_Object*)bc_GetEnviromentCIntAt(env,
                                                                        index);
-                                bc_PushVector(self->ValueStack, NON_NULL(o));
+                                pushv(self, o);
                                 break;
                         }
                         case OP_DCONST: {
@@ -420,7 +372,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* d =
                                     bc_GetEnviromentCDoubleAt(env, index);
-                                bc_PushVector(self->ValueStack, NON_NULL(d));
+                                pushv(self, d);
                                 break;
                         }
                         case OP_CCONST: {
@@ -428,7 +380,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* c =
                                     bc_GetEnviromentCCharAt(env, index);
-                                bc_PushVector(self->ValueStack, NON_NULL(c));
+                                pushv(self, c);
                                 break;
                         }
                         case OP_SCONST: {
@@ -436,22 +388,19 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* cs =
                                     bc_GetEnviromentCStringAt(env, index);
-                                bc_PushVector(self->ValueStack, NON_NULL(cs));
+                                pushv(self, cs);
                                 break;
                         }
                         case OP_TRUE: {
-                                bc_PushVector(self->ValueStack,
-                                              bc_GetTrueObject());
+                                pushv(self, bc_GetTrueObject());
                                 break;
                         }
                         case OP_FALSE: {
-                                bc_PushVector(self->ValueStack,
-                                              bc_GetFalseObject());
+                                pushv(self, bc_GetFalseObject());
                                 break;
                         }
                         case OP_NULL: {
-                                bc_PushVector(self->ValueStack,
-                                              bc_GetNullObject());
+                                pushv(self, bc_GetNullObject());
                                 break;
                         }
                         case OP_RETURN: {
@@ -460,8 +409,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
                         case OP_THROW: {
                                 //例外は呼び出し全てへ伝播
-                                bc_Object* e =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* e = popv(self);
                                 bc_ThrowVM(self, e);
                                 bc_ScriptThread* th =
                                     bc_GetCurrentScriptThread();
@@ -505,32 +453,25 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_HEXCEPTION: {
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(self->Exception));
+                                pushv(self, self->Exception);
                                 break;
                         }
                         case OP_INSTANCEOF: {
                                 bc_GenericType* gtype =
                                     (bc_GenericType*)bc_PopVector(
                                         self->TypeArgs);
-                                bc_Object* v =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
-                                // PrintGenericType(gtype);
-                                // bc_Printfln("");
-                                // PrintGenericType(v->GType);
-                                // bc_Printfln("");
+                                bc_Object* v = popv(self);
                                 int dist =
                                     bc_CdistanceGenericType(gtype, v->GType);
                                 bc_Object* b = bc_GetBoolObject(dist >= 0);
-                                bc_PushVector(self->ValueStack, b);
+                                pushv(self, b);
                                 break;
                         }
                         case OP_DUP:
-                                bc_PushVector(self->ValueStack,
-                                              bc_TopVector(self->ValueStack));
+                                pushv(self, topv(self));
                                 break;
                         case OP_POP:
-                                bc_PopVector(self->ValueStack);
+                                popv(self);
                                 break;
                         case OP_NOP:
                                 /* no operation */
@@ -542,9 +483,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o =
                                     bc_NewObject(NULL, self->ObjectSize);
                                 assert(o->Paint != PAINT_ONEXIT_T);
-                                bc_PushVector(self->ValueStack, NON_NULL(o));
+                                pushv(self, o);
                                 //これを this とする
-                                bc_AssignVector(self->VariableTable, 0, o);
+                                setv(self, 0, o);
                                 break;
                         }
                         case OP_ALLOC_FIELD: {
@@ -553,8 +494,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Type* tp = (bc_Type*)bc_AtVector(
                                     ctx->TypeList, absClsIndex);
                                 bc_Class* cls = BC_TYPE2CLASS(tp);
-                                bc_Object* obj =
-                                    (bc_Object*)bc_TopVector(self->ValueStack);
+                                bc_Object* obj = topv(self);
                                 //仮想関数テーブル更新
                                 bc_CreateVTableClass(cls);
                                 obj->GType = bc_RefGenericType(cls->Parent);
@@ -606,11 +546,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     bc_NewVector(), bc_NewVector());
                                 for (int i = 0; i < ctor->Parameters->Length;
                                      i++) {
-                                        bc_VectorItem e =
-                                            bc_PopVector(self->ValueStack);
+                                        bc_VectorItem e = popv(self);
                                         bc_Object* o = (bc_Object*)e;
-                                        bc_PushVector(sub->ValueStack,
-                                                      NON_NULL(e));
+                                        pushv(sub, e);
                                         bc_AssignVector(
                                             cfr->Args,
                                             (ctor->Parameters->Length - i),
@@ -632,7 +570,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 // bc_Printi(self->level);
                                 // bc_Printfln("[ %s#new ]",
                                 // GetTypeName(ctor->Parent));
-                                // DumpEnviromentOp(ctor->env, sub->level);
+                                // DumpEnviromentOp(ctor->env,
+                                // sub->level);
                                 // DumpOpcodeBuf(ctor->env->Bytecode,
                                 // sub->level);
                                 bc_ExecuteVM(sub, ctor->Env);
@@ -643,11 +582,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_PopCallFrame(bc_GetScriptThreadContext());
                                 //コンストラクタを実行した場合、
                                 // Objectがスタックのトップに残っているはず
-                                bc_VectorItem returnV =
-                                    bc_TopVector(sub->ValueStack);
+                                bc_VectorItem returnV = topv(sub);
                                 bc_Object* returnO = (bc_Object*)returnV;
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(returnV));
+                                pushv(self, returnV);
                                 bc_DeleteFrame(sub);
                                 break;
                         }
@@ -679,10 +616,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //チェインコンストラクタに渡された実引数をプッシュ
                                 for (int i = 0; i < ctor->Parameters->Length;
                                      i++) {
-                                        bc_Object* o = (bc_Object*)bc_PopVector(
-                                            self->ValueStack);
-                                        bc_PushVector(sub->ValueStack,
-                                                      NON_NULL(o));
+                                        bc_Object* o = popv(self);
+                                        pushv(sub, o);
                                         bc_AssignVector(
                                             cfr->Args,
                                             (ctor->Parameters->Length - i),
@@ -693,10 +628,6 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                         bc_PushVector(cfr->TypeArgs,
                                                       self->TypeArgs);
                                 }
-                                //		DumpEnviromentOp(ctor->env,
-                                // sub->level);
-                                // DumpOpcodeBuf(ctor->env->Bytecode,
-                                // sub->level);
                                 bc_ExecuteVM(sub, ctor->Env);
                                 bc_DeleteVector(cfr->Args,
                                                 bc_VectorDeleterOfNull);
@@ -705,27 +636,21 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_PopCallFrame(bc_GetScriptThreadContext());
                                 //コンストラクタを実行した場合、
                                 // Objectがスタックのトップに残っているはず
-                                bc_VectorItem returnV =
-                                    bc_TopVector(sub->ValueStack);
+                                bc_VectorItem returnV = topv(sub);
                                 bc_Object* returnO = (bc_Object*)returnV;
-                                bc_AssignVector(self->VariableTable, 0,
-                                                returnV);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(returnV));
+                                setv(self, 0, returnV);
+                                pushv(self, returnV);
 
                                 bc_DeleteFrame(sub);
                                 // AllocFieldsClass(cls, returnO);
                                 break;
                         }
                         case OP_THIS: {
-                                bc_PushVector(
-                                    self->ValueStack,
-                                    bc_AtVector(self->VariableTable, 0));
+                                pushv(self, getv(self, 0));
                                 break;
                         }
                         case OP_SUPER: {
-                                bc_Object* a =
-                                    bc_AtVector(self->VariableTable, 0);
+                                bc_Object* a = getv(self, 0);
                                 bc_Object* super = bc_CloneObject(a);
                                 super->GType =
                                     BC_TYPE2CLASS(bc_GENERIC2TYPE(a->GType))
@@ -737,20 +662,19 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                                 bc_GENERIC2TYPE(a->GType))
                                                 ->SuperClass))
                                         ->VT;
-                                bc_PushVector(self->ValueStack, super);
+                                pushv(self, super);
                                 break;
                         }
                         // store,load
                         case OP_PUT_FIELD: {
-                                bc_Object* assignValue =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
-                                bc_Object* assignTarget =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* assignValue = popv(self);
+                                bc_Object* assignTarget = popv(self);
                                 if (throw_npe(self, assignTarget)) {
                                         break;
                                 }
                                 assignTarget->Update = true;
-                                // assert(assignTarget->Tag == OBJECT_REF_T);
+                                // assert(assignTarget->Tag ==
+                                // OBJECT_REF_T);
                                 int fieldIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_AssignVector(assignTarget->Fields,
@@ -759,19 +683,15 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
 
                         case OP_GET_FIELD: {
-                                bc_Object* sourceObject =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* sourceObject = popv(self);
                                 if (throw_npe(self, sourceObject)) {
                                         break;
                                 }
-                                // assert(sourceObject->Tag == OBJECT_REF_T);
-                                // int absClsIndex =
-                                // (int)GetEnviromentSourceAt(env, ++i);
                                 int fieldIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* val = (bc_Object*)bc_AtVector(
                                     sourceObject->Fields, fieldIndex);
-                                bc_PushVector(self->ValueStack, val);
+                                pushv(self, val);
                                 break;
                         }
 
@@ -785,8 +705,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Class* cls = tp->Kind.Class;
                                 bc_Field* f =
                                     bc_LookupStaticField(cls, fieldIndex);
-                                bc_Object* sv =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* sv = popv(self);
                                 f->StaticValue = sv;
                                 break;
                         }
@@ -800,19 +719,15 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     ctx->TypeList, absClsIndex);
                                 bc_Field* f = bc_LookupStaticField(
                                     cls->Kind.Class, fieldIndex);
-                                bc_PushVector(self->ValueStack,
-                                              NON_NULL(f->StaticValue));
+                                pushv(self, f->StaticValue);
                                 break;
                         }
                         case OP_PUT_PROPERTY: {
-                                bc_Object* assignValue =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
-                                bc_Object* assignTarget =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* assignValue = popv(self);
+                                bc_Object* assignTarget = popv(self);
                                 if (throw_npe(self, assignTarget)) {
                                         break;
                                 }
-                                // assert(assignTarget->Tag == OBJECT_REF_T);
                                 int propIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Property* pro = bc_LookupProperty(
@@ -822,15 +737,14 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = BC_MEMBER_TYPE(pro);
-                                bc_PushVector(sub->ValueStack, assignValue);
-                                bc_PushVector(sub->ValueStack, assignTarget);
+                                pushv(sub, assignValue);
+                                pushv(sub, assignTarget);
                                 bc_ExecuteVM(sub, pro->Set->Env);
                                 bc_DeleteFrame(sub);
                                 break;
                         }
                         case OP_GET_PROPERTY: {
-                                bc_Object* sourceObject =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* sourceObject = popv(self);
                                 if (throw_npe(self, sourceObject)) {
                                         break;
                                 }
@@ -843,21 +757,18 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = BC_MEMBER_TYPE(pro);
-                                bc_PushVector(sub->ValueStack, sourceObject);
+                                pushv(sub, sourceObject);
                                 bc_ExecuteVM(sub, pro->Get->Env);
                                 //戻り値をスタックに残す
-                                bc_VectorItem returnV =
-                                    bc_TopVector(sub->ValueStack);
+                                bc_VectorItem returnV = topv(sub);
                                 bc_Object* returnO = (bc_Object*)returnV;
-                                bc_AssignVector(self->VariableTable, 0,
-                                                returnV);
-                                bc_PushVector(self->ValueStack, returnV);
+                                setv(self, 0, returnV);
+                                pushv(self, returnV);
                                 bc_DeleteFrame(sub);
                                 break;
                         }
                         case OP_PUT_STATIC_PROPERTY: {
-                                bc_Object* sv =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* sv = popv(self);
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int propIndex =
@@ -870,14 +781,13 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //プロパティを実行
                                 bc_Frame* sub = bc_SubFrame(self);
                                 sub->Receiver = NULL;
-                                bc_PushVector(sub->ValueStack, sv);
+                                pushv(sub, sv);
                                 bc_ExecuteVM(sub, p->Set->Env);
                                 bc_DeleteFrame(sub);
                                 break;
                         }
                         case OP_GET_STATIC_PROPERTY: {
-                                bc_Object* sv =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* sv = popv(self);
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int propIndex =
@@ -892,39 +802,35 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 sub->Receiver = NULL;
                                 bc_ExecuteVM(sub, p->Get->Env);
                                 //戻り値をスタックに残す
-                                bc_VectorItem returnV =
-                                    bc_TopVector(sub->ValueStack);
+                                bc_VectorItem returnV = topv(sub);
                                 bc_Object* returnO = (bc_Object*)returnV;
-                                bc_AssignVector(self->VariableTable, 0,
-                                                returnV);
-                                bc_PushVector(self->ValueStack, returnV);
+                                setv(self, 0, returnV);
+                                pushv(self, returnV);
                                 bc_DeleteFrame(sub);
                                 break;
                         }
                         case OP_STORE: {
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_VectorItem e =
-                                    bc_PopVector(self->ValueStack);
+                                bc_VectorItem e = popv(self);
                                 bc_Object* o = (bc_Object*)e;
                                 assert(o != NULL);
-                                bc_AssignVector(self->VariableTable, index, e);
+                                setv(self, index, e);
                                 // INFO("store");
                                 break;
                         }
                         case OP_LOAD: {
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_VectorItem e =
-                                    bc_AtVector(self->VariableTable, index);
+                                bc_VectorItem e = getv(self, index);
                                 bc_Object* o = (bc_Object*)e;
                                 assert(o != NULL);
-                                bc_PushVector(self->ValueStack, e);
+                                pushv(self, e);
                                 // INFO("load");
                                 break;
                         }
                         case OP_DOWN_AS: {
-                                bc_Object* o = bc_PopVector(self->ValueStack);
+                                bc_Object* o = popv(self);
                                 bc_GenericType* a =
                                     bc_PopVector(self->TypeArgs);
                                 a = bc_CapplyGenericType(
@@ -941,34 +847,30 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                         bc_DeleteVector(inter_list,
                                                         bc_VectorDeleterOfNull);
                                         if (iter == -1) {
-                                                bc_PushVector(
-                                                    self->ValueStack,
-                                                    bc_GetNullObject());
+                                                pushv(self, bc_GetNullObject());
                                         } else {
-                                                bc_PushVector(self->ValueStack,
-                                                              o);
+                                                pushv(self, o);
                                         }
                                         break;
                                 }
                                 if (bc_CdistanceGenericType(o->GType, a) < 0) {
-                                        bc_PushVector(self->ValueStack,
-                                                      bc_GetNullObject());
+                                        pushv(self, bc_GetNullObject());
                                 } else {
                                         // o = CloneObject(o);
                                         // o->GType = a;
-                                        bc_PushVector(self->ValueStack, o);
+                                        pushv(self, o);
                                 }
                                 break;
                         }
                         case OP_UP_AS: {
-                                bc_Object* o = bc_PopVector(self->ValueStack);
+                                bc_Object* o = popv(self);
                                 bc_GenericType* a =
                                     bc_PopVector(self->TypeArgs);
                                 a = bc_CapplyGenericType(
                                     a, bc_GetScriptThreadContext());
                                 assert(a->CoreType != NULL);
                                 if (a->CoreType->Tag == TYPE_CLASS_T) {
-                                        bc_PushVector(self->ValueStack, o);
+                                        pushv(self, o);
                                 } else if (a->CoreType->Tag ==
                                            TYPE_INTERFACE_T) {
                                         bc_Interface* inter = BC_TYPE2INTERFACE(
@@ -982,12 +884,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                         bc_DeleteVector(inter_list,
                                                         bc_VectorDeleterOfNull);
                                         if (iter == -1) {
-                                                bc_PushVector(
-                                                    self->ValueStack,
-                                                    bc_GetNullObject());
+                                                pushv(self, bc_GetNullObject());
                                         } else {
-                                                bc_PushVector(self->ValueStack,
-                                                              o);
+                                                pushv(self, o);
                                         }
                                 }
                                 break;
@@ -1000,8 +899,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Type* tp =
                                     bc_AtVector(ctx->TypeList, absClassIndex);
-                                bc_Object* o =
-                                    (bc_Object*)bc_TopVector(self->ValueStack);
+                                bc_Object* o = topv(self);
                                 if (throw_npe(self, o)) {
                                         break;
                                 }
@@ -1033,8 +931,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         case OP_INVOKEVIRTUAL: {
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_Object* o =
-                                    (bc_Object*)bc_TopVector(self->ValueStack);
+                                bc_Object* o = topv(self);
                                 if (throw_npe(self, o)) {
                                         break;
                                 }
@@ -1049,8 +946,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //オブジェクトから直接型を取り出してしまうと具象すぎる
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_Object* o =
-                                    (bc_Object*)bc_TopVector(self->ValueStack);
+                                bc_Object* o = topv(self);
                                 if (throw_npe(self, o)) {
                                         break;
                                 }
@@ -1067,8 +963,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         case OP_INVOKEOPERATOR: {
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_Object* o =
-                                    (bc_Object*)bc_TopVector(self->ValueStack);
+                                bc_Object* o = topv(self);
                                 bc_Class* cl =
                                     BC_TYPE2CLASS(o->GType->CoreType);
 #if defined(DEBUG)
@@ -1083,8 +978,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_INIT: {
-                                bc_Object* obj = (bc_Object*)bc_AtVector(
-                                    self->VariableTable, 0);
+                                bc_Object* obj = getv(self, 0);
                                 int param_len =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int op_len =
@@ -1094,16 +988,15 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 yctx->YieldCount = 0;
                                 yctx->Length = op_len;
                                 yctx->Parameters = bc_NewVector();
-                                // iterate(int, int) の int, int を受け取る
-                                yctx->Source =
-                                    bc_AtVector(self->VariableTable, 1);
+                                // iterate(int, int) の int, int
+                                // を受け取る
+                                yctx->Source = getv(self, 1);
 #if defined(DEBUG)
                                 const char* yname =
                                     bc_GetObjectName(yctx->Source);
 #endif
                                 for (int i = 2; i < param_len + 1; i++) {
-                                        bc_Object* a =
-                                            bc_AtVector(self->VariableTable, i);
+                                        bc_Object* a = getv(self, i);
                                         assert(a != NULL);
                                         bc_PushVector(yctx->Parameters, a);
                                 }
@@ -1117,8 +1010,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
                         case OP_CORO_NEXT: {
                                 bc_Object* obj = self->Coroutine;
-                                bc_Object* ret =
-                                    (bc_Object*)bc_PopVector(self->ValueStack);
+                                bc_Object* ret = popv(self);
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
                                 assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
                                 bc_YieldContext* yctx = cor->Context;
@@ -1144,7 +1036,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 //まだ実行できる?
                                 bc_Object* hasNext = bc_GetBoolObject(
                                     yctx->YieldOffset < yctx->Length);
-                                bc_PushVector(self->ValueStack, hasNext);
+                                pushv(self, hasNext);
                                 break;
                         }
                         case OP_CORO_EXIT: {
@@ -1159,8 +1051,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                             yctx->VariableTable;
                                         self->ValueStack = yctx->ValueStack;
                                 }
-                                bc_PushVector(self->ValueStack,
-                                              bc_GetFalseObject());
+                                pushv(self, bc_GetFalseObject());
                                 break;
                         }
                         case OP_CORO_RESUME: {
@@ -1186,13 +1077,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
                                 assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
                                 bc_YieldContext* yctx = cor->Context;
-                                bc_PushVector(self->ValueStack, yctx->Stock);
+                                pushv(self, yctx->Stock);
                                 break;
                         }
                         case OP_CORO_SWAP_SELF: {
                                 assert(self->Coroutine == NULL);
-                                bc_Object* obj = (bc_Object*)bc_AtVector(
-                                    self->VariableTable, 0);
+                                bc_Object* obj = getv(self, 0);
                                 assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
                                 bc_YieldContext* yctx = cor->Context;
@@ -1207,16 +1097,14 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
 #endif
                                 //[0] = Array
                                 //[1] = ArrayIterator
-                                bc_AssignVector(self->VariableTable, 0,
-                                                yctx->Source);
+                                setv(self, 0, yctx->Source);
                                 assert(yctx->Source != NULL);
                                 for (int i = 0; i < yctx->Parameters->Length;
                                      i++) {
                                         bc_Object* e =
                                             bc_AtVector(yctx->Parameters, i);
                                         assert(e != NULL);
-                                        bc_AssignVector(self->VariableTable,
-                                                        i + 1, e);
+                                        setv(self, i + 1, e);
                                 }
                                 self->Coroutine = obj;
                                 yctx->IsCached = true;
@@ -1332,7 +1220,9 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_DeferContext* defctx = bc_NewDeferContext();
                                 defctx->Offset = offset;
                                 defctx->VariableTable = bind;
+                                bc_LockRoot();
                                 bc_PushVector(self->DeferList, defctx);
+                                bc_UnlockRoot();
                                 break;
                         }
                         case OP_BREAKPOINT: {
@@ -1389,62 +1279,82 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
         }
 }
 
-static int stack_topi(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
+static void pushv(bc_Frame* self, bc_Object* a) {
+        bc_PushVector(self->ValueStack, NON_NULL(a));
+}
+
+static bc_Object* popv(bc_Frame* self) {
+        return (bc_Object*)bc_PopVector(self->ValueStack);
+}
+
+static bc_Object* topv(bc_Frame* self) {
+        return (bc_Object*)bc_TopVector(self->ValueStack);
+}
+
+static void setv(bc_Frame* self, int index, bc_Object* o) {
+        bc_AssignVector(self->VariableTable, index, o);
+}
+
+static bc_Object* getv(bc_Frame* self, int index) {
+        return (bc_Object*)bc_AtVector(self->VariableTable, index);
+}
+
+static int topvi(bc_Frame* self) {
+        bc_Object* ret = topv(self);
         assert(bc_IsIntValue(ret));
         return ((bc_Integer*)ret)->Value;
 }
 
-static double stack_topd(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
+static double topvd(bc_Frame* self) {
+        bc_Object* ret = topv(self);
         assert(bc_IsDoubleValue(ret));
         return ((bc_Double*)ret)->Value;
 }
 
-static char stack_topc(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
+static char topvc(bc_Frame* self) {
+        bc_Object* ret = topv(self);
         assert(bc_IsCharValue(ret));
         return ((bc_Char*)ret)->Value;
 }
 
-static char* stack_tops(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
+static char* topvs(bc_Frame* self) {
+        bc_Object* ret = topv(self);
         bc_IsStringValue(ret);
         return bc_GetRawString(ret)->Text;
 }
 
-static bool stack_topb(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_TopVector(self->ValueStack);
+static bool topvb(bc_Frame* self) {
+        bc_Object* ret = topv(self);
         assert(bc_IsBoolValue(ret));
         return ((bc_Bool*)ret)->Value;
 }
 
-static int stack_popi(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
+static int popvi(bc_Frame* self) {
+        bc_Object* ret = popv(self);
         assert(bc_IsIntValue(ret));
         return ((bc_Integer*)ret)->Value;
 }
 
-static double stack_popd(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
+static double popvd(bc_Frame* self) {
+        bc_Object* ret = popv(self);
         assert(bc_IsDoubleValue(ret));
         return ((bc_Double*)ret)->Value;
 }
 
-static char stack_popc(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
+static char popvc(bc_Frame* self) {
+        bc_Object* ret = popv(self);
         assert(bc_IsCharValue(ret));
         return ((bc_Char*)ret)->Value;
 }
 
-static char* stack_pops(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
+static char* popvs(bc_Frame* self) {
+        bc_Object* ret = popv(self);
         assert(bc_IsStringValue(ret));
         return bc_GetRawString(ret)->Text;
 }
 
-static bool stack_popb(bc_Frame* self) {
-        bc_Object* ret = (bc_Object*)bc_PopVector(self->ValueStack);
+static bool popvb(bc_Frame* self) {
+        bc_Object* ret = popv(self);
         assert(bc_IsBoolValue(ret));
         return ((bc_Bool*)ret)->Value;
 }

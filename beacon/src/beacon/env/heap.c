@@ -28,6 +28,7 @@ static bc_Heap* gHeap = NULL;
 static GCond gGCWait;
 static GRecMutex gGCMtx;
 static GRecMutex gHeapMtx;
+static GRecMutex gRootMtx;
 static GThread* gGCThread = NULL;
 static bool gGCContinue = true;
 
@@ -100,6 +101,10 @@ void bc_DumpHeap(bc_Heap* self) {
 void bc_LockHeap() { bc_heap_lock(); }
 
 void bc_UnlockHeap() { bc_heap_unlock(); }
+
+void bc_LockRoot() { g_rec_mutex_lock(&gRootMtx); }
+
+void bc_UnlockRoot() { g_rec_mutex_unlock(&gRootMtx); }
 
 // private
 static void delete_object(bc_VectorItem item) {
@@ -207,7 +212,9 @@ static gpointer gc_run(gpointer data) {
                 g_cond_wait(&gGCWait, &gGCMtx);
                 //ヒープを保護してルートを取得
                 bc_heap_lock();
+                bc_LockRoot();
                 gc_collect_all_root(self);
+                bc_UnlockRoot();
                 bc_heap_unlock();
                 //ルートを全てマーク
                 gc_mark(self);
