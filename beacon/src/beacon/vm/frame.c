@@ -16,7 +16,6 @@ static void collect_recursive(bc_Frame* self, bc_Cache* cache);
 static void frame_cache_defer(bc_Frame* self, bc_Cache* cache);
 
 bc_Frame* bc_NewFrame() {
-        bc_LockHeap();
         bc_Frame* ret = (bc_Frame*)MEM_MALLOC(sizeof(bc_Frame));
         ret->ValueStack = bc_NewVector();
         ret->VariableTable = bc_NewVector();
@@ -33,7 +32,6 @@ bc_Frame* bc_NewFrame() {
         ret->Receiver = NULL;
         ret->Coroutine = NULL;
         ret->ObjectSize = sizeof(bc_Object);
-        bc_UnlockHeap();
         return ret;
 }
 
