@@ -89,7 +89,7 @@ void* bc_NewObject(bc_ScriptContext* sctx, size_t object_size) {
         ret->OnMessage = bc_HandleObjectMessage;
         // ret->NativeSlotVec = NULL;
         ret->GType = nullgt;
-        ret->Paint = PAINT_UNMARKED_T;
+        ret->Paint = PAINT_DIFF_T;
         ret->VPtr = nullgt->CoreType->Kind.Class->VT;
         ret->Fields = bc_NewVector();
         ret->Flags = OBJECT_FLG_NONE;

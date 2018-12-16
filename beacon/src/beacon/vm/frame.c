@@ -60,7 +60,6 @@ bc_GenericType* bc_GetRuntimeReceiver(bc_Frame* self) {
 bc_Vector* bc_GetRuntimeTypeArguments(bc_Frame* self) { return self->TypeArgs; }
 
 void bc_DeleteFrame(bc_Frame* self) {
-        bc_CheckSTWRequest();
         remove_from_parent(self);
         bc_ClearVector(self->ValueStack);
         bc_ClearVector(self->VariableTable);

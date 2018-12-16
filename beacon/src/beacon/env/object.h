@@ -31,6 +31,7 @@ typedef enum bc_ObjectFlags {
 typedef enum bc_ObjectPaint {
         PAINT_UNMARKED_T,
         PAINT_MARKED_T,
+        PAINT_DIFF_T,
         PAINT_ONEXIT_T,
 } bc_ObjectPaint;
 

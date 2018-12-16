@@ -493,7 +493,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* obj = topv(self);
                                 //仮想関数テーブル更新
                                 bc_CreateVTableClass(cls);
-                                obj->GType = bc_RefGenericType(cls->Parent);
+                                bc_Type* clsP = cls->Parent;
+                                obj->GType = bc_RefGenericType(clsP);
                                 obj->VPtr = cls->VT;
                                 //ジェネリック型を実体化
                                 if (cls->TypeParameters->Length == 0) {
@@ -1274,12 +1275,10 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
 }
 
 static void pushv(bc_Frame* self, bc_Object* a) {
-        bc_CheckSTWRequest();
         bc_PushVector(self->ValueStack, NON_NULL(a));
 }
 
 static bc_Object* popv(bc_Frame* self) {
-        bc_CheckSTWRequest();
         return (bc_Object*)bc_PopVector(self->ValueStack);
 }
 
@@ -1288,12 +1287,10 @@ static bc_Object* topv(bc_Frame* self) {
 }
 
 static void setv(bc_Frame* self, int index, bc_Object* o) {
-        bc_CheckSTWRequest();
         bc_AssignVector(self->VariableTable, index, o);
 }
 
 static bc_Object* getv(bc_Frame* self, int index) {
-        bc_CheckSTWRequest();
         return (bc_Object*)bc_AtVector(self->VariableTable, index);
 }
 

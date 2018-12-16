@@ -10,19 +10,23 @@
 #include "script_context.h"
 
 // proto
-static void delete_object(bc_VectorItem item);
-static void gc_collect_all_root(bc_Heap* self);
-static void gc_clear(bc_Heap* self);
-static void gc_mark(bc_Heap* self);
-static void gc_mark_barrier(bc_Heap* self);
-static void gc_sweep(bc_Heap* self);
-static void gc_delete(bc_VectorItem item);
 static bc_Heap* bc_new_heap();
-static gpointer gc_run(gpointer data);
+static void delete_object(bc_VectorItem item);
+// mutex
 static void sem_v_signal(GAsyncQueue* q);
 static void sem_p_wait(GAsyncQueue* q);
 static void bc_request_stw();
 static void bc_resume_stw();
+// gc
+static gpointer gc_run(gpointer data);
+static void gc_promotion(bc_Heap* self);
+static void gc_collect_all_root(bc_Heap* self);
+static void gc_clear(bc_Heap* self);
+static void gc_mark(bc_Heap* self);
+static void gc_mark_wait(bc_Heap* self);
+static void gc_mark_barrier(bc_Heap* self);
+static void gc_sweep(bc_Heap* self);
+static void gc_delete(bc_VectorItem item);
 
 static bc_Heap* gHeap = NULL;
 // STWwait
@@ -118,9 +122,77 @@ void bc_CheckSTWRequest() {
 }
 
 // private
+static bc_Heap* bc_new_heap() {
+        bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
+        ret->Objects = bc_NewCache(100);
+        ret->Roots = bc_NewCache(100);
+        ret->AcceptBlocking = 0;
+        ret->CollectBlocking = 0;
+        return ret;
+}
+
 static void delete_object(bc_VectorItem item) {
         bc_Object* e = (bc_Object*)item;
         bc_DeleteObject(e);
+}
+
+// mutex
+static void sem_v_signal(GAsyncQueue* q) {
+        g_async_queue_push(q, GINT_TO_POINTER(1));
+}
+
+static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
+
+static void bc_request_stw() {
+        g_rw_lock_writer_lock(&gQSLock);
+        gRRR = true;
+        g_rw_lock_writer_unlock(&gQSLock);
+        sem_p_wait(gResQ);
+}
+
+static void bc_resume_stw() {
+        g_rw_lock_writer_lock(&gQSLock);
+        gRRR = false;
+        g_rw_lock_writer_unlock(&gQSLock);
+        sem_v_signal(gReqQ);
+}
+
+// gc
+
+static gpointer gc_run(gpointer data) {
+        bc_Heap* self = bc_GetHeap();
+        while (gGCContinue) {
+                //ヒープを保護してルートを取得
+                bc_request_stw();
+                gc_promotion(self);
+                gc_collect_all_root(self);
+                bc_resume_stw();
+                //ルートを全てマーク
+                gc_mark(self);
+                //ライトバリアーを確認
+                bc_request_stw();
+                gc_mark_wait(self);
+                gc_mark_barrier(self);
+                bc_resume_stw();
+                //ライトバリアーを確認
+                gc_sweep(self);
+        }
+        return NULL;
+}
+
+static void gc_promotion(bc_Heap* self) {
+        bc_Cache* iter = self->Roots;
+        while (iter != NULL) {
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                bc_Object* e = iter->Data;
+                if (e->Paint == PAINT_DIFF_T) {
+                        e->Paint = PAINT_UNMARKED_T;
+                }
+                iter = iter->Next;
+        }
 }
 
 static void gc_collect_all_root(bc_Heap* self) {
@@ -142,21 +214,6 @@ static void gc_collect_all_root(bc_Heap* self) {
         }
 }
 
-static void gc_clear(bc_Heap* self) {
-        bc_Cache* iter = self->Objects;
-        while (iter != NULL) {
-                bc_Object* e = iter->Data;
-                if (iter->Data == NULL) {
-                        iter = iter->Next;
-                        continue;
-                }
-                if (e->Paint == PAINT_MARKED_T) {
-                        e->Paint = PAINT_UNMARKED_T;
-                }
-                iter = iter->Next;
-        }
-}
-
 static void gc_mark(bc_Heap* self) {
         bc_Cache* iter = self->Roots;
         while (iter != NULL) {
@@ -166,6 +223,22 @@ static void gc_mark(bc_Heap* self) {
                 }
                 bc_Object* e = iter->Data;
                 bc_MarkAllObject(e);
+                iter = iter->Next;
+        }
+}
+
+static void gc_mark_wait(bc_Heap* self) {
+        bc_Cache* iter = self->Objects;
+        while (iter != NULL) {
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                bc_Object* e = iter->Data;
+                if (e->Paint == PAINT_DIFF_T) {
+                        e->Paint = PAINT_UNMARKED_T;
+                        bc_MarkAllObject(e);
+                }
                 iter = iter->Next;
         }
 }
@@ -200,6 +273,8 @@ static void gc_sweep(bc_Heap* self) {
                 if (e->Paint == PAINT_UNMARKED_T) {
                         bc_DeleteObject(e);
                         iter->Data = NULL;
+                } else if (e->Paint == PAINT_MARKED_T) {
+                        e->Paint = PAINT_UNMARKED_T;
                 }
                 iter = iter->Next;
         }
@@ -209,52 +284,4 @@ static void gc_sweep(bc_Heap* self) {
 static void gc_delete(bc_VectorItem item) {
         bc_Object* e = (bc_Object*)item;
         bc_DeleteObject(e);
-}
-
-static bc_Heap* bc_new_heap() {
-        bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
-        ret->Objects = bc_NewCache(100);
-        ret->Roots = bc_NewCache(100);
-        ret->AcceptBlocking = 0;
-        ret->CollectBlocking = 0;
-        return ret;
-}
-
-static gpointer gc_run(gpointer data) {
-        bc_Heap* self = bc_GetHeap();
-        while (gGCContinue) {
-                //ヒープを保護してルートを取得
-                bc_request_stw();
-                gc_collect_all_root(self);
-                bc_resume_stw();
-                //ルートを全てマーク
-                gc_mark(self);
-                //ライトバリアーを確認
-                bc_request_stw();
-                gc_mark_barrier(self);
-                bc_resume_stw();
-                //ライトバリアーを確認
-                gc_sweep(self);
-        }
-        return NULL;
-}
-
-static void sem_v_signal(GAsyncQueue* q) {
-        g_async_queue_push(q, GINT_TO_POINTER(1));
-}
-
-static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
-
-static void bc_request_stw() {
-        g_rw_lock_writer_lock(&gQSLock);
-        gRRR = true;
-        g_rw_lock_writer_unlock(&gQSLock);
-        sem_p_wait(gResQ);
-}
-
-static void bc_resume_stw() {
-        g_rw_lock_writer_lock(&gQSLock);
-        gRRR = false;
-        g_rw_lock_writer_unlock(&gQSLock);
-        sem_v_signal(gReqQ);
 }

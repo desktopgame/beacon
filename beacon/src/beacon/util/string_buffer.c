@@ -70,6 +70,7 @@ void bc_ReserveBuffer(bc_Buffer* self) {
         int newSize = self->Capacity + (self->Capacity / 2);
         char* temp = (char*)MEM_REALLOC(self->Text, newSize);
         assert(temp != NULL);
+        memset(temp + self->Length, '\0', (newSize - self->Capacity));
         //新しく確保された部分を 0埋め
         self->Text = temp;
         self->Capacity = newSize;
