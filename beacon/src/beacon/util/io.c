@@ -11,6 +11,7 @@
 #endif
 
 #include <sys/stat.h>
+#include "../error.h"
 #include "../util/mem.h"
 #include "file_entry.h"
 #include "string_buffer.h"
@@ -131,7 +132,10 @@ void bc_WriteText(const char* filename, const char* text) {
 
 void bc_GetCurrentPath(char* block, int len) {
         memset(block, '\0', len);
-        getcwd(block, len);
+        errno = 0;
+        if (getcwd(block, len) == NULL) {
+                bc_RedirectCStandardError(errno);
+        }
         for (int i = 0; i < len; i++) {
                 char c = block[i];
 #if defined(_WIN32)
