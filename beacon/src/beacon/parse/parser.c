@@ -51,8 +51,12 @@ bc_Parser* bc_ParseFile(const char* filename) {
         if (yyparse()) {
                 gParser->Result = PARSE_SYNTAX_ERROR_T;
                 bc_RelocationParserError(gParser);
+                fclose(yyin);
+                yyin = NULL;
                 return gParser;
         }
+        fclose(yyin);
+        yyin = NULL;
         gParser->Result = PARSE_COMPLETE_T;
         return gParser;
 }
