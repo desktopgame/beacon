@@ -197,6 +197,19 @@ bc_StringView bc_GetPanicMessage();
  */
 BCErrorID bc_GetLastPanic();
 
+#define bc_RedirectCStandardError(errornum) \
+        (bc_ReportCStandardErrorWithLocation(errornum, __FILE__, __LINE__))
+/**
+ * C言語標準(errno.h)でサポートされるエラーを出力します。
+ * また、beaconインタプリタでエラーが発生した時と同様`パニック`状態になります。
+ * この関数は通常 `bc_RedirectCStandardError` を介して呼び出されます。
+ * @param errornum
+ * @param filename
+ * @param lineno
+ */
+void bc_ReportCStandardErrorWithLocation(int errornum, const char* filename,
+                                         int lineno);
+
 /**
  * 致命的なエラーによってインタプリタを終了します.
  */

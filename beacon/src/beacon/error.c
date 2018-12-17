@@ -1,4 +1,5 @@
 #include "error.h"
+#include <string.h>
 #include "env/script_context.h"
 #include "util/mem.h"
 #include "util/string_buffer.h"
@@ -415,6 +416,22 @@ void bc_SetPanicColumn(int column) { gPanicColumn = column; }
 bc_StringView bc_GetPanicMessage() { return gLastMessage; }
 
 BCErrorID bc_GetLastPanic() { return gGlobalPanic; }
+
+void bc_ReportCStandardErrorWithLocation(int errornum, const char* filename,
+                                         int lineno) {
+        //エラー発生位置
+        bc_SetPanicFile(filename);
+        bc_SetPanicLine(lineno);
+        //エラーメッセージを文字列化
+        const char* c_error = strerror(errornum);
+        char block[512] = {0};
+        sprintf(block, "bc_RedirectCStandardError: %s\n", c_error);
+        //表示
+        fprintf(stderr, "%s", block);
+        //保存
+        gLastMessage = bc_InternString(block);
+        gGlobalPanic = BCERROR_GENERIC_T;
+}
 
 void bc_FatalError() { abort(); }
 // private
