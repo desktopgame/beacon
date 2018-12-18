@@ -29,11 +29,19 @@ struct bc_Cache;
 typedef void (*bc_StaticEach)(struct bc_Field* item);
 
 /**
+ * スクリプトコンテキストの状態。
+ */
+typedef enum ScriptContextState {
+        SCTX_STATE_NONE,
+        SCTX_STATE_CREATED,
+        SCTX_STATE_DESTROYED,
+} ScriptContextState;
+
+/**
  * beacon言語のあらゆるオブジェクトのトップレベル.
  * ホスト言語から異なる環境のスクリプトを実行するためにこの方法を使用します。
  */
 typedef struct bc_ScriptContext {
-        struct bc_ScriptThread* ThreadRef;
         bc_NumericMap* NamespaceMap;
         bc_TreeMap* ClassLoaderMap;
         bc_Vector* IncludeList;
@@ -54,31 +62,26 @@ typedef struct bc_ScriptContext {
 } bc_ScriptContext;
 
 /**
- * スクリプトコンテキストを登録するためのスクリプトコンテキストを作成します.
- * このとき現在のコンテキストは上書きされます。
- * 既に作成されている場合は何もしません。
+ * スクリプトコンテキストを初期化します。
+ */
+void bc_InitScriptContext();
+
+/**
+ * スクリプトコンテキストを破棄します。
+ */
+void bc_DestroyScriptContext();
+
+/**
+ * スクリプトコンテキストを返します。
  * @return
  */
-bc_ScriptContext* bc_OpenScriptContext();
+bc_ScriptContext* bc_GetScriptContext();
 
 /**
- * 現在のスクリプトコンテキストを返します.
- * この呼び出しは同期される必要があります。
+ * 現在のステートを返します。
  * @return
  */
-bc_ScriptContext* bc_GetCurrentScriptContext();
-
-/**
- * スクリプトコンテキストを登録するためのスクリプトコンテキストと、
- * そこから参照可能な全てのスクリプトコンテキストを開放します.
- */
-void bc_CloseScriptContext();
-
-/**
- * まだブートストラップクラスローダが起動していないなら起動します.
- * @param self
- */
-void bc_BootstrapScriptContext(bc_ScriptContext* self);
+ScriptContextState bc_GetScriptContextState();
 
 /**
  * 全ての静的フィールドを訪問します.

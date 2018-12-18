@@ -30,8 +30,6 @@ void bc_InitScriptThread() {
 bc_ScriptThread* bc_AddScriptThread() {
         bc_ScriptThread* th = bc_new_script_thread();
         bc_lock();
-        bc_AttachScriptContext(
-            th, bc_SelectedScriptContext(bc_GetMainScriptThread()));
         bc_PushVector(gAllThread, th);
         bc_unlock();
         return th;
@@ -100,36 +98,6 @@ bc_ScriptThread* bc_GetScriptThreadAt(int index) {
 }
 
 void bc_UnlockScriptThread() { bc_unlock(); }
-
-void bc_AttachScriptContext(bc_ScriptThread* self, bc_ScriptContext* script) {
-        bc_ScriptThread* thr = self;
-        assert(thr != NULL);
-        assert(script->ThreadRef == NULL);
-        if (thr->SelectedScriptContext == -1) {
-                thr->SelectedScriptContext = 0;
-        }
-        script->ThreadRef = thr;
-        bc_PushVector(thr->ScriptContextRefAll, script);
-}
-
-void bc_DetachScriptContext(bc_ScriptContext* script) {
-        bc_ScriptThread* thr = script->ThreadRef;
-        assert(thr != NULL);
-        bc_ScriptContext* selected = bc_SelectedScriptContext(thr);
-        if (selected == script) {
-                thr->SelectedScriptContext = -1;
-        }
-        bc_RemoveVector(thr->ScriptContextRefAll,
-                        bc_FindVector(thr->ScriptContextRefAll, script));
-}
-
-bc_ScriptContext* bc_SelectedScriptContext(bc_ScriptThread* self) {
-        if (self->SelectedScriptContext == -1) {
-                return NULL;
-        }
-        return bc_AtVector(self->ScriptContextRefAll,
-                           self->SelectedScriptContext);
-}
 
 // private
 static void ScriptThread_trace_delete(bc_VectorItem item) {

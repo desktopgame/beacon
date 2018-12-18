@@ -27,7 +27,7 @@ void bc_InitBool() {
 
 bc_Type* bc_GetBoolType(bc_ScriptContext* sctx) {
         if (sctx == NULL) {
-                sctx = bc_GetCurrentScriptContext();
+                sctx = bc_GetScriptContext();
         }
         bc_Namespace* lang = bc_GetLangNamespace(sctx);
         return bc_FindTypeFromNamespace(lang, bc_InternString("Bool"));

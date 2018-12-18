@@ -36,13 +36,13 @@ bool bc_EvalString(const char* source) {
 
 // private
 static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         if (aOpt == NULL) {
                 bc_LoadClassLoader(cll);
         } else {
                 bc_LoadPassASTClassLoader(cll, aOpt);
         }
-        bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         bc_GetUniqueTrueObject(sctx);
         bc_GetUniqueFalseObject(sctx);
         bc_GetUniqueNullObject(sctx);

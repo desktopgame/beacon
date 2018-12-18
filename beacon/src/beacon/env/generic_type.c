@@ -64,7 +64,7 @@ bc_GenericType* bc_MallocGenericType(struct bc_Type* CoreType,
         ret->Tag = GENERIC_TYPE_TAG_NONE_T;
         ret->IsCtorParameter = false;
         //現在のスクリプトコンテキストに登録
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_PushVector(ctx->AllGenericList, ret);
         return ret;
 }
@@ -90,7 +90,7 @@ bc_GenericType* bc_CloneGenericType(bc_GenericType* self, bool recursive) {
 }
 
 void bc_CollectGenericType() {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         //マークを外す
         for (int i = 0; i < ctx->AllGenericList->Length; i++) {
                 bc_GenericType* e =

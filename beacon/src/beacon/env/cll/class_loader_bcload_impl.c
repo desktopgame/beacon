@@ -111,7 +111,7 @@ static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
 
 void BCLoadClassLoader(bc_ClassLoader* self) {
         bc_CL_ERROR(self);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
         CLBC_import(self, self->ILCode->ImportList);
         CLBC_namespace_tree(self);
@@ -119,7 +119,7 @@ void BCLoadClassLoader(bc_ClassLoader* self) {
 
 void SpecialBCLoadClassLoader(bc_ClassLoader* self) {
         bc_CL_ERROR(self);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
         //	CLBC_import(self, self->ILCode->import_list);
         CLBC_namespace_tree(self);

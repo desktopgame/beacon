@@ -67,6 +67,11 @@ void bc_IgnoreHeap(bc_Object* o);
 void bc_DumpHeap();
 
 /**
+ * GCが完全に実行されるまでウェイトします。
+ */
+void bc_WaitFullGC();
+
+/**
  * STWが要求されているならウェイトします。
  */
 void bc_CheckSTWRequest();

@@ -27,6 +27,9 @@ static void gc_mark_wait(bc_Heap* self);
 static void gc_mark_barrier(bc_Heap* self);
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
+static bool is_contains_diff_on_roots();
+static void gc_roots_lock();
+static void gc_roots_unlock();
 
 static bc_Heap* gHeap = NULL;
 // STWwait
@@ -34,6 +37,9 @@ static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
 static GRWLock gQSLock;
 static volatile bool gSTWRequested = false;
+
+// Roots
+static GRecMutex gRootsMtx;
 
 static GThread* gGCThread = NULL;
 static bool gGCContinue = true;
@@ -96,6 +102,12 @@ void bc_DumpHeap() {
                 bc_PrintGenericType(a->GType);
                 printf("\n");
                 iter = iter->Next;
+        }
+}
+
+void bc_WaitFullGC() {
+        while (is_contains_diff_on_roots()) {
+                bc_CheckSTWRequest();
         }
 }
 
@@ -193,25 +205,28 @@ static void gc_promotion(bc_Heap* self) {
 }
 
 static void gc_collect_all_root(bc_Heap* self) {
+        //全ての静的フィールドをマーク
+        bc_ScriptContext* sctx = bc_GetScriptContext();
+        if (bc_GetScriptContextState() != SCTX_STATE_DESTROYED) {
+                bc_CollectStaticFields(sctx, self->Roots);
+        }
+        // true, false, null
+        bc_StoreCache(self->Roots, bc_GetUniqueTrueObject(sctx));
+        bc_StoreCache(self->Roots, bc_GetUniqueFalseObject(sctx));
+        bc_StoreCache(self->Roots, bc_GetUniqueNullObject(sctx));
         for (int i = 0; i < bc_GetScriptThreadCount(); i++) {
                 bc_ScriptThread* th = bc_GetScriptThreadAt(i);
-                //全ての静的フィールドをマーク
-                bc_ScriptContext* sctx = bc_SelectedScriptContext(th);
-                bc_CollectStaticFields(sctx, self->Roots);
                 //全てのスタック変数をマーク
                 // GC直後にフレームを解放した場合はNULLになる
                 bc_Frame* top = bc_GetScriptThreadFrameRef(th);
                 if (top != NULL) {
                         bc_CollectAllFrame(top, self->Roots);
                 }
-                // true, false, null
-                bc_StoreCache(self->Roots, bc_GetUniqueTrueObject(sctx));
-                bc_StoreCache(self->Roots, bc_GetUniqueFalseObject(sctx));
-                bc_StoreCache(self->Roots, bc_GetUniqueNullObject(sctx));
         }
 }
 
 static void gc_mark(bc_Heap* self) {
+        gc_roots_lock();
         bc_Cache* iter = self->Roots;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
@@ -219,9 +234,12 @@ static void gc_mark(bc_Heap* self) {
                         continue;
                 }
                 bc_Object* e = iter->Data;
-                bc_MarkAllObject(e);
+                if (e->Paint != PAINT_ONEXIT_T) {
+                        bc_MarkAllObject(e);
+                }
                 iter = iter->Next;
         }
+        gc_roots_unlock();
 }
 
 static void gc_mark_wait(bc_Heap* self) {
@@ -252,7 +270,9 @@ static void gc_mark_barrier(bc_Heap* self) {
                         iter = iter->Next;
                         continue;
                 }
-                bc_MarkAllObject(e);
+                if (e->Paint != PAINT_ONEXIT_T) {
+                        bc_MarkAllObject(e);
+                }
                 e->Update = false;
                 iter = iter->Next;
         }
@@ -275,10 +295,36 @@ static void gc_sweep(bc_Heap* self) {
                 }
                 iter = iter->Next;
         }
+        gc_roots_lock();
         bc_EraseCacheAll(self->Roots);
+        gc_roots_unlock();
 }
 
 static void gc_delete(bc_VectorItem item) {
         bc_Object* e = (bc_Object*)item;
         bc_DeleteObject(e);
 }
+
+static bool is_contains_diff_on_roots() {
+        gc_roots_lock();
+        bc_Heap* self = bc_GetHeap();
+        bc_Cache* iter = self->Roots;
+        while (iter != NULL) {
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                bc_Object* o = iter->Data;
+                if (o->Paint == PAINT_DIFF_T) {
+                        gc_roots_unlock();
+                        return true;
+                }
+                iter = iter->Next;
+        }
+        gc_roots_unlock();
+        return false;
+}
+
+static void gc_roots_lock() { g_rec_mutex_lock(&gRootsMtx); }
+
+static void gc_roots_unlock() { g_rec_mutex_unlock(&gRootsMtx); }

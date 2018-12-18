@@ -147,6 +147,7 @@ void bc_DeleteEnviroment(bc_Enviroment* self) {
         if (self == NULL) {
                 return;
         }
+        bc_WaitFullGC();
         bc_DeleteVector(self->ConstantPool, delete_constant);
         bc_DeleteVector(self->LineRangeTable, delete_line_range);
         bc_DeleteOpcodeBuf(self->Bytecode);

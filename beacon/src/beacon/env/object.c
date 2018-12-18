@@ -110,7 +110,7 @@ void* bc_ConstructObject(bc_ScriptContext* sctx, size_t object_size,
 }
 
 bc_Object* bc_GetIntObject(int i) {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_CacheScriptContext();
         if ((i < -9) || i > 99) {
                 return bc_IInternScriptContext(ctx, i);
@@ -128,17 +128,17 @@ bc_Object* bc_GetBoolObject(bool b) {
 }
 
 bc_Object* bc_GetTrueObject() {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         return bc_GetUniqueTrueObject(ctx);
 }
 
 bc_Object* bc_GetFalseObject() {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         return bc_GetUniqueFalseObject(ctx);
 }
 
 bc_Object* bc_GetNullObject() {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         return bc_GetUniqueNullObject(ctx);
 }
 

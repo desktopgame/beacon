@@ -127,7 +127,7 @@ bc_StringView bc_GetVMErrorMessage() { return gVMError; }
 static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                    int deferStart) {
         assert(env != NULL);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         int source_len = env->Bytecode->Instructions->Length;
         self->ContextRef = env;
         bc_Heap* he = bc_GetHeap();
@@ -1484,7 +1484,7 @@ static void terminate(bc_Frame* self) {
  */
 static void uncaught(bc_Frame* self, bc_Enviroment* env, int pc) {
         char* message = create_error_message(self, env, pc);
-        bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         if (sctx->IsPrintError) {
                 fprintf(stderr, "%s", message);
         }

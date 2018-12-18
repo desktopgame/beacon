@@ -29,7 +29,7 @@ void CLBC_import(bc_ClassLoader* self, bc_Vector* ilimports) {
         }
         // Javaがjava.langをインポートせずに使用できるのと同じように、
         //全てのクラスローダーはデフォルトで beacon/lang をロードする
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         for (int i = 0; i < ctx->IncludeList->Length; i++) {
                 bc_FileEntry* entry = bc_AtVector(ctx->IncludeList, i);
                 if (entry->IsFile &&
@@ -51,7 +51,7 @@ void CLBC_new_load(bc_ClassLoader* self, char* fullPath) {
 
 bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {
         bc_CL_ERROR_RET(self, self);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ClassLoader* cll = bc_NewClassLoader(full_path, CONTENT_LIB_T);
         cll->Parent = self;
         bc_ImportInfo* info = bc_ImportImportManager(self->ImportManager, cll);
@@ -79,7 +79,7 @@ static void CLBC_import_internal(bc_ClassLoader* self, bc_Vector* ilimports,
 
 static void CLBC_new_load_internal(bc_ClassLoader* self, char* full_path) {
         bc_CL_ERROR(self);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         //そのファイルパスに対応した
         //クラスローダが既に存在するなら無視
         bc_ClassLoader* cll =

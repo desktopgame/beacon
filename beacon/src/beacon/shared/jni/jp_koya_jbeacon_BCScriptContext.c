@@ -5,7 +5,7 @@
 
 JNIEXPORT jobject JNICALL
 Java_jp_koya_jbeacon_BCScriptContext_nativeOpen(JNIEnv* env, jclass cls) {
-        bc_ScriptContext* sctx = bc_OpenScriptContext();
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         //エラーメッセージはスタックトレースに含めるので、
         //出力しない
         sctx->IsPrintError = false;
@@ -35,6 +35,4 @@ Java_jp_koya_jbeacon_BCScriptContext_nativeOpen(JNIEnv* env, jclass cls) {
 }
 
 JNIEXPORT void JNICALL
-Java_jp_koya_jbeacon_BCScriptContext_nativeClose(JNIEnv* env, jclass cls) {
-        bc_CloseScriptContext();
-}
+Java_jp_koya_jbeacon_BCScriptContext_nativeClose(JNIEnv* env, jclass cls) {}

@@ -7,9 +7,7 @@
 
 int bc_TestCmd(int argc, char* argv[]) {
 #if defined(DEBUG) || (defined(_MSC_VER) && defined(DEBUG))
-        bc_OpenScriptContext();
         int ret = bc_RunTest(argc, argv);
-        bc_CloseScriptContext();
         return ret;
 #else
         fprintf(stderr, "not supported operation\n");
@@ -19,8 +17,6 @@ int bc_TestCmd(int argc, char* argv[]) {
 }
 
 int bc_RunCmd(const char* filename) {
-        bc_OpenScriptContext();
         int ret = bc_EvalFile(filename);
-        bc_CloseScriptContext();
         return ret;
 }

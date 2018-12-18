@@ -96,7 +96,7 @@ void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a) {
 
 void bc_SpecialLoadClassLoader(bc_ClassLoader* self, char* relativePath) {
         char* fullP = bc_ResolveScriptPath(relativePath);
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_Heap* he = bc_GetHeap();
         bc_ClassLoader* cll = bc_GetTreeMapValue(ctx->ClassLoaderMap, fullP);
         he->AcceptBlocking++;

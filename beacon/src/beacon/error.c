@@ -26,7 +26,7 @@ void bc_Vpanic(BCErrorID id, va_list ap) {
         char* fmt = bc_Vfpanic(id, ap);
         gGlobalPanic = id;
         gLastMessage = bc_InternString(fmt);
-        bc_ScriptContext* sctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         if (sctx->IsPrintError) {
                 fprintf(stderr, "%s", fmt);
         }

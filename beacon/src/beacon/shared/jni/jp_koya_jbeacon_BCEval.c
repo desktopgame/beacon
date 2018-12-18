@@ -112,7 +112,7 @@ static jobject bc_eval_string(JNIEnv* env, jclass cls, jstring str,
 }
 
 static bc_Frame* bc_eval_allocate(bc_ClassLoader* cll) {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_Frame* fr = bc_NewFrame();
         bc_SetScriptThreadFrameRef(bc_GetCurrentScriptThread(), fr);
         bc_Heap* he = bc_GetHeap();

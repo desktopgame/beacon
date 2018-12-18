@@ -28,7 +28,7 @@ static void dump_class(bc_NumericMap* root, bool isRoot, int depth);
 bc_Namespace* bc_CreateNamespaceAtRoot(bc_ScriptContext* sctx,
                                        bc_StringView name) {
         if (sctx == NULL) {
-                sctx = bc_GetCurrentScriptContext();
+                sctx = bc_GetScriptContext();
         }
         if (sctx->NamespaceMap == NULL) {
                 sctx->NamespaceMap = bc_NewNumericMap();
@@ -45,7 +45,7 @@ bc_Namespace* bc_CreateNamespaceAtRoot(bc_ScriptContext* sctx,
 bc_Namespace* bc_FindNamespaceFromRoot(bc_ScriptContext* sctx,
                                        bc_StringView name) {
         if (sctx == NULL) {
-                sctx = bc_GetCurrentScriptContext();
+                sctx = bc_GetScriptContext();
         }
         return bc_CFindNamespaceFromRoot(sctx, name);
 }
@@ -73,7 +73,7 @@ bc_Namespace* bc_AddNamespaceNamespace(bc_Namespace* self,
 }
 
 struct bc_Type* bc_AddTypeNamespace(bc_Namespace* self, bc_Type* type) {
-        bc_ScriptContext* ctx = bc_GetCurrentScriptContext();
+        bc_ScriptContext* ctx = bc_GetScriptContext();
         type->Location = self;
         bc_PutNumericMap(self->TypeMap, bc_GetTypeName(type), type);
         type->AbsoluteIndex = ctx->TypeList->Length;
