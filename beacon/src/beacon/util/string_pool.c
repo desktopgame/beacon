@@ -1,5 +1,6 @@
 #include "string_pool.h"
 #include <assert.h>
+#include <glib.h>
 #include "mem.h"
 #include "text.h"
 #include "tree_map.h"
@@ -7,6 +8,7 @@
 
 static bc_TreeMap* gMap = NULL;
 static bc_Vector* gVec = NULL;
+static GRecMutex gPMtx;
 
 #define HEADER (2)
 
@@ -20,16 +22,20 @@ void bc_InitStringPool() {
 bc_StringView bc_InternString(const char* str) {
         assert(gMap != NULL);
         assert(gVec != NULL);
+        g_rec_mutex_lock(&gPMtx);
         bc_TreeMap* cell = bc_GetTreeMapCell(gMap, str);
         if (cell == NULL) {
                 cell = bc_PutTreeMap(gMap, str, (void*)(gVec->Length + HEADER));
                 bc_PushVector(gVec, cell->Key);
         }
         if (cell == gMap) {
+                g_rec_mutex_unlock(&gPMtx);
                 return BC_ZERO_VIEW;
         }
         assert(cell->Item != 0);
-        return (bc_StringView)cell->Item;
+        bc_StringView ret = (bc_StringView)cell->Item;
+        g_rec_mutex_unlock(&gPMtx);
+        return ret;
 }
 
 bc_StringView bc_InternString2(bc_Buffer* buffer) {
@@ -53,25 +59,34 @@ bc_StringView bc_ConcatIntern(const char* head, bc_StringView foot) {
 }
 
 bc_StringView bc_Str2Ref(const char* str) {
+        g_rec_mutex_lock(&gPMtx);
         bc_TreeMap* cell = bc_GetTreeMapCell(gMap, str);
         if (cell == gMap) {
+                g_rec_mutex_unlock(&gPMtx);
                 return BC_ZERO_VIEW;
         }
-        return (bc_StringView)cell->Item;
+        bc_StringView ret = (bc_StringView)cell->Item;
+        g_rec_mutex_unlock(&gPMtx);
+        return ret;
 }
 
 const char* bc_Ref2Str(bc_StringView ref) {
+        g_rec_mutex_lock(&gPMtx);
         if (ref == BC_NULL_VIEW) {
+                g_rec_mutex_unlock(&gPMtx);
                 return NULL;
         }
         if (ref == BC_ZERO_VIEW) {
+                g_rec_mutex_unlock(&gPMtx);
                 return "";
         }
         const char* str = (const char*)bc_AtVector(gVec, ref - HEADER);
+        g_rec_mutex_unlock(&gPMtx);
         return str;
 }
 
 void bc_DumpStringPool(FILE* fp) {
+        g_rec_mutex_lock(&gPMtx);
         assert(gMap != NULL);
         assert(gVec != NULL);
         fprintf(fp, "string pool---\n");
@@ -79,6 +94,7 @@ void bc_DumpStringPool(FILE* fp) {
                 char* e = (char*)bc_AtVector(gVec, i);
                 fprintf(fp, "    [%d] = %s\n", i, e);
         }
+        g_rec_mutex_unlock(&gPMtx);
 }
 
 void bc_DestroyStringPool() {
