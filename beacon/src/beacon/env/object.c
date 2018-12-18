@@ -192,20 +192,19 @@ bc_Object* bc_CloneObject(bc_Object* self) {
 }
 
 void bc_PaintAllObject(bc_Object* self, bc_ObjectPaint paint) {
-        // field#static_valueは
+        //- field#static_valueは
         //実際に修飾子が static でないときは NULL
-        if (self == NULL) {
-                return;
-        }
-        if (self->Paint == paint) {
+        //- 既に塗装済みなら return しないとスタックオーバーフロー
+        //- beaconでは値型と参照型を区別しない
+        //  よって引数やフィールドに定数が渡された場合、
+        //  間接的にマークされてはいけないオブジェクトがマークされてしまうことがある。その対策
+        if (self == NULL || self->Paint == paint ||
+            self->Paint == PAINT_ONEXIT_T) {
                 return;
         }
         if (self->Paint != PAINT_ONEXIT_T) {
                 self->Paint = paint;
         }
-#if DEBUG
-// printf("%s\n", Ref2Str(GetTypeName(self->GType->CoreType)));
-#endif
         assert(self->OnMessage != NULL);
         bc_ObjectMessageArgument argv[] = {paint};
         self->OnMessage(self, OBJECT_MSG_MARKALL, 1, argv);
