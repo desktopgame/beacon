@@ -1,6 +1,7 @@
 #include "heap.h"
 #include <assert.h>
 #include <glib.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "../env/generic_type.h"
 #include "../util/mem.h"
@@ -33,6 +34,7 @@ static void gc_roots_lock();
 static void gc_roots_unlock();
 
 static bc_Heap* gHeap = NULL;
+static int gGCRuns = 0;
 // STWwait
 static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
@@ -49,16 +51,35 @@ static bool gGCContinue = true;
 static GRWLock gForceQuitLock;
 static volatile bool gForceQuit = false;
 
+#define REPORT_GC
+
+#ifdef REPORT_GC
+#define gcReportPath ("./report/gc.txt")
+static FILE* gReportFP;
+#endif
+
 void bc_InitHeap() {
         assert(gHeap == NULL);
         gReqQ = g_async_queue_new();
         gResQ = g_async_queue_new();
         gHeap = bc_new_heap();
         gGCThread = g_thread_new("gc", gc_run, NULL);
+#ifdef REPORT_GC
+        //リポートファイルをクリアして作成
+        if (bc_ExistsFile(gcReportPath)) {
+                bc_DeleteFile(gcReportPath);
+        }
+        gReportFP = fopen(gcReportPath, "w");
+#endif
 }
 
 void bc_DestroyHeap() {
         bc_WaitFullGC();
+#ifdef REPORT_GC
+        //リポートファイルを閉じる
+        fclose(gReportFP);
+        gReportFP = NULL;
+#endif
         // ロック中なら強制的に再開
         // resume_stwの後に毎回確認される
         g_rw_lock_reader_lock(&gQSLock);
@@ -308,6 +329,12 @@ static void gc_mark_barrier(bc_Heap* self) {
 }
 
 static void gc_sweep(bc_Heap* self) {
+        gGCRuns++;
+#ifdef REPORT_GC
+        GTimeVal before, after;
+        g_get_current_time(&before);
+#endif
+        int all = 0;
         int sweep = 0;
         bc_Cache* iter = self->Objects;
         while (iter != NULL) {
@@ -316,9 +343,11 @@ static void gc_sweep(bc_Heap* self) {
                         iter = iter->Next;
                         continue;
                 }
+                all++;
                 if (e->Paint == PAINT_UNMARKED_T) {
                         bc_DeleteObject(e);
                         iter->Data = NULL;
+                        sweep++;
                 } else if (e->Paint == PAINT_MARKED_T) {
                         e->Paint = PAINT_UNMARKED_T;
                 }
@@ -327,6 +356,18 @@ static void gc_sweep(bc_Heap* self) {
         gc_roots_lock();
         bc_EraseCacheAll(self->Roots);
         gc_roots_unlock();
+#ifdef REPORT_GC
+        g_get_current_time(&after);
+        glong diff = after.tv_usec - before.tv_usec;
+        if (sweep == 0) {
+                fprintf(gReportFP, "sweep(%d)\n", gGCRuns);
+        } else {
+                fprintf(gReportFP, "!sweep(%d)\n", gGCRuns);
+        }
+        fprintf(gReportFP, "    %d - %d = %d\n", all, sweep, (all - sweep));
+        fprintf(gReportFP, "    delete  : %d\n", sweep);
+        fprintf(gReportFP, "    time    : %ld\n", diff);
+#endif
 }
 
 static void gc_delete(bc_VectorItem item) {
