@@ -166,11 +166,11 @@ static void free_script_context(bc_ScriptContext* self) {
         bc_Frame* thv = bc_GetScriptThreadFrameRef(bc_GetCurrentScriptThread());
         bc_CatchVM(thv);
         bc_DeleteClassLoader(self->BootstrapClassLoader);
-        if (self->Null != NULL) {
-                bc_IgnoreHeap(self->Null);
-                self->Null->Paint = PAINT_ONEXIT_T;
-                bc_DestroyObject(self->Null);
-        }
+        //        if (self->Null != NULL) {
+        //                bc_IgnoreHeap(self->Null);
+        //                self->Null->Paint = PAINT_ONEXIT_T;
+        bc_DestroyObject(self->Null);
+        //        }
         bc_DeleteVector(self->NegativeIntegerCacheList, delete_cache);
         bc_DeleteVector(self->PositiveIntegerCacheList, delete_cache);
         bc_DeleteNumericMap(self->IntegerCacheMap, delete_mcache);

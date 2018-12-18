@@ -240,6 +240,9 @@ void bc_PrintObject(bc_Object* self) {
 }
 
 void bc_DeleteObject(bc_Object* self) {
+        if (self == NULL) {
+                return;
+        }
         gObjectCount--;
         if ((self->Flags & OBJECT_FLG_CLONE) > 0) {
                 MEM_FREE(self);

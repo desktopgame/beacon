@@ -28,6 +28,7 @@ static void gc_mark_barrier(bc_Heap* self);
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
 static bool is_contains_diff_on_roots();
+static bool is_force_quit_now();
 static void gc_roots_lock();
 static void gc_roots_unlock();
 
@@ -44,6 +45,10 @@ static GRecMutex gRootsMtx;
 static GThread* gGCThread = NULL;
 static bool gGCContinue = true;
 
+// force quit
+static GRWLock gForceQuitLock;
+static volatile bool gForceQuit = false;
+
 void bc_InitHeap() {
         assert(gHeap == NULL);
         gReqQ = g_async_queue_new();
@@ -53,10 +58,21 @@ void bc_InitHeap() {
 }
 
 void bc_DestroyHeap() {
-        bc_CheckSTWRequest();
+        bc_WaitFullGC();
+        // ロック中なら強制的に再開
+        // resume_stwの後に毎回確認される
+        g_rw_lock_reader_lock(&gQSLock);
+        if (gSTWRequested) {
+                g_rw_lock_writer_lock(&gForceQuitLock);
+                gForceQuit = true;
+                sem_v_signal(gResQ);
+                g_rw_lock_writer_unlock(&gForceQuitLock);
+        }
+        g_rw_lock_reader_unlock(&gQSLock);
         gGCContinue = false;
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
+        int idc = bc_CountActiveObject();
         g_async_queue_unref(gReqQ);
         g_async_queue_unref(gResQ);
         MEM_FREE(gHeap);
@@ -106,6 +122,9 @@ void bc_DumpHeap() {
 }
 
 void bc_WaitFullGC() {
+        if (gHeap == NULL) {
+                return;
+        }
         while (is_contains_diff_on_roots()) {
                 bc_CheckSTWRequest();
         }
@@ -171,15 +190,25 @@ static void bc_resume_stw() {
 static gpointer gc_run(gpointer data) {
         bc_Heap* self = bc_GetHeap();
         while (gGCContinue) {
+                if (is_force_quit_now()) {
+                        break;
+                }
                 //ヒープを保護してルートを取得
                 bc_request_stw();
+                if (is_force_quit_now()) {
+                        break;
+                }
                 gc_promotion(self);
                 gc_collect_all_root(self);
                 bc_resume_stw();
+
                 //ルートを全てマーク
                 gc_mark(self);
                 //ライトバリアーを確認
                 bc_request_stw();
+                if (is_force_quit_now()) {
+                        break;
+                }
                 gc_mark_wait(self);
                 gc_mark_barrier(self);
                 bc_resume_stw();
@@ -323,6 +352,14 @@ static bool is_contains_diff_on_roots() {
         }
         gc_roots_unlock();
         return false;
+}
+
+static bool is_force_quit_now() {
+        bool ret = false;
+        g_rw_lock_reader_lock(&gForceQuitLock);
+        ret = gForceQuit;
+        g_rw_lock_reader_unlock(&gForceQuitLock);
+        return ret;
 }
 
 static void gc_roots_lock() { g_rec_mutex_lock(&gRootsMtx); }
