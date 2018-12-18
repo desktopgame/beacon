@@ -33,7 +33,7 @@ static bc_Heap* gHeap = NULL;
 static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
 static GRWLock gQSLock;
-static volatile bool gRRR = false;
+static volatile bool gSTWRequested = false;
 
 static GThread* gGCThread = NULL;
 static bool gGCContinue = true;
@@ -109,7 +109,7 @@ void bc_CheckSTWRequest() {
                 return;
         }
         g_rw_lock_reader_lock(&gQSLock);
-        if (!gRRR) {
+        if (!gSTWRequested) {
                 g_rw_lock_reader_unlock(&gQSLock);
                 return;
         }
@@ -142,14 +142,14 @@ static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
 static void bc_request_stw() {
         g_rw_lock_writer_lock(&gQSLock);
-        gRRR = true;
+        gSTWRequested = true;
         g_rw_lock_writer_unlock(&gQSLock);
         sem_p_wait(gResQ);
 }
 
 static void bc_resume_stw() {
         g_rw_lock_writer_lock(&gQSLock);
-        gRRR = false;
+        gSTWRequested = false;
         g_rw_lock_writer_unlock(&gQSLock);
         sem_v_signal(gReqQ);
 }
