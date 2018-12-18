@@ -54,7 +54,7 @@ install(
     DESTINATION ${BC_INSTALL_DIR}
 )
 install(
-    DIRECTORY ./../../license
+    DIRECTORY ./../../license_list
     DESTINATION ${BC_INSTALL_DIR}
 )
 install(
