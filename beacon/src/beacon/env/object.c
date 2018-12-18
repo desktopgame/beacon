@@ -94,7 +94,7 @@ void* bc_NewObject(bc_ScriptContext* sctx, size_t object_size) {
         ret->Fields = bc_NewVector();
         ret->Flags = OBJECT_FLG_NONE;
         ret->Update = false;
-        bc_AddHeap(bc_GetHeap(), ret);
+        bc_AddHeap(ret);
         gObjectCount++;
         return mem;
 }

@@ -1491,7 +1491,7 @@ static void uncaught(bc_Frame* self, bc_Enviroment* env, int pc) {
         gVMError = bc_InternString(message);
         MEM_FREE(message);
         bc_CatchVM(bc_GetRootFrame(self));
-        bc_CollectHeap(bc_GetHeap());
+        bc_CheckSTWRequest();
 }
 
 /**

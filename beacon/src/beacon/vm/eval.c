@@ -64,7 +64,7 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
         bc_CatchVM(fr);
         bc_ReleaseScriptThreadFrameRef(bc_GetCurrentScriptThread());
         bc_DeleteFrame(fr);
-        bc_CollectHeap(bc_GetHeap());
+        bc_CheckSTWRequest();
 
         bool ret = bc_GetLastPanic();
         bc_DeleteClassLoader(cll);

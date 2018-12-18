@@ -244,7 +244,7 @@ static void free_script_context(bc_ScriptContext* self) {
         bc_CatchVM(thv);
         bc_DeleteClassLoader(self->BootstrapClassLoader);
         if (self->Null != NULL) {
-                bc_IgnoreHeap(bc_GetHeap(), self->Null);
+                bc_IgnoreHeap(self->Null);
                 self->Null->Paint = PAINT_ONEXIT_T;
                 bc_DestroyObject(self->Null);
         }

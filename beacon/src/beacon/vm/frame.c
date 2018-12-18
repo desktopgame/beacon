@@ -68,7 +68,7 @@ void bc_DeleteFrame(bc_Frame* self) {
         bc_DeleteVector(self->Children, bc_VectorDeleterOfNull);
         bc_DeleteVector(self->TypeArgs, bc_VectorDeleterOfNull);
         bc_DeleteVector(self->DeferList, delete_defctx);
-        bc_CollectHeap(bc_GetHeap());
+        bc_CheckSTWRequest();
         MEM_FREE(self);
 }
 

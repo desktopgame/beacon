@@ -51,29 +51,20 @@ bc_Heap* bc_GetHeap();
  * ヒープにオブジェクトを追加します.
  * obj#blockingがtrueなら、
  * 追加せずに obj#paint を PAINT_ONEXIT_T へ変更します。
- * @param self
  * @param obj
  */
-void bc_AddHeap(bc_Heap* self, bc_Object* obj);
-
-/**
- * GCを実行します.
- * @param self
- */
-void bc_CollectHeap(bc_Heap* self);
+void bc_AddHeap(bc_Object* obj);
 
 /**
  * 指定のオブジェクトをヒープから取り除きます.
- * @param self
  * @param o
  */
-void bc_IgnoreHeap(bc_Heap* self, bc_Object* o);
+void bc_IgnoreHeap(bc_Object* o);
 
 /**
  * ヒープの中身をダンプします.
- * @param self
  */
-void bc_DumpHeap(bc_Heap* self);
+void bc_DumpHeap();
 
 /**
  * STWが要求されているならウェイトします。

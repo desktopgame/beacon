@@ -47,7 +47,7 @@ void bc_InitHeap() {
 }
 
 void bc_DestroyHeap() {
-        bc_CollectHeap(gHeap);
+        bc_CheckSTWRequest();
         gGCContinue = false;
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
@@ -65,7 +65,8 @@ bc_Heap* bc_GetHeap() {
         return gHeap;
 }
 
-void bc_AddHeap(bc_Heap* self, bc_Object* obj) {
+void bc_AddHeap(bc_Object* obj) {
+        bc_Heap* self = bc_GetHeap();
         if (self == NULL) {
                 obj->Paint = PAINT_ONEXIT_T;
                 return;
@@ -77,21 +78,14 @@ void bc_AddHeap(bc_Heap* self, bc_Object* obj) {
         bc_StoreCache(self->Objects, obj);
 }
 
-void bc_CollectHeap(bc_Heap* self) {
-        if (self->CollectBlocking > 0) {
-                return;
-        }
+void bc_IgnoreHeap(bc_Object* o) {
         bc_CheckSTWRequest();
+        bc_EraseCache(bc_GetHeap()->Objects, o);
 }
 
-void bc_IgnoreHeap(bc_Heap* self, bc_Object* o) {
-        bc_CheckSTWRequest();
-        bc_EraseCache(self->Objects, o);
-}
-
-void bc_DumpHeap(bc_Heap* self) {
+void bc_DumpHeap() {
         printf("heap dump:\n");
-        bc_Cache* iter = self->Objects;
+        bc_Cache* iter = bc_GetHeap()->Objects;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
@@ -110,6 +104,9 @@ void bc_CheckSTWRequest() {
                 fprintf(stderr,
                         "this function must be not called from gc thread\n");
                 abort();
+        }
+        if (bc_GetHeap()->CollectBlocking > 0) {
+                return;
         }
         g_rw_lock_reader_lock(&gQSLock);
         if (!gRRR) {

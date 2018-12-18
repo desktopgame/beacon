@@ -351,7 +351,7 @@ static void bc_eval_release(JNIEnv* env, bc_ClassLoader* cll, bc_Frame* fr) {
                 MEM_FREE(mes);
         }
         bc_CatchVM(fr);
-        bc_CollectHeap(bc_GetHeap());
+        bc_CheckSTWRequest();
         bc_DeleteFrame(fr);
         bc_ReleaseScriptThreadFrameRef(bc_GetCurrentScriptThread());
 
