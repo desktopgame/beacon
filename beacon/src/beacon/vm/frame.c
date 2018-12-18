@@ -130,17 +130,17 @@ static void collect_recursive(bc_Frame* self, bc_Cache* cache) {
         }
         for (int i = 0; i < self->ValueStack->Length; i++) {
                 bc_Object* e = (bc_Object*)bc_AtVector(self->ValueStack, i);
-                bc_StoreCache(cache, e);
+                bc_AddRoot(e);
         }
         for (int i = 0; i < self->VariableTable->Length; i++) {
                 bc_Object* e = (bc_Object*)bc_AtVector(self->VariableTable, i);
-                bc_StoreCache(cache, e);
+                bc_AddRoot(e);
         }
         // deferのために一時的に保存された領域
         frame_cache_defer(self, cache);
         //例外をマークする
         if (self->Exception != NULL) {
-                bc_StoreCache(cache, self->Exception);
+                bc_AddRoot(self->Exception);
         }
 }
 
@@ -153,7 +153,7 @@ static void frame_cache_defer(bc_Frame* self, bc_Cache* cache) {
                 bc_Vector* bind = defctx->VariableTable;
                 for (int j = 0; j < bind->Length; j++) {
                         bc_Object* e = bc_AtVector(bind, j);
-                        bc_StoreCache(cache, e);
+                        bc_AddRoot(e);
                 }
         }
 }

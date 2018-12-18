@@ -56,6 +56,12 @@ bc_Heap* bc_GetHeap();
 void bc_AddHeap(bc_Object* obj);
 
 /**
+ * ルートの一覧に obj を追加します。
+ * @param obj
+ */
+void bc_AddRoot(bc_Object* obj);
+
+/**
  * 指定のオブジェクトをヒープから取り除きます.
  * @param o
  */

@@ -85,7 +85,7 @@ void bc_CollectStaticFields(bc_ScriptContext* self, bc_Cache* cache) {
                         bc_Field* f =
                             (bc_Field*)bc_AtVector(cls->StaticFields, j);
                         if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
-                                bc_StoreCache(cache, f->StaticValue);
+                                bc_AddRoot(f->StaticValue);
                         }
                 }
         }

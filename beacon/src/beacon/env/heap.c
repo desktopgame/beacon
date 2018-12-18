@@ -110,15 +110,21 @@ bc_Heap* bc_GetHeap() {
 
 void bc_AddHeap(bc_Object* obj) {
         bc_Heap* self = bc_GetHeap();
-        if (self == NULL) {
-                obj->Paint = PAINT_ONEXIT_T;
-                return;
-        }
-        if (self->AcceptBlocking > 0) {
+        //定数は入れてはいけない
+        if (self == NULL || self->AcceptBlocking > 0) {
                 obj->Paint = PAINT_ONEXIT_T;
                 return;
         }
         bc_StoreCache(self->Objects, obj);
+}
+
+void bc_AddRoot(bc_Object* obj) {
+        if (obj == NULL) {
+                return;
+        }
+        if (obj->Paint != PAINT_ONEXIT_T) {
+                bc_StoreCache(bc_GetHeap()->Roots, obj);
+        }
 }
 
 void bc_IgnoreHeap(bc_Object* o) {
@@ -261,9 +267,9 @@ static void gc_collect_all_root(bc_Heap* self) {
                 bc_CollectStaticFields(sctx, self->Roots);
         }
         // true, false, null
-        bc_StoreCache(self->Roots, bc_GetUniqueTrueObject(sctx));
-        bc_StoreCache(self->Roots, bc_GetUniqueFalseObject(sctx));
-        bc_StoreCache(self->Roots, bc_GetUniqueNullObject(sctx));
+        bc_AddRoot(bc_GetUniqueTrueObject(sctx));
+        bc_AddRoot(bc_GetUniqueFalseObject(sctx));
+        bc_AddRoot(bc_GetUniqueNullObject(sctx));
         for (int i = 0; i < bc_GetScriptThreadCount(); i++) {
                 bc_ScriptThread* th = bc_GetScriptThreadAt(i);
                 //全てのスタック変数をマーク
