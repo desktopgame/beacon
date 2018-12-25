@@ -3,7 +3,7 @@ project(beacon C)
 #各種変数の設定
 set(CMAKE_CXX_COMPILER clang)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
-set(CMAKE_C_FLAGS_DEBUG "-g -fsanitize=address -coverage -O0 -DDEBUG -MMD -Wall")
+set(CMAKE_C_FLAGS_DEBUG "-g -O0 -DDEBUG -MMD -Wall")
 set(CMAKE_C_FLAGS_RELEASE "-g -O2 -MMD -w -DNDEBUG")
 set(BC_EXECUTABLE "beacon" CACHE STRING "executable file name")
 set(BC_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/beacon CACHE PATH "Path to install")

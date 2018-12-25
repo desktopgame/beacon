@@ -125,6 +125,7 @@ void bc_MXFree(void* block, const char* filename, int lineno) {
         c->Count = -1;
         location_slot(c, filename, lineno);
         mem_unlock();
+        bc_ValidateMX();
 #else
         free(block);
 #endif

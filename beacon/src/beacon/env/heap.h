@@ -81,4 +81,10 @@ void bc_WaitFullGC();
  * STWが要求されているならウェイトします。
  */
 void bc_CheckSTWRequest();
+
+void bc_BeginHeapSafeInvoke();
+
+void bc_EndHeapSafeInvoke();
+
+bool bc_IsStopForSafeInvoke();
 #endif  // !SIGNAL_ENV_HEAP_H

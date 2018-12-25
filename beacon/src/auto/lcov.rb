@@ -11,7 +11,7 @@ o.lines {|line| p "    " + line}
 #.gcda .gcno をコピー
 File.delete("lcov.info") if File.exists?("lcov.info")
 #lcov.info生成
-o, e, s = Open3.capture3("lcov -c -d . -o lcov.info")
+o, e, s = Open3.capture3("lcov -c -d ./CMakeFiles/beacon.dir -o lcov.info")
 p e
 p
 #html生成

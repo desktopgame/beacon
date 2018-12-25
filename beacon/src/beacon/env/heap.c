@@ -10,13 +10,19 @@
 #include "../vm/vm.h"
 #include "script_context.h"
 
+typedef enum stw_result {
+        stw_none,
+        stw_success,
+        stw_fail_by_safe_invoke,
+        stw_fail_by_force_quit,
+} stw_result;
 // proto
 static bc_Heap* bc_new_heap();
 static void delete_object(bc_VectorItem item);
 // mutex
 static void sem_v_signal(GAsyncQueue* q);
 static void sem_p_wait(GAsyncQueue* q);
-static void bc_request_stw();
+static stw_result bc_request_stw();
 static void bc_resume_stw();
 // gc
 static gpointer gc_run(gpointer data);
@@ -26,12 +32,15 @@ static void gc_clear(bc_Heap* self);
 static void gc_mark(bc_Heap* self);
 static void gc_mark_wait(bc_Heap* self);
 static void gc_mark_barrier(bc_Heap* self);
+static void gc_reset_roots();
+static void gc_reset_mark();
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
 static bool is_contains_diff_on_roots();
 static bool is_force_quit_now();
 static void gc_roots_lock();
 static void gc_roots_unlock();
+static void safe_invoke();
 
 static bc_Heap* gHeap = NULL;
 static int gGCRuns = 0;
@@ -41,11 +50,32 @@ static GAsyncQueue* gResQ;
 static GRWLock gQSLock;
 static volatile bool gSTWRequested = false;
 
+static GRWLock gSTWResultLock;
+static volatile stw_result gSTWResult = stw_none;
+static stw_result read_stw_result() {
+        g_rw_lock_reader_lock(&gSTWResultLock);
+        stw_result ret = gSTWResult;
+        g_rw_lock_reader_unlock(&gSTWResultLock);
+        return ret;
+}
+static void write_stw_result(stw_result write) {
+        g_rw_lock_writer_lock(&gSTWResultLock);
+        gSTWResult = write;
+        g_rw_lock_writer_unlock(&gSTWResultLock);
+}
+
+static GAsyncQueue* gInvokeReqQ;
+static GAsyncQueue* gInvokeResQ;
+static volatile bool gInvoke = false;
+static GRWLock gInvokeLock;
+
+static GRWLock gStopForInvokeLock;
+static volatile bool gStopForInvoke = false;
+
 // Roots
 static GRecMutex gRootsMtx;
 
 static GThread* gGCThread = NULL;
-static bool gGCContinue = true;
 
 // force quit
 static GRWLock gForceQuitLock;
@@ -63,6 +93,8 @@ void bc_InitHeap() {
         gReqQ = g_async_queue_new();
         gResQ = g_async_queue_new();
         gHeap = bc_new_heap();
+        gInvokeReqQ = g_async_queue_new();
+        gInvokeResQ = g_async_queue_new();
         gGCThread = g_thread_new("gc", gc_run, NULL);
 #ifdef REPORT_GC
         //リポートファイルをクリアして作成
@@ -75,13 +107,9 @@ void bc_InitHeap() {
 
 void bc_DestroyHeap() {
         bc_WaitFullGC();
-#ifdef REPORT_GC
-        //リポートファイルを閉じる
-        fclose(gReportFP);
-        gReportFP = NULL;
-#endif
         // ロック中なら強制的に再開
         // resume_stwの後に毎回確認される
+        bc_BeginHeapSafeInvoke();
         g_rw_lock_reader_lock(&gQSLock);
         if (gSTWRequested) {
                 g_rw_lock_writer_lock(&gForceQuitLock);
@@ -90,7 +118,7 @@ void bc_DestroyHeap() {
                 g_rw_lock_writer_unlock(&gForceQuitLock);
         }
         g_rw_lock_reader_unlock(&gQSLock);
-        gGCContinue = false;
+        bc_EndHeapSafeInvoke();
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
         int idc = bc_CountActiveObject();
@@ -101,6 +129,11 @@ void bc_DestroyHeap() {
         gHeap = NULL;
         gReqQ = NULL;
         gResQ = NULL;
+#ifdef REPORT_GC
+        //リポートファイルを閉じる
+        fclose(gReportFP);
+        gReportFP = NULL;
+#endif
 }
 
 bc_Heap* bc_GetHeap() {
@@ -155,6 +188,8 @@ void bc_WaitFullGC() {
         while (is_contains_diff_on_roots()) {
                 bc_CheckSTWRequest();
         }
+        bc_CheckSTWRequest();
+        bc_CheckSTWRequest();
 }
 
 void bc_CheckSTWRequest() {
@@ -172,8 +207,48 @@ void bc_CheckSTWRequest() {
                 return;
         }
         g_rw_lock_reader_unlock(&gQSLock);
+        write_stw_result(stw_success);
         sem_v_signal(gResQ);
         sem_p_wait(gReqQ);
+}
+
+void bc_BeginHeapSafeInvoke() {
+#if BC_DEBUG
+        assert(g_thread_self() != gGCThread);
+#endif
+        //セーフインボーク中としてマーク
+        g_rw_lock_writer_lock(&gInvokeLock);
+        gInvoke = true;
+        //現在STWを待機しているか
+        g_rw_lock_reader_lock(&gQSLock);
+        bool waiting = gSTWRequested;
+        if (waiting) {
+                write_stw_result(stw_fail_by_safe_invoke);
+                sem_v_signal(gResQ);
+        }
+        g_rw_lock_reader_unlock(&gQSLock);
+        g_rw_lock_writer_unlock(&gInvokeLock);
+        //スレッドが止まるまで待つ
+        sem_p_wait(gInvokeResQ);
+}
+
+void bc_EndHeapSafeInvoke() {
+#if BC_DEBUG
+        assert(g_thread_self() != gGCThread);
+#endif
+        //セーフインボークを解除
+        g_rw_lock_writer_lock(&gInvokeLock);
+        gInvoke = false;
+        g_rw_lock_writer_unlock(&gInvokeLock);
+        //スレッドを再開
+        sem_v_signal(gInvokeReqQ);
+}
+
+bool bc_IsStopForSafeInvoke() {
+        g_rw_lock_reader_lock(&gStopForInvokeLock);
+        bool ret = gStopForInvoke;
+        g_rw_lock_reader_unlock(&gStopForInvokeLock);
+        return ret;
 }
 
 // private
@@ -198,11 +273,26 @@ static void sem_v_signal(GAsyncQueue* q) {
 
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
-static void bc_request_stw() {
+static stw_result bc_request_stw() {
+        g_rw_lock_reader_lock(&gInvokeLock);
+        g_rw_lock_reader_lock(&gForceQuitLock);
+        if (gInvoke) {
+                g_rw_lock_reader_unlock(&gForceQuitLock);
+                g_rw_lock_reader_unlock(&gInvokeLock);
+                return stw_fail_by_safe_invoke;
+        }
+        if (gForceQuit) {
+                g_rw_lock_reader_unlock(&gForceQuitLock);
+                g_rw_lock_reader_unlock(&gInvokeLock);
+                return stw_fail_by_force_quit;
+        }
         g_rw_lock_writer_lock(&gQSLock);
+        g_rw_lock_reader_unlock(&gForceQuitLock);
+        g_rw_lock_reader_unlock(&gInvokeLock);
         gSTWRequested = true;
         g_rw_lock_writer_unlock(&gQSLock);
         sem_p_wait(gResQ);
+        return read_stw_result();
 }
 
 static void bc_resume_stw() {
@@ -216,31 +306,39 @@ static void bc_resume_stw() {
 
 static gpointer gc_run(gpointer data) {
         bc_Heap* self = bc_GetHeap();
-        while (gGCContinue) {
+        while (true) {
                 if (is_force_quit_now()) {
                         break;
                 }
+                safe_invoke();
                 //ヒープを保護してルートを取得
-                bc_request_stw();
-                if (is_force_quit_now()) {
-                        break;
+                if (bc_request_stw() == stw_success) {
+                        if (is_force_quit_now()) {
+                                break;
+                        }
+                        gc_promotion(self);
+                        gc_collect_all_root(self);
+                        bc_resume_stw();
+                        //ルートを全てマーク
+                        gc_mark(self);
+                        //ライトバリアーを確認
+                        if (bc_request_stw() == stw_success) {
+                                if (is_force_quit_now()) {
+                                        break;
+                                }
+                                gc_mark_wait(self);
+                                gc_mark_barrier(self);
+                                bc_resume_stw();
+                                //ライトバリアーを確認
+                                gc_sweep(self);
+                        } else {
+                                gc_reset_roots();
+                                gc_reset_mark();
+                        }
+                } else {
+                        gc_reset_roots();
+                        gc_reset_mark();
                 }
-                gc_promotion(self);
-                gc_collect_all_root(self);
-                bc_resume_stw();
-
-                //ルートを全てマーク
-                gc_mark(self);
-                //ライトバリアーを確認
-                bc_request_stw();
-                if (is_force_quit_now()) {
-                        break;
-                }
-                gc_mark_wait(self);
-                gc_mark_barrier(self);
-                bc_resume_stw();
-                //ライトバリアーを確認
-                gc_sweep(self);
         }
         return NULL;
 }
@@ -334,6 +432,27 @@ static void gc_mark_barrier(bc_Heap* self) {
         }
 }
 
+static void gc_reset_roots() {
+        gc_roots_lock();
+        bc_EraseCacheAll(gHeap->Roots);
+        gc_roots_unlock();
+}
+
+static void gc_reset_mark() {
+        bc_Cache* iter = gHeap->Objects;
+        while (iter != NULL) {
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                bc_Object* obj = iter->Data;
+                if (obj->Paint == PAINT_MARKED_T) {
+                        obj->Paint = PAINT_UNMARKED_T;
+                }
+                iter = iter->Next;
+        }
+}
+
 static void gc_sweep(bc_Heap* self) {
         gGCRuns++;
 #ifdef REPORT_GC
@@ -359,9 +478,7 @@ static void gc_sweep(bc_Heap* self) {
                 }
                 iter = iter->Next;
         }
-        gc_roots_lock();
-        bc_EraseCacheAll(self->Roots);
-        gc_roots_unlock();
+        gc_reset_roots();
 #ifdef REPORT_GC
         g_get_current_time(&after);
         glong diff = after.tv_usec - before.tv_usec;
@@ -412,3 +529,19 @@ static bool is_force_quit_now() {
 static void gc_roots_lock() { g_rec_mutex_lock(&gRootsMtx); }
 
 static void gc_roots_unlock() { g_rec_mutex_unlock(&gRootsMtx); }
+
+static void safe_invoke() {
+        g_rw_lock_reader_lock(&gInvokeLock);
+        if (gInvoke) {
+                g_rw_lock_writer_lock(&gStopForInvokeLock);
+                gStopForInvoke = true;
+                g_rw_lock_writer_unlock(&gStopForInvokeLock);
+                g_rw_lock_reader_unlock(&gInvokeLock);
+                sem_v_signal(gInvokeResQ);
+                sem_p_wait(gInvokeReqQ);
+        }
+        g_rw_lock_reader_unlock(&gInvokeLock);
+        g_rw_lock_writer_lock(&gStopForInvokeLock);
+        gStopForInvoke = false;
+        g_rw_lock_writer_unlock(&gStopForInvokeLock);
+}
