@@ -47,8 +47,9 @@ static int gGCRuns = 0;
 // STWwait
 static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
-static GRWLock gQSLock;
-static volatile bool gSTWRequested = false;
+#define gSTWRequest_V (1)
+#define gSTWNotRequest_V (0)
+static volatile gint gSTWRequestedAtm = 0;
 
 static GRWLock gSTWResultLock;
 static volatile stw_result gSTWResult = stw_none;
@@ -110,14 +111,12 @@ void bc_DestroyHeap() {
         // ロック中なら強制的に再開
         // resume_stwの後に毎回確認される
         bc_BeginHeapSafeInvoke();
-        g_rw_lock_reader_lock(&gQSLock);
-        if (gSTWRequested) {
+        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
                 g_rw_lock_writer_lock(&gForceQuitLock);
                 gForceQuit = true;
                 sem_v_signal(gResQ);
                 g_rw_lock_writer_unlock(&gForceQuitLock);
         }
-        g_rw_lock_reader_unlock(&gQSLock);
         bc_EndHeapSafeInvoke();
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
@@ -201,12 +200,9 @@ void bc_CheckSTWRequest() {
         if (bc_GetHeap()->CollectBlocking > 0) {
                 return;
         }
-        g_rw_lock_reader_lock(&gQSLock);
-        if (!gSTWRequested) {
-                g_rw_lock_reader_unlock(&gQSLock);
+        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWNotRequest_V) {
                 return;
         }
-        g_rw_lock_reader_unlock(&gQSLock);
         write_stw_result(stw_success);
         sem_v_signal(gResQ);
         sem_p_wait(gReqQ);
@@ -220,13 +216,10 @@ void bc_BeginHeapSafeInvoke() {
         g_rw_lock_writer_lock(&gInvokeLock);
         gInvoke = true;
         //現在STWを待機しているか
-        g_rw_lock_reader_lock(&gQSLock);
-        bool waiting = gSTWRequested;
-        if (waiting) {
+        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
                 write_stw_result(stw_fail_by_safe_invoke);
                 sem_v_signal(gResQ);
         }
-        g_rw_lock_reader_unlock(&gQSLock);
         g_rw_lock_writer_unlock(&gInvokeLock);
         //スレッドが止まるまで待つ
         sem_p_wait(gInvokeResQ);
@@ -286,19 +279,15 @@ static stw_result bc_request_stw() {
                 g_rw_lock_reader_unlock(&gInvokeLock);
                 return stw_fail_by_force_quit;
         }
-        g_rw_lock_writer_lock(&gQSLock);
         g_rw_lock_reader_unlock(&gForceQuitLock);
         g_rw_lock_reader_unlock(&gInvokeLock);
-        gSTWRequested = true;
-        g_rw_lock_writer_unlock(&gQSLock);
+        g_atomic_int_set(&gSTWRequestedAtm, gSTWRequest_V);
         sem_p_wait(gResQ);
         return read_stw_result();
 }
 
 static void bc_resume_stw() {
-        g_rw_lock_writer_lock(&gQSLock);
-        gSTWRequested = false;
-        g_rw_lock_writer_unlock(&gQSLock);
+        g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
         sem_v_signal(gReqQ);
 }
 
