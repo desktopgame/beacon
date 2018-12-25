@@ -66,8 +66,9 @@ static void write_stw_result(stw_result write) {
 
 static GAsyncQueue* gInvokeReqQ;
 static GAsyncQueue* gInvokeResQ;
-static volatile bool gInvoke = false;
-static GRWLock gInvokeLock;
+#define gInvokeYes_V (1)
+#define gInvokeNo_V (0)
+static volatile gint gInvokeAtm = gInvokeYes_V;
 
 static GRWLock gStopForInvokeLock;
 static volatile bool gStopForInvoke = false;
@@ -211,14 +212,12 @@ void bc_BeginHeapSafeInvoke() {
         assert(g_thread_self() != gGCThread);
 #endif
         //セーフインボーク中としてマーク
-        g_rw_lock_writer_lock(&gInvokeLock);
-        gInvoke = true;
+        g_atomic_int_set(&gInvokeAtm, gInvokeYes_V);
         //現在STWを待機しているか
         if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
                 write_stw_result(stw_fail_by_safe_invoke);
                 sem_v_signal(gResQ);
         }
-        g_rw_lock_writer_unlock(&gInvokeLock);
         //スレッドが止まるまで待つ
         sem_p_wait(gInvokeResQ);
 }
@@ -228,9 +227,7 @@ void bc_EndHeapSafeInvoke() {
         assert(g_thread_self() != gGCThread);
 #endif
         //セーフインボークを解除
-        g_rw_lock_writer_lock(&gInvokeLock);
-        gInvoke = false;
-        g_rw_lock_writer_unlock(&gInvokeLock);
+        g_atomic_int_set(&gInvokeAtm, gInvokeNo_V);
         //スレッドを再開
         sem_v_signal(gInvokeReqQ);
 }
@@ -265,16 +262,12 @@ static void sem_v_signal(GAsyncQueue* q) {
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
 static stw_result bc_request_stw() {
-        g_rw_lock_reader_lock(&gInvokeLock);
-        if (gInvoke) {
-                g_rw_lock_reader_unlock(&gInvokeLock);
+        if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
                 return stw_fail_by_safe_invoke;
         }
         if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
-                g_rw_lock_reader_unlock(&gInvokeLock);
                 return stw_fail_by_force_quit;
         }
-        g_rw_lock_reader_unlock(&gInvokeLock);
         g_atomic_int_set(&gSTWRequestedAtm, gSTWRequest_V);
         sem_p_wait(gResQ);
         return read_stw_result();
@@ -508,16 +501,13 @@ static void gc_roots_lock() { g_rec_mutex_lock(&gRootsMtx); }
 static void gc_roots_unlock() { g_rec_mutex_unlock(&gRootsMtx); }
 
 static void safe_invoke() {
-        g_rw_lock_reader_lock(&gInvokeLock);
-        if (gInvoke) {
+        if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
                 g_rw_lock_writer_lock(&gStopForInvokeLock);
                 gStopForInvoke = true;
                 g_rw_lock_writer_unlock(&gStopForInvokeLock);
-                g_rw_lock_reader_unlock(&gInvokeLock);
                 sem_v_signal(gInvokeResQ);
                 sem_p_wait(gInvokeReqQ);
         }
-        g_rw_lock_reader_unlock(&gInvokeLock);
         g_rw_lock_writer_lock(&gStopForInvokeLock);
         gStopForInvoke = false;
         g_rw_lock_writer_unlock(&gStopForInvokeLock);
