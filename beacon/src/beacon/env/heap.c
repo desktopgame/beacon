@@ -68,11 +68,11 @@ static GAsyncQueue* gInvokeReqQ;
 static GAsyncQueue* gInvokeResQ;
 #define gInvokeYes_V (1)
 #define gInvokeNo_V (0)
-static volatile gint gInvokeAtm = gInvokeYes_V;
+static volatile gint gInvokeAtm = gInvokeNo_V;
 
 #define gInvokeStopForInvokeYes_V (1)
 #define gInvokeStopForInvokeNo_V (0)
-static volatile gint gStopForInvokeAtm;
+static volatile gint gStopForInvokeAtm = gInvokeStopForInvokeNo_V;
 
 // Roots
 static GRecMutex gRootsMtx;
