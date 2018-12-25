@@ -70,8 +70,9 @@ static GAsyncQueue* gInvokeResQ;
 #define gInvokeNo_V (0)
 static volatile gint gInvokeAtm = gInvokeYes_V;
 
-static GRWLock gStopForInvokeLock;
-static volatile bool gStopForInvoke = false;
+#define gInvokeStopForInvokeYes_V (1)
+#define gInvokeStopForInvokeNo_V (0)
+static volatile gint gStopForInvokeAtm;
 
 // Roots
 static GRecMutex gRootsMtx;
@@ -233,10 +234,8 @@ void bc_EndHeapSafeInvoke() {
 }
 
 bool bc_IsStopForSafeInvoke() {
-        g_rw_lock_reader_lock(&gStopForInvokeLock);
-        bool ret = gStopForInvoke;
-        g_rw_lock_reader_unlock(&gStopForInvokeLock);
-        return ret;
+        return g_atomic_int_get(&gStopForInvokeAtm) ==
+               gInvokeStopForInvokeYes_V;
 }
 
 // private
@@ -502,13 +501,9 @@ static void gc_roots_unlock() { g_rec_mutex_unlock(&gRootsMtx); }
 
 static void safe_invoke() {
         if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
-                g_rw_lock_writer_lock(&gStopForInvokeLock);
-                gStopForInvoke = true;
-                g_rw_lock_writer_unlock(&gStopForInvokeLock);
+                g_atomic_int_set(&gStopForInvokeAtm, gInvokeStopForInvokeYes_V);
                 sem_v_signal(gInvokeResQ);
                 sem_p_wait(gInvokeReqQ);
         }
-        g_rw_lock_writer_lock(&gStopForInvokeLock);
-        gStopForInvoke = false;
-        g_rw_lock_writer_unlock(&gStopForInvokeLock);
+        g_atomic_int_set(&gStopForInvokeAtm, gInvokeStopForInvokeNo_V);
 }
