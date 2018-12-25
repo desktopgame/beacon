@@ -37,7 +37,6 @@ static void gc_reset_mark();
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
 static bool is_contains_diff_on_roots();
-static bool is_force_quit_now();
 static void gc_roots_lock();
 static void gc_roots_unlock();
 static void safe_invoke();
@@ -49,7 +48,7 @@ static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
 #define gSTWRequest_V (1)
 #define gSTWNotRequest_V (0)
-static volatile gint gSTWRequestedAtm = 0;
+static volatile gint gSTWRequestedAtm = gSTWNotRequest_V;
 
 static GRWLock gSTWResultLock;
 static volatile stw_result gSTWResult = stw_none;
@@ -79,8 +78,9 @@ static GRecMutex gRootsMtx;
 static GThread* gGCThread = NULL;
 
 // force quit
-static GRWLock gForceQuitLock;
-static volatile bool gForceQuit = false;
+#define gForceQuitYes_V (1)
+#define gForceQuitNo_V (0)
+static volatile gint gForceQuitAtm = gForceQuitNo_V;
 
 #define REPORT_GC
 
@@ -112,10 +112,8 @@ void bc_DestroyHeap() {
         // resume_stwの後に毎回確認される
         bc_BeginHeapSafeInvoke();
         if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
-                g_rw_lock_writer_lock(&gForceQuitLock);
-                gForceQuit = true;
+                g_atomic_int_set(&gForceQuitAtm, gForceQuitYes_V);
                 sem_v_signal(gResQ);
-                g_rw_lock_writer_unlock(&gForceQuitLock);
         }
         bc_EndHeapSafeInvoke();
         g_thread_join(gGCThread);
@@ -268,18 +266,14 @@ static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
 static stw_result bc_request_stw() {
         g_rw_lock_reader_lock(&gInvokeLock);
-        g_rw_lock_reader_lock(&gForceQuitLock);
         if (gInvoke) {
-                g_rw_lock_reader_unlock(&gForceQuitLock);
                 g_rw_lock_reader_unlock(&gInvokeLock);
                 return stw_fail_by_safe_invoke;
         }
-        if (gForceQuit) {
-                g_rw_lock_reader_unlock(&gForceQuitLock);
+        if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
                 g_rw_lock_reader_unlock(&gInvokeLock);
                 return stw_fail_by_force_quit;
         }
-        g_rw_lock_reader_unlock(&gForceQuitLock);
         g_rw_lock_reader_unlock(&gInvokeLock);
         g_atomic_int_set(&gSTWRequestedAtm, gSTWRequest_V);
         sem_p_wait(gResQ);
@@ -296,13 +290,14 @@ static void bc_resume_stw() {
 static gpointer gc_run(gpointer data) {
         bc_Heap* self = bc_GetHeap();
         while (true) {
-                if (is_force_quit_now()) {
+                if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
                         break;
                 }
                 safe_invoke();
                 //ヒープを保護してルートを取得
                 if (bc_request_stw() == stw_success) {
-                        if (is_force_quit_now()) {
+                        if (g_atomic_int_get(&gForceQuitAtm) ==
+                            gForceQuitYes_V) {
                                 break;
                         }
                         gc_promotion(self);
@@ -312,7 +307,8 @@ static gpointer gc_run(gpointer data) {
                         gc_mark(self);
                         //ライトバリアーを確認
                         if (bc_request_stw() == stw_success) {
-                                if (is_force_quit_now()) {
+                                if (g_atomic_int_get(&gForceQuitAtm) ==
+                                    gForceQuitYes_V) {
                                         break;
                                 }
                                 gc_mark_wait(self);
@@ -505,14 +501,6 @@ static bool is_contains_diff_on_roots() {
         }
         gc_roots_unlock();
         return false;
-}
-
-static bool is_force_quit_now() {
-        bool ret = false;
-        g_rw_lock_reader_lock(&gForceQuitLock);
-        ret = gForceQuit;
-        g_rw_lock_reader_unlock(&gForceQuitLock);
-        return ret;
 }
 
 static void gc_roots_lock() { g_rec_mutex_lock(&gRootsMtx); }
