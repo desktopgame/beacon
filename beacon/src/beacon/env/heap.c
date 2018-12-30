@@ -16,6 +16,7 @@ typedef enum stw_result {
         stw_fail_by_safe_invoke,
         stw_fail_by_force_quit,
         stw_fail_by_join,
+        stw_fail_by_fgc,
 } stw_result;
 // proto
 static bc_Heap* bc_new_heap();
@@ -35,12 +36,14 @@ static void gc_mark_wait(bc_Heap* self);
 static void gc_mark_barrier(bc_Heap* self);
 static void gc_reset_roots();
 static void gc_reset_mark();
+static void gc_overwrite_mark(bc_ObjectPaint paint);
 static void gc_sweep(bc_Heap* self);
 static void gc_delete(bc_VectorItem item);
 static bool is_contains_diff_on_roots();
 static void gc_roots_lock();
 static void gc_roots_unlock();
 static void safe_invoke();
+static bool gc_full();
 
 static bc_Heap* gHeap = NULL;
 static int gGCRuns = 0;
@@ -79,6 +82,11 @@ static volatile gint gStopForInvokeAtm = gInvokeStopForInvokeNo_V;
 #define gJoinNo_V (0)
 static volatile gint gJoinAtm = gJoinNo_V;
 
+#define gFGCYes_V (1)
+#define gFGCNo_V (0)
+static volatile gint gFGCAtm = gFGCNo_V;
+static GAsyncQueue* gFGCQ;
+
 // Roots
 static GRecMutex gRootsMtx;
 
@@ -103,6 +111,7 @@ void bc_InitHeap() {
         gHeap = bc_new_heap();
         gInvokeReqQ = g_async_queue_new();
         gInvokeResQ = g_async_queue_new();
+        gFGCQ = g_async_queue_new();
         gGCThread = g_thread_new("gc", gc_run, NULL);
 #ifdef REPORT_GC
         //リポートファイルをクリアして作成
@@ -129,6 +138,7 @@ void bc_DestroyHeap() {
         int idc = bc_CountActiveObject();
         g_async_queue_unref(gReqQ);
         g_async_queue_unref(gResQ);
+        g_async_queue_unref(gFGCQ);
         MEM_FREE(gHeap);
         gGCThread = NULL;
         gHeap = NULL;
@@ -190,11 +200,13 @@ void bc_WaitFullGC() {
         if (gHeap == NULL) {
                 return;
         }
-        while (is_contains_diff_on_roots()) {
-                bc_CheckSTWRequest();
+        g_atomic_int_set(&gFGCAtm, gFGCYes_V);
+        //現在STWを待機しているか
+        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
+                write_stw_result(stw_fail_by_fgc);
+                sem_v_signal(gResQ);
         }
-        bc_CheckSTWRequest();
-        bc_CheckSTWRequest();
+        g_async_queue_pop(gFGCQ);
 }
 
 void bc_CheckSTWRequest() {
@@ -280,6 +292,10 @@ static stw_result bc_request_stw() {
                 g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
                 return stw_fail_by_join;
         }
+        if (g_atomic_int_get(&gFGCAtm) == gFGCYes_V) {
+                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
+                return stw_fail_by_fgc;
+        }
         sem_p_wait(gResQ);
         return read_stw_result();
 }
@@ -297,6 +313,7 @@ static gpointer gc_run(gpointer data) {
                 if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
                         break;
                 }
+                gc_full();
                 safe_invoke();
                 //ヒープを保護してルートを取得
                 if (bc_request_stw() == stw_success) {
@@ -442,6 +459,19 @@ static void gc_reset_mark() {
         }
 }
 
+static void gc_overwrite_mark(bc_ObjectPaint paint) {
+        bc_Cache* iter = gHeap->Objects;
+        while (iter != NULL) {
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                bc_Object* obj = iter->Data;
+                obj->Paint = paint;
+                iter = iter->Next;
+        }
+}
+
 static void gc_sweep(bc_Heap* self) {
         gGCRuns++;
 #ifdef REPORT_GC
@@ -518,4 +548,19 @@ static void safe_invoke() {
                 sem_p_wait(gInvokeReqQ);
         }
         g_atomic_int_set(&gStopForInvokeAtm, gInvokeStopForInvokeNo_V);
+}
+
+static bool gc_full() {
+        if (g_atomic_int_get(&gFGCAtm) != gFGCYes_V) {
+                return false;
+        }
+        gc_overwrite_mark(PAINT_UNMARKED_T);
+        gc_reset_roots();
+        bc_Heap* he = bc_GetHeap();
+        gc_collect_all_root(he);
+        gc_mark(he);
+        gc_sweep(he);
+        g_atomic_int_set(&gFGCAtm, gFGCNo_V);
+        g_async_queue_push(gFGCQ, GINT_TO_POINTER(1));
+        return true;
 }
