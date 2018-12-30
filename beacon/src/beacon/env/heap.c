@@ -127,12 +127,12 @@ void bc_DestroyHeap() {
         // ロック中なら強制的に再開
         // resume_stwの後に毎回確認される
         g_atomic_int_set(&gJoinAtm, gJoinYes_V);
-        bc_BeginHeapSafeInvoke();
+        // bc_BeginHeapSafeInvoke();
         g_atomic_int_set(&gForceQuitAtm, gForceQuitYes_V);
         if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
                 sem_v_signal(gResQ);
         }
-        bc_EndHeapSafeInvoke();
+        // bc_EndHeapSafeInvoke();
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
         int idc = bc_CountActiveObject();
