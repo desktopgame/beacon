@@ -15,6 +15,7 @@ typedef enum stw_result {
         stw_success,
         stw_fail_by_safe_invoke,
         stw_fail_by_force_quit,
+        stw_fail_by_join,
 } stw_result;
 // proto
 static bc_Heap* bc_new_heap();
@@ -74,6 +75,10 @@ static volatile gint gInvokeAtm = gInvokeNo_V;
 #define gInvokeStopForInvokeNo_V (0)
 static volatile gint gStopForInvokeAtm = gInvokeStopForInvokeNo_V;
 
+#define gJoinYes_V (1)
+#define gJoinNo_V (0)
+static volatile gint gJoinAtm = gJoinNo_V;
+
 // Roots
 static GRecMutex gRootsMtx;
 
@@ -112,9 +117,10 @@ void bc_DestroyHeap() {
         bc_WaitFullGC();
         // ロック中なら強制的に再開
         // resume_stwの後に毎回確認される
+        g_atomic_int_set(&gJoinAtm, gJoinYes_V);
         bc_BeginHeapSafeInvoke();
+        g_atomic_int_set(&gForceQuitAtm, gForceQuitYes_V);
         if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
-                g_atomic_int_set(&gForceQuitAtm, gForceQuitYes_V);
                 sem_v_signal(gResQ);
         }
         bc_EndHeapSafeInvoke();
@@ -261,13 +267,19 @@ static void sem_v_signal(GAsyncQueue* q) {
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
 static stw_result bc_request_stw() {
+        g_atomic_int_set(&gSTWRequestedAtm, gSTWRequest_V);
         if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
+                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
                 return stw_fail_by_safe_invoke;
         }
         if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
+                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
                 return stw_fail_by_force_quit;
         }
-        g_atomic_int_set(&gSTWRequestedAtm, gSTWRequest_V);
+        if (g_atomic_int_get(&gJoinAtm) == gJoinYes_V) {
+                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
+                return stw_fail_by_join;
+        }
         sem_p_wait(gResQ);
         return read_stw_result();
 }
