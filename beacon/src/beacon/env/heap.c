@@ -51,9 +51,6 @@ static void gc_reset_mark();
 static void gc_overwrite_mark(bc_ObjectPaint paint);
 static void gc_sweep();
 static void gc_delete(bc_VectorItem item);
-static bool is_contains_diff_on_roots();
-static void gc_roots_lock();
-static void gc_roots_unlock();
 static void safe_invoke();
 static bool gc_full();
 
@@ -397,7 +394,6 @@ static void gc_collect_all_root() {
 }
 
 static void gc_mark() {
-        gc_roots_lock();
         bc_Cache* iter = gHeap->Roots;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
@@ -410,7 +406,6 @@ static void gc_mark() {
                 }
                 iter = iter->Next;
         }
-        gc_roots_unlock();
 }
 
 static void gc_mark_wait() {
@@ -449,11 +444,7 @@ static void gc_mark_barrier() {
         }
 }
 
-static void gc_reset_roots() {
-        gc_roots_lock();
-        bc_EraseCacheAll(gHeap->Roots);
-        gc_roots_unlock();
-}
+static void gc_reset_roots() { bc_EraseCacheAll(gHeap->Roots); }
 
 static void gc_reset_mark() {
         bc_Cache* iter = gHeap->Objects;
@@ -527,29 +518,6 @@ static void gc_delete(bc_VectorItem item) {
         bc_Object* e = (bc_Object*)item;
         bc_DeleteObject(e);
 }
-
-static bool is_contains_diff_on_roots() {
-        gc_roots_lock();
-        bc_Cache* iter = gHeap->Roots;
-        while (iter != NULL) {
-                if (iter->Data == NULL) {
-                        iter = iter->Next;
-                        continue;
-                }
-                bc_Object* o = iter->Data;
-                if (o->Paint == PAINT_DIFF_T) {
-                        gc_roots_unlock();
-                        return true;
-                }
-                iter = iter->Next;
-        }
-        gc_roots_unlock();
-        return false;
-}
-
-static void gc_roots_lock() { g_rec_mutex_lock(&gRootsMtx); }
-
-static void gc_roots_unlock() { g_rec_mutex_unlock(&gRootsMtx); }
 
 static void safe_invoke() {
         if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
