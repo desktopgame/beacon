@@ -23,8 +23,8 @@
 #include "../../il/il_parameter.h"
 #include "../../il/il_property.h"
 #include "../../il/il_stmt_interface.h"
-#include "../../util/text.h"
 #include "../../util/mem.h"
+#include "../../util/text.h"
 #include "../../vm/script_thread.h"
 #include "../../vm/symbol_entry.h"
 #include "class_loader_ilload_stmt_module_impl.h"
@@ -124,9 +124,8 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
         //静的フィールドならついでに初期化
         //静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
         bc_Heap* he = bc_GetHeap();
-        int abtmp = he->AcceptBlocking;
-        he->CollectBlocking++;
-        he->AcceptBlocking = 0;
+        int abtemp = bc_BeginNewRuntime();
+        bc_BeginGCPending();
         if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(fi))) {
                 bc_Frame* f = bc_NewFrame();
                 bc_SetScriptThreadFrameRef(bc_GetMainScriptThread(), f);
@@ -135,8 +134,8 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
                 bc_ReleaseScriptThreadFrameRef(bc_GetMainScriptThread());
                 bc_DeleteFrame(f);
         }
-        he->AcceptBlocking = abtmp;
-        he->CollectBlocking--;
+        bc_EndNewRuntime(abtemp);
+        bc_EndGCPending();
         return true;
 }
 

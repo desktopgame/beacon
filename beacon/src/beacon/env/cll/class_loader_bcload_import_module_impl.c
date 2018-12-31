@@ -44,9 +44,9 @@ void CLBC_import(bc_ClassLoader* self, bc_Vector* ilimports) {
 void CLBC_new_load(bc_ClassLoader* self, char* fullPath) {
         bc_CL_ERROR(self);
         bc_Heap* he = bc_GetHeap();
-        he->AcceptBlocking++;
+        bc_BeginNewConstant();
         CLBC_new_load_internal(self, fullPath);
-        he->AcceptBlocking--;
+        bc_EndNewConstant();
 }
 
 bc_ClassLoader* CLBC_import_new(bc_ClassLoader* self, char* full_path) {

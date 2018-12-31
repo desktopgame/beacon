@@ -10,6 +10,19 @@
 #include "../vm/vm.h"
 #include "script_context.h"
 
+struct bc_Heap {
+        bc_Cache* Objects;
+        bc_Cache* Roots;
+        //この値が 1以上 なら、新しく確保されたオブジェクトは
+        //ヒープに関連づけられません。
+        //つまり、オブジェクトを自分で解放する必要があります。
+        //これはリテラルのための機構です。
+        int AcceptBlocking;
+        //この値が 1以上 なら、新しくオブジェクトを確保した時に
+        //オブジェクトの総数が閾値を上回っていてもGCを施工しません。
+        int CollectBlocking;
+};
+
 typedef enum stw_result {
         stw_none,
         stw_success,
@@ -243,6 +256,43 @@ void bc_EndHeapSafeInvoke() {
         g_atomic_int_set(&gInvokeAtm, gInvokeNo_V);
         //スレッドを再開
         sem_v_signal(gInvokeReqQ);
+}
+
+void bc_BeginNewConstant() {
+        bc_Heap* he = bc_GetHeap();
+        he->AcceptBlocking++;
+}
+
+void bc_EndNewConstant() {
+        bc_Heap* he = bc_GetHeap();
+        he->AcceptBlocking--;
+}
+
+int bc_BeginNewRuntime() {
+        bc_Heap* he = bc_GetHeap();
+        int ret = he->AcceptBlocking;
+        he->AcceptBlocking = 0;
+}
+
+void bc_EndNewRuntime(int depth) {
+        bc_Heap* he = bc_GetHeap();
+        he->AcceptBlocking = depth;
+}
+
+void bc_BeginGCPending() {
+        bc_Heap* he = bc_GetHeap();
+        he->CollectBlocking++;
+}
+
+void bc_EndGCPending() {
+        bc_Heap* he = bc_GetHeap();
+        he->CollectBlocking--;
+}
+
+void bc_ResetHeapState() {
+        bc_Heap* he = bc_GetHeap();
+        he->AcceptBlocking = 0;
+        he->CollectBlocking = 0;
 }
 
 // private

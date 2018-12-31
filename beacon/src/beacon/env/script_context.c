@@ -94,25 +94,24 @@ void bc_CollectStaticFields(bc_ScriptContext* self, bc_Cache* cache) {
 bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
         bc_Heap* he = bc_GetHeap();
         bc_NumericMap* cell = bc_GetNumericMapCell(self->IntegerCacheMap, i);
-        he->AcceptBlocking++;
+        bc_BeginNewConstant();
         if (cell == NULL) {
                 bc_Object* obj = (bc_Object*)bc_NewInteger(i);
                 obj->Paint = PAINT_ONEXIT_T;
                 cell = bc_PutNumericMap(self->IntegerCacheMap, i, obj);
         }
-        he->AcceptBlocking--;
+        bc_EndNewConstant();
         return (bc_Object*)cell->Item;
 }
 
 void bc_CacheScriptContext() {
         bc_ScriptContext* self = bc_GetScriptContext();
         if (self == NULL) return;
-        bc_Heap* h = bc_GetHeap();
-        if (h != NULL) h->AcceptBlocking++;
+        bc_BeginNewConstant();
         //すでにキャッシュされている
         if (self->PositiveIntegerCacheList->Length > 0 ||
             self->NegativeIntegerCacheList->Length > 0) {
-                if (h != NULL) h->AcceptBlocking--;
+                bc_EndNewConstant();
                 return;
         }
         //正の数のキャッシュ
@@ -127,7 +126,7 @@ void bc_CacheScriptContext() {
                 bc_PushVector(self->NegativeIntegerCacheList, a);
                 a->Paint = PAINT_ONEXIT_T;
         }
-        if (h != NULL) h->AcceptBlocking--;
+        bc_EndNewConstant();
 }
 
 // private
@@ -230,7 +229,7 @@ static void mark_static(bc_Field* item) {
 }
 
 static void boot(bc_ScriptContext* self) {
-        bc_GetHeap()->AcceptBlocking++;
+        bc_BeginNewConstant();
         self->IsLoadForBoot = true;
         //プリロード
         bc_Namespace* beacon =
@@ -295,7 +294,7 @@ static void boot(bc_ScriptContext* self) {
 
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/World.bc");
-        //退避していたコンテキストを復帰
-        bc_GetHeap()->AcceptBlocking--;
+        //退避していたコンテキストを復
+        bc_EndNewConstant();
         self->IsLoadForBoot = false;
 }

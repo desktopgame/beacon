@@ -38,8 +38,7 @@ static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr,
             bc_FindClassFromNamespace(lang, bc_InternString("Exception"));
         bc_Object* self = (bc_Object*)bc_AtVector(fr->VariableTable, 0);
         // FXIME:???
-        bc_Heap* h = bc_GetHeap();
-        h->CollectBlocking++;
+        bc_BeginGCPending();
         //スタックトレースを作成する
         bc_Frame* temp = fr;
         bc_Vector* stackTraceElementVec = bc_NewVector();
@@ -90,5 +89,5 @@ static void bc_exception_nativeInit(bc_Method* parent, bc_Frame* fr,
             exceptionClass, bc_InternString("stackTrace"), &tempi);
         bc_AssignVector(self->Fields, tempi, arr);
         bc_DeleteVector(stackTraceElementVec, bc_VectorDeleterOfNull);
-        h->CollectBlocking--;
+        bc_EndGCPending();
 }

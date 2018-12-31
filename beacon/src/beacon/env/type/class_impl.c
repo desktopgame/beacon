@@ -113,7 +113,7 @@ void bc_AllocFieldsClass(bc_Class* self, bc_Object* o, bc_Frame* fr) {
                 if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(f))) {
                         continue;
                 }
-                he->CollectBlocking++;
+                bc_BeginGCPending();
                 if (f->InitialValue != NULL) {
                         bc_Frame* sub = bc_SubFrame(fr);
                         for (int i = 0; i < fr->TypeArgs->Length; i++) {
@@ -127,7 +127,7 @@ void bc_AllocFieldsClass(bc_Class* self, bc_Object* o, bc_Frame* fr) {
                         bc_DeleteFrame(sub);
                 }
                 bc_PushVector(o->Fields, a);
-                he->CollectBlocking--;
+                bc_EndGCPending();
         }
 }
 
@@ -383,9 +383,9 @@ bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
         }
         bc_ExecuteVM(sub, ctor->Env);
         bc_Object* inst = bc_PopVector(sub->ValueStack);
-        h->CollectBlocking++;
+        bc_BeginGCPending();
         bc_DeleteFrame(sub);
-        h->CollectBlocking--;
+        bc_EndGCPending();
         //呼び出しフレームの削除
         bc_PopCallFrame(cctx);
         bc_DeleteCallContext(cctx);

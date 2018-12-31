@@ -18,18 +18,7 @@
 /**
  * オブジェクトの一覧を格納します.
  */
-typedef struct bc_Heap {
-        bc_Cache* Objects;
-        bc_Cache* Roots;
-        //この値が 1以上 なら、新しく確保されたオブジェクトは
-        //ヒープに関連づけられません。
-        //つまり、オブジェクトを自分で解放する必要があります。
-        //これはリテラルのための機構です。
-        int AcceptBlocking;
-        //この値が 1以上 なら、新しくオブジェクトを確保した時に
-        //オブジェクトの総数が閾値を上回っていてもGCを施工しません。
-        int CollectBlocking;
-} bc_Heap;
+typedef struct bc_Heap bc_Heap;
 
 /**
  * ヒープを初期化します。
@@ -85,4 +74,18 @@ void bc_CheckSTWRequest();
 void bc_BeginHeapSafeInvoke();
 
 void bc_EndHeapSafeInvoke();
+
+void bc_BeginNewConstant();
+
+void bc_EndNewConstant();
+
+int bc_BeginNewRuntime();
+
+void bc_EndNewRuntime(int depth);
+
+void bc_BeginGCPending();
+
+void bc_EndGCPending();
+
+void bc_ResetHeapState();
 #endif  // !SIGNAL_ENV_HEAP_H

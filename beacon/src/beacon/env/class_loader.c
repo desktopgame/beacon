@@ -88,22 +88,21 @@ void bc_LoadClassLoader(bc_ClassLoader* self) {
 void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a) {
         bc_Recover();
         bc_Heap* hee = bc_GetHeap();
-        hee->AcceptBlocking++;
+        bc_BeginNewConstant();
         self->SourceCode = a;
         load_class(self);
-        hee->AcceptBlocking--;
+        bc_EndNewConstant();
 }
 
 void bc_SpecialLoadClassLoader(bc_ClassLoader* self, char* relativePath) {
         char* fullP = bc_ResolveScriptPath(relativePath);
         bc_ScriptContext* ctx = bc_GetScriptContext();
-        bc_Heap* he = bc_GetHeap();
         bc_ClassLoader* cll = bc_GetTreeMapValue(ctx->ClassLoaderMap, fullP);
-        he->AcceptBlocking++;
+        bc_BeginNewConstant();
         if (cll == NULL) {
                 cll = load_special_class(self, cll, fullP);
         }
-        he->AcceptBlocking--;
+        bc_EndNewConstant();
         MEM_FREE(fullP);
 }
 
