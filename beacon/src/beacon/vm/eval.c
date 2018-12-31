@@ -50,7 +50,6 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
         bc_Frame* fr = bc_NewFrame();
         bc_SetScriptThreadFrameRef(bc_GetCurrentScriptThread(), fr);
         //エラーによって中断された場合のため、ここで戻す
-        bc_Heap* he = bc_GetHeap();
         bc_ResetHeapState();
 #if defined(DEBUG)
         bc_Printfln("start");

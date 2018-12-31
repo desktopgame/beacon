@@ -43,7 +43,6 @@ void CLBC_import(bc_ClassLoader* self, bc_Vector* ilimports) {
 
 void CLBC_new_load(bc_ClassLoader* self, char* fullPath) {
         bc_CL_ERROR(self);
-        bc_Heap* he = bc_GetHeap();
         bc_BeginNewConstant();
         CLBC_new_load_internal(self, fullPath);
         bc_EndNewConstant();

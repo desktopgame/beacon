@@ -40,16 +40,16 @@ static stw_result bc_request_stw();
 static void bc_resume_stw();
 // gc
 static gpointer gc_run(gpointer data);
-static void gc_promotion(bc_Heap* self);
-static void gc_collect_all_root(bc_Heap* self);
-static void gc_clear(bc_Heap* self);
-static void gc_mark(bc_Heap* self);
-static void gc_mark_wait(bc_Heap* self);
-static void gc_mark_barrier(bc_Heap* self);
+static void gc_promotion();
+static void gc_collect_all_root();
+static void gc_clear();
+static void gc_mark();
+static void gc_mark_wait();
+static void gc_mark_barrier();
 static void gc_reset_roots();
 static void gc_reset_mark();
 static void gc_overwrite_mark(bc_ObjectPaint paint);
-static void gc_sweep(bc_Heap* self);
+static void gc_sweep();
 static void gc_delete(bc_VectorItem item);
 static bool is_contains_diff_on_roots();
 static void gc_roots_lock();
@@ -158,19 +158,13 @@ void bc_DestroyHeap() {
 #endif
 }
 
-bc_Heap* bc_GetHeap() {
-        assert(gHeap != NULL);
-        return gHeap;
-}
-
 void bc_AddHeap(bc_Object* obj) {
-        bc_Heap* self = bc_GetHeap();
         //定数は入れてはいけない
-        if (self == NULL || self->AcceptBlocking > 0) {
+        if (gHeap == NULL || gHeap->AcceptBlocking > 0) {
                 obj->Paint = PAINT_ONEXIT_T;
                 return;
         }
-        bc_StoreCache(self->Objects, obj);
+        bc_StoreCache(gHeap->Objects, obj);
 }
 
 void bc_AddRoot(bc_Object* obj) {
@@ -178,18 +172,18 @@ void bc_AddRoot(bc_Object* obj) {
                 return;
         }
         if (obj->Paint != PAINT_ONEXIT_T) {
-                bc_StoreCache(bc_GetHeap()->Roots, obj);
+                bc_StoreCache(gHeap->Roots, obj);
         }
 }
 
 void bc_IgnoreHeap(bc_Object* o) {
         bc_CheckSTWRequest();
-        bc_EraseCache(bc_GetHeap()->Objects, o);
+        bc_EraseCache(gHeap->Objects, o);
 }
 
 void bc_DumpHeap() {
         printf("heap dump:\n");
-        bc_Cache* iter = bc_GetHeap()->Objects;
+        bc_Cache* iter = gHeap->Objects;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
@@ -222,7 +216,7 @@ void bc_CheckSTWRequest() {
                         "this function must be not called from gc thread\n");
                 abort();
         }
-        if (bc_GetHeap()->CollectBlocking > 0) {
+        if (gHeap->CollectBlocking > 0) {
                 return;
         }
         if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWNotRequest_V) {
@@ -258,41 +252,24 @@ void bc_EndHeapSafeInvoke() {
         sem_v_signal(gInvokeReqQ);
 }
 
-void bc_BeginNewConstant() {
-        bc_Heap* he = bc_GetHeap();
-        he->AcceptBlocking++;
-}
+void bc_BeginNewConstant() { gHeap->AcceptBlocking++; }
 
-void bc_EndNewConstant() {
-        bc_Heap* he = bc_GetHeap();
-        he->AcceptBlocking--;
-}
+void bc_EndNewConstant() { gHeap->AcceptBlocking--; }
 
 int bc_BeginNewRuntime() {
-        bc_Heap* he = bc_GetHeap();
-        int ret = he->AcceptBlocking;
-        he->AcceptBlocking = 0;
+        int ret = gHeap->AcceptBlocking;
+        gHeap->AcceptBlocking = 0;
 }
 
-void bc_EndNewRuntime(int depth) {
-        bc_Heap* he = bc_GetHeap();
-        he->AcceptBlocking = depth;
-}
+void bc_EndNewRuntime(int depth) { gHeap->AcceptBlocking = depth; }
 
-void bc_BeginGCPending() {
-        bc_Heap* he = bc_GetHeap();
-        he->CollectBlocking++;
-}
+void bc_BeginGCPending() { gHeap->CollectBlocking++; }
 
-void bc_EndGCPending() {
-        bc_Heap* he = bc_GetHeap();
-        he->CollectBlocking--;
-}
+void bc_EndGCPending() { gHeap->CollectBlocking--; }
 
 void bc_ResetHeapState() {
-        bc_Heap* he = bc_GetHeap();
-        he->AcceptBlocking = 0;
-        he->CollectBlocking = 0;
+        gHeap->AcceptBlocking = 0;
+        gHeap->CollectBlocking = 0;
 }
 
 // private
@@ -343,7 +320,6 @@ static void bc_resume_stw() {
 // gc
 
 static gpointer gc_run(gpointer data) {
-        bc_Heap* self = bc_GetHeap();
         while (true) {
                 if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
                         break;
@@ -356,22 +332,22 @@ static gpointer gc_run(gpointer data) {
                             gForceQuitYes_V) {
                                 break;
                         }
-                        gc_promotion(self);
-                        gc_collect_all_root(self);
+                        gc_promotion();
+                        gc_collect_all_root();
                         bc_resume_stw();
                         //ルートを全てマーク
-                        gc_mark(self);
+                        gc_mark();
                         //ライトバリアーを確認
                         if (bc_request_stw() == stw_success) {
                                 if (g_atomic_int_get(&gForceQuitAtm) ==
                                     gForceQuitYes_V) {
                                         break;
                                 }
-                                gc_mark_wait(self);
-                                gc_mark_barrier(self);
+                                gc_mark_wait();
+                                gc_mark_barrier();
                                 bc_resume_stw();
                                 //ライトバリアーを確認
-                                gc_sweep(self);
+                                gc_sweep();
                         } else {
                                 gc_reset_roots();
                                 gc_reset_mark();
@@ -384,8 +360,8 @@ static gpointer gc_run(gpointer data) {
         return NULL;
 }
 
-static void gc_promotion(bc_Heap* self) {
-        bc_Cache* iter = self->Roots;
+static void gc_promotion() {
+        bc_Cache* iter = gHeap->Roots;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
@@ -399,11 +375,11 @@ static void gc_promotion(bc_Heap* self) {
         }
 }
 
-static void gc_collect_all_root(bc_Heap* self) {
+static void gc_collect_all_root() {
         //全ての静的フィールドをマーク
         bc_ScriptContext* sctx = bc_GetScriptContext();
         if (bc_GetScriptContextState() != SCTX_STATE_DESTROYED) {
-                bc_CollectStaticFields(sctx, self->Roots);
+                bc_CollectStaticFields(sctx, gHeap->Roots);
         }
         // true, false, null
         bc_AddRoot(bc_GetUniqueTrueObject(sctx));
@@ -415,14 +391,14 @@ static void gc_collect_all_root(bc_Heap* self) {
                 // GC直後にフレームを解放した場合はNULLになる
                 bc_Frame* top = bc_GetScriptThreadFrameRef(th);
                 if (top != NULL) {
-                        bc_CollectAllFrame(top, self->Roots);
+                        bc_CollectAllFrame(top, gHeap->Roots);
                 }
         }
 }
 
-static void gc_mark(bc_Heap* self) {
+static void gc_mark() {
         gc_roots_lock();
-        bc_Cache* iter = self->Roots;
+        bc_Cache* iter = gHeap->Roots;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
@@ -437,8 +413,8 @@ static void gc_mark(bc_Heap* self) {
         gc_roots_unlock();
 }
 
-static void gc_mark_wait(bc_Heap* self) {
-        bc_Cache* iter = self->Objects;
+static void gc_mark_wait() {
+        bc_Cache* iter = gHeap->Objects;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
@@ -453,8 +429,8 @@ static void gc_mark_wait(bc_Heap* self) {
         }
 }
 
-static void gc_mark_barrier(bc_Heap* self) {
-        bc_Cache* iter = self->Objects;
+static void gc_mark_barrier() {
+        bc_Cache* iter = gHeap->Objects;
         while (iter != NULL) {
                 bc_Object* e = iter->Data;
                 if (iter->Data == NULL) {
@@ -507,7 +483,7 @@ static void gc_overwrite_mark(bc_ObjectPaint paint) {
         }
 }
 
-static void gc_sweep(bc_Heap* self) {
+static void gc_sweep() {
         gGCRuns++;
 #ifdef REPORT_GC
         GTimeVal before, after;
@@ -515,7 +491,7 @@ static void gc_sweep(bc_Heap* self) {
 #endif
         int all = 0;
         int sweep = 0;
-        bc_Cache* iter = self->Objects;
+        bc_Cache* iter = gHeap->Objects;
         while (iter != NULL) {
                 bc_Object* e = iter->Data;
                 if (iter->Data == NULL) {
@@ -554,8 +530,7 @@ static void gc_delete(bc_VectorItem item) {
 
 static bool is_contains_diff_on_roots() {
         gc_roots_lock();
-        bc_Heap* self = bc_GetHeap();
-        bc_Cache* iter = self->Roots;
+        bc_Cache* iter = gHeap->Roots;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
@@ -591,10 +566,9 @@ static bool gc_full() {
         }
         gc_overwrite_mark(PAINT_UNMARKED_T);
         gc_reset_roots();
-        bc_Heap* he = bc_GetHeap();
-        gc_collect_all_root(he);
-        gc_mark(he);
-        gc_sweep(he);
+        gc_collect_all_root();
+        gc_mark();
+        gc_sweep();
         g_atomic_int_set(&gFGCAtm, gFGCNo_V);
         g_async_queue_push(gFGCQ, GINT_TO_POINTER(1));
         return true;

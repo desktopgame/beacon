@@ -123,7 +123,6 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
         }
         //静的フィールドならついでに初期化
         //静的フィールドでものすごいでかいオブジェクトを確保すると重くなるかも
-        bc_Heap* he = bc_GetHeap();
         int abtemp = bc_BeginNewRuntime();
         bc_BeginGCPending();
         if (bc_IsStaticModifier(BC_MEMBER_MODIFIER(fi))) {

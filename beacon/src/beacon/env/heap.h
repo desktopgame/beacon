@@ -31,12 +31,6 @@ void bc_InitHeap();
 void bc_DestroyHeap();
 
 /**
- * 現在のスクリプトコンテキストでヒープを返します.
- * @return
- */
-bc_Heap* bc_GetHeap();
-
-/**
  * ヒープにオブジェクトを追加します.
  * obj#blockingがtrueなら、
  * 追加せずに obj#paint を PAINT_ONEXIT_T へ変更します。

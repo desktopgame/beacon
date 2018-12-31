@@ -105,7 +105,6 @@ bc_Type* bc_NewPreloadClass(bc_StringView namev) {
 
 void bc_AllocFieldsClass(bc_Class* self, bc_Object* o, bc_Frame* fr) {
         // assert(o->Tag == OBJECT_REF_T);
-        bc_Heap* he = bc_GetHeap();
         for (int i = 0; i < self->Fields->Length; i++) {
                 bc_Field* f = (bc_Field*)bc_AtVector(self->Fields, i);
                 bc_Object* a = bc_GetDefaultObject(f->GType);
@@ -369,7 +368,6 @@ bc_Object* bc_NewInstanceClass(bc_Class* self, bc_Frame* fr, bc_Vector* args,
         assert(temp != -1);
         //コンストラクタを実行
         bc_Frame* sub = bc_SubFrame(fr);
-        bc_Heap* h = bc_GetHeap();
         if (args != NULL) {
                 for (int i = args->Length - 1; i >= 0; i--) {
                         bc_Object* o = bc_AtVector(args, i);

@@ -92,7 +92,6 @@ void bc_CollectStaticFields(bc_ScriptContext* self, bc_Cache* cache) {
 }
 
 bc_Object* bc_IInternScriptContext(bc_ScriptContext* self, int i) {
-        bc_Heap* he = bc_GetHeap();
         bc_NumericMap* cell = bc_GetNumericMapCell(self->IntegerCacheMap, i);
         bc_BeginNewConstant();
         if (cell == NULL) {

@@ -130,7 +130,6 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
         bc_ScriptContext* ctx = bc_GetScriptContext();
         int source_len = env->Bytecode->Instructions->Length;
         self->ContextRef = env;
-        bc_Heap* he = bc_GetHeap();
         for (int IDX = pos; IDX < source_len; IDX++) {
                 //このVMの子要素で例外がスローされ、
                 //それを子要素自身で処理できなかった場合には、

@@ -87,7 +87,6 @@ void bc_LoadClassLoader(bc_ClassLoader* self) {
 
 void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a) {
         bc_Recover();
-        bc_Heap* hee = bc_GetHeap();
         bc_BeginNewConstant();
         self->SourceCode = a;
         load_class(self);
