@@ -92,9 +92,6 @@ static volatile gint gStopForInvokeAtm = gInvokeStopForInvokeNo_V;
 static volatile gint gFGCAtm = gFGCNo_V;
 static GAsyncQueue* gFGCQ;
 
-// Roots
-static GRecMutex gRootsMtx;
-
 static GThread* gGCThread = NULL;
 
 // force quit
