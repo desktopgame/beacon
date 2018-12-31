@@ -37,6 +37,8 @@ static void bc_int_nativeEQ(bc_Method* parent, bc_Frame* fr,
                             bc_Enviroment* env);
 static void bc_int_nativeToChar(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env);
+static void bc_int_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                  bc_Enviroment* env);
 
 bc_Object* bc_NewInteger(int value) {
         bc_Integer* i =
@@ -73,6 +75,8 @@ void bc_InitInt() {
         bc_DefineNativeMethodClass(intClass, "nativeEQ", bc_int_nativeEQ);
         bc_DefineNativeMethodClass(intClass, "nativeToChar",
                                    bc_int_nativeToChar);
+        bc_DefineNativeMethodClass(intClass, "nativeToString",
+                                   bc_int_nativeToString);
 }
 
 bc_Type* bc_GetIntType() {
@@ -223,4 +227,13 @@ static void bc_int_nativeToChar(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_PushVector(fr->ValueStack, bc_NewChar(INT_VALUE(self)));
+}
+
+static void bc_int_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                  bc_Enviroment* env) {
+        bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+        int ivalue = INT_VALUE(self);
+        char buffer[256] = {0};
+        sprintf(buffer, "%d", ivalue);
+        bc_PushVector(fr->ValueStack, bc_NewString(buffer));
 }
