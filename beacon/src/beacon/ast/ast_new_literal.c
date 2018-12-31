@@ -1,8 +1,26 @@
 #include "ast_new_literal.h"
 
+bc_AST* bc_NewASTShort(short s) {
+        bc_AST* ret = bc_NewAST(AST_SHORT_T);
+        ret->Attr.ShortValue = s;
+        return ret;
+}
+
 bc_AST* bc_NewASTInt(int i) {
         bc_AST* ret = bc_NewAST(AST_INT_T);
         ret->Attr.IntValue = i;
+        return ret;
+}
+
+bc_AST* bc_NewASTLong(long l) {
+        bc_AST* ret = bc_NewAST(AST_LONG_T);
+        ret->Attr.LongValue = l;
+        return ret;
+}
+
+bc_AST* bc_NewASTFloat(float f) {
+        bc_AST* ret = bc_NewAST(AST_FLOAT_T);
+        ret->Attr.FloatValue = f;
         return ret;
 }
 
