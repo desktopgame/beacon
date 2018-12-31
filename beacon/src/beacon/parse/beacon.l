@@ -262,12 +262,31 @@ static void update_loc() {
 	bc_GetCurrentParser()->Lineno++;
 }
 
-<INITIAL>[1-9][0-9]* {
-	yylval.ast_value = bc_NewASTInt(atoi(yytext));
+<INITIAL>[1-9][0-9]*[s|S] {
+	yylval.ast_value = bc_NewASTShort((short)atoi(yytext));
+	return SHORT;
+}
+
+<INITIAL>[1-9][0-9]*[i|I]? {
+	yylval.ast_value = bc_NewASTInt(atoit(yytext));
 	return INT;
 }
 
-<INITIAL>[0-9]+\.[0-9]+ {
+<INITIAL>[1-9][0-9]*[f|F] {
+	yylval.ast_value = bc_NewASTFloat(atof(yytext));
+	return FLOAT;
+}
+
+<INITIAL>[0-9]*\.[0-9]+[f|F] {
+	yylval.ast_value = bc_NewASTFloat(atof(yytext));
+	return FLOAT;
+}
+
+<INITIAL>[0-9]*\.[0-9]+[d|D]? {
+	yylval.ast_value = bc_NewASTDouble(atof(yytext));
+	return DOUBLE;
+}
+<INITIAL>[1-9][0-9]*[d|D] {
 	yylval.ast_value = bc_NewASTDouble(atof(yytext));
 	return DOUBLE;
 }

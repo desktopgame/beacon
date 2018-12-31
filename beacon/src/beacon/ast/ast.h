@@ -71,7 +71,10 @@ typedef enum bc_ASTTag {
         AST_OP_CALL_T,
         // int double
         AST_INT_T,
+        AST_FLOAT_T,
         AST_DOUBLE_T,
+        AST_SHORT_T,
+        AST_LONG_T,
         AST_CHAR_T,
         AST_STRING_T,
         AST_VARIABLE_T,
@@ -219,9 +222,12 @@ typedef enum bc_ASTTag {
  */
 typedef struct bc_AST {
         union {
-                int IntValue;
-                double DoubleValue;
                 char CharValue;
+                int IntValue;
+                short ShortValue;
+                long LongValue;
+                float FloatValue;
+                double DoubleValue;
                 bc_StringView StringVValue;
                 bc_AccessLevel AccessValue;
                 bc_ModifierType ModifierValue;

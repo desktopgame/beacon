@@ -27,7 +27,10 @@
 %locations
 %token <ast_value>			CHAR_LITERAL
 %token <ast_value>			STRING_LITERAL
+%token <ast_value>			SHORT
 %token <ast_value>			INT
+%token <ast_value>			LONG
+%token <ast_value>			FLOAT
 %token <ast_value>			DOUBLE
 %token <stringv_value>		IDENT
 %type <chain_type_value>	constructor_chain_type_T
@@ -997,7 +1000,10 @@ lhs
 	}
 	;
 primary
-	: INT
+	: SHORT
+	| INT
+	| LONG
+	| FLOAT
 	| DOUBLE
 	| CHAR_LITERAL
 	| STRING_LITERAL

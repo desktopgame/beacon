@@ -13,10 +13,28 @@
 #include "ast.h"
 
 /**
+ * @param s
+ * @return
+ */
+bc_AST* bc_NewASTShort(short s);
+
+/**
  * 整数型の値を保存する要素を作成します.
  * @param i
  */
 bc_AST* bc_NewASTInt(int i);
+
+/**
+ * @param l
+ * @return
+ */
+bc_AST* bc_NewASTLong(long l);
+
+/**
+ * @param f
+ * @return
+ */
+bc_AST* bc_NewASTFloat(float f);
 
 /**
  * 実数型の値を保存する要素を作成します.
