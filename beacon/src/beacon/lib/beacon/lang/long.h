@@ -32,7 +32,7 @@ struct bc_Object* bc_NewLong(long value);
 void bc_InitLong();
 
 /**
- * beacon::lang::Intを返します.
+ * beacon::lang::Longを返します.
  * @return
  */
 struct bc_Type* bc_GetLongType();

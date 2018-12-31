@@ -121,7 +121,13 @@ bc_Namespace* bc_GetPlaceholderNamespace(bc_ScriptContext* sctx) {
 
 bc_Type* bc_GetObjectTypeNamespace() { return bc_GetObjectType(); }
 
+bc_Type* bc_GetShortTypeNamespace() { return NULL; }
+
 bc_Type* bc_GetIntTypeNamespace() { return bc_GetIntType(); }
+
+bc_Type* bc_GetLongTypeNamespace() { return NULL; }
+
+bc_Type* bc_GetFloatTypeNamespace() { return NULL; }
 
 bc_Type* bc_GetDoubleTypeNamespace() { return bc_GetDoubleType(); }
 

@@ -36,7 +36,7 @@ static void bc_long_nativeEQ(bc_Method* parent, bc_Frame* fr,
 
 bc_Object* bc_NewLong(long value) {
         bc_Long* ret =
-            bc_ConstructObject(NULL, sizeof(bc_Long), BC_GENERIC_OBJECT);
+            bc_ConstructObject(NULL, sizeof(bc_Long), BC_GENERIC_LONG);
         ret->Value = value;
         return (bc_Object*)ret;
 }

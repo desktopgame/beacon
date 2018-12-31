@@ -1,0 +1,118 @@
+//require "beacon/lang/Console"
+
+namespace beacon::lang {
+	class Long {
+		public:
+		def new(Long i) {
+			this.nativeInit(i);
+		}
+
+		def equals(Object a) -> Bool {
+			if(!(a is Long)) {
+				return false;
+			}
+			return nativeEquals(a);
+		}
+
+		def toString() -> String {
+			return nativeToString();
+		}
+
+		operator +(Long a) -> Long {
+			return nativeAdd(a);
+		}
+
+		operator -(Long a) -> Long {
+			return nativeSub(a);
+		}
+
+		operator *(Long a) -> Long {
+			return nativeMul(a);
+		}
+
+		operator /(Long a) -> Long {
+			return nativeDiv(a);
+		}
+
+		operator %(Long a) -> Long {
+			return nativeMod(a);
+		}
+
+		operator <<(Long a) -> Long {
+			return nativeLShift(a);
+		}
+
+		operator >>(Long a) -> Long {
+			return nativeRShift(a);
+		}
+
+		operator |(Long a) -> Long {
+			return nativeBitOr(a);
+		}
+
+		operator &(Long a) -> Long {
+			return nativeBitAnd(a);
+		}
+
+		operator >(Long a) -> Bool {
+			return nativeGT(a);
+		}
+
+		operator >=(Long a) -> Bool {
+			return nativeGE(a);
+		}
+
+		operator <(Long a) -> Bool {
+			return nativeLT(a);
+		}
+
+		operator <=(Long a) -> Bool {
+			return nativeLE(a);
+		}
+
+		operator ==(Long a) -> Bool {
+			return nativeEQ(a);
+		}
+
+		operator != (Long a) -> Bool {
+			return !nativeEQ(a);
+		}
+
+		operator -() -> Long {
+			return nativeMul(-1);
+		}
+
+		private:
+		def native nativeInit(Long i) -> Void;
+
+		def native nativeAdd(Long a) -> Long;
+
+		def native nativeSub(Long a) -> Long;
+
+		def native nativeMul(Long a) -> Long;
+
+		def native nativeDiv(Long a) -> Long;
+
+		def native nativeMod(Long a) -> Long;
+
+		def native nativeLShift(Long a) -> Long;
+
+		def native nativeRShift(Long a) -> Long;
+
+		def native nativeGT(Long a) -> Bool;
+
+		def native nativeGE(Long a) -> Bool;
+
+		def native nativeLT(Long a) -> Bool;
+
+		def native nativeLE(Long a) -> Bool;
+
+		def native nativeBitOr(Long a) -> Long;
+
+		def native nativeBitAnd(Long a) -> Long;
+
+		def native nativeEQ(Long a) -> Bool;
+
+		def native nativeEquals(Object a) -> Bool;
+	}
+}

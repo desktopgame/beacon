@@ -17,7 +17,10 @@
 #include "../util/vector.h"
 struct bc_ScriptContext;
 #define BC_TYPE_OBJECT (bc_GetObjectTypeNamespace())
+#define BC_TYPE_SHORT (bc_GetShortTypeNamespace())
 #define BC_TYPE_INT (bc_GetIntTypeNamespace())
+#define BC_TYPE_LONG (bc_GetLongTypeNamespace())
+#define BC_TYPE_FLOAT (bc_GetFloatTypeNamespace())
 #define BC_TYPE_DOUBLE (bc_GetDoubleTypeNamespace())
 #define BC_TYPE_CHAR (bc_GetCharTypeNamespace())
 #define BC_TYPE_STRING (bc_GetStringTypeNamespace())
@@ -27,7 +30,10 @@ struct bc_ScriptContext;
 #define BC_TYPE_EXCEPTION (bc_GetExceptionTypeNamespace())
 
 #define BC_GENERIC_OBJECT ((bc_GetObjectTypeNamespace()->GenericSelf))
+#define BC_GENERIC_SHORT ((bc_GetShortTypeNamespace()->GenericSelf))
 #define BC_GENERIC_INT ((bc_GetIntTypeNamespace()->GenericSelf))
+#define BC_GENERIC_LONG ((bc_GetLongTypeNamespace()->GenericSelf))
+#define BC_GENERIC_FLOAT ((bc_GetFloatTypeNamespace()->GenericSelf))
 #define BC_GENERIC_DOUBLE ((bc_GetDoubleTypeNamespace()->GenericSelf))
 #define BC_GENERIC_CHAR ((bc_GetCharTypeNamespace()->GenericSelf))
 #define BC_GENERIC_STRING ((bc_GetStringTypeNamespace()->GenericSelf))
@@ -164,10 +170,25 @@ bc_Namespace* bc_GetPlaceholderNamespace(struct bc_ScriptContext* sctx);
 struct bc_Type* bc_GetObjectTypeNamespace();
 
 /**
+ * @return
+ */
+struct bc_Type* bc_GetShortTypeNamespace();
+
+/**
  * 現在のスクリプトコンテキストで int タイプを返します.
  * @return
  */
 struct bc_Type* bc_GetIntTypeNamespace();
+
+/**
+ * @return
+ */
+struct bc_Type* bc_GetLongTypeNamespace();
+
+/**
+ * @return
+ */
+struct bc_Type* bc_GetFloatTypeNamespace();
 
 /**
  * 現在のスクリプトコンテキストで double タイプを返します.

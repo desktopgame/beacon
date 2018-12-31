@@ -242,7 +242,10 @@ static void boot(bc_ScriptContext* self) {
         bc_InitObject();
         bc_InitArray();
         bc_InitException();
+        bc_InitShort();
         bc_InitInt();
+        bc_InitLong();
+        bc_InitFloat();
         bc_InitDouble();
         bc_InitChar();
         bc_InitLong();

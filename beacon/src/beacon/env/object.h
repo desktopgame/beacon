@@ -79,6 +79,8 @@ typedef struct bc_Object {
                            int argc, bc_ObjectMessageArgument argv[]);
 } bc_Object;
 
+#include "value.h"
+
 /**
  * 標準的なメッセージハンドラです。
  * 拡張メッセージハンドラを実装する場合はこれをラップするのが簡単です。
@@ -215,76 +217,6 @@ void bc_DeleteObject(bc_Object* self);
  * @param self
  */
 void bc_DestroyObject(bc_Object* self);
-
-/**
- * beaconからCの int へ変換します.
- * @param self
- * @return
- */
-int bc_ObjectToInt(bc_Object* self);
-
-/**
- * beaconからCの double へ変換します.
- * @param self
- * @return
- */
-double bc_ObjectToDouble(bc_Object* self);
-
-/**
- * beaconからCの bool へ変換します.
- * @param self
- * @return
- */
-bool bc_ObjectToBool(bc_Object* self);
-
-/**
- * beaconからCの char へ変換します.
- * @param self
- * @return
- */
-char bc_ObjectToChar(bc_Object* self);
-
-/**
- * beaconからCの long へ変換します.
- * @param self
- * @return
- */
-long bc_ObjectToLong(bc_Object* self);
-
-/**
- * Cからbeaconの Int へ変換します.
- * @param i
- * @return
- */
-bc_Object* bc_IntToObject(int i);
-
-/**
- * Cからbeaconの Double へ変換します.
- * @param d
- * @return
- */
-bc_Object* bc_DoubleToObject(double d);
-
-/**
- * Cからbeaconの bool へ変換します.
- * @param b
- * @return
- */
-bc_Object* bc_BoolToObject(bool b);
-
-/**
- * Cからbeaconの char へ変換します.
- * @param c
- * @return
- */
-bc_Object* bc_CharToObject(char c);
-
-/**
- * Cからbeacon
- * @param l
- * @return
- */
-bc_Object* bc_LongToObject(long l);
 
 /**
  * 指定の型のデフォルト値を返します.
