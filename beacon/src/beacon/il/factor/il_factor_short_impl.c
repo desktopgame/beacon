@@ -27,7 +27,7 @@ void bc_GenerateILShort(bc_ILShort* self, bc_Enviroment* env,
                         bc_CallContext* cctx) {
         assert(self->Count == 0);
         int index = bc_AddCShortEnviroment(env, self->Value);
-        bc_AddOpcodeBuf(env->Bytecode, OP_ICONST);
+        bc_AddOpcodeBuf(env->Bytecode, OP_SHCONST);
         bc_AddOpcodeBuf(env->Bytecode, index);
         self->Count++;
 }

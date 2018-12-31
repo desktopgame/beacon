@@ -25,7 +25,7 @@ bc_ILFloat* bc_NewILFloat(double d) {
 void bc_GenerateILFloat(bc_ILFloat* self, bc_Enviroment* env,
                         bc_CallContext* cctx) {
         int index = bc_AddCFloatEnviroment(env, self->Value);
-        bc_AddOpcodeBuf(env->Bytecode, OP_DCONST);
+        bc_AddOpcodeBuf(env->Bytecode, OP_FCONST);
         bc_AddOpcodeBuf(env->Bytecode, index);
 }
 

@@ -69,7 +69,10 @@ typedef enum bc_Opcode {
         OP_BEXCOR,
         OP_BFLIP,
 
+        OP_SHCONST,
         OP_ICONST,
+        OP_LCONST,
+        OP_FCONST,
         OP_DCONST,
         OP_CCONST,
         OP_SCONST,
