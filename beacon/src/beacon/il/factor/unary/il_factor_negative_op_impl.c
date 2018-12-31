@@ -29,8 +29,14 @@ void bc_GenerateILNegativeOp(bc_ILNegativeOp* self, bc_Enviroment* env,
         bc_GenericType* gt = bc_EvalILFactor(self->Parent->Arg, env, cctx);
         if (self->OperatorIndex == -1) {
                 bc_GenerateILFactor(self->Parent->Arg, env, cctx);
-                if (bc_GENERIC2TYPE(gt) == BC_TYPE_INT) {
+                if (bc_GENERIC2TYPE(gt) == BC_TYPE_SHORT) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_SNEG);
+                } else if (bc_GENERIC2TYPE(gt) == BC_TYPE_INT) {
                         bc_AddOpcodeBuf(env->Bytecode, OP_INEG);
+                } else if (bc_GENERIC2TYPE(gt) == BC_TYPE_LONG) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_LNEG);
+                } else if (bc_GENERIC2TYPE(gt) == BC_TYPE_FLOAT) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_FNEG);
                 } else if (bc_GENERIC2TYPE(gt) == BC_TYPE_DOUBLE) {
                         bc_AddOpcodeBuf(env->Bytecode, OP_DNEG);
                 } else {
@@ -46,7 +52,10 @@ void bc_GenerateILNegativeOp(bc_ILNegativeOp* self, bc_Enviroment* env,
 void bc_LoadILNegativeOp(bc_ILNegativeOp* self, bc_Enviroment* env,
                          bc_CallContext* cctx) {
         bc_GenericType* gt = bc_EvalILFactor(self->Parent->Arg, env, cctx);
-        if (bc_GENERIC2TYPE(gt) != BC_TYPE_INT &&
+        if (bc_GENERIC2TYPE(gt) != BC_TYPE_SHORT &&
+            bc_GENERIC2TYPE(gt) != BC_TYPE_INT &&
+            bc_GENERIC2TYPE(gt) != BC_TYPE_LONG &&
+            bc_GENERIC2TYPE(gt) != BC_TYPE_FLOAT &&
             bc_GENERIC2TYPE(gt) != BC_TYPE_DOUBLE) {
                 self->OperatorIndex =
                     bc_GetIndexILUnaryOp(self->Parent, env, cctx);

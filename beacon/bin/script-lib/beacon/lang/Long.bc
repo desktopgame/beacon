@@ -77,11 +77,9 @@ namespace beacon::lang {
 		operator != (Long a) -> Bool {
 			return !nativeEQ(a);
 		}
-		/*
 		operator -() -> Long {
 			return nativeMul(-1l);
 		}
-		*/
 
 		private:
 		def native nativeInit(Long i) -> Void;

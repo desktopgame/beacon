@@ -26,8 +26,17 @@ void bc_GenerateILFactor(bc_ILFactor* self, bc_Enviroment* env,
         bc_SetPanicFile(env->ContextRef->FileName);
         bc_SetPanicLine(self->Lineno);
         switch (self->Type) {
+                case ILFACTOR_SHORT_T:
+                        bc_GenerateILShort(self->Kind.Short, env, cctx);
+                        break;
                 case ILFACTOR_INT_T:
                         bc_GenerateILInt(self->Kind.Int, env, cctx);
+                        break;
+                case ILFACTOR_LONG_T:
+                        bc_GenerateILLong(self->Kind.Long, env, cctx);
+                        break;
+                case ILFACTOR_FLOAT_T:
+                        bc_GenerateILFloat(self->Kind.Float, env, cctx);
                         break;
                 case ILFACTOR_DOUBLE_T:
                         bc_GenerateILDouble(self->Kind.Double, env, cctx);
@@ -109,8 +118,17 @@ void bc_LoadILFactor(bc_ILFactor* self, bc_Enviroment* env,
         bc_SetPanicFile(env->ContextRef->FileName);
         bc_SetPanicLine(self->Lineno);
         switch (self->Type) {
+                case ILFACTOR_SHORT_T:
+                        bc_LoadILShort(self->Kind.Short, env, cctx);
+                        break;
                 case ILFACTOR_INT_T:
                         bc_LoadILInt(self->Kind.Int, env, cctx);
+                        break;
+                case ILFACTOR_LONG_T:
+                        bc_LoadILLong(self->Kind.Long, env, cctx);
+                        break;
+                case ILFACTOR_FLOAT_T:
+                        bc_LoadILFloat(self->Kind.Float, env, cctx);
                         break;
                 case ILFACTOR_DOUBLE_T:
                         bc_LoadILDouble(self->Kind.Double, env, cctx);
@@ -188,8 +206,17 @@ bc_GenericType* bc_EvalILFactor(bc_ILFactor* self, bc_Enviroment* env,
         bc_SetPanicLine(self->Lineno);
         bc_GenericType* ret = NULL;
         switch (self->Type) {
+                case ILFACTOR_SHORT_T:
+                        ret = bc_EvalILShort(self->Kind.Short, env, cctx);
+                        break;
                 case ILFACTOR_INT_T:
                         ret = bc_EvalILInt(self->Kind.Int, env, cctx);
+                        break;
+                case ILFACTOR_LONG_T:
+                        ret = bc_EvalILLong(self->Kind.Long, env, cctx);
+                        break;
+                case ILFACTOR_FLOAT_T:
+                        ret = bc_EvalILFloat(self->Kind.Float, env, cctx);
                         break;
                 case ILFACTOR_DOUBLE_T:
                         ret = bc_EvalILDouble(self->Kind.Double, env, cctx);
@@ -270,8 +297,14 @@ char* bc_ILFactorToString(bc_ILFactor* self, bc_Enviroment* env) {
                 return NULL;
         }
         switch (self->Type) {
+                case ILFACTOR_SHORT_T:
+                        return bc_ILShortToString(self->Kind.Short, env);
                 case ILFACTOR_INT_T:
                         return bc_ILIntToString(self->Kind.Int, env);
+                case ILFACTOR_LONG_T:
+                        return bc_ILLongToString(self->Kind.Long, env);
+                case ILFACTOR_FLOAT_T:
+                        return bc_ILFloatToString(self->Kind.Float, env);
                 case ILFACTOR_DOUBLE_T:
                         return bc_ILDoubleToString(self->Kind.Double, env);
                 case ILFACTOR_CHAR_T:
@@ -365,8 +398,17 @@ void bc_DeleteILFactor(bc_ILFactor* self) {
                 return;
         }
         switch (self->Type) {
+                case ILFACTOR_SHORT_T:
+                        bc_DeleteILShort(self->Kind.Short);
+                        break;
                 case ILFACTOR_INT_T:
                         bc_DeleteILInt(self->Kind.Int);
+                        break;
+                case ILFACTOR_LONG_T:
+                        bc_DeleteILLong(self->Kind.Long);
+                        break;
+                case ILFACTOR_FLOAT_T:
+                        bc_DeleteILFloat(self->Kind.Float);
                         break;
                 case ILFACTOR_DOUBLE_T:
                         bc_DeleteILDouble(self->Kind.Double);

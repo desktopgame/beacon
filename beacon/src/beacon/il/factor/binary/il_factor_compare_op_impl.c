@@ -9,7 +9,10 @@
 #include "../../../vm/enviroment.h"
 #include "../../il_factor_impl.h"
 
+static bc_Opcode operator_to_sopcode(bc_OperatorType type);
 static bc_Opcode operator_to_iopcode(bc_OperatorType type);
+static bc_Opcode operator_to_lopcode(bc_OperatorType type);
+static bc_Opcode operator_to_fopcode(bc_OperatorType type);
 static bc_Opcode operator_to_dopcode(bc_OperatorType type);
 static bc_Opcode operator_to_copcode(bc_OperatorType type);
 
@@ -35,10 +38,22 @@ void bc_GenerateILCompareOp(bc_ILCompareOp* self, bc_Enviroment* env,
         if (self->OperatorIndex == -1) {
                 bc_GenerateILFactor(self->Parent->Right, env, cctx);
                 bc_GenerateILFactor(self->Parent->Left, env, cctx);
-                if (bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
+                if (bc_IsShortShortBinaryOp(self->Parent, env, cctx)) {
+                        bc_AddOpcodeBuf(
+                            env->Bytecode,
+                            (bc_VectorItem)operator_to_sopcode(self->Type));
+                } else if (bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
                         bc_AddOpcodeBuf(
                             env->Bytecode,
                             (bc_VectorItem)operator_to_iopcode(self->Type));
+                } else if (bc_IsLongLongBinaryOp(self->Parent, env, cctx)) {
+                        bc_AddOpcodeBuf(
+                            env->Bytecode,
+                            (bc_VectorItem)operator_to_lopcode(self->Type));
+                } else if (bc_IsFloatFloatBinaryOp(self->Parent, env, cctx)) {
+                        bc_AddOpcodeBuf(
+                            env->Bytecode,
+                            (bc_VectorItem)operator_to_fopcode(self->Type));
                 } else if (bc_IsDoubleDoubleBinaryOp(self->Parent, env, cctx)) {
                         bc_AddOpcodeBuf(
                             env->Bytecode,
@@ -62,7 +77,10 @@ void bc_GenerateILCompareOp(bc_ILCompareOp* self, bc_Enviroment* env,
 
 void bc_LoadILCompareOp(bc_ILCompareOp* self, bc_Enviroment* env,
                         bc_CallContext* cctx) {
-        if (!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+        if (!bc_IsShortShortBinaryOp(self->Parent, env, cctx) &&
+            !bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+            !bc_IsLongLongBinaryOp(self->Parent, env, cctx) &&
+            !bc_IsFloatFloatBinaryOp(self->Parent, env, cctx) &&
             !bc_IsDoubleDoubleBinaryOp(self->Parent, env, cctx) &&
             !bc_IsCharCharBinaryOp(self->Parent, env, cctx)) {
                 self->OperatorIndex =
@@ -76,6 +94,24 @@ char* bc_ILCompareOpToString(bc_ILCompareOp* self, bc_Enviroment* env) {
         return bc_ILBinaryOpToStringSimple(self->Parent, env);
 }
 // static
+static bc_Opcode operator_to_sopcode(bc_OperatorType type) {
+        switch (type) {
+                case OPERATOR_GT_T:
+                        return OP_SGT;
+                case OPERATOR_GE_T:
+                        return OP_SGE;
+                case OPERATOR_LT_T:
+                        return OP_SLT;
+                case OPERATOR_LE_T:
+                        return OP_SLE;
+                case OPERATOR_EQ_T:
+                        return OP_SEQ;
+                case OPERATOR_NOT_EQ_T:
+                        return OP_SNOTEQ;
+        }
+        assert(false);
+}
+
 static bc_Opcode operator_to_iopcode(bc_OperatorType type) {
         switch (type) {
                 case OPERATOR_GT_T:
@@ -90,6 +126,42 @@ static bc_Opcode operator_to_iopcode(bc_OperatorType type) {
                         return OP_IEQ;
                 case OPERATOR_NOT_EQ_T:
                         return OP_INOTEQ;
+        }
+        assert(false);
+}
+
+static bc_Opcode operator_to_lopcode(bc_OperatorType type) {
+        switch (type) {
+                case OPERATOR_GT_T:
+                        return OP_LGT;
+                case OPERATOR_GE_T:
+                        return OP_LGE;
+                case OPERATOR_LT_T:
+                        return OP_LLT;
+                case OPERATOR_LE_T:
+                        return OP_LLE;
+                case OPERATOR_EQ_T:
+                        return OP_LEQ;
+                case OPERATOR_NOT_EQ_T:
+                        return OP_LNOTEQ;
+        }
+        assert(false);
+}
+
+static bc_Opcode operator_to_fopcode(bc_OperatorType type) {
+        switch (type) {
+                case OPERATOR_GT_T:
+                        return OP_FGT;
+                case OPERATOR_GE_T:
+                        return OP_FGE;
+                case OPERATOR_LT_T:
+                        return OP_FLT;
+                case OPERATOR_LE_T:
+                        return OP_FLE;
+                case OPERATOR_EQ_T:
+                        return OP_FEQ;
+                case OPERATOR_NOT_EQ_T:
+                        return OP_FNOTEQ;
         }
         assert(false);
 }
@@ -111,6 +183,7 @@ static bc_Opcode operator_to_dopcode(bc_OperatorType type) {
         }
         assert(false);
 }
+
 static bc_Opcode operator_to_copcode(bc_OperatorType type) {
         switch (type) {
                 case OPERATOR_GT_T:

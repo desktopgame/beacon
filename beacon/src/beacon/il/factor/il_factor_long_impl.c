@@ -36,7 +36,7 @@ void bc_LoadILLong(bc_ILLong* self, bc_Enviroment* env, bc_CallContext* cctx) {}
 
 bc_GenericType* bc_EvalILLong(bc_ILLong* self, bc_Enviroment* env,
                               bc_CallContext* cctx) {
-        return BC_GENERIC_SHORT;
+        return BC_GENERIC_LONG;
 }
 
 char* bc_ILLongToString(bc_ILLong* self, bc_Enviroment* env) {

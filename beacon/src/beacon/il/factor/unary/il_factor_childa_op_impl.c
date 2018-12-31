@@ -22,8 +22,12 @@ bc_GenericType* bc_EvalILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env,
         bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
         if (self->OperatorIndex == -1) {
                 // GenerateILFactor(self->Parent->Arg, env);
-                if (bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
+                if (bc_GENERIC2TYPE(gtype) == BC_TYPE_SHORT) {
+                        return bc_TYPE2GENERIC(BC_TYPE_SHORT);
+                } else if (bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
                         return bc_TYPE2GENERIC(BC_TYPE_INT);
+                } else if (bc_GENERIC2TYPE(gtype) == BC_TYPE_LONG) {
+                        return bc_TYPE2GENERIC(BC_TYPE_LONG);
                 } else if (bc_GENERIC2TYPE(gtype) == BC_TYPE_BOOL) {
                         return bc_TYPE2GENERIC(BC_TYPE_BOOL);
                 } else {
@@ -46,8 +50,12 @@ void bc_GenerateILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env,
                 bc_GenerateILFactor(self->Parent->Arg, env, cctx);
                 bc_GenericType* gtype =
                     bc_EvalILFactor(self->Parent->Arg, env, cctx);
-                if (bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
+                if (bc_GENERIC2TYPE(gtype) == BC_TYPE_SHORT) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_SFLIP);
+                } else if (bc_GENERIC2TYPE(gtype) == BC_TYPE_INT) {
                         bc_AddOpcodeBuf(env->Bytecode, OP_IFLIP);
+                } else if (bc_GENERIC2TYPE(gtype) == BC_TYPE_LONG) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_LFLIP);
                 } else if (bc_GENERIC2TYPE(gtype) == BC_TYPE_BOOL) {
                         bc_AddOpcodeBuf(env->Bytecode, OP_BFLIP);
                 } else {
@@ -63,7 +71,9 @@ void bc_GenerateILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env,
 void bc_LoadILChildaOp(bc_ILChildaOp* self, bc_Enviroment* env,
                        bc_CallContext* cctx) {
         bc_GenericType* gtype = bc_EvalILFactor(self->Parent->Arg, env, cctx);
-        if (bc_GENERIC2TYPE(gtype) != BC_TYPE_INT &&
+        if (bc_GENERIC2TYPE(gtype) != BC_TYPE_SHORT &&
+            bc_GENERIC2TYPE(gtype) != BC_TYPE_INT &&
+            bc_GENERIC2TYPE(gtype) != BC_TYPE_LONG &&
             bc_GENERIC2TYPE(gtype) != BC_TYPE_BOOL) {
                 self->OperatorIndex =
                     bc_GetIndexILUnaryOp(self->Parent, env, cctx);

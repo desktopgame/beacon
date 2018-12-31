@@ -57,8 +57,17 @@ void bc_DeleteILBinaryOp(bc_ILBinaryOp* self);
 
 char* bc_ILBinaryOpToStringSimple(bc_ILBinaryOp* self, bc_Enviroment* env);
 
+bool bc_IsShortShortBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
+                             bc_CallContext* cctx);
+
 bool bc_IsIntIntBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
                          bc_CallContext* cctx);
+
+bool bc_IsLongLongBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
+                           bc_CallContext* cctx);
+
+bool bc_IsFloatFloatBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
+                             bc_CallContext* cctx);
 
 bool bc_IsDoubleDoubleBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
                                bc_CallContext* cctx);

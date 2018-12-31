@@ -53,7 +53,7 @@ namespace beacon::lang {
 		}
 
 		operator -() -> Float {
-			return nativeMul(-1.0);
+			return nativeMul(-1.0f);
 		}
 
 		private:

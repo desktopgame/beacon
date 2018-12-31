@@ -75,7 +75,7 @@ namespace beacon::lang {
 		}
 
 		operator -() -> Short {
-			return nativeMul(-1);
+			return nativeMul(-1s);
 		}
 
 		private:

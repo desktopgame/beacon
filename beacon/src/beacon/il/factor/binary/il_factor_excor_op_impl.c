@@ -23,8 +23,14 @@ bc_GenericType* bc_EvalILExcorOp(bc_ILExcorOp* self, bc_Enviroment* env,
             bc_EvalILFactor(self->Parent->Right, env, cctx);
         assert(lgtype != NULL);
         assert(rgtype != NULL);
+        if (bc_IsShortShortBinaryOp(self->Parent, env, cctx)) {
+                return bc_TYPE2GENERIC(BC_TYPE_SHORT);
+        }
         if (bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
                 return bc_TYPE2GENERIC(BC_TYPE_INT);
+        }
+        if (bc_IsLongLongBinaryOp(self->Parent, env, cctx)) {
+                return bc_TYPE2GENERIC(BC_TYPE_LONG);
         }
         if (bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
                 return bc_TYPE2GENERIC(BC_TYPE_BOOL);
@@ -48,8 +54,12 @@ void bc_GenerateILExcorOp(bc_ILExcorOp* self, bc_Enviroment* env,
         if (self->OperatorIndex == -1) {
                 bc_GenerateILFactor(self->Parent->Right, env, cctx);
                 bc_GenerateILFactor(self->Parent->Left, env, cctx);
-                if (bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
+                if (bc_IsShortShortBinaryOp(self->Parent, env, cctx)) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_SEXCOR);
+                } else if (bc_IsIntIntBinaryOp(self->Parent, env, cctx)) {
                         bc_AddOpcodeBuf(env->Bytecode, OP_IEXCOR);
+                } else if (bc_IsLongLongBinaryOp(self->Parent, env, cctx)) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_LEXCOR);
                 } else if (bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
                         bc_AddOpcodeBuf(env->Bytecode, OP_BEXCOR);
                 } else {
@@ -65,7 +75,9 @@ void bc_GenerateILExcorOp(bc_ILExcorOp* self, bc_Enviroment* env,
 
 void bc_LoadILExcorOp(bc_ILExcorOp* self, bc_Enviroment* env,
                       bc_CallContext* cctx) {
-        if (!bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+        if (!bc_IsShortShortBinaryOp(self->Parent, env, cctx) &&
+            !bc_IsIntIntBinaryOp(self->Parent, env, cctx) &&
+            !bc_IsLongLongBinaryOp(self->Parent, env, cctx) &&
             !bc_IsBoolBoolBinaryOp(self->Parent, env, cctx)) {
                 self->OperatorIndex =
                     bc_GetIndexILBinaryOp(self->Parent, env, cctx);

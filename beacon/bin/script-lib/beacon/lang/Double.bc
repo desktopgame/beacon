@@ -53,7 +53,7 @@ namespace beacon::lang {
 		}
 
 		operator -() -> Double {
-			return nativeMul(-1.0);
+			return nativeMul(-1.0d);
 		}
 
 		private:

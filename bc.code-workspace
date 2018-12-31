@@ -147,7 +147,8 @@
 			"fqcn_cache.h": "c",
 			"resolve.h": "c",
 			"bridge.h": "c",
-			"script_thread.h": "c"
+			"script_thread.h": "c",
+			"il_factor_int_impl.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

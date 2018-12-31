@@ -40,8 +40,14 @@ bc_ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source) {
 
 // private
 static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
-        if (source->Tag == AST_INT_T) {
+        if (source->Tag == AST_SHORT_T) {
+                return bc_WrapILShort(bc_NewILShort(source->Attr.ShortValue));
+        } else if (source->Tag == AST_INT_T) {
                 return bc_WrapILInt(bc_NewILInt(source->Attr.IntValue));
+        } else if (source->Tag == AST_LONG_T) {
+                return bc_WrapILLong(bc_NewILLong(source->Attr.LongValue));
+        } else if (source->Tag == AST_FLOAT_T) {
+                return bc_WrapILFloat(bc_NewILFloat(source->Attr.FloatValue));
         } else if (source->Tag == AST_DOUBLE_T) {
                 return bc_WrapILDouble(
                     bc_NewILDouble(source->Attr.DoubleValue));

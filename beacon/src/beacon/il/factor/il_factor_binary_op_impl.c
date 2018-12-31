@@ -191,9 +191,24 @@ char* bc_ILBinaryOpToStringSimple(bc_ILBinaryOp* self, bc_Enviroment* env) {
         return bc_ReleaseBuffer(sb);
 }
 
+bool bc_IsShortShortBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
+                             bc_CallContext* cctx) {
+        return type_test(self, env, cctx, BC_TYPE_SHORT);
+}
+
 bool bc_IsIntIntBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
                          bc_CallContext* cctx) {
         return type_test(self, env, cctx, BC_TYPE_INT);
+}
+
+bool bc_IsLongLongBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
+                           bc_CallContext* cctx) {
+        return type_test(self, env, cctx, BC_TYPE_LONG);
+}
+
+bool bc_IsFloatFloatBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
+                             bc_CallContext* cctx) {
+        return type_test(self, env, cctx, BC_TYPE_FLOAT);
 }
 
 bool bc_IsDoubleDoubleBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
