@@ -1,0 +1,115 @@
+//require "beacon/lang/Console"
+
+namespace beacon::lang {
+	class Short {
+		public:
+		def new(Short i) {
+			this.nativeInit(i);
+		}
+
+		def equals(Object a) -> Bool {
+			if(!(a is Short)) {
+				return false;
+			}
+			return nativeEquals(a);
+		}
+
+		operator +(Short a) -> Short {
+			return nativeAdd(a);
+		}
+
+		operator -(Short a) -> Short {
+			return nativeSub(a);
+		}
+
+		operator *(Short a) -> Short {
+			return nativeMul(a);
+		}
+
+		operator /(Short a) -> Short {
+			return nativeDiv(a);
+		}
+
+		operator %(Short a) -> Short {
+			return nativeMod(a);
+		}
+
+		operator <<(Short a) -> Short {
+			return nativeLShift(a);
+		}
+
+		operator >>(Short a) -> Short {
+			return nativeRShift(a);
+		}
+
+		operator |(Short a) -> Short {
+			return nativeBitOr(a);
+		}
+
+		operator &(Short a) -> Short {
+			return nativeBitAnd(a);
+		}
+
+		operator >(Short a) -> Bool {
+			return nativeGT(a);
+		}
+
+		operator >=(Short a) -> Bool {
+			return nativeGE(a);
+		}
+
+		operator <(Short a) -> Bool {
+			return nativeLT(a);
+		}
+
+		operator <=(Short a) -> Bool {
+			return nativeLE(a);
+		}
+
+		operator ==(Short a) -> Bool {
+			return nativeEQ(a);
+		}
+
+		operator != (Short a) -> Bool {
+			return !nativeEQ(a);
+		}
+
+		operator -() -> Short {
+			return nativeMul(-1);
+		}
+
+		private:
+		def native nativeInit(Short i) -> Void;
+
+		def native nativeAdd(Short a) -> Short;
+
+		def native nativeSub(Short a) -> Short;
+
+		def native nativeMul(Short a) -> Short;
+
+		def native nativeDiv(Short a) -> Short;
+
+		def native nativeMod(Short a) -> Short;
+
+		def native nativeLShift(Short a) -> Short;
+
+		def native nativeRShift(Short a) -> Short;
+
+		def native nativeGT(Short a) -> Bool;
+
+		def native nativeGE(Short a) -> Bool;
+
+		def native nativeLT(Short a) -> Bool;
+
+		def native nativeLE(Short a) -> Bool;
+
+		def native nativeBitOr(Short a) -> Short;
+
+		def native nativeBitAnd(Short a) -> Short;
+
+		def native nativeEQ(Short a) -> Bool;
+
+		def native nativeEquals(Object a) -> Bool;
+
+	}
+}

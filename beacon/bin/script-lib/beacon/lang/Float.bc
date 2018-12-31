@@ -1,0 +1,82 @@
+namespace beacon::lang {
+	class Float {
+		public:
+		def new(Float d) {
+			this.nativeInit(d);
+		}
+
+		def equals(Object a) -> Bool {
+			if(!(a is Float)) {
+				return false;
+			}
+			return nativeEquals(a);
+		}
+
+		operator +(Float a) -> Float {
+			return nativeAdd(a);
+		}
+
+		operator -(Float a) -> Float {
+			return nativeSub(a);
+		}
+
+		operator *(Float a) -> Float {
+			return nativeMul(a);
+		}
+
+		operator /(Float a) -> Float {
+			return nativeDiv(a);
+		}
+
+		operator >(Float a) -> Bool {
+			return nativeGT(a);
+		}
+
+		operator >=(Float a) -> Bool {
+			return nativeGE(a);
+		}
+
+		operator <(Float a) -> Bool {
+			return nativeLT(a);
+		}
+
+		operator <=(Float a) -> Bool {
+			return nativeLE(a);
+		}
+
+		operator ==(Float a) -> Bool {
+			return nativeEQ(a);
+		}
+
+		operator != (Float a) -> Bool {
+			return !nativeEQ(a);
+		}
+
+		operator -() -> Float {
+			return nativeMul(-1.0);
+		}
+
+		private:
+		def native nativeInit(Float d) -> Void;
+
+		def native nativeAdd(Float a) -> Float;
+
+		def native nativeSub(Float a) -> Float;
+
+		def native nativeMul(Float a) -> Float;
+
+		def native nativeDiv(Float a) -> Float;
+
+		def native nativeGT(Float a) -> Bool;
+
+		def native nativeGE(Float a) -> Bool;
+
+		def native nativeLT(Float a) -> Bool;
+
+		def native nativeLE(Float a) -> Bool;
+
+		def native nativeEQ(Float a) -> Bool;
+
+		def native nativeEquals(Object a) -> Bool;
+	}
+}
