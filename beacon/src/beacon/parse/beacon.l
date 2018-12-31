@@ -253,7 +253,21 @@ static void update_loc() {
 <INITIAL>"operator"			{ return (OPERATOR); }
 <INITIAL>"->"				{ return (ARROW); }
 
-<INITIAL>"0" {
+<INITIAL>"0"[s|S] {
+	//0s
+	yylval.ast_value = bc_NewASTShort(0);
+	return SHORT;
+}
+
+<INITIAL>"0"[l|L] {
+	//0l
+	yylval.ast_value = bc_NewASTLong(0);
+	return LONG;
+}
+
+<INITIAL>"0"[i|I]? {
+	//0
+	//0i
 	yylval.ast_value = bc_NewASTInt(0);
 	return INT;
 }
@@ -263,30 +277,44 @@ static void update_loc() {
 }
 
 <INITIAL>[1-9][0-9]*[s|S] {
+	//100s
 	yylval.ast_value = bc_NewASTShort((short)atoi(yytext));
 	return SHORT;
 }
 
 <INITIAL>[1-9][0-9]*[i|I]? {
-	yylval.ast_value = bc_NewASTInt(atoit(yytext));
+	//100
+	//100i
+	yylval.ast_value = bc_NewASTInt(atoi(yytext));
 	return INT;
 }
 
+<INITIAL>[1-9][0-9]*[l|L] {
+	//100l
+	yylval.ast_value = bc_NewASTLong(atol(yytext));
+	return LONG;
+}
+
 <INITIAL>[1-9][0-9]*[f|F] {
+	//100f
 	yylval.ast_value = bc_NewASTFloat(atof(yytext));
 	return FLOAT;
 }
 
 <INITIAL>[0-9]*\.[0-9]+[f|F] {
+	//10.0f
 	yylval.ast_value = bc_NewASTFloat(atof(yytext));
 	return FLOAT;
 }
 
 <INITIAL>[0-9]*\.[0-9]+[d|D]? {
+	//10.0
+	//10.0d
 	yylval.ast_value = bc_NewASTDouble(atof(yytext));
 	return DOUBLE;
 }
 <INITIAL>[1-9][0-9]*[d|D] {
+	//100d
 	yylval.ast_value = bc_NewASTDouble(atof(yytext));
 	return DOUBLE;
 }
