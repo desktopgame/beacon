@@ -63,9 +63,9 @@ void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
         bc_Object* nameObj = bc_AtVector(threadObj->Fields, temp);
         bc_Buffer* buffer = bc_GetRawString(nameObj);
         //スレッドを開始
+        ((bc_Thread*)threadObj)->ScriptThreadRef = self;
         GThread* gth = g_thread_new(buffer->Text, func, data);
         self->Thread = gth;
-        ((bc_Thread*)threadObj)->ScriptThreadRef = self;
 }
 
 void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, bc_Frame* frame_ref) {
