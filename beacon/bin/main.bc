@@ -1,18 +1,10 @@
-namespace thread {
-	class MyRunnable : Runnable {
-		public:
-		def new() {
-		}
-
-		def run() -> Void {
-			var i = 0;
-			while(i < 10) {
-				printLine("print " + i);
-				i = i + 1;
-			}
-		}
-	}
-}
-var th = new Thread("thread", new thread::MyRunnable());
-th.start();
-th.join();
+var iv = 10i;
+var shv = 10s;
+var lv = 100l;
+var flv = 10f;
+var dov = 10d;
+printLine(iv);
+printLine(shv);
+printLine(lv);
+printLine(flv);
+printLine(dov);

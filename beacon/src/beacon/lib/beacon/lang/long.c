@@ -33,6 +33,8 @@ static void bc_long_nativeBitAnd(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env);
 static void bc_long_nativeEQ(bc_Method* parent, bc_Frame* fr,
                              bc_Enviroment* env);
+static void bc_long_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                   bc_Enviroment* env);
 
 bc_Object* bc_NewLong(long value) {
         bc_Long* ret =
@@ -68,6 +70,8 @@ void bc_InitLong() {
         bc_DefineNativeMethodClass(longClass, "nativeBitAnd",
                                    bc_long_nativeBitAnd);
         bc_DefineNativeMethodClass(longClass, "nativeEQ", bc_long_nativeEQ);
+        bc_DefineNativeMethodClass(longClass, "nativeToString",
+                                   bc_long_nativeToString);
 }
 
 bc_Type* bc_GetLongType() {
@@ -208,6 +212,14 @@ static void bc_long_nativeBitAnd(bc_Method* parent, bc_Frame* fr,
 
 static void bc_long_nativeEQ(bc_Method* parent, bc_Frame* fr,
                              bc_Enviroment* env) {
+        bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+        bc_Object* a = bc_AtVector(fr->VariableTable, 1);
+        bc_Object* ret = bc_GetBoolObject(LONG_VALUE(self) == LONG_VALUE(a));
+        bc_PushVector(fr->ValueStack, ret);
+}
+
+static void bc_long_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                   bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret = bc_GetBoolObject(LONG_VALUE(self) == LONG_VALUE(a));

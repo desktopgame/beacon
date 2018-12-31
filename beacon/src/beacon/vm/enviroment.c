@@ -87,9 +87,27 @@ void bc_DumpEnviromentOp(bc_Enviroment* self, int depth) {
         bc_Println();
 }
 
+int bc_AddCShortEnviroment(bc_Enviroment* self, short s) {
+        int len = self->ConstantPool->Length;
+        add_constant(self, (bc_Object*)bc_NewShort(s));
+        return len;
+}
+
 int bc_AddCIntEnviroment(bc_Enviroment* self, int i) {
         int len = self->ConstantPool->Length;
         add_constant(self, (bc_Object*)bc_NewInteger(i));
+        return len;
+}
+
+int bc_AddCLongEnviroment(bc_Enviroment* self, long l) {
+        int len = self->ConstantPool->Length;
+        add_constant(self, (bc_Object*)bc_NewLong(l));
+        return len;
+}
+
+int bc_AddCFloatEnviroment(bc_Enviroment* self, float f) {
+        int len = self->ConstantPool->Length;
+        add_constant(self, (bc_Object*)bc_NewFloat(f));
         return len;
 }
 

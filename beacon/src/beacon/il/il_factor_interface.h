@@ -25,7 +25,10 @@
  * 計算可能な要素の種類.
  */
 typedef enum bc_ILFactorType {
+        ILFACTOR_SHORT_T,
         ILFACTOR_INT_T,
+        ILFACTOR_LONG_T,
+        ILFACTOR_FLOAT_T,
         ILFACTOR_DOUBLE_T,
         ILFACTOR_CHAR_T,
         ILFACTOR_STRING_T,
@@ -57,7 +60,10 @@ typedef enum bc_ILFactorType {
 //ここでは関数呼び出しを前方宣言し、
 //関数呼び出しを表す構造体では実引数の一覧を ILFactor型で定義します。
 //詳細は il_factor_impl.h を参照してください。
+struct bc_ILShort;
 struct bc_ILInt;
+struct bc_ILLong;
+struct bc_ILFloat;
 struct bc_ILDouble;
 struct bc_ILChar;
 struct bc_ILString;
@@ -88,7 +94,10 @@ typedef struct bc_ILFactor {
         bc_ILFactorType Type;
         int Lineno;
         union {
+                struct bc_ILShort* Short;
                 struct bc_ILInt* Int;
+                struct bc_ILLong* Long;
+                struct bc_ILFloat* Float;
                 struct bc_ILDouble* Double;
                 struct bc_ILChar* Char;
                 struct bc_ILString* String;

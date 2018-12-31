@@ -56,13 +56,39 @@ void bc_DumpEnviromentOp(bc_Enviroment* self, int depth);
 
 /**
  * 定数プールに整数を追加して、その位置を返します.
+ * @param self
+ * @param s
+ * @return
+ */
+int bc_AddCShortEnviroment(bc_Enviroment* self, short s);
+
+/**
+ * 定数プールに整数を追加して、その位置を返します.
+ * @param self
  * @param i
  * @return
  */
 int bc_AddCIntEnviroment(bc_Enviroment* self, int i);
 
 /**
+ * 定数プールに整数を追加して、その位置を返します.
+ * @param self
+ * @param l
+ * @return
+ */
+int bc_AddCLongEnviroment(bc_Enviroment* self, long l);
+
+/**
  * 定数プールに浮動小数を追加して、その位置を返します.
+ * @param self
+ * @param f
+ * @return
+ */
+int bc_AddCFloatEnviroment(bc_Enviroment* self, float f);
+
+/**
+ * 定数プールに浮動小数を追加して、その位置を返します.
+ * @param self
  * @param d
  * @return
  */
@@ -70,6 +96,7 @@ int bc_AddCDoubleEnviroment(bc_Enviroment* self, double d);
 
 /**
  * 定数プールに文字を追加して、その位置を返します.
+ * @param self
  * @param c
  * @return
  */
@@ -77,6 +104,7 @@ int bc_AddCCharEnviroment(bc_Enviroment* self, char c);
 
 /**
  * 定数プールに文字列を追加して、その位置を返します.
+ * @param self
  * @param sv
  * @return
  */

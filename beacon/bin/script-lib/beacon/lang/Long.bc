@@ -77,10 +77,11 @@ namespace beacon::lang {
 		operator != (Long a) -> Bool {
 			return !nativeEQ(a);
 		}
-
+		/*
 		operator -() -> Long {
-			return nativeMul(-1);
+			return nativeMul(-1l);
 		}
+		*/
 
 		private:
 		def native nativeInit(Long i) -> Void;
@@ -114,5 +115,7 @@ namespace beacon::lang {
 		def native nativeEQ(Long a) -> Bool;
 
 		def native nativeEquals(Object a) -> Bool;
+
+		def native nativeToString() -> String;
 	}
 }
