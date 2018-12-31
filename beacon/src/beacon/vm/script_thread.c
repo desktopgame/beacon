@@ -1,7 +1,9 @@
 #include "script_thread.h"
 #include <assert.h>
 #include "../env/script_context.h"
+#include "../env/type_interface.h"
 #include "../il/call_context.h"
+#include "../lib/bc_library_interface.h"
 #include "../util/mem.h"
 #include "../vm/vm.h"
 #include "../vm/vm_trace.h"
@@ -51,7 +53,20 @@ bc_ScriptThread* bc_GetCurrentScriptThread() {
         return ret;
 }
 
-void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* runnable) {}
+void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
+                          GThreadFunc func, gpointer data) {
+        //スレッド生成時に渡された名前を取得
+        bc_Type* ty = bc_GetThreadType();
+        int temp = -1;
+        bc_ResolveField(ty->Kind.Class, bc_InternString("name"), &temp);
+        assert(temp != -1);
+        bc_Object* nameObj = bc_AtVector(threadObj->Fields, temp);
+        bc_Buffer* buffer = bc_GetRawString(nameObj);
+        //スレッドを開始
+        GThread* gth = g_thread_new(buffer->Text, func, data);
+        self->Thread = gth;
+        ((bc_Thread*)threadObj)->ScriptThreadRef = self;
+}
 
 void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, bc_Frame* frame_ref) {
         // TODO:ここで同期をとる

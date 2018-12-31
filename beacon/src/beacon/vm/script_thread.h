@@ -50,9 +50,13 @@ bc_ScriptThread* bc_AddScriptThread();
 
 /**
  * @param self
- * @param runnable
+ * @param threadObj
+ * @param runnableObj
+ * @param func
+ * @param data
  */
-void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* runnable);
+void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
+                          GThreadFunc func, gpointer data);
 
 /**
  * 現在のスレッドを返します.

@@ -7,15 +7,20 @@ static void bc_thread_nativeInit(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env);
 static void bc_thread_nativeStart(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env);
+static void bc_thread_nativeJoin(bc_Method* parent, bc_Frame* fr,
+                                 bc_Enviroment* env);
 static void bc_thread_nativeGetMainThread(bc_Method* parent, bc_Frame* fr,
                                           bc_Enviroment* env);
 static void bc_thread_nativeGetCurrentThread(bc_Method* parent, bc_Frame* fr,
                                              bc_Enviroment* env);
 static gpointer bc_thread_body(gpointer data);
+static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
+                                bc_ObjectMessageArgument argv[]);
 
 bc_Object* bc_NewThread(bc_ScriptThread* thread) {
         bc_Thread* ret = bc_ConstructObject(NULL, sizeof(bc_Thread),
                                             bc_GetThreadType()->GenericSelf);
+        ret->Super.OnMessage = handle_obj_message;
         bc_ConnectThread((bc_Object*)ret, thread);
         return (bc_Object*)ret;
 }
@@ -28,6 +33,10 @@ void bc_InitThread() {
         bc_AddTypeNamespace(lang, threadType);
         bc_DefineNativeMethodClass(threadClass, "nativeInit",
                                    bc_thread_nativeInit);
+        bc_DefineNativeMethodClass(threadClass, "nativeJoin",
+                                   bc_thread_nativeJoin);
+        bc_DefineNativeMethodClass(threadClass, "nativeStart",
+                                   bc_thread_nativeStart);
         bc_DefineNativeMethodClass(threadClass, "nativeGetMainThread",
                                    bc_thread_nativeGetMainThread);
         bc_DefineNativeMethodClass(threadClass, "nativeGetCurrentThread",
@@ -58,19 +67,25 @@ static void bc_thread_nativeStart(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Thread* th = (bc_Thread*)self;
+        th->Env = env;
         //メインスレッドに対して start は呼び出せない
         if (th == bc_GetMainScriptThread()->Thread) {
                 bc_ThrowVM(fr, bc_NewSimpleException(
                                    fr, "can't be start a main thread."));
                 return;
         }
-        //スレッド生成時に渡された名前を取得
-        bc_Type* ty = bc_GetThreadType();
-        int temp = -1;
-        bc_ResolveField(ty->Kind.Class, "name", &temp);
-        assert(temp != -1);
-        bc_Object* nameObj = bc_AtVector(self->Fields, temp);
-        bc_Buffer* buffer = bc_GetRawString(nameObj);
+        bc_ScriptThread* sth = bc_AddScriptThread();
+        bc_StartScriptThread(sth, self, bc_thread_body, self);
+}
+
+static void bc_thread_nativeJoin(bc_Method* parent, bc_Frame* fr,
+                                 bc_Enviroment* env) {
+        bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+        bc_Thread* th = (bc_Thread*)self;
+        bc_ScriptThread* sth = th->ScriptThreadRef;
+        GThread* gth = sth->Thread;
+        g_thread_join(gth);
+        sth->Thread;
 }
 
 static void bc_thread_nativeGetMainThread(bc_Method* parent, bc_Frame* fr,
@@ -110,5 +125,36 @@ static void bc_thread_nativeGetCurrentThread(bc_Method* parent, bc_Frame* fr,
 
 static gpointer bc_thread_body(gpointer data) {
         bc_Thread* th = (bc_Thread*)data;
+        bc_ScriptThread* sth = th->ScriptThreadRef;
+        //新しいフレームで実行
+        bc_Frame* fr = bc_NewFrame();
+        // Thread#runnable を検索
+        int temp = -1;
+        bc_Field* runnableF = bc_ResolveField(
+            bc_GetThreadType()->Kind.Class, bc_InternString("runnable"), &temp);
+        assert(temp != -1);
+        // Runnable#run を検索
+        // FIXME:無駄遣い
+        bc_Vector* typeargs = bc_NewVector();
+        bc_CallContext* cctx = bc_NewCallContext(CALL_TOP_T);
+        bc_Object* runnableObj = bc_AtVector(th->Super.Fields, temp);
+        bc_Method* runM = bc_ResolveMethod(
+            runnableObj->GType->CoreType->Kind.Class, bc_InternString("run"), 0,
+            NULL, typeargs, cctx, &temp);
+        assert(temp != -1);
+        bc_DeleteCallContext(cctx);
+        bc_DeleteVector(typeargs, bc_VectorDeleterOfNull);
+        bc_AssignVector(fr->VariableTable, 0, runnableObj);
+        bc_PushVector(fr->ValueStack, runnableObj);
+        bc_SetScriptThreadFrameRef(sth, fr);
+        // Runnable#run を実行
+        bc_ExecuteMethod(runM, fr, th->Env);
         return NULL;
+}
+
+static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
+                                bc_ObjectMessageArgument argv[]) {
+        if (msg == OBJECT_MSG_DELETE) {
+        }
+        return bc_HandleObjectMessage(self, msg, argc, argv);
 }

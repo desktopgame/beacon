@@ -11,6 +11,10 @@ namespace beacon::lang {
 			nativeStart();
 		}
 
+		def join() -> Void {
+			nativeJoin();
+		}
+
 		def static getMainThread() -> Thread {
 			if(mainThread == null) {
 				mainThread = nativeGetMainThread();
@@ -27,6 +31,8 @@ namespace beacon::lang {
 		def native nativeInit() -> Void;
 
 		def native nativeStart() -> Void;
+
+		def native nativeJoin() -> Void;
 
 		def static native nativeGetMainThread() -> Thread;
 

@@ -1,11 +1,13 @@
 #ifndef BEACON_LIB_SIGNAL_LANG_THREAD_H
 #define BEACON_LIB_SIGNAL_LANG_THREAD_H
+#include "../../../vm/enviroment.h"
 #include "../../../vm/script_thread.h"
 #include "../../bc_library_impl.h"
 
 typedef struct bc_Thread {
         bc_Object Super;
         bc_ScriptThread* ScriptThreadRef;
+        bc_Enviroment* Env;
 } bc_Thread;
 
 /**

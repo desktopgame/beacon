@@ -1,28 +1,18 @@
-namespace run114 {
-	interface Walkable {
-		public:
-		def walk() -> Void;
-	}
-	interface Flyable {
-		public:
-		def fly() -> Void;
-	}
-	class Bird : Walkable, Flyable {
+namespace thread {
+	class MyRunnable : Runnable {
 		public:
 		def new() {
 		}
 
-		def walk() -> Void {
-			printLine("walk");
-		}
-
-		def fly() -> Void {
-			printLine("fly");
+		def run() -> Void {
+			var i = 0;
+			while(i < 10) {
+				printLine("print " + i);
+				i = i + 1;
+			}
 		}
 	}
 }
-var bird = new run114::Bird();
-run114::Walkable w = bird;
-run114::Flyable f = bird;
-w.walk();
-f.fly();
+var th = new Thread("thread", new thread::MyRunnable());
+th.start();
+th.join();

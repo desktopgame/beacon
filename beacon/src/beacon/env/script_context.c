@@ -289,6 +289,8 @@ static void boot(bc_ScriptContext* self) {
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/Exception.bc");
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/Thread.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/StackTraceElement.bc");
 
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
