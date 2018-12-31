@@ -59,8 +59,8 @@ static int gGCRuns = 0;
 // STWwait
 static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
-#define gSTWRequest_V (1)
-#define gSTWNotRequest_V (0)
+static const gint gSTWRequest_V = 1;
+static const gint gSTWNotRequest_V = 0;
 static volatile gint gSTWRequestedAtm = gSTWNotRequest_V;
 
 static GRWLock gSTWResultLock;
@@ -79,24 +79,24 @@ static void write_stw_result(stw_result write) {
 
 static GAsyncQueue* gInvokeReqQ;
 static GAsyncQueue* gInvokeResQ;
-#define gInvokeYes_V (1)
-#define gInvokeNo_V (0)
+static const gint gInvokeYes_V = 1;
+static const gint gInvokeNo_V = 0;
 static volatile gint gInvokeAtm = gInvokeNo_V;
 
-#define gInvokeStopForInvokeYes_V (1)
-#define gInvokeStopForInvokeNo_V (0)
+static const gint gInvokeStopForInvokeYes_V = 1;
+static const gint gInvokeStopForInvokeNo_V = 0;
 static volatile gint gStopForInvokeAtm = gInvokeStopForInvokeNo_V;
 
-#define gFGCYes_V (1)
-#define gFGCNo_V (0)
+static const gint gFGCYes_V = 1;
+static const gint gFGCNo_V = 0;
 static volatile gint gFGCAtm = gFGCNo_V;
 static GAsyncQueue* gFGCQ;
 
 static GThread* gGCThread = NULL;
 
 // force quit
-#define gForceQuitYes_V (1)
-#define gForceQuitNo_V (0)
+static const gint gForceQuitYes_V = 1;
+static const gint gForceQuitNo_V = 0;
 static volatile gint gForceQuitAtm = gForceQuitNo_V;
 
 #define REPORT_GC
