@@ -245,11 +245,6 @@ void bc_EndHeapSafeInvoke() {
         sem_v_signal(gInvokeReqQ);
 }
 
-bool bc_IsStopForSafeInvoke() {
-        return g_atomic_int_get(&gStopForInvokeAtm) ==
-               gInvokeStopForInvokeYes_V;
-}
-
 // private
 static bc_Heap* bc_new_heap() {
         bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));

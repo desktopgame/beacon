@@ -66,7 +66,6 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
         bc_DeleteFrame(fr);
         bc_CheckSTWRequest();
         bc_BeginHeapSafeInvoke();
-        assert(bc_IsStopForSafeInvoke());
         bc_ClearScriptContext(bc_GetScriptContext());
         bc_EndHeapSafeInvoke();
 
