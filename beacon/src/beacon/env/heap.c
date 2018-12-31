@@ -27,7 +27,7 @@ typedef enum stw_result {
         stw_none,
         stw_success,
         stw_fail_by_safe_invoke,
-        stw_fail_by_force_quit,
+        stw_fail_by_quit,
         stw_fail_by_fgc,
 } stw_result;
 // proto
@@ -59,9 +59,9 @@ static int gGCRuns = 0;
 // STWwait
 static GAsyncQueue* gReqQ;
 static GAsyncQueue* gResQ;
-static const gint gSTWRequest_V = 1;
-static const gint gSTWNotRequest_V = 0;
-static volatile gint gSTWRequestedAtm = gSTWNotRequest_V;
+static const gint STW_REQUEST_ON = 1;
+static const gint STW_REQUEST_OFF = 0;
+static volatile gint gSTWRequestedAtm = STW_REQUEST_OFF;
 
 static GRWLock gSTWResultLock;
 static volatile stw_result gSTWResult = stw_none;
@@ -79,25 +79,25 @@ static void write_stw_result(stw_result write) {
 
 static GAsyncQueue* gInvokeReqQ;
 static GAsyncQueue* gInvokeResQ;
-static const gint gInvokeYes_V = 1;
-static const gint gInvokeNo_V = 0;
-static volatile gint gInvokeAtm = gInvokeNo_V;
+static const gint SAFE_INVOKE_ON = 1;
+static const gint SAFE_INVOKE_OFF = 0;
+static volatile gint gInvokeAtm = SAFE_INVOKE_OFF;
 
-static const gint gInvokeStopForInvokeYes_V = 1;
-static const gint gInvokeStopForInvokeNo_V = 0;
-static volatile gint gStopForInvokeAtm = gInvokeStopForInvokeNo_V;
+static const gint STOP_FOR_ON = 1;
+static const gint STOP_FOR_OFF = 0;
+static volatile gint gStopForInvokeAtm = STOP_FOR_OFF;
 
-static const gint gFGCYes_V = 1;
-static const gint gFGCNo_V = 0;
-static volatile gint gFGCAtm = gFGCNo_V;
+static const gint FULL_GC_ON = 1;
+static const gint FULL_GC_OFF = 0;
+static volatile gint gFGCAtm = FULL_GC_OFF;
 static GAsyncQueue* gFGCQ;
 
 static GThread* gGCThread = NULL;
 
-// force quit
-static const gint gForceQuitYes_V = 1;
-static const gint gForceQuitNo_V = 0;
-static volatile gint gForceQuitAtm = gForceQuitNo_V;
+// quit
+static const gint QUIT_ON = 1;
+static const gint QUIT_OFF = 0;
+static volatile gint gQuitAtm = QUIT_OFF;
 
 #define REPORT_GC
 
@@ -129,8 +129,8 @@ void bc_DestroyHeap() {
         // ロック中なら強制的に再開
         // resume_stwの後に毎回確認される
         // bc_BeginHeapSafeInvoke();
-        g_atomic_int_set(&gForceQuitAtm, gForceQuitYes_V);
-        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
+        g_atomic_int_set(&gQuitAtm, QUIT_ON);
+        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
                 sem_v_signal(gResQ);
         }
         // bc_EndHeapSafeInvoke();
@@ -195,9 +195,9 @@ void bc_WaitFullGC() {
         if (gHeap == NULL) {
                 return;
         }
-        g_atomic_int_set(&gFGCAtm, gFGCYes_V);
+        g_atomic_int_set(&gFGCAtm, FULL_GC_ON);
         //現在STWを待機しているか
-        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
+        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
                 write_stw_result(stw_fail_by_fgc);
                 sem_v_signal(gResQ);
         }
@@ -213,7 +213,7 @@ void bc_CheckSTWRequest() {
         if (gHeap->CollectBlocking > 0) {
                 return;
         }
-        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWNotRequest_V) {
+        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_OFF) {
                 return;
         }
         write_stw_result(stw_success);
@@ -226,9 +226,9 @@ void bc_BeginHeapSafeInvoke() {
         assert(g_thread_self() != gGCThread);
 #endif
         //セーフインボーク中としてマーク
-        g_atomic_int_set(&gInvokeAtm, gInvokeYes_V);
+        g_atomic_int_set(&gInvokeAtm, SAFE_INVOKE_ON);
         //現在STWを待機しているか
-        if (g_atomic_int_get(&gSTWRequestedAtm) == gSTWRequest_V) {
+        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
                 write_stw_result(stw_fail_by_safe_invoke);
                 sem_v_signal(gResQ);
         }
@@ -241,7 +241,7 @@ void bc_EndHeapSafeInvoke() {
         assert(g_thread_self() != gGCThread);
 #endif
         //セーフインボークを解除
-        g_atomic_int_set(&gInvokeAtm, gInvokeNo_V);
+        g_atomic_int_set(&gInvokeAtm, SAFE_INVOKE_OFF);
         //スレッドを再開
         sem_v_signal(gInvokeReqQ);
 }
@@ -289,17 +289,17 @@ static void sem_v_signal(GAsyncQueue* q) {
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
 static stw_result bc_request_stw() {
-        g_atomic_int_set(&gSTWRequestedAtm, gSTWRequest_V);
-        if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
-                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
+        g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_ON);
+        if (g_atomic_int_get(&gInvokeAtm) == SAFE_INVOKE_ON) {
+                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
                 return stw_fail_by_safe_invoke;
         }
-        if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
-                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
-                return stw_fail_by_force_quit;
+        if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
+                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
+                return stw_fail_by_quit;
         }
-        if (g_atomic_int_get(&gFGCAtm) == gFGCYes_V) {
-                g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
+        if (g_atomic_int_get(&gFGCAtm) == FULL_GC_ON) {
+                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
                 return stw_fail_by_fgc;
         }
         sem_p_wait(gResQ);
@@ -307,7 +307,7 @@ static stw_result bc_request_stw() {
 }
 
 static void bc_resume_stw() {
-        g_atomic_int_set(&gSTWRequestedAtm, gSTWNotRequest_V);
+        g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
         sem_v_signal(gReqQ);
 }
 
@@ -315,15 +315,14 @@ static void bc_resume_stw() {
 
 static gpointer gc_run(gpointer data) {
         while (true) {
-                if (g_atomic_int_get(&gForceQuitAtm) == gForceQuitYes_V) {
+                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
                         break;
                 }
                 gc_full();
                 safe_invoke();
                 //ヒープを保護してルートを取得
                 if (bc_request_stw() == stw_success) {
-                        if (g_atomic_int_get(&gForceQuitAtm) ==
-                            gForceQuitYes_V) {
+                        if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
                                 break;
                         }
                         gc_promotion();
@@ -333,8 +332,7 @@ static gpointer gc_run(gpointer data) {
                         gc_mark();
                         //ライトバリアーを確認
                         if (bc_request_stw() == stw_success) {
-                                if (g_atomic_int_get(&gForceQuitAtm) ==
-                                    gForceQuitYes_V) {
+                                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
                                         break;
                                 }
                                 gc_mark_wait();
@@ -517,16 +515,16 @@ static void gc_delete(bc_VectorItem item) {
 }
 
 static void safe_invoke() {
-        if (g_atomic_int_get(&gInvokeAtm) == gInvokeYes_V) {
-                g_atomic_int_set(&gStopForInvokeAtm, gInvokeStopForInvokeYes_V);
+        if (g_atomic_int_get(&gInvokeAtm) == SAFE_INVOKE_ON) {
+                g_atomic_int_set(&gStopForInvokeAtm, STOP_FOR_ON);
                 sem_v_signal(gInvokeResQ);
                 sem_p_wait(gInvokeReqQ);
         }
-        g_atomic_int_set(&gStopForInvokeAtm, gInvokeStopForInvokeNo_V);
+        g_atomic_int_set(&gStopForInvokeAtm, STOP_FOR_OFF);
 }
 
 static bool gc_full() {
-        if (g_atomic_int_get(&gFGCAtm) != gFGCYes_V) {
+        if (g_atomic_int_get(&gFGCAtm) != FULL_GC_ON) {
                 return false;
         }
         gc_overwrite_mark(PAINT_UNMARKED_T);
@@ -534,7 +532,7 @@ static bool gc_full() {
         gc_collect_all_root();
         gc_mark();
         gc_sweep();
-        g_atomic_int_set(&gFGCAtm, gFGCNo_V);
+        g_atomic_int_set(&gFGCAtm, FULL_GC_OFF);
         g_async_queue_push(gFGCQ, GINT_TO_POINTER(1));
         return true;
 }
