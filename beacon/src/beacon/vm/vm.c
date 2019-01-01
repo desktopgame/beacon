@@ -144,6 +144,8 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                 }
                 self->PC = IDX;
                 bc_Opcode b = (bc_Opcode)bc_GetEnviromentSourceAt(env, IDX);
+                bc_PrintOpcode(env->Bytecode->Instructions, IDX);
+                bc_Println();
                 switch (b) {
                         // int & int
                         case OP_IADD:
@@ -368,6 +370,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o =
                                     (bc_Object*)bc_GetEnviromentCIntAt(env,
                                                                        index);
+                                bc_Integer* i = o;
                                 pushv(self, o);
                                 break;
                         }
@@ -385,6 +388,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* d =
                                     bc_GetEnviromentCFloatAt(env, index);
+                                bc_Float* flo = d;
                                 pushv(self, d);
                                 break;
                         }

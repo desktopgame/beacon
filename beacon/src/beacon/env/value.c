@@ -46,3 +46,40 @@ bc_Object* bc_DoubleToObject(double d) { return (bc_Object*)bc_NewDouble(d); }
 bc_Object* bc_BoolToObject(bool b) { return bc_GetBoolObject(b); }
 
 bc_Object* bc_CharToObject(char c) { return (bc_Object*)bc_NewChar(c); }
+
+//判別用関数
+bool bc_IsCharValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_CHAR;
+}
+
+bool bc_IsBoolValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_BOOL;
+}
+
+bool bc_IsShortValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_SHORT;
+}
+
+bool bc_IsIntValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_INT;
+}
+
+bool bc_IsLongValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_LONG;
+}
+
+bool bc_IsFloatValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_FLOAT;
+}
+
+bool bc_IsDoubleValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_DOUBLE;
+}
+
+bool bc_IsStringValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_STRING;
+}
+
+bool bc_IsNullValue(bc_Object* self) {
+        return self->GType->CoreType == BC_TYPE_NULL;
+}

@@ -150,9 +150,24 @@ int bc_FprintOpcode(FILE* fp, bc_Vector* source, int index) {
                         fprintf(fp, "bflip");
                         break;
                 // push const
+                case OP_SHCONST: {
+                        int a = bc_AtVector(source, ++index);
+                        fprintf(fp, "push shconst(%d)", a);
+                        break;
+                }
                 case OP_ICONST: {
                         int a = bc_AtVector(source, ++index);
                         fprintf(fp, "push iconst(%d)", a);
+                        break;
+                }
+                case OP_LCONST: {
+                        int a = bc_AtVector(source, ++index);
+                        fprintf(fp, "push lconst(%d)", a);
+                        break;
+                }
+                case OP_FCONST: {
+                        int a = bc_AtVector(source, ++index);
+                        fprintf(fp, "push fconst(%d)", a);
                         break;
                 }
                 case OP_DCONST: {

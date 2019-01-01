@@ -279,30 +279,6 @@ bc_Object* bc_GetDefaultObject(bc_GenericType* gt) {
         return a;
 }
 
-bool bc_IsCharValue(bc_Object* self) {
-        return self->GType->CoreType == BC_TYPE_CHAR;
-}
-
-bool bc_IsBoolValue(bc_Object* self) {
-        return self->GType->CoreType == BC_TYPE_BOOL;
-}
-
-bool bc_IsIntValue(bc_Object* self) {
-        return self->GType->CoreType == BC_TYPE_INT;
-}
-
-bool bc_IsDoubleValue(bc_Object* self) {
-        return self->GType->CoreType == BC_TYPE_DOUBLE;
-}
-
-bool bc_IsStringValue(bc_Object* self) {
-        return self->GType->CoreType == BC_TYPE_STRING;
-}
-
-bool bc_IsNullValue(bc_Object* self) {
-        return self->GType->CoreType == BC_TYPE_NULL;
-}
-
 const char* bc_GetObjectName(bc_Object* self) {
         const char* name = "NULL";
         if (self->GType != NULL && self->GType->CoreType != NULL) {

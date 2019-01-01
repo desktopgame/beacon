@@ -231,46 +231,4 @@ bc_Object* bc_GetDefaultObject(struct bc_GenericType* gt);
  * @return
  */
 const char* bc_GetObjectName(bc_Object* self);
-
-/**
- * オブジェクトが文字型の値を持つなら true.
- * @param self
- * @return
- */
-bool bc_IsCharValue(bc_Object* self);
-
-/**
- * オブジェクトが真偽値型の値を持つなら true.
- * @param self
- * @return
- */
-bool bc_IsBoolValue(bc_Object* self);
-
-/**
- * オブジェクトが整数型の値を持つなら true.
- * @param self
- * @return
- */
-bool bc_IsIntValue(bc_Object* self);
-
-/**
- * オブジェクトが実数型の値を持つなら true.
- * @param self
- * @return
- */
-bool bc_IsDoubleValue(bc_Object* self);
-
-/**
- * オブジェクトが文字列型の値を持つなら true.
- * @param self
- * @return
- */
-bool bc_IsStringValue(bc_Object* self);
-
-/**
- * オブジェクトが空なら true.
- * @param self
- * @return
- */
-bool bc_IsNullValue(bc_Object* self);
 #endif  // !SIGNAL_ENV_OBJECT_H

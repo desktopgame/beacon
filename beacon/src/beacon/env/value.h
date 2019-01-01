@@ -101,4 +101,68 @@ bc_Object* bc_BoolToObject(bool b);
  * @return
  */
 bc_Object* bc_CharToObject(char c);
+
+//判別用関数
+/**
+ * オブジェクトが文字型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsCharValue(bc_Object* self);
+
+/**
+ * オブジェクトが真偽値型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsBoolValue(bc_Object* self);
+
+/**
+ * オブジェクトが整数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsShortValue(bc_Object* self);
+
+/**
+ * オブジェクトが整数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsIntValue(bc_Object* self);
+
+/**
+ * オブジェクトが整数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsLongValue(bc_Object* self);
+
+/**
+ * オブジェクトが実数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsFloatValue(bc_Object* self);
+
+/**
+ * オブジェクトが実数型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsDoubleValue(bc_Object* self);
+
+/**
+ * オブジェクトが文字列型の値を持つなら true.
+ * @param self
+ * @return
+ */
+bool bc_IsStringValue(bc_Object* self);
+
+/**
+ * オブジェクトが空なら true.
+ * @param self
+ * @return
+ */
+bool bc_IsNullValue(bc_Object* self);
 #endif
