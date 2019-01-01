@@ -13,19 +13,47 @@
 // proto
 static char* text_strclone(const char* source);
 static char* read_line_impl(FILE* fp);
+static char* read_digits(const char* literal, const char* ending, char* block,
+                         int block_size);
+static bool contains_char(const char* source, char a);
 static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
 
-short bc_StrToShort(const char* literal) { return atoi(literal); }
+short bc_StrToShort(const char* literal) {
+        char block[16] = {0};
+        read_digits(literal, "sS", block, 16);
+        short ret = atoi(block);
+        return ret;
+}
 
-int bc_StrToInt(const char* literal) { return atoi(literal); }
+int bc_StrToInt(const char* literal) {
+        char block[16] = {0};
+        read_digits(literal, "iI", block, 16);
+        int ret = atoi(block);
+        return ret;
+}
 
-long bc_StrToLong(const char* literal) { return atol(literal); }
+long bc_StrToLong(const char* literal) {
+        char block[32] = {0};
+        read_digits(literal, "lL", block, 32);
+        long ret = atol(block);
+        return ret;
+}
 
-float bc_StrToFloat(const char* literal) { return (float)atof(literal); }
+float bc_StrToFloat(const char* literal) {
+        char block[16] = {0};
+        read_digits(literal, "fF", block, 16);
+        float ret = (float)atof(block);
+        return ret;
+}
 
-double bc_StrToDouble(const char* literal) { return atof(literal); }
+double bc_StrToDouble(const char* literal) {
+        char block[32] = {0};
+        read_digits(literal, "dD", block, 32);
+        double ret = atof(block);
+        return ret;
+}
 
 char* bc_Strdup(const char* source) {
         if (source == NULL) {
@@ -174,4 +202,36 @@ static char* read_line_impl(FILE* fp) {
                 bc_AppendBuffer(sb, ch);
         }
         return bc_ReleaseBuffer(sb);
+}
+
+static char* read_digits(const char* literal, const char* ending, char* block,
+                         int block_size) {
+        int end = 0;
+        for (int i = 0; i < block_size; i++) {
+                if (literal[i] == '\0') {
+                        end = i + 1;
+                        break;
+                } else if (contains_char(ending, literal[i])) {
+                        end = i + 1;
+                        break;
+                } else {
+                        block[i] = literal[i];
+                }
+        }
+        for (int i = end; i < block_size; i++) {
+                block[i] = '\0';
+        }
+        return block;
+}
+
+static bool contains_char(const char* source, char a) {
+        for (int i = 0;; i++) {
+                if (source[i] == '\0') {
+                        break;
+                }
+                if (source[i] == a) {
+                        return true;
+                }
+        }
+        return false;
 }
