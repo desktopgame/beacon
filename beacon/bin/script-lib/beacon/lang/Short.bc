@@ -78,6 +78,10 @@ namespace beacon::lang {
 			return nativeMul(-1s);
 		}
 
+		def toString() -> String {
+			return nativeToString();
+		}
+
 		private:
 		def native nativeInit(Short i) -> Void;
 
@@ -110,6 +114,8 @@ namespace beacon::lang {
 		def native nativeEQ(Short a) -> Bool;
 
 		def native nativeEquals(Object a) -> Bool;
+
+		def native nativeToString() -> String;
 
 	}
 }

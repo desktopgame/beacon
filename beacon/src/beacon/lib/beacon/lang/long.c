@@ -221,7 +221,8 @@ static void bc_long_nativeEQ(bc_Method* parent, bc_Frame* fr,
 static void bc_long_nativeToString(bc_Method* parent, bc_Frame* fr,
                                    bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
-        bc_Object* a = bc_AtVector(fr->VariableTable, 1);
-        bc_Object* ret = bc_GetBoolObject(LONG_VALUE(self) == LONG_VALUE(a));
-        bc_PushVector(fr->ValueStack, ret);
+        // bc_Object* a = bc_AtVector(fr->VariableTable, 1);
+        char block[32] = {0};
+        sprintf(block, "%ld", LONG_VALUE(self));
+        bc_PushVector(fr->ValueStack, bc_NewString(block));
 }

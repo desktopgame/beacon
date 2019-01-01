@@ -35,6 +35,8 @@ static void bc_short_nativeBitAnd(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env);
 static void bc_short_nativeEQ(bc_Method* parent, bc_Frame* fr,
                               bc_Enviroment* env);
+static void bc_short_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                    bc_Enviroment* env);
 
 bc_Object* bc_NewShort(short value) {
         bc_Short* s =
@@ -71,6 +73,8 @@ void bc_InitShort() {
         bc_DefineNativeMethodClass(shortClass, "nativeBitAnd",
                                    bc_short_nativeBitAnd);
         bc_DefineNativeMethodClass(shortClass, "nativeEQ", bc_short_nativeEQ);
+        bc_DefineNativeMethodClass(shortClass, "nativeToString",
+                                   bc_short_nativeToString);
 }
 
 bc_Type* bc_GetShortType() {
@@ -215,4 +219,13 @@ static void bc_short_nativeEQ(bc_Method* parent, bc_Frame* fr,
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret = bc_GetBoolObject(SHORT_VALUE(self) == SHORT_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
+}
+
+static void bc_short_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                    bc_Enviroment* env) {
+        bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+        short sh = SHORT_VALUE(self);
+        char block[16] = {0};
+        sprintf(block, "%d", (int)sh);
+        bc_PushVector(fr->ValueStack, bc_NewString(block));
 }
