@@ -107,7 +107,8 @@ int bc_AddCLongEnviroment(bc_Enviroment* self, long l) {
 
 int bc_AddCFloatEnviroment(bc_Enviroment* self, float f) {
         int len = self->ConstantPool->Length;
-        add_constant(self, (bc_Object*)bc_NewFloat(f));
+        bc_Float* bf = bc_NewFloat(f);
+        add_constant(self, bf);
         return len;
 }
 

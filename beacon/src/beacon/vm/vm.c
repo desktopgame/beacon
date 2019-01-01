@@ -384,12 +384,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_FCONST: {
-                                int index =
+                                int fci =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
-                                bc_Object* d =
-                                    bc_GetEnviromentCFloatAt(env, index);
-                                bc_Float* flo = d;
-                                pushv(self, d);
+                                bc_Object* fobj =
+                                    bc_GetEnviromentCFloatAt(env, fci);
+                                bc_Float* flo = fobj;
+                                pushv(self, fobj);
                                 break;
                         }
                         case OP_DCONST: {

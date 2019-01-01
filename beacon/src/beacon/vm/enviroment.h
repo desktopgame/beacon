@@ -156,6 +156,14 @@ struct bc_Object* bc_GetEnviromentCLongAt(bc_Enviroment* self, int index);
  * @param index
  * @return
  */
+struct bc_Object* bc_GetEnviromentCFloatAt(bc_Enviroment* self, int index);
+
+/**
+ * 指定位置の浮動小数型の定数を返します.
+ * @param self
+ * @param index
+ * @return
+ */
 struct bc_Object* bc_GetEnviromentCDoubleAt(bc_Enviroment* self, int index);
 
 /**
