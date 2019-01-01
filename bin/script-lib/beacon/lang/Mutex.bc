@@ -1,0 +1,23 @@
+namespace beacon::lang {
+	class Mutex {
+		public:
+		def new() {
+			nativeInit();
+		}
+
+		def lock() -> Void {
+			nativeLock();
+		}
+
+		def unlock() -> Void {
+			nativeUnlock();
+		}
+
+		private:
+		def native nativeInit() -> Void;
+
+		def native nativeLock() -> Void;
+
+		def native nativeUnlock() -> Void;
+	}
+}

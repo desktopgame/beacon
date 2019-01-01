@@ -258,6 +258,7 @@ static void boot(bc_ScriptContext* self) {
         bc_InitLocaleType();
         bc_InitTime();
         bc_InitThread();
+        bc_InitMutex();
         bc_InitMonitor();
         //ブートストラップクラスローダー
         self->BootstrapClassLoader =
