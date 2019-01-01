@@ -1,10 +1,60 @@
-var iv = 10i;
-var shv = 10s;
-var lv = 100l;
-var flv = 10f;
-var dov = 10d;
-printLine(iv);
-printLine(shv);
-printLine(lv);
-printLine(flv);
-printLine(dov);
+namespace mutex {
+	class Range {
+		private:
+		Int offset;
+		Int length;
+		Int seek;
+
+		public:
+		def new(Int offset, Int length) {
+			this.offset = offset;
+			this.length = length;
+		}
+
+		def seek() -> Int {
+			seek = seek + 1;
+			return getNumber();
+		}
+
+		def canSeek() -> Bool {
+			return seek < length;
+		}
+
+		def getNumber() -> Int {
+			return offset + seek;
+		}
+	}
+	class CountRunner : Runnable {
+		private:
+		String name;
+		Mutex m;
+		Range r;
+
+		public:
+		def new(String name, Mutex m, Range r) {
+			this.name = name;
+			this.m = m;
+			this.r = r;
+		}
+
+		def run() -> Void {
+			while(true) {
+				m.lock();
+				if(!r.canSeek()) {
+					m.unlock();
+					break;
+				}
+				printLine(name + ":" + r.seek());
+				m.unlock();
+			}
+		}
+	}
+}
+var m = new Mutex();
+var r = new mutex::Range(0, 100);
+var tha = new Thread("a", new mutex::CountRunner("a", m, r));
+var thb = new Thread("b", new mutex::CountRunner("b", m, r));
+tha.start();
+thb.start();
+tha.join();
+thb.join();
