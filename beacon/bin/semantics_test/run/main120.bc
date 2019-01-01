@@ -1,0 +1,10 @@
+var iv = 10i;
+var shv = 10s;
+var lv = 100l;
+var flv = 10f;
+var dov = 10d;
+printLine(iv.toString());
+printLine(shv.toString());
+printLine(lv.toString());
+printLine(flv.toString());
+printLine(dov.toString());
