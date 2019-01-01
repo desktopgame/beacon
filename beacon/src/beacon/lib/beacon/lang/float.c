@@ -1,5 +1,6 @@
 #include "float.h"
 #include "../../bc_library_impl.h"
+#include "../../bc_library_interface.h"
 
 // proto
 static void bc_float_nativeInit(bc_Method* parent, bc_Frame* fr,
@@ -24,6 +25,8 @@ static void bc_float_nativeLE(bc_Method* parent, bc_Frame* fr,
                               bc_Enviroment* env);
 static void bc_float_nativeEQ(bc_Method* parent, bc_Frame* fr,
                               bc_Enviroment* env);
+static void bc_float_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                    bc_Enviroment* env);
 
 bc_Object* bc_NewFloat(float value) {
         bc_Float* ret =
@@ -51,6 +54,8 @@ void bc_InitFloat() {
         bc_DefineNativeMethodClass(floatClass, "nativeLT", bc_float_nativeLT);
         bc_DefineNativeMethodClass(floatClass, "nativeLE", bc_float_nativeLE);
         bc_DefineNativeMethodClass(floatClass, "nativeEQ", bc_float_nativeEQ);
+        bc_DefineNativeMethodClass(floatClass, "nativeToString",
+                                   bc_float_nativeToString);
 }
 
 bc_Type* bc_GetFloatType() {
@@ -150,4 +155,13 @@ static void bc_float_nativeEQ(bc_Method* parent, bc_Frame* fr,
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret = bc_GetBoolObject(FLOAT_VALUE(self) == FLOAT_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
+}
+
+static void bc_float_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                    bc_Enviroment* env) {
+        bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+        float f = FLOAT_VALUE(self);
+        char block[16] = {0};
+        sprintf(block, "%f", f);
+        bc_PushVector(fr->ValueStack, bc_NewString(block));
 }

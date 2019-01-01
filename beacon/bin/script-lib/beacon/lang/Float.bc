@@ -12,6 +12,10 @@ namespace beacon::lang {
 			return nativeEquals(a);
 		}
 
+		def toString() -> String {
+			return nativeToString();
+		}
+
 		operator +(Float a) -> Float {
 			return nativeAdd(a);
 		}
@@ -78,5 +82,7 @@ namespace beacon::lang {
 		def native nativeEQ(Float a) -> Bool;
 
 		def native nativeEquals(Object a) -> Bool;
+
+		def native nativeToString() -> String;
 	}
 }
