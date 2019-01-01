@@ -228,8 +228,11 @@ bool bc_IsCharCharBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
 
 int bc_GetIndexILBinaryOp(bc_ILBinaryOp* self, bc_Enviroment* env,
                           bc_CallContext* cctx) {
-        if (bc_IsIntIntBinaryOp(self, env, cctx) ||
-            bc_IsDoubleDoubleBinaryOp(self, env, cctx)) {
+        if (bc_IsShortShortBinaryOp(self, env, cctx) ||
+            bc_IsIntIntBinaryOp(self, env, cctx) ||
+            bc_IsLongLongBinaryOp(self, env, cctx) ||
+            bc_IsDoubleDoubleBinaryOp(self, env, cctx) ||
+            bc_IsFloatFloatBinaryOp(self, env, cctx)) {
                 return -1;
         }
         return bc_GetIndexILBinaryOp2(self->Left, self->Right, self->Type, env,

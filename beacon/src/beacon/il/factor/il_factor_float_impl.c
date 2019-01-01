@@ -16,9 +16,9 @@ bc_ILFactor* bc_WrapILFloat(bc_ILFloat* self) {
         return ret;
 }
 
-bc_ILFloat* bc_NewILFloat(double d) {
+bc_ILFloat* bc_NewILFloat(float f) {
         bc_ILFloat* ret = (bc_ILFloat*)MEM_MALLOC(sizeof(bc_ILFloat));
-        ret->Value = d;
+        ret->Value = f;
         return ret;
 }
 

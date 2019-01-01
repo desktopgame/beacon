@@ -353,6 +353,15 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 pushv(self, bc_GetBoolObject(~SPB(self)));
                                 break;
                                 // push const
+                        case OP_SHCONST: {
+                                int index =
+                                    (int)bc_GetEnviromentSourceAt(env, ++IDX);
+                                bc_Object* o =
+                                    (bc_Object*)bc_GetEnviromentCShortAt(env,
+                                                                         index);
+                                pushv(self, o);
+                                break;
+                        }
                         case OP_ICONST: {
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
@@ -360,6 +369,23 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (bc_Object*)bc_GetEnviromentCIntAt(env,
                                                                        index);
                                 pushv(self, o);
+                                break;
+                        }
+                        case OP_LCONST: {
+                                int index =
+                                    (int)bc_GetEnviromentSourceAt(env, ++IDX);
+                                bc_Object* o =
+                                    (bc_Object*)bc_GetEnviromentCLongAt(env,
+                                                                        index);
+                                pushv(self, o);
+                                break;
+                        }
+                        case OP_FCONST: {
+                                int index =
+                                    (int)bc_GetEnviromentSourceAt(env, ++IDX);
+                                bc_Object* d =
+                                    bc_GetEnviromentCFloatAt(env, index);
+                                pushv(self, d);
                                 break;
                         }
                         case OP_DCONST: {

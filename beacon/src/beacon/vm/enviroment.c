@@ -137,9 +137,24 @@ bc_Object* bc_GetEnviromentConstantAt(bc_Enviroment* self, int index) {
         return (bc_Object*)bc_AtVector(self->ConstantPool, index);
 }
 
+bc_Object* bc_GetEnviromentCShortAt(bc_Enviroment* self, int index) {
+        bc_Object* e = bc_GetEnviromentConstantAt(self, index);
+        return e;
+}
+
 bc_Object* bc_GetEnviromentCIntAt(bc_Enviroment* self, int index) {
         bc_Object* e = bc_GetEnviromentConstantAt(self, index);
         assert(bc_IsIntValue(e));
+        return e;
+}
+
+bc_Object* bc_GetEnviromentCLongAt(bc_Enviroment* self, int index) {
+        bc_Object* e = bc_GetEnviromentConstantAt(self, index);
+        return e;
+}
+
+bc_Object* bc_GetEnviromentCFloatAt(bc_Enviroment* self, int index) {
+        bc_Object* e = bc_GetEnviromentConstantAt(self, index);
         return e;
 }
 

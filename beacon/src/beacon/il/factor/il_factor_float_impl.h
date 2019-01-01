@@ -22,7 +22,7 @@ typedef struct bc_ILFloat {
 
 bc_ILFactor* bc_WrapILFloat(bc_ILFloat* self);
 
-bc_ILFloat* bc_NewILFloat(double d);
+bc_ILFloat* bc_NewILFloat(float f);
 
 void bc_GenerateILFloat(bc_ILFloat* self, bc_Enviroment* env,
                         bc_CallContext* cctx);

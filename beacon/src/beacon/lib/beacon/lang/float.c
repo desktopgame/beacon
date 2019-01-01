@@ -81,7 +81,7 @@ static void bc_float_nativeAdd(bc_Method* parent, bc_Frame* fr,
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret =
-            (bc_Object*)bc_NewDouble(FLOAT_VALUE(self) + FLOAT_VALUE(a));
+            (bc_Object*)bc_NewFloat(FLOAT_VALUE(self) + FLOAT_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
 }
 
@@ -90,7 +90,7 @@ static void bc_float_nativeSub(bc_Method* parent, bc_Frame* fr,
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret =
-            (bc_Object*)bc_NewDouble(FLOAT_VALUE(self) - FLOAT_VALUE(a));
+            (bc_Object*)bc_NewFloat(FLOAT_VALUE(self) - FLOAT_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
 }
 
@@ -99,7 +99,7 @@ static void bc_float_nativeMul(bc_Method* parent, bc_Frame* fr,
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret =
-            (bc_Object*)bc_NewDouble(FLOAT_VALUE(self) * FLOAT_VALUE(a));
+            (bc_Object*)bc_NewFloat(FLOAT_VALUE(self) * FLOAT_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
 }
 
@@ -108,7 +108,7 @@ static void bc_float_nativeDiv(bc_Method* parent, bc_Frame* fr,
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* a = bc_AtVector(fr->VariableTable, 1);
         bc_Object* ret =
-            (bc_Object*)bc_NewDouble(FLOAT_VALUE(self) / FLOAT_VALUE(a));
+            (bc_Object*)bc_NewFloat(FLOAT_VALUE(self) / FLOAT_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
 }
 
