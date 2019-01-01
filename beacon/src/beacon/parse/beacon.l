@@ -278,44 +278,44 @@ static void update_loc() {
 
 <INITIAL>[1-9][0-9]*[s|S] {
 	//100s
-	yylval.ast_value = bc_NewASTShort((short)atoi(yytext));
+	yylval.ast_value = bc_NewASTShort(bc_StrToShort(yytext));
 	return SHORT;
 }
 
 <INITIAL>[1-9][0-9]*[i|I]? {
 	//100
 	//100i
-	yylval.ast_value = bc_NewASTInt(atoi(yytext));
+	yylval.ast_value = bc_NewASTInt(bc_StrToInt(yytext));
 	return INT;
 }
 
 <INITIAL>[1-9][0-9]*[l|L] {
 	//100l
-	yylval.ast_value = bc_NewASTLong(atol(yytext));
+	yylval.ast_value = bc_NewASTLong(bc_StrToLong(yytext));
 	return LONG;
 }
 
 <INITIAL>[1-9][0-9]*[f|F] {
 	//100f
-	yylval.ast_value = bc_NewASTFloat(atof(yytext));
+	yylval.ast_value = bc_NewASTFloat(bc_StrToFloat(yytext));
 	return FLOAT;
 }
 
 <INITIAL>[0-9]*\.[0-9]+[f|F] {
 	//10.0f
-	yylval.ast_value = bc_NewASTFloat(atof(yytext));
+	yylval.ast_value = bc_NewASTFloat(bc_StrToFloat(yytext));
 	return FLOAT;
 }
 
 <INITIAL>[0-9]*\.[0-9]+[d|D]? {
 	//10.0
 	//10.0d
-	yylval.ast_value = bc_NewASTDouble(atof(yytext));
+	yylval.ast_value = bc_NewASTDouble(bc_StrToDouble(yytext));
 	return DOUBLE;
 }
 <INITIAL>[1-9][0-9]*[d|D] {
 	//100d
-	yylval.ast_value = bc_NewASTDouble(atof(yytext));
+	yylval.ast_value = bc_NewASTDouble(bc_StrToDouble(yytext));
 	return DOUBLE;
 }
 

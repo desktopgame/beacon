@@ -1556,7 +1556,7 @@ YY_RULE_SETUP
 #line 279 "beacon.l"
 {
 	//100s
-	yylval.ast_value = bc_NewASTShort((short)atoi(yytext));
+	yylval.ast_value = bc_NewASTShort(bc_StrToShort(yytext));
 	return SHORT;
 }
 	YY_BREAK
@@ -1566,7 +1566,7 @@ YY_RULE_SETUP
 {
 	//100
 	//100i
-	yylval.ast_value = bc_NewASTInt(atoi(yytext));
+	yylval.ast_value = bc_NewASTInt(bc_StrToInt(yytext));
 	return INT;
 }
 	YY_BREAK
@@ -1575,7 +1575,7 @@ YY_RULE_SETUP
 #line 292 "beacon.l"
 {
 	//100l
-	yylval.ast_value = bc_NewASTLong(atol(yytext));
+	yylval.ast_value = bc_NewASTLong(bc_StrToLong(yytext));
 	return LONG;
 }
 	YY_BREAK
@@ -1584,7 +1584,7 @@ YY_RULE_SETUP
 #line 298 "beacon.l"
 {
 	//100f
-	yylval.ast_value = bc_NewASTFloat(atof(yytext));
+	yylval.ast_value = bc_NewASTFloat(bc_StrToFloat(yytext));
 	return FLOAT;
 }
 	YY_BREAK
@@ -1593,7 +1593,7 @@ YY_RULE_SETUP
 #line 304 "beacon.l"
 {
 	//10.0f
-	yylval.ast_value = bc_NewASTFloat(atof(yytext));
+	yylval.ast_value = bc_NewASTFloat(bc_StrToFloat(yytext));
 	return FLOAT;
 }
 	YY_BREAK
@@ -1603,7 +1603,7 @@ YY_RULE_SETUP
 {
 	//10.0
 	//10.0d
-	yylval.ast_value = bc_NewASTDouble(atof(yytext));
+	yylval.ast_value = bc_NewASTDouble(bc_StrToDouble(yytext));
 	return DOUBLE;
 }
 	YY_BREAK
@@ -1612,7 +1612,7 @@ YY_RULE_SETUP
 #line 316 "beacon.l"
 {
 	//100d
-	yylval.ast_value = bc_NewASTDouble(atof(yytext));
+	yylval.ast_value = bc_NewASTDouble(bc_StrToDouble(yytext));
 	return DOUBLE;
 }
 	YY_BREAK

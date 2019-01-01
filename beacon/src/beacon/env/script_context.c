@@ -266,7 +266,13 @@ static void boot(bc_ScriptContext* self) {
                                   "beacon/lang/Object.bc");
 
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/Short.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/Int.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/Long.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/Float.bc");
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/Double.bc");
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,

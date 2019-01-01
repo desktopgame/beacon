@@ -17,6 +17,41 @@
 #include "vector.h"
 
 /**
+ * beaconのshortリテラル表現をCのリテラルへ変換します。
+ * @param literal
+ * @return
+ */
+short bc_StrToShort(const char* literal);
+
+/**
+ * beaconのintリテラル表現をCのリテラルへ変換します。
+ * @param literal
+ * @return
+ */
+int bc_StrToInt(const char* literal);
+
+/**
+ * beaconのlongリテラル表現をCのリテラルへ変換します。
+ * @param literal
+ * @return
+ */
+long bc_StrToLong(const char* literal);
+
+/**
+ * beaconのfloatリテラル表現をCのリテラルへ変換します。
+ * @param literal
+ * @return
+ */
+float bc_StrToFloat(const char* literal);
+
+/**
+ * beaconのdoubleリテラル表現をCのリテラルへ変換します。
+ * @param literal
+ * @return
+ */
+double bc_StrToDouble(const char* literal);
+
+/**
  * 引数の文字列を複製して返します.
  * コンパイラごとの差分を吸収するために提供されます。
  * @param source

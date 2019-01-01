@@ -17,6 +17,16 @@ static FILE* text_fp = NULL;
 static FILE* fake_stdout = NULL;
 static FILE* real_stdout = NULL;
 
+short bc_StrToShort(const char* literal) { return atoi(literal); }
+
+int bc_StrToInt(const char* literal) { return atoi(literal); }
+
+long bc_StrToLong(const char* literal) { return atol(literal); }
+
+float bc_StrToFloat(const char* literal) { return (float)atof(literal); }
+
+double bc_StrToDouble(const char* literal) { return atof(literal); }
+
 char* bc_Strdup(const char* source) {
         if (source == NULL) {
                 return NULL;

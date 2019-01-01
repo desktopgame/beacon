@@ -72,8 +72,8 @@ static void bc_float_nativeEquals(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env) {
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* d = bc_AtVector(fr->VariableTable, 1);
-        bc_PushVector(fr->ValueStack, bc_BoolToObject(bc_ObjectToDouble(self) ==
-                                                      bc_ObjectToDouble(d)));
+        bc_PushVector(fr->ValueStack, bc_BoolToObject(bc_ObjectToFloat(self) ==
+                                                      bc_ObjectToFloat(d)));
 }
 
 static void bc_float_nativeAdd(bc_Method* parent, bc_Frame* fr,
