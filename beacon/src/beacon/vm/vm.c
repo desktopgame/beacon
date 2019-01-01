@@ -144,8 +144,6 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                 }
                 self->PC = IDX;
                 bc_Opcode b = (bc_Opcode)bc_GetEnviromentSourceAt(env, IDX);
-                bc_PrintOpcode(env->Bytecode->Instructions, IDX);
-                bc_Println();
                 switch (b) {
                         // int & int
                         case OP_IADD:
