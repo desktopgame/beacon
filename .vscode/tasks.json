@@ -7,7 +7,7 @@
 			"label": "GenerateParser",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src/beacon/parse"
+				"cwd": "src/beacon/parse"
 			},
 			"command": "go run script/gen.go"
 		},
@@ -15,7 +15,7 @@
 			"label": "GenerateDocument",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "ruby auto/doxy.rb"
 		},
@@ -23,7 +23,7 @@
 			"label": "CMake(None)",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "cmake",
 			"args": [
@@ -37,7 +37,7 @@
 			"label": "CMake(Debug)",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "cmake",
 			"args": [
@@ -52,7 +52,7 @@
 			"label": "CMake(Release)",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "cmake",
 			"args": [
@@ -67,7 +67,7 @@
 			"label": "Make",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "make",
 			"problemMatcher": []
@@ -76,7 +76,7 @@
 			"label": "Test",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "make",
 			"args": [
@@ -88,7 +88,7 @@
 			"label": "Clean",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "make",
 			"args": [
@@ -99,7 +99,7 @@
 			"label": "Install",
 			"type": "shell",
 			"options": {
-				"cwd": "../beacon/beacon/src"
+				"cwd": "src"
 			},
 			"command": "sudo make install",
 		},

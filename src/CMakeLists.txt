@@ -54,11 +54,11 @@ install(
     DESTINATION ${BC_INSTALL_DIR}
 )
 install(
-    DIRECTORY ./../../license_list
+    DIRECTORY ./../license_list
     DESTINATION ${BC_INSTALL_DIR}
 )
 install(
-    FILES ./../../README.md ./../../changelog.md
+    FILES ./../README.md ./../changelog.md
     DESTINATION ${BC_INSTALL_DIR}
 )
 #ここで全ての .c ファイルを収集する
