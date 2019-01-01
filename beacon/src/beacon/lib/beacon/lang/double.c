@@ -1,5 +1,6 @@
 #include "double.h"
 #include "../../bc_library_impl.h"
+#include "../../bc_library_interface.h"
 
 // proto
 static void bc_double_nativeInit(bc_Method* parent, bc_Frame* fr,
@@ -24,6 +25,8 @@ static void bc_double_nativeLE(bc_Method* parent, bc_Frame* fr,
                                bc_Enviroment* env);
 static void bc_double_nativeEQ(bc_Method* parent, bc_Frame* fr,
                                bc_Enviroment* env);
+static void bc_double_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                     bc_Enviroment* env);
 
 bc_Object* bc_NewDouble(double value) {
         bc_Double* ret =
@@ -55,6 +58,8 @@ void bc_InitDouble() {
         bc_DefineNativeMethodClass(doubleClass, "nativeLT", bc_double_nativeLT);
         bc_DefineNativeMethodClass(doubleClass, "nativeLE", bc_double_nativeLE);
         bc_DefineNativeMethodClass(doubleClass, "nativeEQ", bc_double_nativeEQ);
+        bc_DefineNativeMethodClass(doubleClass, "nativeToString",
+                                   bc_double_nativeToString);
 }
 
 bc_Type* bc_GetDoubleType() {
@@ -157,4 +162,13 @@ static void bc_double_nativeEQ(bc_Method* parent, bc_Frame* fr,
         bc_Object* ret =
             bc_GetBoolObject(DOUBLE_VALUE(self) == DOUBLE_VALUE(a));
         bc_PushVector(fr->ValueStack, ret);
+}
+
+static void bc_double_nativeToString(bc_Method* parent, bc_Frame* fr,
+                                     bc_Enviroment* env) {
+        bc_Object* self = bc_AtVector(fr->VariableTable, 0);
+        double d = DOUBLE_VALUE(self);
+        char block[32] = {0};
+        sprintf(block, "%lf", d);
+        bc_PushVector(fr->ValueStack, bc_NewString(block));
 }
