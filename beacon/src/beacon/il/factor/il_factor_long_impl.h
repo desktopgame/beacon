@@ -25,7 +25,7 @@ typedef struct bc_ILLong {
 bc_ILFactor* bc_WrapILLong(bc_ILLong* self);
 
 #define bc_NewILLong(i) (bc_MallocILLong(i, __FILE__, __LINE__))
-bc_ILLong* bc_MallocILLong(short s, const char* filename, int lineno);
+bc_ILLong* bc_MallocILLong(long l, const char* filename, int lineno);
 
 void bc_GenerateILLong(bc_ILLong* self, bc_Enviroment* env,
                        bc_CallContext* cctx);

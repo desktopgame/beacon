@@ -15,10 +15,10 @@ bc_ILFactor* bc_WrapILLong(bc_ILLong* self) {
         return ret;
 }
 
-bc_ILLong* bc_MallocILLong(short s, const char* filename, int lineno) {
+bc_ILLong* bc_MallocILLong(long l, const char* filename, int lineno) {
         bc_ILLong* ret =
             (bc_ILLong*)bc_MXMalloc(sizeof(bc_ILLong), filename, lineno);
-        ret->Value = s;
+        ret->Value = l;
         ret->Count = 0;
         return ret;
 }
