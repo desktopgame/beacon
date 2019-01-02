@@ -1,0 +1,63 @@
+namespace m121 {
+	class Range {
+		private:
+		Int offset;
+		Int length;
+		Int seek;
+
+		public:
+		def new(Int offset, Int length) {
+			this.offset = offset;
+			this.length = length;
+		}
+
+		def seek() -> Int {
+			seek = seek + 1;
+			return getNumber();
+		}
+
+		def canSeek() -> Bool {
+			return seek < length;
+		}
+
+		def getNumber() -> Int {
+			return offset + seek;
+		}
+	}
+	class CountRunner : Runnable {
+		private:
+		String name;
+		Mutex m;
+		Range r;
+
+		public:
+		def new(String name, Mutex m, Range r) {
+			this.name = name;
+			this.m = m;
+			this.r = r;
+		}
+
+		def run() -> Void {
+			while(true) {
+				m.lock();
+				if(!r.canSeek()) {
+					m.unlock();
+					break;
+				}
+				printLine(name + ":" + r.seek());
+				m.unlock();
+			}
+		}
+	}
+}
+var m = new Mutex();
+var r = new m121::Range(0, 100);
+var tha = new Thread("a", new m121::CountRunner("a", m, r));
+var thb = new Thread("b", new m121::CountRunner("b", m, r));
+var thc = new Thread("b", new m121::CountRunner("c", m, r));
+tha.start();
+thb.start();
+thc.start();
+tha.join();
+thb.join();
+thc.join();
