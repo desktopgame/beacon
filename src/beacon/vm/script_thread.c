@@ -57,6 +57,27 @@ bc_ScriptThread* bc_GetCurrentScriptThread() {
         return ret;
 }
 
+void bc_ZombinizeScriptThread() {
+        bc_lock();
+        g_rec_mutex_lock(&gActiveMutex);
+        bc_ScriptThread* sth = bc_GetCurrentScriptThread();
+        sth->State = STHREAD_ZOMBIE;
+        g_rec_mutex_unlock(&gActiveMutex);
+        bc_unlock();
+}
+
+void bc_ExitScriptThread(bc_ScriptThread* self) {
+        bc_lock();
+        g_rec_mutex_lock(&gActiveMutex);
+        assert(self->State == STHREAD_ZOMBIE);
+        // bc_ScriptThread* cur = bc_GetCurrentScriptThread();
+        assert(self != NULL);
+        bc_RemoveVector(gAllThread, bc_FindVector(gAllThread, self));
+        g_rec_mutex_unlock(&gActiveMutex);
+        bc_unlock();
+        bc_delete_script_thread(self);
+}
+
 void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
                           GThreadFunc func, gpointer data) {
         g_rec_mutex_lock(&gActiveMutex);

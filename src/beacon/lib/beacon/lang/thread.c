@@ -88,7 +88,6 @@ static void bc_thread_nativeJoin(bc_Method* parent, bc_Frame* fr,
         bc_BeginSyncHeap();
         g_thread_join(gth);
         bc_EndSyncHeap();
-        sth->Thread;
 }
 
 static void bc_thread_nativeGetMainThread(bc_Method* parent, bc_Frame* fr,
@@ -152,12 +151,18 @@ static gpointer bc_thread_body(gpointer data) {
         bc_SetScriptThreadFrameRef(sth, fr);
         // Runnable#run を実行
         bc_ExecuteMethod(runM, fr, th->Env);
+        //スクリプトスレッドを破棄
+        bc_ReleaseScriptThreadFrameRef(sth);
+        bc_DeleteFrame(fr);
+        bc_ZombinizeScriptThread();
         return NULL;
 }
 
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
                                 bc_ObjectMessageArgument argv[]) {
         if (msg == OBJECT_MSG_DELETE) {
+                bc_Thread* th = self;
+                bc_ExitScriptThread(th->ScriptThreadRef->Thread);
         }
         return bc_HandleObjectMessage(self, msg, argc, argv);
 }

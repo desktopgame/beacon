@@ -27,7 +27,7 @@ struct bc_Object;
 typedef enum bc_ScriptThreadState {
         STHREAD_NONE,
         STHREAD_START,
-        STHREAD_SYNC,
+        STHREAD_ZOMBIE,
 } bc_ScriptThreadState;
 /**
  * 並列実行のための構造体です.
@@ -110,6 +110,18 @@ bc_ScriptThread* bc_GetMainScriptThread();
  * @return
  */
 struct bc_CallContext* bc_GetScriptThreadContext();
+
+/**
+ * この関数を呼び出したスレッドに対応するスクリプトスレッドをゾンビにします。
+ */
+void bc_ZombinizeScriptThread();
+
+/**
+ * この関数を呼び出したスレッドに対応するスクリプトスレッドを破棄します。
+ * この関数が呼び出された時点で既にスレッドが終了している必要があります。
+ * @param self
+ */
+void bc_ExitScriptThread(bc_ScriptThread* self);
 
 /**
  * メインスレッドを終了します.
