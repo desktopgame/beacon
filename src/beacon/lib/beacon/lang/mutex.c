@@ -39,13 +39,15 @@ bc_Type* bc_GetMutexType() {
 
 // private
 static void bc_mutex_nativeInit(bc_Method* parent, bc_Frame* fr,
-                                bc_Enviroment* env) {}
+                                bc_Enviroment* env) {
+        bc_Mutex* self = bc_AtVector(fr->VariableTable, 0);
+        self->Super.OnMessage = handle_obj_message;
+        self->Stack = 0;
+        g_mutex_init(&self->Mutex);
+}
 
 static void bc_mutex_nativeLock(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env) {
-        // mutex#lockしたままウェイトに入った場合
-        //もう一つのスレッドはそれが終わるのを待機する
-        //こうなるとデッドロックになってしまう
         bc_Mutex* self = bc_AtVector(fr->VariableTable, 0);
         bool ret = false;
         if (self->Stack > 0) {

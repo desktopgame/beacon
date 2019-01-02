@@ -1,4 +1,4 @@
-namespace mutex {
+namespace m121 {
 	class Range {
 		private:
 		Int offset;
@@ -51,10 +51,10 @@ namespace mutex {
 	}
 }
 var m = new Mutex();
-var r = new mutex::Range(0, 100);
-var tha = new Thread("a", new mutex::CountRunner("a", m, r));
-var thb = new Thread("b", new mutex::CountRunner("b", m, r));
-var thc = new Thread("b", new mutex::CountRunner("c", m, r));
+var r = new m121::Range(0, 100);
+var tha = new Thread("a", new m121::CountRunner("a", m, r));
+var thb = new Thread("b", new m121::CountRunner("b", m, r));
+var thc = new Thread("b", new m121::CountRunner("c", m, r));
 tha.start();
 thb.start();
 thc.start();

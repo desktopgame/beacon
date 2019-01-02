@@ -24,6 +24,7 @@
 #include "beacon/lang/mutex.h"
 #include "beacon/lang/null.h"
 #include "beacon/lang/object.h"
+#include "beacon/lang/rec_mutex.h"
 #include "beacon/lang/short.h"
 #include "beacon/lang/string.h"
 #include "beacon/lang/thread.h"
