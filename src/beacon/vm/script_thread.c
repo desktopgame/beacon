@@ -143,20 +143,6 @@ void bc_LockScriptThread() { bc_lock(); }
 
 void bc_UnlockScriptThread() { bc_unlock(); }
 
-void bc_BeginSyncScriptThread() {
-        bc_ScriptThread* cur = bc_GetCurrentScriptThread();
-        g_rec_mutex_lock(&gActiveMutex);
-        cur->State = STHREAD_SYNC;
-        g_rec_mutex_unlock(&gActiveMutex);
-}
-
-void bc_EndSyncScriptThread() {
-        bc_ScriptThread* cur = bc_GetCurrentScriptThread();
-        g_rec_mutex_lock(&gActiveMutex);
-        cur->State = STHREAD_START;
-        g_rec_mutex_unlock(&gActiveMutex);
-}
-
 // private
 static void ScriptThread_trace_delete(bc_VectorItem item) {
         bc_VMTrace* e = (bc_VMTrace*)item;
