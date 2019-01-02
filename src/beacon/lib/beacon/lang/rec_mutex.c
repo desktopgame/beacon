@@ -43,7 +43,7 @@ static void bc_rec_mutex_nativeInit(bc_Method* parent, bc_Frame* fr,
         bc_RecMutex* self = bc_AtVector(fr->VariableTable, 0);
         self->Super.OnMessage = handle_obj_message;
         self->Stack = 0;
-        g_mutex_init(&self->Mutex);
+        g_rec_mutex_init(&self->Mutex);
 }
 static void bc_rec_mutex_nativeLock(bc_Method* parent, bc_Frame* fr,
                                     bc_Enviroment* env) {
