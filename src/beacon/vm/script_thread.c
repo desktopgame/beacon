@@ -1,5 +1,6 @@
 #include "script_thread.h"
 #include <assert.h>
+#include "../env/heap.h"
 #include "../env/script_context.h"
 #include "../env/type_interface.h"
 #include "../il/call_context.h"
@@ -13,6 +14,7 @@ static void ScriptThread_trace_delete(bc_VectorItem item);
 static bc_ScriptThread* bc_new_script_thread();
 static void bc_delete_script_thread(bc_ScriptThread* self);
 static GRecMutex gMutex;
+static GRecMutex gActiveMutex;
 static bc_Vector* gAllThread;
 static void bc_lock();
 static void bc_unlock();
@@ -24,6 +26,7 @@ void bc_InitScriptThread() {
         gAllThread = bc_NewVector();
         g_sg_main_thread = bc_new_script_thread();
         g_sg_main_thread->Thread = g_thread_self();
+        g_sg_main_thread->State = STHREAD_START;
         bc_lock();
         bc_PushVector(gAllThread, g_sg_main_thread);
         bc_unlock();
@@ -50,11 +53,14 @@ bc_ScriptThread* bc_GetCurrentScriptThread() {
                 }
         }
         bc_unlock();
+        assert(ret != NULL);
         return ret;
 }
 
 void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
                           GThreadFunc func, gpointer data) {
+        g_rec_mutex_lock(&gActiveMutex);
+        bc_lock();
         //スレッド生成時に渡された名前を取得
         bc_Type* ty = bc_GetThreadType();
         int temp = -1;
@@ -66,6 +72,9 @@ void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
         ((bc_Thread*)threadObj)->ScriptThreadRef = self;
         GThread* gth = g_thread_new(buffer->Text, func, data);
         self->Thread = gth;
+        self->State = STHREAD_START;
+        bc_unlock();
+        g_rec_mutex_unlock(&gActiveMutex);
 }
 
 void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, bc_Frame* frame_ref) {
@@ -104,15 +113,49 @@ void bc_DestroyScriptThread() {
         bc_unlock();
 }
 
-void bc_LockScriptThread() { bc_lock(); }
+int bc_GetScriptThreadCount() {
+        g_rec_mutex_lock(&gMutex);
+        int ret = gAllThread->Length;
+        g_rec_mutex_unlock(&gMutex);
+        return ret;
+}
 
-int bc_GetScriptThreadCount() { return gAllThread->Length; }
+int bc_GetActiveScriptThreadCount() {
+        g_rec_mutex_lock(&gActiveMutex);
+        bc_ScriptThread* main = bc_GetMainScriptThread();
+        int count = 0;
+        for (int i = 0; i < gAllThread->Length; i++) {
+                bc_ScriptThread* e = bc_AtVector(gAllThread, i);
+                bc_ScriptThreadState stat = e->State;
+                if (stat == STHREAD_START) {
+                        count++;
+                }
+        }
+        g_rec_mutex_unlock(&gActiveMutex);
+        return count;
+}
 
 bc_ScriptThread* bc_GetScriptThreadAt(int index) {
         return bc_AtVector(gAllThread, index);
 }
 
+void bc_LockScriptThread() { bc_lock(); }
+
 void bc_UnlockScriptThread() { bc_unlock(); }
+
+void bc_BeginSyncScriptThread() {
+        bc_ScriptThread* cur = bc_GetCurrentScriptThread();
+        g_rec_mutex_lock(&gActiveMutex);
+        cur->State = STHREAD_SYNC;
+        g_rec_mutex_unlock(&gActiveMutex);
+}
+
+void bc_EndSyncScriptThread() {
+        bc_ScriptThread* cur = bc_GetCurrentScriptThread();
+        g_rec_mutex_lock(&gActiveMutex);
+        cur->State = STHREAD_START;
+        g_rec_mutex_unlock(&gActiveMutex);
+}
 
 // private
 static void ScriptThread_trace_delete(bc_VectorItem item) {
@@ -130,6 +173,7 @@ static bc_ScriptThread* bc_new_script_thread() {
         ret->ScriptContextRefAll = bc_NewVector();
         ret->Owner = NULL;
         ret->SelectedScriptContext = -1;
+        ret->State = STHREAD_NONE;
         return ret;
 }
 

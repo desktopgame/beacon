@@ -1,4 +1,6 @@
 #include "mutex.h"
+#include "../../../env/heap.h"
+#include "../../../vm/script_thread.h"
 static void bc_mutex_nativeInit(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env);
 static void bc_mutex_nativeLock(bc_Method* parent, bc_Frame* fr,
@@ -11,6 +13,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
 bc_Object* bc_NewMutex() {
         bc_Mutex* ret = MEM_MALLOC(sizeof(bc_Mutex));
         ret->Super.OnMessage = handle_obj_message;
+        ret->Stack = 0;
         g_mutex_init(&ret->Mutex);
         return ret;
 }
@@ -40,12 +43,25 @@ static void bc_mutex_nativeInit(bc_Method* parent, bc_Frame* fr,
 
 static void bc_mutex_nativeLock(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env) {
+        // mutex#lockしたままウェイトに入った場合
+        //もう一つのスレッドはそれが終わるのを待機する
+        //こうなるとデッドロックになってしまう
         bc_Mutex* self = bc_AtVector(fr->VariableTable, 0);
+        bool ret = false;
+        if (self->Stack > 0) {
+                ret = bc_BeginSyncHeap();
+        }
+        self->Stack++;
         g_mutex_lock(&self->Mutex);
 }
+
 static void bc_mutex_nativeUnlock(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env) {
         bc_Mutex* self = bc_AtVector(fr->VariableTable, 0);
+        self->Stack--;
+        if (self->Stack > 0) {
+                bc_EndSyncHeap();
+        }
         g_mutex_unlock(&self->Mutex);
 }
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,

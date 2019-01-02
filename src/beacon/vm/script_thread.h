@@ -20,6 +20,15 @@ struct bc_Frame;
 struct bc_CallContext;
 struct bc_ScriptContext;
 struct bc_Object;
+
+/**
+ * スクリプトスレッドの状態を表します。
+ */
+typedef enum bc_ScriptThreadState {
+        STHREAD_NONE,
+        STHREAD_START,
+        STHREAD_SYNC,
+} bc_ScriptThreadState;
 /**
  * 並列実行のための構造体です.
  * 現在の呼び出し位置を表すトレースのスタックを含みます。
@@ -34,6 +43,7 @@ typedef struct bc_ScriptThread {
         bc_Vector* ScriptContextRefAll;
         int SelectedScriptContext;
         struct bc_CallContext* CCtx;
+        bc_ScriptThreadState State;
 } bc_ScriptThread;
 
 /**
@@ -107,15 +117,16 @@ struct bc_CallContext* bc_GetScriptThreadContext();
 void bc_DestroyScriptThread();
 
 /**
- * スクリプトの生成/破棄をブロックします。
- */
-void bc_LockScriptThread();
-
-/**
  * 全てのスレッドの数を返します。
  * @return
  */
 int bc_GetScriptThreadCount();
+
+/**
+ * 開始しているスレッドの数を返します。
+ * @return
+ */
+int bc_GetActiveScriptThreadCount();
 
 /**
  * 指定のスレッドを返します。
@@ -125,7 +136,22 @@ int bc_GetScriptThreadCount();
 bc_ScriptThread* bc_GetScriptThreadAt(int index);
 
 /**
+ * スクリプトの生成/破棄をブロックします。
+ */
+void bc_LockScriptThread();
+
+/**
  * ブロックを解除します。
  */
 void bc_UnlockScriptThread();
+
+/**
+ * スクリプトの生成/破棄をブロックします。
+ */
+void bc_BeginSyncScriptThread();
+
+/**
+ * ブロックを解除します。
+ */
+void bc_EndSyncScriptThread();
 #endif  // SIGNAL_THREAD_THREAD_H

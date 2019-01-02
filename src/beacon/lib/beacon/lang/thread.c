@@ -1,5 +1,6 @@
 #include "thread.h"
 #include <glib.h>
+#include "../../../env/heap.h"
 #include "../../bc_library_impl.h"
 #include "../../bc_library_interface.h"
 
@@ -84,7 +85,9 @@ static void bc_thread_nativeJoin(bc_Method* parent, bc_Frame* fr,
         bc_Thread* th = (bc_Thread*)self;
         bc_ScriptThread* sth = th->ScriptThreadRef;
         GThread* gth = sth->Thread;
+        bc_BeginSyncHeap();
         g_thread_join(gth);
+        bc_EndSyncHeap();
         sth->Thread;
 }
 

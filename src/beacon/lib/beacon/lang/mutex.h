@@ -9,6 +9,7 @@
 typedef struct bc_Mutex {
         bc_Object Super;
         GMutex Mutex;
+        int Stack;
 } bc_Mutex;
 
 /**

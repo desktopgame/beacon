@@ -13,6 +13,7 @@
 struct bc_Heap {
         bc_Cache* Objects;
         bc_Cache* Roots;
+        bc_Cache* Garabage;
         //この値が 1以上 なら、新しく確保されたオブジェクトは
         //ヒープに関連づけられません。
         //つまり、オブジェクトを自分で解放する必要があります。
@@ -49,6 +50,7 @@ static void gc_mark_barrier();
 static void gc_reset_roots();
 static void gc_reset_mark();
 static void gc_overwrite_mark(bc_ObjectPaint paint);
+static void gc_sweep_prepare();
 static void gc_sweep();
 static void gc_delete(bc_VectorItem item);
 static void safe_invoke();
@@ -91,6 +93,10 @@ static const gint FULL_GC_ON = 1;
 static const gint FULL_GC_OFF = 0;
 static volatile gint gFGCAtm = FULL_GC_OFF;
 static GAsyncQueue* gFGCQ;
+
+static volatile gint gHeapWaitStack = 0;
+static volatile gint gHeapSyncStack = 0;
+static GRecMutex gSTWStateMtx;
 
 static GThread* gGCThread = NULL;
 
@@ -213,12 +219,51 @@ void bc_CheckSTWRequest() {
         if (gHeap->CollectBlocking > 0) {
                 return;
         }
+        g_rec_mutex_lock(&gSTWStateMtx);
         if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_OFF) {
+                g_rec_mutex_unlock(&gSTWStateMtx);
                 return;
         }
-        write_stw_result(stw_success);
-        sem_v_signal(gResQ);
+        // STW中は全てのスレッドが待機しなければいけない
+        //なのでスレッドを生成できないように
+        bc_LockScriptThread();
+        //スレッドをカウント
+        int thread_count = bc_GetActiveScriptThreadCount();
+        g_atomic_int_inc(&gHeapWaitStack);
+        gint waitStack = g_atomic_int_get(&gHeapWaitStack);
+        gint syncStack = g_atomic_int_get(&gHeapSyncStack);
+        if ((waitStack + syncStack) == thread_count) {
+                write_stw_result(stw_success);
+                sem_v_signal(gResQ);
+        }
+        bc_UnlockScriptThread();
+        g_rec_mutex_unlock(&gSTWStateMtx);
         sem_p_wait(gReqQ);
+}
+
+bool bc_BeginSyncHeap() {
+        g_rec_mutex_lock(&gSTWStateMtx);
+        bool ret = false;
+        bc_LockScriptThread();
+        int thread_count = bc_GetActiveScriptThreadCount();
+        g_atomic_int_inc(&gHeapSyncStack);
+        gint waitStack = g_atomic_int_get(&gHeapWaitStack);
+        gint syncStack = g_atomic_int_get(&gHeapSyncStack);
+        if ((waitStack + syncStack) == thread_count) {
+                write_stw_result(stw_success);
+                sem_v_signal(gResQ);
+                ret = true;
+        }
+        assert((waitStack + syncStack) <= thread_count);
+        bc_UnlockScriptThread();
+        g_rec_mutex_unlock(&gSTWStateMtx);
+        return ret;
+}
+
+void bc_EndSyncHeap() {
+        g_rec_mutex_lock(&gSTWStateMtx);
+        g_atomic_int_dec_and_test(&gHeapSyncStack);
+        g_rec_mutex_unlock(&gSTWStateMtx);
 }
 
 void bc_BeginHeapSafeInvoke() {
@@ -271,6 +316,7 @@ static bc_Heap* bc_new_heap() {
         bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
         ret->Objects = bc_NewCache(100);
         ret->Roots = bc_NewCache(100);
+        ret->Garabage = bc_NewCache(100);
         ret->AcceptBlocking = 0;
         ret->CollectBlocking = 0;
         return ret;
@@ -289,26 +335,38 @@ static void sem_v_signal(GAsyncQueue* q) {
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
 
 static stw_result bc_request_stw() {
+        g_rec_mutex_lock(&gSTWStateMtx);
         g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_ON);
         if (g_atomic_int_get(&gInvokeAtm) == SAFE_INVOKE_ON) {
                 g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
+                g_rec_mutex_unlock(&gSTWStateMtx);
                 return stw_fail_by_safe_invoke;
         }
         if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
                 g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
+                g_rec_mutex_unlock(&gSTWStateMtx);
                 return stw_fail_by_quit;
         }
         if (g_atomic_int_get(&gFGCAtm) == FULL_GC_ON) {
                 g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
+                g_rec_mutex_unlock(&gSTWStateMtx);
                 return stw_fail_by_fgc;
         }
+        g_rec_mutex_unlock(&gSTWStateMtx);
         sem_p_wait(gResQ);
         return read_stw_result();
 }
 
 static void bc_resume_stw() {
+        g_rec_mutex_lock(&gSTWStateMtx);
         g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
-        sem_v_signal(gReqQ);
+        //待機中の全てのスレッドを解放する
+        while (g_atomic_int_get(&gHeapWaitStack) > 0) {
+                g_atomic_int_dec_and_test(&gHeapWaitStack);
+                sem_v_signal(gReqQ);
+        }
+        g_rec_mutex_unlock(&gSTWStateMtx);
+        // bc_UnlockScriptThread();
 }
 
 // gc
@@ -337,6 +395,7 @@ static gpointer gc_run(gpointer data) {
                                 }
                                 gc_mark_wait();
                                 gc_mark_barrier();
+                                gc_sweep_prepare();
                                 bc_resume_stw();
                                 //ライトバリアーを確認
                                 gc_sweep();
@@ -469,6 +528,26 @@ static void gc_overwrite_mark(bc_ObjectPaint paint) {
         }
 }
 
+static void gc_sweep_prepare() {
+        bc_EraseCacheAll(gHeap->Garabage);
+        bc_Cache* iter = gHeap->Objects;
+        while (iter != NULL) {
+                bc_Object* e = iter->Data;
+                if (iter->Data == NULL) {
+                        iter = iter->Next;
+                        continue;
+                }
+                if (e->Paint == PAINT_UNMARKED_T) {
+                        // bc_DeleteObject(e);
+                        bc_StoreCache(gHeap->Garabage, iter->Data);
+                        iter->Data = NULL;
+                } else if (e->Paint == PAINT_MARKED_T) {
+                        e->Paint = PAINT_UNMARKED_T;
+                }
+                iter = iter->Next;
+        }
+}
+
 static void gc_sweep() {
         gGCRuns++;
 #ifdef REPORT_GC
@@ -477,7 +556,7 @@ static void gc_sweep() {
 #endif
         int all = 0;
         int sweep = 0;
-        bc_Cache* iter = gHeap->Objects;
+        bc_Cache* iter = gHeap->Garabage;
         while (iter != NULL) {
                 bc_Object* e = iter->Data;
                 if (iter->Data == NULL) {
@@ -489,8 +568,6 @@ static void gc_sweep() {
                         bc_DeleteObject(e);
                         iter->Data = NULL;
                         sweep++;
-                } else if (e->Paint == PAINT_MARKED_T) {
-                        e->Paint = PAINT_UNMARKED_T;
                 }
                 iter = iter->Next;
         }
