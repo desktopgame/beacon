@@ -90,6 +90,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
                 assert(argc == 1);
                 bc_HandleObjectMessage(self, msg, argc, argv);
                 bc_Vector* values = ARRAY_VALUE(self);
+                assert(values != NULL);
                 for (int i = 0; i < values->Length; i++) {
                         bc_PaintAllObject((bc_Object*)bc_AtVector(values, i),
                                           argv[0].Int);

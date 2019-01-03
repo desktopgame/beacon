@@ -34,9 +34,11 @@ void bc_InitScriptThread() {
 
 bc_ScriptThread* bc_AddScriptThread() {
         bc_ScriptThread* th = bc_new_script_thread();
+        g_rec_mutex_lock(&gActiveMutex);
         bc_lock();
         bc_PushVector(gAllThread, th);
         bc_unlock();
+        g_rec_mutex_unlock(&gActiveMutex);
         return th;
 }
 

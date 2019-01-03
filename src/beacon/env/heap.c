@@ -201,6 +201,8 @@ void bc_WaitFullGC() {
         if (gHeap == NULL) {
                 return;
         }
+        int c = bc_GetActiveScriptThreadCount();
+        assert(c == 1);
         g_atomic_int_set(&gFGCAtm, FULL_GC_ON);
         //現在STWを待機しているか
         if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
@@ -523,7 +525,9 @@ static void gc_overwrite_mark(bc_ObjectPaint paint) {
                         continue;
                 }
                 bc_Object* obj = iter->Data;
-                obj->Paint = paint;
+                if (obj->Paint != PAINT_ONEXIT_T) {
+                        obj->Paint = paint;
+                }
                 iter = iter->Next;
         }
 }
