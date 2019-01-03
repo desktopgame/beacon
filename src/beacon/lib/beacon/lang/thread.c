@@ -87,6 +87,7 @@ static void bc_thread_nativeJoin(bc_Method* parent, bc_Frame* fr,
         GThread* gth = sth->Thread;
         bc_BeginSyncHeap();
         g_thread_join(gth);
+        sth->Thread = NULL;
         bc_EndSyncHeap();
 }
 

@@ -74,6 +74,10 @@ void bc_ExitScriptThread(bc_ScriptThread* self) {
         assert(self != NULL);
         bc_RemoveVector(gAllThread, bc_FindVector(gAllThread, self));
         g_rec_mutex_unlock(&gActiveMutex);
+        if (self->Thread != NULL) {
+                g_thread_unref(self->Thread);
+                self->Thread = NULL;
+        }
         bc_unlock();
         bc_delete_script_thread(self);
 }
