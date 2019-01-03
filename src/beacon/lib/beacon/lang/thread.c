@@ -61,6 +61,7 @@ static void bc_thread_nativeInit(bc_Method* parent, bc_Frame* fr,
         bc_Object* self = bc_AtVector(fr->VariableTable, 0);
         bc_Thread* th = (bc_Thread*)self;
         bc_ScriptThread* thr = bc_AddScriptThread();
+        self->OnMessage = handle_obj_message;
         bc_ConnectThread(self, thr);
 }
 
@@ -163,7 +164,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
                                 bc_ObjectMessageArgument argv[]) {
         if (msg == OBJECT_MSG_DELETE) {
                 bc_Thread* th = self;
-                bc_ExitScriptThread(th->ScriptThreadRef->Thread);
+                bc_ExitScriptThread(th->ScriptThreadRef);
         }
         return bc_HandleObjectMessage(self, msg, argc, argv);
 }
