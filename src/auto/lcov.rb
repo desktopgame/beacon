@@ -46,17 +46,6 @@ end
 if(File.exist?("lcov/index.html")) then
 	File.delete("lcov/index.html")
 end
-#gcda,gcnoを削除しておく
-Dir.glob("**/*.gcda") do |e|
-	File.delete(e)
-end
-Dir.glob("**/*.gcno") do |e|
-	File.delete(e)
-end
-#cleanを実行する
-o, e, s = Open3.capture3("make clean")
-p e
-p
 #makeを実行する
 o, e, s = Open3.capture3("make")
 p e
