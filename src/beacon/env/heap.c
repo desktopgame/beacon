@@ -414,7 +414,7 @@ static gpointer gc_run(gpointer data) {
 }
 
 static void gc_promotion() {
-        bc_Cache* iter = gHeap->Roots;
+        bc_Cache* iter = gHeap->Objects;
         while (iter != NULL) {
                 if (iter->Data == NULL) {
                         iter = iter->Next;
