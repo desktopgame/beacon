@@ -107,12 +107,14 @@ void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
 
 void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, bc_Frame* frame_ref) {
         // TODO:ここで同期をとる
+        bc_lock();
         assert(frame_ref != NULL);
         assert(self->CCtx == NULL);
         self->IsVMCrushByException = false;
         self->IsVMDump = false;
         self->FrameRef = frame_ref;
         self->CCtx = bc_NewCallContext(CALL_TOP_T);
+        bc_unlock();
 }
 
 bc_Frame* bc_GetScriptThreadFrameRef(bc_ScriptThread* self) {
