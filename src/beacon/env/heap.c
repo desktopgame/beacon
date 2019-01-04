@@ -24,6 +24,16 @@ struct bc_Heap {
         int CollectBlocking;
 };
 
+typedef enum insn_code {
+        insn_collect = 0,
+        insn_mark,
+        insn_mark_barrier,
+        insn_sweep,
+        insn_full_gc,
+        insn_safe_invoke,
+        insn_quit,
+} insn_code;
+
 typedef enum stw_result {
         stw_none,
         stw_success,
@@ -37,10 +47,21 @@ static void delete_object(bc_VectorItem item);
 // mutex
 static void sem_v_signal(GAsyncQueue* q);
 static void sem_p_wait(GAsyncQueue* q);
+
+static insn_code insn_pop();
+static void insn_push(insn_code code);
+
 static stw_result bc_request_stw();
 static void bc_resume_stw();
 // gc
 static gpointer gc_run(gpointer data);
+static void gc_insn_collect();
+static void gc_insn_mark();
+static void gc_insn_mark_barrier();
+static void gc_insn_sweep();
+static void gc_insn_full_gc();
+static void gc_insn_safe_invoke();
+
 static void gc_promotion();
 static void gc_collect_all_root();
 static void gc_clear();
@@ -97,6 +118,7 @@ static GAsyncQueue* gFGCQ;
 static volatile gint gHeapWaitStack = 0;
 static volatile gint gHeapSyncStack = 0;
 static GRecMutex gSTWStateMtx;
+static GAsyncQueue* gRunQueue;
 
 static GThread* gGCThread = NULL;
 
@@ -120,6 +142,7 @@ void bc_InitHeap() {
         gInvokeReqQ = g_async_queue_new();
         gInvokeResQ = g_async_queue_new();
         gFGCQ = g_async_queue_new();
+        gRunQueue = g_async_queue_new();
         gGCThread = g_thread_new("gc", gc_run, NULL);
 #ifdef REPORT_GC
         //リポートファイルをクリアして作成
@@ -226,6 +249,7 @@ void bc_CheckSTWRequest() {
                 g_rec_mutex_unlock(&gSTWStateMtx);
                 return;
         }
+        insn_push(insn_full_gc);
         // STW中は全てのスレッドが待機しなければいけない
         //なのでスレッドを生成できないように
         bc_LockScriptThread();
@@ -272,6 +296,7 @@ void bc_BeginHeapSafeInvoke() {
 #if BC_DEBUG
         assert(g_thread_self() != gGCThread);
 #endif
+        insn_push(insn_safe_invoke);
         //セーフインボーク中としてマーク
         g_atomic_int_set(&gInvokeAtm, SAFE_INVOKE_ON);
         //現在STWを待機しているか
@@ -329,12 +354,18 @@ static void delete_object(bc_VectorItem item) {
         bc_DeleteObject(e);
 }
 
-// mutex
+// utility
 static void sem_v_signal(GAsyncQueue* q) {
         g_async_queue_push(q, GINT_TO_POINTER(1));
 }
 
 static void sem_p_wait(GAsyncQueue* q) { g_async_queue_pop(q); }
+
+static insn_code insn_pop() { return g_async_queue_pop(gRunQueue); }
+
+static void insn_push(insn_code code) {
+        g_async_queue_push(gRunQueue, GINT_TO_POINTER(code));
+}
 
 static stw_result bc_request_stw() {
         g_rec_mutex_lock(&gSTWStateMtx);
@@ -359,6 +390,15 @@ static stw_result bc_request_stw() {
         return read_stw_result();
 }
 
+static void bc_interrupt_stw() {
+        g_rec_mutex_lock(&gSTWStateMtx);
+        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
+                sem_v_signal(gResQ);
+                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
+        }
+        g_rec_mutex_unlock(&gSTWStateMtx);
+}
+
 static void bc_resume_stw() {
         g_rec_mutex_lock(&gSTWStateMtx);
         g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
@@ -374,45 +414,93 @@ static void bc_resume_stw() {
 // gc
 
 static gpointer gc_run(gpointer data) {
-        while (true) {
-                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
-                        break;
-                }
-                gc_full();
-                safe_invoke();
-                //ヒープを保護してルートを取得
-                if (bc_request_stw() == stw_success) {
-                        if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
+        bool go = true;
+        while (go) {
+                gint code = insn_pop();
+                switch (code) {
+                        case insn_collect:
+                                gc_insn_collect();
                                 break;
-                        }
-                        gc_promotion();
-                        gc_collect_all_root();
-                        bc_resume_stw();
-                        //ルートを全てマーク
-                        gc_mark();
-                        //ライトバリアーを確認
-                        if (bc_request_stw() == stw_success) {
-                                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
-                                        break;
-                                }
-                                gc_mark_wait();
-                                gc_mark_barrier();
-                                gc_sweep_prepare();
-                                bc_resume_stw();
-                                //ライトバリアーを確認
-                                gc_sweep();
-                        } else {
-                                gc_reset_roots();
-                                gc_reset_mark();
-                        }
-                } else {
-                        gc_reset_roots();
-                        gc_reset_mark();
+                        case insn_mark:
+                                gc_insn_mark();
+                                break;
+                        case insn_mark_barrier:
+                                gc_insn_mark_barrier();
+                                break;
+                        case insn_sweep:
+                                gc_insn_sweep();
+                                break;
+                        case insn_full_gc:
+                                gc_insn_full_gc();
+                                break;
+                        case insn_safe_invoke:
+                                gc_insn_safe_invoke();
+                                break;
+                        case insn_quit:
+                                go = false;
+                                break;
                 }
         }
         return NULL;
 }
 
+static void gc_insn_collect() {
+        if (bc_request_stw() == stw_success) {
+                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
+                        insn_push(insn_quit);
+                        return;
+                }
+                gc_promotion();
+                gc_collect_all_root();
+                bc_resume_stw();
+                insn_push(insn_mark);
+        } else {
+                gc_reset_roots();
+                gc_reset_mark();
+                insn_push(insn_collect);
+        }
+}
+
+static void gc_insn_mark() {
+        gc_mark();
+        insn_push(insn_mark_barrier);
+}
+
+static void gc_insn_mark_barrier() {
+        //ライトバリアーを確認
+        if (bc_request_stw() == stw_success) {
+                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
+                        insn_push(insn_quit);
+                        return;
+                }
+                gc_mark_wait();
+                gc_mark_barrier();
+                gc_sweep_prepare();
+                bc_resume_stw();
+                insn_push(insn_sweep);
+        } else {
+                gc_reset_roots();
+                gc_reset_mark();
+                insn_push(insn_collect);
+        }
+}
+
+static void gc_insn_sweep() {
+        gc_sweep();
+        insn_push(insn_collect);
+}
+
+static void gc_insn_full_gc() {
+        gc_full();
+        insn_push(insn_collect);
+}
+
+static void gc_insn_safe_invoke() {
+        safe_invoke();
+        insn_push(insn_collect);
+}
+
+// gc functions
 static void gc_promotion() {
         bc_Cache* iter = gHeap->Objects;
         while (iter != NULL) {
