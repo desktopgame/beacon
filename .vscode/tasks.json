@@ -101,7 +101,7 @@
 			"options": {
 				"cwd": "src"
 			},
-			"command": "bash auto/gcov.bash",
+			"command": "ruby auto/lcov.rb",
 		},
 		{
 			"label": "Install",
