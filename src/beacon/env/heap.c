@@ -308,7 +308,7 @@ void bc_BeginGCPending() { gHeap->CollectBlocking++; }
 
 void bc_EndGCPending() { gHeap->CollectBlocking--; }
 
-void bc_ResetHeapState() {
+void bc_ResetHeapStack() {
         gHeap->AcceptBlocking = 0;
         gHeap->CollectBlocking = 0;
 }

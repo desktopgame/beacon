@@ -146,5 +146,5 @@ void bc_EndGCPending();
 /**
  * ヒープのスタック情報をリセットします。
  */
-void bc_ResetHeapState();
+void bc_ResetHeapStack();
 #endif  // !SIGNAL_ENV_HEAP_H

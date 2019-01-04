@@ -115,7 +115,7 @@ static bc_Frame* bc_eval_allocate(bc_ClassLoader* cll) {
         bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_Frame* fr = bc_NewFrame();
         bc_SetScriptThreadFrameRef(bc_GetCurrentScriptThread(), fr);
-        bc_ResetHeapState();
+        bc_ResetHeapStack();
         if (!bc_GetLastPanic()) {
                 bc_ExecuteVM(fr, cll->Env);
         }
