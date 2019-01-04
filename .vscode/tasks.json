@@ -96,6 +96,14 @@
 			]
 		},
 		{
+			"label": "Coverage",
+			"type": "shell",
+			"options": {
+				"cwd": "src"
+			},
+			"command": "bash auto/gcov.bash",
+		},
+		{
 			"label": "Install",
 			"type": "shell",
 			"options": {
