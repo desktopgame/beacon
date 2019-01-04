@@ -34,17 +34,6 @@ typedef struct bc_Constructor {
 bc_Constructor* bc_NewConstructor();
 
 /**
- * このコンストラクタを使用してオブジェクトを生成します.
- * @param self
- * @param args
- * @param parent
- * @return
- */
-struct bc_Object* bc_NewInstanceConstructor(bc_Constructor* self,
-                                            bc_Vector* args,
-                                            struct bc_Frame* parent);
-
-/**
  * コンストラクタを開放します.
  * @param self
  */
