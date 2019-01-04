@@ -22,6 +22,10 @@ namespace beacon::lang {
 			return mainThread;
 		}
 
+		def static sleep(Long millis) -> Void {
+			nativeSleep(millis);
+		}
+
 		private:
 		String name;
 		Runnable runnable;
@@ -37,5 +41,7 @@ namespace beacon::lang {
 		def static native nativeGetMainThread() -> Thread;
 
 		def static native nativeGetCurrentThread() -> Thread;
+
+		def static native nativeSleep(Long millis) -> Void;
 	}
 }

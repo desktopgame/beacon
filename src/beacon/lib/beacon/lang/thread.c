@@ -3,6 +3,9 @@
 #include "../../../env/heap.h"
 #include "../../bc_library_impl.h"
 #include "../../bc_library_interface.h"
+#if __APPLE__
+#include <unistd.h>
+#endif
 
 static void bc_thread_nativeInit(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env);
@@ -14,6 +17,8 @@ static void bc_thread_nativeGetMainThread(bc_Method* parent, bc_Frame* fr,
                                           bc_Enviroment* env);
 static void bc_thread_nativeGetCurrentThread(bc_Method* parent, bc_Frame* fr,
                                              bc_Enviroment* env);
+static void bc_thread_nativeSleep(bc_Method* parent, bc_Frame* fr,
+                                  bc_Enviroment* env);
 static gpointer bc_thread_body(gpointer data);
 static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
                                 bc_ObjectMessageArgument argv[]);
@@ -42,6 +47,8 @@ void bc_InitThread() {
                                    bc_thread_nativeGetMainThread);
         bc_DefineNativeMethodClass(threadClass, "nativeGetCurrentThread",
                                    bc_thread_nativeGetCurrentThread);
+        bc_DefineNativeMethodClass(threadClass, "nativeSleep",
+                                   bc_thread_nativeSleep);
 }
 
 bc_Type* bc_GetThreadType() {
@@ -125,6 +132,16 @@ static void bc_thread_nativeGetCurrentThread(bc_Method* parent, bc_Frame* fr,
         bc_Object* obj = bc_NewThread(thr);
         bc_PushVector(fr->ValueStack, obj);
         bc_UnlockScriptThread();
+}
+
+static void bc_thread_nativeSleep(bc_Method* parent, bc_Frame* fr,
+                                  bc_Enviroment* env) {
+        bc_Long* lo = bc_AtVector(fr->VariableTable, 1);
+        bc_BeginSyncHeap();
+#if __APPLE__
+        usleep(lo->Value);
+#endif
+        bc_EndSyncHeap();
 }
 
 static gpointer bc_thread_body(gpointer data) {
