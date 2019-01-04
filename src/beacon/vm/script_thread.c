@@ -64,6 +64,7 @@ void bc_ZombinizeScriptThread() {
         g_rec_mutex_lock(&gActiveMutex);
         bc_ScriptThread* sth = bc_GetCurrentScriptThread();
         sth->State = STHREAD_ZOMBIE;
+        sth->Owner = NULL;
         g_rec_mutex_unlock(&gActiveMutex);
         bc_unlock();
 }
