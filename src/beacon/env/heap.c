@@ -438,7 +438,9 @@ static void gc_collect_all_root() {
         bc_AddRoot(bc_GetUniqueTrueObject(sctx));
         bc_AddRoot(bc_GetUniqueFalseObject(sctx));
         bc_AddRoot(bc_GetUniqueNullObject(sctx));
-        for (int i = 0; i < bc_GetScriptThreadCount(); i++) {
+        bc_LockScriptThread();
+        int sthn = bc_GetScriptThreadCount();
+        for (int i = 0; i < sthn; i++) {
                 bc_ScriptThread* th = bc_GetScriptThreadAt(i);
                 //全てのスタック変数をマーク
                 // GC直後にフレームを解放した場合はNULLになる
@@ -447,6 +449,7 @@ static void gc_collect_all_root() {
                         bc_CollectAllFrame(top, gHeap->Roots);
                 }
         }
+        bc_UnlockScriptThread();
 }
 
 static void gc_mark() {
