@@ -55,6 +55,18 @@ void bc_EraseCacheAll(bc_Cache* self) {
         }
 }
 
+int bc_CountCache(bc_Cache* self) {
+        bc_Cache* iter = self;
+        int ret = 0;
+        while (iter != NULL) {
+                if (iter->Data != NULL) {
+                        ret++;
+                }
+                iter = iter->Next;
+        }
+        return ret;
+}
+
 void bc_DeleteCache(bc_Cache* self, bc_CacheDataDeleter deleter) {
         bc_Cache* iter = self;
         while (iter != NULL) {

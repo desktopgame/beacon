@@ -43,6 +43,12 @@ void bc_EraseCache(bc_Cache* self, void* data);
 void bc_EraseCacheAll(bc_Cache* self);
 
 /**
+ * @param self
+ * @return
+ */
+int bc_CountCache(bc_Cache* self);
+
+/**
  * 全てのキャッシュを削除します。
  * @param self
  * @param deleter
