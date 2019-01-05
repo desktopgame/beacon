@@ -49,10 +49,13 @@ static void insn_push(insn_code code);
 static void insn_push_stw(insn_code code);
 static void insn_push_unit(insn_code code);
 static void insn_flush();
+static bool is_high_prio_insn(insn_code code);
 static const char* insn_string(insn_code code);
 static void write_insn_curr_code(insn_code code);
 static void write_insn_last_code(insn_code code);
 static void assert_last_code(insn_code code);
+static void begin_interrupt_stw();
+static void end_interrupt_stw();
 
 // gc
 static gpointer gc_run(gpointer data);
@@ -92,12 +95,14 @@ static gint gSTWPollStack = 0;
 static gint gSTWInterrupt = 0;
 static gint gCurrInsnCode = 0;
 static gint gLastInsnCode = 0;
+static gint gObjectCount = 0;
 static GRWLock gCurrInsnCodeRWLock;
 static GRWLock gLastInsnCodeRWLock;
 static GRecMutex gRQueueMutex;
 static GAsyncQueue* gRunQueue;
 static GAsyncQueue* gSubQueue;
 static GAsyncQueue* gCheckQueue;
+static GAsyncQueue* gFullGCQueue;
 static GAsyncQueue* gSIBeginQueue;
 static GAsyncQueue* gSIEndQueue;
 static GThread* gGCThread = NULL;
@@ -116,6 +121,7 @@ void bc_InitHeap() {
         gRunQueue = g_async_queue_new();
         gSubQueue = g_async_queue_new();
         gCheckQueue = g_async_queue_new();
+        gFullGCQueue = g_async_queue_new();
         gSIBeginQueue = g_async_queue_new();
         gSIEndQueue = g_async_queue_new();
         gGCThread = g_thread_new("gc", gc_run, NULL);
@@ -129,20 +135,13 @@ void bc_InitHeap() {
 }
 
 void bc_DestroyHeap() {
-        g_rec_mutex_lock(&gSTWScheduleMutex);
+        begin_interrupt_stw();
         g_rec_mutex_lock(&gRQueueMutex);
         //既存のタスクを全て終了する
         insn_flush();
         insn_push(insn_quit);
-        //もし他のスレッドを待っているなら強制再開
-        g_rw_lock_reader_lock(&gCurrInsnCodeRWLock);
-        if (gCurrInsnCode == insn_stw_begin) {
-                g_atomic_int_set(&gSTWInterrupt, 1);
-                g_cond_signal(&gSTWScheduleCond);
-        }
-        g_rw_lock_reader_unlock(&gCurrInsnCodeRWLock);
         g_rec_mutex_unlock(&gRQueueMutex);
-        g_rec_mutex_unlock(&gSTWScheduleMutex);
+        end_interrupt_stw();
 
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
@@ -155,6 +154,8 @@ void bc_DestroyHeap() {
         gSubQueue = NULL;
         g_async_queue_unref(gCheckQueue);
         gCheckQueue = NULL;
+        g_async_queue_unref(gFullGCQueue);
+        gFullGCQueue = NULL;
         g_async_queue_unref(gSIBeginQueue);
         gSIBeginQueue = NULL;
         g_async_queue_unref(gSIEndQueue);
@@ -180,6 +181,7 @@ void bc_AddHeap(bc_Object* obj) {
                 return;
         }
         bc_StoreCache(gHeap->Objects, obj);
+        g_atomic_int_inc(&gObjectCount);
 }
 
 void bc_AddRoot(bc_Object* obj) {
@@ -216,7 +218,13 @@ void bc_WaitFullGC() {
         if (gHeap == NULL) {
                 return;
         }
+        begin_interrupt_stw();
+        g_rec_mutex_lock(&gRQueueMutex);
+        insn_flush();
         insn_push_stw(insn_full_gc);
+        g_rec_mutex_unlock(&gRQueueMutex);
+        end_interrupt_stw();
+        sem_p_wait(gFullGCQueue);
 }
 
 void bc_CheckSTWRequest() {
@@ -299,6 +307,12 @@ void bc_ResetHeapStack() {
         gHeap->CollectBlocking = 0;
 }
 
+void bc_TriggerThreadCountChanged() {
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        g_cond_signal(&gSTWScheduleCond);
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
+}
+
 // private
 static bc_Heap* bc_new_heap() {
         bc_Heap* ret = (bc_Heap*)MEM_MALLOC(sizeof(bc_Heap));
@@ -350,6 +364,10 @@ static void insn_flush() {
         g_rec_mutex_unlock(&gRQueueMutex);
 }
 
+static bool is_high_prio_insn(insn_code code) {
+        return (code == insn_safe_invoke || code == insn_full_gc);
+}
+
 static const char* insn_string(insn_code code) {
         switch (code) {
                 case insn_collect:
@@ -394,6 +412,21 @@ static void assert_last_code(insn_code code) {
                 abort();
         }
         g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
+}
+
+static void begin_interrupt_stw() {
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        //もし他のスレッドを待っているなら強制再開
+        g_rw_lock_reader_lock(&gCurrInsnCodeRWLock);
+        if (gCurrInsnCode == insn_stw_begin) {
+                g_atomic_int_set(&gSTWInterrupt, 1);
+                g_cond_signal(&gSTWScheduleCond);
+        }
+}
+
+static void end_interrupt_stw() {
+        g_rw_lock_reader_unlock(&gCurrInsnCodeRWLock);
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
 }
 
 // gc
@@ -488,6 +521,7 @@ static void gc_insn_full_gc() {
         insn_flush();
         insn_push_stw(insn_collect);
         g_rec_mutex_unlock(&gRunQueue);
+        sem_v_signal(gFullGCQueue);
 }
 
 static void gc_insn_safe_invoke() {
@@ -497,23 +531,25 @@ static void gc_insn_safe_invoke() {
 
 static void gc_insn_stw_begin() {
         g_rec_mutex_lock(&gRQueueMutex);
-        bool safeInvoke = false;
+        bool highPrio = false;
+        insn_code highPrioCode = insn_invalid;
         //セーフインボークが予約されているか
         while (g_async_queue_length(gRunQueue) > 0) {
                 gint code = g_async_queue_pop(gRunQueue);
                 g_async_queue_push(gSubQueue, code);
-                if (code == insn_safe_invoke) {
-                        safeInvoke = true;
+                if (is_high_prio_insn(code)) {
+                        highPrio = true;
+                        highPrioCode = code;
                         break;
                 }
         }
         //予約ずみならそちらを優先
-        if (safeInvoke) {
+        if (highPrio) {
                 while (g_async_queue_length(gSubQueue) > 0) {
                         g_async_queue_pop(gSubQueue);
                 }
                 insn_flush();
-                insn_push(insn_safe_invoke);
+                insn_push(highPrioCode);
                 insn_push_stw(insn_collect);
                 g_rec_mutex_unlock(&gRQueueMutex);
                 return;
@@ -526,10 +562,11 @@ static void gc_insn_stw_begin() {
         }
         g_rec_mutex_unlock(&gRQueueMutex);
         g_rec_mutex_lock(&gSTWScheduleMutex);
-        int asthn = bc_GetActiveScriptThreadCount();
+        // bc_LockActiveScriptThread();
         //全てのスレッドが揃うまでまつ
         while (((g_atomic_int_get(&gSTWSynqStack) +
-                 g_atomic_int_get(&gSTWPollStack)) < asthn) &&
+                 g_atomic_int_get(&gSTWPollStack)) <
+                bc_GetActiveScriptThreadCount()) &&
                g_atomic_int_get(&gSTWInterrupt) == 0) {
                 g_cond_wait(&gSTWScheduleCond, &gSTWScheduleMutex);
         }
@@ -538,6 +575,7 @@ static void gc_insn_stw_begin() {
                 g_atomic_int_set(&gSTWInterrupt, 0);
                 gc_insn_stw_end();
         }
+        // bc_UnlockActiveScriptThread();
         g_rec_mutex_unlock(&gSTWScheduleMutex);
 }
 
@@ -699,7 +737,7 @@ static void gc_sweep(bool full_gc) {
         GTimeVal before, after;
         g_get_current_time(&before);
 #endif
-        int all = 0;
+        int all = g_atomic_int_get(&gObjectCount);
         int sweep = 0;
         bc_Cache* iter = gHeap->Garabage;
         while (iter != NULL) {
@@ -713,6 +751,7 @@ static void gc_sweep(bool full_gc) {
                         bc_DeleteObject(e);
                         iter->Data = NULL;
                         sweep++;
+                        g_atomic_int_dec_and_test(&gObjectCount);
                 }
                 iter = iter->Next;
         }

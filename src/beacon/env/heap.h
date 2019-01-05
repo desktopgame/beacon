@@ -149,4 +149,6 @@ void bc_EndGCPending();
  * ヒープのスタック情報をリセットします。
  */
 void bc_ResetHeapStack();
+
+void bc_TriggerThreadCountChanged();
 #endif  // !SIGNAL_ENV_HEAP_H

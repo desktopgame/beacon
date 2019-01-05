@@ -156,4 +156,14 @@ void bc_LockScriptThread();
  * ブロックを解除します。
  */
 void bc_UnlockScriptThread();
+
+/**
+ * スクリプトの生成/破棄をブロックします。
+ */
+void bc_LockActiveScriptThread();
+
+/**
+ * ブロックを解除します。
+ */
+void bc_UnlockActiveScriptThread();
 #endif  // SIGNAL_THREAD_THREAD_H

@@ -67,6 +67,7 @@ void bc_ZombinizeScriptThread() {
         sth->Owner = NULL;
         g_rec_mutex_unlock(&gActiveMutex);
         bc_unlock();
+        bc_TriggerThreadCountChanged();
 }
 
 void bc_ExitScriptThread(bc_ScriptThread* self) {
@@ -83,6 +84,7 @@ void bc_ExitScriptThread(bc_ScriptThread* self) {
         }
         bc_unlock();
         bc_delete_script_thread(self);
+        bc_TriggerThreadCountChanged();
 }
 
 void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
@@ -151,6 +153,7 @@ int bc_GetScriptThreadCount() {
 }
 
 int bc_GetActiveScriptThreadCount() {
+        bc_lock();
         g_rec_mutex_lock(&gActiveMutex);
         bc_ScriptThread* main = bc_GetMainScriptThread();
         int count = 0;
@@ -162,6 +165,7 @@ int bc_GetActiveScriptThreadCount() {
                 }
         }
         g_rec_mutex_unlock(&gActiveMutex);
+        bc_unlock();
         return count;
 }
 
@@ -172,6 +176,10 @@ bc_ScriptThread* bc_GetScriptThreadAt(int index) {
 void bc_LockScriptThread() { bc_lock(); }
 
 void bc_UnlockScriptThread() { bc_unlock(); }
+
+void bc_LockActiveScriptThread() { g_rec_mutex_lock(&gActiveMutex); }
+
+void bc_UnlockActiveScriptThread() { g_rec_mutex_unlock(&gActiveMutex); }
 
 // private
 static void ScriptThread_trace_delete(bc_VectorItem item) {
