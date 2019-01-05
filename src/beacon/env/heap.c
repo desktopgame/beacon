@@ -76,7 +76,7 @@ static void gc_reset_roots();
 static void gc_reset_mark();
 static void gc_overwrite_mark(bc_ObjectPaint paint);
 static void gc_sweep_prepare();
-static void gc_sweep();
+static void gc_sweep(bool full_gc);
 static void gc_delete(bc_VectorItem item);
 static void gc_trigger();
 static void safe_invoke();
@@ -474,7 +474,7 @@ static void gc_insn_mark_barrier() {
 
 static void gc_insn_sweep() {
         assert_last_code(insn_stw_end);
-        gc_sweep();
+        gc_sweep(false);
         insn_push_stw(insn_collect);
 }
 
@@ -483,7 +483,7 @@ static void gc_insn_full_gc() {
         gc_reset_roots();
         gc_collect_all_root();
         gc_mark();
-        gc_sweep();
+        gc_sweep(true);
         g_rec_mutex_lock(&gRunQueue);
         insn_flush();
         insn_push_stw(insn_collect);
@@ -693,7 +693,7 @@ static void gc_sweep_prepare() {
         }
 }
 
-static void gc_sweep() {
+static void gc_sweep(bool full_gc) {
         gGCRuns++;
 #ifdef REPORT_GC
         GTimeVal before, after;
