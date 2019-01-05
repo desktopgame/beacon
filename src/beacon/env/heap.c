@@ -25,22 +25,18 @@ struct bc_Heap {
 };
 
 typedef enum insn_code {
-        insn_collect = 0,
+        insn_collect = 1,
         insn_mark,
         insn_mark_barrier,
         insn_sweep,
         insn_full_gc,
         insn_safe_invoke,
+        insn_stw_begin,
+        insn_stw_end,
         insn_quit,
+        insn_invalid,
 } insn_code;
 
-typedef enum stw_result {
-        stw_none,
-        stw_success,
-        stw_fail_by_safe_invoke,
-        stw_fail_by_quit,
-        stw_fail_by_fgc,
-} stw_result;
 // proto
 static bc_Heap* bc_new_heap();
 static void delete_object(bc_VectorItem item);
@@ -50,17 +46,25 @@ static void sem_p_wait(GAsyncQueue* q);
 
 static insn_code insn_pop();
 static void insn_push(insn_code code);
+static void insn_push_stw(insn_code code);
+static void insn_push_unit(insn_code code);
+static void insn_flush();
+static const char* insn_string(insn_code code);
+static void write_insn_curr_code(insn_code code);
+static void write_insn_last_code(insn_code code);
+static void assert_last_code(insn_code code);
 
-static stw_result bc_request_stw();
-static void bc_resume_stw();
 // gc
 static gpointer gc_run(gpointer data);
+static bool gc_insn_eval(insn_code code);
 static void gc_insn_collect();
 static void gc_insn_mark();
 static void gc_insn_mark_barrier();
 static void gc_insn_sweep();
 static void gc_insn_full_gc();
 static void gc_insn_safe_invoke();
+static void gc_insn_stw_begin();
+static void gc_insn_stw_end();
 
 static void gc_promotion();
 static void gc_collect_all_root();
@@ -74,58 +78,30 @@ static void gc_overwrite_mark(bc_ObjectPaint paint);
 static void gc_sweep_prepare();
 static void gc_sweep();
 static void gc_delete(bc_VectorItem item);
+static void gc_trigger();
 static void safe_invoke();
 static bool gc_full();
 
 static bc_Heap* gHeap = NULL;
 static int gGCRuns = 0;
-// STWwait
-static GAsyncQueue* gReqQ;
-static GAsyncQueue* gResQ;
-static const gint STW_REQUEST_ON = 1;
-static const gint STW_REQUEST_OFF = 0;
-static volatile gint gSTWRequestedAtm = STW_REQUEST_OFF;
 
-static GRWLock gSTWResultLock;
-static volatile stw_result gSTWResult = stw_none;
-static stw_result read_stw_result() {
-        g_rw_lock_reader_lock(&gSTWResultLock);
-        stw_result ret = gSTWResult;
-        g_rw_lock_reader_unlock(&gSTWResultLock);
-        return ret;
-}
-static void write_stw_result(stw_result write) {
-        g_rw_lock_writer_lock(&gSTWResultLock);
-        gSTWResult = write;
-        g_rw_lock_writer_unlock(&gSTWResultLock);
-}
-
-static GAsyncQueue* gInvokeReqQ;
-static GAsyncQueue* gInvokeResQ;
-static const gint SAFE_INVOKE_ON = 1;
-static const gint SAFE_INVOKE_OFF = 0;
-static volatile gint gInvokeAtm = SAFE_INVOKE_OFF;
-
-static const gint STOP_FOR_ON = 1;
-static const gint STOP_FOR_OFF = 0;
-static volatile gint gStopForInvokeAtm = STOP_FOR_OFF;
-
-static const gint FULL_GC_ON = 1;
-static const gint FULL_GC_OFF = 0;
-static volatile gint gFGCAtm = FULL_GC_OFF;
-static GAsyncQueue* gFGCQ;
-
-static volatile gint gHeapWaitStack = 0;
-static volatile gint gHeapSyncStack = 0;
-static GRecMutex gSTWStateMtx;
+static GRecMutex gSTWScheduleMutex;
+static GCond gSTWScheduleCond;
+static gint gSTWSynqStack = 0;
+static gint gSTWPollStack = 0;
+static gint gSTWInterrupt = 0;
+static gint gCurrInsnCode = 0;
+static gint gLastInsnCode = 0;
+static GRWLock gCurrInsnCodeRWLock;
+static GRWLock gLastInsnCodeRWLock;
+static GRecMutex gRQueueMutex;
 static GAsyncQueue* gRunQueue;
-
+static GAsyncQueue* gSubQueue;
+static GAsyncQueue* gCheckQueue;
+static GAsyncQueue* gSIBeginQueue;
+static GAsyncQueue* gSIEndQueue;
 static GThread* gGCThread = NULL;
-
-// quit
-static const gint QUIT_ON = 1;
-static const gint QUIT_OFF = 0;
-static volatile gint gQuitAtm = QUIT_OFF;
+static bool ggg = false;
 
 #define REPORT_GC
 
@@ -136,13 +112,12 @@ static FILE* gReportFP;
 
 void bc_InitHeap() {
         assert(gHeap == NULL);
-        gReqQ = g_async_queue_new();
-        gResQ = g_async_queue_new();
         gHeap = bc_new_heap();
-        gInvokeReqQ = g_async_queue_new();
-        gInvokeResQ = g_async_queue_new();
-        gFGCQ = g_async_queue_new();
         gRunQueue = g_async_queue_new();
+        gSubQueue = g_async_queue_new();
+        gCheckQueue = g_async_queue_new();
+        gSIBeginQueue = g_async_queue_new();
+        gSIEndQueue = g_async_queue_new();
         gGCThread = g_thread_new("gc", gc_run, NULL);
 #ifdef REPORT_GC
         //リポートファイルをクリアして作成
@@ -154,31 +129,48 @@ void bc_InitHeap() {
 }
 
 void bc_DestroyHeap() {
-        bc_WaitFullGC();
-        // ロック中なら強制的に再開
-        // resume_stwの後に毎回確認される
-        // bc_BeginHeapSafeInvoke();
-        g_atomic_int_set(&gQuitAtm, QUIT_ON);
-        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
-                sem_v_signal(gResQ);
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        g_rec_mutex_lock(&gRQueueMutex);
+        //既存のタスクを全て終了する
+        insn_flush();
+        insn_push(insn_quit);
+        //もし他のスレッドを待っているなら強制再開
+        g_rw_lock_reader_lock(&gCurrInsnCodeRWLock);
+        if (gCurrInsnCode == insn_stw_begin) {
+                g_atomic_int_set(&gSTWInterrupt, 1);
+                g_cond_signal(&gSTWScheduleCond);
         }
-        // bc_EndHeapSafeInvoke();
+        g_rw_lock_reader_unlock(&gCurrInsnCodeRWLock);
+        g_rec_mutex_unlock(&gRQueueMutex);
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
+
         g_thread_join(gGCThread);
         bc_DeleteCache(gHeap->Objects, delete_object);
-        int idc = bc_CountActiveObject();
-        g_async_queue_unref(gReqQ);
-        g_async_queue_unref(gResQ);
-        g_async_queue_unref(gFGCQ);
         MEM_FREE(gHeap);
         gGCThread = NULL;
         gHeap = NULL;
-        gReqQ = NULL;
-        gResQ = NULL;
+        g_async_queue_unref(gRunQueue);
+        gRunQueue = NULL;
+        g_async_queue_unref(gSubQueue);
+        gSubQueue = NULL;
+        g_async_queue_unref(gCheckQueue);
+        gCheckQueue = NULL;
+        g_async_queue_unref(gSIBeginQueue);
+        gSIBeginQueue = NULL;
+        g_async_queue_unref(gSIEndQueue);
+        gSIEndQueue = NULL;
 #ifdef REPORT_GC
         //リポートファイルを閉じる
         fclose(gReportFP);
         gReportFP = NULL;
 #endif
+}
+
+void bc_WakeupGC() {
+        if (!ggg) {
+                insn_push_stw(insn_collect);
+                ggg = true;
+        }
 }
 
 void bc_AddHeap(bc_Object* obj) {
@@ -224,15 +216,7 @@ void bc_WaitFullGC() {
         if (gHeap == NULL) {
                 return;
         }
-        int c = bc_GetActiveScriptThreadCount();
-        assert(c == 1);
-        g_atomic_int_set(&gFGCAtm, FULL_GC_ON);
-        //現在STWを待機しているか
-        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
-                write_stw_result(stw_fail_by_fgc);
-                sem_v_signal(gResQ);
-        }
-        g_async_queue_pop(gFGCQ);
+        insn_push_stw(insn_full_gc);
 }
 
 void bc_CheckSTWRequest() {
@@ -244,78 +228,55 @@ void bc_CheckSTWRequest() {
         if (gHeap->CollectBlocking > 0) {
                 return;
         }
-        g_rec_mutex_lock(&gSTWStateMtx);
-        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_OFF) {
-                g_rec_mutex_unlock(&gSTWStateMtx);
-                return;
-        }
-        insn_push(insn_full_gc);
-        // STW中は全てのスレッドが待機しなければいけない
-        //なのでスレッドを生成できないように
-        bc_LockScriptThread();
-        //スレッドをカウント
-        int thread_count = bc_GetActiveScriptThreadCount();
-        g_atomic_int_inc(&gHeapWaitStack);
-        gint waitStack = g_atomic_int_get(&gHeapWaitStack);
-        gint syncStack = g_atomic_int_get(&gHeapSyncStack);
-        if ((waitStack + syncStack) == thread_count) {
-                write_stw_result(stw_success);
-                sem_v_signal(gResQ);
-        }
-        bc_UnlockScriptThread();
-        g_rec_mutex_unlock(&gSTWStateMtx);
-        sem_p_wait(gReqQ);
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        g_atomic_int_inc(&gSTWPollStack);
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
+        gc_trigger();
+        sem_p_wait(gCheckQueue);
 }
 
 bool bc_BeginSyncHeap() {
-        g_rec_mutex_lock(&gSTWStateMtx);
-        bool ret = false;
-        bc_LockScriptThread();
-        int thread_count = bc_GetActiveScriptThreadCount();
-        g_atomic_int_inc(&gHeapSyncStack);
-        gint waitStack = g_atomic_int_get(&gHeapWaitStack);
-        gint syncStack = g_atomic_int_get(&gHeapSyncStack);
-        if ((waitStack + syncStack) == thread_count) {
-                write_stw_result(stw_success);
-                sem_v_signal(gResQ);
-                ret = true;
-        }
-        assert((waitStack + syncStack) <= thread_count);
-        bc_UnlockScriptThread();
-        g_rec_mutex_unlock(&gSTWStateMtx);
-        return ret;
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        g_atomic_int_inc(&gSTWSynqStack);
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
+        gc_trigger();
+        return false;
 }
 
-void bc_EndSyncHeap() {
-        g_rec_mutex_lock(&gSTWStateMtx);
-        g_atomic_int_dec_and_test(&gHeapSyncStack);
-        g_rec_mutex_unlock(&gSTWStateMtx);
-}
+void bc_EndSyncHeap() { g_atomic_int_dec_and_test(&gSTWSynqStack); }
 
 void bc_BeginHeapSafeInvoke() {
 #if BC_DEBUG
         assert(g_thread_self() != gGCThread);
 #endif
-        insn_push(insn_safe_invoke);
-        //セーフインボーク中としてマーク
-        g_atomic_int_set(&gInvokeAtm, SAFE_INVOKE_ON);
-        //現在STWを待機しているか
-        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
-                write_stw_result(stw_fail_by_safe_invoke);
-                sem_v_signal(gResQ);
+        // insn_stw_beginを実行しているなら強制的に割り込む
+        g_rw_lock_reader_lock(&gCurrInsnCodeRWLock);
+        g_rec_mutex_lock(&gRQueueMutex);
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        insn_code tmp = gCurrInsnCode;
+        if (gCurrInsnCode == insn_stw_begin) {
+                //予約された全ての命令を破棄
+                insn_flush();
+                insn_push_unit(insn_safe_invoke);
+                //割り込みフラグをtrueに
+                g_atomic_int_set(&gSTWInterrupt, 1);
+                //再開
+                g_cond_signal(&gSTWScheduleCond);
+        } else {
+                insn_flush();
+                insn_push_unit(insn_safe_invoke);
         }
-        //スレッドが止まるまで待つ
-        sem_p_wait(gInvokeResQ);
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
+        g_rec_mutex_unlock(&gRQueueMutex);
+        g_rw_lock_reader_unlock(&gCurrInsnCodeRWLock);
+        g_async_queue_pop(gSIBeginQueue);
 }
 
 void bc_EndHeapSafeInvoke() {
 #if BC_DEBUG
         assert(g_thread_self() != gGCThread);
 #endif
-        //セーフインボークを解除
-        g_atomic_int_set(&gInvokeAtm, SAFE_INVOKE_OFF);
-        //スレッドを再開
-        sem_v_signal(gInvokeReqQ);
+        g_async_queue_push(gSIEndQueue, GINT_TO_POINTER(1));
 }
 
 void bc_BeginNewConstant() { gHeap->AcceptBlocking++; }
@@ -367,137 +328,226 @@ static void insn_push(insn_code code) {
         g_async_queue_push(gRunQueue, GINT_TO_POINTER(code));
 }
 
-static stw_result bc_request_stw() {
-        g_rec_mutex_lock(&gSTWStateMtx);
-        g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_ON);
-        if (g_atomic_int_get(&gInvokeAtm) == SAFE_INVOKE_ON) {
-                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
-                g_rec_mutex_unlock(&gSTWStateMtx);
-                return stw_fail_by_safe_invoke;
-        }
-        if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
-                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
-                g_rec_mutex_unlock(&gSTWStateMtx);
-                return stw_fail_by_quit;
-        }
-        if (g_atomic_int_get(&gFGCAtm) == FULL_GC_ON) {
-                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
-                g_rec_mutex_unlock(&gSTWStateMtx);
-                return stw_fail_by_fgc;
-        }
-        g_rec_mutex_unlock(&gSTWStateMtx);
-        sem_p_wait(gResQ);
-        return read_stw_result();
+static void insn_push_stw(insn_code code) {
+        g_rec_mutex_lock(&gRQueueMutex);
+        insn_push(insn_stw_begin);
+        insn_push(code);
+        insn_push(insn_stw_end);
+        g_rec_mutex_unlock(&gRQueueMutex);
 }
 
-static void bc_interrupt_stw() {
-        g_rec_mutex_lock(&gSTWStateMtx);
-        if (g_atomic_int_get(&gSTWRequestedAtm) == STW_REQUEST_ON) {
-                sem_v_signal(gResQ);
-                g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
-        }
-        g_rec_mutex_unlock(&gSTWStateMtx);
+static void insn_push_unit(insn_code code) {
+        g_rec_mutex_lock(&gRQueueMutex);
+        insn_push(code);
+        g_rec_mutex_unlock(&gRQueueMutex);
 }
 
-static void bc_resume_stw() {
-        g_rec_mutex_lock(&gSTWStateMtx);
-        g_atomic_int_set(&gSTWRequestedAtm, STW_REQUEST_OFF);
-        //待機中の全てのスレッドを解放する
-        while (g_atomic_int_get(&gHeapWaitStack) > 0) {
-                g_atomic_int_dec_and_test(&gHeapWaitStack);
-                sem_v_signal(gReqQ);
+static void insn_flush() {
+        g_rec_mutex_lock(&gRQueueMutex);
+        while (g_async_queue_length(gRunQueue) > 0) {
+                g_async_queue_pop(gRunQueue);
         }
-        g_rec_mutex_unlock(&gSTWStateMtx);
-        // bc_UnlockScriptThread();
+        g_rec_mutex_unlock(&gRQueueMutex);
+}
+
+static const char* insn_string(insn_code code) {
+        switch (code) {
+                case insn_collect:
+                        return "collect";
+                case insn_mark:
+                        return "mark";
+                case insn_mark_barrier:
+                        return "barrier";
+                case insn_sweep:
+                        return "sweep";
+                case insn_full_gc:
+                        return "full-gc";
+                case insn_safe_invoke:
+                        return "safe-invoke";
+                case insn_stw_begin:
+                        return "stw-begin";
+                case insn_stw_end:
+                        return "stw-end";
+                case insn_quit:
+                        return "quit";
+        }
+        return "undefined";
+}
+
+static void write_insn_curr_code(insn_code code) {
+        g_rw_lock_writer_lock(&gCurrInsnCodeRWLock);
+        gCurrInsnCode = code;
+        g_rw_lock_writer_unlock(&gCurrInsnCodeRWLock);
+}
+
+static void write_insn_last_code(insn_code code) {
+        g_rw_lock_writer_lock(&gLastInsnCodeRWLock);
+        gLastInsnCode = code;
+        g_rw_lock_writer_unlock(&gLastInsnCodeRWLock);
+}
+
+static void assert_last_code(insn_code code) {
+        g_rw_lock_reader_lock(&gLastInsnCodeRWLock);
+        if (gLastInsnCode != code) {
+                fprintf(stderr, "assersion failed. (value)%s != (expect)%s\n",
+                        insn_string(gLastInsnCode), insn_string(code));
+                abort();
+        }
+        g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
 }
 
 // gc
 
 static gpointer gc_run(gpointer data) {
-        bool go = true;
-        while (go) {
-                gint code = insn_pop();
-                switch (code) {
-                        case insn_collect:
-                                gc_insn_collect();
-                                break;
-                        case insn_mark:
-                                gc_insn_mark();
-                                break;
-                        case insn_mark_barrier:
-                                gc_insn_mark_barrier();
-                                break;
-                        case insn_sweep:
-                                gc_insn_sweep();
-                                break;
-                        case insn_full_gc:
-                                gc_insn_full_gc();
-                                break;
-                        case insn_safe_invoke:
-                                gc_insn_safe_invoke();
-                                break;
-                        case insn_quit:
-                                go = false;
-                                break;
-                }
+        while (gc_insn_eval(insn_pop())) {
+                ;
         }
         return NULL;
 }
 
-static void gc_insn_collect() {
-        if (bc_request_stw() == stw_success) {
-                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
-                        insn_push(insn_quit);
-                        return;
-                }
-                gc_promotion();
-                gc_collect_all_root();
-                bc_resume_stw();
-                insn_push(insn_mark);
-        } else {
-                gc_reset_roots();
-                gc_reset_mark();
-                insn_push(insn_collect);
+static bool gc_insn_eval(insn_code code) {
+        bool go = true;
+        //同じ命令を連続して実行しないように
+        g_rw_lock_reader_lock(&gLastInsnCodeRWLock);
+        if (gLastInsnCode == code) {
+                g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
+                write_insn_last_code(insn_invalid);
+                return go;
         }
+        g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
+        //各命令を実行
+        write_insn_curr_code(code);
+        // fprintf(stderr, "-    %s\n", insn_string(code));
+        switch (code) {
+                case insn_collect:
+                        gc_insn_collect();
+                        break;
+                case insn_mark:
+                        gc_insn_mark();
+                        break;
+                case insn_mark_barrier:
+                        gc_insn_mark_barrier();
+                        break;
+                case insn_sweep:
+                        gc_insn_sweep();
+                        break;
+                case insn_full_gc:
+                        gc_insn_full_gc();
+                        break;
+                case insn_safe_invoke:
+                        gc_insn_safe_invoke();
+                        break;
+                case insn_stw_begin:
+                        gc_insn_stw_begin();
+                        break;
+                case insn_stw_end:
+                        gc_insn_stw_end();
+                        break;
+                case insn_quit:
+                        go = false;
+                        break;
+        }
+        write_insn_last_code(code);
+        return go;
+}
+
+static void gc_insn_collect() {
+        assert_last_code(insn_stw_begin);
+        gc_promotion();
+        gc_collect_all_root();
+        insn_push_unit(insn_mark);
 }
 
 static void gc_insn_mark() {
+        assert_last_code(insn_stw_end);
         gc_mark();
-        insn_push(insn_mark_barrier);
+        insn_push_stw(insn_mark_barrier);
 }
 
 static void gc_insn_mark_barrier() {
-        //ライトバリアーを確認
-        if (bc_request_stw() == stw_success) {
-                if (g_atomic_int_get(&gQuitAtm) == QUIT_ON) {
-                        insn_push(insn_quit);
-                        return;
-                }
-                gc_mark_wait();
-                gc_mark_barrier();
-                gc_sweep_prepare();
-                bc_resume_stw();
-                insn_push(insn_sweep);
-        } else {
-                gc_reset_roots();
-                gc_reset_mark();
-                insn_push(insn_collect);
-        }
+        assert_last_code(insn_stw_begin);
+        gc_mark_wait();
+        gc_mark_barrier();
+        gc_sweep_prepare();
+        insn_push_unit(insn_sweep);
 }
 
 static void gc_insn_sweep() {
+        assert_last_code(insn_stw_end);
         gc_sweep();
-        insn_push(insn_collect);
+        insn_push_stw(insn_collect);
 }
 
 static void gc_insn_full_gc() {
-        gc_full();
-        insn_push(insn_collect);
+        gc_overwrite_mark(PAINT_UNMARKED_T);
+        gc_reset_roots();
+        gc_collect_all_root();
+        gc_mark();
+        gc_sweep();
+        g_rec_mutex_lock(&gRunQueue);
+        insn_flush();
+        insn_push_stw(insn_collect);
+        g_rec_mutex_unlock(&gRunQueue);
 }
 
 static void gc_insn_safe_invoke() {
-        safe_invoke();
-        insn_push(insn_collect);
+        g_async_queue_push(gSIBeginQueue, GINT_TO_POINTER(1));
+        g_async_queue_pop(gSIEndQueue);
+}
+
+static void gc_insn_stw_begin() {
+        g_rec_mutex_lock(&gRQueueMutex);
+        bool safeInvoke = false;
+        //セーフインボークが予約されているか
+        while (g_async_queue_length(gRunQueue) > 0) {
+                gint code = g_async_queue_pop(gRunQueue);
+                g_async_queue_push(gSubQueue, code);
+                if (code == insn_safe_invoke) {
+                        safeInvoke = true;
+                        break;
+                }
+        }
+        //予約ずみならそちらを優先
+        if (safeInvoke) {
+                while (g_async_queue_length(gSubQueue) > 0) {
+                        g_async_queue_pop(gSubQueue);
+                }
+                insn_flush();
+                insn_push(insn_safe_invoke);
+                insn_push_stw(insn_collect);
+                g_rec_mutex_unlock(&gRQueueMutex);
+                return;
+        } else {
+                //予約さていないので戻す
+                while (g_async_queue_length(gSubQueue) > 0) {
+                        gint code = g_async_queue_pop(gSubQueue);
+                        g_async_queue_push(gRunQueue, code);
+                }
+        }
+        g_rec_mutex_unlock(&gRQueueMutex);
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        int asthn = bc_GetActiveScriptThreadCount();
+        //全てのスレッドが揃うまでまつ
+        while (((g_atomic_int_get(&gSTWSynqStack) +
+                 g_atomic_int_get(&gSTWPollStack)) < asthn) &&
+               g_atomic_int_get(&gSTWInterrupt) == 0) {
+                g_cond_wait(&gSTWScheduleCond, &gSTWScheduleMutex);
+        }
+        //割り込みによって中断された
+        if (g_atomic_int_get(&gSTWInterrupt) == 1) {
+                g_atomic_int_set(&gSTWInterrupt, 0);
+                gc_insn_stw_end();
+        }
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
+}
+
+static void gc_insn_stw_end() {
+        g_rec_mutex_lock(&gSTWScheduleMutex);
+        while (g_atomic_int_get(&gSTWPollStack) > 0) {
+                g_atomic_int_dec_and_test(&gSTWPollStack);
+                sem_v_signal(gCheckQueue);
+        }
+        g_rec_mutex_unlock(&gSTWScheduleMutex);
 }
 
 // gc functions
@@ -686,25 +736,13 @@ static void gc_delete(bc_VectorItem item) {
         bc_DeleteObject(e);
 }
 
-static void safe_invoke() {
-        if (g_atomic_int_get(&gInvokeAtm) == SAFE_INVOKE_ON) {
-                g_atomic_int_set(&gStopForInvokeAtm, STOP_FOR_ON);
-                sem_v_signal(gInvokeResQ);
-                sem_p_wait(gInvokeReqQ);
+static void gc_trigger() {
+        gint sync = g_atomic_int_get(&gSTWSynqStack);
+        gint poll = g_atomic_int_get(&gSTWPollStack);
+        int all = bc_GetActiveScriptThreadCount();
+        if ((sync + poll) == all) {
+                g_rec_mutex_lock(&gSTWScheduleMutex);
+                g_cond_signal(&gSTWScheduleCond);
+                g_rec_mutex_unlock(&gSTWScheduleMutex);
         }
-        g_atomic_int_set(&gStopForInvokeAtm, STOP_FOR_OFF);
-}
-
-static bool gc_full() {
-        if (g_atomic_int_get(&gFGCAtm) != FULL_GC_ON) {
-                return false;
-        }
-        gc_overwrite_mark(PAINT_UNMARKED_T);
-        gc_reset_roots();
-        gc_collect_all_root();
-        gc_mark();
-        gc_sweep();
-        g_atomic_int_set(&gFGCAtm, FULL_GC_OFF);
-        g_async_queue_push(gFGCQ, GINT_TO_POINTER(1));
-        return true;
 }

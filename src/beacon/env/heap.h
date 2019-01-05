@@ -30,6 +30,8 @@ void bc_InitHeap();
  */
 void bc_DestroyHeap();
 
+void bc_WakeupGC();
+
 /**
  * ヒープにオブジェクトを追加します.
  * obj#blockingがtrueなら、
