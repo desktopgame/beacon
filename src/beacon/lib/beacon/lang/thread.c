@@ -24,7 +24,7 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
                                 bc_ObjectMessageArgument argv[]);
 
 bc_Object* bc_NewThread(bc_ScriptThread* thread) {
-        bc_Thread* ret = bc_ConstructObject(NULL, sizeof(bc_Thread),
+        bc_Thread* ret = bc_ConstructObject(sizeof(bc_Thread),
                                             bc_GetThreadType()->GenericSelf);
         ret->Super.OnMessage = handle_obj_message;
         bc_ConnectThread((bc_Object*)ret, thread);

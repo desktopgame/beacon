@@ -39,8 +39,7 @@ static void bc_short_nativeToString(bc_Method* parent, bc_Frame* fr,
                                     bc_Enviroment* env);
 
 bc_Object* bc_NewShort(short value) {
-        bc_Short* s =
-            bc_ConstructObject(NULL, sizeof(bc_Short), BC_GENERIC_SHORT);
+        bc_Short* s = bc_ConstructObject(sizeof(bc_Short), BC_GENERIC_SHORT);
         s->Value = value;
         return (bc_Object*)s;
 }

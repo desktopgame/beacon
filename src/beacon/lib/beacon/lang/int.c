@@ -41,8 +41,7 @@ static void bc_int_nativeToString(bc_Method* parent, bc_Frame* fr,
                                   bc_Enviroment* env);
 
 bc_Object* bc_NewInteger(int value) {
-        bc_Integer* i =
-            bc_ConstructObject(NULL, sizeof(bc_Integer), BC_GENERIC_INT);
+        bc_Integer* i = bc_ConstructObject(sizeof(bc_Integer), BC_GENERIC_INT);
         i->Value = value;
         return (bc_Object*)i;
 }

@@ -30,7 +30,7 @@ static void bc_double_nativeToString(bc_Method* parent, bc_Frame* fr,
 
 bc_Object* bc_NewDouble(double value) {
         bc_Double* ret =
-            bc_ConstructObject(NULL, sizeof(bc_Double), BC_GENERIC_DOUBLE);
+            bc_ConstructObject(sizeof(bc_Double), BC_GENERIC_DOUBLE);
         ret->Value = value;
         return (bc_Object*)ret;
 }

@@ -8,8 +8,7 @@ static void bc_char_nativeToInt(bc_Method* parent, bc_Frame* fr,
                                 bc_Enviroment* env);
 
 bc_Object* bc_NewChar(char value) {
-        bc_Char* ret =
-            bc_ConstructObject(NULL, sizeof(bc_Char), BC_GENERIC_CHAR);
+        bc_Char* ret = bc_ConstructObject(sizeof(bc_Char), BC_GENERIC_CHAR);
         ret->Value = value;
         return (bc_Object*)ret;
 }

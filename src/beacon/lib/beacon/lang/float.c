@@ -29,8 +29,7 @@ static void bc_float_nativeToString(bc_Method* parent, bc_Frame* fr,
                                     bc_Enviroment* env);
 
 bc_Object* bc_NewFloat(float value) {
-        bc_Float* ret =
-            bc_ConstructObject(NULL, sizeof(bc_Float), BC_GENERIC_FLOAT);
+        bc_Float* ret = bc_ConstructObject(sizeof(bc_Float), BC_GENERIC_FLOAT);
         ret->Value = value;
         return (bc_Object*)ret;
 }

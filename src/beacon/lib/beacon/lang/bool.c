@@ -8,7 +8,7 @@ static void bc_bool_nativeBitAnd(bc_Method* parent, bc_Frame* fr,
 
 bc_Object* bc_NewBool(bc_ScriptContext* sctx, bool value) {
         bc_Bool* ret = bc_ConstructObject(
-            sctx, sizeof(bc_Bool), bc_GetBoolTypeNamespace(sctx)->GenericSelf);
+            sizeof(bc_Bool), bc_GetBoolTypeNamespace(sctx)->GenericSelf);
         ret->Value = value;
         return (bc_Object*)ret;
 }

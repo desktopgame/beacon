@@ -95,21 +95,18 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc,
 
 /**
  * 指定のサイズのメモリを確保して、ヒープに紐づけます。
- * @param sctx
  * @param object_size
  * @return
  */
-void* bc_NewObject(struct bc_ScriptContext* sctx, size_t object_size);
+void* bc_NewObject(size_t object_size);
 
 /**
  * オブジェクトを生成して型を割り当てます。
- * @param sctx
  * @param object_size
  * @param gtype
  * @return
  */
-void* bc_ConstructObject(struct bc_ScriptContext* sctx, size_t object_size,
-                         struct bc_GenericType* gtype);
+void* bc_ConstructObject(size_t object_size, struct bc_GenericType* gtype);
 
 /**
  * 可能ならキャッシュを返します.

@@ -26,7 +26,7 @@ bc_Object* bc_NewArray(int size, bc_GenericType* element_type) {
         // Array[T]を作成する
         bc_GenericType* array_type = bc_NewGenericType(bc_GetArrayType());
         bc_AddArgsGenericType(array_type, element_type);
-        bc_Array* ret = bc_ConstructObject(NULL, sizeof(bc_Array), array_type);
+        bc_Array* ret = bc_ConstructObject(sizeof(bc_Array), array_type);
         ret->Super.OnMessage = handle_obj_message;
         ret->Elements = bc_NewVector();
         for (int i = 0; i < size; i++) {

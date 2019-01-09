@@ -37,8 +37,7 @@ static void bc_long_nativeToString(bc_Method* parent, bc_Frame* fr,
                                    bc_Enviroment* env);
 
 bc_Object* bc_NewLong(long value) {
-        bc_Long* ret =
-            bc_ConstructObject(NULL, sizeof(bc_Long), BC_GENERIC_LONG);
+        bc_Long* ret = bc_ConstructObject(sizeof(bc_Long), BC_GENERIC_LONG);
         ret->Value = value;
         return (bc_Object*)ret;
 }
