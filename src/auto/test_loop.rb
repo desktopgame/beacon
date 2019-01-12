@@ -3,6 +3,32 @@ require "fileutils"
 require "date"
 require 'fileutils'
 require_relative "cmd"
+require 'rbconfig'
+
+def os
+  @os ||= (
+    host_os = RbConfig::CONFIG['host_os']
+    case host_os
+    when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+      :windows
+    when /darwin|mac os/
+      :macosx
+    when /linux/
+      :linux
+    when /solaris|bsd/
+      :unix
+    else
+      :unknown
+    end
+  )
+end
+
+def say(str)
+	if(os == :macosx) then
+		system("say " + str)
+	end
+end
+
 loops = 10
 if(ARGV.length > 0) then
 	loops = ARGV[0].to_i
@@ -42,8 +68,10 @@ loops.times do |i|
 				puts "e: " + line
 			end
 			puts("----FAIL")
+			say("テストがエラーで終わりました")
 			abort()
 		end
 	end
 end
 puts "----- SUCCESS -----"
+say("テストが正常に終わりました")
