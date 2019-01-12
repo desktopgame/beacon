@@ -87,7 +87,6 @@ void bc_ExitScriptThread(bc_ScriptThread* self) {
 
 void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
                           GThreadFunc func, gpointer data) {
-        g_rec_mutex_lock(&gActiveMutex);
         bc_lock();
         //スレッド生成時に渡された名前を取得
         bc_Type* ty = bc_GetThreadType();
@@ -100,9 +99,10 @@ void bc_StartScriptThread(bc_ScriptThread* self, bc_Object* threadObj,
         ((bc_Thread*)threadObj)->ScriptThreadRef = self;
         GThread* gth = g_thread_new(buffer->Text, func, data);
         self->Thread = gth;
+        g_rec_mutex_lock(&gActiveMutex);
         self->State = STHREAD_START;
-        bc_unlock();
         g_rec_mutex_unlock(&gActiveMutex);
+        bc_unlock();
 }
 
 void bc_SetScriptThreadFrameRef(bc_ScriptThread* self, bc_Frame* frame_ref) {
