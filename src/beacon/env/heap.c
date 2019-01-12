@@ -517,10 +517,10 @@ static void gc_insn_full_gc() {
         gc_collect_all_root();
         gc_mark();
         gc_sweep(true);
-        g_rec_mutex_lock(&gRunQueue);
+        g_rec_mutex_lock(&gRQueueMutex);
         insn_flush();
         insn_push_stw(insn_collect);
-        g_rec_mutex_unlock(&gRunQueue);
+        g_rec_mutex_unlock(&gRQueueMutex);
         sem_v_signal(gFullGCQueue);
 }
 
@@ -549,6 +549,7 @@ static void gc_insn_stw_begin() {
                         g_async_queue_pop(gSubQueue);
                 }
                 insn_flush();
+                write_insn_last_code(insn_invalid);
                 insn_push(highPrioCode);
                 insn_push_stw(insn_collect);
                 g_rec_mutex_unlock(&gRQueueMutex);
