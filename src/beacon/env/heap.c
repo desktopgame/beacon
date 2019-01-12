@@ -407,9 +407,8 @@ static void write_insn_last_code(insn_code code) {
 static void assert_last_code(insn_code code) {
         g_rw_lock_reader_lock(&gLastInsnCodeRWLock);
         if (gLastInsnCode != code) {
-                fprintf(stderr, "assersion failed. (value)%s != (expect)%s\n",
+                g_error("heap.(value)%s != (expect)%s",
                         insn_string(gLastInsnCode), insn_string(code));
-                abort();
         }
         g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
 }
@@ -450,7 +449,7 @@ static bool gc_insn_eval(insn_code code) {
         g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
         //各命令を実行
         write_insn_curr_code(code);
-        g_debug(insn_string(code));
+        g_message("heap.%s", insn_string(code));
         // fprintf(stderr, "-    %s\n", insn_string(code));
         switch (code) {
                 case insn_collect:
