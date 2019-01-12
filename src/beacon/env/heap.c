@@ -450,6 +450,7 @@ static bool gc_insn_eval(insn_code code) {
         g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
         //各命令を実行
         write_insn_curr_code(code);
+        g_debug(insn_string(code));
         // fprintf(stderr, "-    %s\n", insn_string(code));
         switch (code) {
                 case insn_collect:

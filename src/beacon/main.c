@@ -14,6 +14,7 @@
 #include "env/script_context.h"
 #include "il/il_print_layout.h"
 #include "test.h"
+#include "util/log.h"
 #include "util/mem.h"
 #include "util/string_pool.h"
 
@@ -61,6 +62,7 @@ int main(int argc, char *argv[]) {
             _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
         //_CrtSetBreakAlloc(36862);
 #endif
+        bc_InitLog();
         bc_InitMX();
         bc_InitStringPool();
         bc_InitScriptThread();
@@ -77,6 +79,7 @@ int main(int argc, char *argv[]) {
         bc_DestroyScriptThread();
         bc_DestroyStringPool();
         bc_DestroyMX();
+        bc_DestroyLog();
 #if defined(_MSC_VER) && defined(DEBUG)
         _CrtDumpMemoryLeaks();
 #endif
