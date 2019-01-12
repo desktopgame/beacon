@@ -6,16 +6,22 @@ require 'timeout'
 
 class Cmd
   @@timeout = 0
+  @@stdout_file_last = nil
+  @@stderr_file_last = nil
   def Cmd.timeout=(sec) ; @@timeout = sec ; end
+  def Cmd.stdout_file_last  ; @@stdout_file_last ; end
+  def Cmd.stderr_file_last  ; @@stderr_file_last ; end
   def Cmd.run(*cmd_array)
     raise(Exception,"Command string is nil") if cmd_array.size == 0
     stdout_file = Tempfile::new("#{$$}_light_cmd_tmpout",Dir.tmpdir)
     stderr_file = Tempfile::new("#{$$}_light_cmd_tmperr",Dir.tmpdir)
+    @@stdout_file_last = stdout_file
+    @@stderr_file_last = stderr_file
     pid = spawn(*cmd_array, :out => [stdout_file,"w"],:err => [stderr_file,"w"])
     status = nil
     if @@timeout != 0
       begin
-        timeout(@@timeout) do
+        Timeout.timeout(@@timeout) do
           status = Process.waitpid2(pid)[1] >> 8
         end
       rescue Timeout::Error => e

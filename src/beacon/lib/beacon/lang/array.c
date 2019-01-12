@@ -93,10 +93,13 @@ static void* handle_obj_message(bc_Object* self, bc_ObjectMessage msg, int argc,
                 assert(argc == 1);
                 bc_HandleObjectMessage(self, msg, argc, argv);
                 bc_Vector* values = ARRAY_VALUE(self);
-                assert(values != NULL);
-                for (int i = 0; i < values->Length; i++) {
-                        bc_PaintAllObject((bc_Object*)bc_AtVector(values, i),
-                                          argv[0].Int);
+                //まだnativeInitが呼ばれていないならnull
+                if (values != NULL) {
+                        for (int i = 0; i < values->Length; i++) {
+                                bc_PaintAllObject(
+                                    (bc_Object*)bc_AtVector(values, i),
+                                    argv[0].Int);
+                        }
                 }
                 return NULL;
         } else if (msg == OBJECT_MSG_DELETE) {
@@ -142,6 +145,7 @@ static void bc_array_nativeInit(bc_Method* parent, bc_Frame* fr,
                 bc_Object* oe = bc_GetDefaultObject(targ);
                 bc_PushVector(ARRAY_VALUE(self), oe);
         }
+        self->Super.Update = true;
 }
 
 static void bc_array_nativeSet(bc_Method* parent, bc_Frame* fr,
@@ -151,6 +155,7 @@ static void bc_array_nativeSet(bc_Method* parent, bc_Frame* fr,
         bc_Object* val = bc_AtVector(fr->VariableTable, 2);
         assert(bc_IsIntValue(idx));
         bc_AssignVector(ARRAY_VALUE(self), bc_ObjectToInt(idx), val);
+        self->Update = true;
 }
 
 static void bc_array_nativeGet(bc_Method* parent, bc_Frame* fr,
