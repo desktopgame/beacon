@@ -4,6 +4,7 @@
 #include "../../../env/exception.h"
 #include "../../../env/field.h"
 #include "../../../env/generic_type.h"
+#include "../../../env/heap.h"
 #include "../../../util/mem.h"
 #include "../../../util/text.h"
 #include "../../bc_library_impl.h"
@@ -26,12 +27,14 @@ bc_Object* bc_NewArray(int size, bc_GenericType* element_type) {
         // Array[T]を作成する
         bc_GenericType* array_type = bc_NewGenericType(bc_GetArrayType());
         bc_AddArgsGenericType(array_type, element_type);
-        bc_Array* ret = bc_ConstructObject(sizeof(bc_Array), array_type);
+        bc_Array* ret = bc_MallocObject(sizeof(bc_Array));
         ret->Super.OnMessage = handle_obj_message;
         ret->Elements = bc_NewVector();
         for (int i = 0; i < size; i++) {
                 bc_PushVector(ret->Elements, bc_GetNullObject());
         }
+        bc_SetType(ret, array_type);
+        bc_AddHeap(ret);
         return (bc_Object*)ret;
 }
 

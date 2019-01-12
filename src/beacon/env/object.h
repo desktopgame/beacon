@@ -94,6 +94,13 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc,
                              bc_ObjectMessageArgument argv[]);
 
 /**
+ * 指定のサイズのメモリを確保しますが、ヒープには紐付けません。
+ * @param object_size
+ * @return
+ */
+void* bc_MallocObject(size_t object_size);
+
+/**
  * 指定のサイズのメモリを確保して、ヒープに紐づけます。
  * @param object_size
  * @return
@@ -102,11 +109,19 @@ void* bc_NewObject(size_t object_size);
 
 /**
  * オブジェクトを生成して型を割り当てます。
+ * bc_NewObject(), bc_SetType を続けて呼び出すことと等価です。
  * @param object_size
  * @param gtype
  * @return
  */
 void* bc_ConstructObject(size_t object_size, struct bc_GenericType* gtype);
+
+/**
+ * 型を割り当てます。
+ * @param self
+ * @param gtype
+ */
+void bc_SetType(bc_Object* self, struct bc_GenericType* gtype);
 
 /**
  * 可能ならキャッシュを返します.

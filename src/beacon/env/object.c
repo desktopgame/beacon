@@ -78,7 +78,7 @@ void* bc_HandleObjectMessage(bc_Object* self, bc_ObjectMessage msg, int argc,
         return NULL;
 }
 
-void* bc_NewObject(size_t object_size) {
+void* bc_MallocObject(size_t object_size) {
         if (object_size < sizeof(bc_Object)) {
                 return NULL;
         }
@@ -95,18 +95,26 @@ void* bc_NewObject(size_t object_size) {
         ret->Fields = bc_NewVector();
         ret->Flags = OBJECT_FLG_NONE;
         ret->Update = false;
-        bc_AddHeap(ret);
         gObjectCount++;
         return mem;
+}
+
+void* bc_NewObject(size_t object_size) {
+        bc_Object* ret = bc_MallocObject(object_size);
+        bc_AddHeap(ret);
+        return ret;
 }
 
 void* bc_ConstructObject(size_t object_size, bc_GenericType* gtype) {
         assert(gtype != NULL);
         void* mem = bc_NewObject(object_size);
-        bc_Object* obj = mem;
-        obj->GType = gtype;
-        obj->VPtr = bc_GetVTableType(gtype->CoreType);
+        bc_SetType(mem, gtype);
         return mem;
+}
+
+void bc_SetType(bc_Object* self, bc_GenericType* gtype) {
+        self->GType = gtype;
+        self->VPtr = bc_GetVTableType(gtype->CoreType);
 }
 
 bc_Object* bc_GetIntObject(int i) {

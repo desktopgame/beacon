@@ -1,6 +1,7 @@
 #include "string.h"
 #include <assert.h>
 #include <string.h>
+#include "../../../env/heap.h"
 #include "../../bc_library_impl.h"
 #include "../../bc_library_interface.h"
 
@@ -11,8 +12,7 @@ static void bc_string_nativeInit(bc_Method* parent, bc_Frame* fr,
                                  bc_Enviroment* env);
 
 bc_Object* bc_NewString(const char* str) {
-        bc_Object* ret =
-            bc_ConstructObject(sizeof(bc_String), BC_GENERIC_STRING);
+        bc_Object* ret = bc_MallocObject(sizeof(bc_String));
         ret->OnMessage = handle_obj_message;
         // ret->u.string_ = s;
         // ret->u.field_vec = NewVector();
@@ -55,6 +55,8 @@ bc_Object* bc_NewString(const char* str) {
         // C形式の文字列でも保存
         // AssignVector(ret->NativeSlotVec, 0, sb);
         ((bc_String*)ret)->Buffer = sb;
+        bc_SetType(ret, BC_GENERIC_STRING);
+        bc_AddHeap(ret);
         return (bc_Object*)ret;
 }
 
