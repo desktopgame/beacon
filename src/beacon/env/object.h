@@ -156,27 +156,6 @@ bc_Object* bc_GetFalseObject();
 bc_Object* bc_GetNullObject();
 
 /**
- * trueを参照します.
- * @param sctx
- * @return
- */
-bc_Object* bc_GetUniqueTrueObject(struct bc_ScriptContext* sctx);
-
-/**
- * falseを参照します.
- * @param sctx
- * @return
- */
-bc_Object* bc_GetUniqueFalseObject(struct bc_ScriptContext* sctx);
-
-/**
- * nullを参照します.
- * @param sctx
- * @return
- */
-bc_Object* bc_GetUniqueNullObject(struct bc_ScriptContext* sctx);
-
-/**
  * このオブジェクトを複製します.
  * int/double/char/boolでのみ使用可能です。
  * @param self

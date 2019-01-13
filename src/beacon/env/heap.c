@@ -622,9 +622,9 @@ static void gc_collect_all_root() {
                 bc_CollectStaticFields(sctx, gHeap->Roots);
         }
         // true, false, null
-        bc_AddRoot(bc_GetUniqueTrueObject(sctx));
-        bc_AddRoot(bc_GetUniqueFalseObject(sctx));
-        bc_AddRoot(bc_GetUniqueNullObject(sctx));
+        bc_AddRoot(bc_GetTrueObject());
+        bc_AddRoot(bc_GetFalseObject());
+        bc_AddRoot(bc_GetNullObject());
         bc_LockScriptThread();
         int sthn = bc_GetScriptThreadCount();
         for (int i = 0; i < sthn; i++) {

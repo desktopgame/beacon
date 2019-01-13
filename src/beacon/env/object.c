@@ -136,21 +136,7 @@ bc_Object* bc_GetBoolObject(bool b) {
 }
 
 bc_Object* bc_GetTrueObject() {
-        bc_ScriptContext* ctx = bc_GetScriptContext();
-        return bc_GetUniqueTrueObject(ctx);
-}
-
-bc_Object* bc_GetFalseObject() {
-        bc_ScriptContext* ctx = bc_GetScriptContext();
-        return bc_GetUniqueFalseObject(ctx);
-}
-
-bc_Object* bc_GetNullObject() {
-        bc_ScriptContext* ctx = bc_GetScriptContext();
-        return bc_GetUniqueNullObject(ctx);
-}
-
-bc_Object* bc_GetUniqueTrueObject(bc_ScriptContext* sctx) {
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         if (sctx->True == NULL) {
                 sctx->True = (bc_Object*)bc_NewBool(sctx, true);
                 sctx->True->Paint = PAINT_ONEXIT_T;
@@ -158,7 +144,8 @@ bc_Object* bc_GetUniqueTrueObject(bc_ScriptContext* sctx) {
         return sctx->True;
 }
 
-bc_Object* bc_GetUniqueFalseObject(bc_ScriptContext* sctx) {
+bc_Object* bc_GetFalseObject() {
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         if (sctx->False == NULL) {
                 sctx->False = (bc_Object*)bc_NewBool(sctx, false);
                 sctx->False->Paint = PAINT_ONEXIT_T;
@@ -166,7 +153,8 @@ bc_Object* bc_GetUniqueFalseObject(bc_ScriptContext* sctx) {
         return sctx->False;
 }
 
-bc_Object* bc_GetUniqueNullObject(bc_ScriptContext* sctx) {
+bc_Object* bc_GetNullObject() {
+        bc_ScriptContext* sctx = bc_GetScriptContext();
         if (sctx->Null == NULL) {
                 sctx->Null = bc_NewObject(sizeof(bc_Object));
                 sctx->Null->GType = bc_NewGenericType(BC_TYPE_NULL);

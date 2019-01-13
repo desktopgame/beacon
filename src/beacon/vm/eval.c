@@ -43,9 +43,9 @@ static bool eval_top_from_cll(bc_ClassLoader* cll, bc_AST* aOpt) {
                 bc_LoadPassASTClassLoader(cll, aOpt);
         }
         bc_ScriptContext* sctx = bc_GetScriptContext();
-        bc_GetUniqueTrueObject(sctx);
-        bc_GetUniqueFalseObject(sctx);
-        bc_GetUniqueNullObject(sctx);
+        bc_GetTrueObject();
+        bc_GetFalseObject();
+        bc_GetNullObject();
         //実行
         bc_Frame* fr = bc_NewFrame();
         bc_SetScriptThreadFrameRef(bc_GetCurrentScriptThread(), fr);
