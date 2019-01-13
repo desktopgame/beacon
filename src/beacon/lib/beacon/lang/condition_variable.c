@@ -77,13 +77,15 @@ static void bc_condition_variable_nativeWaitTimed(bc_Method* parent,
         bc_ConditionVariable* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* sync = bc_AtVector(fr->VariableTable, 1);
         bc_Long* timeout = bc_AtVector(fr->VariableTable, 2);
+        gboolean gb = 1;
         if (sync->GType->CoreType == bc_GetMutexType()) {
-                g_cond_wait_until(&self->Cond, &((bc_Mutex*)sync)->Mutex,
-                                  timeout->Value);
+                gb = g_cond_timed_wait(&self->Cond, &((bc_Mutex*)sync)->Mutex,
+                                       timeout->Value);
         } else if (sync->GType->CoreType == bc_GetRecMutexType()) {
-                g_cond_wait_until(&self->Cond, &((bc_RecMutex*)sync)->Mutex,
-                                  timeout->Value);
+                gb = g_cond_timed_wait(
+                    &self->Cond, &((bc_RecMutex*)sync)->Mutex, timeout->Value);
         }
+        bc_PushVector(fr->ValueStack, bc_GetBoolObject(gb));
 }
 static void bc_condition_variable_nativeSignal(bc_Method* parent, bc_Frame* fr,
                                                bc_Enviroment* env) {

@@ -9,8 +9,8 @@ namespace beacon::lang {
 			nativeWait(sync);
 		}
 
-		def wait(Synchronizable sync, Long timeout) -> Void {
-			nativeWaitTimed(sync, timeout);
+		def wait(Synchronizable sync, Long timeout) -> Bool {
+			return nativeWaitTimed(sync, timeout);
 		}
 
 		def signal() -> Void {
@@ -26,7 +26,7 @@ namespace beacon::lang {
 
 		def native nativeWait(Synchronizable sync) -> Void;
 
-		def native nativeWaitTimed(Synchronizable sync, Long timeout) -> Void;
+		def native nativeWaitTimed(Synchronizable sync, Long timeout) -> Bool;
 
 		def native nativeSignal() -> Void;
 
