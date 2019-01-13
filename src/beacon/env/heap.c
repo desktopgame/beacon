@@ -421,8 +421,6 @@ static void begin_interrupt_stw() {
                 g_atomic_int_set(&gSTWInterrupt, 1);
                 g_cond_signal(&gSTWScheduleCond);
         }
-        g_rw_lock_reader_unlock(&gCurrInsnCodeRWLock);
-        g_rec_mutex_unlock(&gSTWScheduleMutex);
 }
 
 static void end_interrupt_stw() {
