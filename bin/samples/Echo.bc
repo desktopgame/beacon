@@ -1,0 +1,45 @@
+namespace condvar {
+	class Echo : Runnable {
+		public:
+		def new(Synchronizable sync, ConditionVariable condvar) {
+			this.sync = sync;
+			this.condvar = condvar;
+		}
+
+		def run() -> Void {
+			while(text == null) {
+				condvar.wait(sync);
+				text.printLine();
+				if(text == "exit") { break; }
+				text = null;
+			}
+		}
+
+		public:
+		String text;
+
+		private:
+		Synchronizable sync;
+		ConditionVariable condvar;
+	}
+}
+var mtx = new RecMutex();
+var condvar = new ConditionVariable();
+var echo = new condvar::Echo(mtx, condvar);
+var th = new Thread("thread" , echo);
+th.start();
+while(true) {
+	var line = Console.readLine();
+	echo.text = line;
+	mtx.lock();
+	condvar.signal();
+	mtx.unlock();
+	if(line == "exit") {
+		echo.text = "exit";
+		mtx.lock();
+		condvar.signal();
+		mtx.unlock();
+		break;
+	}
+}
+th.join();
