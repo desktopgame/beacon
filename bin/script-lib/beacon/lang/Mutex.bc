@@ -1,3 +1,5 @@
+require "Synchronizable"
+
 namespace beacon::lang {
 	class Mutex : Synchronizable {
 		public:

@@ -1,4 +1,6 @@
 #include "condition_variable.h"
+#include "../../../env/heap.h"
+#include "../../../vm/script_thread.h"
 #include "../../bc_library_interface.h"
 
 // proto
@@ -57,11 +59,17 @@ static void bc_condition_variable_nativeWait(bc_Method* parent, bc_Frame* fr,
                                              bc_Enviroment* env) {
         bc_ConditionVariable* self = bc_AtVector(fr->VariableTable, 0);
         bc_Object* sync = bc_AtVector(fr->VariableTable, 1);
+        bc_BeginSyncHeap();
         if (sync->GType->CoreType == bc_GetMutexType()) {
-                g_cond_wait(&self->Cond, &((bc_Mutex*)sync)->Mutex);
+                GMutex m = ((bc_Mutex*)sync)->Mutex;
+                g_cond_wait(&self->Cond, &m);
         } else if (sync->GType->CoreType == bc_GetRecMutexType()) {
-                g_cond_wait(&self->Cond, &((bc_RecMutex*)sync)->Mutex);
+                GRecMutex rm = ((bc_RecMutex*)sync)->Mutex;
+                g_rec_mutex_lock(&rm);
+                g_cond_wait(&self->Cond, &rm);
+                g_rec_mutex_unlock(&rm);
         }
+        bc_EndHeapSafeInvoke();
 }
 static void bc_condition_variable_nativeWaitTimed(bc_Method* parent,
                                                   bc_Frame* fr,

@@ -304,6 +304,12 @@ static void boot(bc_ScriptContext* self) {
                                   "beacon/lang/StackTraceElement.bc");
 
         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/Synchronizable.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/Mutex.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                  "beacon/lang/RecMutex.bc");
+        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
                                   "beacon/lang/World.bc");
         //退避していたコンテキストを復
         bc_EndNewConstant();

@@ -28,6 +28,7 @@ void bc_GenerateILBool(bc_ILBool* self, bc_Enviroment* env,
 
 bc_GenericType* bc_EvalILBool(bc_ILBool* self, bc_Enviroment* env,
                               bc_CallContext* cctx) {
+        assert(BC_GENERIC_BOOL != NULL);
         return BC_GENERIC_BOOL;
 }
 

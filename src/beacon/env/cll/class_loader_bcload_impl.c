@@ -310,6 +310,10 @@ static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
                 tp = bc_WrapClass(outClass);
                 CLBC_register_class(self, parent, iltype, tp, outClass);
                 bc_CL_ERROR_RET(self, tp);
+        } else if (tp->State == TYPE_PENDING) {
+                outClass = tp->Kind.Class;
+                CLBC_register_class(self, parent, iltype, tp, outClass);
+                bc_CL_ERROR_RET(self, tp);
         } else {
                 outClass = tp->Kind.Class;
                 if ((tp->State & TYPE_REGISTER) == 0) {
@@ -364,7 +368,9 @@ static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent,
         }
         bc_DeleteCallContext(cctx);
         cls->Location = parent;
-        bc_AddTypeNamespace(parent, tp);
+        if (tp->State != TYPE_PENDING) {
+                bc_AddTypeNamespace(parent, tp);
+        }
         //重複するインターフェイスを検出
         bc_Interface* inter = NULL;
         if ((inter = bc_IsValidInterface(tp))) {
