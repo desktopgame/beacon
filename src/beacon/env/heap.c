@@ -436,7 +436,7 @@ static gpointer gc_run(gpointer data) {
                 g_rec_mutex_lock(&gRQueueMutex);
                 insn_code code = g_async_queue_try_pop_unlocked(gRunQueue);
                 g_rec_mutex_unlock(&gRQueueMutex);
-                if(code == NULL) {
+                if (code == NULL) {
                         g_thread_yield();
                         continue;
                 }
@@ -448,6 +448,7 @@ static gpointer gc_run(gpointer data) {
 static bool gc_insn_eval(insn_code code) {
         bool go = true;
         //同じ命令を連続して実行しないように
+        /*
         g_rw_lock_reader_lock(&gLastInsnCodeRWLock);
         if (gLastInsnCode == code) {
                 g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
@@ -455,6 +456,7 @@ static bool gc_insn_eval(insn_code code) {
                 return go;
         }
         g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
+        */
         //各命令を実行
         write_insn_curr_code(code);
         g_message("heap.%s", insn_string(code));
@@ -568,11 +570,13 @@ static void gc_insn_stw_begin() {
                 while (g_async_queue_length(gSubQueue) > 0) {
                         gint code = g_async_queue_pop(gSubQueue);
                         g_async_queue_push(gRunQueue, code);
-                        if(lcode != -1) {
-                                if(lcode != insn_stw_begin &&
-                                   code == insn_collect) {
-                                           g_error("heap.scheduleError:%s->%s", insn_string(lcode), insn_string(code));
-                                   }
+                        if (lcode != -1) {
+                                if (lcode != insn_stw_begin &&
+                                    code == insn_collect) {
+                                        g_error("heap.scheduleError:%s->%s",
+                                                insn_string(lcode),
+                                                insn_string(code));
+                                }
                         }
                         lcode = code;
                 }
