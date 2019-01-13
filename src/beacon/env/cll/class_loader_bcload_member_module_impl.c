@@ -410,7 +410,7 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
                       bc_ILType* iltype, bc_Type* tp, bc_ILMethod* ilmt,
                       bc_Method* mt) {
         //	VectorItem e = AtVector(sgmethods, i);
-        g_message("    Method.Decl:%s", bc_Ref2Str(mt->Name));
+        g_message("    Method.Impl:%s", bc_Ref2Str(mt->Name));
         bc_Method* me = mt;
         bc_ILMethod* ilmethod = ilmt;
         //ネイティブメソッドならオペコードは不要
