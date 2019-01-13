@@ -1,0 +1,7 @@
+namespace beacon::lang {
+	interface Synchronizable {
+		public:
+		def lock() -> Void;
+		def unlock() -> Void;
+	}
+}

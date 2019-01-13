@@ -1,0 +1,35 @@
+namespace beacon::lang {
+	class ConditionVariable {
+		public:
+		def new() {
+			nativeInit();
+		}
+
+		def wait(Synchronizable sync) -> Void {
+			nativeWait(sync);
+		}
+
+		def wait(Synchronizable sync, Long timeout) -> Void {
+			nativeWaitTimed(sync, timeout);
+		}
+
+		def signal() -> Void {
+			nativeSignal();
+		}
+
+		def broadcast() -> Void {
+			nativeBroadcast();
+		}
+
+		private:
+		def native nativeInit() -> Void;
+
+		def native nativeWait(Synchronizable sync) -> Void;
+
+		def native nativeWaitTimed(Synchronizable sync, Long timeout) -> Void;
+
+		def native nativeSignal() -> Void;
+
+		def native nativeBroadcast() -> Void;
+	}
+}

@@ -1,5 +1,5 @@
 namespace beacon::lang {
-	class Mutex {
+	class Mutex : Synchronizable {
 		public:
 		def new() {
 			nativeInit();

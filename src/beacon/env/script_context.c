@@ -260,6 +260,7 @@ static void boot(bc_ScriptContext* self) {
         bc_InitThread();
         bc_InitMutex();
         bc_InitRecMutex();
+        bc_InitConditionVariable();
         //ブートストラップクラスローダー
         self->BootstrapClassLoader =
             bc_NewClassLoader("bootstrap", CONTENT_LIB_T);

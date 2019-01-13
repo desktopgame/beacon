@@ -149,7 +149,8 @@
 			"bridge.h": "c",
 			"script_thread.h": "c",
 			"il_factor_int_impl.h": "c",
-			"mutex.h": "c"
+			"mutex.h": "c",
+			"rec_mutex.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
