@@ -431,8 +431,16 @@ static void end_interrupt_stw() {
 // gc
 
 static gpointer gc_run(gpointer data) {
-        while (gc_insn_eval(insn_pop())) {
-                ;
+        bool go = true;
+        while (go) {
+                g_rec_mutex_lock(&gRQueueMutex);
+                insn_code code = g_async_queue_try_pop_unlocked(gRunQueue);
+                g_rec_mutex_unlock(&gRQueueMutex);
+                if(code == NULL) {
+                        g_thread_yield();
+                        continue;
+                }
+                go = gc_insn_eval(code);
         }
         return NULL;
 }
@@ -555,10 +563,18 @@ static void gc_insn_stw_begin() {
                 g_rec_mutex_unlock(&gRQueueMutex);
                 return;
         } else {
+                gint lcode = -1;
                 //予約さていないので戻す
                 while (g_async_queue_length(gSubQueue) > 0) {
                         gint code = g_async_queue_pop(gSubQueue);
                         g_async_queue_push(gRunQueue, code);
+                        if(lcode != -1) {
+                                if(lcode != insn_stw_begin &&
+                                   code == insn_collect) {
+                                           g_error("heap.scheduleError:%s->%s", insn_string(lcode), insn_string(code));
+                                   }
+                        }
+                        lcode = code;
                 }
         }
         g_rec_mutex_unlock(&gRQueueMutex);
