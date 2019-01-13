@@ -1,5 +1,6 @@
 #include "class_loader_bcload_impl.h"
 #include <assert.h>
+#include <glib.h>
 #include "../../env/object.h"
 #include "../../il/il_TYPE_IMPL.h"
 #include "../../il/il_argument.h"
@@ -324,6 +325,7 @@ static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
 
 static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                                 bc_ILType* iltype, bc_Type* tp, bc_Class* cls) {
+        g_message("Class.Register:%s", bc_Ref2Str(cls->Name));
         bc_InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
         bc_DupTypeParameterList(iltype->Kind.Class->TypeParameters,
                                 cls->TypeParameters);
@@ -397,6 +399,7 @@ static bc_Type* CLBC_get_or_load_interface(bc_ClassLoader* self,
 static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                                     bc_ILType* iltype, bc_Type* tp,
                                     bc_Interface* inter) {
+        g_message("Interface.Register:%s", bc_Ref2Str(inter->Name));
         bc_InitGenericSelf(tp, iltype->Kind.Interface->TypeParameters->Length);
         bc_DupTypeParameterList(iltype->Kind.Interface->TypeParameters,
                                 inter->TypeParameters);
