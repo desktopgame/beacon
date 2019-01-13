@@ -20,8 +20,6 @@
 #include "beacon/lang/float.h"
 #include "beacon/lang/int.h"
 #include "beacon/lang/long.h"
-#include "beacon/lang/monitor.h"
-#include "beacon/lang/mutex.h"
 #include "beacon/lang/null.h"
 #include "beacon/lang/object.h"
 #include "beacon/lang/rec_mutex.h"
