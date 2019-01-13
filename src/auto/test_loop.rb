@@ -67,7 +67,7 @@ loops.times do |i|
 			while line = Cmd.stderr_file_last.gets
 				puts "e: " + line
 			end
-			puts("----FAIL")
+			puts("----FAIL[" + i.to_s + "]")
 			say("テストがエラーで終わりました")
 			abort()
 		end
