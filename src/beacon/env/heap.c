@@ -447,16 +447,6 @@ static gpointer gc_run(gpointer data) {
 
 static bool gc_insn_eval(insn_code code) {
         bool go = true;
-        //同じ命令を連続して実行しないように
-        /*
-        g_rw_lock_reader_lock(&gLastInsnCodeRWLock);
-        if (gLastInsnCode == code) {
-                g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
-                write_insn_last_code(insn_invalid);
-                return go;
-        }
-        g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
-        */
         //各命令を実行
         write_insn_curr_code(code);
         g_message("heap.%s", insn_string(code));
