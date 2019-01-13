@@ -1,5 +1,6 @@
 #include "class_loader_link_impl.h"
 #include <assert.h>
+#include <glib.h>
 #include "../../env/constructor.h"
 #include "../../env/object.h"
 #include "../../env/property.h"
@@ -68,6 +69,7 @@ static void CLBC_class_decl(bc_ClassLoader* self, bc_ILType* iltype,
         const char* name = bc_Ref2Str(bc_GetTypeName(tp));
 #endif
         bc_CL_ERROR(self);
+        g_message("Class.Decl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
         CLBC_fields_decl(self, iltype, tp, iltype->Kind.Class->Fields, scope);
         CLBC_fields_decl(self, iltype, tp, iltype->Kind.Class->StaticFields,
                          scope);
@@ -101,6 +103,7 @@ static void CLBC_class_impl(bc_ClassLoader* self, bc_ILType* iltype,
 #if defined(DEBUG)
         const char* tyname = bc_Ref2Str(bc_GetTypeName(tp));
 #endif
+        g_message("Class.Impl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
         bc_CreateVTableClass(tp->Kind.Class);
         bc_CreateOperatorVTClass(tp->Kind.Class);
         bc_CL_ERROR(self);
@@ -137,6 +140,7 @@ static void CLBC_interface_decl(bc_ClassLoader* self, bc_ILType* iltype,
         if ((tp->State & TYPE_DECL) > 0) {
                 return;
         }
+        g_message("Interface.Decl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
         assert(tp->Kind.Interface->Methods->Length == 0);
         bc_CL_ERROR(self);
         CLBC_methods_decl(self, iltype, tp, iltype->Kind.Interface->Methods,
@@ -171,6 +175,7 @@ static void CLBC_interface_impl(bc_ClassLoader* self, bc_ILType* iltype,
         if ((tp->State & TYPE_IMPL) > 0) {
                 return;
         }
+        g_message("Interface.Impl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
         bc_CL_ERROR(self);
         CLBC_methods_impl(self, scope, iltype, tp,
                           iltype->Kind.Interface->Methods,

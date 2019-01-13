@@ -60,6 +60,7 @@ bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                      bc_ILField* ilfi, bc_Namespace* scope,
                      bc_CallContext* cctx) {
         bc_Field* fi = bc_NewField(ilfi->Name);
+        g_message("    Field.Decl:%s", bc_Ref2Str(ilfi->Name));
         BC_MEMBER_ACCESS(fi) = ilfi->Access;
         BC_MEMBER_MODIFIER(fi) = ilfi->Modifier;
         BC_MEMBER_TYPE(fi) = tp;
@@ -98,6 +99,7 @@ bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
 
 bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
                      bc_Namespace* scope, bc_CallContext* cctx) {
+        g_message("    Field.Impl:%s", bc_Ref2Str(fi->Name));
         fi->StaticValue = bc_GetDefaultObject(fi->GType);
         if (fi->InitialValue == NULL) {
                 return true;
@@ -175,6 +177,7 @@ bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                         bc_CallContext* cctx) {
         // VectorItem e = AtVector(ilprops, i);
         // ILProperty* ilprop = e;
+        g_message("    Property.Decl:%s", bc_Ref2Str(ilprop->Name));
         bc_Property* prop = bc_NewProperty(ilprop->Name);
         BC_MEMBER_ACCESS(prop) = ilprop->Access;
         BC_MEMBER_MODIFIER(prop) = ilprop->Modifier;
@@ -224,6 +227,7 @@ bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                         bc_ILProperty* ilprop, bc_Property* prop,
                         bc_Namespace* scope, bc_CallContext* cctx) {
         // VectorItem e = AtVector(sgprops, i);
+        g_message("    Property.Impl:%s", bc_Ref2Str(prop->Name));
         bc_Property* pr = prop;
         bc_ILProperty* ilpr = ilprop;
         if (pr->IsShort) {
@@ -288,6 +292,7 @@ void CLBC_properties_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
 //
 bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                       bc_ILMethod* ilmt, bc_Namespace* scope) {
+        g_message("    Method.Decl:%s", bc_Ref2Str(ilmt->Name));
         //メソッド一覧から取り出す
         bc_ILMethod* ilmethod = ilmt;
         //メソッドから仮引数一覧を取りだす
@@ -405,6 +410,7 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
                       bc_ILType* iltype, bc_Type* tp, bc_ILMethod* ilmt,
                       bc_Method* mt) {
         //	VectorItem e = AtVector(sgmethods, i);
+        g_message("    Method.Decl:%s", bc_Ref2Str(mt->Name));
         bc_Method* me = mt;
         bc_ILMethod* ilmethod = ilmt;
         //ネイティブメソッドならオペコードは不要
@@ -474,6 +480,7 @@ void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope,
 //
 bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                     bc_ILConstructor* ilcons, bc_Namespace* scope) {
+        g_message("    Constructor.Decl:%d", ilcons->Parameters->Length);
         //メソッドから仮引数一覧を取りだす
         bc_Vector* ilparams = ilcons->Parameters;
         bc_Class* classz = tp->Kind.Class;
@@ -502,6 +509,7 @@ bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
 bool CLBC_ctor_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
                     bc_ILConstructor* ilcons, bc_Constructor* cons,
                     bc_Namespace* scope) {
+        g_message("    Constructor.Impl:%d", ilcons->Parameters->Length);
         //仮引数に型を設定する
         // class_loader_sgload_params(self, scope, ilcons->parameter_list,
         // cons->parameter_list); まずは仮引数の一覧にインデックスを割り振る
