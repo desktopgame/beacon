@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
+#include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -180,6 +181,33 @@ bool bc_IsIncluded(const char* source, const char* text) {
 char* bc_ReadLine() { return read_line_impl(stdin); }
 
 char* bc_FreadLine(FILE* fp) { return read_line_impl(fp); }
+
+int bc_GetLastPathComponent(const char* src, char path, char buffer[],
+                            int bufsize) {
+        memset(buffer, '\0', bufsize);
+        int len = strlen(src);
+        int pos = len;
+        //最後のパスの位置を取得
+        for (int i = 0; i < len; i++) {
+                char c = src[i];
+                if (c == '\0') {
+                        break;
+                }
+                if (c == path) {
+                        pos = i + 1;
+                        continue;
+                }
+        }
+        int range = len - pos;
+        if (range < bufsize) {
+                for (int i = 0; i < range; i++) {
+                        buffer[i] = src[pos + i];
+                }
+        } else if (range >= bufsize) {
+                g_error("text#bc_GetLastPathComponent");
+        }
+        return range;
+}
 
 // private
 static char* text_strclone(const char* source) {

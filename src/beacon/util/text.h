@@ -108,4 +108,15 @@ char* bc_ReadLine();
  * @return
  */
 char* bc_FreadLine(FILE* fp);
+
+/**
+ * srcをpathで区切った時、最後に現れる文字列をbufferへ格納します。
+ * @param src
+ * @param path
+ * @param buffer
+ * @param bufsize
+ * @return バッファに入力した文字数
+ */
+int bc_GetLastPathComponent(const char* src, char path, char buffer[],
+                            int bufsize);
 #endif  // !SIGNAL_UTIL_TEXT_H
