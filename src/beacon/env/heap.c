@@ -407,7 +407,7 @@ static void write_insn_last_code(insn_code code) {
 static void assert_last_code(insn_code code) {
         g_rw_lock_reader_lock(&gLastInsnCodeRWLock);
         if (gLastInsnCode != code) {
-                g_error("heap.(value)%s != (expect)%s",
+                g_error("Heap.(value)%s != (expect)%s",
                         insn_string(gLastInsnCode), insn_string(code));
         }
         g_rw_lock_reader_unlock(&gLastInsnCodeRWLock);
@@ -449,7 +449,7 @@ static bool gc_insn_eval(insn_code code) {
         bool go = true;
         //各命令を実行
         write_insn_curr_code(code);
-        g_message("heap.%s", insn_string(code));
+        g_message("Heap.%s", insn_string(code));
         // fprintf(stderr, "-    %s\n", insn_string(code));
         switch (code) {
                 case insn_collect:
@@ -563,7 +563,7 @@ static void gc_insn_stw_begin() {
                         if (lcode != -1) {
                                 if (lcode != insn_stw_begin &&
                                     code == insn_collect) {
-                                        g_error("heap.scheduleError:%s->%s",
+                                        g_error("Heap.scheduleError:%s->%s",
                                                 insn_string(lcode),
                                                 insn_string(code));
                                 }
