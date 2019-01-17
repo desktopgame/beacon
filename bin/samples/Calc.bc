@@ -76,7 +76,7 @@ namespace calc {
 						if(!scanner.ready()) { break; }
 						c = scanner.getc();
 					}
-					if((scanner.ready())) {
+					if(scanner.ready()) {
 						scanner.ungetc();
 					}
 					ret << new Token(TokenId.Value, buf.toString());
@@ -276,11 +276,11 @@ namespace calc {
 		}
 
 		def static tokenIsOperator(Int id) -> Bool {
-			return	((id == calc::TokenId.Add) ||
-	       			(id == calc::TokenId.Sub) ||
-	    			(id == calc::TokenId.Mul) ||
-	     			(id == calc::TokenId.Div) ||
-	       			(id == calc::TokenId.Mod));
+			return	id == calc::TokenId.Add ||
+	       			id == calc::TokenId.Sub ||
+	    			id == calc::TokenId.Mul ||
+	     			id == calc::TokenId.Div ||
+	       			id == calc::TokenId.Mod;
 		}
 
 		def static tokenToBiOp(Int id, Node a, Node b) -> BinaryOperatorNode {
@@ -324,15 +324,8 @@ while(iter.moveNext()) {
 			var sn = stack.top();
 			var sAssoc = calc::CalcUtility.tokenToAssoc(sn.id);
 			var sPrio = calc::CalcUtility.tokenToPriority(sn.id);
-			if(((calc::CalcUtility.tokenIsOperator(sn.id)) &&
-				(
-			   		(
-						(eAssoc == calc::AssocType.Left) &&
-				   		(ePrio <= sPrio)
-			   		) ||
-					(ePrio < sPrio)
-				)
-			)
+			if(calc::CalcUtility.tokenIsOperator(sn.id) &&
+				((eAssoc == calc::AssocType.Left && ePrio <= sPrio) || ePrio < sPrio)
 			) {
 				output << sn;
 				stack.pop();
@@ -357,8 +350,8 @@ while(iter.moveNext()) {
 }
 while(stack.length() > 0) {
 	var s2 = stack.pop();
-	if((s2.id == calc::TokenId.LBrace) ||
-	   (s2.id == calc::TokenId.RBrace)) {
+	if(s2.id == calc::TokenId.LBrace ||
+	   s2.id == calc::TokenId.RBrace) {
 		printLine("error!");
 		break;
 	}
