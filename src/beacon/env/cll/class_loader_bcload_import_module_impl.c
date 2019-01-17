@@ -1,5 +1,6 @@
 #include "class_loader_bcload_import_module_impl.h"
 #include <assert.h>
+#include <glib.h>
 #include "../../env/heap.h"
 #include "../../env/import_info.h"
 #include "../../env/script_context.h"
@@ -69,6 +70,8 @@ static void CLBC_import_internal(bc_ClassLoader* self, bc_Vector* ilimports,
         }
         bc_VectorItem e = bc_AtVector(ilimports, i);
         bc_ILImport* import = (bc_ILImport*)e;
+        g_message("    Import:From@%s Required@%s", self->FileName,
+                  bc_Ref2Str(import->Path));
         char* withExt = bc_ConcatString(bc_Ref2Str(import->Path), ".bc");
         char* fullPath = bc_ResolveScriptPath(withExt);
         CLBC_new_load(self, fullPath);
