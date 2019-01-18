@@ -11,35 +11,35 @@
 #include "class_loader.h"
 #include "type_impl.h"
 
-static void CLBC_namespace_tree(bc_ClassLoader* self);
-static void CLBC_namespace_list(bc_ClassLoader* self,
+static void load_namespace_tree(bc_ClassLoader* self);
+static void load_namespace_list(bc_ClassLoader* self,
                                 bc_Vector* ilNamespacelist,
                                 bc_Namespace* parent);
-static void CLBC_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
+static void load_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
                            bc_Namespace* parent);
-static void CLBC_type_list(bc_ClassLoader* self, bc_Vector* iltype_list,
+static void load_type_list(bc_ClassLoader* self, bc_Vector* iltype_list,
                            bc_Namespace* parent);
-static void CLBC_enum(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_enum(bc_ClassLoader* self, bc_ILType* iltype,
                       bc_Namespace* parent);
-static void CLBC_class(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_class(bc_ClassLoader* self, bc_ILType* iltype,
                        bc_Namespace* parent);
-static void CLBC_interface(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_interface(bc_ClassLoader* self, bc_ILType* iltype,
                            bc_Namespace* parent);
-static void CLBC_attach_native_method(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_attach_native_method(bc_ClassLoader* self, bc_ILType* iltype,
                                       bc_Class* classz, bc_ILMethod* ilmethod,
                                       bc_Method* me);
-static void CLBC_debug_native_method(bc_Method* parent, bc_Frame* fr,
+static void load_debug_native_method(bc_Method* parent, bc_Frame* fr,
                                      bc_Enviroment* env);
-static void CLBC_check_superclass(bc_Class* cls);
-static bc_Type* CLBC_get_or_load_enum(bc_Namespace* parent, bc_ILType* iltype);
-static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
+static void load_check_superclass(bc_Class* cls);
+static bc_Type* load_get_or_load_enum(bc_Namespace* parent, bc_ILType* iltype);
+static bc_Type* load_get_or_load_class(bc_ClassLoader* self,
                                        bc_Namespace* parent, bc_ILType* iltype);
-static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent,
+static void load_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                                 bc_ILType* iltype, bc_Type* tp, bc_Class* cls);
-static bc_Type* CLBC_get_or_load_interface(bc_ClassLoader* self,
+static bc_Type* load_get_or_load_interface(bc_ClassLoader* self,
                                            bc_Namespace* parent,
                                            bc_ILType* iltype);
-static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
+static void load_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                                     bc_ILType* iltype, bc_Type* tp,
                                     bc_Interface* inter);
 
@@ -48,7 +48,7 @@ void bc_LoadIL(bc_ClassLoader* self) {
         bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
         CLBC_import(self, self->ILCode->ImportList);
-        CLBC_namespace_tree(self);
+        load_namespace_tree(self);
 }
 
 void bc_SpecialLoadIL(bc_ClassLoader* self) {
@@ -56,16 +56,16 @@ void bc_SpecialLoadIL(bc_ClassLoader* self) {
         bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
         //	CLBC_import(self, self->ILCode->import_list);
-        CLBC_namespace_tree(self);
+        load_namespace_tree(self);
 }
 
 // private
-static void CLBC_namespace_tree(bc_ClassLoader* self) {
+static void load_namespace_tree(bc_ClassLoader* self) {
         bc_CL_ERROR(self);
-        CLBC_namespace_list(self, self->ILCode->NamespaceList, NULL);
+        load_namespace_list(self, self->ILCode->NamespaceList, NULL);
 }
 
-static void CLBC_namespace_list(bc_ClassLoader* self,
+static void load_namespace_list(bc_ClassLoader* self,
                                 bc_Vector* ilNamespacelist,
                                 bc_Namespace* parent) {
         // self->link = classlink_resume;
@@ -73,12 +73,12 @@ static void CLBC_namespace_list(bc_ClassLoader* self,
         for (int i = 0; i < ilNamespacelist->Length; i++) {
                 bc_VectorItem e = bc_AtVector(ilNamespacelist, i);
                 bc_ILNamespace* iln = (bc_ILNamespace*)e;
-                CLBC_namespace(self, iln, parent);
+                load_namespace(self, iln, parent);
                 bc_CL_ERROR(self);
         }
 }
 
-static void CLBC_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
+static void load_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
                            bc_Namespace* parent) {
         bc_CL_ERROR(self);
         bc_Namespace* current = NULL;
@@ -87,33 +87,33 @@ static void CLBC_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
         } else {
                 current = bc_AddNamespaceNamespace(parent, ilnamespace->Name);
         }
-        CLBC_namespace_list(self, ilnamespace->NamespaceList, current);
-        CLBC_type_list(self, ilnamespace->TypeList, current);
+        load_namespace_list(self, ilnamespace->NamespaceList, current);
+        load_type_list(self, ilnamespace->TypeList, current);
 }
 
-static void CLBC_type_list(bc_ClassLoader* self, bc_Vector* iltype_list,
+static void load_type_list(bc_ClassLoader* self, bc_Vector* iltype_list,
                            bc_Namespace* parent) {
         bc_CL_ERROR(self);
         for (int i = 0; i < iltype_list->Length; i++) {
                 bc_VectorItem e = bc_AtVector(iltype_list, i);
                 bc_ILType* ilt = (bc_ILType*)e;
                 if (ilt->Tag == ILTYPE_CLASS_T) {
-                        CLBC_class(self, ilt, parent);
+                        load_class(self, ilt, parent);
                 } else if (ilt->Tag == ILTYPE_INTERFACE_T) {
-                        CLBC_interface(self, ilt, parent);
+                        load_interface(self, ilt, parent);
                 } else if (ilt->Tag == ILTYPE_ENUM_T) {
-                        CLBC_enum(self, ilt, parent);
+                        load_enum(self, ilt, parent);
                 }
                 bc_CL_ERROR(self);
         }
 }
 
-static void CLBC_enum(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_enum(bc_ClassLoader* self, bc_ILType* iltype,
                       bc_Namespace* parent) {
         bc_CL_ERROR(self);
         assert(iltype->Tag == ILTYPE_ENUM_T);
         bc_ILEnum* ilenum = iltype->Kind.Enum;
-        bc_Type* tp = CLBC_get_or_load_enum(parent, iltype);
+        bc_Type* tp = load_get_or_load_enum(parent, iltype);
         bc_CL_ERROR(self);
         bc_Class* cls = BC_TYPE2CLASS(tp);
         if ((tp->State & TYPE_REGISTER) > 0) {
@@ -145,13 +145,13 @@ static void CLBC_enum(bc_ClassLoader* self, bc_ILType* iltype,
         tp->State = tp->State | TYPE_REGISTER;
 }
 
-static void CLBC_class(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_class(bc_ClassLoader* self, bc_ILType* iltype,
                        bc_Namespace* parent) {
         bc_CL_ERROR(self);
         //既に登録されていたら二重に登録しないように
         //例えば、ネイティブメソッドを登録するために一時的にクラスが登録されている場合がある
         assert(iltype->Tag == ILTYPE_CLASS_T);
-        bc_Type* tp = CLBC_get_or_load_class(self, parent, iltype);
+        bc_Type* tp = load_get_or_load_class(self, parent, iltype);
         bc_CL_ERROR(self);
         bc_Class* cls = BC_TYPE2CLASS(tp);
         if ((tp->State & TYPE_REGISTER) > 0) {
@@ -160,7 +160,7 @@ static void CLBC_class(bc_ClassLoader* self, bc_ILType* iltype,
         cls->IsAbstract = iltype->Kind.Class->IsAbstract;
         bc_InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
         //デフォルトで親に Object を持つように
-        CLBC_check_superclass(cls);
+        load_check_superclass(cls);
         //宣言のロードを予約
         bc_TypeCache* tc = bc_InitTypeCache(bc_NewTypeCache(), self, iltype, tp,
                                             parent, CACHEKIND_CLASS_DECL_T);
@@ -173,12 +173,12 @@ static void CLBC_class(bc_ClassLoader* self, bc_ILType* iltype,
         tp->State = tp->State | TYPE_REGISTER;
 }
 
-static void CLBC_interface(bc_ClassLoader* self, bc_ILType* iltype,
+static void load_interface(bc_ClassLoader* self, bc_ILType* iltype,
                            bc_Namespace* parent) {
         bc_CL_ERROR(self);
         assert(iltype->Tag == ILTYPE_INTERFACE_T);
         // NOTE:後で親関数から渡すようにする
-        bc_Type* tp = CLBC_get_or_load_interface(self, parent, iltype);
+        bc_Type* tp = load_get_or_load_interface(self, parent, iltype);
         bc_CL_ERROR(self);
         bc_Interface* inter = BC_TYPE2INTERFACE(tp);
         if ((tp->State & TYPE_REGISTER) > 0) {
@@ -197,7 +197,7 @@ static void CLBC_interface(bc_ClassLoader* self, bc_ILType* iltype,
         tp->State = tp->State | TYPE_REGISTER;
 }
 
-static void CLBC_attach_native_method(bc_ClassLoader* self, bc_ILType* ilclass,
+static void load_attach_native_method(bc_ClassLoader* self, bc_ILType* ilclass,
                                       bc_Class* classz, bc_ILMethod* ilmethod,
                                       bc_Method* me) {
         //	native_method.h で、実行時にリンクするようにしたので不要
@@ -205,10 +205,10 @@ static void CLBC_attach_native_method(bc_ClassLoader* self, bc_ILType* ilclass,
         // NewNativeMethodRef(class_loader_sgload_debug_NativeMethod);
 }
 
-static void CLBC_debug_native_method(bc_Method* parent, bc_Frame* fr,
+static void load_debug_native_method(bc_Method* parent, bc_Frame* fr,
                                      bc_Enviroment* env) {}
 
-static void CLBC_check_superclass(bc_Class* cls) {
+static void load_check_superclass(bc_Class* cls) {
         bc_Class* objClass = BC_TYPE_OBJECT->Kind.Class;
         if (cls != objClass) {
                 if (cls->SuperClass == NULL) {
@@ -217,7 +217,7 @@ static void CLBC_check_superclass(bc_Class* cls) {
         }
 }
 
-static bc_Type* CLBC_get_or_load_enum(bc_Namespace* parent, bc_ILType* iltype) {
+static bc_Type* load_get_or_load_enum(bc_Namespace* parent, bc_ILType* iltype) {
         bc_Class* outClass = NULL;
         bc_Type* tp = bc_FindTypeFromNamespace(parent, iltype->Kind.Enum->Name);
         if (tp == NULL) {
@@ -231,7 +231,7 @@ static bc_Type* CLBC_get_or_load_enum(bc_Namespace* parent, bc_ILType* iltype) {
         return tp;
 }
 
-static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
+static bc_Type* load_get_or_load_class(bc_ClassLoader* self,
                                        bc_Namespace* parent,
                                        bc_ILType* iltype) {
         bc_Type* tp =
@@ -241,11 +241,11 @@ static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
         if (tp == NULL) {
                 outClass = bc_NewClass(iltype->Kind.Class->Name);
                 tp = bc_WrapClass(outClass);
-                CLBC_register_class(self, parent, iltype, tp, outClass);
+                load_register_class(self, parent, iltype, tp, outClass);
                 bc_CL_ERROR_RET(self, tp);
         } else if (tp->State == TYPE_PENDING) {
                 outClass = tp->Kind.Class;
-                CLBC_register_class(self, parent, iltype, tp, outClass);
+                load_register_class(self, parent, iltype, tp, outClass);
                 bc_CL_ERROR_RET(self, tp);
         } else {
                 outClass = tp->Kind.Class;
@@ -260,7 +260,7 @@ static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
         return tp;
 }
 
-static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent,
+static void load_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                                 bc_ILType* iltype, bc_Type* tp, bc_Class* cls) {
         g_message("Class.Register:%s", bc_Ref2Str(cls->Name));
         bc_InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
@@ -311,7 +311,7 @@ static void CLBC_register_class(bc_ClassLoader* self, bc_Namespace* parent,
         }
 }
 
-static bc_Type* CLBC_get_or_load_interface(bc_ClassLoader* self,
+static bc_Type* load_get_or_load_interface(bc_ClassLoader* self,
                                            bc_Namespace* parent,
                                            bc_ILType* iltype) {
         bc_Type* tp =
@@ -320,7 +320,7 @@ static bc_Type* CLBC_get_or_load_interface(bc_ClassLoader* self,
         if (tp == NULL) {
                 inter = bc_NewInterface(iltype->Kind.Interface->Name);
                 tp = bc_WrapInterface(inter);
-                CLBC_register_interface(self, parent, iltype, tp, inter);
+                load_register_interface(self, parent, iltype, tp, inter);
                 bc_CL_ERROR_RET(self, tp);
         } else {
                 inter = tp->Kind.Interface;
@@ -335,7 +335,7 @@ static bc_Type* CLBC_get_or_load_interface(bc_ClassLoader* self,
         return tp;
 }
 
-static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
+static void load_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                                     bc_ILType* iltype, bc_Type* tp,
                                     bc_Interface* inter) {
         g_message("Interface.Register:%s", bc_Ref2Str(inter->Name));
