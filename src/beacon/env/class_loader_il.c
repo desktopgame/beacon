@@ -115,32 +115,32 @@ static bc_ILYieldReturn* load_yield_return(bc_ClassLoader* self,
 //
 // load factor
 //
-static bc_ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source);
-static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source);
-static bc_ILBool* CLIL_true(bc_ClassLoader* self, bc_AST* source);
-static bc_ILBool* CLIL_false(bc_ClassLoader* self, bc_AST* source);
-static bc_ILUnaryOp* CLIL_unary(bc_ClassLoader* self, bc_AST* source,
+static bc_ILFactor* load_factor_with_pos(bc_ClassLoader* self, bc_AST* source);
+static bc_ILFactor* load_factor(bc_ClassLoader* self, bc_AST* source);
+static bc_ILBool* load_true(bc_ClassLoader* self, bc_AST* source);
+static bc_ILBool* load_false(bc_ClassLoader* self, bc_AST* source);
+static bc_ILUnaryOp* load_unary(bc_ClassLoader* self, bc_AST* source,
                                 bc_OperatorType type);
-static bc_ILBinaryOp* CLIL_binary(bc_ClassLoader* self, bc_AST* source,
+static bc_ILBinaryOp* load_binary(bc_ClassLoader* self, bc_AST* source,
                                   bc_OperatorType type);
-static bc_ILExplicitUnaryOp* CLIL_explicit_unary(bc_ClassLoader* self,
+static bc_ILExplicitUnaryOp* load_explicit_unary(bc_ClassLoader* self,
                                                  bc_AST* source,
                                                  bc_OperatorType type);
-static bc_ILExplicitBinaryOp* CLIL_explicit_binary(bc_ClassLoader* self,
+static bc_ILExplicitBinaryOp* load_explicit_binary(bc_ClassLoader* self,
                                                    bc_AST* source,
                                                    bc_OperatorType type);
-static bc_ILAssignOp* CLIL_assign(bc_ClassLoader* self, bc_AST* source);
-static bc_ILAssignOp* CLIL_assign_arithmetic(bc_ClassLoader* self,
+static bc_ILAssignOp* load_assign(bc_ClassLoader* self, bc_AST* source);
+static bc_ILAssignOp* load_assign_arithmetic(bc_ClassLoader* self,
                                              bc_AST* source,
                                              bc_OperatorType type);
-static bc_ILVariable* CLIL_variable(bc_ClassLoader* self, bc_AST* source);
-static bc_ILNewInstance* CLIL_new_instance(bc_ClassLoader* self,
+static bc_ILVariable* load_variable(bc_ClassLoader* self, bc_AST* source);
+static bc_ILNewInstance* load_new_instance(bc_ClassLoader* self,
                                            bc_AST* source);
-static bc_ILAs* CLIL_as(bc_ClassLoader* self, bc_AST* source);
-static bc_ILCallOp* CLIL_call_op(bc_ClassLoader* self, bc_AST* source);
-static bc_ILMemberOp* CLIL_member_op(bc_ClassLoader* self, bc_AST* source);
-static bc_ILInstanceOf* CLIL_instanceof(bc_ClassLoader* self, bc_AST* source);
-static bc_ILSubscript* CLIL_subscript(bc_ClassLoader* self, bc_AST* source);
+static bc_ILAs* load_as(bc_ClassLoader* self, bc_AST* source);
+static bc_ILCallOp* load_call_op(bc_ClassLoader* self, bc_AST* source);
+static bc_ILMemberOp* load_member_op(bc_ClassLoader* self, bc_AST* source);
+static bc_ILInstanceOf* load_instanceof(bc_ClassLoader* self, bc_AST* source);
+static bc_ILSubscript* load_subscript(bc_ClassLoader* self, bc_AST* source);
 
 bc_ILToplevel* bc_LoadAST(bc_ClassLoader* self, bc_AST* a) {
         bc_ILToplevel* ret = bc_NewILToplevel();
@@ -543,7 +543,7 @@ static void load_field(bc_ClassLoader* self, bc_ILType* current, bc_AST* afield,
         bc_AddFieldILType(current, v);
         //設定されているなら初期値も
         if (!bc_IsBlankAST(afact)) {
-                v->InitialValue = CLILFactor(self, afact);
+                v->InitialValue = load_factor_with_pos(self, afact);
         }
         //重複する修飾子を検出
         if (error) {
@@ -707,7 +707,7 @@ static void load_argument_list(bc_ClassLoader* self, bc_Vector* list,
         } else if (asource->Tag == AST_ARGUMENT_T) {
                 bc_AST* aprimary = bc_FirstAST(asource);
                 bc_ILArgument* ilarg = bc_NewILArgument();
-                ilarg->Factor = CLILFactor(self, aprimary);
+                ilarg->Factor = load_factor_with_pos(self, aprimary);
                 bc_PushVector(list, ilarg);
         }
 }
@@ -762,7 +762,7 @@ static bc_ILStatement* load_stmt(bc_ClassLoader* self, bc_AST* asource) {
                 }
                 case AST_PROC_T: {
                         bc_AST* afact = bc_FirstAST(asource);
-                        bc_ILFactor* ilfact = CLILFactor(self, afact);
+                        bc_ILFactor* ilfact = load_factor_with_pos(self, afact);
                         bc_ILProc* ilproc = bc_NewILProc();
                         ilproc->Factor = ilfact;
                         assert(ilfact != NULL);
@@ -849,7 +849,7 @@ static bc_ILStatement* load_stmt(bc_ClassLoader* self, bc_AST* asource) {
                         bc_ILInjectJNI* jni =
                             bc_NewILInjectJNI(asource->Attr.StringVValue);
                         bc_AST* afact = bc_FirstAST(asource);
-                        jni->Value = CLILFactor(self, afact);
+                        jni->Value = load_factor_with_pos(self, afact);
                         jni->Value->Lineno = 0;
                         return bc_WrapILInjectJNI(jni);
                 }
@@ -865,7 +865,7 @@ static bc_ILInferencedTypeInit* load_inferenced_type_init(bc_ClassLoader* self,
         bc_AST* afact = bc_SecondAST(asource);
         bc_ILInferencedTypeInit* ret =
             bc_NewILInferencedTypeInit(aname->Attr.StringVValue);
-        ret->Value = CLILFactor(self, afact);
+        ret->Value = load_factor_with_pos(self, afact);
         return ret;
 }
 
@@ -887,7 +887,7 @@ static bc_ILVariableInit* load_variable_init(bc_ClassLoader* self,
         bc_ILVariableInit* ret =
             bc_NewILVariableInit(aident->Attr.StringVValue);
         load_generic_cache(afqcn, ret->GCache);
-        ret->Value = CLILFactor(self, afact);
+        ret->Value = load_factor_with_pos(self, afact);
         return ret;
 }
 
@@ -896,7 +896,7 @@ static bc_ILIf* load_if(bc_ClassLoader* self, bc_AST* asource) {
         bc_ILIf* ret = bc_NewILIf();
         bc_AST* acond = bc_FirstAST(asource);
         bc_AST* abody = bc_SecondAST(asource);
-        bc_ILFactor* ilcond = CLILFactor(self, acond);
+        bc_ILFactor* ilcond = load_factor_with_pos(self, acond);
         load_body(self, ret->Body, abody);
         ret->Condition = ilcond;
         return ret;
@@ -931,7 +931,7 @@ static bc_ILWhile* load_while(bc_ClassLoader* self, bc_AST* asource) {
         bc_AST* acond = bc_FirstAST(asource);
         bc_AST* abody = bc_SecondAST(asource);
         bc_ILWhile* ilwhile = bc_NewILWhile();
-        ilwhile->Condition = CLILFactor(self, acond);
+        ilwhile->Condition = load_factor_with_pos(self, acond);
         load_body(self, ilwhile->Statements, abody);
         return ilwhile;
 }
@@ -946,7 +946,7 @@ static void load_elif_list(bc_ClassLoader* self, bc_Vector* list,
                 bc_AST* acond = bc_FirstAST(asource);
                 bc_AST* abody = bc_SecondAST(asource);
                 bc_ILElif* ilelif = bc_NewILElif();
-                ilelif->Condition = CLILFactor(self, acond);
+                ilelif->Condition = load_factor_with_pos(self, acond);
                 load_body(self, ilelif->Body, abody);
                 bc_PushILElifList(list, ilelif);
         }
@@ -955,7 +955,7 @@ static void load_elif_list(bc_ClassLoader* self, bc_Vector* list,
 static bc_ILReturn* load_return(bc_ClassLoader* self, bc_AST* asource) {
         assert(asource->Tag == AST_RETURN_T);
         bc_AST* afact = bc_FirstAST(asource);
-        bc_ILFactor* ilfact = CLILFactor(self, afact);
+        bc_ILFactor* ilfact = load_factor_with_pos(self, afact);
         bc_ILReturn* ret = bc_NewILReturn();
         ret->Factor = ilfact;
         return ret;
@@ -990,7 +990,7 @@ static void load_catch_list(bc_ClassLoader* self, bc_Vector* dest,
 
 static bc_ILThrow* load_throw(bc_ClassLoader* self, bc_AST* asource) {
         bc_ILThrow* ret = bc_NewILThrow();
-        ret->Factor = CLILFactor(self, bc_FirstAST(asource));
+        ret->Factor = load_factor_with_pos(self, bc_FirstAST(asource));
         return ret;
 }
 
@@ -998,11 +998,11 @@ static bc_ILAssert* load_assert(bc_ClassLoader* self, bc_AST* asource) {
         bc_ILAssert* ret = bc_NewILAssert();
         bc_AST* afact = bc_FirstAST(asource);
         bc_AST* amsg = bc_SecondAST(asource);
-        ret->Condition = CLILFactor(self, afact);
+        ret->Condition = load_factor_with_pos(self, afact);
         if (bc_IsBlankAST(amsg)) {
                 ret->Message = NULL;
         } else {
-                ret->Message = CLILFactor(self, amsg);
+                ret->Message = load_factor_with_pos(self, amsg);
         }
         return ret;
 }
@@ -1018,18 +1018,18 @@ static bc_ILDefer* load_defer(bc_ClassLoader* self, bc_AST* asource) {
 static bc_ILYieldReturn* load_yield_return(bc_ClassLoader* self,
                                            bc_AST* asource) {
         bc_ILYieldReturn* ret = bc_NewILYieldReturn();
-        ret->Value = CLILFactor(self, bc_FirstAST(asource));
+        ret->Value = load_factor_with_pos(self, bc_FirstAST(asource));
         return ret;
 }
 
-static bc_ILFactor* CLILFactor(bc_ClassLoader* self, bc_AST* source) {
-        bc_ILFactor* ret = CLILFactorImpl(self, source);
+static bc_ILFactor* load_factor_with_pos(bc_ClassLoader* self, bc_AST* source) {
+        bc_ILFactor* ret = load_factor(self, source);
         assert(source->Lineno >= 0);
         ret->Lineno = source->Lineno;
         return ret;
 }
 
-static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILFactor* load_factor(bc_ClassLoader* self, bc_AST* source) {
         if (source->Tag == AST_SHORT_T) {
                 return bc_WrapILShort(bc_NewILShort(source->Attr.ShortValue));
         } else if (source->Tag == AST_INT_T) {
@@ -1047,116 +1047,116 @@ static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
                 return bc_WrapILString(
                     bc_NewILString(source->Attr.StringVValue));
         } else if (source->Tag == AST_VARIABLE_T) {
-                return bc_WrapILVariable(CLIL_variable(self, source));
+                return bc_WrapILVariable(load_variable(self, source));
                 // operator(+ - * / %)
         } else if (source->Tag == AST_ADD_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_ADD_T));
+                    load_binary(self, source, OPERATOR_ADD_T));
         } else if (source->Tag == AST_SUB_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_SUB_T));
+                    load_binary(self, source, OPERATOR_SUB_T));
         } else if (source->Tag == AST_MUL_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_MUL_T));
+                    load_binary(self, source, OPERATOR_MUL_T));
         } else if (source->Tag == AST_DIV_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_DIV_T));
+                    load_binary(self, source, OPERATOR_DIV_T));
         } else if (source->Tag == AST_MOD_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_MOD_T));
+                    load_binary(self, source, OPERATOR_MOD_T));
                 // operator(| || & &&)
         } else if (source->Tag == AST_BIT_OR_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_BIT_OR_T));
+                    load_binary(self, source, OPERATOR_BIT_OR_T));
         } else if (source->Tag == AST_LOGIC_OR_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_LOGIC_OR_T));
+                    load_binary(self, source, OPERATOR_LOGIC_OR_T));
         } else if (source->Tag == AST_BIT_AND_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_BIT_AND_T));
+                    load_binary(self, source, OPERATOR_BIT_AND_T));
         } else if (source->Tag == AST_LOGIC_AND_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_LOGIC_AND_T));
+                    load_binary(self, source, OPERATOR_LOGIC_AND_T));
                 //^
         } else if (source->Tag == AST_EXC_OR_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_EXCOR_T));
+                    load_binary(self, source, OPERATOR_EXCOR_T));
         } else if (source->Tag == AST_CHILDA_T) {
                 return bc_WrapILUnaryOp(
-                    CLIL_unary(self, source, OPERATOR_CHILDA_T));
+                    load_unary(self, source, OPERATOR_CHILDA_T));
                 //<< >>
         } else if (source->Tag == AST_LSHIFT_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_LSHIFT_T));
+                    load_binary(self, source, OPERATOR_LSHIFT_T));
         } else if (source->Tag == AST_RSHIFT_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_RSHIFT_T));
+                    load_binary(self, source, OPERATOR_RSHIFT_T));
                 // operator(== != > >= < <=)
         } else if (source->Tag == AST_EQUAL_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_EQ_T));
+                    load_binary(self, source, OPERATOR_EQ_T));
         } else if (source->Tag == AST_NOT_TEQUAL_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_NOT_EQ_T));
+                    load_binary(self, source, OPERATOR_NOT_EQ_T));
         } else if (source->Tag == AST_GT_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_GT_T));
+                    load_binary(self, source, OPERATOR_GT_T));
         } else if (source->Tag == AST_GE_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_GE_T));
+                    load_binary(self, source, OPERATOR_GE_T));
         } else if (source->Tag == AST_LT_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_LT_T));
+                    load_binary(self, source, OPERATOR_LT_T));
         } else if (source->Tag == AST_LE_T) {
                 return bc_WrapILBinaryOp(
-                    CLIL_binary(self, source, OPERATOR_LE_T));
+                    load_binary(self, source, OPERATOR_LE_T));
                 // operator(= += -= *= /= %=)
         } else if (source->Tag == AST_AS_TSIGN_T) {
-                return bc_WrapILAssignOp(CLIL_assign(self, source));
+                return bc_WrapILAssignOp(load_assign(self, source));
         } else if (source->Tag == AST_ADD_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_ADD_T));
+                    load_assign_arithmetic(self, source, OPERATOR_ADD_T));
         } else if (source->Tag == AST_SUB_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_SUB_T));
+                    load_assign_arithmetic(self, source, OPERATOR_SUB_T));
         } else if (source->Tag == AST_MUL_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_MUL_T));
+                    load_assign_arithmetic(self, source, OPERATOR_MUL_T));
         } else if (source->Tag == AST_DIV_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_DIV_T));
+                    load_assign_arithmetic(self, source, OPERATOR_DIV_T));
         } else if (source->Tag == AST_MOD_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_MOD_T));
+                    load_assign_arithmetic(self, source, OPERATOR_MOD_T));
                 // instanceof
         } else if (source->Tag == AST_INSTANCEOF_T) {
-                return bc_WrapILInstanceOf(CLIL_instanceof(self, source));
+                return bc_WrapILInstanceOf(load_instanceof(self, source));
                 //|= &=
         } else if (source->Tag == AST_OR_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_BIT_OR_T));
+                    load_assign_arithmetic(self, source, OPERATOR_BIT_OR_T));
         } else if (source->Tag == AST_AND_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_BIT_AND_T));
+                    load_assign_arithmetic(self, source, OPERATOR_BIT_AND_T));
                 //<<= >>=
         } else if (source->Tag == AST_LSHIFT_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_LSHIFT_T));
+                    load_assign_arithmetic(self, source, OPERATOR_LSHIFT_T));
         } else if (source->Tag == AST_RSHIFT_ASSIGN_T) {
                 return bc_WrapILAssignOp(
-                    CLIL_assign_arithmetic(self, source, OPERATOR_RSHIFT_T));
+                    load_assign_arithmetic(self, source, OPERATOR_RSHIFT_T));
                 //!-
         } else if (source->Tag == AST_NOT_T) {
                 return bc_WrapILUnaryOp(
-                    CLIL_unary(self, source, OPERATOR_NOT_T));
+                    load_unary(self, source, OPERATOR_NOT_T));
         } else if (source->Tag == AST_NEG_T) {
                 return bc_WrapILUnaryOp(
-                    CLIL_unary(self, source, OPERATOR_NEGATIVE_T));
+                    load_unary(self, source, OPERATOR_NEGATIVE_T));
         } else if (source->Tag == AST_EXPLICIT_UOPERATOR_T) {
-                return bc_WrapILExplicitUnaryOp(CLIL_explicit_unary(
+                return bc_WrapILExplicitUnaryOp(load_explicit_unary(
                     self, source, source->Attr.OperatorValue));
         } else if (source->Tag == AST_EXPLICIT_BIOPERATOR_T) {
-                return bc_WrapILExplicitBinaryOp(CLIL_explicit_binary(
+                return bc_WrapILExplicitBinaryOp(load_explicit_binary(
                     self, source, source->Attr.OperatorValue));
                 // this super
         } else if (source->Tag == AST_THIS_T) {
@@ -1170,81 +1170,81 @@ static bc_ILFactor* CLILFactorImpl(bc_ClassLoader* self, bc_AST* source) {
                 ret->Kind.Super = sp;
                 return ret;
         } else if (source->Tag == AST_NEW_INSTANCE_T) {
-                return bc_WrapILNewInstance(CLIL_new_instance(self, source));
+                return bc_WrapILNewInstance(load_new_instance(self, source));
         } else if (source->Tag == AST_TRUE_T) {
-                return bc_WrapILBool(CLIL_true(self, source));
+                return bc_WrapILBool(load_true(self, source));
         } else if (source->Tag == AST_FALSE_T) {
-                return bc_WrapILBool(CLIL_false(self, source));
+                return bc_WrapILBool(load_false(self, source));
         } else if (source->Tag == AST_NULL_T) {
                 bc_ILFactor* ret = bc_NewILFactor(ILFACTOR_NULL_T);
                 ret->Kind.Null = NULL;
                 return ret;
         } else if (source->Tag == AST_AS_T) {
-                return bc_WrapILAs(CLIL_as(self, source));
+                return bc_WrapILAs(load_as(self, source));
         } else if (source->Tag == AST_OP_CALL_T) {
-                return bc_WrapCallOp(CLIL_call_op(self, source));
+                return bc_WrapCallOp(load_call_op(self, source));
         } else if (source->Tag == AST_FIELD_ACCESS_T) {
-                return bc_WrapILMemberOp(CLIL_member_op(self, source));
+                return bc_WrapILMemberOp(load_member_op(self, source));
         } else if (source->Tag == AST_SUBSCRIPT_ACCESS_T) {
-                return bc_WrapILSubscript(CLIL_subscript(self, source));
+                return bc_WrapILSubscript(load_subscript(self, source));
         }
         bc_ILFactor* fact = bc_NewILFactor(ILFACTOR_UNARY_OP_T);
         return fact;
 }
 
-static bc_ILBool* CLIL_true(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILBool* load_true(bc_ClassLoader* self, bc_AST* source) {
         return bc_NewILBool(true);
 }
 
-static bc_ILBool* CLIL_false(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILBool* load_false(bc_ClassLoader* self, bc_AST* source) {
         return bc_NewILBool(false);
 }
 
-static bc_ILUnaryOp* CLIL_unary(bc_ClassLoader* self, bc_AST* source,
+static bc_ILUnaryOp* load_unary(bc_ClassLoader* self, bc_AST* source,
                                 bc_OperatorType type) {
         bc_ILUnaryOp* ret = bc_NewILUnaryOp(type);
         bc_AST* a = bc_FirstAST(source);
-        ret->Arg = CLILFactor(self, a);
+        ret->Arg = load_factor_with_pos(self, a);
         return ret;
 }
 
-static bc_ILBinaryOp* CLIL_binary(bc_ClassLoader* self, bc_AST* source,
+static bc_ILBinaryOp* load_binary(bc_ClassLoader* self, bc_AST* source,
                                   bc_OperatorType type) {
         bc_ILBinaryOp* ret = bc_NewILBinaryOp(type);
         bc_AST* aleft = bc_FirstAST(source);
         bc_AST* aright = bc_SecondAST(source);
-        ret->Left = CLILFactor(self, aleft);
-        ret->Right = CLILFactor(self, aright);
+        ret->Left = load_factor_with_pos(self, aleft);
+        ret->Right = load_factor_with_pos(self, aright);
         return ret;
 }
 
-static bc_ILExplicitUnaryOp* CLIL_explicit_unary(bc_ClassLoader* self,
+static bc_ILExplicitUnaryOp* load_explicit_unary(bc_ClassLoader* self,
                                                  bc_AST* source,
                                                  bc_OperatorType type) {
         bc_ILExplicitUnaryOp* ret = bc_NewILExplicitUnaryOp(type);
-        ret->Receiver = CLILFactor(self, bc_FirstAST(source));
+        ret->Receiver = load_factor_with_pos(self, bc_FirstAST(source));
         return ret;
 }
 
-static bc_ILExplicitBinaryOp* CLIL_explicit_binary(bc_ClassLoader* self,
+static bc_ILExplicitBinaryOp* load_explicit_binary(bc_ClassLoader* self,
                                                    bc_AST* source,
                                                    bc_OperatorType type) {
         bc_ILExplicitBinaryOp* ret = bc_NewILExplicitBinaryOp(type);
-        ret->Receiver = CLILFactor(self, bc_FirstAST(source));
-        ret->Arg = CLILFactor(self, bc_SecondAST(source));
+        ret->Receiver = load_factor_with_pos(self, bc_FirstAST(source));
+        ret->Arg = load_factor_with_pos(self, bc_SecondAST(source));
         return ret;
 }
 
-static bc_ILAssignOp* CLIL_assign(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILAssignOp* load_assign(bc_ClassLoader* self, bc_AST* source) {
         bc_ILAssignOp* ret = bc_NewILAssignOp();
         bc_AST* aleft = bc_FirstAST(source);
         bc_AST* aright = bc_SecondAST(source);
-        ret->Left = CLILFactor(self, aleft);
-        ret->Right = CLILFactor(self, aright);
+        ret->Left = load_factor_with_pos(self, aleft);
+        ret->Right = load_factor_with_pos(self, aright);
         return ret;
 }
 
-static bc_ILAssignOp* CLIL_assign_arithmetic(bc_ClassLoader* self,
+static bc_ILAssignOp* load_assign_arithmetic(bc_ClassLoader* self,
                                              bc_AST* source,
                                              bc_OperatorType type) {
         // a += b
@@ -1252,15 +1252,15 @@ static bc_ILAssignOp* CLIL_assign_arithmetic(bc_ClassLoader* self,
         bc_ILBinaryOp* bin = bc_NewILBinaryOp(type);
         bc_AST* aleft = bc_FirstAST(source);
         bc_AST* aright = bc_SecondAST(source);
-        bin->Left = CLILFactor(self, aleft);
-        bin->Right = CLILFactor(self, aright);
-        ret->Left = CLILFactor(self, aleft);
+        bin->Left = load_factor_with_pos(self, aleft);
+        bin->Right = load_factor_with_pos(self, aright);
+        ret->Left = load_factor_with_pos(self, aleft);
         ret->Right = bc_WrapILBinaryOp(bin);
         ret->Right->Lineno = aright->Lineno;
         return ret;
 }
 
-static bc_ILVariable* CLIL_variable(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILVariable* load_variable(bc_ClassLoader* self, bc_AST* source) {
         bc_AST* afqcn = bc_FirstAST(source);
         bc_AST* atype_args = bc_SecondAST(source);
 
@@ -1270,7 +1270,7 @@ static bc_ILVariable* CLIL_variable(bc_ClassLoader* self, bc_AST* source) {
         return ilvar;
 }
 
-static bc_ILNewInstance* CLIL_new_instance(bc_ClassLoader* self,
+static bc_ILNewInstance* load_new_instance(bc_ClassLoader* self,
                                            bc_AST* source) {
         assert(source->Tag == AST_NEW_INSTANCE_T);
         bc_AST* afqcn = bc_FirstAST(source);
@@ -1283,49 +1283,49 @@ static bc_ILNewInstance* CLIL_new_instance(bc_ClassLoader* self,
         return ret;
 }
 
-static bc_ILAs* CLIL_as(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILAs* load_as(bc_ClassLoader* self, bc_AST* source) {
         bc_ILAs* ret = bc_NewILAs();
-        ret->Source = CLILFactor(self, bc_FirstAST(source));
+        ret->Source = load_factor_with_pos(self, bc_FirstAST(source));
         load_generic_cache(bc_SecondAST(source), ret->GCache);
         return ret;
 }
 
-static bc_ILCallOp* CLIL_call_op(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILCallOp* load_call_op(bc_ClassLoader* self, bc_AST* source) {
         assert(source->Tag == AST_OP_CALL_T);
         bc_ILCallOp* ret = bc_NewILCallOp();
         bc_AST* afact = bc_FirstAST(source);
         bc_AST* aargs = bc_SecondAST(source);
-        ret->Receiver = CLILFactor(self, afact);
+        ret->Receiver = load_factor_with_pos(self, afact);
         load_argument_list(self, ret->Arguments, aargs);
         return ret;
 }
 
-static bc_ILMemberOp* CLIL_member_op(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILMemberOp* load_member_op(bc_ClassLoader* self, bc_AST* source) {
         assert(source->Tag == AST_FIELD_ACCESS_T);
         bc_AST* afact = bc_FirstAST(source);
         bc_AST* aname = bc_SecondAST(source);
         bc_AST* atype_args = bc_AtAST(source, 2);
         bc_ILMemberOp* ret = bc_NewILMemberOp(aname->Attr.StringVValue);
-        ret->Source = CLILFactor(self, afact);
+        ret->Source = load_factor_with_pos(self, afact);
         load_type_argument(self, atype_args, ret->TypeArgs);
         return ret;
 }
 
-static bc_ILInstanceOf* CLIL_instanceof(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILInstanceOf* load_instanceof(bc_ClassLoader* self, bc_AST* source) {
         assert(source->Tag == AST_INSTANCEOF_T);
         bc_AST* afact = bc_FirstAST(source);
         bc_AST* atype = bc_SecondAST(source);
         bc_ILInstanceOf* ret = bc_NewILInstanceOf();
-        ret->Source = CLILFactor(self, afact);
+        ret->Source = load_factor_with_pos(self, afact);
         load_generic_cache(atype, ret->GCache);
         return ret;
 }
 
-static bc_ILSubscript* CLIL_subscript(bc_ClassLoader* self, bc_AST* source) {
+static bc_ILSubscript* load_subscript(bc_ClassLoader* self, bc_AST* source) {
         bc_ILSubscript* ret = bc_NewILSubscript();
         bc_AST* afact = bc_FirstAST(source);
         bc_AST* apos = bc_SecondAST(source);
-        ret->Receiver = CLILFactor(self, afact);
-        ret->Position = CLILFactor(self, apos);
+        ret->Receiver = load_factor_with_pos(self, afact);
+        ret->Position = load_factor_with_pos(self, apos);
         return ret;
 }
