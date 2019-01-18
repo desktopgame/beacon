@@ -146,9 +146,10 @@ static void CLBC_check_class(bc_ClassLoader* self, bc_ILType* iltype,
 static void CLBC_check_interface(bc_ClassLoader* self, bc_ILType* iltype,
                                  bc_Type* tp, bc_Namespace* scope);
 
-bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,
-                   bc_Vector* ilparams, bc_Vector* ilstmts,
-                   bc_CallContext* cctx, bc_Namespace* range) {
+bool bc_GenerateCoroutine(bc_ClassLoader* self, bc_Method* mt,
+                          bc_Enviroment* env, bc_Vector* ilparams,
+                          bc_Vector* ilstmts, bc_CallContext* cctx,
+                          bc_Namespace* range) {
         //戻り値が iterator なら、
         //コルーチンとして使えるようにする
         bool yield_err = false;
@@ -998,8 +999,8 @@ static bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
                 bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
                 bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)0);
         }
-        CLBC_corutine(self, me, env, ilmethod->Parameters, ilmethod->Statements,
-                      cctx, scope);
+        bc_GenerateCoroutine(self, me, env, ilmethod->Parameters,
+                             ilmethod->Statements, cctx, scope);
         bc_DeleteCallContext(cctx);
         return true;
 }

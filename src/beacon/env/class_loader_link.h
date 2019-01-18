@@ -16,10 +16,10 @@ struct bc_Namespace;
 struct bc_CallContext;
 struct bc_Method;
 
-bool CLBC_corutine(struct bc_ClassLoader* self, struct bc_Method* mt,
-                   struct bc_Enviroment* env, bc_Vector* ilparams,
-                   bc_Vector* ilstmts, struct bc_CallContext* cctx,
-                   struct bc_Namespace* range);
+bool bc_GenerateCoroutine(struct bc_ClassLoader* self, struct bc_Method* mt,
+                          struct bc_Enviroment* env, bc_Vector* ilparams,
+                          bc_Vector* ilstmts, struct bc_CallContext* cctx,
+                          struct bc_Namespace* range);
 
 void bc_GenerateStatements(bc_ClassLoader* self, bc_Vector* stmt_list,
                            struct bc_Enviroment* dest,

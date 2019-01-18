@@ -290,9 +290,9 @@ static void load_toplevel_function(bc_ClassLoader* self) {
                 bc_Method* m = bc_AtVector(BC_TYPE2CLASS(worldT)->Methods, i);
                 bc_ScriptMethod* sm = m->Kind.Script;
                 bc_CallContext* cctx = bc_NewMethodContext(m);
-                CLBC_corutine(self, m, sm->Env, ilfunc->Parameters,
-                              ilfunc->Statements, cctx,
-                              bc_GetLangNamespace(NULL));
+                bc_GenerateCoroutine(self, m, sm->Env, ilfunc->Parameters,
+                                     ilfunc->Statements, cctx,
+                                     bc_GetLangNamespace(NULL));
                 bc_DeleteCallContext(cctx);
         }
 }
