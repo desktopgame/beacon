@@ -37,9 +37,7 @@
 
 #include "class_loader_bc.h"
 #include "class_loader_il.h"
-#include "cll/class_loader_bcload_import_module_impl.h"
-#include "cll/class_loader_bcload_member_module_impl.h"
-#include "cll/class_loader_link_impl.h"
+#include "class_loader_link.h"
 #include "heap.h"
 #include "import_info.h"
 #include "type_cache.h"
@@ -221,7 +219,8 @@ static void load_toplevel(bc_ClassLoader* self) {
         bc_AddOpcodeBuf(self->Env->Bytecode, OP_STORE);
         bc_AddOpcodeBuf(self->Env->Bytecode, 0);
         //以下読み込み
-        CLBC_body(self, self->ILCode->StatementList, self->Env, cctx, NULL);
+        bc_GenerateStatements(self, self->ILCode->StatementList, self->Env,
+                              cctx, NULL);
         bc_DeleteILStmt(body);
         bc_DeleteCallContext(cctx);
         bc_CacheScriptContext();

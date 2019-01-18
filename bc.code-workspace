@@ -155,7 +155,9 @@
 			"il_namespace.h": "c",
 			"il_type_impl.h": "c",
 			"il_constructor.h": "c",
-			"il_stmt_impl.h": "c"
+			"il_stmt_impl.h": "c",
+			"io.h": "c",
+			"file_entry.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,

@@ -1,34 +1,103 @@
-#include "class_loader_bcload_member_module_impl.h"
+#include "class_loader_link.h"
 #include <assert.h>
-#include <string.h>
-#include "../../env/TYPE_IMPL.h"
-#include "../../env/cll/class_loader_link_impl.h"
-#include "../../env/constructor.h"
-#include "../../env/field.h"
-#include "../../env/heap.h"
-#include "../../env/method.h"
-#include "../../env/object.h"
-#include "../../env/operator_overload.h"
-#include "../../env/parameter.h"
-#include "../../env/property.h"
-#include "../../env/type/resolve.h"
-#include "../../env/type_parameter.h"
-#include "../../il/il_TYPE_IMPL.h"
-#include "../../il/il_argument.h"
-#include "../../il/il_constructor.h"
-#include "../../il/il_constructor_chain.h"
-#include "../../il/il_field.h"
-#include "../../il/il_method.h"
-#include "../../il/il_operator_overload.h"
-#include "../../il/il_parameter.h"
-#include "../../il/il_property.h"
-#include "../../il/il_stmt_interface.h"
-#include "../../util/mem.h"
-#include "../../util/text.h"
-#include "../../vm/script_thread.h"
-#include "../../vm/symbol_entry.h"
+#include <glib.h>
+#include "../error.h"
+#include "../il/il_TYPE_IMPL.h"
+#include "../il/il_argument.h"
+#include "../il/il_constructor.h"
+#include "../il/il_constructor_chain.h"
+#include "../il/il_factor_impl.h"
+#include "../il/il_field.h"
+#include "../il/il_method.h"
+#include "../il/il_operator_overload.h"
+#include "../il/il_parameter.h"
+#include "../il/il_property.h"
+#include "../il/il_property_body.h"
+#include "../il/il_stmt_impl.h"
+#include "../il/il_type_parameter.h"
+#include "../util/text.h"
+#include "../vm/script_thread.h"
+#include "../vm/symbol_entry.h"
+#include "TYPE_IMPL.h"
+#include "constructor.h"
+#include "field.h"
+#include "object.h"
+#include "parameter.h"
+#include "property.h"
+#include "type_cache.h"
+//#include "class_loader_bcload_import_module_impl.h"
+//#include "class_loader_bcload_member_module_impl.h"
 
-// proto
+static bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_ILField* ilfi, bc_Namespace* scope,
+                            bc_CallContext* cctx);
+static bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
+                            bc_Namespace* scope, bc_CallContext* cctx);
+
+static void CLBC_fields_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                             bc_Type* tp, bc_Vector* ilfields,
+                             bc_Namespace* scope);
+static void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope,
+                             bc_Type* tp, bc_Vector* ilfields,
+                             bc_Vector* sgfields);
+
+static bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                               bc_Type* tp, bc_ILProperty* ilprop,
+                               bc_Namespace* scope, bc_CallContext* cctx);
+static bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                               bc_Type* tp, bc_ILProperty* ilprop,
+                               bc_Property* prop, bc_Namespace* scope,
+                               bc_CallContext* cctx);
+
+static void CLBC_properties_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                                 bc_Type* tp, bc_Vector* ilprops,
+                                 bc_Namespace* scope);
+static void CLBC_properties_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                                 bc_Type* tp, bc_Vector* ilprops,
+                                 bc_Vector* sgprops, bc_Namespace* scope);
+
+static bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                             bc_Type* tp, bc_ILMethod* ilmt,
+                             bc_Namespace* scope);
+static bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
+                             bc_ILType* iltype, bc_Type* tp, bc_ILMethod* ilmt,
+                             bc_Method* mt);
+
+static void CLBC_methods_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                              bc_Type* tp, bc_Vector* ilmethods,
+                              bc_Namespace* scope);
+static void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope,
+                              bc_ILType* iltype, bc_Type* tp,
+                              bc_Vector* ilmethods, bc_Vector* sgmethods);
+
+static bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_ILConstructor* ilcons, bc_Namespace* scope);
+static bool CLBC_ctor_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_ILConstructor* ilcons, bc_Constructor* cons,
+                           bc_Namespace* scope);
+
+static void CLBC_ctors_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_Namespace* scope);
+static void CLBC_ctors_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp);
+
+static bool CLBC_operator_overload_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                                        bc_Type* tp,
+                                        bc_ILOperatorOverload* ilopov,
+                                        bc_Namespace* scope);
+static bool CLBC_operator_overload_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                                        bc_Type* tp,
+                                        bc_ILOperatorOverload* ilopov,
+                                        bc_OperatorOverload* opov,
+                                        bc_Namespace* scope);
+
+static void CLBC_operator_overloads_decl(bc_ClassLoader* self,
+                                         bc_ILType* iltype, bc_Type* tp,
+                                         bc_Namespace* scope);
+static void CLBC_operator_overloads_impl(bc_ClassLoader* self,
+                                         bc_ILType* iltype, bc_Type* tp,
+                                         bc_Namespace* scope);
+
 static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope,
                                 bc_Vector* param_list,
                                 bc_Vector* sg_param_liste,
@@ -51,13 +120,495 @@ static void CLBC_chain_super(bc_ClassLoader* self, bc_ILType* iltype,
 static bool CLBC_test_operator_overlaod(bc_ClassLoader* self, bc_ILType* iltype,
                                         bc_Type* tp, bc_OperatorOverload* opov);
 
+static void CLBC_class_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_Namespace* scope);
+static void CLBC_class_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_Namespace* scope);
+
+static void CLBC_interface_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                                bc_Type* tp, bc_Namespace* scope);
+static void CLBC_interface_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                                bc_Type* tp, bc_Namespace* scope);
+
+static void CLBC_enum_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_Namespace* scope);
+static void CLBC_enum_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_Namespace* scope);
+
+static void CLBC_excec_class_decl(bc_ClassLoader* self);
+static void CLBC_excec_class_impl(bc_ClassLoader* self);
+static void CLBC_excec_interface_decl(bc_ClassLoader* self);
+static void CLBC_excec_interface_impl(bc_ClassLoader* self);
+static void CLBC_excec_enum_decl(bc_ClassLoader* self);
+static void CLBC_excec_enum_impl(bc_ClassLoader* self);
+static void CLBC_check_class(bc_ClassLoader* self, bc_ILType* iltype,
+                             bc_Type* tp, bc_Namespace* scope);
+static void CLBC_check_interface(bc_ClassLoader* self, bc_ILType* iltype,
+                                 bc_Type* tp, bc_Namespace* scope);
+
+bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,
+                   bc_Vector* ilparams, bc_Vector* ilstmts,
+                   bc_CallContext* cctx, bc_Namespace* range) {
+        //戻り値が iterator なら、
+        //コルーチンとして使えるようにする
+        bool yield_err = false;
+        if (bc_IsYieldMethod(mt, ilstmts, &yield_err)) {
+                if (yield_err) {
+                        bc_FatalError();
+                        return false;
+                }
+                //メソッド名からクラス名を作成して、
+                // beacon::$placeholderへ肩を格納する
+                bc_Type* iterT =
+                    bc_CreateIteratorTypeFromMethod(mt, self, ilstmts);
+                bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
+                for (int i = 0; i < ilparams->Length; i++) {
+                        bc_AddOpcodeBuf(env->Bytecode, OP_LOAD);
+                        bc_AddOpcodeBuf(env->Bytecode, i + 1);
+                }
+                mt->Kind.Script->Env = env;
+                bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
+                bc_AddOpcodeBuf(env->Bytecode, iterT->AbsoluteIndex);
+                bc_AddOpcodeBuf(env->Bytecode, 0);
+                bc_AddOpcodeBuf(env->Bytecode, OP_RETURN);
+                return true;
+        }
+        // NOTE:ここなら名前空間を設定出来る
+        bc_GenerateStatements(self, ilstmts, env, cctx, range);
+        mt->Kind.Script->Env = env;
+        return true;
+}
+
+void bc_GenerateStatements(bc_ClassLoader* self, bc_Vector* stmt_list,
+                           bc_Enviroment* dest, bc_CallContext* cctx,
+                           bc_Namespace* range) {
+        bc_CL_ERROR(self);
+        //まずは全てのステートメントを読み込む
+        for (int i = 0; i < stmt_list->Length; i++) {
+                if (bc_GetLastPanic()) {
+                        break;
+                }
+                bc_VectorItem e = bc_AtVector(stmt_list, i);
+                bc_ILStatement* s = (bc_ILStatement*)e;
+                bc_LoadILStmt(s, dest, cctx);
+        }
+        //オペコードを生成
+        for (int i = 0; i < stmt_list->Length; i++) {
+                if (bc_GetLastPanic()) {
+                        break;
+                }
+                bc_VectorItem e = bc_AtVector(stmt_list, i);
+                bc_ILStatement* s = (bc_ILStatement*)e;
+                bc_GenerateILStmt(s, dest, cctx);
+        }
+}
+
+void LinkClassLoader(bc_ClassLoader* self, bc_LinkType type) {
+        bc_CL_ERROR(self);
+        bc_SetPanicFile(self->FileName);
+        if (type == LINK_DECL_T) {
+                CLBC_excec_class_decl(self);
+                bc_CL_ERROR(self);
+                CLBC_excec_interface_decl(self);
+                bc_CL_ERROR(self);
+                CLBC_excec_enum_decl(self);
+        } else if (type == LINK_IMPL_T) {
+                CLBC_excec_class_impl(self);
+                bc_CL_ERROR(self);
+                CLBC_excec_interface_impl(self);
+                bc_CL_ERROR(self);
+                CLBC_excec_enum_impl(self);
+        } else
+                assert(false);
+}
+
+// private
+static void CLBC_class_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_Namespace* scope) {
+        if ((tp->State & TYPE_DECL) > 0) {
+                return;
+        }
+#if defined(DEBUG)
+        const char* name = bc_Ref2Str(bc_GetTypeName(tp));
+#endif
+        bc_CL_ERROR(self);
+        g_message("Class.Decl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
+        CLBC_fields_decl(self, iltype, tp, iltype->Kind.Class->Fields, scope);
+        CLBC_fields_decl(self, iltype, tp, iltype->Kind.Class->StaticFields,
+                         scope);
+        bc_CL_ERROR(self);
+        CLBC_properties_decl(self, iltype, tp, iltype->Kind.Class->Properties,
+                             scope);
+        CLBC_properties_decl(self, iltype, tp,
+                             iltype->Kind.Class->StaticProperties, scope);
+        bc_CL_ERROR(self);
+
+        CLBC_methods_decl(self, iltype, tp, iltype->Kind.Class->Methods, scope);
+        CLBC_methods_decl(self, iltype, tp, iltype->Kind.Class->StaticMethods,
+                          scope);
+        bc_CL_ERROR(self);
+
+        CLBC_ctors_decl(self, iltype, tp, scope);
+        bc_CL_ERROR(self);
+
+        CLBC_operator_overloads_decl(self, iltype, tp, scope);
+        bc_CL_ERROR(self);
+
+        bc_CL_ERROR(self);
+        tp->State = tp->State | TYPE_DECL;
+}
+
+static void CLBC_class_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_Namespace* scope) {
+        if ((tp->State & TYPE_IMPL) > 0) {
+                return;
+        }
+#if defined(DEBUG)
+        const char* tyname = bc_Ref2Str(bc_GetTypeName(tp));
+#endif
+        g_message("Class.Impl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
+        bc_CreateVTableClass(tp->Kind.Class);
+        bc_CreateOperatorVTClass(tp->Kind.Class);
+        bc_CL_ERROR(self);
+        CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->Fields,
+                         (BC_TYPE2CLASS(tp))->Fields);
+        CLBC_fields_impl(self, scope, tp, iltype->Kind.Class->StaticFields,
+                         (BC_TYPE2CLASS(tp))->StaticFields);
+        bc_CL_ERROR(self);
+        CLBC_properties_impl(self, iltype, tp, iltype->Kind.Class->Properties,
+                             tp->Kind.Class->Properties, scope);
+        CLBC_properties_impl(self, iltype, tp,
+                             iltype->Kind.Class->StaticProperties,
+                             tp->Kind.Class->StaticProperties, scope);
+        bc_CL_ERROR(self);
+
+        CLBC_methods_impl(self, scope, iltype, tp, iltype->Kind.Class->Methods,
+                          ((BC_TYPE2CLASS(tp))->Methods));
+        CLBC_methods_impl(self, scope, iltype, tp,
+                          iltype->Kind.Class->StaticMethods,
+                          ((BC_TYPE2CLASS(tp))->StaticMethods));
+        bc_CL_ERROR(self);
+
+        CLBC_ctors_impl(self, iltype, tp);
+        bc_CL_ERROR(self);
+
+        CLBC_operator_overloads_impl(self, iltype, tp, scope);
+        bc_CL_ERROR(self);
+        tp->State = tp->State | TYPE_IMPL;
+        CLBC_check_class(self, iltype, tp, scope);
+}
+
+static void CLBC_interface_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                                bc_Type* tp, bc_Namespace* scope) {
+        if ((tp->State & TYPE_DECL) > 0) {
+                return;
+        }
+        g_message("Interface.Decl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
+        assert(tp->Kind.Interface->Methods->Length == 0);
+        bc_CL_ERROR(self);
+        CLBC_methods_decl(self, iltype, tp, iltype->Kind.Interface->Methods,
+                          scope);
+        CLBC_properties_decl(self, iltype, tp,
+                             iltype->Kind.Interface->Properties, scope);
+        // privateなメンバーは定義できない
+        for (int i = 0; i < tp->Kind.Interface->Methods->Length; i++) {
+                bc_Method* e = bc_AtVector(tp->Kind.Interface->Methods, i);
+                if (BC_MEMBER_ACCESS(e) == ACCESS_PRIVATE_T) {
+                        bc_Panic(BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
+                                 bc_Ref2Str(bc_GetTypeName(tp)),
+                                 bc_Ref2Str(e->Name));
+                }
+        }
+        for (int i = 0; i < tp->Kind.Interface->Properties->Length; i++) {
+                bc_Property* e = bc_AtVector(tp->Kind.Interface->Properties, i);
+                if (BC_MEMBER_ACCESS(e) == ACCESS_PRIVATE_T) {
+                        bc_Panic(BCERROR_INTERFACE_HAS_PRIVATE_MEMBER_T,
+                                 bc_Ref2Str(bc_GetTypeName(tp)),
+                                 bc_Ref2Str(e->Name));
+                }
+        }
+        bc_CL_ERROR(self);
+        bc_CreateVTableInterface(tp->Kind.Interface);
+        tp->State = tp->State | TYPE_DECL;
+        CLBC_check_interface(self, iltype, tp, scope);
+}
+
+static void CLBC_interface_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                                bc_Type* tp, bc_Namespace* scope) {
+        if ((tp->State & TYPE_IMPL) > 0) {
+                return;
+        }
+        g_message("Interface.Impl:%s", bc_Ref2Str(bc_GetTypeName(tp)));
+        bc_CL_ERROR(self);
+        CLBC_methods_impl(self, scope, iltype, tp,
+                          iltype->Kind.Interface->Methods,
+                          tp->Kind.Interface->Methods);
+        tp->State = tp->State | TYPE_IMPL;
+}
+
+static void CLBC_enum_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_Namespace* scope) {
+        if ((tp->State & TYPE_DECL) > 0) {
+                return;
+        }
+        //重複するフィールドを確認する
+        bc_Field* outField = NULL;
+        if ((tp->Tag == TYPE_ENUM_T || tp->Tag == TYPE_CLASS_T) &&
+            !bc_IsValidFieldClass(tp->Kind.Class, &outField)) {
+                bc_Panic(BCERROR_OVERWRAP_FIELD_NAME_T,
+                         bc_Ref2Str(tp->Kind.Class->Name),
+                         bc_Ref2Str(outField->Name));
+        }
+        tp->State = tp->State | TYPE_DECL;
+}
+
+static void CLBC_enum_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_Namespace* scope) {
+        if ((tp->State & TYPE_IMPL) > 0) {
+                return;
+        }
+        for (int i = 0; i < tp->Kind.Class->StaticFields->Length; i++) {
+                bc_Field* f = bc_AtVector(tp->Kind.Class->StaticFields, i);
+                f->StaticValue = bc_GetIntObject(i);
+        }
+        tp->State = tp->State | TYPE_IMPL;
+}
+
+static void CLBC_excec_class_decl(bc_ClassLoader* self) {
+        bc_CL_ERROR(self);
+        int count = 0;
+        for (int i = 0; i < self->TypeCaches->Length; i++) {
+                bc_TypeCache* e =
+                    (bc_TypeCache*)bc_AtVector(self->TypeCaches, i);
+                if (e->Kind != CACHEKIND_CLASS_DECL_T || e->IsConsume) {
+                        continue;
+                }
+                count++;
+                e->IsConsume = true;
+                CLBC_class_decl(e->Context, e->ILType, e->Type, e->Scope);
+        }
+}
+
+static void CLBC_excec_class_impl(bc_ClassLoader* self) {
+        int count = 0;
+        for (int i = 0; i < self->TypeCaches->Length; i++) {
+                bc_TypeCache* e =
+                    (bc_TypeCache*)bc_AtVector(self->TypeCaches, i);
+                if (e->Kind != CACHEKIND_CLASS_IMPL_T || e->IsConsume) {
+                        continue;
+                }
+                count++;
+                e->IsConsume = true;
+                CLBC_class_impl(e->Context, e->ILType, e->Type, e->Scope);
+        }
+}
+
+static void CLBC_excec_interface_decl(bc_ClassLoader* self) {
+        bc_CL_ERROR(self);
+        int count = 0;
+        for (int i = 0; i < self->TypeCaches->Length; i++) {
+                bc_TypeCache* e =
+                    (bc_TypeCache*)bc_AtVector(self->TypeCaches, i);
+                if (e->Kind != CACHEKIND_INTERFACE_DECL_T || e->IsConsume) {
+                        continue;
+                }
+                count++;
+                e->IsConsume = true;
+                CLBC_interface_decl(e->Context, e->ILType, e->Type, e->Scope);
+        }
+}
+
+static void CLBC_excec_interface_impl(bc_ClassLoader* self) {
+        bc_CL_ERROR(self);
+        int count = 0;
+        for (int i = 0; i < self->TypeCaches->Length; i++) {
+                bc_TypeCache* e =
+                    (bc_TypeCache*)bc_AtVector(self->TypeCaches, i);
+                if (e->Kind != CACHEKIND_INTERFACE_IMPL_T || e->IsConsume) {
+                        continue;
+                }
+                count++;
+                e->IsConsume = true;
+                CLBC_interface_impl(e->Context, e->ILType, e->Type, e->Scope);
+        }
+}
+
+static void CLBC_excec_enum_decl(bc_ClassLoader* self) {
+        bc_CL_ERROR(self);
+        int count = 0;
+        for (int i = 0; i < self->TypeCaches->Length; i++) {
+                bc_TypeCache* e =
+                    (bc_TypeCache*)bc_AtVector(self->TypeCaches, i);
+                if (e->Kind != CACHEKIND_ENUM_DECL_T || e->IsConsume) {
+                        continue;
+                }
+                count++;
+                e->IsConsume = true;
+                CLBC_enum_decl(e->Context, e->ILType, e->Type, e->Scope);
+        }
+}
+
+static void CLBC_excec_enum_impl(bc_ClassLoader* self) {
+        bc_CL_ERROR(self);
+        int count = 0;
+        for (int i = 0; i < self->TypeCaches->Length; i++) {
+                bc_TypeCache* e =
+                    (bc_TypeCache*)bc_AtVector(self->TypeCaches, i);
+                if (e->Kind != CACHEKIND_ENUM_IMPL_T || e->IsConsume) {
+                        continue;
+                }
+                count++;
+                e->IsConsume = true;
+                CLBC_enum_impl(e->Context, e->ILType, e->Type, e->Scope);
+        }
+}
+
+static void CLBC_check_class(bc_ClassLoader* self, bc_ILType* iltype,
+                             bc_Type* tp, bc_Namespace* scope) {
+        //実装されていないインターフェイスを確認する
+        bc_Method* outiMethod = NULL;
+        if (tp->Tag == TYPE_CLASS_T && !bc_IsImplementInterfaceMethodValidClass(
+                                           BC_TYPE2CLASS(tp), &outiMethod)) {
+                bc_Panic(BCERROR_NOT_IMPLEMENT_INTERFACE_T,
+                         bc_Ref2Str(tp->Kind.Class->Name),
+                         bc_Ref2Str(outiMethod->Name));
+                return;
+        }
+        //実装されていないプロパティを確認する
+        bc_Property* outiProperty = NULL;
+        if (tp->Tag == TYPE_CLASS_T &&
+            !bc_IsImplementInterfacePropertyValidClass(BC_TYPE2CLASS(tp),
+                                                       &outiProperty)) {
+                bc_Panic(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T,
+                         bc_Ref2Str(tp->Kind.Class->Name),
+                         bc_Ref2Str(outiProperty->Name));
+                return;
+        }
+        //実装されていない抽象メソッドを確認する
+        bc_Method* outaMethod = NULL;
+        if (tp->Tag == TYPE_CLASS_T && !bc_IsImplementAbstractClassValidClass(
+                                           BC_TYPE2CLASS(tp), &outaMethod)) {
+                bc_Panic(BCERROR_NOT_IMPLEMENT_ABSTRACT_METHOD_T,
+                         bc_Ref2Str(tp->Kind.Class->Name),
+                         bc_Ref2Str(outaMethod->Name));
+                return;
+        }
+        //重複するプロパティを確認する
+        bc_Property* outProp = NULL;
+        if (!bc_IsValidPropertyClass(tp->Kind.Class, &outProp)) {
+                bc_Panic(BCERROR_OVERWRAP_PROPERTY_NAME_T,
+                         bc_Ref2Str(tp->Kind.Class->Name),
+                         bc_Ref2Str(outProp->Name));
+                return;
+        }
+        //重複するフィールドを確認する
+        bc_Field* outField = NULL;
+        if (!bc_IsValidFieldClass(tp->Kind.Class, &outField)) {
+                bc_Panic(BCERROR_OVERWRAP_FIELD_NAME_T,
+                         bc_Ref2Str(tp->Kind.Class->Name),
+                         bc_Ref2Str(outField->Name));
+                return;
+        }
+        //メソッドの重複するパラメータ名を検出する
+        bc_Method* out_overwrap_m = NULL;
+        bc_StringView out_overwrap_mname;
+        if (!bc_IsMethodParameterValidClass(tp->Kind.Class, &out_overwrap_m,
+                                            &out_overwrap_mname)) {
+                bc_Panic(BCERROR_OVERWRAP_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)),
+                         bc_Ref2Str(out_overwrap_m->Name),
+                         bc_Ref2Str(out_overwrap_mname));
+                return;
+        }
+        //コンストラクタの重複するパラメータ名を検出する
+        bc_Constructor* out_overwrap_c = NULL;
+        bc_StringView out_overwrap_cname;
+        if (!bc_IsConstructorParameterValidClass(
+                tp->Kind.Class, &out_overwrap_c, &out_overwrap_cname)) {
+                bc_Panic(BCERROR_OVERWRAP_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)), "new",
+                         bc_Ref2Str(out_overwrap_cname));
+                return;
+        }
+        //クラスの重複する型パラメータ名を検出する
+        bc_StringView out_overwrap_tpname;
+        if (!bc_IsTypeParameterValidClass(tp->Kind.Class,
+                                          &out_overwrap_tpname)) {
+                bc_Panic(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)),
+                         bc_Ref2Str(out_overwrap_tpname));
+                return;
+        }
+        //メソッドの重複する型パラメータ名を検出する
+        bc_Method* out_overwrap_tpm = NULL;
+        bc_StringView out_overwrap_tpmname;
+        if (!bc_IsMethodTypeParameterValidClass(
+                tp->Kind.Class, &out_overwrap_tpm, &out_overwrap_tpmname)) {
+                bc_Panic(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)),
+                         bc_Ref2Str(out_overwrap_tpm->Name),
+                         bc_Ref2Str(out_overwrap_tpmname));
+                return;
+        }
+        //コンストラクタで初期化されていない final フィールドの確認
+        //これはコンストラクタが生成されてからでないといけない
+        bc_Class* cls = BC_TYPE2CLASS(tp);
+        for (int i = 0; i < cls->Fields->Length; i++) {
+                bc_Field* fi = bc_AtVector(cls->Fields, i);
+                //インスタンス定数が
+                //フィールドでもコンストラクタでも初期化されない
+                if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(fi)) &&
+                    bc_IsFinalModifier(BC_MEMBER_MODIFIER(fi)) &&
+                    !fi->IsNotInitializedAtCtor) {
+                        bc_Panic(
+                            BCERROR_NOT_INITIAL_FIELD_NOT_INITIALIZED_AT_CTOR_T,
+                            bc_Ref2Str(bc_GetTypeName(tp)),
+                            bc_Ref2Str(fi->Name));
+                        return;
+                }
+        }
+}
+
+static void CLBC_check_interface(bc_ClassLoader* self, bc_ILType* iltype,
+                                 bc_Type* tp, bc_Namespace* scope) {
+        //重複するパラメータ名を検出する
+        bc_Method* out_overwrap_m = NULL;
+        bc_StringView out_overwrap_name;
+        if (!bc_IsMethodParameterValidInterface(
+                tp->Kind.Interface, &out_overwrap_m, &out_overwrap_name)) {
+                bc_Panic(BCERROR_OVERWRAP_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)),
+                         bc_Ref2Str(out_overwrap_m->Name),
+                         bc_Ref2Str(out_overwrap_name));
+        }
+        //インターフェイスの重複する型パラメータ名を検出する
+        bc_StringView out_overwrap_tpname;
+        if (!bc_IsTypeParameterValidInterface(tp->Kind.Interface,
+                                              &out_overwrap_tpname)) {
+                bc_Panic(BCERROR_OVERWRAP_TYPE_TYPE_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)),
+                         bc_Ref2Str(out_overwrap_tpname));
+        }
+        //メソッドの重複する型パラメータ名を検出する
+        bc_Method* out_overwrap_tpm = NULL;
+        bc_StringView out_overwrap_tpmname;
+        if (!bc_IsMethodTypeParameterValidInterface(
+                tp->Kind.Interface, &out_overwrap_tpm, &out_overwrap_tpmname)) {
+                bc_Panic(BCERROR_OVERWRAP_METHOD_TYPE_PARAMETER_NAME_T,
+                         bc_Ref2Str(bc_GetTypeName(tp)),
+                         bc_Ref2Str(out_overwrap_tpm->Name),
+                         bc_Ref2Str(out_overwrap_tpmname));
+        }
+}
+
+// private
 //
 // field
 //
 //
-bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                     bc_ILField* ilfi, bc_Namespace* scope,
-                     bc_CallContext* cctx) {
+static bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_ILField* ilfi, bc_Namespace* scope,
+                            bc_CallContext* cctx) {
         bc_Field* fi = bc_NewField(ilfi->Name);
         g_message("    Field.Decl:%s", bc_Ref2Str(ilfi->Name));
         BC_MEMBER_ACCESS(fi) = ilfi->Access;
@@ -96,8 +647,8 @@ bool CLBC_field_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         return true;
 }
 
-bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
-                     bc_Namespace* scope, bc_CallContext* cctx) {
+static bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
+                            bc_Namespace* scope, bc_CallContext* cctx) {
         g_message("    Field.Impl:%s", bc_Ref2Str(fi->Name));
         fi->StaticValue = bc_GetDefaultObject(fi->GType);
         if (fi->InitialValue == NULL) {
@@ -139,8 +690,9 @@ bool CLBC_field_impl(bc_ClassLoader* self, bc_Type* tp, bc_Field* fi,
         return true;
 }
 
-void CLBC_fields_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                      bc_Vector* ilfields, bc_Namespace* scope) {
+static void CLBC_fields_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                             bc_Type* tp, bc_Vector* ilfields,
+                             bc_Namespace* scope) {
         bc_CL_ERROR(self);
         bc_CallContext* cctx = bc_NewNameContext(scope, tp);
         for (int i = 0; i < ilfields->Length; i++) {
@@ -152,8 +704,9 @@ void CLBC_fields_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         bc_DeleteCallContext(cctx);
 }
 
-void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_Type* tp,
-                      bc_Vector* ilfields, bc_Vector* sgfields) {
+static void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope,
+                             bc_Type* tp, bc_Vector* ilfields,
+                             bc_Vector* sgfields) {
         bc_CL_ERROR(self);
         bc_CallContext* cctx = bc_NewCallContext(CALL_CTOR_T);
         cctx->Scope = scope;
@@ -171,9 +724,9 @@ void CLBC_fields_impl(bc_ClassLoader* self, bc_Namespace* scope, bc_Type* tp,
 // Property
 //
 //
-bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                        bc_ILProperty* ilprop, bc_Namespace* scope,
-                        bc_CallContext* cctx) {
+static bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                               bc_Type* tp, bc_ILProperty* ilprop,
+                               bc_Namespace* scope, bc_CallContext* cctx) {
         // VectorItem e = AtVector(ilprops, i);
         // ILProperty* ilprop = e;
         g_message("    Property.Decl:%s", bc_Ref2Str(ilprop->Name));
@@ -222,9 +775,10 @@ bool CLBC_Property_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         return true;
 }
 
-bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                        bc_ILProperty* ilprop, bc_Property* prop,
-                        bc_Namespace* scope, bc_CallContext* cctx) {
+static bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                               bc_Type* tp, bc_ILProperty* ilprop,
+                               bc_Property* prop, bc_Namespace* scope,
+                               bc_CallContext* cctx) {
         // VectorItem e = AtVector(sgprops, i);
         g_message("    Property.Impl:%s", bc_Ref2Str(prop->Name));
         bc_Property* pr = prop;
@@ -247,18 +801,19 @@ bool CLBC_Property_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         }
         bc_AddOpcodeBuf(set->Env->Bytecode, OP_STORE);
         bc_AddOpcodeBuf(set->Env->Bytecode, valueE->Index);
-        CLBC_body(self, set_stmt_list, set->Env, cctx, scope);
+        bc_GenerateStatements(self, set_stmt_list, set->Env, cctx, scope);
         // getterのオペコードを生成
         if (!bc_IsStaticModifier(BC_MEMBER_MODIFIER(pr))) {
                 bc_AddOpcodeBuf(get->Env->Bytecode, OP_STORE);
                 bc_AddOpcodeBuf(get->Env->Bytecode, 0);
         }
-        CLBC_body(self, get_stmt_list, get->Env, cctx, scope);
+        bc_GenerateStatements(self, get_stmt_list, get->Env, cctx, scope);
         return true;
 }
 
-void CLBC_properties_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                          bc_Vector* ilprops, bc_Namespace* scope) {
+static void CLBC_properties_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                                 bc_Type* tp, bc_Vector* ilprops,
+                                 bc_Namespace* scope) {
         bc_CL_ERROR(self);
         bc_CallContext* cctx = bc_NewNameContext(scope, tp);
         for (int i = 0; i < ilprops->Length; i++) {
@@ -270,9 +825,9 @@ void CLBC_properties_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         bc_DeleteCallContext(cctx);
 }
 
-void CLBC_properties_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                          bc_Vector* ilprops, bc_Vector* sgprops,
-                          bc_Namespace* scope) {
+static void CLBC_properties_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                                 bc_Type* tp, bc_Vector* ilprops,
+                                 bc_Vector* sgprops, bc_Namespace* scope) {
         bc_CL_ERROR(self);
         bc_CallContext* cctx = bc_NewNameContext(scope, tp);
         for (int i = 0; i < sgprops->Length; i++) {
@@ -289,8 +844,9 @@ void CLBC_properties_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
 // method
 //
 //
-bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                      bc_ILMethod* ilmt, bc_Namespace* scope) {
+static bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                             bc_Type* tp, bc_ILMethod* ilmt,
+                             bc_Namespace* scope) {
         g_message("    Method.Decl:%s", bc_Ref2Str(ilmt->Name));
         //メソッド一覧から取り出す
         bc_ILMethod* ilmethod = ilmt;
@@ -405,9 +961,9 @@ bool CLBC_method_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         return true;
 }
 
-bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
-                      bc_ILType* iltype, bc_Type* tp, bc_ILMethod* ilmt,
-                      bc_Method* mt) {
+static bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
+                             bc_ILType* iltype, bc_Type* tp, bc_ILMethod* ilmt,
+                             bc_Method* mt) {
         //	VectorItem e = AtVector(sgmethods, i);
         g_message("    Method.Impl:%s", bc_Ref2Str(mt->Name));
         bc_Method* me = mt;
@@ -448,8 +1004,9 @@ bool CLBC_method_impl(bc_ClassLoader* self, bc_Namespace* scope,
         return true;
 }
 
-void CLBC_methods_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                       bc_Vector* ilmethods, bc_Namespace* scope) {
+static void CLBC_methods_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                              bc_Type* tp, bc_Vector* ilmethods,
+                              bc_Namespace* scope) {
         bc_CL_ERROR(self);
         for (int i = 0; i < ilmethods->Length; i++) {
                 if (!CLBC_method_decl(self, iltype, tp,
@@ -459,9 +1016,9 @@ void CLBC_methods_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         }
 }
 
-void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope,
-                       bc_ILType* iltype, bc_Type* tp, bc_Vector* ilmethods,
-                       bc_Vector* sgmethods) {
+static void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope,
+                              bc_ILType* iltype, bc_Type* tp,
+                              bc_Vector* ilmethods, bc_Vector* sgmethods) {
         bc_CL_ERROR(self);
         for (int i = 0; i < ilmethods->Length; i++) {
                 if (!CLBC_method_impl(self, scope, iltype, tp,
@@ -477,8 +1034,8 @@ void CLBC_methods_impl(bc_ClassLoader* self, bc_Namespace* scope,
 // ctor
 //
 //
-bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                    bc_ILConstructor* ilcons, bc_Namespace* scope) {
+static bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_ILConstructor* ilcons, bc_Namespace* scope) {
         g_message("    Constructor.Decl:%d", ilcons->Parameters->Length);
         //メソッドから仮引数一覧を取りだす
         bc_Vector* ilparams = ilcons->Parameters;
@@ -505,9 +1062,9 @@ bool CLBC_ctor_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         return true;
 }
 
-bool CLBC_ctor_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                    bc_ILConstructor* ilcons, bc_Constructor* cons,
-                    bc_Namespace* scope) {
+static bool CLBC_ctor_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
+                           bc_ILConstructor* ilcons, bc_Constructor* cons,
+                           bc_Namespace* scope) {
         g_message("    Constructor.Impl:%d", ilcons->Parameters->Length);
         //仮引数に型を設定する
         // class_loader_sgload_params(self, scope, ilcons->parameter_list,
@@ -529,14 +1086,14 @@ bool CLBC_ctor_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         }
         CLBC_chain(self, iltype, tp, ilcons, ilcons->Chain, env);
         // NOTE:ここなら名前空間を設定出来る
-        CLBC_body(self, ilcons->Statements, env, cctx, scope);
+        bc_GenerateStatements(self, ilcons->Statements, env, cctx, scope);
         cons->Env = env;
         bc_DeleteCallContext(cctx);
         return true;
 }
 
-void CLBC_ctors_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
-                     bc_Namespace* scope) {
+static void CLBC_ctors_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp, bc_Namespace* scope) {
         bc_CL_ERROR(self);
         bc_Class* classz = tp->Kind.Class;
         bc_Vector* ilcons_list = iltype->Kind.Class->Constructors;
@@ -548,7 +1105,8 @@ void CLBC_ctors_decl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp,
         }
 }
 
-void CLBC_ctors_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp) {
+static void CLBC_ctors_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                            bc_Type* tp) {
         bc_CL_ERROR(self);
         assert(tp->Tag == TYPE_CLASS_T);
         bc_Class* classz = tp->Kind.Class;
@@ -573,9 +1131,10 @@ void CLBC_ctors_impl(bc_ClassLoader* self, bc_ILType* iltype, bc_Type* tp) {
 // operator overload
 //
 //
-bool CLBC_operator_overload_decl(bc_ClassLoader* self, bc_ILType* iltype,
-                                 bc_Type* tp, bc_ILOperatorOverload* ilopov,
-                                 bc_Namespace* scope) {
+static bool CLBC_operator_overload_decl(bc_ClassLoader* self, bc_ILType* iltype,
+                                        bc_Type* tp,
+                                        bc_ILOperatorOverload* ilopov,
+                                        bc_Namespace* scope) {
         //演算子オーバーロード一覧から取り出す
         bc_OperatorOverload* opov = bc_NewOperatorOverload(ilopov->Type);
         BC_MEMBER_ACCESS(opov) = ilopov->Access;
@@ -603,10 +1162,11 @@ bool CLBC_operator_overload_decl(bc_ClassLoader* self, bc_ILType* iltype,
         return true;
 }
 
-bool CLBC_operator_overload_impl(bc_ClassLoader* self, bc_ILType* iltype,
-                                 bc_Type* tp, bc_ILOperatorOverload* ilopov,
-                                 bc_OperatorOverload* opov,
-                                 bc_Namespace* scope) {
+static bool CLBC_operator_overload_impl(bc_ClassLoader* self, bc_ILType* iltype,
+                                        bc_Type* tp,
+                                        bc_ILOperatorOverload* ilopov,
+                                        bc_OperatorOverload* opov,
+                                        bc_Namespace* scope) {
         //オペコードを作成
         // FIXME:ILメソッドと実行時メソッドのインデックスが同じなのでとりあえず動く
         //まずは仮引数の一覧にインデックスを割り振る
@@ -630,15 +1190,16 @@ bool CLBC_operator_overload_impl(bc_ClassLoader* self, bc_ILType* iltype,
         bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)OP_STORE);
         bc_AddOpcodeBuf(env->Bytecode, (bc_VectorItem)0);
         // NOTE:ここなら名前空間を設定出来る
-        CLBC_body(self, ilopov->Statements, env, cctx, scope);
+        bc_GenerateStatements(self, ilopov->Statements, env, cctx, scope);
         bc_DeleteCallContext(cctx);
         // ccpop_method();
         opov->Env = env;
         return true;
 }
 
-void CLBC_operator_overloads_decl(bc_ClassLoader* self, bc_ILType* iltype,
-                                  bc_Type* tp, bc_Namespace* scope) {
+static void CLBC_operator_overloads_decl(bc_ClassLoader* self,
+                                         bc_ILType* iltype, bc_Type* tp,
+                                         bc_Namespace* scope) {
         bc_CL_ERROR(self);
         bc_Vector* opov_list = iltype->Kind.Class->OperatorOverloads;
         for (int i = 0; i < opov_list->Length; i++) {
@@ -650,8 +1211,9 @@ void CLBC_operator_overloads_decl(bc_ClassLoader* self, bc_ILType* iltype,
         // CLBC_default_operator_overload(self, tp);
 }
 
-void CLBC_operator_overloads_impl(bc_ClassLoader* self, bc_ILType* iltype,
-                                  bc_Type* tp, bc_Namespace* scope) {
+static void CLBC_operator_overloads_impl(bc_ClassLoader* self,
+                                         bc_ILType* iltype, bc_Type* tp,
+                                         bc_Namespace* scope) {
         bc_CL_ERROR(self);
         bc_Vector* opov_list = tp->Kind.Class->OperatorOverloads;
         //ここで暗黙的に作成される == != によって長さが合わなくなる
@@ -666,63 +1228,6 @@ void CLBC_operator_overloads_impl(bc_ClassLoader* self, bc_ILType* iltype,
         }
 }
 
-bool CLBC_corutine(bc_ClassLoader* self, bc_Method* mt, bc_Enviroment* env,
-                   bc_Vector* ilparams, bc_Vector* ilstmts,
-                   bc_CallContext* cctx, bc_Namespace* range) {
-        //戻り値が iterator なら、
-        //コルーチンとして使えるようにする
-        bool yield_err = false;
-        if (bc_IsYieldMethod(mt, ilstmts, &yield_err)) {
-                if (yield_err) {
-                        bc_FatalError();
-                        return false;
-                }
-                //メソッド名からクラス名を作成して、
-                // beacon::$placeholderへ肩を格納する
-                bc_Type* iterT =
-                    bc_CreateIteratorTypeFromMethod(mt, self, ilstmts);
-                bc_AddOpcodeBuf(env->Bytecode, OP_THIS);
-                for (int i = 0; i < ilparams->Length; i++) {
-                        bc_AddOpcodeBuf(env->Bytecode, OP_LOAD);
-                        bc_AddOpcodeBuf(env->Bytecode, i + 1);
-                }
-                mt->Kind.Script->Env = env;
-                bc_AddOpcodeBuf(env->Bytecode, OP_NEW_INSTANCE);
-                bc_AddOpcodeBuf(env->Bytecode, iterT->AbsoluteIndex);
-                bc_AddOpcodeBuf(env->Bytecode, 0);
-                bc_AddOpcodeBuf(env->Bytecode, OP_RETURN);
-                return true;
-        }
-        // NOTE:ここなら名前空間を設定出来る
-        CLBC_body(self, ilstmts, env, cctx, range);
-        mt->Kind.Script->Env = env;
-        return true;
-}
-
-void CLBC_body(bc_ClassLoader* self, bc_Vector* stmt_list, bc_Enviroment* dest,
-               bc_CallContext* cctx, bc_Namespace* range) {
-        bc_CL_ERROR(self);
-        //まずは全てのステートメントを読み込む
-        for (int i = 0; i < stmt_list->Length; i++) {
-                if (bc_GetLastPanic()) {
-                        break;
-                }
-                bc_VectorItem e = bc_AtVector(stmt_list, i);
-                bc_ILStatement* s = (bc_ILStatement*)e;
-                bc_LoadILStmt(s, dest, cctx);
-        }
-        //オペコードを生成
-        for (int i = 0; i < stmt_list->Length; i++) {
-                if (bc_GetLastPanic()) {
-                        break;
-                }
-                bc_VectorItem e = bc_AtVector(stmt_list, i);
-                bc_ILStatement* s = (bc_ILStatement*)e;
-                bc_GenerateILStmt(s, dest, cctx);
-        }
-}
-
-// private
 static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope,
                                 bc_Vector* param_list, bc_Vector* sg_param_list,
                                 bc_CallContext* cctx) {
