@@ -151,7 +151,7 @@ static void link_recursive(bc_ClassLoader* self, bc_LinkType type) {
                 }
                 link_recursive(info->Context, type);
         }
-        LinkClassLoader(self, type);
+        bc_LinkClassLoader(self, type);
 }
 
 static void delete_cache(bc_VectorItem item) {

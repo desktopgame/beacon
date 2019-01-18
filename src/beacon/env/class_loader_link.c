@@ -204,7 +204,7 @@ void bc_GenerateStatements(bc_ClassLoader* self, bc_Vector* stmt_list,
         }
 }
 
-void LinkClassLoader(bc_ClassLoader* self, bc_LinkType type) {
+void bc_LinkClassLoader(bc_ClassLoader* self, bc_LinkType type) {
         bc_CL_ERROR(self);
         bc_SetPanicFile(self->FileName);
         if (type == LINK_DECL_T) {

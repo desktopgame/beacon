@@ -30,5 +30,5 @@ void bc_GenerateStatements(bc_ClassLoader* self, bc_Vector* stmt_list,
  * @param self
  * @param type
  */
-void LinkClassLoader(bc_ClassLoader* self, bc_LinkType type);
+void bc_LinkClassLoader(bc_ClassLoader* self, bc_LinkType type);
 #endif
