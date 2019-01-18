@@ -1,7 +1,6 @@
 #include "type_cache.h"
 #include "../util/mem.h"
 #include "class_loader.h"
-#include "cll/class_loader_bcload_impl.h"
 
 bc_TypeCache* bc_NewTypeCache() {
         bc_TypeCache* ret = (bc_TypeCache*)MEM_MALLOC(sizeof(bc_TypeCache));

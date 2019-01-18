@@ -35,8 +35,8 @@
 #include "parameter.h"
 #include "script_context.h"
 
+#include "class_loader_bc.h"
 #include "class_loader_il.h"
-#include "cll/class_loader_bcload_impl.h"
 #include "cll/class_loader_bcload_import_module_impl.h"
 #include "cll/class_loader_bcload_member_module_impl.h"
 #include "cll/class_loader_link_impl.h"
@@ -126,7 +126,7 @@ static void load_class(bc_ClassLoader* self) {
                 return;
         }
         // IL -> SG へ
-        BCLoadClassLoader(self);
+        bc_LoadIL(self);
         if (bc_GetLastPanic()) {
                 return;
         }
@@ -179,7 +179,7 @@ static bc_ClassLoader* load_special_class(bc_ClassLoader* self,
                 return cll;
         }
         // IL -> SG へ
-        SpecialBCLoadClassLoader(cll);
+        bc_SpecialLoadIL(cll);
         if (bc_GetLastPanic()) {
                 return cll;
         }

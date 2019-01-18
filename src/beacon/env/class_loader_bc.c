@@ -1,102 +1,35 @@
-#include "class_loader_bcload_impl.h"
-#include <assert.h>
+#include "class_loader_bc.h"
 #include <glib.h>
-#include "../../env/object.h"
-#include "../../il/il_TYPE_IMPL.h"
-#include "../../il/il_argument.h"
-#include "../../il/il_constructor.h"
-#include "../../il/il_constructor_chain.h"
-#include "../../il/il_field.h"
-#include "../../il/il_import.h"
-#include "../../il/il_method.h"
-#include "../../il/il_namespace.h"
-#include "../../il/il_parameter.h"
-#include "../../il/il_stmt_interface.h"
-#include "../../il/il_type_interface.h"
-#include "../../il/il_type_parameter.h"
-#include "../../parse/parser.h"
-#include "../../util/io.h"
-#include "../../util/mem.h"
-#include "../../util/text.h"
-#include "../TYPE_IMPL.h"
-#include "../constructor.h"
-#include "../field.h"
-#include "../method.h"
-#include "../parameter.h"
-#include "../script_context.h"
-#include "../type_interface.h"
-#include "../type_parameter.h"
-#include "class_loader_bcload_import_module_impl.h"
-//
-// sgload
-//
-#include <string.h>
-#include "../../env/heap.h"
-#include "../import_info.h"
-#include "../type_cache.h"
-// proto
+#include "../env/script_context.h"
+#include "../env/type_cache.h"
+#include "../env/type_impl.h"
+#include "../env/type_parameter.h"
+#include "../error.h"
+#include "../il/il_method.h"
+#include "../il/il_namespace.h"
+#include "../il/il_type_impl.h"
+#include "class_loader.h"
+#include "type_impl.h"
+
 static void CLBC_namespace_tree(bc_ClassLoader* self);
-/**
- * 名前空間の一覧を読み込みます.
- * @param self
- * @param ilNamespacelist
- * @param parent
- */
 static void CLBC_namespace_list(bc_ClassLoader* self,
                                 bc_Vector* ilNamespacelist,
                                 bc_Namespace* parent);
-
-/**
- * 名前空間と含まれるエントリの一覧を読み込みます.
- * @param self
- * @param ilnamespace
- * @param parent
- */
 static void CLBC_namespace(bc_ClassLoader* self, bc_ILNamespace* ilnamespace,
                            bc_Namespace* parent);
-
-/**
- * 型宣言の一覧を読み込みます.
- * @param self
- * @param iltype_list
- * @param parent
- */
 static void CLBC_type_list(bc_ClassLoader* self, bc_Vector* iltype_list,
                            bc_Namespace* parent);
-
-/**
- * 列挙宣言を読み込んで名前空間に登録します.
- * @param self
- * @param iltype
- * @param parent
- */
 static void CLBC_enum(bc_ClassLoader* self, bc_ILType* iltype,
                       bc_Namespace* parent);
-
-/**
- * クラス宣言を読み込んで名前空間に登録します.
- * @param self
- * @param iltype
- * @param parent
- */
 static void CLBC_class(bc_ClassLoader* self, bc_ILType* iltype,
                        bc_Namespace* parent);
-
-/**
- * インターフェース宣言を読み込んで名前空間に登録します.
- * @param self
- * @param iltype
- * @param parent
- */
 static void CLBC_interface(bc_ClassLoader* self, bc_ILType* iltype,
                            bc_Namespace* parent);
-
 static void CLBC_attach_native_method(bc_ClassLoader* self, bc_ILType* iltype,
                                       bc_Class* classz, bc_ILMethod* ilmethod,
                                       bc_Method* me);
 static void CLBC_debug_native_method(bc_Method* parent, bc_Frame* fr,
                                      bc_Enviroment* env);
-
 static void CLBC_check_superclass(bc_Class* cls);
 static bc_Type* CLBC_get_or_load_enum(bc_Namespace* parent, bc_ILType* iltype);
 static bc_Type* CLBC_get_or_load_class(bc_ClassLoader* self,
@@ -110,7 +43,7 @@ static void CLBC_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                                     bc_ILType* iltype, bc_Type* tp,
                                     bc_Interface* inter);
 
-void BCLoadClassLoader(bc_ClassLoader* self) {
+void bc_LoadIL(bc_ClassLoader* self) {
         bc_CL_ERROR(self);
         bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
@@ -118,7 +51,7 @@ void BCLoadClassLoader(bc_ClassLoader* self) {
         CLBC_namespace_tree(self);
 }
 
-void SpecialBCLoadClassLoader(bc_ClassLoader* self) {
+void bc_SpecialLoadIL(bc_ClassLoader* self) {
         bc_CL_ERROR(self);
         bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
