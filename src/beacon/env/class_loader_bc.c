@@ -53,11 +53,12 @@ static void load_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
 // import
 //
 static void load_import(bc_ClassLoader* self, bc_Vector* ilimports);
-static void CLBC_new_load(bc_ClassLoader* self, char* fullPath);
+static void load_import_new_load(bc_ClassLoader* self, char* fullPath);
 static void load_import_internal(bc_ClassLoader* self, bc_Vector* ilimports,
                                  int i);
 
-static void CLBC_new_load_internal(bc_ClassLoader* self, char* full_path);
+static void load_import_new_load_internal(bc_ClassLoader* self,
+                                          char* full_path);
 
 static void load_import_already(bc_ClassLoader* self, bc_ClassLoader* cll);
 
@@ -445,16 +446,16 @@ static void load_import(bc_ClassLoader* self, bc_Vector* ilimports) {
                 if (entry->IsFile &&
                     bc_IsMatchExtension(entry->FileName, "bc")) {
                         char* p = bc_GetAbsolutePath(entry->FileName);
-                        CLBC_new_load(self, p);
+                        load_import_new_load(self, p);
                         MEM_FREE(p);
                 }
         }
 }
 
-static void CLBC_new_load(bc_ClassLoader* self, char* fullPath) {
+static void load_import_new_load(bc_ClassLoader* self, char* fullPath) {
         bc_CL_ERROR(self);
         bc_BeginNewConstant();
-        CLBC_new_load_internal(self, fullPath);
+        load_import_new_load_internal(self, fullPath);
         bc_EndNewConstant();
 }
 
@@ -473,12 +474,13 @@ static void load_import_internal(bc_ClassLoader* self, bc_Vector* ilimports,
                   bc_Ref2Str(import->Path));
         char* withExt = bc_ConcatString(bc_Ref2Str(import->Path), ".bc");
         char* fullPath = bc_ResolveScriptPath(withExt);
-        CLBC_new_load(self, fullPath);
+        load_import_new_load(self, fullPath);
         MEM_FREE(withExt);
         MEM_FREE(fullPath);
 }
 
-static void CLBC_new_load_internal(bc_ClassLoader* self, char* full_path) {
+static void load_import_new_load_internal(bc_ClassLoader* self,
+                                          char* full_path) {
         bc_CL_ERROR(self);
         bc_ScriptContext* ctx = bc_GetScriptContext();
         //そのファイルパスに対応した
