@@ -4,13 +4,13 @@
 #include "../../env/heap.h"
 #include "../../env/import_info.h"
 #include "../../env/script_context.h"
+#include "../../error.h"
 #include "../../il/il_import.h"
 #include "../../parse/parser.h"
 #include "../../util/file_entry.h"
 #include "../../util/io.h"
 #include "../../util/mem.h"
 #include "../../util/text.h"
-#include "class_loader_ilload_impl.h"
 
 // proto
 static void CLBC_import_internal(bc_ClassLoader* self, bc_Vector* ilimports,

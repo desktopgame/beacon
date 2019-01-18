@@ -7,6 +7,7 @@
 #include "../il/il_constructor_chain.h"
 #include "../il/il_factor_impl.h"
 #include "../il/il_field.h"
+#include "../il/il_function.h"
 #include "../il/il_import.h"
 #include "../il/il_method.h"
 #include "../il/il_namespace.h"
@@ -80,12 +81,15 @@ static void load_parameter_list(bc_ClassLoader* self, bc_Vector* list,
                                 bc_AST* asource);
 static void load_argument_list(bc_ClassLoader* self, bc_Vector* list,
                                bc_AST* asource);
+static void load_function(bc_ClassLoader* self, bc_AST* asource);
 //
 // load statement
 //
 static void load_body(struct bc_ClassLoader* self, bc_Vector* list,
                       struct bc_AST* source);
 static bc_ILStatement* load_stmt(bc_ClassLoader* self, bc_AST* asource);
+static bc_ILStatement* load_stmt_with_pos(bc_ClassLoader* self,
+                                          bc_AST* asource);
 static bc_ILInferencedTypeInit* load_inferenced_type_init(bc_ClassLoader* self,
                                                           bc_AST* asource);
 static bc_ILVariableDecl* load_variable_decl(bc_ClassLoader* self,
@@ -140,6 +144,7 @@ static bc_ILSubscript* CLIL_subscript(bc_ClassLoader* self, bc_AST* source);
 
 bc_ILToplevel* bc_LoadAST(bc_ClassLoader* self, bc_AST* a) {
         bc_ILToplevel* ret = bc_NewILToplevel();
+        self->ILCode = ret;
         for (int i = 0; i < a->Children->Length; i++) {
                 bc_AST* child = bc_AtVector(a->Children, i);
                 // import a
@@ -148,15 +153,19 @@ bc_ILToplevel* bc_LoadAST(bc_ClassLoader* self, bc_AST* a) {
                         load_import_list(self, child);
                         // namespace Foo { ... }
                 } else if (child->Tag == AST_NAMESPACE_DECL_T) {
+                        load_namespace_root(self, self->ILCode->NamespaceList,
+                                            child);
                         // load_namespace_root(
                         // self, self->ILCode->NamespaceList, child);
                         // print();
                 } else if (bc_IsStmtAST(child)) {
+                        load_body(self, self->ILCode->StatementList, child);
                         // load_body(self, self->ILCode->StatementList, child);
                         // def f() { ... }
                 } else if (child->Tag == AST_FUNCTION_DECL_T) {
-                        // class_loader_ilload_function(self, child);
+                        load_function(self, child);
                 } else {
+                        bc_FatalError();
                         // fprintf(stderr, "ast is not collected\n");
                         // bc_FatalError();
                 }
@@ -703,6 +712,21 @@ static void load_argument_list(bc_ClassLoader* self, bc_Vector* list,
         }
 }
 
+static void load_function(bc_ClassLoader* self, bc_AST* asource) {
+        assert(asource->Tag == AST_FUNCTION_DECL_T);
+        bc_AST* afunc_name = bc_AtAST(asource, 0);
+        bc_AST* atypeparams = bc_AtAST(asource, 1);
+        bc_AST* aparam_list = bc_AtAST(asource, 2);
+        bc_AST* afunc_body = bc_AtAST(asource, 3);
+        bc_AST* aret_name = bc_AtAST(asource, 4);
+        bc_ILFunction* ilfunc = bc_NewILFunction(afunc_name->Attr.StringVValue);
+        load_type_parameter(self, atypeparams, ilfunc->TypeParameters);
+        load_parameter_list(self, ilfunc->Parameters, aparam_list);
+        load_body(self, ilfunc->Statements, afunc_body);
+        load_generic_cache(aret_name, ilfunc->ReturnGCache);
+        bc_PushVector(self->ILCode->FunctionList, ilfunc);
+}
+
 static void load_body(bc_ClassLoader* self, bc_Vector* list, bc_AST* source) {
         if (source == NULL) {
                 return;
@@ -719,6 +743,16 @@ static void load_body(bc_ClassLoader* self, bc_Vector* list, bc_AST* source) {
                         bc_PushVector(list, stmt);
                 }
         }
+}
+
+static bc_ILStatement* load_stmt_with_pos(bc_ClassLoader* self,
+                                          bc_AST* asource) {
+        bc_ILStatement* stmt = load_stmt(self, asource);
+        if (stmt != NULL) {
+                stmt->Lineno = asource->Lineno;
+                assert(asource->Lineno >= 0);
+        }
+        return stmt;
 }
 
 static bc_ILStatement* load_stmt(bc_ClassLoader* self, bc_AST* asource) {
@@ -977,7 +1011,7 @@ static bc_ILDefer* load_defer(bc_ClassLoader* self, bc_AST* asource) {
         assert(asource->Tag == AST_STMT_DEFER_T);
         bc_AST* astmt = bc_FirstAST(asource);
         bc_ILDefer* ret = bc_NewILDefer();
-        ret->Task = load_stmt(self, astmt);
+        ret->Task = load_stmt_with_pos(self, astmt);
         return ret;
 }
 

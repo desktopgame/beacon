@@ -27,7 +27,6 @@
 #include "../../util/text.h"
 #include "../../vm/script_thread.h"
 #include "../../vm/symbol_entry.h"
-#include "class_loader_ilload_stmt_module_impl.h"
 
 // proto
 static void CLBC_parameter_list(bc_ClassLoader* self, bc_Namespace* scope,

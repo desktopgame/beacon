@@ -35,11 +35,10 @@
 #include "parameter.h"
 #include "script_context.h"
 
+#include "class_loader_il.h"
 #include "cll/class_loader_bcload_impl.h"
 #include "cll/class_loader_bcload_import_module_impl.h"
 #include "cll/class_loader_bcload_member_module_impl.h"
-#include "cll/class_loader_ilload_impl.h"
-#include "cll/class_loader_ilload_type_module_impl.h"
 #include "cll/class_loader_link_impl.h"
 #include "heap.h"
 #include "import_info.h"
@@ -122,7 +121,7 @@ void bc_DeleteClassLoader(bc_ClassLoader* self) {
 static void load_class(bc_ClassLoader* self) {
         assert(self != NULL);
         // AST -> IL へ
-        ILLoadClassLoader(self, self->SourceCode);
+        self->ILCode = bc_LoadAST(self, self->SourceCode);
         if (bc_GetLastPanic()) {
                 return;
         }
@@ -175,7 +174,7 @@ static bc_ClassLoader* load_special_class(bc_ClassLoader* self,
         cll->SourceCode = bc_ReleaseParserAST(p);
         bc_DestroyParser(p);
         // AST -> IL へ
-        ILLoadClassLoader(cll, cll->SourceCode);
+        cll->ILCode = bc_LoadAST(cll, cll->SourceCode);
         if (bc_GetLastPanic()) {
                 return cll;
         }

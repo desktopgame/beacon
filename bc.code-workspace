@@ -150,7 +150,12 @@
 			"script_thread.h": "c",
 			"il_factor_int_impl.h": "c",
 			"mutex.h": "c",
-			"rec_mutex.h": "c"
+			"rec_mutex.h": "c",
+			"il_top_level.h": "c",
+			"il_namespace.h": "c",
+			"il_type_impl.h": "c",
+			"il_constructor.h": "c",
+			"il_stmt_impl.h": "c"
 		},
 		"ruby.lint": {
 			"reek": true,
