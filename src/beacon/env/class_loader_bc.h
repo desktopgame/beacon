@@ -6,8 +6,15 @@ struct bc_Enviroment;
 struct bc_Namespace;
 struct bc_CallContext;
 
-struct bc_ClassLoader* CLBC_import_new(struct bc_ClassLoader* self,
-                                       char* fullPath);
+/**
+ * selfがfullPathをインポートするためのクラスローダーを作成し、
+ * selfと返されるクラスローダーの間に依存関係を構築します。
+ * @param self
+ * @param fullPath
+ * @return
+ */
+struct bc_ClassLoader* bc_NewClassLoaderForImport(struct bc_ClassLoader* self,
+                                                  char* fullPath);
 
 /**
  * 中間表現を読み込んでクラスを生成します。

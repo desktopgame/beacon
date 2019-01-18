@@ -162,7 +162,7 @@ static void delete_cache(bc_VectorItem item) {
 static bc_ClassLoader* load_special_class(bc_ClassLoader* self,
                                           bc_ClassLoader* cll,
                                           char* full_path) {
-        cll = CLBC_import_new(self, full_path);
+        cll = bc_NewClassLoaderForImport(self, full_path);
         // parser
         bc_Parser* p = bc_ParseFile(full_path);
         if (check_parser_error(p)) {
