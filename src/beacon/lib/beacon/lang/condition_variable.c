@@ -69,7 +69,7 @@ static void bc_condition_variable_nativeWait(bc_Method* parent, bc_Frame* fr,
                 g_cond_wait(&self->Cond, &rm);
                 g_rec_mutex_unlock(&rm);
         }
-        bc_EndHeapSafeInvoke();
+        bc_EndSyncHeap();
 }
 static void bc_condition_variable_nativeWaitTimed(bc_Method* parent,
                                                   bc_Frame* fr,
@@ -78,13 +78,18 @@ static void bc_condition_variable_nativeWaitTimed(bc_Method* parent,
         bc_Object* sync = bc_AtVector(fr->VariableTable, 1);
         bc_Long* timeout = bc_AtVector(fr->VariableTable, 2);
         gboolean gb = 1;
+        bc_BeginSyncHeap();
         if (sync->GType->CoreType == bc_GetMutexType()) {
                 gb = g_cond_timed_wait(&self->Cond, &((bc_Mutex*)sync)->Mutex,
                                        timeout->Value);
         } else if (sync->GType->CoreType == bc_GetRecMutexType()) {
+                GRecMutex rm = ((bc_RecMutex*)sync)->Mutex;
+                g_rec_mutex_lock(&rm);
                 gb = g_cond_timed_wait(
                     &self->Cond, &((bc_RecMutex*)sync)->Mutex, timeout->Value);
+                g_rec_mutex_unlock(&rm);
         }
+        bc_EndSyncHeap();
         bc_PushVector(fr->ValueStack, bc_GetBoolObject(gb));
 }
 static void bc_condition_variable_nativeSignal(bc_Method* parent, bc_Frame* fr,
