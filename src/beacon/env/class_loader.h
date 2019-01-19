@@ -36,6 +36,7 @@ typedef struct bc_ClassLoader {
         struct bc_ClassLoader* Parent;
         int Level;
         char* FileName;
+        bool Special;
         //	bool error;
 } bc_ClassLoader;
 
@@ -82,10 +83,11 @@ void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a);
 /**
  * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
  * beacon/langの読み込みのための使用されます。
+ * この関数では名前空間/型の登録のみを行います。
  * @param self
  * @param relativePath
  */
-void bc_SpecialLoadClassLoader(bc_ClassLoader* self, char* relativePath);
+void bc_LoadMapping(bc_ClassLoader* self, const char* relativePath);
 
 /**
  * このクラスローダーを開放します.

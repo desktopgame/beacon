@@ -2,11 +2,13 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "../lib/bc_library_interface.h"
+#include "../util/file_entry.h"
 #include "../util/io.h"
 #include "../util/mem.h"
 #include "../util/text.h"
 #include "../vm/script_thread.h"
 #include "class_loader.h"
+#include "class_loader_bc.h"
 #include "field.h"
 #include "generic_type.h"
 #include "heap.h"
@@ -25,6 +27,7 @@ static void delete_cache(bc_VectorItem item);
 static void delete_mcache(bc_NumericMapKey key, bc_NumericMapItem item);
 static void mark_static(bc_Field* item);
 static void boot(bc_ScriptContext* self);
+static void boot_entry(bc_ScriptContext* self, bc_FileEntry* e);
 
 static bc_ScriptContext* gScriptContext = NULL;
 static ScriptContextState gStat = SCTX_STATE_NONE;
@@ -263,55 +266,52 @@ static void boot(bc_ScriptContext* self) {
         bc_InitConditionVariable();
         //ブートストラップクラスローダー
         self->BootstrapClassLoader =
-            bc_NewClassLoader("bootstrap", CONTENT_LIB_T);
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Object.bc");
+            bc_NewClassLoader("bootstrap", CONTENT_LIB_T); /*
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Object.bc");
 
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Short.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Int.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Long.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Float.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Double.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Char.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Bool.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Null.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Void.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Short.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Int.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Long.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Float.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Double.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Char.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Bool.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Null.bc");
+         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
+                                   "beacon/lang/Void.bc");
+                                   */
 
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Iterable.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Iterator.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Array.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/String.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Console.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Exception.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Thread.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/StackTraceElement.bc");
-
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Synchronizable.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/Mutex.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/RecMutex.bc");
-        bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                  "beacon/lang/World.bc");
+        bc_Vector* files = bc_GetFiles("script-lib/beacon/lang");
+        for (int i = 0; i < files->Length; i++) {
+                bc_FileEntry* e = bc_AtVector(files, i);
+                boot_entry(self, e);
+        }
+        bc_LoadResolve();
+        bc_DeleteFiles(files);
         //退避していたコンテキストを復
         bc_EndNewConstant();
         self->IsLoadForBoot = false;
+}
+
+static void boot_entry(bc_ScriptContext* self, bc_FileEntry* e) {
+        if (!e->IsFile || !bc_IsMatchExtension(e->FileName, "bc")) {
+                return;
+        }
+        //最後のパスを取得する
+        char buffer[128];
+        bc_GetLastPathComponent(e->FileName, '/', buffer, 128);
+        // beaconからの相対パスでスクリプトを参照する
+        char fullPathBuffer[256];
+        sprintf(fullPathBuffer, "beacon/lang/%s", buffer);
+        g_message("Boot.Load:%s", fullPathBuffer);
+        bc_LoadMapping(self->BootstrapClassLoader, fullPathBuffer);
 }

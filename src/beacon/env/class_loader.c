@@ -67,6 +67,7 @@ bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type) {
         ret->TypeCaches = bc_NewVector();
         ret->FileName = bc_Strdup(filename);
         ret->Env->ContextRef = ret;
+        ret->Special = true;
         return ret;
 }
 
@@ -90,16 +91,16 @@ void bc_LoadPassASTClassLoader(bc_ClassLoader* self, bc_AST* a) {
         bc_EndNewConstant();
 }
 
-void bc_SpecialLoadClassLoader(bc_ClassLoader* self, char* relativePath) {
-        char* fullP = bc_ResolveScriptPath(relativePath);
+void bc_LoadMapping(bc_ClassLoader* self, const char* relativePath) {
+        char* fullPath = bc_ResolveScriptPath(relativePath);
         bc_ScriptContext* ctx = bc_GetScriptContext();
-        bc_ClassLoader* cll = bc_GetTreeMapValue(ctx->ClassLoaderMap, fullP);
+        bc_ClassLoader* cll = bc_GetTreeMapValue(ctx->ClassLoaderMap, fullPath);
         bc_BeginNewConstant();
         if (cll == NULL) {
-                cll = load_special_class(self, cll, fullP);
+                cll = load_special_class(self, cll, fullPath);
         }
         bc_EndNewConstant();
-        MEM_FREE(fullP);
+        MEM_FREE(fullPath);
 }
 
 void bc_DeleteClassLoader(bc_ClassLoader* self) {
@@ -163,6 +164,7 @@ static bc_ClassLoader* load_special_class(bc_ClassLoader* self,
                                           bc_ClassLoader* cll,
                                           char* full_path) {
         cll = bc_NewClassLoaderForImport(self, full_path);
+        cll->Special = true;
         // parser
         bc_Parser* p = bc_ParseFile(full_path);
         if (check_parser_error(p)) {

@@ -18,6 +18,13 @@
 #include "class_loader.h"
 #include "type_impl.h"
 
+typedef struct late_register_info {
+        bc_ClassLoader* ClassLoader;
+        bc_ILType* ILType;
+        bc_Type* Type;
+} late_register_info;
+static bc_Vector* gLateRegisterList = NULL;
+
 static void load_namespace_tree(bc_ClassLoader* self);
 static void load_namespace_list(bc_ClassLoader* self,
                                 bc_Vector* ilNamespacelist,
@@ -30,8 +37,15 @@ static void load_enum(bc_ClassLoader* self, bc_ILType* iltype,
                       bc_Namespace* parent);
 static void load_class(bc_ClassLoader* self, bc_ILType* iltype,
                        bc_Namespace* parent);
+static void load_register_class_common(bc_ClassLoader* self,
+                                       bc_Namespace* parent, bc_ILType* iltype,
+                                       bc_Type* tp, bc_Class* cls);
 static void load_interface(bc_ClassLoader* self, bc_ILType* iltype,
                            bc_Namespace* parent);
+static void load_register_interface_common(bc_ClassLoader* self,
+                                           bc_Namespace* parent,
+                                           bc_ILType* iltype, bc_Type* tp,
+                                           bc_Interface* inter);
 static void load_attach_native_method(bc_ClassLoader* self, bc_ILType* iltype,
                                       bc_Class* classz, bc_ILMethod* ilmethod,
                                       bc_Method* me);
@@ -61,6 +75,9 @@ static void load_import_new_load_internal(bc_ClassLoader* self,
                                           char* full_path);
 
 static void load_import_already(bc_ClassLoader* self, bc_ClassLoader* cll);
+static late_register_info* new_late_register_info(bc_ClassLoader* cll,
+                                                  bc_ILType* iltype,
+                                                  bc_Type* type);
 
 bc_ClassLoader* bc_NewClassLoaderForImport(bc_ClassLoader* self,
                                            char* full_path) {
@@ -84,6 +101,9 @@ void bc_LoadIL(bc_ClassLoader* self) {
 
 void bc_SpecialLoadIL(bc_ClassLoader* self) {
         bc_CL_ERROR(self);
+        if (gLateRegisterList == NULL) {
+                gLateRegisterList = bc_NewVector();
+        }
         bc_ScriptContext* ctx = bc_GetScriptContext();
         bc_ILToplevel* iltop = self->ILCode;
         //	load_import(self, self->ILCode->import_list);
@@ -111,6 +131,24 @@ void bc_LoadILStatements(bc_ClassLoader* self, bc_Vector* stmt_list,
                 bc_VectorItem e = bc_AtVector(stmt_list, i);
                 bc_ILStatement* s = (bc_ILStatement*)e;
                 bc_GenerateILStmt(s, dest, cctx);
+        }
+}
+
+void bc_LoadResolve() {
+        assert(gLateRegisterList != NULL);
+        for (int i = 0; i < gLateRegisterList->Length; i++) {
+                late_register_info* e = bc_AtVector(gLateRegisterList, i);
+                g_message("Boot.Resolve:%s",
+                          bc_Ref2Str(bc_GetTypeName(e->Type)));
+                if (e->ILType->Tag == ILTYPE_CLASS_T) {
+                        load_register_class_common(
+                            e->ClassLoader, e->Type->Location, e->ILType,
+                            e->Type, e->Type->Kind.Class);
+                } else if (e->ILType->Tag == ILTYPE_INTERFACE_T) {
+                        load_register_interface_common(
+                            e->ClassLoader, e->Type->Location, e->ILType,
+                            e->Type, e->Type->Kind.Interface);
+                }
         }
 }
 
@@ -317,6 +355,21 @@ static bc_Type* load_get_or_load_class(bc_ClassLoader* self,
 
 static void load_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                                 bc_ILType* iltype, bc_Type* tp, bc_Class* cls) {
+        if (self->Special) {
+                cls->Location = parent;
+                bc_AddTypeNamespace(parent, tp);
+                bc_PushVector(gLateRegisterList,
+                              new_late_register_info(self, iltype, tp));
+                return;
+        }
+        load_register_class_common(self, parent, iltype, tp, cls);
+        cls->Location = parent;
+        bc_AddTypeNamespace(parent, tp);
+}
+
+static void load_register_class_common(bc_ClassLoader* self,
+                                       bc_Namespace* parent, bc_ILType* iltype,
+                                       bc_Type* tp, bc_Class* cls) {
         g_message("Class.Register:%s", bc_Ref2Str(cls->Name));
         bc_InitGenericSelf(tp, iltype->Kind.Class->TypeParameters->Length);
         bc_DupTypeParameterList(iltype->Kind.Class->TypeParameters,
@@ -332,7 +385,15 @@ static void load_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                         assert(gtp != NULL);
                         if (gtp->CoreType->Tag == TYPE_CLASS_T) {
                                 cls->SuperClass = gtp;
+                                g_message(
+                                    "Class.SuperClass:%s extends %s",
+                                    bc_Ref2Str(bc_GetTypeName(tp)),
+                                    bc_Ref2Str(bc_GetTypeName(gtp->CoreType)));
                         } else if (gtp->CoreType->Tag == TYPE_INTERFACE_T) {
+                                g_message(
+                                    "Class.Implement:%s implements %s",
+                                    bc_Ref2Str(bc_GetTypeName(tp)),
+                                    bc_Ref2Str(bc_GetTypeName(gtp->CoreType)));
                                 bc_PushVector(cls->Implements, gtp);
                         } else
                                 assert(false);
@@ -355,10 +416,6 @@ static void load_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                 }
         }
         bc_DeleteCallContext(cctx);
-        cls->Location = parent;
-        if (tp->State != TYPE_PENDING) {
-                bc_AddTypeNamespace(parent, tp);
-        }
         //重複するインターフェイスを検出
         bc_Interface* inter = NULL;
         if ((inter = bc_IsValidInterface(tp))) {
@@ -397,6 +454,23 @@ static bc_Type* load_get_or_load_interface(bc_ClassLoader* self,
 static void load_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                                     bc_ILType* iltype, bc_Type* tp,
                                     bc_Interface* inter) {
+        if (self->Special) {
+                inter->Location = parent;
+                bc_AddTypeNamespace(parent, tp);
+                bc_PushVector(gLateRegisterList,
+                              new_late_register_info(self, iltype, tp));
+                return;
+        }
+        load_register_interface_common(self, parent, iltype, tp, inter);
+        //場所を設定
+        inter->Location = parent;
+        bc_AddTypeNamespace(parent, tp);
+}
+
+static void load_register_interface_common(bc_ClassLoader* self,
+                                           bc_Namespace* parent,
+                                           bc_ILType* iltype, bc_Type* tp,
+                                           bc_Interface* inter) {
         g_message("Interface.Register:%s", bc_Ref2Str(inter->Name));
         bc_InitGenericSelf(tp, iltype->Kind.Interface->TypeParameters->Length);
         bc_DupTypeParameterList(iltype->Kind.Interface->TypeParameters,
@@ -419,10 +493,7 @@ static void load_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                         bc_PushVector(inter->Implements, gtp);
                 }
         }
-        //場所を設定
-        inter->Location = parent;
         bc_DeleteCallContext(cctx);
-        bc_AddTypeNamespace(parent, tp);
         //重複するインターフェイスを検出
         bc_Interface* ovinter = NULL;
         if ((ovinter = bc_IsValidInterface(tp))) {
@@ -430,6 +501,7 @@ static void load_register_interface(bc_ClassLoader* self, bc_Namespace* parent,
                          bc_Ref2Str(ovinter->Name));
         }
 }
+
 // import
 static void load_import(bc_ClassLoader* self, bc_Vector* ilimports) {
         bc_CL_ERROR(self);
@@ -517,4 +589,14 @@ static void load_import_already(bc_ClassLoader* self, bc_ClassLoader* cll) {
                 bc_Panic(BCERROR_CHAIN_T, cll->FileName);
                 return;
         }
+}
+
+static late_register_info* new_late_register_info(bc_ClassLoader* cll,
+                                                  bc_ILType* iltype,
+                                                  bc_Type* type) {
+        late_register_info* ret = MEM_MALLOC(sizeof(late_register_info));
+        ret->ClassLoader = cll;
+        ret->ILType = iltype;
+        ret->Type = type;
+        return ret;
 }

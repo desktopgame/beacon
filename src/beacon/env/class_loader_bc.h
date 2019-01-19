@@ -27,4 +27,10 @@ void bc_LoadIL(struct bc_ClassLoader* self);
  * @param self
  */
 void bc_SpecialLoadIL(struct bc_ClassLoader* self);
+
+/**
+ * 実行時ディレクトリからの相対パスでファイルを仮読み込みします.
+ * beacon/langの読み込みのための使用されます。
+ */
+void bc_LoadResolve();
 #endif
