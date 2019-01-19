@@ -357,9 +357,12 @@ static void load_register_class(bc_ClassLoader* self, bc_Namespace* parent,
                                 bc_ILType* iltype, bc_Type* tp, bc_Class* cls) {
         if (self->Special) {
                 cls->Location = parent;
-                bc_AddTypeNamespace(parent, tp);
+                if (tp->State != TYPE_PENDING) {
+                        bc_AddTypeNamespace(parent, tp);
+                }
                 bc_PushVector(gLateRegisterList,
                               new_late_register_info(self, iltype, tp));
+                g_message("Boot.Special:%s", bc_Ref2Str(bc_GetTypeName(tp)));
                 return;
         }
         load_register_class_common(self, parent, iltype, tp, cls);

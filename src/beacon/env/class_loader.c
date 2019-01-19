@@ -67,7 +67,7 @@ bc_ClassLoader* bc_NewClassLoader(const char* filename, bc_ContentType type) {
         ret->TypeCaches = bc_NewVector();
         ret->FileName = bc_Strdup(filename);
         ret->Env->ContextRef = ret;
-        ret->Special = true;
+        ret->Special = false;
         return ret;
 }
 
