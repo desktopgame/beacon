@@ -266,30 +266,7 @@ static void boot(bc_ScriptContext* self) {
         bc_InitConditionVariable();
         //ブートストラップクラスローダー
         self->BootstrapClassLoader =
-            bc_NewClassLoader("bootstrap", CONTENT_LIB_T); /*
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Object.bc");
-
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Short.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Int.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Long.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Float.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Double.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Char.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Bool.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Null.bc");
-         bc_SpecialLoadClassLoader(self->BootstrapClassLoader,
-                                   "beacon/lang/Void.bc");
-                                   */
-
+            bc_NewClassLoader("bootstrap", CONTENT_LIB_T);
         bc_Vector* files = bc_GetFiles("script-lib/beacon/lang");
         for (int i = 0; i < files->Length; i++) {
                 bc_FileEntry* e = bc_AtVector(files, i);
