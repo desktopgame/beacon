@@ -47,15 +47,15 @@ namespace beacon::unsafe {
 		}
 
 		private:
-		Object rawTime;
-		def static native nativeRawTime() -> Object;
+		Long rawTime;
+		def static native nativeRawTime() -> Long;
 		def native nativeToString() -> String;
-		def static native nativeGetSecond(Object rawTime) -> Int;
-		def static native nativeGetMinute(Object rawTime) -> Int;
-		def static native nativeGetHour(Object rawTime) -> Int;
-		def static native nativeGetDay(Object rawTime) -> Int;
-		def static native nativeGetYear(Object rawTime) -> Int;
-		def static native nativeGetDayOfWeek(Object rawTime) -> Int;
-		def static native nativeGetDayOfYear(Object rawTime) -> Int;
+		def static native nativeGetSecond(Long rawTime) -> Int;
+		def static native nativeGetMinute(Long rawTime) -> Int;
+		def static native nativeGetHour(Long rawTime) -> Int;
+		def static native nativeGetDay(Long rawTime) -> Int;
+		def static native nativeGetYear(Long rawTime) -> Int;
+		def static native nativeGetDayOfWeek(Long rawTime) -> Int;
+		def static native nativeGetDayOfYear(Long rawTime) -> Int;
 	}
 }
