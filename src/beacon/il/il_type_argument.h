@@ -29,12 +29,6 @@ typedef struct bc_ILTypeArgument {
 bc_ILTypeArgument* bc_NewILTypeArgument();
 
 /**
- * 全ての型実引数を出力します.
- * @param iltype_args
- */
-void bc_PrintILTypeArgument(bc_Vector* iltype_args);
-
-/**
  * @param iltype_args
  * @param cctx
  * @return

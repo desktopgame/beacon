@@ -34,17 +34,6 @@ typedef struct bc_GenericCache {
 bc_GenericCache* bc_NewGenericCache();
 
 /**
- * 型変数つきの型宣言をインデント無しで出力します.
- * @param self
- */
-void bc_PrintGenericCache(bc_GenericCache* self);
-/**
- * 型変数つきの型宣言をインデント付きで出力します.
- * @param self
- */
-void bc_DumpGenericCache(bc_GenericCache* self, int depth);
-
-/**
  * @param self
  * @return
  */

@@ -24,42 +24,6 @@ bc_FQCNCache* bc_MallocFQCNCache(const char* filename, int lineno) {
         return ret;
 }
 
-void bc_DumpFQCNCache(bc_FQCNCache* self, int depth) {
-        bc_Printi(depth);
-        printf("type %s", bc_Ref2Str(self->Name));
-        bc_Println();
-        // X::C.call() のような呼び出しなら
-        if (self->Scope->Length > 0) {
-                bc_Printi(depth);
-                printf("scope");
-                bc_Println();
-                for (int i = 0; i < self->Scope->Length; i++) {
-                        bc_StringView sv =
-                            (bc_StringView)bc_AtVector(self->Scope, i);
-                        bc_Printi(depth + 1);
-                        printf("%s", bc_Ref2Str(sv));
-                        bc_Println();
-                }
-        }
-}
-
-void bc_PrintFQCNCache(bc_FQCNCache* self) {
-        if (self == NULL) {
-                printf("NULL");
-                return;
-        }
-        if (self->Scope->Length == 0) {
-                printf("%s", bc_Ref2Str(self->Name));
-        } else {
-                for (int i = 0; i < self->Scope->Length; i++) {
-                        printf("%s", bc_Ref2Str((bc_StringView)bc_AtVector(
-                                         self->Scope, i)));
-                        printf("::");
-                }
-                printf("%s", bc_Ref2Str(self->Name));
-        }
-}
-
 bc_Namespace* bc_GetScopeFQCN(bc_FQCNCache* self, bc_Namespace* current) {
         if (self->Scope->Length == 0) {
                 return current;
@@ -84,14 +48,6 @@ bc_Type* bc_GetTypeFQCN(bc_FQCNCache* self, bc_Namespace* current) {
                 ret = resolve_type(self, bc_GetLangNamespace(NULL));
         }
         return ret;
-}
-
-bc_Interface* bc_GetInterfaceFQCN(bc_FQCNCache* self, bc_Namespace* current) {
-        return bc_TypeToInterface(bc_GetTypeFQCN(self, current));
-}
-
-bc_Class* bc_GetClassFQCN(bc_FQCNCache* self, bc_Namespace* current) {
-        return bc_TypeToClass(bc_GetTypeFQCN(self, current));
 }
 
 char* bc_FQCNCacheToString(bc_FQCNCache* self) {

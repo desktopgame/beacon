@@ -17,29 +17,6 @@ bc_GenericCache* bc_NewGenericCache() {
         return ret;
 }
 
-void bc_PrintGenericCache(bc_GenericCache* self) {
-        bc_PrintFQCNCache(self->FQCN);
-        if (self->TypeArgs->Length <= 0) {
-                return;
-        }
-        printf("[");
-        for (int i = 0; i < self->TypeArgs->Length; i++) {
-                bc_GenericCache* e =
-                    (bc_GenericCache*)bc_AtVector(self->TypeArgs, i);
-                bc_PrintGenericCache(e);
-                if (i != self->TypeArgs->Length - 1) {
-                        printf(", ");
-                }
-        }
-        printf("]");
-}
-
-void bc_DumpGenericCache(bc_GenericCache* self, int depth) {
-        bc_Printi(depth);
-        bc_PrintGenericCache(self);
-        bc_Println();
-}
-
 char* bc_GenericCacheToString(bc_GenericCache* self) {
         bc_Buffer* sb = bc_NewBuffer();
         // Namespace::Class

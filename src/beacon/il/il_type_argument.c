@@ -14,22 +14,6 @@ bc_ILTypeArgument* bc_NewILTypeArgument() {
         return ret;
 }
 
-void bc_PrintILTypeArgument(bc_Vector* iltype_args) {
-        if (iltype_args->Length == 0) {
-                return;
-        }
-        printf("<");
-        for (int i = 0; i < iltype_args->Length; i++) {
-                bc_ILTypeArgument* e =
-                    (bc_ILTypeArgument*)bc_AtVector(iltype_args, i);
-                bc_PrintGenericCache(e->GCache);
-                if (i != iltype_args->Length - 1) {
-                        printf(",");
-                }
-        }
-        printf("<");
-}
-
 void bc_ResolveILTypeArgument(bc_Vector* iltype_args, bc_CallContext* cctx) {
         for (int i = 0; i < iltype_args->Length; i++) {
                 bc_ILTypeArgument* e =

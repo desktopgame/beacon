@@ -38,19 +38,6 @@ typedef struct bc_FQCNCache {
 bc_FQCNCache* bc_MallocFQCNCache(const char* filename, int lineno);
 
 /**
- * FQCNキャッシュを出力します.
- * @param self
- * @param depth
- */
-void bc_DumpFQCNCache(bc_FQCNCache* self, int depth);
-
-/**
- * FQCNを切り詰めて改行せずに表示します.
- * @param self
- */
-void bc_PrintFQCNCache(bc_FQCNCache* self);
-
-/**
  * FQCNが示す名前空間を返します.
  * X::Y ではなく、 Y の場合は NULL を返します。
  * @param self
@@ -69,26 +56,6 @@ struct bc_Namespace* bc_GetScopeFQCN(bc_FQCNCache* self,
  */
 struct bc_Type* bc_GetTypeFQCN(bc_FQCNCache* self,
                                struct bc_Namespace* current);
-
-/**
- * X::Y の表すタイプを返します.
- * 絶対参照のときは引数 current は無視されます。
- * @param self
- * @param current
- * @return
- */
-struct bc_Interface* bc_GetInterfaceFQCN(bc_FQCNCache* self,
-                                         struct bc_Namespace* current);
-
-/**
- * X::Y の表すタイプを返します.
- * 絶対参照のときは引数 current は無視されます。
- * @param self
- * @param current
- * @return
- */
-struct bc_Class* bc_GetClassFQCN(bc_FQCNCache* self,
-                                 struct bc_Namespace* current);
 
 /**
  * 文字列に変換して返します.
