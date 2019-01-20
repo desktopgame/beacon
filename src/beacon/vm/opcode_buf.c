@@ -6,7 +6,6 @@
 
 // proto
 static void delete_label(bc_VectorItem item);
-static void copy_buf(bc_OpcodeBuf* src, bc_OpcodeBuf* dst);
 
 bc_OpcodeBuf* bc_NewOpcodeBuf() {
         bc_OpcodeBuf* ret = (bc_OpcodeBuf*)MEM_MALLOC(sizeof(bc_OpcodeBuf));
@@ -33,13 +32,6 @@ int bc_AddNOPOpcodeBuf(bc_OpcodeBuf* self) {
         return len;
 }
 
-bc_OpcodeBuf* bc_MergeOpcodeBuf(bc_OpcodeBuf* a, bc_OpcodeBuf* b) {
-        bc_OpcodeBuf* ret = bc_NewOpcodeBuf();
-        copy_buf(a, ret);
-        copy_buf(b, ret);
-        return ret;
-}
-
 void bc_DeleteOpcodeBuf(bc_OpcodeBuf* self) {
         if (self == NULL) {
                 return;
@@ -53,20 +45,4 @@ void bc_DeleteOpcodeBuf(bc_OpcodeBuf* self) {
 static void delete_label(bc_VectorItem item) {
         bc_Label* l = (bc_Label*)item;
         bc_DeleteLabel(l);
-}
-
-static void copy_buf(bc_OpcodeBuf* src, bc_OpcodeBuf* dst) {
-        for (int i = 0; i < src->Instructions->Length; i++) {
-                bc_VectorItem e = bc_AtVector(src->Instructions, i);
-                if (e == OP_GOTO || e == OP_GOTO_IF_FALSE ||
-                    e == OP_GOTO_IF_TRUE) {
-                        bc_AddOpcodeBuf(dst, e);
-                        bc_Label* lb =
-                            (bc_Label*)bc_AtVector(src->Instructions, ++i);
-                        bc_AddOpcodeBuf(dst, e);
-                        bc_PushVector(dst->LabelTable, lb);
-                } else {
-                        bc_AddOpcodeBuf(dst, e);
-                }
-        }
 }
