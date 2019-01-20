@@ -56,37 +56,6 @@ void bc_AddRangeEnviroment(bc_Enviroment* self, int lineno) {
         }
 }
 
-void bc_DumpEnviromentOp(bc_Enviroment* self, int depth) {
-        bc_OpcodeBuf* buf = self->Bytecode;
-        bc_LineRange* lr = NULL;
-        int lrPos = -1;
-        for (int i = 0; i < buf->Instructions->Length; i++) {
-                bc_Printi(depth);
-                i = bc_PrintOpcode(buf->Instructions, i);
-                if (!bc_IsEmptyVector(self->LineRangeTable)) {
-                        if (lr == NULL) {
-                                lr = bc_AtVector(self->LineRangeTable, 0);
-                                lrPos = 0;
-                        } else {
-                                if (i > lr->EndOffset) {
-                                        lrPos++;
-                                        if (lrPos <
-                                            self->LineRangeTable->Length) {
-                                                lr = bc_AtVector(
-                                                    self->LineRangeTable,
-                                                    lrPos);
-                                        }
-                                }
-                        }
-                }
-                if (lr != NULL) {
-                        printf("<%d>", lr->Lineno);
-                }
-                bc_Println();
-        }
-        bc_Println();
-}
-
 int bc_AddCShortEnviroment(bc_Enviroment* self, short s) {
         int len = self->ConstantPool->Length;
         add_constant(self, (bc_Object*)bc_NewShort(s));

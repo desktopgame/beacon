@@ -50,13 +50,6 @@ bc_Label* bc_AddLabelOpcodeBuf(bc_OpcodeBuf* self, int index);
 int bc_AddNOPOpcodeBuf(bc_OpcodeBuf* self);
 
 /**
- * オペコードの一覧を出力します.
- * @param self
- * @param depth
- */
-void bc_DumpOpcodeBuf(bc_OpcodeBuf* self, int depth);
-
-/**
  * a の 末尾に b を統合した新しい OpcodeBuf を作成します.
  * @param a
  * @param b

@@ -33,15 +33,6 @@ int bc_AddNOPOpcodeBuf(bc_OpcodeBuf* self) {
         return len;
 }
 
-void bc_DumpOpcodeBuf(bc_OpcodeBuf* self, int depth) {
-        for (int i = 0; i < self->Instructions->Length; i++) {
-                bc_Printi(depth);
-                i = bc_PrintOpcode(self->Instructions, i);
-                bc_Println();
-        }
-        bc_Println();
-}
-
 bc_OpcodeBuf* bc_MergeOpcodeBuf(bc_OpcodeBuf* a, bc_OpcodeBuf* b) {
         bc_OpcodeBuf* ret = bc_NewOpcodeBuf();
         copy_buf(a, ret);

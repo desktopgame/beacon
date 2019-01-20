@@ -201,18 +201,4 @@ typedef enum bc_Opcode {
         OP_SIZE,
 } bc_Opcode;
 
-/**
- * オペコードを出力します.
- * @param source
- * @param index
- */
-int bc_PrintOpcode(bc_Vector* source, int index);
-
-/**
- * オペコードを出力します.
- * @param fp
- * @param source
- * @param index
- */
-int bc_FprintOpcode(FILE* fp, bc_Vector* source, int index);
 #endif  // !SIGNAL_VM_OPCODE_H

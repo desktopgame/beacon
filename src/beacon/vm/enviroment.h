@@ -47,14 +47,6 @@ bc_Enviroment* bc_NewEnviroment();
 void bc_AddRangeEnviroment(bc_Enviroment* self, int lineno);
 
 /**
- * この Enviroment に含まれるオペコードの一覧をダンプします.
- * DumpOpcodeBuf との違いは、行番号を出力できる点です。
- * @param self
- * @param depth
- */
-void bc_DumpEnviromentOp(bc_Enviroment* self, int depth);
-
-/**
  * 定数プールに整数を追加して、その位置を返します.
  * @param self
  * @param s
