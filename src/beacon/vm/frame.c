@@ -10,8 +10,6 @@
 // proto
 static void delete_defctx(bc_VectorItem e);
 static void remove_from_parent(bc_Frame* self);
-static void mark_recursive(bc_Frame* self);
-static void frame_mark_defer(bc_Frame* self);
 static void collect_recursive(bc_Frame* self, bc_Cache* cache);
 static void frame_cache_defer(bc_Frame* self, bc_Cache* cache);
 
@@ -42,11 +40,6 @@ bc_Frame* bc_SubFrame(bc_Frame* parent) {
         ret->ContextRef = parent->ContextRef;
         bc_PushVector(parent->Children, ret);
         return ret;
-}
-
-void bc_MarkAllFrame(bc_Frame* self) {
-        //全ての子要素を巡回してマーキング
-        mark_recursive(self);
 }
 
 void bc_CollectAllFrame(bc_Frame* self, bc_Cache* cache) {
@@ -87,39 +80,6 @@ static void remove_from_parent(bc_Frame* self) {
         if (self->Parent != NULL) {
                 int idx = bc_FindVector(self->Parent->Children, self);
                 bc_RemoveVector(self->Parent->Children, idx);
-        }
-}
-
-static void mark_recursive(bc_Frame* self) {
-        for (int i = 0; i < self->Children->Length; i++) {
-                bc_Frame* e = (bc_Frame*)bc_AtVector(self->Children, i);
-                mark_recursive(e);
-        }
-        for (int i = 0; i < self->ValueStack->Length; i++) {
-                bc_Object* e = (bc_Object*)bc_AtVector(self->ValueStack, i);
-                bc_MarkAllObject(e);
-        }
-        for (int i = 0; i < self->VariableTable->Length; i++) {
-                bc_Object* e = (bc_Object*)bc_AtVector(self->VariableTable, i);
-                bc_MarkAllObject(e);
-        }
-        // deferのために一時的に保存された領域
-        frame_mark_defer(self);
-        //例外をマークする
-        bc_MarkAllObject(self->Exception);
-}
-
-static void frame_mark_defer(bc_Frame* self) {
-        if (self->DeferList == NULL) {
-                return;
-        }
-        for (int i = 0; i < self->DeferList->Length; i++) {
-                bc_DeferContext* defctx = bc_AtVector(self->DeferList, i);
-                bc_Vector* bind = defctx->VariableTable;
-                for (int j = 0; j < bind->Length; j++) {
-                        bc_Object* e = bc_AtVector(bind, j);
-                        bc_MarkAllObject(e);
-                }
         }
 }
 

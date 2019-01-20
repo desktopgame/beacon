@@ -128,12 +128,6 @@ bc_Frame* bc_NewFrame();
 bc_Frame* bc_SubFrame(bc_Frame* parent);
 
 /**
- * このフレームの変数を全てマークします.
- * @param self
- */
-void bc_MarkAllFrame(bc_Frame* self);
-
-/**
  * このフレームの全ての変数をキャッシュへ追加します。
  * @param self
  * @param cache
