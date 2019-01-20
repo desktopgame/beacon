@@ -10,7 +10,6 @@
 #ifndef BEACON_VM_FRAME_H
 #define BEACON_VM_FRAME_H
 #include <stdlib.h>
-#include "../util/stack.h"
 #include "../util/vector.h"
 #include "enviroment.h"
 struct bc_Object;

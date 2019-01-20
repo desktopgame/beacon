@@ -10,7 +10,6 @@
 #pragma once
 #ifndef BEACON_VM_VM_H
 #define BEACON_VM_VM_H
-#include "../util/stack.h"
 #include "../util/vector.h"
 #include "enviroment.h"
 #include "frame.h"

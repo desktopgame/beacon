@@ -12,7 +12,6 @@
 #define BEACON_ENV_SCRIPT_CONTEXT_H
 #include <stdbool.h>
 #include "../util/numeric_map.h"
-#include "../util/stack.h"
 #include "../util/tree_map.h"
 #include "../util/vector.h"
 struct bc_Heap;

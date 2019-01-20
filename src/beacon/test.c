@@ -12,7 +12,6 @@
 #include "util/file_entry.h"
 #include "util/io.h"
 #include "util/mem.h"
-#include "util/stack.h"
 #include "util/string_buffer.h"
 #include "util/text.h"
 #include "util/tree_map.h"
