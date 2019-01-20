@@ -85,18 +85,6 @@ const char* bc_Ref2Str(bc_StringView ref) {
         return str;
 }
 
-void bc_DumpStringPool(FILE* fp) {
-        g_rec_mutex_lock(&gPMtx);
-        assert(gMap != NULL);
-        assert(gVec != NULL);
-        fprintf(fp, "string pool---\n");
-        for (int i = 0; i < gVec->Length; i++) {
-                char* e = (char*)bc_AtVector(gVec, i);
-                fprintf(fp, "    [%d] = %s\n", i, e);
-        }
-        g_rec_mutex_unlock(&gPMtx);
-}
-
 void bc_DestroyStringPool() {
         bc_DeleteTreeMap(gMap, bc_TreeMapDeleterOfNull);
         bc_DeleteVector(gVec, bc_VectorDeleterOfNull);

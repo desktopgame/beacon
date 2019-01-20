@@ -69,12 +69,6 @@ bc_StringView bc_Str2Ref(const char* str);
 const char* bc_Ref2Str(bc_StringView ref);
 
 /**
- * プールに格納された全ての文字列を出力します.
- * @param fp
- */
-void bc_DumpStringPool(FILE* fp);
-
-/**
  * 文字列プールを解放します.
  */
 void bc_DestroyStringPool();
