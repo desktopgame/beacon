@@ -21,19 +21,6 @@ typedef enum bc_AccessLevel {
 } bc_AccessLevel;
 
 /**
- * アクセスレベルを出力します.
- * @param level
- */
-void bc_PrintAccess(bc_AccessLevel level);
-
-/**
- * @param self
- * @param other
- * @return selfがotherよりも堅牢なアクセスレベルならtrue
- */
-bool bc_IsSecureAccess(bc_AccessLevel self, bc_AccessLevel other);
-
-/**
  * @param self
  * @param other
  * @return selfがotherよりも脆弱なアクセスレベルならtrue
