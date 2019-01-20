@@ -23,14 +23,6 @@ void bc_PushVector(bc_Vector* self, bc_VectorItem item) {
         self->Length++;
 }
 
-bc_Vector* bc_AppendVector(bc_Vector* self, bc_VectorItem item) {
-        if (self == NULL) {
-                self = bc_NewVector();
-        }
-        bc_PushVector(self, item);
-        return self;
-}
-
 bc_VectorItem bc_TopVector(bc_Vector* self) {
         assert(self != NULL);
         assert(self->Length > 0);
@@ -47,21 +39,6 @@ bc_VectorItem bc_PopVector(bc_Vector* self) {
         return ret;
 }
 
-void bc_InsertVector(bc_Vector* self, int index, bc_VectorItem item) {
-        assert(index >= 0 && index < (self->Length + 1));
-        if (self->Capacity < (self->Length + 1)) {
-                bc_ReserveVector(self);
-        }
-        bc_VectorItem t = self->Memory[index];
-        for (int i = index; i < self->Length; i++) {
-                bc_VectorItem b = self->Memory[i + 1];
-                self->Memory[i + 1] = t;
-                t = b;
-        }
-        self->Memory[index] = item;
-        self->Length++;
-}
-
 bc_VectorItem bc_RemoveVector(bc_Vector* self, int index) {
         assert(index >= 0 && index < self->Length);
         bc_VectorItem ret = self->Memory[index];
@@ -70,12 +47,6 @@ bc_VectorItem bc_RemoveVector(bc_Vector* self, int index) {
         }
         self->Length--;
         return ret;
-}
-
-void bc_PackVector(bc_Vector* self) {
-        assert(self != NULL);
-        self->Memory = MEM_REALLOC(self->Memory, SLOT_SIZE * self->Length);
-        self->Capacity = self->Length;
 }
 
 int bc_ReserveVector(bc_Vector* self) {
@@ -107,18 +78,6 @@ bc_VectorItem bc_AtVector(bc_Vector* self, int index) {
         return self->Memory[index];
 }
 
-bc_Vector* bc_SubVector(bc_Vector* self, int offset, int len) {
-        assert(offset >= 0);
-        if (len == 0) {
-                return bc_NewVector();
-        }
-        bc_Vector* v = bc_NewVector();
-        for (int i = offset; i < offset + len; i++) {
-                bc_PushVector(v, bc_AtVector(self, i));
-        }
-        return v;
-}
-
 bool bc_IsEmptyVector(bc_Vector* self) { return self->Length == 0; }
 
 int bc_FindVector(bc_Vector* self, bc_VectorItem item) {
@@ -131,10 +90,6 @@ int bc_FindVector(bc_Vector* self, bc_VectorItem item) {
                 }
         }
         return pos;
-}
-
-bool bc_IsContainsVector(bc_Vector* self, bc_VectorItem item) {
-        return bc_FindVector(self, item);
 }
 
 void bc_ClearVector(bc_Vector* self) {
@@ -177,16 +132,26 @@ void bc_CopyVector(bc_Vector* src, bc_Vector* dst) {
         }
 }
 
-void bc_EachVector(bc_Vector* self, bc_VectorAction a) {
-        for (int i = 0; i < self->Length; i++) {
-                a(bc_AtVector(self, i));
-        }
-}
-
 void bc_MergeVector(bc_Vector* src, bc_Vector* dst) {
         for (int i = 0; i < src->Length; i++) {
                 bc_VectorItem e = bc_AtVector(src, i);
                 bc_PushVector(dst, e);
         }
 }
+
+void bc_InsertVector(bc_Vector* self, int index, bc_VectorItem item) {
+        assert(index >= 0 && index < (self->Length + 1));
+        if (self->Capacity < (self->Length + 1)) {
+                bc_ReserveVector(self);
+        }
+        bc_VectorItem t = self->Memory[index];
+        for (int i = index; i < self->Length; i++) {
+                bc_VectorItem b = self->Memory[i + 1];
+                self->Memory[i + 1] = t;
+                t = b;
+        }
+        self->Memory[index] = item;
+        self->Length++;
+}
+
 #undef SLOT_SIZE

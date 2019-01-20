@@ -60,14 +60,6 @@ bc_Vector* bc_MallocVector(const char* filename, int lineno);
 void bc_PushVector(bc_Vector* self, bc_VectorItem item);
 
 /**
- * selfが空なら新規作成して返します.
- * @param self
- * @param item
- * @return
- */
-bc_Vector* bc_AppendVector(bc_Vector* self, bc_VectorItem item);
-
-/**
  * 末尾の要素を削除せずに返します.
  * @param self
  * @return
@@ -82,27 +74,11 @@ bc_VectorItem bc_TopVector(bc_Vector* self);
 bc_VectorItem bc_PopVector(bc_Vector* self);
 
 /**
- * 指定位置に値を挿入します.
- * indexから末尾までの要素を一つ右にシフトします。
- * 次に index を item で上書きします。
- * @param self
- * @param index
- * @param item
- */
-void bc_InsertVector(bc_Vector* self, int index, bc_VectorItem item);
-
-/**
  * 指定位置の要素を削除します.
  * @param self
  * @param index
  */
 bc_VectorItem bc_RemoveVector(bc_Vector* self, int index);
-
-/**
- * 容量を圧縮します.
- * @param self
- */
-void bc_PackVector(bc_Vector* self);
 
 /**
  * 容量を拡張します.
@@ -129,14 +105,6 @@ void bc_AssignVector(bc_Vector* self, int index, bc_VectorItem item);
 bc_VectorItem bc_AtVector(bc_Vector* self, int index);
 
 /**
- * @param self
- * @param offset
- * @param len
- * @return
- */
-bc_Vector* bc_SubVector(bc_Vector* self, int offset, int len);
-
-/**
  * 空なら true.
  * @param self
  * @return
@@ -150,14 +118,6 @@ bool bc_IsEmptyVector(bc_Vector* self);
  * @return 見つからなければ -1
  */
 int bc_FindVector(bc_Vector* self, bc_VectorItem item);
-
-/**
- * 先頭から検索して一致するものがあるなら true を返します.
- * @param self
- * @param item
- * @return 見つからなければ false
- */
-bool bc_IsContainsVector(bc_Vector* self, bc_VectorItem item);
 
 /**
  * 中身を空にします.
@@ -198,14 +158,19 @@ bc_Vector* bc_CloneVector(bc_Vector* source);
 void bc_CopyVector(bc_Vector* src, bc_Vector* dst);
 
 /**
- * @param self
- * @param a
- */
-void bc_EachVector(bc_Vector* self, bc_VectorAction a);
-
-/**
  * @param src
  * @param dst
  */
 void bc_MergeVector(bc_Vector* src, bc_Vector* dst);
+
+/**
+ * 指定位置に値を挿入します.
+ * indexから末尾までの要素を一つ右にシフトします。
+ * 次に index を item で上書きします。
+ * @param self
+ * @param index
+ * @param item
+ */
+void bc_InsertVector(bc_Vector* self, int index, bc_VectorItem item);
+
 #endif  // !SIGNAL_UTIL_VECTOR_H
