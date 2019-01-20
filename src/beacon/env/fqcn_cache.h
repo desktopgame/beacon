@@ -69,12 +69,4 @@ char* bc_FQCNCacheToString(bc_FQCNCache* self);
  * @param self
  */
 void bc_DeleteFQCNCache(bc_FQCNCache* self);
-
-/**
- * 二つが同じなら true.
- * @param a
- * @param b
- * @return
- */
-bool bc_EqualsFQCNCache(bc_FQCNCache* a, bc_FQCNCache* b);
 #endif  // !SIGNAL_ENV_FQCN_CACHE_H

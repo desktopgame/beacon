@@ -51,25 +51,6 @@ void bc_DeleteGenericCache(bc_GenericCache* self) {
         MEM_FREE(self);
 }
 
-bool bc_EqualsGenericCache(bc_GenericCache* a, bc_GenericCache* b) {
-        if (a->TypeArgs->Length != b->TypeArgs->Length) {
-                return false;
-        }
-        if (!bc_EqualsFQCNCache(a->FQCN, b->FQCN)) {
-                return false;
-        }
-        if (a == b) {
-                return true;
-        }
-        for (int i = 0; i < a->TypeArgs->Length; i++) {
-                bc_GenericCache* ag = bc_AtVector(a->TypeArgs, i);
-                bc_GenericCache* bg = bc_AtVector(b->TypeArgs, i);
-                if (!bc_EqualsGenericCache(ag, bg)) {
-                        return false;
-                }
-        }
-        return true;
-}
 // private
 static void tree_delete(bc_VectorItem item) {
         bc_GenericCache* e = (bc_GenericCache*)item;

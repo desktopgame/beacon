@@ -72,22 +72,6 @@ void bc_DeleteFQCNCache(bc_FQCNCache* self) {
         MEM_FREE(self);
 }
 
-bool bc_EqualsFQCNCache(bc_FQCNCache* a, bc_FQCNCache* b) {
-        if (a->Name != b->Name || a->Scope->Length != b->Scope->Length) {
-                return false;
-        }
-        if (a == b) {
-                return true;
-        }
-        for (int i = 0; i < a->Scope->Length; i++) {
-                bc_StringView as = (bc_StringView)bc_AtVector(a->Scope, i);
-                bc_StringView bs = (bc_StringView)bc_AtVector(b->Scope, i);
-                if (as != bs) {
-                        return false;
-                }
-        }
-        return true;
-}
 // private
 static bc_Type* resolve_type(bc_FQCNCache* self, bc_Namespace* current) {
         // Y形式

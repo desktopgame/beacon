@@ -45,10 +45,4 @@ char* bc_GenericCacheToString(bc_GenericCache* self);
  */
 void bc_DeleteGenericCache(bc_GenericCache* self);
 
-/**
- * @param a
- * @param b
- * @return
- */
-bool bc_EqualsGenericCache(bc_GenericCache* a, bc_GenericCache* b);
 #endif  // !SIGNAL_ENV_GENERIC_CACHE_H
