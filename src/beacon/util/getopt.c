@@ -6,6 +6,7 @@
  * Released under the MIT license
  * https://github.com/takamin/win-c/blob/master/LICENSE
  */
+#ifdef _WIN32
 #include "getopt.h"
 #include <stdio.h>
 #include <string.h>
@@ -259,3 +260,4 @@ const struct option* longopts, int* longindex)
 return -1;
 }
 ********************************************************/
+#endif

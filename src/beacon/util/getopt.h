@@ -15,6 +15,7 @@
  * Released under the MIT license
  * https://github.com/takamin/win-c/blob/master/LICENSE
  */
+#ifdef _WIN32
 #ifndef _GETOPT_H_
 #define _GETOPT_H_
 
@@ -49,3 +50,4 @@ const struct option* longopts, int* longindex);
 }
 #endif  // __cplusplus
 #endif  // _GETOPT_H_
+#endif
