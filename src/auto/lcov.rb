@@ -43,10 +43,19 @@ end
 if(Dir.exist?("lcov/beacon")) then
 	FileUtils.rm_r("lcov/beacon")
 end
+if(Dir.exist?("CMakeFiles")) then
+	FileUtils.rm_r("CMakeFiles")
+end
+if(File.exist?("CMakeCache.txt")) then
+	File.delete("CMakeCache.txt")
+end
 if(File.exist?("lcov/index.html")) then
 	File.delete("lcov/index.html")
 end
 #makeを実行する
+o, e, s = Open3.capture3("cmake -D CMAKE_BUILD_TYPE=Debug -D JNI_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include -D JNI_NATIVE_INCLUDE_DIR=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/include/darwin .")
+p e
+p
 o, e, s = Open3.capture3("make")
 p e
 p
