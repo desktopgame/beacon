@@ -13,12 +13,6 @@
 #include "ast.h"
 
 /**
- * @param b
- * @return
- */
-bc_AST* bc_NewASTBool(bool b);
-
-/**
  * trueを表す要素を作成します.
  * @return
  */
@@ -45,29 +39,12 @@ bc_AST* bc_NewASTNull();
 bc_AST* bc_NewASTAs(bc_AST* afact, bc_AST* atypename);
 
 /**
- * 名前参照を表す要素を作成します.
- * 名前参照には identifier だけで構成される変数参照と、
- * 名前空間とクラス名を連結した 静的フィールド参照が存在します。
- * @param atypename
- * @return
- */
-bc_AST* bc_NewASTNameReference(bc_AST* atypename);
-
-/**
  * 変数を表す要素を作成します.
  * @param a
  * @param atype_args
  * @return
  */
 bc_AST* bc_NewASTVariable(bc_AST* a, bc_AST* atype_args);
-
-/**
- * 変数を表す要素を作成します.
- * @param str
- * @param atype_args
- * @return
- */
-bc_AST* bc_NewASTVariableFromString(bc_StringView str, bc_AST* atype_args);
 
 /**
  * 関数呼び出し演算子を表す要素を作成します.
@@ -134,11 +111,4 @@ bc_AST* bc_NewASTExplicitBiOperator(bc_AST* afact, bc_OperatorType type,
  * @return
  */
 bc_AST* bc_NewASTExplicitUOperator(bc_AST* afact, bc_OperatorType type);
-
-/**
- * @param afact
- * @param aindex
- * @return
- */
-bc_AST* bc_NewASTSubscriptAccess(bc_AST* afact, bc_AST* aindex);
 #endif  // !SIGNAL_AST_AST_NEW_FACTOR_H

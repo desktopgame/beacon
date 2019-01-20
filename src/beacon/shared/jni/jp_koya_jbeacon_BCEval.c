@@ -200,8 +200,9 @@ static bool bc_read_symbol(JNIEnv* env, jobject table, bc_AST* a) {
                             keyv, bc_NewASTChar(jobject2jchar(env, valueE)));
                 } else if ((*env)->IsInstanceOf(env, valueE, bool_cls) ==
                            JNI_TRUE) {
+                        bool b = jobject2jboolean(env, valueE);
                         astmt = bc_NewASTInject(
-                            keyv, bc_NewASTBool(jobject2jboolean(env, valueE)));
+                            keyv, b ? bc_NewASTTrue() : bc_NewASTFalse());
                 } else if ((*env)->IsInstanceOf(env, valueE, string_cls) ==
                            JNI_TRUE) {
                         jstring valuej = (jstring)valueE;
