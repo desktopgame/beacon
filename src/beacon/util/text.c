@@ -69,18 +69,6 @@ char* bc_Strdup(const char* source) {
 #endif
 }
 
-bool bc_IsBlankText(const char* str) {
-        assert(str != NULL);
-        int len = strlen(str);
-        for (int i = 0; i < len; i++) {
-                char e = str[i];
-                if (e != ' ' && e != '\n' && !isspace(e)) {
-                        return false;
-                }
-        }
-        return true;
-}
-
 char* bc_ConcatString(const char* a, const char* b) {
 #if defined(_MSC_VER)
         int alen = strlen(a);
@@ -133,49 +121,6 @@ char* bc_GetLineAt(const char* src, int lineno) {
         char* ret = buf->Text;
         MEM_FREE(buf);
         return ret;
-}
-
-char* bc_JoinString(bc_Vector* v, char* join) {
-        if (v == NULL || v->Length == 0) {
-                return NULL;
-        }
-        // FIXME:もうちょっと無駄をなくせるはず
-        char* head = bc_Strdup((char*)bc_AtVector(v, 0));
-        int ptr = strlen(head);
-        for (int i = 1; i < v->Length; i++) {
-                char* e = (char*)bc_AtVector(v, i);
-                if (i <= (v->Length - 1) && join != NULL) {
-                        char* conn = bc_ConcatString(head, join);
-                        MEM_FREE(head);
-                        head = conn;
-                }
-                char* ret = bc_ConcatString(head, e);
-                MEM_FREE(head);
-                head = ret;
-        }
-        return head;
-}
-
-bool bc_IsIncluded(const char* source, const char* text) {
-        int pos = 0;
-        int slen = strlen(source);
-        int tlen = strlen(text);
-        for (int i = 0; i < slen; i++) {
-                char ch = source[i];
-                int diff = tlen - pos;
-                if (i + diff > slen) {
-                        break;
-                }
-                if (ch == text[pos]) {
-                        pos++;
-                        if (pos == tlen) {
-                                return true;
-                        }
-                } else {
-                        pos = 0;
-                }
-        }
-        return false;
 }
 
 char* bc_ReadLine() { return read_line_impl(stdin); }

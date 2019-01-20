@@ -59,13 +59,6 @@ double bc_StrToDouble(const char* literal);
 char* bc_Strdup(const char* source);
 
 /**
- * strが空白文字だけで構成されるなら true.
- * @param str
- * @return
- */
-bool bc_IsBlankText(const char* str);
-
-/**
  * 二つの文字列を連結して返します.
  * @param a 呼び出し側で開放してください.
  * @param b 呼び出し側で開放してください.
@@ -80,21 +73,6 @@ char* bc_ConcatString(const char* a, const char* b);
  * @return 呼び出し側で開放してください。
  */
 char* bc_GetLineAt(const char* src, int lineno);
-
-/**
- * v の中の文字列を全て連結します.
- * @param v 呼び出し側で開放してください.
- * @return 呼び出し側で開放してください.
- */
-char* bc_JoinString(bc_Vector* v, char* join);
-
-/**
- * ソースにテキストが含まれるなら true.
- * @param source
- * @param text
- * @return
- */
-bool bc_IsIncluded(const char* source, const char* text);
 
 /**
  * 標準入力から一行読み込んで返します.
