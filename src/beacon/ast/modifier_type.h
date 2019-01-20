@@ -47,23 +47,10 @@ bool bc_IsNativeModifier(bc_ModifierType type);
 bool bc_IsAbstractModifier(bc_ModifierType type);
 
 /**
- * 指定の修飾子が override を含むなら true.
- * @param type
- * @return
- */
-bool bc_IsOverrideModifier(bc_ModifierType type);
-
-/**
  * @param type
  * @return
  */
 bool bc_IsFinalModifier(bc_ModifierType type);
-
-/**
- * 修飾子を出力します.
- * @param type
- */
-void bc_PrintModifier(bc_ModifierType type);
 
 /**
  * 引数に列挙する修飾子を全て含むなら true.
@@ -83,18 +70,6 @@ bool bc_IsIncludeModifier(bc_ModifierType self, int count,
  */
 bool bc_IsPairIncludeModifier(bc_ModifierType self, bc_ModifierType primary,
                               bc_ModifierType other);
-
-/**
- * primaryとothersの中の任意の一つを同時に使用しているなら true.
- * @param self
- * @param primary
- * @param others
- * @param outIndex
- * @return
- */
-bool bc_IsBothIncludeModifier(bc_ModifierType self, bc_ModifierType primary,
-                              int count, bc_ModifierType others[],
-                              int* outIndex);
 
 /**
  * 修飾子を文字列へ変換します。
