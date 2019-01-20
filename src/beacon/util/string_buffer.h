@@ -87,14 +87,6 @@ void bc_ReserveBuffer(bc_Buffer* self);
 void bc_ShrinkBuffer(bc_Buffer* self);
 
 /**
- * @param self
- * @param lineIndex
- * @param len
- * @return
- */
-bc_Buffer* bc_IndentBuffer(bc_Buffer* self, int lineIndex, int len);
-
-/**
  * バッファーと中身を開放します.
  * @param self
  */

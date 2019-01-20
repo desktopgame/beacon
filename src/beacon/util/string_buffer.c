@@ -87,29 +87,6 @@ void bc_ShrinkBuffer(bc_Buffer* self) {
         self->Capacity = self->Length;
 }
 
-bc_Buffer* bc_IndentBuffer(bc_Buffer* self, int lineIndex, int len) {
-        bc_Buffer* buf = bc_NewBuffer();
-        int linec = 0;
-        int pos = 0;
-        for (int i = 0; i < self->Length; i++) {
-                char c = self->Text[i];
-                if (pos == 0 &&
-                    ((linec >= lineIndex && linec < (lineIndex + len)) ||
-                     (lineIndex == -1 && len == -1))) {
-                        bc_AppendsBuffer(buf, "    ");
-                }
-                if (c == '\n') {
-                        linec++;
-                        pos = 0;
-                        bc_AppendBuffer(buf, '\n');
-                } else {
-                        bc_AppendBuffer(buf, c);
-                        pos++;
-                }
-        }
-        return buf;
-}
-
 void bc_DeleteBuffer(bc_Buffer* self) {
         if (self == NULL) {
                 return;
