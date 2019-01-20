@@ -8,9 +8,4 @@ bc_Label* bc_NewLabel(int cursor) {
         return ret;
 }
 
-bc_Label* bc_CloneLabel(bc_Label* src) {
-        bc_Label* ret = bc_NewLabel(src->Cursor);
-        return ret;
-}
-
 void bc_DeleteLabel(bc_Label* self) { MEM_FREE(self); }

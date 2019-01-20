@@ -27,13 +27,6 @@ typedef struct bc_Label {
 bc_Label* bc_NewLabel(int cursor);
 
 /**
- * ラベルを複製します.
- * @param src
- * @return
- */
-bc_Label* bc_CloneLabel(bc_Label* src);
-
-/**
  * ラベルを開放します.
  * @param self
  */
