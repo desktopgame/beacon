@@ -1,5 +1,6 @@
 #include "vm.h"
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -76,6 +77,8 @@ static void mark_exception(bc_Frame* self, bc_Object* exc);
 #define SPS(a) popvs(a)
 #define SPB(a) popvb(a)
 
+#define BOOL_STRING(a) ((a) ? "true" : "false")
+
 // Reference Store
 
 void bc_ExecuteVM(bc_Frame* self, bc_Enviroment* env) {
@@ -146,177 +149,275 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                 bc_Opcode b = (bc_Opcode)bc_GetEnviromentSourceAt(env, IDX);
                 switch (b) {
                         // int & int
-                        case OP_IADD:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) + SPI(self)));
+                        case OP_IADD: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.iadd:%d %d", a, b);
+                                pushv(self, bc_GetIntObject(a + b));
                                 break;
-                        case OP_ISUB:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) - SPI(self)));
+                        }
+                        case OP_ISUB: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.isub:%d %d", a, b);
+                                pushv(self, bc_GetIntObject(a - b));
                                 break;
-                        case OP_IMUL:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) * SPI(self)));
+                        }
+                        case OP_IMUL: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.imul:%d %d", a, b);
+                                pushv(self, bc_GetIntObject(a * b));
                                 break;
+                        }
                         case OP_IDIV: {
                                 int a = SPI(self);
                                 int b = SPI(self);
+                                g_message("  VM.idiv:%d %d", a, b);
                                 assert(b != 0);
                                 pushv(self, bc_GetIntObject(a / b));
                                 break;
                         }
-                        case OP_IMOD:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) % SPI(self)));
+                        case OP_IMOD: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.imod:%d %d", a, b);
+                                pushv(self, bc_GetIntObject(a % b));
                                 break;
+                        }
                         case OP_IBIT_OR: {
                                 int a = SPI(self);
                                 int b = SPI(self);
+                                g_message("  VM.ibit_or:%d %d", a, b);
                                 pushv(self, bc_GetIntObject(a | b));
                                 break;
                         }
                         case OP_ILOGIC_OR: {
                                 int a = SPI(self);
                                 int b = SPI(self);
+                                g_message("  VM.ilogic_or:%d %d", a, b);
                                 pushv(self, bc_GetIntObject(a || b));
                                 break;
                         }
                         case OP_IBIT_AND: {
                                 int a = SPI(self);
                                 int b = SPI(self);
+                                g_message("  VM.ibit_and:%d %d", a, b);
                                 pushv(self, bc_GetIntObject(a & b));
                                 break;
                         }
                         case OP_ILOGIC_AND: {
-                                // SPI(self) をそのまま埋めると正常に動作しない
-                                //おそらくマクロの展開によるもの
-                                //短絡評価のせいだった
                                 int a = SPI(self);
                                 int b = SPI(self);
+                                g_message("  VM.ilogic_and:%d %d", a, b);
                                 pushv(self, bc_GetIntObject(a && b));
                                 break;
                         }
-                        case OP_IEQ:
-                                pushv(self,
-                                      bc_GetBoolObject(SPI(self) == SPI(self)));
-                                break;
-                        case OP_INOTEQ:
-                                pushv(self,
-                                      bc_GetBoolObject(SPI(self) != SPI(self)));
-                                break;
-                        case OP_IGT:
-                                pushv(self,
-                                      bc_GetBoolObject(SPI(self) > SPI(self)));
-                                break;
-                        case OP_IGE:
-                                pushv(self,
-                                      bc_GetBoolObject(SPI(self) >= SPI(self)));
-                                break;
-                        case OP_ILT: {
-                                bc_Object* a_ = popv(self);
-                                bc_Object* b_ = popv(self);
-                                pushv(self,
-                                      bc_GetBoolObject(bc_ObjectToInt(a_) <
-                                                       bc_ObjectToInt(b_)));
+                        case OP_IEQ: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.ieq: %d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a == b));
                                 break;
                         }
-                        case OP_ILE:
-                                pushv(self,
-                                      bc_GetBoolObject(SPI(self) <= SPI(self)));
+                        case OP_INOTEQ: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.inoteq:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a != b));
                                 break;
-                        case OP_ILSH:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) << SPI(self)));
+                        }
+                        case OP_IGT: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.igt:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a > b));
                                 break;
-                        case OP_IRSH:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) >> SPI(self)));
+                        }
+                        case OP_IGE: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.ige:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a >= b));
                                 break;
-                        case OP_IEXCOR:
-                                pushv(self,
-                                      bc_GetIntObject(SPI(self) ^ SPI(self)));
+                        }
+                        case OP_ILT: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.ilt:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a < b));
                                 break;
-                        case OP_IFLIP:
-                                pushv(self, bc_GetIntObject(~SPI(self)));
+                        }
+                        case OP_ILE: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.ile:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a <= b));
                                 break;
-                        case OP_CEQ:
-                                pushv(self,
-                                      bc_GetBoolObject(SPC(self) == SPC(self)));
+                        }
+                        case OP_ILSH: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.ilsh:%d %d", a, b);
+                                pushv(self, bc_GetIntObject(a << b));
                                 break;
-                        case OP_CNOTEQ:
-                                pushv(self,
-                                      bc_GetBoolObject(SPC(self) != SPC(self)));
+                        }
+                        case OP_IRSH: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.irsh:%d %d", a, b);
+                                pushv(self, bc_GetIntObject(a >> b));
                                 break;
-                        case OP_CGT:
-                                pushv(self,
-                                      bc_GetBoolObject(SPC(self) > SPC(self)));
+                        }
+                        case OP_IEXCOR: {
+                                int a = SPI(self);
+                                int b = SPI(self);
+                                g_message("  VM.iexcor:%d %d");
+                                pushv(self, bc_GetIntObject(a ^ b));
                                 break;
-                        case OP_CGE:
-                                pushv(self,
-                                      bc_GetBoolObject(SPC(self) >= SPC(self)));
+                        }
+                        case OP_IFLIP: {
+                                int a = SPI(self);
+                                g_message("  VM.iflip:%d", a);
+                                pushv(self, bc_GetIntObject(~a));
                                 break;
-                        case OP_CLT:
-                                pushv(self,
-                                      bc_GetBoolObject(SPC(self) < SPC(self)));
+                        }
+                        case OP_CEQ: {
+                                char a = SPC(self);
+                                char b = SPC(self);
+                                g_message("  VM.ceq:%c %c", a, b);
+                                pushv(self, bc_GetBoolObject(a == b));
                                 break;
-                        case OP_CLE:
-                                pushv(self,
-                                      bc_GetBoolObject(SPC(self) <= SPC(self)));
+                        }
+                        case OP_CNOTEQ: {
+                                char a = SPC(self);
+                                char b = SPC(self);
+                                g_message("  VM.cnoteq:%c %c", a, b);
+                                pushv(self, bc_GetBoolObject(a != b));
                                 break;
+                        }
+                        case OP_CGT: {
+                                char a = SPC(self);
+                                char b = SPC(self);
+                                g_message("  VM.cgt:%c %c", a, b);
+                                pushv(self, bc_GetBoolObject(a > b));
+                                break;
+                        }
+                        case OP_CGE: {
+                                char a = SPC(self);
+                                char b = SPC(self);
+                                g_message("  VM.cge:%c %c", a, b);
+                                pushv(self, bc_GetBoolObject(a >= b));
+                                break;
+                        }
+                        case OP_CLT: {
+                                char a = SPC(self);
+                                char b = SPC(self);
+                                g_message("  VM.clt:%c %c", a, b);
+                                pushv(self, bc_GetBoolObject(a < b));
+                                break;
+                        }
+                        case OP_CLE: {
+                                char a = SPC(self);
+                                char b = SPC(self);
+                                g_message("  VM.cle:%c %c", a, b);
+                                pushv(self, bc_GetBoolObject(a <= b));
+                                break;
+                        }
                                 // double & double
-                        case OP_DADD:
+                        case OP_DADD: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dadd:%lf %lf", a, b);
+                                pushv(self, bc_NewDouble(a + b));
+                                break;
+                        }
+                        case OP_DSUB: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dsub:%lf %lf", a, b);
+                                pushv(self, bc_NewDouble(a - b));
+                                break;
+                        }
+                        case OP_DMUL: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dmul:%lf %lf", a, b);
+                                pushv(self, bc_NewDouble(a * b));
+                                break;
+                        }
+                        case OP_DDIV: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.ddiv:%lf %lf", a, b);
+                                pushv(self, bc_NewDouble(a / b));
+                                break;
+                        }
+                        case OP_DMOD: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dmod:%lf %lf", a, b);
                                 pushv(self,
-                                      bc_NewDouble(SPD(self) + SPD(self)));
+                                      bc_NewDouble((double)((int)a % (int)b)));
                                 break;
-                        case OP_DSUB:
-                                pushv(self,
-                                      bc_NewDouble(SPD(self) - SPD(self)));
+                        }
+                        case OP_DEQ: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.deq:%lf %lf", a, b);
+                                pushv(self, bc_GetBoolObject(a == b));
                                 break;
-                        case OP_DMUL:
-                                pushv(self,
-                                      bc_NewDouble(SPD(self) * SPD(self)));
+                        }
+                        case OP_DNOTEQ: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dnoteq:%lf %lf", a, b);
+                                pushv(self, bc_GetBoolObject(a != b));
                                 break;
-                        case OP_DDIV:
-                                pushv(self,
-                                      bc_NewDouble(SPD(self) / SPD(self)));
+                        }
+                        case OP_DGT: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dgt:%lf %lf", a, b);
+                                pushv(self, bc_GetBoolObject(a > b));
                                 break;
-                        case OP_DMOD:
-                                pushv(self,
-                                      bc_NewDouble((double)((int)SPD(self) %
-                                                            (int)SPD(self))));
+                        }
+                        case OP_DGE: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dge:%lf %lf", a, b);
+                                pushv(self, bc_GetBoolObject(a >= b));
                                 break;
-                        case OP_DEQ:
-                                pushv(self,
-                                      bc_GetBoolObject(SPD(self) == SPD(self)));
+                        }
+                        case OP_DLT: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dlt:%lf %lf", a, b);
+                                pushv(self, bc_GetBoolObject(a < b));
                                 break;
-                        case OP_DNOTEQ:
-                                pushv(self,
-                                      bc_GetBoolObject(SPD(self) != SPD(self)));
+                        }
+                        case OP_DLE: {
+                                double a = SPD(self);
+                                double b = SPD(self);
+                                g_message("  VM.dle:%lf %lf", a, b);
+                                pushv(self, bc_GetBoolObject(a <= b));
                                 break;
-                        case OP_DGT:
-                                pushv(self,
-                                      bc_GetBoolObject(SPD(self) > SPD(self)));
+                        }
+                        case OP_INEG: {
+                                int a = SPI(self);
+                                g_message("  VM.ineg:%d", a);
+                                pushv(self, bc_GetIntObject(-a));
                                 break;
-                        case OP_DGE:
-                                pushv(self,
-                                      bc_GetBoolObject(SPD(self) >= SPD(self)));
+                        }
+                        case OP_DNEG: {
+                                double a = SPD(self);
+                                g_message("  VM.dneg:%lf", a);
+                                pushv(self, bc_NewDouble(-a));
                                 break;
-                        case OP_DLT:
-                                pushv(self,
-                                      bc_GetBoolObject(SPD(self) < SPD(self)));
-                                break;
-                        case OP_DLE:
-                                pushv(self,
-                                      bc_GetBoolObject(SPD(self) <= SPD(self)));
-                                break;
-                        case OP_INEG:
-                                pushv(self, bc_GetIntObject(-SPI(self)));
-                                break;
-                        case OP_DNEG:
-                                pushv(self, bc_NewDouble(-SPD(self)));
-                                break;
+                        }
                         case OP_BNOT: {
                                 bool a = SPB(self);
+                                g_message("  VM.bnot:%s", BOOL_STRING(a));
                                 pushv(self, bc_GetBoolObject(!a));
                                 break;
                         }
@@ -324,31 +425,43 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         case OP_BBIT_OR: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
+                                g_message("  VM.bbit_or:%s %s", BOOL_STRING(ab),
+                                          BOOL_STRING(bb));
                                 pushv(self, bc_GetBoolObject(ab | bb));
                                 break;
                         }
                         case OP_BLOGIC_OR: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
+                                g_message("  VM.blogic_or:%s %s",
+                                          BOOL_STRING(ab), BOOL_STRING(bb));
                                 pushv(self, bc_GetBoolObject(ab || bb));
                                 break;
                         }
                         case OP_BBIT_AND: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
+                                g_message("  VM.bbit_and:%s %s",
+                                          BOOL_STRING(ab), BOOL_STRING(bb));
                                 pushv(self, bc_GetBoolObject(ab & bb));
                                 break;
                         }
                         case OP_BLOGIC_AND: {
                                 bool ab = SPB(self);
                                 bool bb = SPB(self);
+                                g_message("  VM.bbit_and:%s %s",
+                                          BOOL_STRING(ab), BOOL_STRING(bb));
                                 pushv(self, bc_GetBoolObject(ab && bb));
                                 break;
                         }
-                        case OP_BEXCOR:
-                                pushv(self,
-                                      bc_GetBoolObject(SPB(self) ^ SPB(self)));
+                        case OP_BEXCOR: {
+                                bool ab = SPB(self);
+                                bool bb = SPB(self);
+                                g_message("  VM.bexcor:%s %s", BOOL_STRING(ab),
+                                          BOOL_STRING(bb));
+                                pushv(self, bc_GetBoolObject(ab ^ bb));
                                 break;
+                        }
                         case OP_BFLIP:
                                 pushv(self, bc_GetBoolObject(~SPB(self)));
                                 break;
