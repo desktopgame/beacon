@@ -462,9 +462,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 pushv(self, bc_GetBoolObject(ab ^ bb));
                                 break;
                         }
-                        case OP_BFLIP:
-                                pushv(self, bc_GetBoolObject(~SPB(self)));
+                        case OP_BFLIP: {
+                                bool ab = SPB(self);
+                                g_message("  VM.bflip:%s", BOOL_STRING(ab));
+                                pushv(self, bc_GetBoolObject(~ab));
                                 break;
+                        }
                                 // push const
                         case OP_SHCONST: {
                                 int index =
@@ -472,6 +475,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o =
                                     (bc_Object*)bc_GetEnviromentCShortAt(env,
                                                                          index);
+                                g_message("  VM.shconst:%d", index);
                                 pushv(self, o);
                                 break;
                         }
@@ -482,6 +486,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (bc_Object*)bc_GetEnviromentCIntAt(env,
                                                                        index);
                                 bc_Integer* i = o;
+                                g_message("  VM.iconst:%d", index);
                                 pushv(self, o);
                                 break;
                         }
@@ -491,6 +496,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* o =
                                     (bc_Object*)bc_GetEnviromentCLongAt(env,
                                                                         index);
+                                g_message("  VM.lconst:%d", index);
                                 pushv(self, o);
                                 break;
                         }
@@ -500,6 +506,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_Object* fobj =
                                     bc_GetEnviromentCFloatAt(env, fci);
                                 bc_Float* flo = fobj;
+                                g_message("  VM.fconst:%d", fci);
                                 pushv(self, fobj);
                                 break;
                         }
@@ -508,6 +515,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* d =
                                     bc_GetEnviromentCDoubleAt(env, index);
+                                g_message("  VM.dconst:%d", index);
                                 pushv(self, d);
                                 break;
                         }
@@ -516,6 +524,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* c =
                                     bc_GetEnviromentCCharAt(env, index);
+                                g_message("  VM.cconst:%d", index);
                                 pushv(self, c);
                                 break;
                         }
@@ -524,26 +533,32 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* cs =
                                     bc_GetEnviromentCStringAt(env, index);
+                                g_message("  VM.sconst:%d", index);
                                 pushv(self, cs);
                                 break;
                         }
                         case OP_TRUE: {
+                                g_message("  VM.true");
                                 pushv(self, bc_GetTrueObject());
                                 break;
                         }
                         case OP_FALSE: {
+                                g_message("  VM.false");
                                 pushv(self, bc_GetFalseObject());
                                 break;
                         }
                         case OP_NULL: {
+                                g_message("  VM.null");
                                 pushv(self, bc_GetNullObject());
                                 break;
                         }
                         case OP_RETURN: {
+                                g_message("  VM.return");
                                 IDX = source_len;
                                 break;
                         }
                         case OP_THROW: {
+                                g_message("  VM.throw");
                                 //例外は呼び出し全てへ伝播
                                 bc_Object* e = popv(self);
                                 bc_ThrowVM(self, e);
@@ -559,6 +574,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_TRY_ENTER: {
+                                g_message("  VM.try_enter");
                                 bc_ScriptThread* th =
                                     bc_GetCurrentScriptThread();
                                 bc_VMTrace* trace = bc_NewVMTrace(self);
@@ -572,6 +588,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_TRY_EXIT: {
+                                g_message("  VM.try_exit");
                                 bc_ScriptThread* th =
                                     bc_GetCurrentScriptThread();
                                 bc_VMTrace* trace =
@@ -580,6 +597,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_TRY_CLEAR: {
+                                g_message("  VM.try_clear");
                                 bc_ScriptThread* th =
                                     bc_GetCurrentScriptThread();
                                 bc_CatchVM(self);
@@ -589,10 +607,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_HEXCEPTION: {
+                                g_message("  VM.hexception");
                                 pushv(self, self->Exception);
                                 break;
                         }
                         case OP_INSTANCEOF: {
+                                g_message("  VM.instanceof");
                                 bc_GenericType* gtype =
                                     (bc_GenericType*)bc_PopVector(
                                         self->TypeArgs);
@@ -603,16 +623,22 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 pushv(self, b);
                                 break;
                         }
-                        case OP_DUP:
+                        case OP_DUP: {
+                                g_message("  VM.dup");
                                 pushv(self, topv(self));
                                 break;
-                        case OP_POP:
+                        }
+                        case OP_POP: {
+                                g_message("  VM.pop");
                                 popv(self);
                                 break;
+                        }
                         case OP_NOP:
                                 /* no operation */
+                                g_message("  VM.nop");
                                 break;
                         case OP_NEW_OBJECT: {
+                                g_message("  VM.new_object");
                                 //コンストラクタをさかのぼり、
                                 //トップレベルまで到達するとこの処理によって生成が行われます。
                                 // FIXME:???
@@ -624,6 +650,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_ALLOC_FIELD: {
+                                g_message("  VM.alloc_field");
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Type* tp = (bc_Type*)bc_AtVector(
@@ -659,6 +686,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_NEW_INSTANCE: {
+                                g_message("  VM.new_instance");
                                 //生成するクラスとコンストラクタを特定
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
@@ -726,6 +754,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
                         case OP_CHAIN_THIS:
                         case OP_CHAIN_SUPER: {
+                                g_message("  VM.chain");
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int ctorIndex =
@@ -782,10 +811,12 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_THIS: {
+                                g_message("  VM.this");
                                 pushv(self, getv(self, 0));
                                 break;
                         }
                         case OP_SUPER: {
+                                g_message("  VM.super");
                                 bc_Object* a = getv(self, 0);
                                 bc_Object* super = bc_CloneObject(a);
                                 super->GType =
@@ -803,6 +834,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
                         // store,load
                         case OP_PUT_FIELD: {
+                                g_message("  VM.put_field");
                                 bc_Object* assignValue = popv(self);
                                 bc_Object* assignTarget = popv(self);
                                 if (throw_npe(self, assignTarget)) {
@@ -819,6 +851,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
 
                         case OP_GET_FIELD: {
+                                g_message("  VM.get_field");
                                 bc_Object* sourceObject = popv(self);
                                 if (throw_npe(self, sourceObject)) {
                                         break;
@@ -832,6 +865,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
 
                         case OP_PUT_STATIC: {
+                                g_message("  VM.put_static");
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int fieldIndex =
@@ -847,6 +881,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
 
                         case OP_GET_STATIC: {
+                                g_message("  VM.get_static");
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int fieldIndex =
@@ -859,6 +894,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_PUT_PROPERTY: {
+                                g_message("  VM.put_property");
                                 bc_Object* assignValue = popv(self);
                                 bc_Object* assignTarget = popv(self);
                                 if (throw_npe(self, assignTarget)) {
@@ -880,6 +916,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_GET_PROPERTY: {
+                                g_message("  VM.get_property");
                                 bc_Object* sourceObject = popv(self);
                                 if (throw_npe(self, sourceObject)) {
                                         break;
@@ -904,6 +941,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_PUT_STATIC_PROPERTY: {
+                                g_message("  VM.put_static_property");
                                 bc_Object* sv = popv(self);
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
@@ -923,6 +961,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_GET_STATIC_PROPERTY: {
+                                g_message("  VM.get_static_property");
                                 bc_Object* sv = popv(self);
                                 int absClsIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
@@ -951,6 +990,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_VectorItem e = popv(self);
                                 bc_Object* o = (bc_Object*)e;
                                 assert(o != NULL);
+                                g_message("  VM.store:%d", index);
                                 setv(self, index, e);
                                 // INFO("store");
                                 break;
@@ -961,11 +1001,13 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 bc_VectorItem e = getv(self, index);
                                 bc_Object* o = (bc_Object*)e;
                                 assert(o != NULL);
+                                g_message("  VM.load:%d", index);
                                 pushv(self, e);
                                 // INFO("load");
                                 break;
                         }
                         case OP_DOWN_AS: {
+                                g_message("  VM.down_as");
                                 bc_Object* o = popv(self);
                                 bc_GenericType* a =
                                     bc_PopVector(self->TypeArgs);
@@ -999,6 +1041,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_UP_AS: {
+                                g_message("  VM.up_as");
                                 bc_Object* o = popv(self);
                                 bc_GenericType* a =
                                     bc_PopVector(self->TypeArgs);
@@ -1029,6 +1072,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
                         // invoke
                         case OP_INVOKEINTERFACE: {
+                                g_message("  VM.invokeinterface");
                                 int absClassIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int methodIndex =
@@ -1048,6 +1092,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_INVOKESTATIC: {
+                                g_message("  VM.invokestatic");
                                 int absClassIndex =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 int methodIndex =
@@ -1065,6 +1110,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_INVOKEVIRTUAL: {
+                                g_message("  VM.invokevirtual");
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* o = topv(self);
@@ -1078,6 +1124,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_INVOKESPECIAL: {
+                                g_message("  VM.invokespecial");
                                 // privateメソッドには常にレシーバがいないはず
                                 //オブジェクトから直接型を取り出してしまうと具象すぎる
                                 int index =
@@ -1097,6 +1144,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_INVOKEOPERATOR: {
+                                g_message("  VM.invokeoperator");
                                 int index =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
                                 bc_Object* o = topv(self);
@@ -1114,6 +1162,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_INIT: {
+                                g_message("  VM.coro_init");
                                 bc_Object* obj = getv(self, 0);
                                 int param_len =
                                     (int)bc_GetEnviromentSourceAt(env, ++IDX);
@@ -1145,6 +1194,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_NEXT: {
+                                g_message("  VM.coro_next");
                                 bc_Object* obj = self->Coroutine;
                                 bc_Object* ret = popv(self);
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
@@ -1176,6 +1226,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_EXIT: {
+                                g_message("  VM.coro_exit");
                                 bc_Object* obj = self->Coroutine;
                                 assert((obj->Flags | OBJECT_FLG_COROUTINE) > 0);
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
@@ -1191,6 +1242,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_RESUME: {
+                                g_message("  VM.coro_resume");
                                 bc_Object* obj = self->Coroutine;
                                 assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
@@ -1209,6 +1261,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_CURRENT: {
+                                g_message("  VM.coro_current");
                                 bc_Object* obj = self->Coroutine;
                                 bc_Coroutine* cor = (bc_Coroutine*)obj;
                                 assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
@@ -1217,6 +1270,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_CORO_SWAP_SELF: {
+                                g_message("  VM.coro_swap_self");
                                 assert(self->Coroutine == NULL);
                                 bc_Object* obj = getv(self, 0);
                                 assert((obj->Flags & OBJECT_FLG_COROUTINE) > 0);
@@ -1247,6 +1301,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_GENERIC_ADD: {
+                                g_message("  VM.generic_add");
                                 // TODO:ここで親フレームを遡るように
                                 //ジェネリックタイプを作成する
                                 int depth = 0;
@@ -1339,15 +1394,18 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         // defer
                         case OP_DEFER_ENTER: {
+                                g_message("  VM.defer_enter");
                                 break;
                         }
                         case OP_DEFER_EXIT: {
+                                g_message("  VM.defer_exit");
                                 if (pos == deferStart) {
                                         IDX = source_len;
                                 }
                                 break;
                         }
                         case OP_DEFER_REGISTER: {
+                                g_message("  VM.defer_register");
                                 bc_Label* offset =
                                     (bc_Label*)bc_GetEnviromentSourceAt(env,
                                                                         ++IDX);
@@ -1360,11 +1418,13 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 break;
                         }
                         case OP_BREAKPOINT: {
+                                g_message("  VM.breakpoint");
                                 break;
                         }
 
                         // goto
                         case OP_GOTO: {
+                                g_message("  VM.goto");
                                 bc_Label* l =
                                     (bc_Label*)bc_GetEnviromentSourceAt(env,
                                                                         ++IDX);
@@ -1373,6 +1433,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
 
                         case OP_GOTO_IF_TRUE: {
+                                g_message("  VM.goto_if_true");
                                 bool v = SPB(self);
                                 bc_Label* l =
                                     (bc_Label*)bc_GetEnviromentSourceAt(env,
@@ -1384,6 +1445,7 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                         }
 
                         case OP_GOTO_IF_FALSE: {
+                                g_message("  VM.goto_if_false");
                                 bool v = SPB(self);
                                 bc_Label* l =
                                     (bc_Label*)bc_GetEnviromentSourceAt(env,
