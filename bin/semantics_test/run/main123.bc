@@ -1,0 +1,6 @@
+var shovala = 100s;
+var shovalb = 5s;
+assert((shovala + shovalb) == 105s);
+assert((shovala - shovalb) == 95s);
+assert((shovala * 2s) == 200s);
+printLine((shovala + shovalb));

@@ -46,12 +46,14 @@ static double topvd(bc_Frame* self);
 static char topvc(bc_Frame* self);
 static char* topvs(bc_Frame* self);
 static bool topvb(bc_Frame* self);
+static short topvsh(bc_Frame* self);
 
 static int popvi(bc_Frame* self);
 static double popvd(bc_Frame* self);
 static char popvc(bc_Frame* self);
 static char* popvs(bc_Frame* self);
 static bool popvb(bc_Frame* self);
+static short popvsh(bc_Frame* self);
 static void remove_from_parent(bc_Frame* self);
 static void frame_markStatic(bc_Field* item);
 static void vm_delete_defctx(bc_VectorItem e);
@@ -64,18 +66,20 @@ static void uncaught(bc_Frame* self, bc_Enviroment* env, int pc);
 static void mark_exception(bc_Frame* self, bc_Object* exc);
 
 // Stack Top
-#define STI(a) topvi(a)
-#define STD(a) topvd(a)
-#define STC(a) topvc(a)
-#define STS(a) topvs(a)
-#define STB(a) topvb(a)
+#define STI(a) (topvi(a))
+#define STD(a) (topvd(a))
+#define STC(a) (topvc(a))
+#define STS(a) (topvs(a))
+#define STB(a) (topvb(a))
+#define STSH(a) (topvsh(a))
 
 // Stack Pop
-#define SPI(a) popvi(a)
-#define SPD(a) popvd(a)
-#define SPC(a) popvc(a)
-#define SPS(a) popvs(a)
-#define SPB(a) popvb(a)
+#define SPI(a) (popvi(a))
+#define SPD(a) (popvd(a))
+#define SPC(a) (popvc(a))
+#define SPS(a) (popvs(a))
+#define SPB(a) (popvb(a))
+#define SPSH(a) (popvsh(a))
 
 #define BOOL_STRING(a) ((a) ? "true" : "false")
 
@@ -282,6 +286,141 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 pushv(self, bc_GetIntObject(~a));
                                 break;
                         }
+
+                        case OP_SADD: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sadd:%d %d", a, b);
+                                pushv(self, bc_NewShort(a + b));
+                                break;
+                        }
+                        case OP_SSUB: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.ssub:%d %d", a, b);
+                                pushv(self, bc_NewShort(a - b));
+                                break;
+                        }
+                        case OP_SMUL: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.smul:%d %d", a, b);
+                                pushv(self, bc_NewShort(a * b));
+                                break;
+                        }
+                        case OP_SDIV: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sdiv:%d %d", a, b);
+                                assert(b != 0);
+                                pushv(self, bc_NewShort(a / b));
+                                break;
+                        }
+                        case OP_SMOD: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.smod:%d %d", a, b);
+                                pushv(self, bc_NewShort(a % b));
+                                break;
+                        }
+                        case OP_SBIT_OR: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sbit_or:%d %d", a, b);
+                                pushv(self, bc_NewShort(a | b));
+                                break;
+                        }
+                        case OP_SLOGIC_OR: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.slogic_or:%d %d", a, b);
+                                pushv(self, bc_NewShort(a || b));
+                                break;
+                        }
+                        case OP_SBIT_AND: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sbit_and:%d %d", a, b);
+                                pushv(self, bc_NewShort(a & b));
+                                break;
+                        }
+                        case OP_SLOGIC_AND: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.slogic_and:%d %d", a, b);
+                                pushv(self, bc_NewShort(a && b));
+                                break;
+                        }
+                        case OP_SEQ: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.seq: %d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a == b));
+                                break;
+                        }
+                        case OP_SNOTEQ: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.snoteq:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a != b));
+                                break;
+                        }
+                        case OP_SGT: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sgt:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a > b));
+                                break;
+                        }
+                        case OP_SGE: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sge:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a >= b));
+                                break;
+                        }
+                        case OP_SLT: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.slt:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a < b));
+                                break;
+                        }
+                        case OP_SLE: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sle:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a <= b));
+                                break;
+                        }
+                        case OP_SLSH: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.slsh:%d %d", a, b);
+                                pushv(self, bc_NewShort(a << b));
+                                break;
+                        }
+                        case OP_SRSH: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.srsh:%d %d", a, b);
+                                pushv(self, bc_NewShort(a >> b));
+                                break;
+                        }
+                        case OP_SEXCOR: {
+                                short a = SPSH(self);
+                                short b = SPSH(self);
+                                g_message("  VM.sexcor:%d %d");
+                                pushv(self, bc_NewShort(a ^ b));
+                                break;
+                        }
+                        case OP_SFLIP: {
+                                short a = SPSH(self);
+                                g_message("  VM.sflip:%d", a);
+                                pushv(self, bc_NewShort(~a));
+                                break;
+                        }
+
                         case OP_CEQ: {
                                 char a = SPC(self);
                                 char b = SPC(self);
@@ -1525,6 +1664,12 @@ static bool topvb(bc_Frame* self) {
         return ((bc_Bool*)ret)->Value;
 }
 
+static short topvsh(bc_Frame* self) {
+        bc_Object* ret = topv(self);
+        assert(bc_IsShortValue(ret));
+        return ((bc_Short*)ret)->Value;
+}
+
 static int popvi(bc_Frame* self) {
         bc_Object* ret = popv(self);
         assert(bc_IsIntValue(ret));
@@ -1553,6 +1698,12 @@ static bool popvb(bc_Frame* self) {
         bc_Object* ret = popv(self);
         assert(bc_IsBoolValue(ret));
         return ((bc_Bool*)ret)->Value;
+}
+
+static short popvsh(bc_Frame* self) {
+        bc_Object* ret = popv(self);
+        assert(bc_IsShortValue(ret));
+        return ((bc_Short*)ret)->Value;
 }
 
 static bool throw_npe(bc_Frame* self, bc_Object* o) {
