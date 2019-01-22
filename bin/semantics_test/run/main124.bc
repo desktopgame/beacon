@@ -1,0 +1,6 @@
+var lovaa = 100l;
+var lovab = 5l;
+assert((lovaa + lovab) == 105l);
+assert((lovaa - lovab) == 95l);
+assert((lovaa * 2l) == 200l);
+printLine((lovaa + lovab));

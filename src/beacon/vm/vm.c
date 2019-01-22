@@ -47,6 +47,7 @@ static char topvc(bc_Frame* self);
 static char* topvs(bc_Frame* self);
 static bool topvb(bc_Frame* self);
 static short topvsh(bc_Frame* self);
+static long topvl(bc_Frame* self);
 
 static int popvi(bc_Frame* self);
 static double popvd(bc_Frame* self);
@@ -54,6 +55,7 @@ static char popvc(bc_Frame* self);
 static char* popvs(bc_Frame* self);
 static bool popvb(bc_Frame* self);
 static short popvsh(bc_Frame* self);
+static long popvl(bc_Frame* self);
 static void remove_from_parent(bc_Frame* self);
 static void frame_markStatic(bc_Field* item);
 static void vm_delete_defctx(bc_VectorItem e);
@@ -72,6 +74,7 @@ static void mark_exception(bc_Frame* self, bc_Object* exc);
 #define STS(a) (topvs(a))
 #define STB(a) (topvb(a))
 #define STSH(a) (topvsh(a))
+#define STL(a) (topvl(a))
 
 // Stack Pop
 #define SPI(a) (popvi(a))
@@ -80,6 +83,7 @@ static void mark_exception(bc_Frame* self, bc_Object* exc);
 #define SPS(a) (popvs(a))
 #define SPB(a) (popvb(a))
 #define SPSH(a) (popvsh(a))
+#define SPL(a) (popvl(a))
 
 #define BOOL_STRING(a) ((a) ? "true" : "false")
 
@@ -418,6 +422,140 @@ static void vm_run(bc_Frame* self, bc_Enviroment* env, int pos,
                                 short a = SPSH(self);
                                 g_message("  VM.sflip:%d", a);
                                 pushv(self, bc_NewShort(~a));
+                                break;
+                        }
+
+                        case OP_LADD: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.ladd:%d %d", a, b);
+                                pushv(self, bc_NewLong(a + b));
+                                break;
+                        }
+                        case OP_LSUB: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lsub:%d %d", a, b);
+                                pushv(self, bc_NewLong(a - b));
+                                break;
+                        }
+                        case OP_LMUL: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lmul:%d %d", a, b);
+                                pushv(self, bc_NewLong(a * b));
+                                break;
+                        }
+                        case OP_LDIV: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.ldiv:%d %d", a, b);
+                                assert(b != 0);
+                                pushv(self, bc_NewLong(a / b));
+                                break;
+                        }
+                        case OP_LMOD: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lmod:%d %d", a, b);
+                                pushv(self, bc_NewLong(a % b));
+                                break;
+                        }
+                        case OP_LBIT_OR: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lbit_or:%d %d", a, b);
+                                pushv(self, bc_NewLong(a | b));
+                                break;
+                        }
+                        case OP_LLOGIC_OR: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.llogic_or:%d %d", a, b);
+                                pushv(self, bc_NewLong(a || b));
+                                break;
+                        }
+                        case OP_LBIT_AND: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lbit_and:%d %d", a, b);
+                                pushv(self, bc_NewLong(a & b));
+                                break;
+                        }
+                        case OP_LLOGIC_AND: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.llogic_and:%d %d", a, b);
+                                pushv(self, bc_NewLong(a && b));
+                                break;
+                        }
+                        case OP_LEQ: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.seq: %d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a == b));
+                                break;
+                        }
+                        case OP_LNOTEQ: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lnoteq:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a != b));
+                                break;
+                        }
+                        case OP_LGT: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lgt:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a > b));
+                                break;
+                        }
+                        case OP_LGE: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lge:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a >= b));
+                                break;
+                        }
+                        case OP_LLT: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.llt:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a < b));
+                                break;
+                        }
+                        case OP_LLE: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lle:%d %d", a, b);
+                                pushv(self, bc_GetBoolObject(a <= b));
+                                break;
+                        }
+                        case OP_LLSH: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.llsh:%d %d", a, b);
+                                pushv(self, bc_NewLong(a << b));
+                                break;
+                        }
+                        case OP_LRSH: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lrsh:%d %d", a, b);
+                                pushv(self, bc_NewLong(a >> b));
+                                break;
+                        }
+                        case OP_LEXCOR: {
+                                long a = SPL(self);
+                                long b = SPL(self);
+                                g_message("  VM.lexcor:%d %d");
+                                pushv(self, bc_NewLong(a ^ b));
+                                break;
+                        }
+                        case OP_LFLIP: {
+                                long a = SPL(self);
+                                g_message("  VM.lflip:%d", a);
+                                pushv(self, bc_NewLong(~a));
                                 break;
                         }
 
@@ -1670,6 +1808,12 @@ static short topvsh(bc_Frame* self) {
         return ((bc_Short*)ret)->Value;
 }
 
+static long topvl(bc_Frame* self) {
+        bc_Object* ret = topv(self);
+        assert(bc_IsLongValue(ret));
+        return ((bc_Long*)ret)->Value;
+}
+
 static int popvi(bc_Frame* self) {
         bc_Object* ret = popv(self);
         assert(bc_IsIntValue(ret));
@@ -1704,6 +1848,12 @@ static short popvsh(bc_Frame* self) {
         bc_Object* ret = popv(self);
         assert(bc_IsShortValue(ret));
         return ((bc_Short*)ret)->Value;
+}
+
+static long popvl(bc_Frame* self) {
+        bc_Object* ret = popv(self);
+        assert(bc_IsLongValue(ret));
+        return ((bc_Long*)ret)->Value;
 }
 
 static bool throw_npe(bc_Frame* self, bc_Object* o) {
